@@ -27,10 +27,13 @@
 			    android:layout_height="wrap_content"
 		    	android:stretchColumns="1" />
 
+		    <!-- XXX SSL
 		    <TextView 
 		    	android:id="@+id/fingerprintsText"
 		        android:layout_width="fill_parent"
-			    android:layout_height="wrap_content" />
+			    android:layout_height="wrap_content"
+			    android:text="@string/fingerprintsLabel" />
+			-->
 
 		    <TableLayout
 		        android:id="@+id/fingerprintsTable"

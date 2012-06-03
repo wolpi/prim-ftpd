@@ -1,13 +1,9 @@
 package org.primftpd;
 
-import java.security.KeyStore;
-
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.listener.ListenerFactory;
-import org.apache.ftpserver.ssl.SslConfiguration;
 import org.primftpd.filesystem.AndroidFileSystemFactory;
-import org.primftpd.util.KeyStoreUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -203,18 +199,19 @@ public class FtpServerService extends Service
     	serverFactory.setUserManager(new AndroidPrefsUserManager(prefsBean));
     	serverFactory.setFileSystem(new AndroidFileSystemFactory());
 
+    	// XXX SSL
     	// ssl listener
-    	KeyStore keyStore = KeyStoreUtil.loadKeyStore(getResources());
-    	if (keyStore != null) {
-	    	SslConfiguration sslConfig = KeyStoreUtil.createSslConfiguration(keyStore);
-	    	if (sslConfig != null) {
-		    	ListenerFactory sslListenerFactory = new ListenerFactory();
-		    	sslListenerFactory.setPort(prefsBean.getSslPort());
-		    	sslListenerFactory.setImplicitSsl(true);
-		    	sslListenerFactory.setSslConfiguration(sslConfig);
-		    	serverFactory.addListener("ssl", sslListenerFactory.createListener());
-	    	}
-    	}
+//    	KeyStore keyStore = KeyStoreUtil.loadKeyStore(getResources());
+//    	if (keyStore != null) {
+//	    	SslConfiguration sslConfig = KeyStoreUtil.createSslConfiguration(keyStore);
+//	    	if (sslConfig != null) {
+//		    	ListenerFactory sslListenerFactory = new ListenerFactory();
+//		    	sslListenerFactory.setPort(prefsBean.getSslPort());
+//		    	sslListenerFactory.setImplicitSsl(true);
+//		    	sslListenerFactory.setSslConfiguration(sslConfig);
+//		    	serverFactory.addListener("ssl", sslListenerFactory.createListener());
+//	    	}
+//    	}
 
     	// do start server
     	ftpServer = serverFactory.createServer();

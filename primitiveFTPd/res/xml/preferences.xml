@@ -19,11 +19,12 @@
 		<EditTextPreference
 			android:name="port"
 			android:key="portPref"
-			android:defaultValue="1233"
+			android:defaultValue="12345"
 			android:title="@string/prefTitlePort"
 			android:summary="@string/prefSummaryPort"
 			android:numeric="integer"
 		/>
+		<!-- XXX SSL
 		<EditTextPreference
 			android:name="sslPort"
 			android:key="sslPortPref"
@@ -32,6 +33,7 @@
 			android:summary="@string/prefSummaryPortSsl"
 			android:numeric="integer"
 		/>
+		-->
 	</PreferenceCategory>
 
 </PreferenceScreen>
