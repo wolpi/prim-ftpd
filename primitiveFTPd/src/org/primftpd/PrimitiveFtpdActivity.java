@@ -197,7 +197,7 @@ public class PrimitiveFtpdActivity extends Activity {
     	table.removeAllViews();
 
     	// create header line
-    	createIfaceRow(
+    	createTableRow(
     		table,
     		getText(R.string.ifacesLabel),
     		getText(R.string.ipAddrLabel));
@@ -225,7 +225,7 @@ public class PrimitiveFtpdActivity extends Activity {
                     	continue;
                     }
 
-                    createIfaceRow(table, ifaceDispName, hostAddr);
+                    createTableRow(table, ifaceDispName, hostAddr);
                 }
 
             }
@@ -238,35 +238,35 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     /**
-     * Creates a row in interfaces table.
+     * Creates a 2 column row in a table.
      *
      * @param table Table to add row to.
-     * @param ifaceName Text for left column.
-     * @param ipAddr Text for right column.
+     * @param label Text for left column.
+     * @param value Text for right column.
      */
-    protected void createIfaceRow(
+    protected void createTableRow(
     		TableLayout table,
-    		CharSequence ifaceName,
-    		CharSequence ipAddr)
+    		CharSequence label,
+    		CharSequence value)
     {
     	TableRow row = new TableRow(table.getContext());
     	table.addView(row);
     	row.setPadding(1, 1, 1, 5);
 
-    	TextView nameView = new TextView(row.getContext());
-    	row.addView(nameView);
-    	nameView.setPadding(0, 0, 20, 0);
-    	nameView.setText(ifaceName);
+    	TextView labelView = new TextView(row.getContext());
+    	row.addView(labelView);
+    	labelView.setPadding(0, 0, 20, 0);
+    	labelView.setText(label);
 
-    	TextView ipView = new TextView(row.getContext());
-    	row.addView(ipView);
+    	TextView valueView = new TextView(row.getContext());
+    	row.addView(valueView);
 
     	LayoutParams params = new LayoutParams();
     	params.height = LayoutParams.WRAP_CONTENT;
 
-    	ipView.setLayoutParams(params);
-    	ipView.setGravity(Gravity.LEFT);
-    	ipView.setText(ipAddr);
+    	valueView.setLayoutParams(params);
+    	valueView.setGravity(Gravity.LEFT);
+    	valueView.setText(value);
     }
 
     /**
@@ -279,17 +279,17 @@ public class PrimitiveFtpdActivity extends Activity {
     	table.removeAllViews();
 
     	// create header line
-    	createIfaceRow(
+    	createTableRow(
     		table,
     		getText(R.string.protocolLabel),
     		getText(R.string.portLabel));
 
-    	createIfaceRow(
+    	createTableRow(
     		table,
     		"ftp",
     		prefsBean.getPortStr());
 
-    	createIfaceRow(
+    	createTableRow(
     		table,
     		"ftps",
     		prefsBean.getSslPortStr());
@@ -301,11 +301,11 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	// note: HTML required for line breaks
     	TableLayout table = (TableLayout)findViewById(R.id.fingerprintsTable);
-    	createIfaceRow(
+    	createTableRow(
     		table,
     		"MD5",
     		Html.fromHtml(md5Fingerprint));
-    	createIfaceRow(
+    	createTableRow(
     		table,
     		"SHA1",
     		Html.fromHtml(sha1Fingerprint));
