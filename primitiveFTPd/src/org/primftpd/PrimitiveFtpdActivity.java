@@ -3,11 +3,9 @@ package org.primftpd;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.security.KeyStore;
 import java.util.Enumeration;
 import java.util.List;
 
-import org.primftpd.util.KeyStoreUtil;
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,11 +122,12 @@ public class PrimitiveFtpdActivity extends Activity {
 			}
 		});
 
+    	// XXX SSL
     	// calc certificate fingerprints
-    	KeyStore keyStore = KeyStoreUtil.loadKeyStore(getResources());
-    	md5Fingerprint = KeyStoreUtil.calcKeyFingerprint(keyStore, "MD5");
-    	sha1Fingerprint = KeyStoreUtil.calcKeyFingerprint(keyStore, "SHA-1");
-    	createFingerprintTable();
+//    	KeyStore keyStore = KeyStoreUtil.loadKeyStore(getResources());
+//    	md5Fingerprint = KeyStoreUtil.calcKeyFingerprint(keyStore, "MD5");
+//    	sha1Fingerprint = KeyStoreUtil.calcKeyFingerprint(keyStore, "SHA-1");
+//    	createFingerprintTable();
     }
 
     @Override
@@ -289,16 +288,14 @@ public class PrimitiveFtpdActivity extends Activity {
     		"ftp",
     		prefsBean.getPortStr());
 
-    	createTableRow(
-    		table,
-    		"ftps",
-    		prefsBean.getSslPortStr());
+    	// XXX SSL
+//    	createTableRow(
+//    		table,
+//    		"ftps",
+//    		prefsBean.getSslPortStr());
     }
 
     protected void createFingerprintTable() {
-    	TextView fingerprintsLabel = (TextView) findViewById(R.id.fingerprintsText);
-    	fingerprintsLabel.setText(getText(R.string.fingerprintsLabel));
-
     	// note: HTML required for line breaks
     	TableLayout table = (TableLayout)findViewById(R.id.fingerprintsTable);
     	createTableRow(
@@ -383,9 +380,10 @@ public class PrimitiveFtpdActivity extends Activity {
 		createPortsTable();
 	}
 
-	private static final int PORT_DEFAULT_VAL = 1233;
+	private static final int PORT_DEFAULT_VAL = 12345;
 	private static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
 	private static final int SSL_PORT_DEFAULT_VAL = 1234;
+	@SuppressWarnings("unused") // XXX SSL
 	private static final String SSL_PORT_DEFAULT_VAL_STR = String.valueOf(SSL_PORT_DEFAULT_VAL);
 
 	/**
@@ -422,32 +420,34 @@ public class PrimitiveFtpdActivity extends Activity {
 			PORT_DEFAULT_VAL,
 			PORT_DEFAULT_VAL_STR);
 
+		// XXX SSL
+		int sslPort = SSL_PORT_DEFAULT_VAL;
 		// load SSL port
-		int sslPort = loadAndValidatePort(
-			prefs,
-			PREF_KEY_SSL_PORT,
-			SSL_PORT_DEFAULT_VAL,
-			SSL_PORT_DEFAULT_VAL_STR);
-
-		// check if ports are equal
-		if (port == sslPort) {
-			Toast.makeText(
-				getApplicationContext(),
-				R.string.portsEqual,
-				Toast.LENGTH_LONG).show();
-			port = PORT_DEFAULT_VAL;
-			sslPort = SSL_PORT_DEFAULT_VAL;
-
-			// reset in persistent prefs
-			Editor prefsEditor = prefs.edit();
-			prefsEditor.putString(
-				PREF_KEY_PORT,
-				PORT_DEFAULT_VAL_STR);
-			prefsEditor.putString(
-				PREF_KEY_SSL_PORT,
-				SSL_PORT_DEFAULT_VAL_STR);
-			prefsEditor.commit();
-		}
+//		int sslPort = loadAndValidatePort(
+//			prefs,
+//			PREF_KEY_SSL_PORT,
+//			SSL_PORT_DEFAULT_VAL,
+//			SSL_PORT_DEFAULT_VAL_STR);
+//
+//		// check if ports are equal
+//		if (port == sslPort) {
+//			Toast.makeText(
+//				getApplicationContext(),
+//				R.string.portsEqual,
+//				Toast.LENGTH_LONG).show();
+//			port = PORT_DEFAULT_VAL;
+//			sslPort = SSL_PORT_DEFAULT_VAL;
+//
+//			// reset in persistent prefs
+//			Editor prefsEditor = prefs.edit();
+//			prefsEditor.putString(
+//				PREF_KEY_PORT,
+//				PORT_DEFAULT_VAL_STR);
+//			prefsEditor.putString(
+//				PREF_KEY_SSL_PORT,
+//				SSL_PORT_DEFAULT_VAL_STR);
+//			prefsEditor.commit();
+//		}
 
 		// create prefsBean
 		PrefsBean oldPrefs = prefsBean;
