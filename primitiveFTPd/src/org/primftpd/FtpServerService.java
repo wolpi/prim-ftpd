@@ -22,6 +22,8 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.Process;
 import android.widget.Toast;
 
@@ -41,6 +43,7 @@ public class FtpServerService extends Service
 	private Looper serviceLooper;
 	private ServiceHandler serviceHandler;
 	private PrefsBean prefsBean;
+	private WakeLock wakeLock;
 
 	/**
 	 * Handles starting and stopping of FtpServer.
@@ -67,6 +70,14 @@ public class FtpServerService extends Service
 
 		    		if (ftpServer != null) {
 						createStatusbarNotification();
+
+						// acquire wake lock for CPU to still handle requests
+						// note: PARTIAL_WAKE_LOCK is not enough
+						logger.debug("acquiring wake lock");
+						PowerManager powerMgr = (PowerManager) getSystemService(POWER_SERVICE);
+						wakeLock = powerMgr.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "pFTPd");
+						wakeLock.acquire();
+
 		    		} else {
 		    			stopSelf();
 
@@ -84,6 +95,11 @@ public class FtpServerService extends Service
 				}
 				if (ftpServer == null) {
 					removeStatusbarNotification();
+				}
+				if (wakeLock != null) {
+					logger.debug("releasing wake lock");
+					wakeLock.release();
+					wakeLock = null;
 				}
 				logger.debug("stopSelf");
 				stopSelf();
@@ -129,7 +145,9 @@ public class FtpServerService extends Service
 		msg.arg1 = MSG_START;
 		serviceHandler.sendMessage(msg);
 
-		return START_NOT_STICKY;
+		// we don't want the system to kill the ftp server
+		//return START_NOT_STICKY;
+		return START_STICKY;
 	}
 
 	@Override
