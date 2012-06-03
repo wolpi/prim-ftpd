@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">primitive ftpd</string>
+    <string name="ifacesLabel">Netzwerk Schnittstelle</string>
+    <string name="ipAddrLabel">IP Adresse</string>
+    <string name="ifacesError">Fehler: </string>
+    <string name="protocolLabel">Protokoll</string>
+    <string name="portLabel">Port</string>
+    <string name="fingerprintsLabel">SSL Zertifikat Fingerabdrücke</string>
+        
+    <string name="startService">Server Starten</string>
+    <string name="stopService">Server Stoppen</string>
+    <string name="notificationTitle">FTP Server</string>
+    <string name="exit">Beenden</string>
+
+    <string name="haveToSetPassword">Sie müssen erst ein Passwort setzen</string>
+    <string name="serverRunning">FTP Server läuft</string>
+    <string name="serverCouldNotBeStarted">Server konnte nicht gestartet werden! Fehler Meldung: </string>
+    <string name="portInvalid">Port ist ungültig. Er wird auf den Default Wert zurückgesetzt.</string>
+    <string name="portsEqual">Ports sind gleich. Beide werden auf den Default Wert zurückgesetzt.</string>
+    <string name="restartServer">Sie müssen den Server neu starten damit die Änderungen wirksam werden.</string>
+
+    <string name="prefs">Einstellungen</string>
+    <string name="prefCategoryTitle">FTP Server Einstellungen</string>
+    <string name="prefTitleUser">Benutzer Name</string>
+    <string name="prefSummaryUser">FTP Server Benutzer Name</string>
+    <string name="prefTitlePassword">Passwort</string>
+    <string name="prefSummaryPassword">FTP Server Passwort</string>
+    <string name="prefTitlePort">Port</string>
+    <string name="prefSummaryPort">FTP Server Port</string>
+    <string name="prefTitlePortSsl">SSL Port</string>
+    <string name="prefSummaryPortSsl">FTP server port (verschlüsselt)</string>
+
+</resources>

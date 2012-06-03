@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory android:title="@string/prefCategoryTitle">
+		<EditTextPreference
+			android:name="user_name"
+			android:key="userNamePref"
+			android:defaultValue="user"
+			android:title="@string/prefTitleUser"
+			android:summary="@string/prefSummaryUser"
+		/>
+		<org.primftpd.EncryptingEditTextPreference
+			android:name="password"
+			android:key="passwordPref"
+			android:title="@string/prefTitlePassword"
+			android:summary="@string/prefSummaryPassword"
+			android:password="true"
+		/>
+		<EditTextPreference
+			android:name="port"
+			android:key="portPref"
+			android:defaultValue="1233"
+			android:title="@string/prefTitlePort"
+			android:summary="@string/prefSummaryPort"
+			android:numeric="integer"
+		/>
+		<EditTextPreference
+			android:name="sslPort"
+			android:key="sslPortPref"
+			android:defaultValue="1234"
+			android:title="@string/prefTitlePortSsl"
+			android:summary="@string/prefSummaryPortSsl"
+			android:numeric="integer"
+		/>
+	</PreferenceCategory>
+
+</PreferenceScreen>

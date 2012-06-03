@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:id="@+id/scrollView"
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent">
+
+        <LinearLayout
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content">
+
+		    <TableLayout
+		        android:id="@+id/ifacesTable"
+		        android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+		    	android:stretchColumns="1" />
+
+		    <TableLayout
+		        android:id="@+id/portsTable"
+		        android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+		    	android:stretchColumns="1" />
+
+		    <TextView 
+		    	android:id="@+id/fingerprintsText"
+		        android:layout_width="fill_parent"
+			    android:layout_height="wrap_content" />
+
+		    <TableLayout
+		        android:id="@+id/fingerprintsTable"
+		        android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+		    	android:stretchColumns="1" />
+
+		    <Button 
+		        android:id="@+id/startButton" 
+		        android:layout_width="fill_parent" 
+		        android:layout_height="wrap_content" 
+		        android:text="@string/startService" />
+			<Button 
+			    android:id="@+id/stopButton" 
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/stopService" />
+		    <Button 
+		        android:id="@+id/prefsButton" 
+		        android:layout_width="fill_parent" 
+		        android:layout_height="wrap_content" 
+		        android:text="@string/prefs" />
+
+	    </LinearLayout>
+    </ScrollView>
+</LinearLayout>
