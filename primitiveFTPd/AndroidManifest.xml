@@ -9,6 +9,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature android:name="android.hardware.wifi" />
 
@@ -31,7 +32,7 @@
             android:label="@string/prefCategoryTitle">
         </activity>
             
-		<service android:name=".FtpServerService" />
+        <service android:name=".FtpServerService" />
 
 	</application>
 
