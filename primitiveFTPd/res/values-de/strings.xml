@@ -30,6 +30,6 @@
     <string name="prefTitlePort">Port</string>
     <string name="prefSummaryPort">FTP Server Port</string>
     <string name="prefTitlePortSsl">SSL Port</string>
-    <string name="prefSummaryPortSsl">FTP server port (verschlüsselt)</string>
+    <string name="prefSummaryPortSsl">FTP Server port (verschlüsselt)</string>
 
 </resources>
