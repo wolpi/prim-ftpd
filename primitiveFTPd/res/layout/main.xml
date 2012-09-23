@@ -27,6 +27,12 @@
 			    android:layout_height="wrap_content"
 		    	android:stretchColumns="1" />
 
+		    <TableLayout
+		        android:id="@+id/usernameTable"
+		        android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+		    	android:stretchColumns="1" />
+		    
 		    <!-- XXX SSL
 		    <TextView 
 		    	android:id="@+id/fingerprintsText"
