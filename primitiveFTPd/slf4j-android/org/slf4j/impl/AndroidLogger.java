@@ -120,35 +120,35 @@ public class AndroidLogger extends MarkerIgnoringBase
 	@Override
 	public void debug(final String msg)
 	{
-		Log.d(name, msg);
+		//Log.d(name, msg);
 	}
 
 	/* @see org.slf4j.Logger#debug(java.lang.String, java.lang.Object) */
 	@Override
 	public void debug(final String format, final Object arg1)
 	{
-		Log.d(name, format(format, arg1, null));
+		//Log.d(name, format(format, arg1, null));
 	}
 
 	/* @see org.slf4j.Logger#debug(java.lang.String, java.lang.Object, java.lang.Object) */
 	@Override
 	public void debug(final String format, final Object param1, final Object param2)
 	{
-		Log.d(name, format(format, param1, param2));
+		//Log.d(name, format(format, param1, param2));
 	}
 
 	/* @see org.slf4j.Logger#debug(java.lang.String, java.lang.Object[]) */
 	@Override
 	public void debug(final String format, final Object[] argArray)
 	{
-		Log.d(name, format(format, argArray));
+		//Log.d(name, format(format, argArray));
 	}
 
 	/* @see org.slf4j.Logger#debug(java.lang.String, java.lang.Throwable) */
 	@Override
 	public void debug(final String msg, final Throwable t)
 	{
-		Log.d(name, msg, t);
+		//Log.d(name, msg, t);
 	}
 
 	/* @see org.slf4j.Logger#isInfoEnabled() */
@@ -162,35 +162,35 @@ public class AndroidLogger extends MarkerIgnoringBase
 	@Override
 	public void info(final String msg)
 	{
-		Log.i(name, msg);
+		//Log.i(name, msg);
 	}
 
 	/* @see org.slf4j.Logger#info(java.lang.String, java.lang.Object) */
 	@Override
 	public void info(final String format, final Object arg)
 	{
-		Log.i(name, format(format, arg, null));
+		//Log.i(name, format(format, arg, null));
 	}
 
 	/* @see org.slf4j.Logger#info(java.lang.String, java.lang.Object, java.lang.Object) */
 	@Override
 	public void info(final String format, final Object arg1, final Object arg2)
 	{
-		Log.i(name, format(format, arg1, arg2));
+		//Log.i(name, format(format, arg1, arg2));
 	}
 
 	/* @see org.slf4j.Logger#info(java.lang.String, java.lang.Object[]) */
 	@Override
 	public void info(final String format, final Object[] argArray)
 	{
-		Log.i(name, format(format, argArray));
+		//Log.i(name, format(format, argArray));
 	}
 
 	/* @see org.slf4j.Logger#info(java.lang.String, java.lang.Throwable) */
 	@Override
 	public void info(final String msg, final Throwable t)
 	{
-		Log.i(name, msg, t);
+		//Log.i(name, msg, t);
 	}
 
 	/* @see org.slf4j.Logger#isWarnEnabled() */
@@ -204,35 +204,35 @@ public class AndroidLogger extends MarkerIgnoringBase
 	@Override
 	public void warn(final String msg)
 	{
-		Log.w(name, msg);
+		//Log.w(name, msg);
 	}
 
 	/* @see org.slf4j.Logger#warn(java.lang.String, java.lang.Object) */
 	@Override
 	public void warn(final String format, final Object arg)
 	{
-		Log.w(name, format(format, arg, null));
+		//Log.w(name, format(format, arg, null));
 	}
 
 	/* @see org.slf4j.Logger#warn(java.lang.String, java.lang.Object, java.lang.Object) */
 	@Override
 	public void warn(final String format, final Object arg1, final Object arg2)
 	{
-		Log.w(name, format(format, arg1, arg2));
+		//Log.w(name, format(format, arg1, arg2));
 	}
 
 	/* @see org.slf4j.Logger#warn(java.lang.String, java.lang.Object[]) */
 	@Override
 	public void warn(final String format, final Object[] argArray)
 	{
-		Log.w(name, format(format, argArray));
+		//Log.w(name, format(format, argArray));
 	}
 
 	/* @see org.slf4j.Logger#warn(java.lang.String, java.lang.Throwable) */
 	@Override
 	public void warn(final String msg, final Throwable t)
 	{
-		Log.w(name, msg, t);
+		//Log.w(name, msg, t);
 	}
 
 	/* @see org.slf4j.Logger#isErrorEnabled() */
