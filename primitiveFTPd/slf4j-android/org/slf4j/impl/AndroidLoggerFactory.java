@@ -32,8 +32,6 @@ import java.util.StringTokenizer;
 
 import org.slf4j.ILoggerFactory;
 
-import android.util.Log;
-
 /**
  * An implementation of {@link ILoggerFactory} which always returns
  * {@link AndroidLogger} instances.
@@ -68,9 +66,9 @@ public class AndroidLoggerFactory implements ILoggerFactory
 			if (slogger == null)
 			{
 				if (!actualName.equals(name)) {
-					Log.i(AndroidLoggerFactory.class.getSimpleName(),
-						"Logger name '" + name + "' exceeds maximum length of " + TAG_MAX_LENGTH +
-						" characters, using '" + actualName + "' instead.");
+//					Log.i(AndroidLoggerFactory.class.getSimpleName(),
+//						"Logger name '" + name + "' exceeds maximum length of " + TAG_MAX_LENGTH +
+//						" characters, using '" + actualName + "' instead.");
 				}
 
 				slogger = new AndroidLogger(actualName);
