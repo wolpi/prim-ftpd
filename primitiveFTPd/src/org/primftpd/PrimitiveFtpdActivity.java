@@ -295,6 +295,19 @@ public class PrimitiveFtpdActivity extends Activity {
 //    		prefsBean.getSslPortStr());
     }
 
+    protected void createUsernameTable() {
+    	TableLayout table = (TableLayout)findViewById(R.id.usernameTable);
+
+        // clear old entries
+    	table.removeAllViews();
+
+    	// create header line
+    	createTableRow(
+    		table,
+    		getText(R.string.prefTitleUser),
+    		prefsBean.getUserName());
+    }
+
     protected void createFingerprintTable() {
     	// note: HTML required for line breaks
     	TableLayout table = (TableLayout)findViewById(R.id.fingerprintsTable);
@@ -378,6 +391,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		loadPrefs();
 
 		createPortsTable();
+		createUsernameTable();
 	}
 
 	private static final int PORT_DEFAULT_VAL = 12345;
@@ -394,7 +408,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	}
 
 
-	public static final String PREF_KEY_USER = "userPref";
+	public static final String PREF_KEY_USER = "userNamePref";
 	public static final String PREF_KEY_PASSWORD = "passwordPref";
 	public static final String PREF_KEY_PORT = "portPref";
 	public static final String PREF_KEY_SSL_PORT = "sslPortPref";
