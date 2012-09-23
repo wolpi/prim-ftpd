@@ -17,7 +17,7 @@ public class EncryptionUtil
 	public static String encrypt(String str)
 	{
 		try {
-			MessageDigest cipher = MessageDigest.getInstance("SHA-256");
+			MessageDigest cipher = MessageDigest.getInstance("SHA-512");
 			byte[] encrypted = cipher.digest((str + SALT).getBytes("UTF-8"));
 			byte[] base64 = Base64.encodeBase64(encrypted);
 			return new String(base64, "UTF-8");
