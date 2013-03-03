@@ -1,5 +1,7 @@
 package org.primftpd;
 
+import java.lang.ref.WeakReference;
+
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.listener.ListenerFactory;
@@ -45,60 +47,75 @@ public class FtpServerService extends Service
 	 * Handles starting and stopping of FtpServer.
 	 *
 	 */
-	private final class ServiceHandler extends Handler {
-		public ServiceHandler(Looper looper) {
+	private final static class ServiceHandler extends Handler {
+
+		protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+		private final WeakReference<FtpServerService> ftpServiceRef;
+
+		public ServiceHandler(Looper looper, FtpServerService ftpService) {
 			super(looper);
+			this.ftpServiceRef = new WeakReference<FtpServerService>(ftpService);
 		}
 		@Override
 		public void handleMessage(Message msg) {
 			logger.debug("handleMessage()");
 
+			FtpServerService ftpService = ftpServiceRef.get();
+			if (ftpService == null) {
+				logger.warn("ftpServiceRef is null");
+				return;
+			}
+
 			int toDo = msg.arg1;
 			if (toDo == MSG_START) {
-				if (ftpServer == null) {
+				if (ftpService.ftpServer == null) {
 					logger.debug("starting ftp server");
 
 					// XXX set properties to prefer IPv4 to run in simulator
 					System.setProperty("java.net.preferIPv4Stack", "true");
 		    		System.setProperty("java.net.preferIPv6Addresses", "false");
 
-		    		launchFtpServer();
+		    		ftpService.launchFtpServer();
 
-		    		if (ftpServer != null) {
-						createStatusbarNotification();
+		    		if (ftpService.ftpServer != null) {
+		    			ftpService.createStatusbarNotification();
 
 						// acquire wake lock for CPU to still handle requests
 						// note: PARTIAL_WAKE_LOCK is not enough
 						logger.debug("acquiring wake lock");
-						PowerManager powerMgr = (PowerManager) getSystemService(POWER_SERVICE);
-						wakeLock = powerMgr.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "pFTPd");
-						wakeLock.acquire();
+						PowerManager powerMgr =
+								(PowerManager) ftpService.getSystemService(POWER_SERVICE);
+						ftpService.wakeLock = powerMgr.newWakeLock(
+								PowerManager.SCREEN_DIM_WAKE_LOCK,
+								"pFTPd");
+						ftpService.wakeLock.acquire();
 
 		    		} else {
-		    			stopSelf();
+		    			ftpService.stopSelf();
 
 		    			// tell activity to update button states
 		    			Intent intent = new Intent(BROADCAST_ACTION_COULD_NOT_START);
-		    			sendBroadcast(intent);
+		    			ftpService.sendBroadcast(intent);
 		    		}
 				}
 
 			} else if (toDo == MSG_STOP) {
-				if (ftpServer != null) {
+				if (ftpService.ftpServer != null) {
 					logger.debug("stopping ftp server");
-					ftpServer.stop();
-					ftpServer = null;
+					ftpService.ftpServer.stop();
+					ftpService.ftpServer = null;
 				}
-				if (ftpServer == null) {
-					removeStatusbarNotification();
+				if (ftpService.ftpServer == null) {
+					ftpService.removeStatusbarNotification();
 				}
-				if (wakeLock != null) {
+				if (ftpService.wakeLock != null) {
 					logger.debug("releasing wake lock");
-					wakeLock.release();
-					wakeLock = null;
+					ftpService.wakeLock.release();
+					ftpService.wakeLock = null;
 				}
 				logger.debug("stopSelf");
-				stopSelf();
+				ftpService.stopSelf();
 			}
 		}
 	}
@@ -117,7 +134,7 @@ public class FtpServerService extends Service
 	    thread.start();
 
 	    serviceLooper = thread.getLooper();
-	    serviceHandler = new ServiceHandler(serviceLooper);
+	    serviceHandler = new ServiceHandler(serviceLooper, this);
 	}
 
 	@Override
