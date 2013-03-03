@@ -10,6 +10,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
+import java.util.Locale;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
@@ -130,7 +131,7 @@ public class KeyStoreUtil
 					hexString = "0" + hexString;
 				}
 
-				fingerPrint.append(hexString.toUpperCase());
+				fingerPrint.append(hexString.toUpperCase(Locale.ENGLISH));
 
 				if (i != fingerPrintBytes.length -1) {
 					fingerPrint.append(":");
