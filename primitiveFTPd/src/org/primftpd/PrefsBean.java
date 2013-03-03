@@ -1,7 +1,11 @@
 package org.primftpd;
 
-public class PrefsBean
+import java.io.Serializable;
+
+public class PrefsBean implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private final String userName;
 	private final String password;
 	private final String portStr;

@@ -59,10 +59,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	};
 
 	protected static final String SERVICE_CLASS_NAME = "org.primftpd.FtpServerService";
-	public static final String EXTRA_USERNAME = "username";
-	public static final String EXTRA_PASSWORD = "password";
-	public static final String EXTRA_PORT = "port";
-	public static final String EXTRA_SSL_PORT = "ssl.port";
+	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -171,10 +168,7 @@ public class PrimitiveFtpdActivity extends Activity {
      */
     protected Intent createFtpServiceIntent() {
     	Intent intent = new Intent(this, FtpServerService.class);
-    	intent.putExtra(EXTRA_USERNAME, prefsBean.getUserName());
-    	intent.putExtra(EXTRA_PASSWORD, prefsBean.getPassword());
-    	intent.putExtra(EXTRA_PORT, prefsBean.getPort());
-    	intent.putExtra(EXTRA_SSL_PORT, prefsBean.getSslPort());
+    	intent.putExtra(EXTRA_PREFS_BEAN, prefsBean);
     	return intent;
     }
 
