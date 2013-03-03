@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="primitiveFTPd" default="help">
+<project name="primitiveFTPd" default="release-with-delete">
 
     <!-- The local.properties file is created and updated by the 'android' tool.
          It contains the path to the SDK. It should *NOT* be checked into
@@ -88,5 +88,12 @@
     -->
     <!-- version-tag: custom -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
+
+    <target name="release-with-delete" depends="release"
+        	description="executes release target and deletes empty dir libs">
+
+        <!-- why does the android script create the empty libs dir ??? -->
+        <delete dir="libs" includeEmptyDirs="true" />
+    </target>
 
 </project>
