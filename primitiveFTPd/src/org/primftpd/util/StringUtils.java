@@ -2679,31 +2679,6 @@ public class StringUtils {
 
     // Case conversion
     //-----------------------------------------------------------------------
-    /**
-     * <p>Converts a String to upper case as per {@link String#toUpperCase()}.</p>
-     *
-     * <p>A {@code null} input String returns {@code null}.</p>
-     *
-     * <pre>
-     * StringUtils.upperCase(null)  = null
-     * StringUtils.upperCase("")    = ""
-     * StringUtils.upperCase("aBc") = "ABC"
-     * </pre>
-     *
-     * <p><strong>Note:</strong> As described in the documentation for {@link String#toUpperCase()},
-     * the result of this method is affected by the current locale.
-     * For platform-independent case transformations, the method {@link #lowerCase(String, Locale)}
-     * should be used with a specific locale (e.g. {@link Locale#ENGLISH}).</p>
-     *
-     * @param str  the String to upper case, may be null
-     * @return the upper cased String, {@code null} if null String input
-     */
-    public static String upperCase(String str) {
-        if (str == null) {
-            return null;
-        }
-        return str.toUpperCase();
-    }
 
     /**
      * <p>Converts a String to upper case as per {@link String#toUpperCase(Locale)}.</p>
@@ -2726,32 +2701,6 @@ public class StringUtils {
             return null;
         }
         return str.toUpperCase(locale);
-    }
-
-    /**
-     * <p>Converts a String to lower case as per {@link String#toLowerCase()}.</p>
-     *
-     * <p>A {@code null} input String returns {@code null}.</p>
-     *
-     * <pre>
-     * StringUtils.lowerCase(null)  = null
-     * StringUtils.lowerCase("")    = ""
-     * StringUtils.lowerCase("aBc") = "abc"
-     * </pre>
-     *
-     * <p><strong>Note:</strong> As described in the documentation for {@link String#toLowerCase()},
-     * the result of this method is affected by the current locale.
-     * For platform-independent case transformations, the method {@link #lowerCase(String, Locale)}
-     * should be used with a specific locale (e.g. {@link Locale#ENGLISH}).</p>
-     *
-     * @param str  the String to lower case, may be null
-     * @return the lower cased String, {@code null} if null String input
-     */
-    public static String lowerCase(String str) {
-        if (str == null) {
-            return null;
-        }
-        return str.toLowerCase();
     }
 
     /**
