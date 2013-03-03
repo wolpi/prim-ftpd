@@ -143,15 +143,7 @@ public class FtpServerService extends Service
 
 		// get parameters
 		Bundle extras = intent.getExtras();
-		String userName = extras.getString(
-			PrimitiveFtpdActivity.EXTRA_USERNAME);
-		String password = extras.getString(
-			PrimitiveFtpdActivity.EXTRA_PASSWORD);
-		int port = extras.getInt(
-			PrimitiveFtpdActivity.EXTRA_PORT);
-		int sslPort = extras.getInt(
-			PrimitiveFtpdActivity.EXTRA_SSL_PORT);
-		prefsBean = new PrefsBean(userName, password, port, sslPort);
+		prefsBean = (PrefsBean)extras.get(PrimitiveFtpdActivity.EXTRA_PREFS_BEAN);
 
 		// send start message
 		Message msg = serviceHandler.obtainMessage();
