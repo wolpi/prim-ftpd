@@ -2,7 +2,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.primftpd"
-    android:versionCode="3"
+    android:versionCode="4"
     android:versionName="1.0.3-alpha" >
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="7" />
