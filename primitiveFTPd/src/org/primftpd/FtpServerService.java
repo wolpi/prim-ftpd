@@ -141,6 +141,12 @@ public class FtpServerService extends Service
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		logger.debug("onStartCommand()");
 
+		if (intent == null) {
+			logger.warn("intent is null in onStartCommand()");
+
+			return START_REDELIVER_INTENT;
+		}
+
 		// get parameters
 		Bundle extras = intent.getExtras();
 		prefsBean = (PrefsBean)extras.get(PrimitiveFtpdActivity.EXTRA_PREFS_BEAN);

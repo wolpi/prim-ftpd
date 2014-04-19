@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_start"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/startService"
+        android:icon="@android:drawable/ic_media_play" />
+
+    <item
+        android:id="@+id/menu_stop"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/stopService"
+        android:icon="@android:drawable/ic_media_pause" />
+
+    <item
+        android:id="@+id/menu_prefs"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/prefs"
+        android:icon="@android:drawable/ic_menu_preferences" />
+</menu>
