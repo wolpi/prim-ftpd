@@ -26,8 +26,6 @@ import android.text.Html;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
@@ -79,45 +77,6 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	// button handlers
     	updateButtonStates();
-    	final Button startButton = (Button)findViewById(R.id.startButton);
-    	final Button stopButton = (Button)findViewById(R.id.stopButton);
-    	startButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (StringUtils.isBlank(prefsBean.getPassword()))
-				{
-					Toast.makeText(
-							getApplicationContext(),
-							R.string.haveToSetPassword,
-							Toast.LENGTH_LONG).show();
-
-				} else {
-					Intent intent = createFtpServiceIntent();
-			    	startService(intent);
-			    	startButton.setEnabled(false);
-			    	stopButton.setEnabled(true);
-				}
-			}
-		});
-    	stopButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-		    	Intent intent = createFtpServiceIntent();
-		    	stopService(intent);
-		    	startButton.setEnabled(true);
-		    	stopButton.setEnabled(false);
-			}
-		});
-
-    	final Button prefsButton = (Button)findViewById(R.id.prefsButton);
-    	prefsButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = createPreferencesIntent();
-				startActivity(intent);
-			}
-		});
 
     	// XXX SSL
     	// calc certificate fingerprints
@@ -161,15 +120,6 @@ public class PrimitiveFtpdActivity extends Activity {
     	// unregister broadcast receivers
         this.unregisterReceiver(this.receiver);
         this.unregisterReceiver(this.networkStateReceiver);
-    }
-
-    /**
-     * @return Intent to start/stop {@link FtpServerService}.
-     */
-    protected Intent createFtpServiceIntent() {
-    	Intent intent = new Intent(this, FtpServerService.class);
-    	intent.putExtra(EXTRA_PREFS_BEAN, prefsBean);
-    	return intent;
     }
 
     /**
@@ -333,11 +283,14 @@ public class PrimitiveFtpdActivity extends Activity {
      * Updates enabled state of start/stop buttons.
      */
     protected void updateButtonStates() {
+    	if (startIcon == null || stopIcon == null) {
+    		return;
+    	}
+
     	boolean serviceRunning = checkServiceRunning();
-    	final Button startButton = (Button)findViewById(R.id.startButton);
-    	final Button stopButton = (Button)findViewById(R.id.stopButton);
-    	startButton.setEnabled(!serviceRunning);
-    	stopButton.setEnabled(serviceRunning);
+
+    	startIcon.setVisible(!serviceRunning);
+    	stopIcon.setVisible(serviceRunning);
 
     	// remove status bar notification if server not running
     	if (!serviceRunning) {
@@ -345,36 +298,74 @@ public class PrimitiveFtpdActivity extends Activity {
     	}
     }
 
-    private static final int MENU_ITEM_ID_PREFS = 0;
-    private static final int MENU_ITEM_ID_EXIT = 1;
+    protected MenuItem startIcon;
+	protected MenuItem stopIcon;
 
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(
-			Menu.NONE,
-			MENU_ITEM_ID_PREFS,
-			0,
-			getText(R.string.prefs));
-		menu.add(
-			Menu.NONE,
-			MENU_ITEM_ID_EXIT,
-			0,
-			getText(R.string.exit));
-		return super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.pftpd, menu);
+
+		startIcon = menu.findItem(R.id.menu_start);
+		stopIcon = menu.findItem(R.id.menu_stop);
+
+		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case MENU_ITEM_ID_PREFS:
-				startActivity(new Intent(this, FtpPrefsActivity.class));
-				return true;
-			case MENU_ITEM_ID_EXIT:
-				finish();
-				return true;
+		case R.id.menu_start:
+			handleStart(startIcon, stopIcon);
+			break;
+		case R.id.menu_stop:
+			handleStop(startIcon, stopIcon);
+			break;
+		case R.id.menu_prefs:
+			handlePrefs();
+			break;
 		}
+
+		updateButtonStates();
+
 		return false;
 	}
+
+    protected void handleStart(MenuItem startIcon, MenuItem stopIcon) {
+		if (StringUtils.isBlank(prefsBean.getPassword()))
+		{
+			Toast.makeText(
+				getApplicationContext(),
+				R.string.haveToSetPassword,
+				Toast.LENGTH_LONG).show();
+
+		} else {
+			Intent intent = createFtpServiceIntent();
+	    	startService(intent);
+	    	startIcon.setVisible(false);
+	    	stopIcon.setVisible(true);
+		}
+    }
+
+    protected void handleStop(MenuItem startIcon, MenuItem stopIcon) {
+    	Intent intent = createFtpServiceIntent();
+    	stopService(intent);
+    	startIcon.setVisible(true);
+    	stopIcon.setVisible(false);
+    }
+
+    protected void handlePrefs() {
+		Intent intent = createPreferencesIntent();
+		startActivity(intent);
+    }
+
+    /**
+     * @return Intent to start/stop {@link FtpServerService}.
+     */
+    protected Intent createFtpServiceIntent() {
+    	Intent intent = new Intent(this, FtpServerService.class);
+    	intent.putExtra(EXTRA_PREFS_BEAN, prefsBean);
+    	return intent;
+    }
 
 	@Override
 	protected void onStart() {

@@ -41,20 +41,5 @@
 		    android:layout_height="wrap_content"
 	    	android:stretchColumns="1" />
 	
-	    <Button 
-	        android:id="@+id/startButton" 
-	        android:layout_width="fill_parent" 
-	        android:layout_height="wrap_content" 
-	        android:text="@string/startService" />
-		<Button 
-		    android:id="@+id/stopButton" 
-		    android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content" 
-		    android:text="@string/stopService" />
-	    <Button 
-	        android:id="@+id/prefsButton" 
-	        android:layout_width="fill_parent" 
-	        android:layout_height="wrap_content" 
-	        android:text="@string/prefs" />
 	</LinearLayout>
 </ScrollView>
