@@ -123,14 +123,6 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     /**
-     * @return Intent to open preferences page.
-     */
-    protected Intent createPreferencesIntent() {
-    	Intent intent = new Intent(this, FtpPrefsActivity.class);
-    	return intent;
-    }
-
-    /**
      * Creates table containing network interfaces.
      */
     protected void createIfaceTable() {
@@ -327,7 +319,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		updateButtonStates();
 
-		return false;
+		return super.onOptionsItemSelected(item);
 	}
 
     protected void handleStart(MenuItem startIcon, MenuItem stopIcon) {
@@ -354,7 +346,7 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     protected void handlePrefs() {
-		Intent intent = createPreferencesIntent();
+    	Intent intent = new Intent(this, FtpPrefsActivity.class);
 		startActivity(intent);
     }
 
