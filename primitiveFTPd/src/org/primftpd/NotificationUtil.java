@@ -14,8 +14,8 @@ public class NotificationUtil
 			Notification notification)
 	{
 		NotificationManager notiMgr = (NotificationManager) androidObject.getSystemService(
-				Context.NOTIFICATION_SERVICE);
-			notiMgr.notify(NOTIFICATION_ID, notification);
+			Context.NOTIFICATION_SERVICE);
+		notiMgr.notify(NOTIFICATION_ID, notification);
 	}
 
 	public static void removeStatusbarNotification(ContextWrapper androidObject) {

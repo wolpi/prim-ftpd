@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -174,20 +173,27 @@ public class FtpServerService extends Service
 	 * Creates Statusbar Notification.
 	 */
 	protected void createStatusbarNotification() {
+		// create pending intent
+		Intent notificationIntent = new Intent(this, PrimitiveFtpdActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
 		// create notification
 		int icon = R.drawable.ic_launcher;
 		CharSequence tickerText = getText(R.string.serverRunning);
-		long when = System.currentTimeMillis();
-		Notification notification = new Notification(icon, tickerText, when);
-		notification.flags = Notification.FLAG_NO_CLEAR;
-
-		// create pending intent
-		Context context = getApplicationContext();
 		CharSequence contentTitle = getText(R.string.notificationTitle);
 		CharSequence contentText = tickerText;
-		Intent notificationIntent = new Intent(this, PrimitiveFtpdActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+
+		long when = System.currentTimeMillis();
+
+		Notification notification = new Notification.Builder(getApplicationContext())
+			.setTicker(tickerText)
+			.setContentTitle(contentTitle)
+			.setContentText(contentText)
+			.setSmallIcon(icon)
+			.setContentIntent(contentIntent)
+			.setWhen(when)
+			.build();
+
 
 		// notification manager
 		NotificationUtil.createStatusbarNotification(this, notification);
