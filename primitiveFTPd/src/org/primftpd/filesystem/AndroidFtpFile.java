@@ -87,9 +87,14 @@ public class AndroidFtpFile implements FtpFile {
 		}
 
 		// file does not exist, probably an upload of a new file, check parent
+		// must be done in loop as some clients to not issue mkdir commands
+		// like filezilla
 		File parent = file.getParentFile();
-		if (parent != null) {
-			return parent.canWrite();
+		while (parent != null) {
+			if (parent.exists()) {
+				return parent.canWrite();
+			}
+			parent = parent.getParentFile();
 		}
 		return false;
 	}
@@ -176,6 +181,14 @@ public class AndroidFtpFile implements FtpFile {
 	public OutputStream createOutputStream(long offset) throws IOException {
 		logger.debug("createOutputStream({})", offset);
 
+		// may be necessary to create dirs
+		// see isWritable()
+		File parent = file.getParentFile();
+		if (!parent.exists()) {
+			parent.mkdirs();
+		}
+
+		// now create out stream
 		OutputStream os = null;
 		if (offset == 0) {
 			os = new FileOutputStream(file);
@@ -186,9 +199,12 @@ public class AndroidFtpFile implements FtpFile {
 			raf.seek(offset);
 			os = new OutputStream() {
 				@Override
-				public void write(int oneByte) throws IOException
-				{
+				public void write(int oneByte) throws IOException {
 					raf.write(oneByte);
+				}
+				@Override
+				public void close() throws IOException {
+					raf.close();
 				}
 			};
 		}
