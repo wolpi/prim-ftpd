@@ -76,7 +76,8 @@ public class PrimitiveFtpdActivity extends Activity {
         setContentView(R.layout.main);
 
     	// button handlers
-    	updateButtonStates();
+        // makes no sense anymore since buttons have been moved to action bar
+    	//updateButtonStates();
 
     	// XXX SSL
     	// calc certificate fingerprints
@@ -93,6 +94,18 @@ public class PrimitiveFtpdActivity extends Activity {
         	updateButtonStates();
     	}
     }
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		logger.debug("onStart()");
+
+		loadPrefs();
+
+		createPortsTable();
+		createUsernameTable();
+	}
 
     @Override
     protected void onResume() {
@@ -276,8 +289,11 @@ public class PrimitiveFtpdActivity extends Activity {
      */
     protected void updateButtonStates() {
     	if (startIcon == null || stopIcon == null) {
+            logger.debug("updateButtonStates(), no icons");
     		return;
     	}
+
+        logger.debug("updateButtonStates()");
 
     	boolean serviceRunning = checkServiceRunning();
 
@@ -295,10 +311,15 @@ public class PrimitiveFtpdActivity extends Activity {
 
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+        logger.debug("onCreateOptionsMenu()");
+
 		getMenuInflater().inflate(R.menu.pftpd, menu);
 
 		startIcon = menu.findItem(R.id.menu_start);
 		stopIcon = menu.findItem(R.id.menu_stop);
+
+		// to avoid icon flicker when invoked via notification
+		updateButtonStates();
 
 		return true;
 	}
@@ -358,18 +379,6 @@ public class PrimitiveFtpdActivity extends Activity {
     	intent.putExtra(EXTRA_PREFS_BEAN, prefsBean);
     	return intent;
     }
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-
-		logger.debug("onStart()");
-
-		loadPrefs();
-
-		createPortsTable();
-		createUsernameTable();
-	}
 
 	private static final int PORT_DEFAULT_VAL = 12345;
 	private static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
