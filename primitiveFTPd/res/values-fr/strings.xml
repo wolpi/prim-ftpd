@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">primitive ftpd</string>
+    <string name="ifacesLabel">Interface réseau</string>
+    <string name="ipAddrLabel">Adresse IP</string>
+    <string name="ifacesError">Erreur: </string>
+    <string name="protocolLabel">Protocole</string>
+    <string name="portLabel">Port</string>
+    <string name="fingerprintsLabel">Empreinte du certificat SSL</string>
+        
+    <string name="startService">Démarrer le serveur</string>
+    <string name="stopService">Arrêter le serveur</string>
+    <string name="notificationTitle">Serveur FTP</string>
+    <string name="exit">Quitter</string>
+
+    <string name="haveToSetPassword">Vous devez d\'abord définir un mot de passe</string>
+    <string name="serverRunning">Serveur FTP en marche</string>
+    <string name="serverCouldNotBeStarted">Impossible de démarrer le serveur ! Erreur : </string>
+    <string name="portInvalid">Port invalide. Retour à la valeur par défaut.</string>
+    <string name="portsEqual">Les ports sont identiques. Retour aux valeurs par défaut.</string>
+    <string name="restartServer">Vous devez redémarrer le serveur pour que les changements soient pris en compte.</string>
+
+    <string name="prefs">Préférences</string>
+    <string name="prefCategoryTitle">Préférences du serveur FTP</string>
+    <string name="prefTitleUser">Utilisateur</string>
+    <string name="prefSummaryUser">Nom d\'utilisateur sur le serveur FTP</string>
+    <string name="prefTitlePassword">Mot de passe</string>
+    <string name="prefSummaryPassword">Mot de passe du serveur FTP</string>
+    <string name="prefTitlePort">Port</string>
+    <string name="prefSummaryPort">Port du serveur FTP</string>
+    <string name="prefTitlePortSsl">Port SSL</string>
+    <string name="prefSummaryPortSsl">Port du serveur FTP (chiffré)</string>
+
+</resources>
