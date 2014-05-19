@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">primitive ftpd</string>
+    <string name="ifacesLabel">Sare interfazea</string>
+    <string name="ipAddrLabel">IP helbidea</string>
+    <string name="ifacesError">Akatsa: </string>
+    <string name="protocolLabel">Protokoloa</string>
+    <string name="portLabel">Ataka</string>
+    <string name="fingerprintsLabel">SSL ziurtagiri hatz-marka</string>
+        
+    <string name="startService">Zerbitzaria hasi</string>
+    <string name="stopService">Zerbitzaria gelditu</string>
+    <string name="notificationTitle">FTP zerbitzaria</string>
+    <string name="exit">Irten</string>
+
+    <string name="haveToSetPassword">Pasahitz bat ezarri behar duzu lehenago</string>
+    <string name="serverRunning">FTP zerbitzaria abian dago</string>
+    <string name="serverCouldNotBeStarted">Zerbitzaria ezin izan da abiarazi! Akats mezua: </string>
+    <string name="portInvalid">Ataka balioa ez da baliozkoa. Lehenetsira berrezartzen.</string>
+    <string name="portsEqual">Atakak berdinak dira. Biak lehenetsira berrezartzen.</string>
+    <string name="restartServer">Zerbitzaria berrabiarazi behar duzu aldaketak eragina izan dezaten.</string>
+
+    <string name="prefs">Hobespenak</string>
+    <string name="prefCategoryTitle">FTP zerbitzari hobespenak</string>
+    <string name="prefTitleUser">Erabiltzaile izena</string>
+    <string name="prefSummaryUser">FTP zerbitzari erabiltzaile izena</string>
+    <string name="prefTitlePassword">Pasahitza</string>
+    <string name="prefSummaryPassword">FTP zerbitzari pasahitza</string>
+    <string name="prefTitlePort">Ataka</string>
+    <string name="prefSummaryPort">FTP zerbitzari ataka</string>
+    <string name="prefTitlePortSsl">SSL ataka</string>
+    <string name="prefSummaryPortSsl">FTP zerbitzari ataka (enkriptatuta)</string>
+
+</resources>
