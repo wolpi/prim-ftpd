@@ -13,6 +13,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -22,6 +23,8 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.Process;
+import android.net.nsd.NsdManager;
+import android.net.nsd.NsdServiceInfo;
 import android.widget.Toast;
 
 /**
@@ -41,6 +44,7 @@ public class FtpServerService extends Service
 	private ServiceHandler serviceHandler;
 	private PrefsBean prefsBean;
 	private WakeLock wakeLock;
+	private NsdManager.RegistrationListener registrationListener;
 
 	/**
 	 * Handles starting and stopping of FtpServer.
@@ -90,6 +94,7 @@ public class FtpServerService extends Service
 								"pFTPd");
 						ftpService.wakeLock.acquire();
 
+						ftpService.registerService();
 		    		} else {
 		    			ftpService.stopSelf();
 
@@ -104,6 +109,7 @@ public class FtpServerService extends Service
 					logger.debug("stopping ftp server");
 					ftpService.ftpServer.stop();
 					ftpService.ftpServer = null;
+					ftpService.unregisterService();
 				}
 				if (ftpService.ftpServer == null) {
 					ftpService.removeStatusbarNotification();
@@ -249,4 +255,31 @@ public class FtpServerService extends Service
 			Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
 		}
     }
+
+    // Register a DNS-SD service (to be discoverable through Bonjour/Avahi)
+	void registerService () {
+		NsdServiceInfo serviceInfo  = new NsdServiceInfo();
+		serviceInfo.setServiceName("primitive ftpd");
+		serviceInfo.setServiceType("_ftp._tcp.");
+		serviceInfo.setPort(prefsBean.getPort());
+
+		NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+
+		registrationListener = new NsdManager.RegistrationListener() {
+				@Override
+				public void onServiceRegistered(NsdServiceInfo serviceInfo) {}
+				@Override
+				public void onRegistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {}
+				@Override
+				public void onServiceUnregistered(NsdServiceInfo serviceInfo) {}
+				@Override
+				public void onUnregistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {}
+			};
+		nsdManager.registerService(serviceInfo, NsdManager.PROTOCOL_DNS_SD, registrationListener);
+	}
+
+	void unregisterService () {
+		NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+		nsdManager.unregisterService(registrationListener);
+	}
 }
