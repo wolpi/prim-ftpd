@@ -34,6 +34,13 @@
 			android:numeric="integer"
 		/>
 		-->
+		<CheckBoxPreference 
+			android:name="announce"
+			android:key="announcePref"
+			android:defaultValue="true"
+			android:title="@string/prefTitleAnnounce"
+			android:summary="@string/prefSummaryAnnounce"
+		/>
 	</PreferenceCategory>
 
 </PreferenceScreen>

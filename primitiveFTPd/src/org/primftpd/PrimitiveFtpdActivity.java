@@ -398,6 +398,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	public static final String PREF_KEY_PASSWORD = "passwordPref";
 	public static final String PREF_KEY_PORT = "portPref";
 	public static final String PREF_KEY_SSL_PORT = "sslPortPref";
+	public static final String PREF_KEY_ANNOUNCE = "announcePref";
 
 	/**
 	 * Loads preferences and stores in member {@link #prefsBean}.
@@ -412,6 +413,10 @@ public class PrimitiveFtpdActivity extends Activity {
 		// load password
 		String password = prefs.getString(PREF_KEY_PASSWORD, null);
 		logger.debug("got password: {}", password);
+
+		// load announcement setting
+		boolean announce = prefs.getBoolean(PREF_KEY_ANNOUNCE, Boolean.TRUE);
+		logger.debug("got announce: {}", Boolean.valueOf(announce));
 
 		// load port
 		int port = loadAndValidatePort(
@@ -451,8 +456,15 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		// create prefsBean
 		PrefsBean oldPrefs = prefsBean;
-		prefsBean = new PrefsBean(userName, password, port, sslPort);
+		prefsBean = new PrefsBean(
+			userName,
+			password,
+			port,
+			sslPort,
+			announce);
 
+		// TODO oldPrefs is null when user navigates via action bar,
+		// find other way to figure out if prefs have changed
 		if (oldPrefs != null) {
 			if (!oldPrefs.equals(prefsBean) && checkServiceRunning()) {
 				Toast.makeText(
