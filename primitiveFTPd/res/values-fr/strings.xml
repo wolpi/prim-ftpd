@@ -31,5 +31,7 @@
     <string name="prefSummaryPort">Port du serveur FTP</string>
     <string name="prefTitlePortSsl">Port SSL</string>
     <string name="prefSummaryPortSsl">Port du serveur FTP (chiffré)</string>
+    <string name="prefTitleAnnounce">Annoncer le serveur sur le réseau local</string>
+    <string name="prefSummaryAnnounce">Annoncer les serveurs FTP sur le réseau local via DNS-SD (Bonjour)</string>
 
 </resources>
