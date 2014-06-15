@@ -2,8 +2,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.primftpd"
-    android:versionCode="8"
-    android:versionName="2.3" >
+    android:versionCode="9"
+    android:versionName="2.4-alpha" >
 
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="17" />
 
