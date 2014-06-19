@@ -31,5 +31,7 @@
     <string name="prefSummaryPort">FTP zerbitzari ataka</string>
     <string name="prefTitlePortSsl">SSL ataka</string>
     <string name="prefSummaryPortSsl">FTP zerbitzari ataka (enkriptatuta)</string>
+    <string name="prefTitleAnnounce">Zerbitzaren berri eman LAN sarean</string>
+    <string name="prefSummaryAnnounce">FTP zerbitzariaren berri ematen du LAN sarean DNS-SD (Bonjour) bidez</string>
 
 </resources>
