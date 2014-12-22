@@ -20,9 +20,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.text.format.Formatter;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +61,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	protected static final String SERVICE_CLASS_NAME = "org.primftpd.FtpServerService";
 	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
+	protected boolean boot_call=false;
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -70,11 +74,24 @@ public class PrimitiveFtpdActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	// basic setup
         super.onCreate(savedInstanceState);
-
         logger.debug("onCreate()");
 
         setContentView(R.layout.main);
+        if(getIntent().getExtras()!=null){
+	        if (getIntent().getExtras().getString("BOOT")!=null){
+	            boot_call=true;
+	        }
+        }
+        
+		IntentFilter filter = new IntentFilter();
+        filter.addAction(FtpServerService.BROADCAST_ACTION_COULD_NOT_START);
+        this.registerReceiver(this.receiver, filter);
 
+
+    	// register listener to reprint interfaces table when network connections change
+    	filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+    	registerReceiver(this.networkStateReceiver, filter);	
+      
     	// button handlers
         // makes no sense anymore since buttons have been moved to action bar
     	//updateButtonStates();
@@ -102,9 +119,13 @@ public class PrimitiveFtpdActivity extends Activity {
 		logger.debug("onStart()");
 
 		loadPrefs();
-
-		createPortsTable();
-		createUsernameTable();
+		
+    	if(boot_call&&!prefsBean.isBootStart()){
+			finish();
+		}else{
+			createPortsTable();
+			createUsernameTable();
+		}
 	}
 
     @Override
@@ -113,15 +134,25 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	logger.debug("onResume()");
 
-    	// broadcast receiver to update buttons
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(FtpServerService.BROADCAST_ACTION_COULD_NOT_START);
-        this.registerReceiver(this.receiver, filter);
 
+    }
+    protected void onDestroy() {
+    	super.onDestroy();
 
-    	// register listener to reprint interfaces table when network connections change
-    	filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-    	registerReceiver(this.networkStateReceiver, filter);
+    	logger.debug("onDestroy()");
+
+    	// unregister broadcast receivers
+        this.unregisterReceiver(this.receiver);
+        this.unregisterReceiver(this.networkStateReceiver);
+    }
+    
+    @Override
+    public void onBackPressed() {
+    	if(checkServiceRunning()){
+    		moveTaskToBack(true);
+    	}else{
+    		super.onBackPressed();    		
+    	}
     }
 
     @Override
@@ -130,9 +161,6 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	logger.debug("onPause()");
 
-    	// unregister broadcast receivers
-        this.unregisterReceiver(this.receiver);
-        this.unregisterReceiver(this.networkStateReceiver);
     }
 
     /**
@@ -141,6 +169,8 @@ public class PrimitiveFtpdActivity extends Activity {
     protected void createIfaceTable() {
     	TableLayout table = (TableLayout)findViewById(R.id.ifacesTable);
 
+    	int iface_cnt=0;
+    	
         // clear old entries
     	table.removeAllViews();
 
@@ -151,32 +181,56 @@ public class PrimitiveFtpdActivity extends Activity {
     		getText(R.string.ipAddrLabel));
 
     	try {
-        	Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
-            while (ifaces.hasMoreElements()) {
-                NetworkInterface iface = ifaces.nextElement();
-                String ifaceDispName = iface.getDisplayName();
-                String ifaceName = iface.getName();
-                Enumeration<InetAddress> inetAddrs = iface.getInetAddresses();
-
-                while (inetAddrs.hasMoreElements()) {
-                    InetAddress inetAddr = inetAddrs.nextElement();
-                    String hostAddr = inetAddr.getHostAddress();
-
-                    logger.debug("addr: '{}', iface name: '{}', disp name: '{}', loopback: '{}'",
-                    		new Object[]{
-                    			inetAddr,
-                    			ifaceName,
-                    			ifaceDispName,
-                    			inetAddr.isLoopbackAddress()});
-
-                    if (inetAddr.isLoopbackAddress()) {
-                    	continue;
-                    }
-
-                    createTableRow(table, ifaceDispName, hostAddr);
-                }
-
-            }
+    		if(prefsBean.isWifiMode()){
+        		WifiManager wifiManager = (WifiManager) getSystemService (Context.WIFI_SERVICE);
+        		WifiInfo info = wifiManager.getConnectionInfo ();
+        		String bind_ip=new String("");
+        		if(info!=null){
+        			if(info.getSSID()!=null){
+        				if(info.getIpAddress()!=0){
+	        				//bind_ip=Formatter.formatIpAddress(info.getIpAddress());
+	            			createTableRow(table, info.getSSID(), Formatter.formatIpAddress(info.getIpAddress()));
+	            			iface_cnt++;
+        				}
+        			}
+        		}
+            	if(iface_cnt==0){
+	            	if (!(startIcon == null || stopIcon == null)) {
+	        			handleStop(startIcon, stopIcon);
+	            	}
+	        	}else{
+	        		if(prefsBean.isBootStart()){
+	                	if (!(startIcon == null || stopIcon == null)) {
+	                		handleStart(startIcon, stopIcon);
+	                	}
+	        	    }
+	        	}
+    		}else{
+	        	Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
+	            while (ifaces.hasMoreElements()) {
+	                NetworkInterface iface = ifaces.nextElement();
+	                String ifaceDispName = iface.getDisplayName();
+	                String ifaceName = iface.getName();
+	                Enumeration<InetAddress> inetAddrs = iface.getInetAddresses();
+	
+	                while (inetAddrs.hasMoreElements()) {
+	                    InetAddress inetAddr = inetAddrs.nextElement();
+	                    String hostAddr = inetAddr.getHostAddress();
+	                    logger.debug("addr: '{}', iface name: '{}', disp name: '{}', loopback: '{}'",
+	                    		new Object[]{
+	                    			inetAddr,
+	                    			ifaceName,
+	                    			ifaceDispName,
+	                    			inetAddr.isLoopbackAddress()});
+	
+	                    if (inetAddr.isLoopbackAddress()) {
+	                    	continue;
+	                    }
+	                    createTableRow(table, ifaceDispName, hostAddr);
+	                }
+	
+	            }
+    		}
         } catch (SocketException e) {
         	logger.info("exception while iterating network interfaces", e);
 
@@ -320,7 +374,11 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		// to avoid icon flicker when invoked via notification
 		updateButtonStates();
-
+		if(boot_call&&prefsBean.isBootStart()){
+	        handleStart(startIcon, stopIcon);
+			moveTaskToBack(true);
+			boot_call=false;
+		}
 		return true;
 	}
 
@@ -352,10 +410,29 @@ public class PrimitiveFtpdActivity extends Activity {
 				Toast.LENGTH_LONG).show();
 
 		} else {
-			Intent intent = createFtpServiceIntent();
+    		WifiManager wifiManager = (WifiManager) getSystemService (Context.WIFI_SERVICE);
+    		WifiInfo info = wifiManager.getConnectionInfo ();
+    		String bind_ip=new String("");
+    		if(info!=null){
+    			if(info.getSSID()!=null){
+    				if(info.getIpAddress()!=0){
+    					bind_ip=Formatter.formatIpAddress(info.getIpAddress());
+    				}
+    			}
+    		}
+    		if(prefsBean.isWifiMode()){
+    			if(bind_ip.equals("")){//in wifi mode only wifi servers are allowed
+    				if(checkServiceRunning()){
+    					handleStop(startIcon, stopIcon);
+    				}
+    				return;
+    			}
+    		}
+    		Intent intent = createFtpServiceIntent();
+    		intent.putExtra("bind_ip", bind_ip);
 	    	startService(intent);
-	    	startIcon.setVisible(false);
-	    	stopIcon.setVisible(true);
+    		startIcon.setVisible(false);
+    		stopIcon.setVisible(true);
 		}
     }
 
@@ -399,6 +476,8 @@ public class PrimitiveFtpdActivity extends Activity {
 	public static final String PREF_KEY_PORT = "portPref";
 	public static final String PREF_KEY_SSL_PORT = "sslPortPref";
 	public static final String PREF_KEY_ANNOUNCE = "announcePref";
+	public static final String PREF_KEY_BOOTSTART = "bootstartPref";
+	public static final String PREF_KEY_WIFIMODE = "wifimodePref";
 
 	/**
 	 * Loads preferences and stores in member {@link #prefsBean}.
@@ -418,6 +497,14 @@ public class PrimitiveFtpdActivity extends Activity {
 		boolean announce = prefs.getBoolean(PREF_KEY_ANNOUNCE, Boolean.TRUE);
 		logger.debug("got announce: {}", Boolean.valueOf(announce));
 
+		// load start on boot setting
+		boolean bootstart=prefs.getBoolean(PREF_KEY_BOOTSTART, Boolean.FALSE);
+		logger.debug("got bootstart: {}", Boolean.valueOf(bootstart));
+
+		// load wifi mode setting
+		boolean wifimode=prefs.getBoolean(PREF_KEY_WIFIMODE, Boolean.FALSE);
+		logger.debug("got wifimode: {}", Boolean.valueOf(wifimode));
+		
 		// load port
 		int port = loadAndValidatePort(
 			prefs,
@@ -461,7 +548,9 @@ public class PrimitiveFtpdActivity extends Activity {
 			password,
 			port,
 			sslPort,
-			announce);
+			announce,
+			bootstart,
+			wifimode);
 
 		// TODO oldPrefs is null when user navigates via action bar,
 		// find other way to figure out if prefs have changed

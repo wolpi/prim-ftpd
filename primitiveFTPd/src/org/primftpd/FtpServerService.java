@@ -39,6 +39,7 @@ public class FtpServerService extends Service
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+	private String bindIP;
 	private FtpServer ftpServer;
 	private Looper serviceLooper;
 	private ServiceHandler serviceHandler;
@@ -85,12 +86,13 @@ public class FtpServerService extends Service
 		    			ftpService.createStatusbarNotification();
 
 						// acquire wake lock for CPU to still handle requests
-						// note: PARTIAL_WAKE_LOCK is not enough
+						// note: PARTIAL_WAKE_LOCK is not enough --> changed PARTIAL_WAKE_LOCK should be enough according do API spec.
+		    			//if server does not react than wifi switched off, a WIFI LOCK should be aquired if needed, maybe an additional pref can be used
 						logger.debug("acquiring wake lock");
 						PowerManager powerMgr =
 								(PowerManager) ftpService.getSystemService(POWER_SERVICE);
 						ftpService.wakeLock = powerMgr.newWakeLock(
-								PowerManager.SCREEN_DIM_WAKE_LOCK,
+								PowerManager.PARTIAL_WAKE_LOCK,
 								"pFTPd");
 						ftpService.wakeLock.acquire();
 
@@ -107,6 +109,7 @@ public class FtpServerService extends Service
 				}
 
 			} else if (toDo == MSG_STOP) {
+				ftpService.bindIP="";
 				if (ftpService.ftpServer != null) {
 					logger.debug("stopping ftp server");
 					ftpService.ftpServer.stop();
@@ -149,6 +152,7 @@ public class FtpServerService extends Service
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		bindIP=new String("");
 		logger.debug("onStartCommand()");
 
 		if (intent == null) {
@@ -160,6 +164,8 @@ public class FtpServerService extends Service
 		// get parameters
 		Bundle extras = intent.getExtras();
 		prefsBean = (PrefsBean)extras.get(PrimitiveFtpdActivity.EXTRA_PREFS_BEAN);
+
+		bindIP=intent.getStringExtra("bind_ip");
 
 		// send start message
 		Message msg = serviceHandler.obtainMessage();
@@ -205,7 +211,7 @@ public class FtpServerService extends Service
 			.setWhen(when)
 			.build();
 
-
+		notification.flags|=Notification.FLAG_NO_CLEAR;
 		// notification manager
 		NotificationUtil.createStatusbarNotification(this, notification);
 	}
@@ -223,6 +229,9 @@ public class FtpServerService extends Service
     protected void launchFtpServer() {
     	ListenerFactory listenerFactory = new ListenerFactory();
     	listenerFactory.setPort(prefsBean.getPort());
+    	if(!bindIP.equals("")){
+    		listenerFactory.setServerAddress(bindIP);
+    	}
 
     	FtpServerFactory serverFactory = new FtpServerFactory();
     	serverFactory.addListener("default", listenerFactory.createListener());

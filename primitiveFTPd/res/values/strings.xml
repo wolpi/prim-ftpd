@@ -33,5 +33,9 @@
     <string name="prefSummaryPortSsl">FTP server port (encrypted)</string>
     <string name="prefTitleAnnounce">Announce server in LAN</string>
     <string name="prefSummaryAnnounce">Announces FTP server in LAN via DNS-SD (Bonjour)</string>
+    <string name="prefTitleBootStart">Start during Bootup</string>
+    <string name="prefSummaryBootStart">Start and enable the server during bootup</string>
+    <string name="prefTitleWifiMode">Wifi only</string>
+    <string name="prefSummaryWifiMode">Only accept connections from wifi</string>
     
 </resources>
