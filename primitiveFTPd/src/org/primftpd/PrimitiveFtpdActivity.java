@@ -184,7 +184,6 @@ public class PrimitiveFtpdActivity extends Activity {
     		if(prefsBean.isWifiMode()){
         		WifiManager wifiManager = (WifiManager) getSystemService (Context.WIFI_SERVICE);
         		WifiInfo info = wifiManager.getConnectionInfo ();
-        		String bind_ip=new String("");
         		if(info!=null){
         			if(info.getSSID()!=null){
         				if(info.getIpAddress()!=0){
