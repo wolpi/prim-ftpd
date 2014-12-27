@@ -55,5 +55,12 @@
 			android:title="@string/prefTitleWifiMode"
 			android:summary="@string/prefSummaryWifiMode"
 		/>
+		<EditTextPreference
+			android:name="allowed_interfaces"
+			android:key="allowedInterfacesPref"
+			android:defaultValue=""
+			android:title="@string/prefAllowedInterfaces"
+			android:summary="@string/prefSummaryAllowedInterfaces"
+		/>
 		</PreferenceCategory>
 </PreferenceScreen>

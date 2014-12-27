@@ -3,8 +3,11 @@ package org.primftpd;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
@@ -25,7 +28,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
-import android.text.format.Formatter;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,19 +51,35 @@ public class PrimitiveFtpdActivity extends Activity {
 		}
 	};
 
+	private BroadcastReceiver refreshReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			loadPrefs();
+			NetworkStateChanged();
+			redrawTableandFilter();
+			restartFTPServer();
+		}
+	};
+
 	private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
 	        logger.debug("network connectivity changed, data str: '{}', action: '{}'",
 	        		intent.getDataString(),
 	        		intent.getAction());
-	        createIfaceTable();
+			loadPrefs();
+	        NetworkStateChanged();
+	    	redrawTableandFilter();
+	    	restartFTPServer();
 	    }
 	};
 
 	protected static final String SERVICE_CLASS_NAME = "org.primftpd.FtpServerService";
 	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
 	protected boolean boot_call=false;
+	protected List<String> interfaces_list=new ArrayList<String>();
+	protected List<String> ip_list=new ArrayList<String>();
+	protected ArrayList<String> bind_ip_list=new ArrayList<String>();
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -75,14 +93,14 @@ public class PrimitiveFtpdActivity extends Activity {
     	// basic setup
         super.onCreate(savedInstanceState);
         logger.debug("onCreate()");
-
+        
         setContentView(R.layout.main);
         if(getIntent().getExtras()!=null){
 	        if (getIntent().getExtras().getString("BOOT")!=null){
 	            boot_call=true;
 	        }
         }
-        
+
 		IntentFilter filter = new IntentFilter();
         filter.addAction(FtpServerService.BROADCAST_ACTION_COULD_NOT_START);
         this.registerReceiver(this.receiver, filter);
@@ -90,12 +108,14 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	// register listener to reprint interfaces table when network connections change
     	filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-    	registerReceiver(this.networkStateReceiver, filter);	
-      
-    	// button handlers
-        // makes no sense anymore since buttons have been moved to action bar
-    	//updateButtonStates();
-
+    	registerReceiver(this.networkStateReceiver, filter);
+    	
+    	filter=new IntentFilter();
+    	filter.addAction("org.primftpd.RestartUI");
+    	registerReceiver(this.refreshReceiver,filter);
+    	
+    	loadPrefs();
+    	NetworkStateChanged();
     	// XXX SSL
     	// calc certificate fingerprints
 //    	KeyStore keyStore = KeyStoreUtil.loadKeyStore(getResources());
@@ -144,6 +164,7 @@ public class PrimitiveFtpdActivity extends Activity {
     	// unregister broadcast receivers
         this.unregisterReceiver(this.receiver);
         this.unregisterReceiver(this.networkStateReceiver);
+        this.unregisterReceiver(this.refreshReceiver);
     }
     
     @Override
@@ -163,48 +184,27 @@ public class PrimitiveFtpdActivity extends Activity {
 
     }
 
-    /**
-     * Creates table containing network interfaces.
-     */
-    protected void createIfaceTable() {
-    	TableLayout table = (TableLayout)findViewById(R.id.ifacesTable);
-
-    	int iface_cnt=0;
-    	
-        // clear old entries
-    	table.removeAllViews();
-
-    	// create header line
-    	createTableRow(
-    		table,
-    		getText(R.string.ifacesLabel),
-    		getText(R.string.ipAddrLabel));
-
+    protected void NetworkStateChanged(){
+    	interfaces_list.clear();
+    	ip_list.clear();
     	try {
-    		if(prefsBean.isWifiMode()){
-        		WifiManager wifiManager = (WifiManager) getSystemService (Context.WIFI_SERVICE);
-        		WifiInfo info = wifiManager.getConnectionInfo ();
-        		if(info!=null){
-        			if(info.getSSID()!=null){
-        				if(info.getIpAddress()!=0){
-	        				//bind_ip=Formatter.formatIpAddress(info.getIpAddress());
-	            			createTableRow(table, info.getSSID(), Formatter.formatIpAddress(info.getIpAddress()));
-	            			iface_cnt++;
-        				}
-        			}
-        		}
-            	if(iface_cnt==0){
-	            	if (!(startIcon == null || stopIcon == null)) {
-	        			handleStop(startIcon, stopIcon);
-	            	}
-	        	}else{
-	        		if(prefsBean.isBootStart()){
-	                	if (!(startIcon == null || stopIcon == null)) {
-	                		handleStart(startIcon, stopIcon);
-	                	}
-	        	    }
-	        	}
-    		}else{
+			if(prefsBean.isWifiMode()){
+	    		WifiManager wifiManager = (WifiManager) getSystemService (Context.WIFI_SERVICE);
+	    		WifiInfo info = wifiManager.getConnectionInfo ();
+	    		if(info!=null){
+	    			if(info.getSSID()!=null){
+	    				if(info.getIpAddress()!=0){
+	    					String ipString = String.format(Locale.getDefault(),"%d.%d.%d.%d",(info.getIpAddress() & 0xff),(info.getIpAddress() >> 8 & 0xff),(info.getIpAddress() >> 16 & 0xff),(info.getIpAddress() >> 24 & 0xff));
+	    					ip_list.add(ipString);
+	    					if(info.getSSID().startsWith("\"")&&info.getSSID().endsWith("\"")){
+	    						interfaces_list.add(info.getSSID().substring(1,info.getSSID().length()-1));
+	    					}else{
+	    						interfaces_list.add(info.getSSID());
+	    					}
+	    				}
+	    			}
+	    		}
+			}else{
 	        	Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
 	            while (ifaces.hasMoreElements()) {
 	                NetworkInterface iface = ifaces.nextElement();
@@ -225,19 +225,75 @@ public class PrimitiveFtpdActivity extends Activity {
 	                    if (inetAddr.isLoopbackAddress()) {
 	                    	continue;
 	                    }
-	                    createTableRow(table, ifaceDispName, hostAddr);
+						ip_list.add(hostAddr);
+						interfaces_list.add(ifaceName);
 	                }
 	
 	            }
-    		}
-        } catch (SocketException e) {
-        	logger.info("exception while iterating network interfaces", e);
+			}
+	    } catch (SocketException e) {
+	    	logger.info("exception while iterating network interfaces", e);
+	
+	    	String msg = getText(R.string.ifacesError) + e.getLocalizedMessage();
+	    	Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+	    }
+    }
+    
+    protected void redrawTableandFilter(){
+    	TableLayout table = (TableLayout)findViewById(R.id.ifacesTable);
+    	ArrayList<String> allowed_interfaces=new ArrayList<String>();
+    	bind_ip_list.clear();
+    	for(String s:Arrays.asList(prefsBean.getAllowedInterfaces().split(","))){
+    		String f=s.trim();
+    		allowed_interfaces.add(f);
+    	}
+    	
+    	// clear old entries
+    	table.removeAllViews();
 
-        	String msg = getText(R.string.ifacesError) + e.getLocalizedMessage();
-        	Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        }
+    	// create header line
+    	createTableRow(
+    		table,
+    		getText(R.string.ifacesLabel),
+    		getText(R.string.ipAddrLabel),"");
+    	
+    	for( int i=0;i<interfaces_list.size();i++ )
+    	{
+    		if(interfaces_list.get(i)!=null){
+	    		if(allowed_interfaces!=null){
+	    			if(allowed_interfaces.size()>0){
+	    				if((allowed_interfaces.size()==1)&&
+	    						(allowed_interfaces.get(0).length()==0)){
+	    	    			createTableRow(table,interfaces_list.get(i),ip_list.get(i),"o");
+	    	    			bind_ip_list.add(ip_list.get(i));
+	    				}else{
+		    				if(allowed_interfaces.contains(interfaces_list.get(i))){
+		    	    			createTableRow(table,interfaces_list.get(i),ip_list.get(i),"o");
+		    	    			bind_ip_list.add(ip_list.get(i));
+		    				}else{
+		    	    			createTableRow(table,interfaces_list.get(i),ip_list.get(i),"x");
+		    				}
+	    				}
+	    			}else{
+    	    			createTableRow(table,interfaces_list.get(i),ip_list.get(i),"o");
+    	    			bind_ip_list.add(ip_list.get(i));
+	    			}
+	    		}else{
+	    			createTableRow(table,interfaces_list.get(i),ip_list.get(i),"o");
+	    			bind_ip_list.add(ip_list.get(i));
+	    		}
+    		}
+    	}
     }
 
+    protected void restartFTPServer(){
+    	if(checkServiceRunning()){
+	        handleStop(startIcon, stopIcon);
+	        handleStart(startIcon, stopIcon);
+    
+    	}
+    }
+    
     /**
      * Creates a 2 column row in a table.
      *
@@ -248,7 +304,8 @@ public class PrimitiveFtpdActivity extends Activity {
     protected void createTableRow(
     		TableLayout table,
     		CharSequence label,
-    		CharSequence value)
+    		CharSequence value,
+    		CharSequence bound)
     {
     	TableRow row = new TableRow(table.getContext());
     	table.addView(row);
@@ -267,7 +324,11 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	valueView.setLayoutParams(params);
     	valueView.setGravity(Gravity.LEFT);
-    	valueView.setText(value);
+    	if(bound.length()>0){
+    		valueView.setText(value+" ("+bound+")");
+    	}else{
+    		valueView.setText(value);
+    	}
     }
 
     /**
@@ -283,12 +344,12 @@ public class PrimitiveFtpdActivity extends Activity {
     	createTableRow(
     		table,
     		getText(R.string.protocolLabel),
-    		getText(R.string.portLabel));
+    		getText(R.string.portLabel),"");
 
     	createTableRow(
     		table,
     		"ftp",
-    		prefsBean.getPortStr());
+    		prefsBean.getPortStr(),"");
 
     	// XXX SSL
 //    	createTableRow(
@@ -307,7 +368,7 @@ public class PrimitiveFtpdActivity extends Activity {
     	createTableRow(
     		table,
     		getText(R.string.prefTitleUser),
-    		prefsBean.getUserName());
+    		prefsBean.getUserName(),"");
     }
 
     protected void createFingerprintTable() {
@@ -316,11 +377,11 @@ public class PrimitiveFtpdActivity extends Activity {
     	createTableRow(
     		table,
     		"MD5",
-    		Html.fromHtml(md5Fingerprint));
+    		Html.fromHtml(md5Fingerprint),"");
     	createTableRow(
     		table,
     		"SHA1",
-    		Html.fromHtml(sha1Fingerprint));
+    		Html.fromHtml(sha1Fingerprint),"");
     }
 
     /**
@@ -409,37 +470,29 @@ public class PrimitiveFtpdActivity extends Activity {
 				Toast.LENGTH_LONG).show();
 
 		} else {
-    		WifiManager wifiManager = (WifiManager) getSystemService (Context.WIFI_SERVICE);
-    		WifiInfo info = wifiManager.getConnectionInfo ();
-    		String bind_ip=new String("");
-    		if(info!=null){
-    			if(info.getSSID()!=null){
-    				if(info.getIpAddress()!=0){
-    					bind_ip=Formatter.formatIpAddress(info.getIpAddress());
-    				}
-    			}
-    		}
-    		if(prefsBean.isWifiMode()){
-    			if(bind_ip.equals("")){//in wifi mode only wifi servers are allowed
-    				if(checkServiceRunning()){
-    					handleStop(startIcon, stopIcon);
-    				}
+    		if(bind_ip_list!=null){
+    			if(bind_ip_list.size()==0){//no servers to bind to
+   					handleStop(startIcon, stopIcon);
     				return;
     			}
     		}
     		Intent intent = createFtpServiceIntent();
-    		intent.putExtra("bind_ip", bind_ip);
+    		intent.putStringArrayListExtra("bind_ip", bind_ip_list);
 	    	startService(intent);
-    		startIcon.setVisible(false);
-    		stopIcon.setVisible(true);
+	    	if((startIcon!=null)&&(stopIcon!=null)){
+	    		startIcon.setVisible(false);
+	    		stopIcon.setVisible(true);
+	    	}
 		}
     }
 
     protected void handleStop(MenuItem startIcon, MenuItem stopIcon) {
     	Intent intent = createFtpServiceIntent();
     	stopService(intent);
-    	startIcon.setVisible(true);
-    	stopIcon.setVisible(false);
+    	if((startIcon!=null)&&(stopIcon!=null)){
+	    	startIcon.setVisible(true);
+	    	stopIcon.setVisible(false);
+    	}
     }
 
     protected void handlePrefs() {
@@ -477,6 +530,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	public static final String PREF_KEY_ANNOUNCE = "announcePref";
 	public static final String PREF_KEY_BOOTSTART = "bootstartPref";
 	public static final String PREF_KEY_WIFIMODE = "wifimodePref";
+	public static final String PREF_KEY_ALLOWED_INTERFACES = "allowedInterfacesPref";
 
 	/**
 	 * Loads preferences and stores in member {@link #prefsBean}.
@@ -503,6 +557,9 @@ public class PrimitiveFtpdActivity extends Activity {
 		// load wifi mode setting
 		boolean wifimode=prefs.getBoolean(PREF_KEY_WIFIMODE, Boolean.FALSE);
 		logger.debug("got wifimode: {}", Boolean.valueOf(wifimode));
+		
+		String allowed_interfaces=prefs.getString(PREF_KEY_ALLOWED_INTERFACES,"");
+		logger.debug("got allowed interfaces: {}", allowed_interfaces);
 		
 		// load port
 		int port = loadAndValidatePort(
@@ -549,7 +606,8 @@ public class PrimitiveFtpdActivity extends Activity {
 			sslPort,
 			announce,
 			bootstart,
-			wifimode);
+			wifimode,
+			allowed_interfaces);
 
 		// TODO oldPrefs is null when user navigates via action bar,
 		// find other way to figure out if prefs have changed

@@ -1,7 +1,9 @@
 package org.primftpd;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
+import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.listener.ListenerFactory;
@@ -39,7 +41,7 @@ public class FtpServerService extends Service
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private String bindIP;
+	private ArrayList<String> bindIP=new ArrayList<String>();
 	private FtpServer ftpServer;
 	private Looper serviceLooper;
 	private ServiceHandler serviceHandler;
@@ -109,7 +111,7 @@ public class FtpServerService extends Service
 				}
 
 			} else if (toDo == MSG_STOP) {
-				ftpService.bindIP="";
+				ftpService.bindIP.clear();
 				if (ftpService.ftpServer != null) {
 					logger.debug("stopping ftp server");
 					ftpService.ftpServer.stop();
@@ -152,7 +154,6 @@ public class FtpServerService extends Service
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		bindIP=new String("");
 		logger.debug("onStartCommand()");
 
 		if (intent == null) {
@@ -161,11 +162,11 @@ public class FtpServerService extends Service
 			return START_REDELIVER_INTENT;
 		}
 
+		bindIP = intent.getStringArrayListExtra("bind_ip");
+
 		// get parameters
 		Bundle extras = intent.getExtras();
 		prefsBean = (PrefsBean)extras.get(PrimitiveFtpdActivity.EXTRA_PREFS_BEAN);
-
-		bindIP=intent.getStringExtra("bind_ip");
 
 		// send start message
 		Message msg = serviceHandler.obtainMessage();
@@ -227,15 +228,26 @@ public class FtpServerService extends Service
      * Launches FTP server.
      */
     protected void launchFtpServer() {
-    	ListenerFactory listenerFactory = new ListenerFactory();
-    	listenerFactory.setPort(prefsBean.getPort());
-    	if(!bindIP.equals("")){
-    		listenerFactory.setServerAddress(bindIP);
-    	}
-
     	FtpServerFactory serverFactory = new FtpServerFactory();
-    	serverFactory.addListener("default", listenerFactory.createListener());
-
+    	serverFactory.getListeners().clear();
+		if(bindIP!=null){
+	    	for(String ip:bindIP){
+	        	ListenerFactory listenerFactory = new ListenerFactory();
+	        	listenerFactory.setPort(prefsBean.getPort());
+	    		listenerFactory.setServerAddress(ip);
+	        	//setup default connection timeout
+	        	listenerFactory.setIdleTimeout(300);
+	        	serverFactory.addListener(ip, listenerFactory.createListener());
+	    	}
+    	}
+    	
+    	//now add heavier protection against brute force attacks
+    	ConnectionConfigFactory connConfig=new ConnectionConfigFactory();
+    	connConfig.setAnonymousLoginEnabled(false);
+    	connConfig.setMaxLoginFailures(5);
+    	connConfig.setLoginFailureDelay(2000);
+    	serverFactory.setConnectionConfig(connConfig.createConnectionConfig());
+    	
     	// user manager & file system
     	serverFactory.setUserManager(new AndroidPrefsUserManager(prefsBean));
     	serverFactory.setFileSystem(new AndroidFileSystemFactory());

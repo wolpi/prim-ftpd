@@ -37,5 +37,6 @@
     <string name="prefSummaryBootStart">Start and enable the server during bootup</string>
     <string name="prefTitleWifiMode">Wifi only</string>
     <string name="prefSummaryWifiMode">Only accept connections from wifi</string>
-    
+    <string name="prefAllowedInterfaces">Bind to interfaces/SSIDs</string>
+    <string name="prefSummaryAllowedInterfaces">Comma separted list of interfaces to bind to. In wifi mode list of allowed SSIDs.</string>
 </resources>
