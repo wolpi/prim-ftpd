@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
@@ -46,7 +48,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (FtpServerService.BROADCAST_ACTION_COULD_NOT_START.equals(intent.getAction())) {
-				updateButtonStates();
+				RedrawUI();
 			}
 		}
 	};
@@ -56,30 +58,52 @@ public class PrimitiveFtpdActivity extends Activity {
 		public void onReceive(Context context, Intent intent) {
 			loadPrefs();
 			NetworkStateChanged();
-			redrawTableandFilter();
+	        RedrawUI();
 			restartFTPServer();
 		}
 	};
 
+	//a timer used to filter spammy broadcasts of changing network connections to avoid restarting the service too often
+	protected static Timer networkStateReceiverFilter;
 	private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
 	        logger.debug("network connectivity changed, data str: '{}', action: '{}'",
 	        		intent.getDataString(),
 	        		intent.getAction());
-			loadPrefs();
-	        NetworkStateChanged();
-	    	redrawTableandFilter();
-	    	restartFTPServer();
+
+	        if(networkStateReceiverFilter!=null){//if timer already runs cancel it
+	    		networkStateReceiverFilter.cancel();
+	    	}
+	    	networkStateReceiverFilter = new Timer();
+	    	networkStateReceiverFilter.schedule(new TimerTask() {//start 5s timer until the service is restarted
+	            @Override
+	            public void run() {
+	                runOnUiThread(new Runnable() {
+	                	public void run() {
+	        		        loadPrefs();
+	        		        NetworkStateChanged();
+	        		        RedrawUI();
+	        		    	restartFTPServer();
+	        		    }
+	                });
+
+	            }
+	    	}, 5000);
+    
 	    }
 	};
 
 	protected static final String SERVICE_CLASS_NAME = "org.primftpd.FtpServerService";
 	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
-	protected boolean boot_call=false;
-	protected List<String> interfaces_list=new ArrayList<String>();
-	protected List<String> ip_list=new ArrayList<String>();
-	protected ArrayList<String> bind_ip_list=new ArrayList<String>();
+	//contains a list of all detected interfaces
+	protected List<String> interfacesList=new ArrayList<String>();
+	//contains a list of the ip addresses of all detected interfaces
+	protected List<String> ipList=new ArrayList<String>();
+	//contains a list off all detected ip addresses and a marker if they should be bound to by the service
+	protected ArrayList<String> bindIpList=new ArrayList<String>();
+	//if true, the user wants to have the service off (usually after pressing the stop button)
+	protected boolean forceOff;
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -94,28 +118,41 @@ public class PrimitiveFtpdActivity extends Activity {
         super.onCreate(savedInstanceState);
         logger.debug("onCreate()");
         
-        setContentView(R.layout.main);
-        if(getIntent().getExtras()!=null){
-	        if (getIntent().getExtras().getString("BOOT")!=null){
-	            boot_call=true;
-	        }
-        }
+        loadPrefs();//load the current preferences
+    	NetworkStateChanged();//determine network addresses and apply filters
 
+    	//register listener to display a toast, if the service could not be started
 		IntentFilter filter = new IntentFilter();
         filter.addAction(FtpServerService.BROADCAST_ACTION_COULD_NOT_START);
         this.registerReceiver(this.receiver, filter);
 
-
-    	// register listener to reprint interfaces table when network connections change
+    	// register listener to refresh the UI and to rebind the service to new interfaces when network connections change
     	filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     	registerReceiver(this.networkStateReceiver, filter);
     	
+    	// register listener to refresh the UI via a broadcast (e.g. when leaving the settings activity)
     	filter=new IntentFilter();
-    	filter.addAction("org.primftpd.RestartUI");
+    	filter.addAction("org.primftpd.RedrawUI");
     	registerReceiver(this.refreshReceiver,filter);
-    	
-    	loadPrefs();
-    	NetworkStateChanged();
+
+    	//are we being called on bootup`?
+    	if(getIntent().getExtras()!=null){
+	        if (getIntent().getExtras().getString("BOOT")!=null){//start the service and quit
+	            forceOff=false;
+	            StartFTPServer();
+	            moveTaskToBack(true);
+	            finish();
+	        }
+        }
+        
+        setContentView(R.layout.main);
+        //initialize forceOff to be able to determine later, if the service should be restarted or stopped, if the network connection changes
+        if(checkServiceRunning()){
+        	forceOff=false;
+        }else{
+        	forceOff=true;
+        }
+        
     	// XXX SSL
     	// calc certificate fingerprints
 //    	KeyStore keyStore = KeyStoreUtil.loadKeyStore(getResources());
@@ -128,7 +165,7 @@ public class PrimitiveFtpdActivity extends Activity {
     public void onWindowFocusChanged(boolean hasFocus) {
     	if (hasFocus) {
         	logger.debug("onWindowFocusChanged(true)");
-        	updateButtonStates();
+        	RedrawUI();
     	}
     }
 
@@ -139,13 +176,8 @@ public class PrimitiveFtpdActivity extends Activity {
 		logger.debug("onStart()");
 
 		loadPrefs();
-		
-    	if(boot_call&&!prefsBean.isBootStart()){
-			finish();
-		}else{
-			createPortsTable();
-			createUsernameTable();
-		}
+	
+		RedrawUI();
 	}
 
     @Override
@@ -153,9 +185,9 @@ public class PrimitiveFtpdActivity extends Activity {
     	super.onResume();
 
     	logger.debug("onResume()");
-
-
+    
     }
+
     protected void onDestroy() {
     	super.onDestroy();
 
@@ -169,7 +201,7 @@ public class PrimitiveFtpdActivity extends Activity {
     
     @Override
     public void onBackPressed() {
-    	if(checkServiceRunning()){
+    	if(checkServiceRunning()){//if the service is still running, do not quit the application
     		moveTaskToBack(true);
     	}else{
     		super.onBackPressed();    		
@@ -181,116 +213,73 @@ public class PrimitiveFtpdActivity extends Activity {
     	super.onPause();
 
     	logger.debug("onPause()");
-
     }
 
-    protected void NetworkStateChanged(){
-    	interfaces_list.clear();
-    	ip_list.clear();
-    	try {
-			if(prefsBean.isWifiMode()){
-	    		WifiManager wifiManager = (WifiManager) getSystemService (Context.WIFI_SERVICE);
-	    		WifiInfo info = wifiManager.getConnectionInfo ();
-	    		if(info!=null){
-	    			if(info.getSSID()!=null){
-	    				if(info.getIpAddress()!=0){
-	    					String ipString = String.format(Locale.getDefault(),"%d.%d.%d.%d",(info.getIpAddress() & 0xff),(info.getIpAddress() >> 8 & 0xff),(info.getIpAddress() >> 16 & 0xff),(info.getIpAddress() >> 24 & 0xff));
-	    					ip_list.add(ipString);
-	    					if(info.getSSID().startsWith("\"")&&info.getSSID().endsWith("\"")){
-	    						interfaces_list.add(info.getSSID().substring(1,info.getSSID().length()-1));
-	    					}else{
-	    						interfaces_list.add(info.getSSID());
-	    					}
-	    				}
-	    			}
-	    		}
-			}else{
-	        	Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
-	            while (ifaces.hasMoreElements()) {
-	                NetworkInterface iface = ifaces.nextElement();
-	                String ifaceDispName = iface.getDisplayName();
-	                String ifaceName = iface.getName();
-	                Enumeration<InetAddress> inetAddrs = iface.getInetAddresses();
+    protected MenuItem startIcon;
+	protected MenuItem stopIcon;
+
+    @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+        logger.debug("onCreateOptionsMenu()");
+		getMenuInflater().inflate(R.menu.pftpd, menu);
+		startIcon = menu.findItem(R.id.menu_start);
+		stopIcon = menu.findItem(R.id.menu_stop);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_start:
+			forceOff=false;
+			StartFTPServer();
+			break;
+		case R.id.menu_stop:
+			forceOff=true;
+			StopFTPServer();
+			break;
+		case R.id.menu_prefs:
+			handlePrefs();
+			break;
+		}
+		RedrawUI();
+		return super.onOptionsItemSelected(item);
+	}
 	
-	                while (inetAddrs.hasMoreElements()) {
-	                    InetAddress inetAddr = inetAddrs.nextElement();
-	                    String hostAddr = inetAddr.getHostAddress();
-	                    logger.debug("addr: '{}', iface name: '{}', disp name: '{}', loopback: '{}'",
-	                    		new Object[]{
-	                    			inetAddr,
-	                    			ifaceName,
-	                    			ifaceDispName,
-	                    			inetAddr.isLoopbackAddress()});
+/*********************************************************************************************************/
+	/**
+	 * redraws the complete user interface by calling all needed methods for
+	 * the different parts of the layout	
+	 */
+	protected void RedrawUI(){
+		createPortsTable();
+		createUsernameTable();
+		redrawTable();
+		updateButtonStates();
+	}
 	
-	                    if (inetAddr.isLoopbackAddress()) {
-	                    	continue;
-	                    }
-						ip_list.add(hostAddr);
-						interfaces_list.add(ifaceName);
-	                }
-	
-	            }
-			}
-	    } catch (SocketException e) {
-	    	logger.info("exception while iterating network interfaces", e);
-	
-	    	String msg = getText(R.string.ifacesError) + e.getLocalizedMessage();
-	    	Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-	    }
-    }
-    
-    protected void redrawTableandFilter(){
+	/**
+	 * fills the table with entries of IP and networks interfaces/SSIDs 
+	 */
+    protected void redrawTable(){
     	TableLayout table = (TableLayout)findViewById(R.id.ifacesTable);
-    	ArrayList<String> allowed_interfaces=new ArrayList<String>();
-    	bind_ip_list.clear();
-    	for(String s:Arrays.asList(prefsBean.getAllowedInterfaces().split(","))){
-    		String f=s.trim();
-    		allowed_interfaces.add(f);
-    	}
-    	
+
     	// clear old entries
     	table.removeAllViews();
-
+    	
     	// create header line
     	createTableRow(
     		table,
     		getText(R.string.ifacesLabel),
     		getText(R.string.ipAddrLabel),"");
     	
-    	for( int i=0;i<interfaces_list.size();i++ )
-    	{
-    		if(interfaces_list.get(i)!=null){
-	    		if(allowed_interfaces!=null){
-	    			if(allowed_interfaces.size()>0){
-	    				if((allowed_interfaces.size()==1)&&
-	    						(allowed_interfaces.get(0).length()==0)){
-	    	    			createTableRow(table,interfaces_list.get(i),ip_list.get(i),"o");
-	    	    			bind_ip_list.add(ip_list.get(i));
-	    				}else{
-		    				if(allowed_interfaces.contains(interfaces_list.get(i))){
-		    	    			createTableRow(table,interfaces_list.get(i),ip_list.get(i),"o");
-		    	    			bind_ip_list.add(ip_list.get(i));
-		    				}else{
-		    	    			createTableRow(table,interfaces_list.get(i),ip_list.get(i),"x");
-		    				}
-	    				}
-	    			}else{
-    	    			createTableRow(table,interfaces_list.get(i),ip_list.get(i),"o");
-    	    			bind_ip_list.add(ip_list.get(i));
-	    			}
-	    		}else{
-	    			createTableRow(table,interfaces_list.get(i),ip_list.get(i),"o");
-	    			bind_ip_list.add(ip_list.get(i));
-	    		}
+    	for( int i=0;i<interfacesList.size();i++ )
+    	{	
+    		if(bindIpList.get(i).split("\0")[1].equals("1")){
+    			createTableRow(table,interfacesList.get(i),bindIpList.get(i).split("\0")[0],"o");
+    		}else{
+    			createTableRow(table,interfacesList.get(i),bindIpList.get(i).split("\0")[0],"x");
     		}
-    	}
-    }
-
-    protected void restartFTPServer(){
-    	if(checkServiceRunning()){
-	        handleStop(startIcon, stopIcon);
-	        handleStart(startIcon, stopIcon);
-    
     	}
     }
     
@@ -385,20 +374,6 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     /**
-     * @return True if {@link FtpServerService} is running.
-     */
-    protected boolean checkServiceRunning() {
-		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-		List<RunningServiceInfo> runningServices = manager.getRunningServices(Integer.MAX_VALUE);
-		for (RunningServiceInfo service : runningServices) {
-			if (SERVICE_CLASS_NAME.equals(service.service.getClassName())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-    /**
      * Updates enabled state of start/stop buttons.
      */
     protected void updateButtonStates() {
@@ -420,48 +395,135 @@ public class PrimitiveFtpdActivity extends Activity {
     	}
     }
 
-    protected MenuItem startIcon;
-	protected MenuItem stopIcon;
-
-    @Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-        logger.debug("onCreateOptionsMenu()");
-
-		getMenuInflater().inflate(R.menu.pftpd, menu);
-
-		startIcon = menu.findItem(R.id.menu_start);
-		stopIcon = menu.findItem(R.id.menu_stop);
-
-		// to avoid icon flicker when invoked via notification
-		updateButtonStates();
-		if(boot_call&&prefsBean.isBootStart()){
-	        handleStart(startIcon, stopIcon);
-			moveTaskToBack(true);
-			boot_call=false;
+/*************************************************************************************************************************/
+    /**
+     * @return True if {@link FtpServerService} is running.
+     */
+    protected boolean checkServiceRunning() {
+		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		List<RunningServiceInfo> runningServices = manager.getRunningServices(Integer.MAX_VALUE);
+		for (RunningServiceInfo service : runningServices) {
+			if (SERVICE_CLASS_NAME.equals(service.service.getClassName())) {
+				return true;
+			}
 		}
-		return true;
+		return false;
 	}
+    
+	/**
+	 * determines the available network interfaces and their corresponding ip addresses
+	 */
+    protected void NetworkStateChanged(){
+    	loadPrefs();
+    	interfacesList.clear();
+    	ipList.clear();
+    	try {
+			if(prefsBean.isWifiMode()){
+	    		WifiManager wifiManager = (WifiManager) getSystemService (Context.WIFI_SERVICE);
+	    		WifiInfo info = wifiManager.getConnectionInfo ();
+	    		if(info!=null){
+	    			if(info.getSSID()!=null){
+	    				if(info.getIpAddress()!=0){
+	    					String ipString = String.format(Locale.getDefault(),"%d.%d.%d.%d",(info.getIpAddress() & 0xff),(info.getIpAddress() >> 8 & 0xff),(info.getIpAddress() >> 16 & 0xff),(info.getIpAddress() >> 24 & 0xff));
+	    					ipList.add(ipString);
+	    					if(info.getSSID().startsWith("\"")&&info.getSSID().endsWith("\"")){
+	    						interfacesList.add(info.getSSID().substring(1,info.getSSID().length()-1));
+	    					}else{
+	    						interfacesList.add(info.getSSID());
+	    					}
+	    				}
+	    			}
+	    		}
+			}else{
+	        	Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
+	            while (ifaces.hasMoreElements()) {
+	                NetworkInterface iface = ifaces.nextElement();
+	                String ifaceDispName = iface.getDisplayName();
+	                String ifaceName = iface.getName();
+	                Enumeration<InetAddress> inetAddrs = iface.getInetAddresses();
+	
+	                while (inetAddrs.hasMoreElements()) {
+	                    InetAddress inetAddr = inetAddrs.nextElement();
+	                    String hostAddr = inetAddr.getHostAddress();
+	                    logger.debug("addr: '{}', iface name: '{}', disp name: '{}', loopback: '{}'",
+	                    		new Object[]{
+	                    			inetAddr,
+	                    			ifaceName,
+	                    			ifaceDispName,
+	                    			inetAddr.isLoopbackAddress()});
+	
+	                    if (inetAddr.isLoopbackAddress()) {
+	                    	continue;
+	                    }
+						ipList.add(hostAddr);
+						interfacesList.add(ifaceName);
+	                }
+	
+	            }
+			}
+			FilterBindInterfaces();
+	    } catch (SocketException e) {
+	    	logger.info("exception while iterating network interfaces", e);
+	
+	    	String msg = getText(R.string.ifacesError) + e.getLocalizedMessage();
+	    	Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+	    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_start:
-			handleStart(startIcon, stopIcon);
-			break;
-		case R.id.menu_stop:
-			handleStop(startIcon, stopIcon);
-			break;
-		case R.id.menu_prefs:
-			handlePrefs();
-			break;
-		}
+    }
+    
+    /**
+     * filters out all interfaces that should not be bound to by the service
+     * as setup in the preferences
+     */
+    protected void FilterBindInterfaces(){
+    	ArrayList<String> allowedInterfaces=new ArrayList<String>();
+    	bindIpList.clear();
+    	for(String s:Arrays.asList(prefsBean.getAllowedInterfaces().split(","))){
+    		String f=s.trim();
+    		allowedInterfaces.add(f);
+    	}
+    	for( int i=0;i<interfacesList.size();i++ )
+    	{
+    		if(interfacesList.get(i)!=null){
+	    		if(allowedInterfaces!=null){
+	    			if(allowedInterfaces.size()>0){
+	    				if((allowedInterfaces.size()==1)&&
+	    						(allowedInterfaces.get(0).length()==0)){
+	    	    			bindIpList.add(ipList.get(i)+"\0"+"1");
+	    				}else{
+		    				if(allowedInterfaces.contains(interfacesList.get(i))){
+		    	    			bindIpList.add(ipList.get(i)+"\0"+"1");
+		    				}else{
+		    	    			bindIpList.add(ipList.get(i)+"\0"+"0");
+		    				}
+	    				}
+	    			}else{
+    	    			bindIpList.add(ipList.get(i)+"\0"+"1");
+	    			}
+	    		}else{
+	    			bindIpList.add(ipList.get(i)+"\0"+"1");
+	    		}
+    		}
+    	}
+    }
+    
+    /**
+     * restarts the service
+     * also takes care if the user actually wants to disable the service
+     */
+    protected void restartFTPServer(){
+    	if(forceOff){
+    		StopFTPServer();
+    	}else{
+    		StopFTPServer();
+    		StartFTPServer();
+    	}
+    }
 
-		updateButtonStates();
-
-		return super.onOptionsItemSelected(item);
-	}
-
-    protected void handleStart(MenuItem startIcon, MenuItem stopIcon) {
+    /**
+     * starts the 
+     */
+    protected void StartFTPServer() {
 		if (StringUtils.isBlank(prefsBean.getPassword()))
 		{
 			Toast.makeText(
@@ -470,31 +532,31 @@ public class PrimitiveFtpdActivity extends Activity {
 				Toast.LENGTH_LONG).show();
 
 		} else {
-    		if(bind_ip_list!=null){
-    			if(bind_ip_list.size()==0){//no servers to bind to
-   					handleStop(startIcon, stopIcon);
-    				return;
-    			}
+			int i=0;
+    		if(bindIpList!=null){
+				for(String s:bindIpList){
+					if(s.split("\0")[1].equals("1")){
+						i++;
+					}
+				}
+    		}
+   			if(i==0){//no servers to bind to
+				StopFTPServer();
+   				return;
     		}
     		Intent intent = createFtpServiceIntent();
-    		intent.putStringArrayListExtra("bind_ip", bind_ip_list);
+    		intent.putStringArrayListExtra("bindIP", bindIpList);
 	    	startService(intent);
-	    	if((startIcon!=null)&&(stopIcon!=null)){
-	    		startIcon.setVisible(false);
-	    		stopIcon.setVisible(true);
-	    	}
 		}
     }
 
-    protected void handleStop(MenuItem startIcon, MenuItem stopIcon) {
-    	Intent intent = createFtpServiceIntent();
-    	stopService(intent);
-    	if((startIcon!=null)&&(stopIcon!=null)){
-	    	startIcon.setVisible(true);
-	    	stopIcon.setVisible(false);
-    	}
-    }
+	protected void StopFTPServer() {
+		Intent intent = createFtpServiceIntent();
+		stopService(intent);
+	}
 
+/*************************************************************************************************************************/
+	
     protected void handlePrefs() {
     	Intent intent = new Intent(this, FtpPrefsActivity.class);
 		startActivity(intent);
@@ -551,12 +613,12 @@ public class PrimitiveFtpdActivity extends Activity {
 		logger.debug("got announce: {}", Boolean.valueOf(announce));
 
 		// load start on boot setting
-		boolean bootstart=prefs.getBoolean(PREF_KEY_BOOTSTART, Boolean.FALSE);
-		logger.debug("got bootstart: {}", Boolean.valueOf(bootstart));
+		boolean bootStart=prefs.getBoolean(PREF_KEY_BOOTSTART, Boolean.FALSE);
+		logger.debug("got bootstart: {}", Boolean.valueOf(bootStart));
 
 		// load wifi mode setting
-		boolean wifimode=prefs.getBoolean(PREF_KEY_WIFIMODE, Boolean.FALSE);
-		logger.debug("got wifimode: {}", Boolean.valueOf(wifimode));
+		boolean wifiMode=prefs.getBoolean(PREF_KEY_WIFIMODE, Boolean.FALSE);
+		logger.debug("got wifimode: {}", Boolean.valueOf(wifiMode));
 		
 		String allowed_interfaces=prefs.getString(PREF_KEY_ALLOWED_INTERFACES,"");
 		logger.debug("got allowed interfaces: {}", allowed_interfaces);
@@ -605,8 +667,8 @@ public class PrimitiveFtpdActivity extends Activity {
 			port,
 			sslPort,
 			announce,
-			bootstart,
-			wifimode,
+			bootStart,
+			wifiMode,
 			allowed_interfaces);
 
 		// TODO oldPrefs is null when user navigates via action bar,

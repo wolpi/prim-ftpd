@@ -18,6 +18,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.WifiLock;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -47,6 +49,7 @@ public class FtpServerService extends Service
 	private ServiceHandler serviceHandler;
 	private PrefsBean prefsBean;
 	private WakeLock wakeLock;
+	private WifiLock wifiLock;
 	private NsdManager.RegistrationListener nsdRegistrationListener;
 
 	/**
@@ -89,7 +92,7 @@ public class FtpServerService extends Service
 
 						// acquire wake lock for CPU to still handle requests
 						// note: PARTIAL_WAKE_LOCK is not enough --> changed PARTIAL_WAKE_LOCK should be enough according do API spec.
-		    			//if server does not react than wifi switched off, a WIFI LOCK should be aquired if needed, maybe an additional pref can be used
+		    			//if server does not react than wifi switched off, a WIFI LOCK should be acquired if needed, maybe an additional pref can be used
 						logger.debug("acquiring wake lock");
 						PowerManager powerMgr =
 								(PowerManager) ftpService.getSystemService(POWER_SERVICE);
@@ -97,6 +100,9 @@ public class FtpServerService extends Service
 								PowerManager.PARTIAL_WAKE_LOCK,
 								"pFTPd");
 						ftpService.wakeLock.acquire();
+						WifiManager wifiMgr = (WifiManager) ftpService.getSystemService(Context.WIFI_SERVICE);
+						ftpService.wifiLock = wifiMgr.createWifiLock(WifiManager.WIFI_MODE_FULL, "pFTPdWifi");
+						ftpService.wifiLock.acquire();							
 
 						if (ftpService.prefsBean.isAnnounce()) {
 							ftpService.announceService();
@@ -128,6 +134,11 @@ public class FtpServerService extends Service
 					logger.debug("releasing wake lock");
 					ftpService.wakeLock.release();
 					ftpService.wakeLock = null;
+				}
+				if (ftpService.wifiLock != null) {
+					logger.debug("releasing wifi lock");
+					ftpService.wifiLock.release();
+					ftpService.wifiLock = null;
 				}
 				logger.debug("stopSelf");
 				ftpService.stopSelf();
@@ -162,7 +173,7 @@ public class FtpServerService extends Service
 			return START_REDELIVER_INTENT;
 		}
 
-		bindIP = intent.getStringArrayListExtra("bind_ip");
+		bindIP = intent.getStringArrayListExtra("bindIP");
 
 		// get parameters
 		Bundle extras = intent.getExtras();
@@ -232,12 +243,14 @@ public class FtpServerService extends Service
     	serverFactory.getListeners().clear();
 		if(bindIP!=null){
 	    	for(String ip:bindIP){
-	        	ListenerFactory listenerFactory = new ListenerFactory();
-	        	listenerFactory.setPort(prefsBean.getPort());
-	    		listenerFactory.setServerAddress(ip);
-	        	//setup default connection timeout
-	        	listenerFactory.setIdleTimeout(300);
-	        	serverFactory.addListener(ip, listenerFactory.createListener());
+	    		if(ip.split("\0")[1].equals("1")){//only bind to allowed addresses
+		        	ListenerFactory listenerFactory = new ListenerFactory();
+		        	listenerFactory.setPort(prefsBean.getPort());
+		    		listenerFactory.setServerAddress(ip.split("\0")[0]);
+		        	//setup default connection timeout
+		        	listenerFactory.setIdleTimeout(300);
+		        	serverFactory.addListener(ip.split("\0")[0], listenerFactory.createListener());
+	    		}
 	    	}
     	}
     	

@@ -13,8 +13,8 @@ public class PrefsBean implements Serializable
 	private final int port;
 	private final int sslPort;
 	private final boolean announce;
-	private final boolean bootstart;
-	private final boolean wifimode;
+	private final boolean bootStart;
+	private final boolean wifiMode;
 	private final String allowedInterfaces;
 
 	public PrefsBean(
@@ -23,8 +23,8 @@ public class PrefsBean implements Serializable
 		int port,
 		int sslPort,
 		boolean announce,
-		boolean bootstart,
-		boolean wifimode,
+		boolean bootStart,
+		boolean wifiMode,
 		String allowedInterfaces)
 	{
 		super();
@@ -35,8 +35,8 @@ public class PrefsBean implements Serializable
 		this.portStr = String.valueOf(port);
 		this.sslPortStr = String.valueOf(sslPort);
 		this.announce = announce;
-		this.bootstart = bootstart;
-		this.wifimode = wifimode;
+		this.bootStart = bootStart;
+		this.wifiMode = wifiMode;
 		this.allowedInterfaces = allowedInterfaces;
 	}
 
@@ -71,12 +71,12 @@ public class PrefsBean implements Serializable
 
 	public boolean isBootStart()
 	{
-		return bootstart;
+		return bootStart;
 	}
 
 	public boolean isWifiMode()
 	{
-		return wifimode;
+		return wifiMode;
 	}
 
 	public String getAllowedInterfaces()

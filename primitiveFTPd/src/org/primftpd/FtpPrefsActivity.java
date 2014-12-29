@@ -24,8 +24,7 @@ public class FtpPrefsActivity extends PreferenceActivity
 
 	@Override
 	public void onBackPressed() {
-	    // your code.
-		Intent i = new Intent("org.primftpd.RestartUI");
+		Intent i = new Intent("org.primftpd.RedrawUI");//request a UI refresh
 		sendBroadcast(i);
 		super.onBackPressed();
 	}
