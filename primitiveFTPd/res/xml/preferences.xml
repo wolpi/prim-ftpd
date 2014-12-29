@@ -41,6 +41,26 @@
 			android:title="@string/prefTitleAnnounce"
 			android:summary="@string/prefSummaryAnnounce"
 		/>
-	</PreferenceCategory>
-
+		<CheckBoxPreference 
+			android:name="bootstart"
+			android:key="bootstartPref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleBootStart"
+			android:summary="@string/prefSummaryBootStart"
+		/>	
+		<CheckBoxPreference 
+			android:name="wifimode"
+			android:key="wifimodePref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleWifiMode"
+			android:summary="@string/prefSummaryWifiMode"
+		/>
+		<EditTextPreference
+			android:name="allowed_interfaces"
+			android:key="allowedInterfacesPref"
+			android:defaultValue=""
+			android:title="@string/prefAllowedInterfaces"
+			android:summary="@string/prefSummaryAllowedInterfaces"
+		/>
+		</PreferenceCategory>
 </PreferenceScreen>

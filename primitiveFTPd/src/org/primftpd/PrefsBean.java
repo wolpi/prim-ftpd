@@ -13,13 +13,19 @@ public class PrefsBean implements Serializable
 	private final int port;
 	private final int sslPort;
 	private final boolean announce;
+	private final boolean bootStart;
+	private final boolean wifiMode;
+	private final String allowedInterfaces;
 
 	public PrefsBean(
 		String userName,
 		String password,
 		int port,
 		int sslPort,
-		boolean announce)
+		boolean announce,
+		boolean bootStart,
+		boolean wifiMode,
+		String allowedInterfaces)
 	{
 		super();
 		this.userName = userName;
@@ -29,6 +35,9 @@ public class PrefsBean implements Serializable
 		this.portStr = String.valueOf(port);
 		this.sslPortStr = String.valueOf(sslPort);
 		this.announce = announce;
+		this.bootStart = bootStart;
+		this.wifiMode = wifiMode;
+		this.allowedInterfaces = allowedInterfaces;
 	}
 
 	public String getUserName() {
@@ -58,6 +67,21 @@ public class PrefsBean implements Serializable
 	public boolean isAnnounce()
 	{
 		return announce;
+	}
+
+	public boolean isBootStart()
+	{
+		return bootStart;
+	}
+
+	public boolean isWifiMode()
+	{
+		return wifiMode;
+	}
+
+	public String getAllowedInterfaces()
+	{
+		return allowedInterfaces;
 	}
 
 	@Override

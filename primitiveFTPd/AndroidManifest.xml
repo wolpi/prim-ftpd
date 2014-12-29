@@ -2,14 +2,16 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.primftpd"
-    android:versionCode="9"
+    android:versionCode="11"
     android:versionName="2.4-alpha" >
 
-    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="17" />
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="16"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-feature android:name="android.hardware.wifi" />
 
@@ -17,7 +19,15 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:allowBackup="false">
-
+        
+		<receiver android:enabled="true" android:name=".BootUpReceiver"
+			android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+		
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+		</receiver>
         <activity
             android:name=".PrimitiveFtpdActivity"
             android:label="@string/app_name">

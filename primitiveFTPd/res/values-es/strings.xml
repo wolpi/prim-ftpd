@@ -35,5 +35,9 @@
     <!--  Versión 2.3  -->
     <string name="prefTitleAnnounce">Divulgar servidor en LAN</string>
     <string name="prefSummaryAnnounce">Divulgar el servidor FTP en la LAN a través de DNS-SD (Bonjour)</string>
+    <string name="prefTitleBootStart">Iniciar durante el arranque</string>
+    <string name="prefSummaryBootStart">Iniciar y activar el servidor durante el arranque</string>
+    <string name="prefTitleWifiMode">sólo wifi</string>
+    <string name="prefSummaryWifiMode">Sólo aceptar conexiones de wifi</string>
     
 </resources>

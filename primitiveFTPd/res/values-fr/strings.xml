@@ -33,5 +33,9 @@
     <string name="prefSummaryPortSsl">Port du serveur FTP (chiffré)</string>
     <string name="prefTitleAnnounce">Annoncer le serveur sur le réseau local</string>
     <string name="prefSummaryAnnounce">Annoncer les serveurs FTP sur le réseau local via DNS-SD (Bonjour)</string>
-
+    <string name="prefTitleBootStart">Lancer pendant le démarrage</string>
+    <string name="prefSummaryBootStart">Lancer et activer le serveur pendant le démarrage</string>
+    <string name="prefTitleWifiMode">Wifi seulement</string>
+    <string name="prefSummaryWifiMode">Ne accepter que les connexions à partir wifi</string>
+    
 </resources>

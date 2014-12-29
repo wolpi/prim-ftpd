@@ -31,5 +31,9 @@
     <string name="prefSummaryPort">FTP zerbitzari ataka</string>
     <string name="prefTitlePortSsl">SSL ataka</string>
     <string name="prefSummaryPortSsl">FTP zerbitzari ataka (enkriptatuta)</string>
-
+    <string name="prefTitleBootStart">Hasierako karga zehar Hasi</string>
+    <string name="prefSummaryBootStart">Hasi Abiatu zehar zerbitzariak gaitu</string>
+    <string name="prefTitleWifiMode">Wifi bakarrik</string>
+    <string name="prefSummaryWifiMode">Bakarrik onartuko wifi konexioak</string>
+    
 </resources>

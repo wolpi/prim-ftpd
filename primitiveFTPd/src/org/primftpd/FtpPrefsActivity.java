@@ -23,6 +23,13 @@ public class FtpPrefsActivity extends PreferenceActivity
 	}
 
 	@Override
+	public void onBackPressed() {
+		Intent i = new Intent("org.primftpd.RedrawUI");//request a UI refresh
+		sendBroadcast(i);
+		super.onBackPressed();
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		super.onOptionsItemSelected(item);
@@ -36,4 +43,6 @@ public class FtpPrefsActivity extends PreferenceActivity
 		}
 		return true;
 	}
+	
+	
 }
