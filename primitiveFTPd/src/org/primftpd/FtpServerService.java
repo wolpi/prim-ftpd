@@ -205,6 +205,7 @@ public class FtpServerService extends Service
 			.setWhen(when)
 			.build();
 
+		notification.flags |= Notification.FLAG_NO_CLEAR;
 
 		// notification manager
 		NotificationUtil.createStatusbarNotification(this, notification);
