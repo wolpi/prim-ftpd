@@ -33,7 +33,8 @@
         </activity>
             
         <service android:name="org.primftpd.services.FtpServerService" />
-
+        <service android:name="org.primftpd.services.SshServerService" />
+        
 	</application>
 
 </manifest>

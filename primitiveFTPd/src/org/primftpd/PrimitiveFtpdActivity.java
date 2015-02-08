@@ -7,6 +7,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import org.primftpd.services.FtpServerService;
+import org.primftpd.services.SshServerService;
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -237,11 +238,10 @@ public class PrimitiveFtpdActivity extends Activity {
     		"ftp",
     		prefsBean.getPortStr());
 
-    	// XXX SSL
-//    	createTableRow(
-//    		table,
-//    		"ftps",
-//    		prefsBean.getSslPortStr());
+    	createTableRow(
+    		table,
+    		"sftp",
+    		prefsBean.getSecurePortStr());
     }
 
     protected void createUsernameTable() {
@@ -271,15 +271,19 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     /**
-     * @return True if {@link FtpServerService} is running.
+     * @return True if at least one service is running.
      */
-    protected boolean checkServiceRunning() {
+    protected boolean checkServicesRunning() {
 		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 		List<RunningServiceInfo> runningServices = manager.getRunningServices(Integer.MAX_VALUE);
-		String serviceClassName = FtpServerService.class.getName();
+		String ftpServiceClassName = FtpServerService.class.getName();
+		String sshServiceClassName = SshServerService.class.getName();
 		for (RunningServiceInfo service : runningServices) {
 			String currentClassName = service.service.getClassName();
-			if (serviceClassName.equals(currentClassName)) {
+			if (ftpServiceClassName.equals(currentClassName)) {
+				return true;
+			}
+			if (sshServiceClassName.equals(currentClassName)) {
 				return true;
 			}
 		}
@@ -297,7 +301,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
         logger.debug("updateButtonStates()");
 
-    	boolean serviceRunning = checkServiceRunning();
+    	boolean serviceRunning = checkServicesRunning();
 
     	startIcon.setVisible(!serviceRunning);
     	stopIcon.setVisible(serviceRunning);
@@ -354,16 +358,16 @@ public class PrimitiveFtpdActivity extends Activity {
 				Toast.LENGTH_LONG).show();
 
 		} else {
-			Intent intent = createFtpServiceIntent();
-	    	startService(intent);
+	    	startService(createFtpServiceIntent());
+	    	startService(createSshServiceIntent());
 	    	startIcon.setVisible(false);
 	    	stopIcon.setVisible(true);
 		}
     }
 
     protected void handleStop(MenuItem startIcon, MenuItem stopIcon) {
-    	Intent intent = createFtpServiceIntent();
-    	stopService(intent);
+    	stopService(createFtpServiceIntent());
+    	stopService(createSshServiceIntent());
     	startIcon.setVisible(true);
     	stopIcon.setVisible(false);
     }
@@ -378,15 +382,28 @@ public class PrimitiveFtpdActivity extends Activity {
      */
     protected Intent createFtpServiceIntent() {
     	Intent intent = new Intent(this, FtpServerService.class);
-    	intent.putExtra(EXTRA_PREFS_BEAN, prefsBean);
+    	putPrefsInIntent(intent);
     	return intent;
     }
 
-	private static final int PORT_DEFAULT_VAL = 12345;
+    /**
+     * @return Intent to start/stop {@link SshServerService}.
+     */
+    protected Intent createSshServiceIntent() {
+    	Intent intent = new Intent(this, SshServerService.class);
+    	putPrefsInIntent(intent);
+    	return intent;
+    }
+
+    protected void putPrefsInIntent(Intent intent) {
+    	intent.putExtra(EXTRA_PREFS_BEAN, prefsBean);
+    }
+
+    private static final int PORT_DEFAULT_VAL = 12345;
 	private static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
-	private static final int SSL_PORT_DEFAULT_VAL = 1234;
-	@SuppressWarnings("unused") // XXX SSL
-	private static final String SSL_PORT_DEFAULT_VAL_STR = String.valueOf(SSL_PORT_DEFAULT_VAL);
+	private static final int SECURE_PORT_DEFAULT_VAL = 1234;
+	private static final String SECURE_PORT_DEFAULT_VAL_STR =
+		String.valueOf(SECURE_PORT_DEFAULT_VAL);
 
 	/**
 	 * @return Android {@link SharedPreferences} object.
@@ -399,7 +416,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	public static final String PREF_KEY_USER = "userNamePref";
 	public static final String PREF_KEY_PASSWORD = "passwordPref";
 	public static final String PREF_KEY_PORT = "portPref";
-	public static final String PREF_KEY_SSL_PORT = "sslPortPref";
+	public static final String PREF_KEY_SECURE_PORT = "securePortPref";
 	public static final String PREF_KEY_ANNOUNCE = "announcePref";
 
 	/**
@@ -427,34 +444,32 @@ public class PrimitiveFtpdActivity extends Activity {
 			PORT_DEFAULT_VAL,
 			PORT_DEFAULT_VAL_STR);
 
-		// XXX SSL
-		int sslPort = SSL_PORT_DEFAULT_VAL;
-		// load SSL port
-//		int sslPort = loadAndValidatePort(
-//			prefs,
-//			PREF_KEY_SSL_PORT,
-//			SSL_PORT_DEFAULT_VAL,
-//			SSL_PORT_DEFAULT_VAL_STR);
-//
-//		// check if ports are equal
-//		if (port == sslPort) {
-//			Toast.makeText(
-//				getApplicationContext(),
-//				R.string.portsEqual,
-//				Toast.LENGTH_LONG).show();
-//			port = PORT_DEFAULT_VAL;
-//			sslPort = SSL_PORT_DEFAULT_VAL;
-//
-//			// reset in persistent prefs
-//			Editor prefsEditor = prefs.edit();
-//			prefsEditor.putString(
-//				PREF_KEY_PORT,
-//				PORT_DEFAULT_VAL_STR);
-//			prefsEditor.putString(
-//				PREF_KEY_SSL_PORT,
-//				SSL_PORT_DEFAULT_VAL_STR);
-//			prefsEditor.commit();
-//		}
+		// load secure port
+		int securePort = loadAndValidatePort(
+			prefs,
+			PREF_KEY_SECURE_PORT,
+			SECURE_PORT_DEFAULT_VAL,
+			SECURE_PORT_DEFAULT_VAL_STR);
+
+		// check if ports are equal
+		if (port == securePort) {
+			Toast.makeText(
+				getApplicationContext(),
+				R.string.portsEqual,
+				Toast.LENGTH_LONG).show();
+			port = PORT_DEFAULT_VAL;
+			securePort = SECURE_PORT_DEFAULT_VAL;
+
+			// reset in persistent prefs
+			Editor prefsEditor = prefs.edit();
+			prefsEditor.putString(
+				PREF_KEY_PORT,
+				PORT_DEFAULT_VAL_STR);
+			prefsEditor.putString(
+				PREF_KEY_SECURE_PORT,
+				SECURE_PORT_DEFAULT_VAL_STR);
+			prefsEditor.commit();
+		}
 
 		// create prefsBean
 		PrefsBean oldPrefs = prefsBean;
@@ -462,13 +477,13 @@ public class PrimitiveFtpdActivity extends Activity {
 			userName,
 			password,
 			port,
-			sslPort,
+			securePort,
 			announce);
 
 		// TODO oldPrefs is null when user navigates via action bar,
 		// find other way to figure out if prefs have changed
 		if (oldPrefs != null) {
-			if (!oldPrefs.equals(prefsBean) && checkServiceRunning()) {
+			if (!oldPrefs.equals(prefsBean) && checkServicesRunning()) {
 				Toast.makeText(
 					getApplicationContext(),
 					R.string.restartServer,

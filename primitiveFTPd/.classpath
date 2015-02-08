@@ -4,10 +4,13 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path="slf4j-android"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="lib" path="libs/ftpserver-core-1.0.6.jar" sourcepath="libs-src/ftpserver-1.0.6-src.zip"/>
+	<classpathentry exported="true" kind="lib" path="libs/mina-core-2.0.9.jar" sourcepath="libs-src/mina-core-2.0.9-src.zip"/>
+	<classpathentry exported="true" kind="lib" path="libs/sshd-core-0.13.0.jar" sourcepath="libs-src/sshd-core-0.13.0-src.zip"/>
+	<classpathentry exported="true" kind="lib" path="libs/bcpg-jdk15on-1.51.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/bcpkix-jdk15on-1.51.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="libs/mina-core-2.0.9.jar" sourcepath="libs-src/mina-core-2.0.9-src.zip"/>
-	<classpathentry kind="lib" path="libs/sshd-core-0.13.0.jar" sourcepath="libs-src/sshd-core-0.13.0-src.zip"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

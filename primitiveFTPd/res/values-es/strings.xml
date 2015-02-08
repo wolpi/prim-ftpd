@@ -29,8 +29,8 @@
     <string name="prefSummaryPassword">Contraseña para el servidor FTP</string>
     <string name="prefTitlePort">Puerto</string>
     <string name="prefSummaryPort">Puerto del servidor FTP</string>
-    <string name="prefTitlePortSsl">Puerto SSL</string>
-    <string name="prefSummaryPortSsl">Puerto del servidor FTP (cifrado)</string>
+    <string name="prefTitlePortSecure">Puerto (cifrado)</string>
+    <string name="prefSummaryPortSecure">Puerto del servidor FTP (cifrado)</string>
 
     <!--  Versión 2.3  -->
     <string name="prefTitleAnnounce">Divulgar servidor en LAN</string>

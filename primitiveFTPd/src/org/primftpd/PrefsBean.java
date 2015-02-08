@@ -9,25 +9,25 @@ public class PrefsBean implements Serializable
 	private final String userName;
 	private final String password;
 	private final String portStr;
-	private final String sslPortStr;
+	private final String securePortStr;
 	private final int port;
-	private final int sslPort;
+	private final int securePort;
 	private final boolean announce;
 
 	public PrefsBean(
 		String userName,
 		String password,
 		int port,
-		int sslPort,
+		int securePort,
 		boolean announce)
 	{
 		super();
 		this.userName = userName;
 		this.password = password;
 		this.port = port;
-		this.sslPort = sslPort;
+		this.securePort = securePort;
 		this.portStr = String.valueOf(port);
-		this.sslPortStr = String.valueOf(sslPort);
+		this.securePortStr = String.valueOf(securePort);
 		this.announce = announce;
 	}
 
@@ -47,12 +47,12 @@ public class PrefsBean implements Serializable
 		return port;
 	}
 
-	public String getSslPortStr() {
-		return sslPortStr;
+	public String getSecurePortStr() {
+		return securePortStr;
 	}
 
-	public int getSslPort()	{
-		return sslPort;
+	public int getSecurePort()	{
+		return securePort;
 	}
 
 	public boolean isAnnounce()
@@ -70,9 +70,9 @@ public class PrefsBean implements Serializable
 				+ ((password == null) ? 0 : password.hashCode());
 		result = prime * result + port;
 		result = prime * result + ((portStr == null) ? 0 : portStr.hashCode());
-		result = prime * result + sslPort;
+		result = prime * result + securePort;
 		result = prime * result
-				+ ((sslPortStr == null) ? 0 : sslPortStr.hashCode());
+				+ ((securePortStr == null) ? 0 : securePortStr.hashCode());
 		result = prime * result
 				+ ((userName == null) ? 0 : userName.hashCode());
 		return result;
@@ -102,12 +102,12 @@ public class PrefsBean implements Serializable
 				return false;
 		} else if (!portStr.equals(other.portStr))
 			return false;
-		if (sslPort != other.sslPort)
+		if (securePort != other.securePort)
 			return false;
-		if (sslPortStr == null) {
-			if (other.sslPortStr != null)
+		if (securePortStr == null) {
+			if (other.securePortStr != null)
 				return false;
-		} else if (!sslPortStr.equals(other.sslPortStr))
+		} else if (!securePortStr.equals(other.securePortStr))
 			return false;
 		if (userName == null) {
 			if (other.userName != null)
