@@ -32,7 +32,7 @@
             android:label="@string/prefCategoryTitle">
         </activity>
             
-        <service android:name=".FtpServerService" />
+        <service android:name="org.primftpd.services.FtpServerService" />
 
 	</application>
 

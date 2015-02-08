@@ -6,6 +6,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.primftpd.services.FtpServerService;
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,6 @@ public class PrimitiveFtpdActivity extends Activity {
 	    }
 	};
 
-	protected static final String SERVICE_CLASS_NAME = "org.primftpd.FtpServerService";
 	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -276,8 +276,10 @@ public class PrimitiveFtpdActivity extends Activity {
     protected boolean checkServiceRunning() {
 		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 		List<RunningServiceInfo> runningServices = manager.getRunningServices(Integer.MAX_VALUE);
+		String serviceClassName = FtpServerService.class.getName();
 		for (RunningServiceInfo service : runningServices) {
-			if (SERVICE_CLASS_NAME.equals(service.service.getClassName())) {
+			String currentClassName = service.service.getClassName();
+			if (serviceClassName.equals(currentClassName)) {
 				return true;
 			}
 		}
