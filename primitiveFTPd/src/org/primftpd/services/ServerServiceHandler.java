@@ -18,6 +18,8 @@ import android.os.PowerManager.WakeLock;
  */
 public class ServerServiceHandler extends Handler
 {
+	private static final String APP_NAME = "pFTPd";
+
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final WeakReference<AbstractServerService> serviceRef;
@@ -74,7 +76,7 @@ public class ServerServiceHandler extends Handler
 						AbstractServerService.POWER_SERVICE);
 				service.wakeLock = powerMgr.newWakeLock(
 					PowerManager.SCREEN_DIM_WAKE_LOCK,
-					"pFTPd");
+					APP_NAME);
 				service.wakeLock.acquire();
 
 				if (service.prefsBean.isAnnounce()) {

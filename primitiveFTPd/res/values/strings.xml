@@ -29,8 +29,8 @@
     <string name="prefSummaryPassword">FTP server password</string>
     <string name="prefTitlePort">Port</string>
     <string name="prefSummaryPort">FTP server port</string>
-    <string name="prefTitlePortSsl">SSL Port</string>
-    <string name="prefSummaryPortSsl">FTP server port (encrypted)</string>
+    <string name="prefTitlePortSecure">Secure Port</string>
+    <string name="prefSummaryPortSecure">FTP server port (encrypted)</string>
     <string name="prefTitleAnnounce">Announce server in LAN</string>
     <string name="prefSummaryAnnounce">Announces FTP server in LAN via DNS-SD (Bonjour)</string>
     

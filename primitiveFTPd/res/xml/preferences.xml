@@ -24,16 +24,14 @@
 			android:summary="@string/prefSummaryPort"
 			android:numeric="integer"
 		/>
-		<!-- XXX SSL
 		<EditTextPreference
 			android:name="sslPort"
-			android:key="sslPortPref"
+			android:key="securePortPref"
 			android:defaultValue="1234"
-			android:title="@string/prefTitlePortSsl"
-			android:summary="@string/prefSummaryPortSsl"
+			android:title="@string/prefTitlePortSecure"
+			android:summary="@string/prefSummaryPortSecure"
 			android:numeric="integer"
 		/>
-		-->
 		<CheckBoxPreference 
 			android:name="announce"
 			android:key="announcePref"

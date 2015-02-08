@@ -29,7 +29,7 @@
     <string name="prefSummaryPassword">FTP zerbitzari pasahitza</string>
     <string name="prefTitlePort">Ataka</string>
     <string name="prefSummaryPort">FTP zerbitzari ataka</string>
-    <string name="prefTitlePortSsl">SSL ataka</string>
-    <string name="prefSummaryPortSsl">FTP zerbitzari ataka (enkriptatuta)</string>
+    <string name="prefTitlePortSecure">ataka (enkriptatuta)</string>
+    <string name="prefSummaryPortSecure">FTP zerbitzari ataka (enkriptatuta)</string>
 
 </resources>
