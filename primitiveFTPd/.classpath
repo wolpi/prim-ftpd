@@ -8,5 +8,6 @@
 	<classpathentry exported="true" kind="lib" path="libs/ftpserver-core-1.0.6.jar" sourcepath="libs-src/ftpserver-1.0.6-src.zip"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="lib" path="libs/mina-core-2.0.9.jar" sourcepath="libs-src/mina-core-2.0.9-src.zip"/>
+	<classpathentry kind="lib" path="libs/sshd-core-0.13.0.jar" sourcepath="libs-src/sshd-core-0.13.0-src.zip"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

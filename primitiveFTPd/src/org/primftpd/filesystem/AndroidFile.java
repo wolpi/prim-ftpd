@@ -12,67 +12,57 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.ftpserver.ftplet.FtpFile;
-import org.apache.ftpserver.ftplet.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AndroidFtpFile implements FtpFile {
+public abstract class AndroidFile<T> {
 
-	private static final Logger logger = LoggerFactory.getLogger(AndroidFtpFile.class);
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private final File file;
-	private final User user;
+	protected final File file;
 
-	public AndroidFtpFile(File file, User user) {
+	public AndroidFile(File file) {
 		super();
 		this.file = file;
-		this.user = user;
 	}
 
-	@Override
+	protected abstract T createFile(File file);
+
 	public String getAbsolutePath() {
 		logger.debug("getAbsolutePath()");
 		return file.getAbsolutePath();
 	}
 
-	@Override
 	public String getName() {
 		logger.debug("getName()");
 		return file.getName();
 	}
 
-	@Override
 	public boolean isHidden() {
 		logger.debug("isHidden()");
 		return file.isHidden();
 	}
 
-	@Override
 	public boolean isDirectory() {
 		logger.debug("isDirectory()");
 		return file.isDirectory();
 	}
 
-	@Override
 	public boolean isFile() {
 		logger.debug("isFile()");
 		return file.isFile();
 	}
 
-	@Override
 	public boolean doesExist() {
 		logger.debug("doesExist(), ({})", file.getAbsolutePath());
 		return file.exists();
 	}
 
-	@Override
 	public boolean isReadable() {
 		logger.debug("isReadable()");
 		return file.canRead();
 	}
 
-	@Override
 	public boolean isWritable() {
 		logger.debug(
 			"writable: {}, exists: {}, file: '{}'",
@@ -99,85 +89,63 @@ public class AndroidFtpFile implements FtpFile {
 		return false;
 	}
 
-	@Override
 	public boolean isRemovable() {
 		logger.debug("isRemovable()");
 		return file.canWrite();
 	}
 
-	@Override
-	public String getOwnerName() {
-		logger.debug("getOwnerName()");
-		return user.getName();
-	}
-
-	@Override
-	public String getGroupName() {
-		logger.debug("getGroupName()");
-		return user.getName();
-	}
-
-	@Override
 	public int getLinkCount() {
 		logger.debug("getLinkCount()");
 		return 0;
 	}
 
-	@Override
 	public long getLastModified() {
 		logger.debug("getLastModified()");
 		return file.lastModified();
 	}
 
-	@Override
 	public boolean setLastModified(long time) {
 		logger.debug("setLastModified({})", time);
 		return file.setLastModified(time);
 	}
 
-	@Override
 	public long getSize() {
 		logger.debug("getSize()");
 		return file.length();
 	}
 
-	@Override
 	public boolean mkdir() {
 		logger.debug("mkdir()");
 		return file.mkdir();
 	}
 
-	@Override
 	public boolean delete() {
 		logger.debug("delete()");
 		return file.delete();
 	}
 
-	@Override
-	public boolean move(FtpFile destination) {
+	public boolean move(AndroidFile<T> destination) {
 		logger.debug("move({})", destination.getAbsolutePath());
 		file.renameTo(new File(destination.getAbsolutePath()));
 		return true;
 	}
 
-	@Override
-	public List<FtpFile> listFiles() {
+	public List<T> listFiles() {
 		logger.debug("listFiles()");
 		File[] filesArray = file.listFiles();
 		if (filesArray != null) {
-			List<FtpFile> files = new ArrayList<FtpFile>(filesArray.length);
+			List<T> files = new ArrayList<T>(filesArray.length);
 			for (File file : filesArray) {
-				files.add(new AndroidFtpFile(file, user));
+				files.add(createFile(file));
 			}
 			return files;
 		}
 		logger.debug("file.listFiles() returned null. Path: {}", file.getAbsolutePath());
-		return new ArrayList<FtpFile>(0);
+		return new ArrayList<T>(0);
 	}
 
 	public static final int BUFFER_SIZE = 1024 * 1024;
 
-	@Override
 	public OutputStream createOutputStream(long offset) throws IOException {
 		logger.debug("createOutputStream({})", offset);
 
@@ -213,7 +181,6 @@ public class AndroidFtpFile implements FtpFile {
 		return bos;
 	}
 
-	@Override
 	public InputStream createInputStream(long offset) throws IOException {
 		logger.debug("createInputStream(), offset: {}, file: {}", offset, file.getAbsolutePath());
 		FileInputStream fis = new FileInputStream(file);
@@ -225,9 +192,4 @@ public class AndroidFtpFile implements FtpFile {
 	public File getFile() {
 		return file;
 	}
-
-	public User getUser() {
-		return user;
-	}
-
 }

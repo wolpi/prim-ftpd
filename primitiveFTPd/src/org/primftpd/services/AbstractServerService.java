@@ -21,6 +21,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager.WakeLock;
 import android.os.Process;
+import android.widget.Toast;
 
 /**
  * Abstract base class for {@link Service}s wrapping servers.
@@ -58,6 +59,15 @@ public abstract class AbstractServerService
 	protected abstract Object getServer();
 	protected abstract void launchServer();
 	protected abstract void stopServer();
+
+	protected void handleServerStartError(Exception e)
+	{
+		logger.error("could not start server", e);
+
+		String msg = getText(R.string.serverCouldNotBeStarted).toString();
+		msg += e.getLocalizedMessage();
+		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+	}
 
 	@Override
 	public IBinder onBind(Intent intent) {

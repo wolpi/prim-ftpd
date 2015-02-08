@@ -2,16 +2,18 @@ package org.primftpd.services;
 
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.ftplet.FileSystemFactory;
+import org.apache.ftpserver.ftplet.FileSystemView;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.primftpd.AndroidPrefsUserManager;
-import org.primftpd.R;
-import org.primftpd.filesystem.AndroidFileSystemFactory;
+import org.primftpd.filesystem.FtpFileSystemView;
 
 import android.os.Looper;
-import android.widget.Toast;
 
 /**
- * Implements an FTP server.
+ * Implements a FTP server.
  */
 public class FtpServerService extends AbstractServerService
 {
@@ -22,10 +24,7 @@ public class FtpServerService extends AbstractServerService
 		Looper serviceLooper,
 		AbstractServerService service)
 	{
-		return new ServerServiceHandler(
-			serviceLooper,
-			service,
-			"ftp");
+		return new ServerServiceHandler(serviceLooper, service, "ftp");
 	}
 
 	@Override
@@ -41,9 +40,6 @@ public class FtpServerService extends AbstractServerService
 		ftpServer = null;
 	}
 
-	/**
-     * Launches FTP server.
-     */
     @Override
 	protected void launchServer() {
     	ListenerFactory listenerFactory = new ListenerFactory();
@@ -54,7 +50,13 @@ public class FtpServerService extends AbstractServerService
 
     	// user manager & file system
     	serverFactory.setUserManager(new AndroidPrefsUserManager(prefsBean));
-    	serverFactory.setFileSystem(new AndroidFileSystemFactory());
+    	serverFactory.setFileSystem(new FileSystemFactory() {
+			@Override
+			public FileSystemView createFileSystemView(User user) throws FtpException
+			{
+				return new FtpFileSystemView(user);
+			}
+    	});
 
     	// XXX SSL
     	// ssl listener
@@ -76,13 +78,8 @@ public class FtpServerService extends AbstractServerService
     		ftpServer.start();
     	} catch (Exception e) {
     		// note: createServer() throws RuntimeExceptions, too
-			logger.error("could not start server", e);
-
-			ftpServer = null;
-
-			String msg = getText(R.string.serverCouldNotBeStarted).toString();
-			msg += e.getLocalizedMessage();
-			Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+    		ftpServer = null;
+			handleServerStartError(e);
 		}
     }
 }
