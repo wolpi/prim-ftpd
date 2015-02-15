@@ -7,7 +7,7 @@
     <string name="ifacesError">Error: </string>
     <string name="protocolLabel">Protocolo</string>
     <string name="portLabel">Puerto</string>
-    <string name="fingerprintsLabel">Huellas digitales de certificados SSL</string>
+    <string name="fingerprintsLabel">Huellas digitales de certificados</string>
         
     <string name="startService">Encender servidor</string>
     <string name="stopService">Apagar servidor</string>

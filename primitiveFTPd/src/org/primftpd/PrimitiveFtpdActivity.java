@@ -1,13 +1,19 @@
 package org.primftpd;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
 import org.primftpd.services.FtpServerService;
 import org.primftpd.services.SshServerService;
+import org.primftpd.util.CertGenerator;
+import org.primftpd.util.CertInfoProvider;
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +28,16 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
@@ -60,11 +70,17 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
 
+	public static final String CERT_FILENAME = "pftpd-cert.pem";
+
+	public static final int CERT_REFRESH_ICON_ID = 1;
+
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PrefsBean prefsBean;
-	private String md5Fingerprint;
-	private String sha1Fingerprint;
+	private String md5Fingerprint = " - ";
+	private String sha1Fingerprint = " - ";
+	private String sha256Fingerprint = " - ";
+	private String certValidUntil = " - ";
 
 	/** Called when the activity is first created. */
     @Override
@@ -80,12 +96,9 @@ public class PrimitiveFtpdActivity extends Activity {
         // makes no sense anymore since buttons have been moved to action bar
     	//updateButtonStates();
 
-    	// XXX SSL
     	// calc certificate fingerprints
-//    	KeyStore keyStore = KeyStoreUtil.loadKeyStore(getResources());
-//    	md5Fingerprint = KeyStoreUtil.calcKeyFingerprint(keyStore, "MD5");
-//    	sha1Fingerprint = KeyStoreUtil.calcKeyFingerprint(keyStore, "SHA-1");
-//    	createFingerprintTable();
+        gatherCertInfo();
+    	createFingerprintTable();
     }
 
     @Override
@@ -134,6 +147,74 @@ public class PrimitiveFtpdActivity extends Activity {
     	// unregister broadcast receivers
         this.unregisterReceiver(this.receiver);
         this.unregisterReceiver(this.networkStateReceiver);
+    }
+
+    protected FileInputStream buildCertificateInStream() throws IOException {
+		FileInputStream fis = openFileInput(CERT_FILENAME);
+		return fis;
+    }
+
+    protected FileOutputStream buildCertificateOutStream() throws IOException {
+		FileOutputStream fos = openFileOutput(CERT_FILENAME, Context.MODE_PRIVATE);
+		return fos;
+    }
+
+    /**
+	 * Reads certificate file and gathers some info, like valid until and
+	 * figerprints.
+	 */
+    protected void gatherCertInfo() {
+    	try {
+	    	CertInfoProvider certInfoprovider = new CertInfoProvider();
+
+	    	FileInputStream fis = buildCertificateInStream();
+	    	try {
+	    		// check if cert is present
+	    		if (fis.available() <= 0) {
+	    			throw new Exception("cert seems to be not present");
+	    		}
+
+	    		// read valid until
+	    		Date validUntil = certInfoprovider.validUntil(fis);
+		    	java.text.DateFormat dateFormat = DateFormat.getDateFormat(
+		    		getApplicationContext());
+		    	certValidUntil = dateFormat.format(validUntil);
+	    	} finally {
+	    		fis.close();
+	    	}
+
+	    	fis = buildCertificateInStream();
+	    	try {
+		    	String fp = certInfoprovider.fingerprint(fis, "MD5");
+		    	if (fp != null) {
+		    		md5Fingerprint = fp;
+		    	}
+	    	} finally {
+	    		fis.close();
+	    	}
+
+	    	fis = buildCertificateInStream();
+	    	try {
+	    		String fp = certInfoprovider.fingerprint(fis, "SHA-1");
+		    	if (fp != null) {
+		    		sha1Fingerprint = fp;
+		    	}
+	    	} finally {
+	    		fis.close();
+	    	}
+
+	    	fis = buildCertificateInStream();
+	    	try {
+	    		String fp = certInfoprovider.fingerprint(fis, "SHA-256");
+		    	if (fp != null) {
+		    		sha256Fingerprint = fp;
+		    	}
+	    	} finally {
+	    		fis.close();
+	    	}
+    	} catch (Exception e) {
+    		logger.debug("cert does probably not exist");
+    	}
     }
 
     /**
@@ -194,9 +275,33 @@ public class PrimitiveFtpdActivity extends Activity {
      * @param value Text for right column.
      */
     protected void createTableRow(
-    		TableLayout table,
-    		CharSequence label,
-    		CharSequence value)
+		TableLayout table,
+		CharSequence label,
+		CharSequence value)
+    {
+    	createTableRow(table, label, value, 0);
+    }
+
+    /**
+     * Creates a 2 column row in a table.
+     *
+     * @param table Table to add row to.
+     * @param label Text for left column.
+     * @param value Resource id of image to show in right column.
+     */
+    protected void createTableRow(
+		TableLayout table,
+		CharSequence label,
+		int imageId)
+    {
+    	createTableRow(table, label, null, imageId);
+    }
+
+    protected void createTableRow(
+		TableLayout table,
+		CharSequence label,
+		CharSequence value,
+		int imageId)
     {
     	TableRow row = new TableRow(table.getContext());
     	table.addView(row);
@@ -207,15 +312,25 @@ public class PrimitiveFtpdActivity extends Activity {
     	labelView.setPadding(0, 0, 20, 0);
     	labelView.setText(label);
 
-    	TextView valueView = new TextView(row.getContext());
+    	View valueView = null;
+    	if (value != null) {
+    		TextView valueTextView = new TextView(row.getContext());
+    		valueTextView.setGravity(Gravity.LEFT);
+    		valueTextView.setText(value);
+    		valueView = valueTextView;
+    	} else {
+    		// it is a little hacky to always create refresh icon
+    		// but this is the only case we need an imageId here
+    		ImageView valueImgView = new ImageView(row.getContext());
+    		valueImgView.setImageResource(imageId);
+    		valueImgView.setId(CERT_REFRESH_ICON_ID);
+    		valueView = valueImgView;
+    	}
     	row.addView(valueView);
 
     	LayoutParams params = new LayoutParams();
     	params.height = LayoutParams.WRAP_CONTENT;
-
     	valueView.setLayoutParams(params);
-    	valueView.setGravity(Gravity.LEFT);
-    	valueView.setText(value);
     }
 
     /**
@@ -258,8 +373,26 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     protected void createFingerprintTable() {
+    	TableLayout table = (TableLayout)findViewById(R.id.certInfoTable);
+        // clear old entries
+    	table.removeAllViews();
+
+    	createTableRow(
+    		table,
+    		getText(R.string.fingerprintsLabel),
+    		R.drawable.refresh);
+
+    	createTableRow(
+    		table,
+    		getText(R.string.certificateValidUntilLabel),
+    		certValidUntil);
+
+    	table = (TableLayout)findViewById(R.id.fingerprintsTable);
+        // clear old entries
+    	table.removeAllViews();
+
     	// note: HTML required for line breaks
-    	TableLayout table = (TableLayout)findViewById(R.id.fingerprintsTable);
+    	// TODO better display of fingerprints
     	createTableRow(
     		table,
     		"MD5",
@@ -268,6 +401,47 @@ public class PrimitiveFtpdActivity extends Activity {
     		table,
     		"SHA1",
     		Html.fromHtml(sha1Fingerprint));
+    	createTableRow(
+    		table,
+    		"SHA256",
+    		Html.fromHtml(sha256Fingerprint));
+
+    	// create onRefreshListener
+    	View refreshButton = findViewById(CERT_REFRESH_ICON_ID);
+    	// TODO show some dialog while key is generated
+    	refreshButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v)
+			{
+
+				AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+					@Override
+					protected Void doInBackground(Void... params)
+					{
+						try {
+							FileOutputStream fos = buildCertificateOutStream();
+							try {
+								new CertGenerator().generate(fos);
+				            } finally {
+				                fos.close();
+				            }
+						} catch (Exception e) {
+							logger.error("could not generate certificate", e);
+						}
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Void result)
+					{
+						super.onPostExecute(result);
+						gatherCertInfo();
+						createFingerprintTable();
+					}
+				};
+				task.execute();
+			}
+		});
     }
 
     /**

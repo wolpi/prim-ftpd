@@ -1,14 +1,12 @@
 package org.primftpd.services;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyPair;
 
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
-import org.apache.ftpserver.util.IoUtils;
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemFactory;
@@ -16,14 +14,12 @@ import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.io.mina.MinaServiceFactoryFactory;
 import org.apache.sshd.server.PasswordAuthenticator;
 import org.apache.sshd.server.command.ScpCommandFactory;
-import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
+import org.apache.sshd.server.keyprovider.PEMGeneratorHostKeyProvider;
 import org.apache.sshd.server.session.ServerSession;
 import org.primftpd.AndroidPrefsUserManager;
-import org.primftpd.R;
+import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.filesystem.SshFileSystemView;
 
-import android.content.res.Resources;
-import android.os.Environment;
 import android.os.Looper;
 
 /**
@@ -101,24 +97,23 @@ public class SshServerService extends AbstractServerService
 		sshServer.setCommandFactory(new ScpCommandFactory());
 
 		try {
-			// load key
-			String keyFile = copyKeyToFile();
-			sshServer.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(keyFile));
+			// start server only when cert was generated
+			final FileInputStream fis = openFileInput(PrimitiveFtpdActivity.CERT_FILENAME);
+			if (fis.available() > 0) {
+				sshServer.setKeyPairProvider(new PEMGeneratorHostKeyProvider("") {
+					@Override
+					protected KeyPair doReadKeyPair(InputStream is) throws Exception
+					{
+						// use own fis instead of passed is
+						return super.doReadKeyPair(fis);
+					}
+				});
 
-    		sshServer.start();
+				sshServer.start();
+			}
     	} catch (Exception e) {
     		sshServer = null;
 			handleServerStartError(e);
     	}
-	}
-
-	private String copyKeyToFile() throws FileNotFoundException, IOException {
-		// TODO remove this, make it properly
-		Resources resources = getResources();
-		InputStream inputStream = resources.openRawResource(R.raw.ca);
-		File dir = Environment.getExternalStorageDirectory();
-		File keyFile = new File(dir, "pftpd-key.pem");
-		IoUtils.copy(inputStream, new FileOutputStream(keyFile), 4096);
-		return keyFile.getAbsolutePath();
 	}
 }

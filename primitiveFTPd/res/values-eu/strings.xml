@@ -7,7 +7,7 @@
     <string name="ifacesError">Akatsa: </string>
     <string name="protocolLabel">Protokoloa</string>
     <string name="portLabel">Ataka</string>
-    <string name="fingerprintsLabel">SSL ziurtagiri hatz-marka</string>
+    <string name="fingerprintsLabel">ziurtagiri hatz-marka</string>
         
     <string name="startService">Zerbitzaria hasi</string>
     <string name="stopService">Zerbitzaria gelditu</string>

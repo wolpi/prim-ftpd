@@ -58,20 +58,6 @@ public class FtpServerService extends AbstractServerService
 			}
     	});
 
-    	// XXX SSL
-    	// ssl listener
-//    	KeyStore keyStore = KeyStoreUtil.loadKeyStore(getResources());
-//    	if (keyStore != null) {
-//	    	SslConfiguration sslConfig = KeyStoreUtil.createSslConfiguration(keyStore);
-//	    	if (sslConfig != null) {
-//		    	ListenerFactory sslListenerFactory = new ListenerFactory();
-//		    	sslListenerFactory.setPort(prefsBean.getSslPort());
-//		    	sslListenerFactory.setImplicitSsl(true);
-//		    	sslListenerFactory.setSslConfiguration(sslConfig);
-//		    	serverFactory.addListener("ssl", sslListenerFactory.createListener());
-//	    	}
-//    	}
-
     	// do start server
     	ftpServer = serverFactory.createServer();
     	try {
