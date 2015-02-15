@@ -7,8 +7,9 @@
     <string name="ifacesError">Fehler: </string>
     <string name="protocolLabel">Protokoll</string>
     <string name="portLabel">Port</string>
-    <string name="fingerprintsLabel">SSL Zertifikat Fingerabdrücke</string>
-        
+    <string name="fingerprintsLabel">Zertifikats-Fingerabdrücke</string>
+    <string name="certificateValidUntilLabel">Zertifikat gütig bis</string>
+    
     <string name="startService">Server Starten</string>
     <string name="stopService">Server Stoppen</string>
     <string name="notificationTitle">FTP Server</string>
