@@ -37,7 +37,7 @@ public class CertInfoProvider
 			byte[] fingerPrintBytes = md.digest();
 			return beautify(fingerPrintBytes);
 		} catch (Exception e) {
-			logger.error("could not read cert", e);
+			logger.error("could not read cert: " + e.getMessage(), e);
 		}
 		return null;
 	}

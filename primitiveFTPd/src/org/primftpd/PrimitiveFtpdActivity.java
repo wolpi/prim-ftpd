@@ -21,8 +21,13 @@ import org.slf4j.LoggerFactory;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -73,6 +78,8 @@ public class PrimitiveFtpdActivity extends Activity {
 	public static final String CERT_FILENAME = "pftpd-cert.pem";
 
 	public static final int CERT_REFRESH_ICON_ID = 1;
+
+	public static final String DIALOG_TAG = "dialogs";
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -408,40 +415,76 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	// create onRefreshListener
     	View refreshButton = findViewById(CERT_REFRESH_ICON_ID);
-    	// TODO show some dialog while key is generated
     	refreshButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v)
-			{
+    		@Override
+    		public void onClick(View v) {
+    			GenCertAskDialogFragment askDiag = new GenCertAskDialogFragment();
+    			askDiag.show(getFragmentManager(), DIALOG_TAG);
+    		}
+    	});
+    }
 
-				AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-					@Override
-					protected Void doInBackground(Void... params)
-					{
-						try {
-							FileOutputStream fos = buildCertificateOutStream();
-							try {
-								new CertGenerator().generate(fos);
-				            } finally {
-				                fos.close();
-				            }
-						} catch (Exception e) {
-							logger.error("could not generate certificate", e);
-						}
-						return null;
-					}
+    protected void genCertAndShowProgressDiag() {
+    	// critical: do not pass getApplicationContext() to dialog
+    	final ProgressDialog progressDiag = new ProgressDialog(this);
+    	progressDiag.setCancelable(false);
+    	progressDiag.setMessage(getText(R.string.generatingCertificateMessage));
 
-					@Override
-					protected void onPostExecute(Void result)
-					{
-						super.onPostExecute(result);
-						gatherCertInfo();
-						createFingerprintTable();
-					}
-				};
-				task.execute();
+    	AsyncTask<Void, Void, Void> task = new GenCertAsyncTask(progressDiag);
+		task.execute();
+
+		progressDiag.show();
+    }
+
+    class GenCertAskDialogFragment extends DialogFragment {
+    	@Override
+    	public Dialog onCreateDialog(Bundle savedInstanceState) {
+    		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.generateCertificateMessage);
+            builder.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
+            	@Override
+				public void onClick(DialogInterface dialog, int id) {
+            		genCertAndShowProgressDiag();
+            	}
+            });
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            	@Override
+				public void onClick(DialogInterface dialog, int id) {
+            		// nothing
+                }
+            });
+            return builder.create();
+    	}
+    }
+
+    class GenCertAsyncTask extends AsyncTask<Void, Void, Void> {
+    	private ProgressDialog progressDiag;
+
+    	public GenCertAsyncTask(ProgressDialog progressDiag) {
+    		this.progressDiag = progressDiag;
+    	}
+
+    	@Override
+		protected Void doInBackground(Void... params) {
+			try {
+				FileOutputStream fos = buildCertificateOutStream();
+				try {
+					new CertGenerator().generate(fos);
+	            } finally {
+	                fos.close();
+	            }
+			} catch (Exception e) {
+				logger.error("could not generate certificate", e);
 			}
-		});
+			return null;
+		}
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			gatherCertInfo();
+			progressDiag.dismiss();
+			createFingerprintTable();
+		}
     }
 
     /**

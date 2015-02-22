@@ -9,6 +9,10 @@
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Zertifikats-Fingerabdrücke</string>
     <string name="certificateValidUntilLabel">Zertifikat gütig bis</string>
+    <string name="generateCertificateMessage">Zertifikat erzeugen ?</string>
+    <string name="generatingCertificateMessage">Zertifikat wird erzeugt ...</string>
+    <string name="generate">Erzeugen</string>
+    <string name="cancel">Abbrechen</string>
     
     <string name="startService">Server Starten</string>
     <string name="stopService">Server Stoppen</string>
