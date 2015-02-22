@@ -39,7 +39,6 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Html;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -382,20 +381,19 @@ public class PrimitiveFtpdActivity extends Activity {
         // clear old entries
     	table.removeAllViews();
 
-    	// note: HTML required for line breaks
-    	// TODO better display of fingerprints
+    	// TODO use monospace font for fingerprints
     	createTableRow(
     		table,
     		"MD5",
-    		Html.fromHtml(md5Fingerprint));
+    		md5Fingerprint);
     	createTableRow(
     		table,
     		"SHA1",
-    		Html.fromHtml(sha1Fingerprint));
+    		sha1Fingerprint);
     	createTableRow(
     		table,
     		"SHA256",
-    		Html.fromHtml(sha256Fingerprint));
+    		sha256Fingerprint);
 
     	// create onRefreshListener
     	View refreshButton = findViewById(KEYS_REFRESH_ICON_ID);
