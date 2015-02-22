@@ -6,16 +6,15 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.security.cert.X509Certificate;
-import java.util.Date;
+import java.security.PrivateKey;
 import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.services.FtpServerService;
 import org.primftpd.services.SshServerService;
-import org.primftpd.util.CertGenerator;
-import org.primftpd.util.CertInfoProvider;
+import org.primftpd.util.KeyGenerator;
+import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +38,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
-import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,10 +75,10 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
 
-	public static final String CERT_FILENAME = "pftpd-cert.pem";
-	public static final String PRIVATEKEY_FILENAME = "pftpd-cert.pk8";
+	public static final String PUBLICKEY_FILENAME = "pftpd-pub.pk8";
+	public static final String PRIVATEKEY_FILENAME = "pftpd-priv.pk8";
 
-	public static final int CERT_REFRESH_ICON_ID = 1;
+	public static final int KEYS_REFRESH_ICON_ID = 1;
 
 	public static final String DIALOG_TAG = "dialogs";
 
@@ -90,7 +88,6 @@ public class PrimitiveFtpdActivity extends Activity {
 	private String md5Fingerprint = " - ";
 	private String sha1Fingerprint = " - ";
 	private String sha256Fingerprint = " - ";
-	private String certValidUntil = " - ";
 
 	/** Called when the activity is first created. */
     @Override
@@ -106,8 +103,8 @@ public class PrimitiveFtpdActivity extends Activity {
         // makes no sense anymore since buttons have been moved to action bar
     	//updateButtonStates();
 
-    	// calc certificate fingerprints
-        gatherCertInfo();
+    	// calc keys fingerprints
+        gatherKeysInfo();
     	createFingerprintTable();
     }
 
@@ -159,13 +156,8 @@ public class PrimitiveFtpdActivity extends Activity {
         this.unregisterReceiver(this.networkStateReceiver);
     }
 
-    protected FileInputStream buildCertificateInStream() throws IOException {
-		FileInputStream fis = openFileInput(CERT_FILENAME);
-		return fis;
-    }
-
-    protected FileOutputStream buildCertificateOutStream() throws IOException {
-		FileOutputStream fos = openFileOutput(CERT_FILENAME, Context.MODE_PRIVATE);
+    protected FileOutputStream buildPublickeyOutStream() throws IOException {
+		FileOutputStream fos = openFileOutput(PUBLICKEY_FILENAME, Context.MODE_PRIVATE);
 		return fos;
     }
 
@@ -180,45 +172,38 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     /**
-	 * Reads certificate file and gathers some info, like valid until and
-	 * figerprints.
+	 * Reads key file and gathers some info, like figerprints.
 	 */
-    protected void gatherCertInfo() {
+    protected void gatherKeysInfo() {
     	FileInputStream fis = null;
     	try {
-        	fis = buildCertificateInStream();
+        	fis = buildPrivatekeyInStream();
 
-	    	// check if cert is present
+	    	// check if key is present
     		if (fis.available() <= 0) {
-    			throw new Exception("cert seems to be not present");
+    			throw new Exception("key seems not to be present");
     		}
 
-	    	CertInfoProvider certInfoprovider = new CertInfoProvider();
-    		X509Certificate cert = certInfoprovider.readCert(fis);
-
-    		// read valid until
-    		Date validUntil = certInfoprovider.validUntil(cert);
-	    	java.text.DateFormat dateFormat = DateFormat.getDateFormat(
-	    		getApplicationContext());
-	    	certValidUntil = dateFormat.format(validUntil);
+	    	KeyInfoProvider keyInfoprovider = new KeyInfoProvider();
+    		PrivateKey privateKey = keyInfoprovider.readPrivatekey(fis);
 
 	    	// fingerprints
-	    	String fp = certInfoprovider.fingerprint(cert, "MD5");
+	    	String fp = keyInfoprovider.fingerprint(privateKey, "MD5");
 	    	if (fp != null) {
 	    		md5Fingerprint = fp;
 	    	}
 
-    		fp = certInfoprovider.fingerprint(cert, "SHA-1");
+    		fp = keyInfoprovider.fingerprint(privateKey, "SHA-1");
 	    	if (fp != null) {
 	    		sha1Fingerprint = fp;
 	    	}
 
-    		fp = certInfoprovider.fingerprint(cert, "SHA-256");
+    		fp = keyInfoprovider.fingerprint(privateKey, "SHA-256");
 	    	if (fp != null) {
 	    		sha256Fingerprint = fp;
 	    	}
     	} catch (Exception e) {
-    		logger.debug("cert does probably not exist");
+    		logger.debug("key does probably not exist");
 		} finally {
 			if (fis != null) {
 				IoUtils.close(fis);
@@ -332,7 +317,7 @@ public class PrimitiveFtpdActivity extends Activity {
     		// but this is the only case we need an imageId here
     		ImageView valueImgView = new ImageView(row.getContext());
     		valueImgView.setImageResource(imageId);
-    		valueImgView.setId(CERT_REFRESH_ICON_ID);
+    		valueImgView.setId(KEYS_REFRESH_ICON_ID);
     		valueView = valueImgView;
     	}
     	row.addView(valueView);
@@ -382,7 +367,7 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     protected void createFingerprintTable() {
-    	TableLayout table = (TableLayout)findViewById(R.id.certInfoTable);
+    	TableLayout table = (TableLayout)findViewById(R.id.keysInfoTable);
         // clear old entries
     	table.removeAllViews();
 
@@ -390,11 +375,6 @@ public class PrimitiveFtpdActivity extends Activity {
     		table,
     		getText(R.string.fingerprintsLabel),
     		R.drawable.refresh);
-
-    	createTableRow(
-    		table,
-    		getText(R.string.certificateValidUntilLabel),
-    		certValidUntil);
 
     	table = (TableLayout)findViewById(R.id.fingerprintsTable);
         // clear old entries
@@ -416,37 +396,37 @@ public class PrimitiveFtpdActivity extends Activity {
     		Html.fromHtml(sha256Fingerprint));
 
     	// create onRefreshListener
-    	View refreshButton = findViewById(CERT_REFRESH_ICON_ID);
+    	View refreshButton = findViewById(KEYS_REFRESH_ICON_ID);
     	refreshButton.setOnClickListener(new View.OnClickListener() {
     		@Override
     		public void onClick(View v) {
-    			GenCertAskDialogFragment askDiag = new GenCertAskDialogFragment();
+    			GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
     			askDiag.show(getFragmentManager(), DIALOG_TAG);
     		}
     	});
     }
 
-    protected void genCertAndShowProgressDiag() {
+    protected void genKeysAndShowProgressDiag() {
     	// critical: do not pass getApplicationContext() to dialog
     	final ProgressDialog progressDiag = new ProgressDialog(this);
     	progressDiag.setCancelable(false);
-    	progressDiag.setMessage(getText(R.string.generatingCertificateMessage));
+    	progressDiag.setMessage(getText(R.string.generatingKeysMessage));
 
-    	AsyncTask<Void, Void, Void> task = new GenCertAsyncTask(progressDiag);
+    	AsyncTask<Void, Void, Void> task = new GenKeysAsyncTask(progressDiag);
 		task.execute();
 
 		progressDiag.show();
     }
 
-    class GenCertAskDialogFragment extends DialogFragment {
+    class GenKeysAskDialogFragment extends DialogFragment {
     	@Override
     	public Dialog onCreateDialog(Bundle savedInstanceState) {
     		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(R.string.generateCertificateMessage);
+            builder.setMessage(R.string.generateKeysMessage);
             builder.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
             	@Override
 				public void onClick(DialogInterface dialog, int id) {
-            		genCertAndShowProgressDiag();
+            		genKeysAndShowProgressDiag();
             	}
             });
             builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -459,33 +439,33 @@ public class PrimitiveFtpdActivity extends Activity {
     	}
     }
 
-    class GenCertAsyncTask extends AsyncTask<Void, Void, Void> {
+    class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
     	private ProgressDialog progressDiag;
 
-    	public GenCertAsyncTask(ProgressDialog progressDiag) {
+    	public GenKeysAsyncTask(ProgressDialog progressDiag) {
     		this.progressDiag = progressDiag;
     	}
 
     	@Override
 		protected Void doInBackground(Void... params) {
 			try {
-				FileOutputStream certFos = buildCertificateOutStream();
+				FileOutputStream publickeyFos = buildPublickeyOutStream();
 				FileOutputStream privatekeyFos = buildPrivatekeyOutStream();
 				try {
-					new CertGenerator().generate(certFos, privatekeyFos);
+					new KeyGenerator().generate(publickeyFos, privatekeyFos);
 	            } finally {
-	                certFos.close();
+	                publickeyFos.close();
 	                privatekeyFos.close();
 	            }
 			} catch (Exception e) {
-				logger.error("could not generate certificate", e);
+				logger.error("could not generate keys", e);
 			}
 			return null;
 		}
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			gatherCertInfo();
+			gatherKeysInfo();
 			progressDiag.dismiss();
 			createFingerprintTable();
 		}

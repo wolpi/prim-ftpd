@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.filesystem.SshFileSystemView;
-import org.primftpd.util.CertInfoProvider;
+import org.primftpd.util.KeyInfoProvider;
 
 import android.os.Looper;
 
@@ -122,13 +121,13 @@ public class SshServerService extends AbstractServerService
 		});
 
 		try {
-			// start server only when cert was generated
-			final FileInputStream certFis = openFileInput(PrimitiveFtpdActivity.CERT_FILENAME);
-			if (certFis.available() > 0) {
+			// start server only when keys were generated
+			final FileInputStream pubkeyFis = openFileInput(PrimitiveFtpdActivity.PUBLICKEY_FILENAME);
+			if (pubkeyFis.available() > 0) {
 				// read keys here, cannot open private files on server callback
-				final Iterable<KeyPair> keys = loadKeys(certFis);
+				final Iterable<KeyPair> keys = loadKeys(pubkeyFis);
 				// and close fis
-				IoUtils.close(certFis);
+				IoUtils.close(pubkeyFis);
 
 				// setKeyPairProvider
 				sshServer.setKeyPairProvider(new AbstractKeyPairProvider() {
@@ -147,19 +146,18 @@ public class SshServerService extends AbstractServerService
     	}
 	}
 
-	protected Iterable<KeyPair> loadKeys(FileInputStream certFis) {
+	protected Iterable<KeyPair> loadKeys(FileInputStream pubkeyFis) {
 		List<KeyPair> keyPairList = new ArrayList<KeyPair>(1);
 		FileInputStream privkeyFis = null;
         try {
-    		// read pub key from cert
-        	CertInfoProvider certInfoProvider = new CertInfoProvider();
-        	X509Certificate cert = certInfoProvider.readCert(certFis);
-        	PublicKey publicKey = cert.getPublicKey();
+    		// read pub key
+        	KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
+        	PublicKey publicKey = keyInfoProvider.readPublicKey(pubkeyFis);
 
     		// read priv key from it's own file
     		privkeyFis = openFileInput(
     			PrimitiveFtpdActivity.PRIVATEKEY_FILENAME);
-    		PrivateKey privateKey = certInfoProvider.readPrivatekey(privkeyFis);
+    		PrivateKey privateKey = keyInfoProvider.readPrivatekey(privkeyFis);
 
 			// return key pair
             keyPairList.add(new KeyPair(publicKey, privateKey));
