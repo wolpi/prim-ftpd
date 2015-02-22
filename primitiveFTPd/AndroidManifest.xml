@@ -28,7 +28,7 @@
         </activity>
 
         <activity
-            android:name=".FtpPrefsActivity"
+            android:name="org.primftpd.prefs.FtpPrefsActivity"
             android:label="@string/prefCategoryTitle">
         </activity>
             

@@ -9,7 +9,7 @@
 			android:title="@string/prefTitleUser"
 			android:summary="@string/prefSummaryUser"
 		/>
-		<org.primftpd.EncryptingEditTextPreference
+		<org.primftpd.prefs.EncryptingEditTextPreference
 			android:name="password"
 			android:key="passwordPref"
 			android:title="@string/prefTitlePassword"

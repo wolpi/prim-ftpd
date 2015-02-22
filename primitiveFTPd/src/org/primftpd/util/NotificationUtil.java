@@ -1,4 +1,4 @@
-package org.primftpd;
+package org.primftpd.util;
 
 import android.app.Notification;
 import android.app.NotificationManager;

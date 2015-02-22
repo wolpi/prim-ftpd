@@ -1,4 +1,6 @@
-package org.primftpd;
+package org.primftpd.prefs;
+
+import org.primftpd.PrimitiveFtpdActivity;
 
 import android.content.Intent;
 import android.os.Bundle;

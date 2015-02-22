@@ -1,4 +1,4 @@
-package org.primftpd;
+package org.primftpd.prefs;
 
 import org.primftpd.util.EncryptionUtil;
 import org.primftpd.util.StringUtils;
