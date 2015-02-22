@@ -7,10 +7,9 @@
     <string name="ifacesError">Fehler: </string>
     <string name="protocolLabel">Protokoll</string>
     <string name="portLabel">Port</string>
-    <string name="fingerprintsLabel">Zertifikats-Fingerabdrücke</string>
-    <string name="certificateValidUntilLabel">Zertifikat gütig bis</string>
-    <string name="generateCertificateMessage">Zertifikat erzeugen ?</string>
-    <string name="generatingCertificateMessage">Zertifikat wird erzeugt ...</string>
+    <string name="fingerprintsLabel">Schlüssel-Fingerabdrücke</string>
+    <string name="generateKeysMessage">Schlüssel erzeugen ?</string>
+    <string name="generatingKeysMessage">Schlüssel wird erzeugt &#8230;</string>
     <string name="generate">Erzeugen</string>
     <string name="cancel">Abbrechen</string>
     

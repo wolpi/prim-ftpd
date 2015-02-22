@@ -7,10 +7,9 @@
     <string name="ifacesError">Error: </string>
     <string name="protocolLabel">Protocol</string>
     <string name="portLabel">Port</string>
-    <string name="fingerprintsLabel">Certificate Fingerprints</string>
-    <string name="certificateValidUntilLabel">Certificate valid until</string>
-    <string name="generateCertificateMessage">Generate Certificate ?</string>
-    <string name="generatingCertificateMessage">Generating Certificate ...</string>
+    <string name="fingerprintsLabel">Key Fingerprints</string>
+    <string name="generateKeysMessage">Generate Keys ?</string>
+    <string name="generatingKeysMessage">Generating Keys &#8230;</string>
     <string name="generate">Generate</string>
     <string name="cancel">Cancel</string>
     

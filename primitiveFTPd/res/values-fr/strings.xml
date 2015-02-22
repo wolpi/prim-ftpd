@@ -7,7 +7,6 @@
     <string name="ifacesError">Erreur: </string>
     <string name="protocolLabel">Protocole</string>
     <string name="portLabel">Port</string>
-    <string name="fingerprintsLabel">Empreinte du certificat</string>
         
     <string name="startService">Démarrer le serveur</string>
     <string name="stopService">Arrêter le serveur</string>
