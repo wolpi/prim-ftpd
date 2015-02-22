@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.services.FtpServerService;
 import org.primftpd.services.SshServerService;
 import org.primftpd.util.CertGenerator;
@@ -76,6 +78,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
 
 	public static final String CERT_FILENAME = "pftpd-cert.pem";
+	public static final String PRIVATEKEY_FILENAME = "pftpd-cert.pk8";
 
 	public static final int CERT_REFRESH_ICON_ID = 1;
 
@@ -166,62 +169,61 @@ public class PrimitiveFtpdActivity extends Activity {
 		return fos;
     }
 
+    protected FileInputStream buildPrivatekeyInStream() throws IOException {
+		FileInputStream fis = openFileInput(PRIVATEKEY_FILENAME);
+		return fis;
+    }
+
+    protected FileOutputStream buildPrivatekeyOutStream() throws IOException {
+		FileOutputStream fos = openFileOutput(PRIVATEKEY_FILENAME, Context.MODE_PRIVATE);
+		return fos;
+    }
+
     /**
 	 * Reads certificate file and gathers some info, like valid until and
 	 * figerprints.
 	 */
     protected void gatherCertInfo() {
+    	FileInputStream fis = null;
     	try {
+        	fis = buildCertificateInStream();
+
+	    	// check if cert is present
+    		if (fis.available() <= 0) {
+    			throw new Exception("cert seems to be not present");
+    		}
+
 	    	CertInfoProvider certInfoprovider = new CertInfoProvider();
+    		X509Certificate cert = certInfoprovider.readCert(fis);
 
-	    	FileInputStream fis = buildCertificateInStream();
-	    	try {
-	    		// check if cert is present
-	    		if (fis.available() <= 0) {
-	    			throw new Exception("cert seems to be not present");
-	    		}
+    		// read valid until
+    		Date validUntil = certInfoprovider.validUntil(cert);
+	    	java.text.DateFormat dateFormat = DateFormat.getDateFormat(
+	    		getApplicationContext());
+	    	certValidUntil = dateFormat.format(validUntil);
 
-	    		// read valid until
-	    		Date validUntil = certInfoprovider.validUntil(fis);
-		    	java.text.DateFormat dateFormat = DateFormat.getDateFormat(
-		    		getApplicationContext());
-		    	certValidUntil = dateFormat.format(validUntil);
-	    	} finally {
-	    		fis.close();
+	    	// fingerprints
+	    	String fp = certInfoprovider.fingerprint(cert, "MD5");
+	    	if (fp != null) {
+	    		md5Fingerprint = fp;
 	    	}
 
-	    	fis = buildCertificateInStream();
-	    	try {
-		    	String fp = certInfoprovider.fingerprint(fis, "MD5");
-		    	if (fp != null) {
-		    		md5Fingerprint = fp;
-		    	}
-	    	} finally {
-	    		fis.close();
+    		fp = certInfoprovider.fingerprint(cert, "SHA-1");
+	    	if (fp != null) {
+	    		sha1Fingerprint = fp;
 	    	}
 
-	    	fis = buildCertificateInStream();
-	    	try {
-	    		String fp = certInfoprovider.fingerprint(fis, "SHA-1");
-		    	if (fp != null) {
-		    		sha1Fingerprint = fp;
-		    	}
-	    	} finally {
-	    		fis.close();
-	    	}
-
-	    	fis = buildCertificateInStream();
-	    	try {
-	    		String fp = certInfoprovider.fingerprint(fis, "SHA-256");
-		    	if (fp != null) {
-		    		sha256Fingerprint = fp;
-		    	}
-	    	} finally {
-	    		fis.close();
+    		fp = certInfoprovider.fingerprint(cert, "SHA-256");
+	    	if (fp != null) {
+	    		sha256Fingerprint = fp;
 	    	}
     	} catch (Exception e) {
     		logger.debug("cert does probably not exist");
-    	}
+		} finally {
+			if (fis != null) {
+				IoUtils.close(fis);
+			}
+		}
     }
 
     /**
@@ -467,11 +469,13 @@ public class PrimitiveFtpdActivity extends Activity {
     	@Override
 		protected Void doInBackground(Void... params) {
 			try {
-				FileOutputStream fos = buildCertificateOutStream();
+				FileOutputStream certFos = buildCertificateOutStream();
+				FileOutputStream privatekeyFos = buildPrivatekeyOutStream();
 				try {
-					new CertGenerator().generate(fos);
+					new CertGenerator().generate(certFos, privatekeyFos);
 	            } finally {
-	                fos.close();
+	                certFos.close();
+	                privatekeyFos.close();
 	            }
 			} catch (Exception e) {
 				logger.error("could not generate certificate", e);

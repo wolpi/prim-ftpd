@@ -59,6 +59,8 @@ public abstract class AbstractServerService
 	protected abstract Object getServer();
 	protected abstract void launchServer();
 	protected abstract void stopServer();
+	protected abstract int getPort();
+	protected abstract String getServiceName();
 
 	protected void handleServerStartError(Exception e)
 	{
@@ -181,8 +183,8 @@ public abstract class AbstractServerService
 
 		NsdServiceInfo serviceInfo  = new NsdServiceInfo();
 		serviceInfo.setServiceName("primitive ftpd");
-		serviceInfo.setServiceType("_ftp._tcp.");
-		serviceInfo.setPort(prefsBean.getPort());
+		serviceInfo.setServiceType("_" + getServiceName() + "._tcp.");
+		serviceInfo.setPort(getPort());
 
 		NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
 

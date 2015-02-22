@@ -2,8 +2,12 @@ package org.primftpd.filesystem;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.sshd.common.Session;
 
@@ -40,20 +44,79 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	}
 
 	@Override
-	public Object getAttribute(Attribute arg0, boolean arg1) throws IOException
+	public Object getAttribute(Attribute attribute, boolean followLinks)
+		throws IOException
 	{
-		// TODO ssh getAttribute
 		logger.debug("getAttribute()");
-		return null;
+		switch (attribute) {
+		case Size:
+			return Long.valueOf(getSize());
+		case Uid:
+			// TODO ssh uid
+			return Integer.valueOf(1);
+		case Owner:
+			return getOwner();
+		case Gid:
+			// TODO ssh gid
+			return Integer.valueOf(1);
+		case Group:
+			return getOwner();
+		case IsDirectory:
+			return Boolean.valueOf(isDirectory());
+		case IsRegularFile:
+			return Boolean.valueOf(isFile());
+		case IsSymbolicLink:
+			// TODO ssh sym links
+			return Boolean.FALSE;
+		case Permissions:
+			boolean read = isReadable();
+			boolean write = isWritable();
+			boolean exec = isExecutable();
+			Set<Permission> tmp = new HashSet<Permission>();
+			if (read) {
+				tmp.add(Permission.UserRead);
+				tmp.add(Permission.GroupRead);
+				tmp.add(Permission.OthersRead);
+			}
+			if (write) {
+				tmp.add(Permission.UserWrite);
+				tmp.add(Permission.GroupWrite);
+				tmp.add(Permission.OthersWrite);
+			}
+			if (exec) {
+				tmp.add(Permission.UserExecute);
+				tmp.add(Permission.GroupExecute);
+				tmp.add(Permission.OthersExecute);
+			}
+			return tmp.isEmpty()
+				? EnumSet.noneOf(Permission.class)
+				: EnumSet.copyOf(tmp);
+		case CreationTime:
+			// TODO ssh creation time
+			return Long.valueOf(getLastModified());
+		case LastModifiedTime:
+			return Long.valueOf(getLastModified());
+		case LastAccessTime:
+			// TODO ssh access time
+			return Long.valueOf(getLastModified());
+		default:
+			return null;
+		}
 	}
 
 	@Override
-	public Map<Attribute, Object> getAttributes(boolean arg0)
-			throws IOException
+	public Map<Attribute, Object> getAttributes(boolean followLinks)
+		throws IOException
 	{
-		// TODO ssh getAttributes
 		logger.debug("getAttributes()");
-		return null;
+
+		Map<SshFile.Attribute, Object> attributes =
+			new HashMap<SshFile.Attribute, Object>();
+		for (SshFile.Attribute attr : SshFile.Attribute.values()) {
+			attributes.put(attr, getAttribute(attr, followLinks));
+		}
+
+		return attributes;
 	}
 
 	@Override
@@ -105,14 +168,14 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	}
 
 	@Override
-	public void setAttribute(Attribute arg0, Object arg1) throws IOException
+	public void setAttribute(Attribute attribute, Object value) throws IOException
 	{
 		// TODO ssh setAttribute
 		logger.debug("setAttribute()");
 	}
 
 	@Override
-	public void setAttributes(Map<Attribute, Object> arg0) throws IOException
+	public void setAttributes(Map<Attribute, Object> attributes) throws IOException
 	{
 		// TODO ssh setAttributes
 		logger.debug("setAttributes()");
