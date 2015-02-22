@@ -68,9 +68,9 @@ public class KeyInfoProvider
 			byte b = fingerPrintBytes[i];
 			String hexString = Integer.toHexString(b);
 			if (hexString.length() > 2) {
-			hexString = hexString.substring(
-			hexString.length() - 2,
-			hexString.length());
+				hexString = hexString.substring(
+				hexString.length() - 2,
+				hexString.length());
 			} else if (hexString.length() < 2) {
 				hexString = "0" + hexString;
 			}
@@ -78,9 +78,9 @@ public class KeyInfoProvider
 			if (i != fingerPrintBytes.length -1) {
 				fingerPrint.append(":");
 			}
-			if (i > 0 && i % 10 == 0) {
+			if ((i + 1) % 6 == 0) {
 				// force line breaks in UI
-				fingerPrint.append("<br/>");
+				fingerPrint.append("\n");
 			}
 		}
 		return fingerPrint.toString();
