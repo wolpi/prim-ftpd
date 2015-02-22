@@ -16,6 +16,7 @@ import java.security.SignatureException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Date;
 
 import org.bouncycastle.crypto.CryptoException;
@@ -30,7 +31,7 @@ public class CertGenerator
 	public static final int KEY_SIZE = 2048;
 	public static final long YEARS_3 = 1000L * 60 * 60 * 24 * 365 * 3;
 
-	public void generate(FileOutputStream fos)
+	public void generate(FileOutputStream certFos, FileOutputStream privKeyFos)
 		throws IOException, InvalidKeyException,
 		SecurityException, SignatureException, NoSuchAlgorithmException,
 		DataLengthException, CryptoException, KeyStoreException,
@@ -46,23 +47,26 @@ public class CertGenerator
 		PublicKey pubKey = keypair.getPublic();
 
 		// TODO use X509v3CertificateBuilder
-		X509V3CertificateGenerator v3CertGen = new X509V3CertificateGenerator();
+		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 
     	Date startDate = new Date();
     	Date expiryDate = new Date(startDate.getTime() + YEARS_3);
 
-		v3CertGen.setSerialNumber(BigInteger.ONE);
-        v3CertGen.setIssuerDN(new X509Principal("CN=pFTPd, OU=None, O=None L=None, C=None"));
-        v3CertGen.setNotBefore(startDate);
-        v3CertGen.setNotAfter(expiryDate);
-        v3CertGen.setSubjectDN(new X509Principal("CN=pFTPd, OU=None, O=None L=None, C=None"));
+		certGen.setSerialNumber(BigInteger.ONE);
+        certGen.setIssuerDN(new X509Principal("CN=pFTPd, OU=None, O=None L=None, C=None"));
+        certGen.setNotBefore(startDate);
+        certGen.setNotAfter(expiryDate);
+        certGen.setSubjectDN(new X509Principal("CN=pFTPd, OU=None, O=None L=None, C=None"));
 
-        v3CertGen.setPublicKey(pubKey);
-        v3CertGen.setSignatureAlgorithm(SIG_ALGO);
+        certGen.setPublicKey(pubKey);
+        certGen.setSignatureAlgorithm(SIG_ALGO);
 
-        X509Certificate cert = v3CertGen.generateX509Certificate(privKey);
+        X509Certificate cert = certGen.generateX509Certificate(privKey);
 
         byte[] encoded = cert.getEncoded();
-        fos.write(encoded);
+        certFos.write(encoded);
+
+    	PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privKey.getEncoded());
+		privKeyFos.write(keySpec.getEncoded());
 	}
 }

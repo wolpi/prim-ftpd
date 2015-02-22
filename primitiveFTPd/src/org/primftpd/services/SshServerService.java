@@ -2,23 +2,32 @@ package org.primftpd.services;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
+import org.apache.ftpserver.util.IoUtils;
 import org.apache.sshd.SshServer;
+import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemFactory;
 import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.io.mina.MinaServiceFactoryFactory;
+import org.apache.sshd.common.keyprovider.AbstractKeyPairProvider;
+import org.apache.sshd.server.Command;
 import org.apache.sshd.server.PasswordAuthenticator;
 import org.apache.sshd.server.command.ScpCommandFactory;
-import org.apache.sshd.server.keyprovider.PEMGeneratorHostKeyProvider;
 import org.apache.sshd.server.session.ServerSession;
+import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.filesystem.SshFileSystemView;
+import org.primftpd.util.CertInfoProvider;
 
 import android.os.Looper;
 
@@ -34,13 +43,25 @@ public class SshServerService extends AbstractServerService
 		Looper serviceLooper,
 		AbstractServerService service)
 	{
-		return new ServerServiceHandler(serviceLooper, service, "ssh");
+		return new ServerServiceHandler(serviceLooper, service, getServiceName());
 	}
 
 	@Override
 	protected Object getServer()
 	{
 		return sshServer;
+	}
+
+	@Override
+	protected int getPort()
+	{
+		return prefsBean.getSecurePort();
+	}
+
+	@Override
+	protected String getServiceName()
+	{
+		return "sftp";
 	}
 
 	@Override
@@ -60,8 +81,16 @@ public class SshServerService extends AbstractServerService
 		sshServer = SshServer.setUpDefaultServer();
 		sshServer.setPort(prefsBean.getSecurePort());
 
-		//sshServer.setUserAuthFactories(userAuthFactories);
+		// causes exception when not set
+		sshServer.setIoServiceFactoryFactory(new MinaServiceFactoryFactory());
 
+		// enable scp and sftp
+		sshServer.setCommandFactory(new ScpCommandFactory());
+		List<NamedFactory<Command>> factoryList = new ArrayList<NamedFactory<Command>>(1);
+		factoryList.add(new SftpSubsystem.Factory());
+		sshServer.setSubsystemFactories(factoryList);
+
+		// PasswordAuthenticator based on android preferences
 		final AndroidPrefsUserManager userManager = new AndroidPrefsUserManager(prefsBean);
 		sshServer.setPasswordAuthenticator(new PasswordAuthenticator() {
 			@Override
@@ -82,6 +111,8 @@ public class SshServerService extends AbstractServerService
 				return true;
 			}
 		});
+
+		// android filesystem view
 		sshServer.setFileSystemFactory(new FileSystemFactory() {
 			@Override
 			public FileSystemView createFileSystemView(Session session) throws IOException
@@ -90,22 +121,21 @@ public class SshServerService extends AbstractServerService
 			}
 		});
 
-		// causes exception when not set
-		sshServer.setIoServiceFactoryFactory(new MinaServiceFactoryFactory());
-
-		// enable sftp
-		sshServer.setCommandFactory(new ScpCommandFactory());
-
 		try {
 			// start server only when cert was generated
-			final FileInputStream fis = openFileInput(PrimitiveFtpdActivity.CERT_FILENAME);
-			if (fis.available() > 0) {
-				sshServer.setKeyPairProvider(new PEMGeneratorHostKeyProvider("") {
+			final FileInputStream certFis = openFileInput(PrimitiveFtpdActivity.CERT_FILENAME);
+			if (certFis.available() > 0) {
+				// read keys here, cannot open private files on server callback
+				final Iterable<KeyPair> keys = loadKeys(certFis);
+				// and close fis
+				IoUtils.close(certFis);
+
+				// setKeyPairProvider
+				sshServer.setKeyPairProvider(new AbstractKeyPairProvider() {
 					@Override
-					protected KeyPair doReadKeyPair(InputStream is) throws Exception
-					{
-						// use own fis instead of passed is
-						return super.doReadKeyPair(fis);
+					public Iterable<KeyPair> loadKeys() {
+						// just return keys that have been loaded before
+						return keys;
 					}
 				});
 
@@ -115,5 +145,31 @@ public class SshServerService extends AbstractServerService
     		sshServer = null;
 			handleServerStartError(e);
     	}
+	}
+
+	protected Iterable<KeyPair> loadKeys(FileInputStream certFis) {
+		List<KeyPair> keyPairList = new ArrayList<KeyPair>(1);
+		FileInputStream privkeyFis = null;
+        try {
+    		// read pub key from cert
+        	CertInfoProvider certInfoProvider = new CertInfoProvider();
+        	X509Certificate cert = certInfoProvider.readCert(certFis);
+        	PublicKey publicKey = cert.getPublicKey();
+
+    		// read priv key from it's own file
+    		privkeyFis = openFileInput(
+    			PrimitiveFtpdActivity.PRIVATEKEY_FILENAME);
+    		PrivateKey privateKey = certInfoProvider.readPrivatekey(privkeyFis);
+
+			// return key pair
+            keyPairList.add(new KeyPair(publicKey, privateKey));
+        } catch (Exception e) {
+        	logger.debug("could not read key: " + e.getMessage(), e);
+    	} finally {
+			if (privkeyFis != null) {
+				IoUtils.close(privkeyFis);
+			}
+		}
+        return keyPairList;
 	}
 }

@@ -44,23 +44,39 @@ public abstract class AndroidFile<T> {
 	}
 
 	public boolean isDirectory() {
-		logger.debug("isDirectory()");
-		return file.isDirectory();
+		boolean isDirectory = file.isDirectory();
+		logger.debug(
+			"isDirectory(), ({}): {}",
+			file.getAbsolutePath(),
+			Boolean.valueOf(isDirectory));
+		return isDirectory;
 	}
 
 	public boolean isFile() {
-		logger.debug("isFile()");
-		return file.isFile();
+		boolean isFile = file.isFile();
+		logger.debug(
+			"isFile(), ({}): {}",
+			file.getAbsolutePath(),
+			Boolean.valueOf(isFile));
+		return isFile;
 	}
 
 	public boolean doesExist() {
-		logger.debug("doesExist(), ({})", file.getAbsolutePath());
-		return file.exists();
+		boolean exists = file.exists();
+		logger.debug(
+			"doesExist(), ({}): {}",
+			file.getAbsolutePath(),
+			Boolean.valueOf(exists));
+		return exists;
 	}
 
 	public boolean isReadable() {
-		logger.debug("isReadable()");
-		return file.canRead();
+		boolean canRead = file.canRead();
+		logger.debug(
+			"isReadable(), ({}): {}",
+			file.getAbsolutePath(),
+			Boolean.valueOf(canRead));
+		return canRead;
 	}
 
 	public boolean isWritable() {

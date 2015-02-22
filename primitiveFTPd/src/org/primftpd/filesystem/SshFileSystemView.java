@@ -32,7 +32,6 @@ public class SshFileSystemView
 	@Override
 	public FileSystemView getNormalizedView()
 	{
-		// TODO ssh getNormalizedView
-		return null;
+		return this;
 	}
 }

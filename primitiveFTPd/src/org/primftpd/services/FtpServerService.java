@@ -24,13 +24,25 @@ public class FtpServerService extends AbstractServerService
 		Looper serviceLooper,
 		AbstractServerService service)
 	{
-		return new ServerServiceHandler(serviceLooper, service, "ftp");
+		return new ServerServiceHandler(serviceLooper, service, getServiceName());
 	}
 
 	@Override
 	protected Object getServer()
 	{
 		return ftpServer;
+	}
+
+	@Override
+	protected int getPort()
+	{
+		return prefsBean.getPort();
+	}
+
+	@Override
+	protected String getServiceName()
+	{
+		return "ftp";
 	}
 
 	@Override
