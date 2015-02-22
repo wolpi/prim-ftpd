@@ -9,7 +9,11 @@
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Certificate Fingerprints</string>
     <string name="certificateValidUntilLabel">Certificate valid until</string>
-        
+    <string name="generateCertificateMessage">Generate Certificate ?</string>
+    <string name="generatingCertificateMessage">Generating Certificate ...</string>
+    <string name="generate">Generate</string>
+    <string name="cancel">Cancel</string>
+    
     <string name="startService">Start Server</string>
     <string name="stopService">Stop Server</string>
     <string name="notificationTitle">FTP Server</string>
