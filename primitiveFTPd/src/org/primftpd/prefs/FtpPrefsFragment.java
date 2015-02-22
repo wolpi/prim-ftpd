@@ -1,7 +1,6 @@
 package org.primftpd.prefs;
 
 import org.primftpd.R;
-import org.primftpd.R.xml;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
