@@ -1,9 +1,9 @@
 package org.primftpd.services;
 
-import org.primftpd.NotificationUtil;
 import org.primftpd.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
+import org.primftpd.util.NotificationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
