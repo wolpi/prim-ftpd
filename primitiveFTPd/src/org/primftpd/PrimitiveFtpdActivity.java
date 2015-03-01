@@ -108,7 +108,7 @@ public class PrimitiveFtpdActivity extends Activity {
     	//updateButtonStates();
 
     	// calc keys fingerprints
-        gatherKeysInfo();
+        calcPubkeyFingerprints();
     	createFingerprintTable();
     }
 
@@ -181,9 +181,9 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     /**
-	 * Reads key file and gathers some info, like figerprints.
+	 * Creates figerprints of public key.
 	 */
-    protected void gatherKeysInfo() {
+    protected void calcPubkeyFingerprints() {
     	FileInputStream fis = null;
     	try {
         	fis = buildPublickeyInStream();
@@ -200,17 +200,17 @@ public class PrimitiveFtpdActivity extends Activity {
     		byte[] encodedKeyKde = keyInfoprovider.encodeAsSsh(rsaPubKey, true);
 
     		// fingerprints
-	    	String fp = keyInfoprovider.fingerprint(encodedKey, "MD5");
+    		String fp = keyInfoprovider.fingerprint(encodedKey, "MD5");
 	    	if (fp != null) {
 	    		fingerprintMd5 = fp;
 	    	}
 
-    		fp = keyInfoprovider.fingerprint(encodedKey, "SHA-1");
+	    	fp = keyInfoprovider.fingerprint(encodedKey, "SHA-1");
 	    	if (fp != null) {
 	    		fingerprintSha1 = fp;
 	    	}
 
-    		fp = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
+	    	fp = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
 	    	if (fp != null) {
 	    		fingerprintSha256 = fp;
 	    	}
@@ -502,7 +502,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			gatherKeysInfo();
+			calcPubkeyFingerprints();
 			progressDiag.dismiss();
 			createFingerprintTable();
 		}
