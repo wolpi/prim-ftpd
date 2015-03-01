@@ -3,11 +3,13 @@ package org.primftpd.util;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -21,10 +23,10 @@ public class KeyInfoProvider
 {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public String fingerprint(PrivateKey privateKey, String hashAlgo) {
+	public String fingerprint(byte[] pubKeyEnc, String hashAlgo) {
 		try {
 			MessageDigest md = MessageDigest.getInstance(hashAlgo);
-			md.update(privateKey.getEncoded());
+			md.update(pubKeyEnc);
 			byte[] fingerPrintBytes = md.digest();
 			return beautify(fingerPrintBytes);
 		} catch (Exception e) {
@@ -78,11 +80,39 @@ public class KeyInfoProvider
 			if (i != fingerPrintBytes.length -1) {
 				fingerPrint.append(":");
 			}
-			if ((i + 1) % 6 == 0) {
+			if ((i + 1) % 8 == 0) {
 				// force line breaks in UI
 				fingerPrint.append("\n");
 			}
 		}
 		return fingerPrint.toString();
+	}
+
+	public byte[] encodeAsSsh(RSAPublicKey pubKey, boolean forKdeDolphin)
+		throws IOException
+	{
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		if (forKdeDolphin) {
+			byte[] name = "ssh-rsa".getBytes("US-ASCII");
+			writeKeyPart(name, buf);
+
+			writeKeyPart(pubKey.getPublicExponent().toByteArray(), buf);
+			writeKeyPart(pubKey.getModulus().toByteArray(), buf);
+		} else {
+			// like openSSH does
+			writeKeyPart(pubKey.getModulus().toByteArray(), buf);
+			writeKeyPart(pubKey.getPublicExponent().toByteArray(), buf);
+			// TODO add key comment
+		}
+		return buf.toByteArray();
+	}
+
+	private void writeKeyPart(byte[] str, OutputStream os)
+		throws IOException
+	{
+		for (int shift = 24; shift >= 0; shift -= 8) {
+			os.write((str.length >>> shift) & 0xFF);
+		}
+		os.write(str);
 	}
 }
