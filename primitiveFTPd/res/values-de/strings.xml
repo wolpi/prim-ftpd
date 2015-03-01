@@ -13,7 +13,10 @@
     <string name="generate">Erzeugen</string>
     <string name="cancel">Abbrechen</string>
     <string name="fingerprintKde">SHA1 inklusive Schlüssel Name (z.B. KDE Dolphin)</string>
-
+    <string name="state">Status</string>
+    <string name="serverStarted">Gestartet &#8230;</string>
+    <string name="serverStopped">Gestoppt</string>
+    
     <string name="startService">Server Starten</string>
     <string name="stopService">Server Stoppen</string>
     <string name="notificationTitle">FTP Server</string>
