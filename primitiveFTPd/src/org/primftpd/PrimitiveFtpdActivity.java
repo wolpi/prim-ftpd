@@ -36,6 +36,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
@@ -76,6 +77,19 @@ public class PrimitiveFtpdActivity extends Activity {
 	    }
 	};
 
+	// flag must be static to be avail after activity change
+	private static boolean prefsChanged = false;
+	private OnSharedPreferenceChangeListener prefsChangeListener =
+		new OnSharedPreferenceChangeListener()
+	{
+		@Override public void onSharedPreferenceChanged(
+			SharedPreferences sharedPreferences, String key)
+		{
+			logger.debug("onSharedPreferenceChanged(), key: {}", key);
+			prefsChanged = true;
+		}
+	};
+
 	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
 
 	public static final String PUBLICKEY_FILENAME = "pftpd-pub.bin";
@@ -110,6 +124,20 @@ public class PrimitiveFtpdActivity extends Activity {
     	// calc keys fingerprints
         calcPubkeyFingerprints();
     	createFingerprintTable();
+
+    	// prefs change
+    	SharedPreferences prefs = getPrefs();
+		prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+    	super.onDestroy();
+
+    	// prefs change
+    	SharedPreferences prefs = getPrefs();
+		prefs.unregisterOnSharedPreferenceChangeListener(prefsChangeListener);
     }
 
     @Override
@@ -132,7 +160,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		createUsernameTable();
 	}
 
-    @Override
+	@Override
     protected void onResume() {
     	super.onResume();
 
@@ -710,7 +738,6 @@ public class PrimitiveFtpdActivity extends Activity {
 		}
 
 		// create prefsBean
-		PrefsBean oldPrefs = prefsBean;
 		prefsBean = new PrefsBean(
 			userName,
 			password,
@@ -718,15 +745,12 @@ public class PrimitiveFtpdActivity extends Activity {
 			securePort,
 			announce);
 
-		// TODO oldPrefs is null when user navigates via action bar,
-		// find other way to figure out if prefs have changed
-		if (oldPrefs != null) {
-			if (!oldPrefs.equals(prefsBean) && checkServicesRunning()) {
-				Toast.makeText(
-					getApplicationContext(),
-					R.string.restartServer,
-					Toast.LENGTH_LONG).show();
-			}
+		if (prefsChanged) {
+			prefsChanged = false;
+			Toast.makeText(
+				getApplicationContext(),
+				R.string.restartServer,
+				Toast.LENGTH_LONG).show();
 		}
 	}
 
