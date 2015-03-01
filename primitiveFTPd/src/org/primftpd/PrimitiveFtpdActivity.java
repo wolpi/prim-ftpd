@@ -58,6 +58,15 @@ import android.widget.Toast;
  */
 public class PrimitiveFtpdActivity extends Activity {
 
+	public static class ServersRunningBean {
+		boolean ftp = false;
+		boolean ssh = false;
+
+		boolean atLeastOneRunning() {
+			return ftp || ssh;
+		}
+	}
+
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -102,6 +111,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PrefsBean prefsBean;
+	private ServersRunningBean serversRunning;
 	private String fingerprintMd5 = " - ";
 	private String fingerprintSha1 = " - ";
 	private String fingerprintSha256 = " - ";
@@ -156,6 +166,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		loadPrefs();
 
+		checkServicesRunning();
 		createPortsTable();
 		createUsernameTable();
 	}
@@ -319,22 +330,67 @@ public class PrimitiveFtpdActivity extends Activity {
 		CharSequence label,
 		CharSequence value)
     {
-    	createTableRow(table, label, value, 0, null, false);
+    	createTableRow(table, label, value, 0, null, false, null);
     }
 
     /**
-     * Creates a 2 column row in a table.
+	 * Creates a 3 column row. To be used for header line of ports table.
+	 * 3rd col is left empty but is required for data-rows.
+	 *
+     * @param table Table to add row to.
+     * @param label Text for left column.
+     * @param value Text for middle column.
+	 * @param serverRunning Flag indicating which icon to show.
+	 */
+    protected void createTableRowPortHeader(
+		TableLayout table,
+		CharSequence label,
+		CharSequence value)
+    {
+		createTableRow(
+			table,
+			label,
+			value,
+			0,
+			null,
+			false,
+			getText(R.string.state));
+    }
+
+    /**
+	 * Creates a 3 column row. To be used for ports, 3rd col shows icon for
+	 * server state.
+	 *
+     * @param table Table to add row to.
+     * @param label Text for left column.
+     * @param value Text for middle column.
+	 * @param serverRunning Flag indicating which icon to show.
+	 */
+    protected void createTableRowPort(
+		TableLayout table,
+		CharSequence label,
+		CharSequence value,
+		boolean serverRunning)
+    {
+    	CharSequence serverState = getText(serverRunning
+    		? R.string.serverStarted
+    		: R.string.serverStopped);
+    	createTableRow(table, label, value, 0, null, false, serverState);
+    }
+
+    /**
+     * Creates a 2 column row. Instead of a value string it uses an image id.
      *
      * @param table Table to add row to.
      * @param label Text for left column.
      * @param value Resource id of image to show in right column.
      */
-    protected void createTableRowWithIcon(
+    protected void createTableRowKeyFingerprintHeader(
 		TableLayout table,
 		CharSequence label,
 		int imageId)
     {
-    	createTableRow(table, label, null, imageId, null, false);
+    	createTableRow(table, label, null, imageId, null, false, null);
     }
 
     protected void createTableRowKeyFingerprint(
@@ -343,7 +399,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		CharSequence value)
     {
     	Integer labelMaxWidth = Integer.valueOf(150);
-    	createTableRow(table, label, value, 0, labelMaxWidth, true);
+    	createTableRow(table, label, value, 0, labelMaxWidth, true, null);
     }
 
     protected void createTableRow(
@@ -352,7 +408,8 @@ public class PrimitiveFtpdActivity extends Activity {
 		CharSequence value,
 		int imageId,
 		Integer labelMaxWidth,
-		boolean monospace)
+		boolean monospace,
+		CharSequence serverState)
     {
     	TableRow row = new TableRow(table.getContext());
     	table.addView(row);
@@ -388,6 +445,14 @@ public class PrimitiveFtpdActivity extends Activity {
     	LayoutParams params = new LayoutParams();
     	params.height = LayoutParams.WRAP_CONTENT;
     	valueView.setLayoutParams(params);
+
+    	if (serverState != null) {
+    		TextView serverStateView = new TextView(row.getContext());
+        	row.addView(serverStateView);
+    		serverStateView.setText(serverState);
+    		serverStateView.setGravity(Gravity.LEFT);
+    		serverStateView.setPadding(50, 0, 0, 0);
+    	}
     }
 
     /**
@@ -400,20 +465,22 @@ public class PrimitiveFtpdActivity extends Activity {
     	table.removeAllViews();
 
     	// create header line
-    	createTableRow(
+    	createTableRowPortHeader(
     		table,
     		getText(R.string.protocolLabel),
     		getText(R.string.portLabel));
 
-    	createTableRow(
+    	createTableRowPort(
     		table,
     		"ftp",
-    		prefsBean.getPortStr());
+    		prefsBean.getPortStr(),
+    		serversRunning.ftp);
 
-    	createTableRow(
+    	createTableRowPort(
     		table,
     		"sftp",
-    		prefsBean.getSecurePortStr());
+    		prefsBean.getSecurePortStr(),
+    		serversRunning.ssh);
     }
 
     protected void createUsernameTable() {
@@ -434,7 +501,7 @@ public class PrimitiveFtpdActivity extends Activity {
         // clear old entries
     	table.removeAllViews();
 
-    	createTableRowWithIcon(
+    	createTableRowKeyFingerprintHeader(
     		table,
     		getText(R.string.fingerprintsLabel),
     		R.drawable.refresh);
@@ -536,10 +603,9 @@ public class PrimitiveFtpdActivity extends Activity {
 		}
     }
 
-    /**
-     * @return True if at least one service is running.
-     */
-    protected boolean checkServicesRunning() {
+    protected void checkServicesRunning() {
+    	logger.debug("checkServicesRunning()");
+    	ServersRunningBean serversRunning = new ServersRunningBean();
 		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 		List<RunningServiceInfo> runningServices = manager.getRunningServices(Integer.MAX_VALUE);
 		String ftpServiceClassName = FtpServerService.class.getName();
@@ -547,13 +613,16 @@ public class PrimitiveFtpdActivity extends Activity {
 		for (RunningServiceInfo service : runningServices) {
 			String currentClassName = service.service.getClassName();
 			if (ftpServiceClassName.equals(currentClassName)) {
-				return true;
+				serversRunning.ftp = true;
 			}
 			if (sshServiceClassName.equals(currentClassName)) {
-				return true;
+				serversRunning.ssh = true;
+			}
+			if (serversRunning.ftp && serversRunning.ssh) {
+				break;
 			}
 		}
-		return false;
+		this.serversRunning = serversRunning;
 	}
 
     /**
@@ -567,13 +636,14 @@ public class PrimitiveFtpdActivity extends Activity {
 
         logger.debug("updateButtonStates()");
 
-    	boolean serviceRunning = checkServicesRunning();
+    	checkServicesRunning();
+    	boolean atLeastOneRunning = serversRunning.atLeastOneRunning();
 
-    	startIcon.setVisible(!serviceRunning);
-    	stopIcon.setVisible(serviceRunning);
+    	startIcon.setVisible(!atLeastOneRunning);
+    	stopIcon.setVisible(atLeastOneRunning);
 
     	// remove status bar notification if server not running
-    	if (!serviceRunning) {
+    	if (!atLeastOneRunning) {
     		NotificationUtil.removeStatusbarNotification(this);
     	}
     }
@@ -611,6 +681,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		}
 
 		updateButtonStates();
+		createPortsTable();
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -747,10 +818,12 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		if (prefsChanged) {
 			prefsChanged = false;
-			Toast.makeText(
-				getApplicationContext(),
-				R.string.restartServer,
-				Toast.LENGTH_LONG).show();
+			if (serversRunning != null && serversRunning.atLeastOneRunning()) {
+				Toast.makeText(
+					getApplicationContext(),
+					R.string.restartServer,
+					Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 
