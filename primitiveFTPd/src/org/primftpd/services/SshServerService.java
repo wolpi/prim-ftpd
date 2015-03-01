@@ -122,7 +122,8 @@ public class SshServerService extends AbstractServerService
 
 		try {
 			// start server only when keys were generated
-			final FileInputStream pubkeyFis = openFileInput(PrimitiveFtpdActivity.PUBLICKEY_FILENAME);
+			final FileInputStream pubkeyFis = openFileInput(
+				PrimitiveFtpdActivity.PUBLICKEY_FILENAME);
 			if (pubkeyFis.available() > 0) {
 				// read keys here, cannot open private files on server callback
 				final Iterable<KeyPair> keys = loadKeys(pubkeyFis);

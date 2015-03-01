@@ -9,10 +9,11 @@
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Schlüssel-Fingerabdrücke</string>
     <string name="generateKeysMessage">Schlüssel erzeugen ?</string>
-    <string name="generatingKeysMessage">Schlüssel wird erzeugt &#8230;</string>
+    <string name="generatingKeysMessage">Schlüssel werden erzeugt &#8230;</string>
     <string name="generate">Erzeugen</string>
     <string name="cancel">Abbrechen</string>
-    
+    <string name="fingerprintKde">SHA1 inklusive Schlüssel Name (z.B. KDE Dolphin)</string>
+
     <string name="startService">Server Starten</string>
     <string name="stopService">Server Stoppen</string>
     <string name="notificationTitle">FTP Server</string>

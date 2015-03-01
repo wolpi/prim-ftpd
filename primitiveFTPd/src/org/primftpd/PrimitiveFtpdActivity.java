@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -35,6 +36,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -76,7 +78,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
 
-	public static final String PUBLICKEY_FILENAME = "pftpd-pub.pk8";
+	public static final String PUBLICKEY_FILENAME = "pftpd-pub.bin";
 	public static final String PRIVATEKEY_FILENAME = "pftpd-priv.pk8";
 
 	public static final int KEYS_REFRESH_ICON_ID = 1;
@@ -86,9 +88,10 @@ public class PrimitiveFtpdActivity extends Activity {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PrefsBean prefsBean;
-	private String md5Fingerprint = " - ";
-	private String sha1Fingerprint = " - ";
-	private String sha256Fingerprint = " - ";
+	private String fingerprintMd5 = " - ";
+	private String fingerprintSha1 = " - ";
+	private String fingerprintSha256 = " - ";
+	private String fingerprintKde = " - ";
 
 	/** Called when the activity is first created. */
     @Override
@@ -157,6 +160,11 @@ public class PrimitiveFtpdActivity extends Activity {
         this.unregisterReceiver(this.networkStateReceiver);
     }
 
+    protected FileInputStream buildPublickeyInStream() throws IOException {
+		FileInputStream fis = openFileInput(PUBLICKEY_FILENAME);
+		return fis;
+    }
+
     protected FileOutputStream buildPublickeyOutStream() throws IOException {
 		FileOutputStream fos = openFileOutput(PUBLICKEY_FILENAME, Context.MODE_PRIVATE);
 		return fos;
@@ -178,7 +186,7 @@ public class PrimitiveFtpdActivity extends Activity {
     protected void gatherKeysInfo() {
     	FileInputStream fis = null;
     	try {
-        	fis = buildPrivatekeyInStream();
+        	fis = buildPublickeyInStream();
 
 	    	// check if key is present
     		if (fis.available() <= 0) {
@@ -186,23 +194,32 @@ public class PrimitiveFtpdActivity extends Activity {
     		}
 
 	    	KeyInfoProvider keyInfoprovider = new KeyInfoProvider();
-    		PrivateKey privateKey = keyInfoprovider.readPrivatekey(fis);
+    		PublicKey pubKey = keyInfoprovider.readPublicKey(fis);
+    		RSAPublicKey rsaPubKey = (RSAPublicKey) pubKey;
+    		byte[] encodedKey = keyInfoprovider.encodeAsSsh(rsaPubKey, false);
+    		byte[] encodedKeyKde = keyInfoprovider.encodeAsSsh(rsaPubKey, true);
 
-	    	// fingerprints
-	    	String fp = keyInfoprovider.fingerprint(privateKey, "MD5");
+    		// fingerprints
+	    	String fp = keyInfoprovider.fingerprint(encodedKey, "MD5");
 	    	if (fp != null) {
-	    		md5Fingerprint = fp;
+	    		fingerprintMd5 = fp;
 	    	}
 
-    		fp = keyInfoprovider.fingerprint(privateKey, "SHA-1");
+    		fp = keyInfoprovider.fingerprint(encodedKey, "SHA-1");
 	    	if (fp != null) {
-	    		sha1Fingerprint = fp;
+	    		fingerprintSha1 = fp;
 	    	}
 
-    		fp = keyInfoprovider.fingerprint(privateKey, "SHA-256");
+    		fp = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
 	    	if (fp != null) {
-	    		sha256Fingerprint = fp;
+	    		fingerprintSha256 = fp;
 	    	}
+
+	    	fp = keyInfoprovider.fingerprint(encodedKeyKde, "SHA-1");
+	    	if (fp != null) {
+	    		fingerprintKde = fp;
+	    	}
+
     	} catch (Exception e) {
     		logger.debug("key does probably not exist");
 		} finally {
@@ -274,7 +291,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		CharSequence label,
 		CharSequence value)
     {
-    	createTableRow(table, label, value, 0);
+    	createTableRow(table, label, value, 0, null, false);
     }
 
     /**
@@ -284,19 +301,30 @@ public class PrimitiveFtpdActivity extends Activity {
      * @param label Text for left column.
      * @param value Resource id of image to show in right column.
      */
-    protected void createTableRow(
+    protected void createTableRowWithIcon(
 		TableLayout table,
 		CharSequence label,
 		int imageId)
     {
-    	createTableRow(table, label, null, imageId);
+    	createTableRow(table, label, null, imageId, null, false);
+    }
+
+    protected void createTableRowKeyFingerprint(
+		TableLayout table,
+		CharSequence label,
+		CharSequence value)
+    {
+    	Integer labelMaxWidth = Integer.valueOf(150);
+    	createTableRow(table, label, value, 0, labelMaxWidth, true);
     }
 
     protected void createTableRow(
 		TableLayout table,
 		CharSequence label,
 		CharSequence value,
-		int imageId)
+		int imageId,
+		Integer labelMaxWidth,
+		boolean monospace)
     {
     	TableRow row = new TableRow(table.getContext());
     	table.addView(row);
@@ -305,6 +333,9 @@ public class PrimitiveFtpdActivity extends Activity {
     	TextView labelView = new TextView(row.getContext());
     	row.addView(labelView);
     	labelView.setPadding(0, 0, 20, 0);
+    	if (labelMaxWidth != null) {
+    		labelView.setMaxWidth(labelMaxWidth.intValue());
+    	}
     	labelView.setText(label);
 
     	View valueView = null;
@@ -313,6 +344,9 @@ public class PrimitiveFtpdActivity extends Activity {
     		valueTextView.setGravity(Gravity.LEFT);
     		valueTextView.setText(value);
     		valueView = valueTextView;
+    		if (monospace) {
+    			valueTextView.setTypeface(Typeface.MONOSPACE);
+    		}
     	} else {
     		// it is a little hacky to always create refresh icon
     		// but this is the only case we need an imageId here
@@ -372,7 +406,7 @@ public class PrimitiveFtpdActivity extends Activity {
         // clear old entries
     	table.removeAllViews();
 
-    	createTableRow(
+    	createTableRowWithIcon(
     		table,
     		getText(R.string.fingerprintsLabel),
     		R.drawable.refresh);
@@ -381,19 +415,22 @@ public class PrimitiveFtpdActivity extends Activity {
         // clear old entries
     	table.removeAllViews();
 
-    	// TODO use monospace font for fingerprints
-    	createTableRow(
+    	createTableRowKeyFingerprint(
     		table,
     		"MD5",
-    		md5Fingerprint);
-    	createTableRow(
+    		fingerprintMd5);
+    	createTableRowKeyFingerprint(
     		table,
     		"SHA1",
-    		sha1Fingerprint);
-    	createTableRow(
+    		fingerprintSha1);
+    	createTableRowKeyFingerprint(
     		table,
     		"SHA256",
-    		sha256Fingerprint);
+    		fingerprintSha256);
+    	createTableRowKeyFingerprint(
+    		table,
+    		getText(R.string.fingerprintKde),
+    		fingerprintKde);
 
     	// create onRefreshListener
     	View refreshButton = findViewById(KEYS_REFRESH_ICON_ID);
