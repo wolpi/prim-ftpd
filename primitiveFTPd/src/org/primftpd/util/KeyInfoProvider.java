@@ -99,20 +99,19 @@ public class KeyInfoProvider
 			writeKeyPart(pubKey.getPublicExponent().toByteArray(), buf);
 			writeKeyPart(pubKey.getModulus().toByteArray(), buf);
 		} else {
-			// like openSSH does
+			// TODO figure out what openSSH/putty are doing
 			writeKeyPart(pubKey.getModulus().toByteArray(), buf);
 			writeKeyPart(pubKey.getPublicExponent().toByteArray(), buf);
-			// TODO add key comment
 		}
 		return buf.toByteArray();
 	}
 
-	private void writeKeyPart(byte[] str, OutputStream os)
+	private void writeKeyPart(byte[] bytes, OutputStream os)
 		throws IOException
 	{
 		for (int shift = 24; shift >= 0; shift -= 8) {
-			os.write((str.length >>> shift) & 0xFF);
+			os.write((bytes.length >>> shift) & 0xFF);
 		}
-		os.write(str);
+		os.write(bytes);
 	}
 }
