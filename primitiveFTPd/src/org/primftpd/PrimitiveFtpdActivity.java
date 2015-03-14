@@ -755,6 +755,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	public static final String PREF_KEY_PORT = "portPref";
 	public static final String PREF_KEY_SECURE_PORT = "securePortPref";
 	public static final String PREF_KEY_ANNOUNCE = "announcePref";
+	public static final String PREF_KEY_WAKELOCK = "wakelockPref";
 
 	/**
 	 * Loads preferences and stores in member {@link #prefsBean}.
@@ -773,6 +774,10 @@ public class PrimitiveFtpdActivity extends Activity {
 		// load announcement setting
 		boolean announce = prefs.getBoolean(PREF_KEY_ANNOUNCE, Boolean.TRUE);
 		logger.debug("got announce: {}", Boolean.valueOf(announce));
+
+		// load wakelock setting
+		boolean wakelock = prefs.getBoolean(PREF_KEY_WAKELOCK, Boolean.TRUE);
+		logger.debug("got wakelock: {}", Boolean.valueOf(wakelock));
 
 		// load port
 		int port = loadAndValidatePort(
@@ -814,7 +819,8 @@ public class PrimitiveFtpdActivity extends Activity {
 			password,
 			port,
 			securePort,
-			announce);
+			announce,
+			wakelock);
 
 		if (prefsChanged) {
 			prefsChanged = false;

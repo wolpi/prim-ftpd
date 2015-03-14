@@ -19,7 +19,6 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.os.PowerManager.WakeLock;
 import android.os.Process;
 import android.widget.Toast;
 
@@ -49,7 +48,6 @@ public abstract class AbstractServerService
 	private Looper serviceLooper;
 	private ServerServiceHandler serviceHandler;
 	PrefsBean prefsBean;
-	WakeLock wakeLock;
 	private NsdManager.RegistrationListener nsdRegistrationListener;
 
 	protected abstract ServerServiceHandler createServiceHandler(

@@ -25,6 +25,9 @@ public class ServerServiceHandler extends Handler
 	private final WeakReference<AbstractServerService> serviceRef;
 	private final String logName;
 
+	private static WakeLock wakeLock;
+
+
 	protected ServerServiceHandler(
 		Looper looper,
 		AbstractServerService service,
@@ -68,16 +71,10 @@ public class ServerServiceHandler extends Handler
 			if (service.getServer() != null) {
 				service.createStatusbarNotification();
 
-				// acquire wake lock for CPU to still handle requests
-				// note: PARTIAL_WAKE_LOCK is not enough
-				logger.debug("acquiring wake lock ({})", logName);
 				PowerManager powerMgr =
 					(PowerManager) service.getSystemService(
 						AbstractServerService.POWER_SERVICE);
-				service.wakeLock = powerMgr.newWakeLock(
-					PowerManager.SCREEN_DIM_WAKE_LOCK,
-					APP_NAME);
-				service.wakeLock.acquire();
+				obtainWakeLock(powerMgr, service.prefsBean.isWakelock());
 
 				if (service.prefsBean.isAnnounce()) {
 					service.announceService();
@@ -106,12 +103,39 @@ public class ServerServiceHandler extends Handler
 		if (service.getServer() == null) {
 			service.removeStatusbarNotification();
 		}
-		if (service.wakeLock != null) {
-			logger.debug("releasing wake lock ({})", logName);
-			service.wakeLock.release();
-			service.wakeLock = null;
-		}
+		releaseWakeLock();
 		logger.debug("stopSelf ({})", logName);
 		service.stopSelf();
+	}
+
+	private synchronized void obtainWakeLock(
+		PowerManager powerMgr,
+		boolean takeWakeLock)
+	{
+		// acquire wake lock for CPU to still handle requests
+		// note: PARTIAL_WAKE_LOCK is not enough
+		if (wakeLock == null && takeWakeLock) {
+			logger.debug("acquiring wake lock ({})", logName);
+			wakeLock = powerMgr.newWakeLock(
+				PowerManager.SCREEN_DIM_WAKE_LOCK,
+				APP_NAME);
+			wakeLock.acquire();
+		} else {
+			if (takeWakeLock) {
+				logger.debug("wake lock already taken ({})", logName);
+			} else {
+				logger.debug("wake lock disabled ({})", logName);
+			}
+		}
+	}
+
+	private synchronized void releaseWakeLock() {
+		if (wakeLock != null) {
+			logger.debug("releasing wake lock ({})", logName);
+			wakeLock.release();
+			wakeLock = null;
+		} else {
+			logger.debug("wake lock already released ({})", logName);
+		}
 	}
 }

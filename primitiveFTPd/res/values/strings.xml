@@ -41,5 +41,7 @@
     <string name="prefSummaryPortSecure">FTP server port (encrypted)</string>
     <string name="prefTitleAnnounce">Announce server in LAN</string>
     <string name="prefSummaryAnnounce">Announces FTP server in LAN via DNS-SD (Bonjour)</string>
+    <string name="prefTitleWakelock">Prevent Standby</string>
+    <string name="prefSummaryWakelock">Prevents Standby while server is running. Standby can cause uplodas/dwonloads to abort.</string>
     
 </resources>

@@ -13,13 +13,15 @@ public class PrefsBean implements Serializable
 	private final int port;
 	private final int securePort;
 	private final boolean announce;
+	private final boolean wakelock;
 
 	public PrefsBean(
 		String userName,
 		String password,
 		int port,
 		int securePort,
-		boolean announce)
+		boolean announce,
+		boolean wakelock)
 	{
 		super();
 		this.userName = userName;
@@ -29,6 +31,7 @@ public class PrefsBean implements Serializable
 		this.portStr = String.valueOf(port);
 		this.securePortStr = String.valueOf(securePort);
 		this.announce = announce;
+		this.wakelock = wakelock;
 	}
 
 	public String getUserName() {
@@ -58,5 +61,10 @@ public class PrefsBean implements Serializable
 	public boolean isAnnounce()
 	{
 		return announce;
+	}
+
+	public boolean isWakelock()
+	{
+		return wakelock;
 	}
 }

@@ -33,6 +33,13 @@
 			android:numeric="integer"
 		/>
 		<CheckBoxPreference 
+			android:name="wakelock"
+			android:key="wakelockPref"
+			android:defaultValue="true"
+			android:title="@string/prefTitleWakelock"
+			android:summary="@string/prefSummaryWakelock"
+		/>
+		<CheckBoxPreference 
 			android:name="announce"
 			android:key="announcePref"
 			android:defaultValue="true"
