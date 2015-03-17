@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.prefs.FtpPrefsActivity;
+import org.primftpd.prefs.ServerToStart;
 import org.primftpd.services.FtpServerService;
 import org.primftpd.services.SshServerService;
 import org.primftpd.util.KeyGenerator;
@@ -112,6 +113,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	private PrefsBean prefsBean;
 	private ServersRunningBean serversRunning;
+	private boolean keyPresent = false;
 	private String fingerprintMd5 = " - ";
 	private String fingerprintSha1 = " - ";
 	private String fingerprintSha256 = " - ";
@@ -229,6 +231,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	    	// check if key is present
     		if (fis.available() <= 0) {
+    			keyPresent = false;
     			throw new Exception("key seems not to be present");
     		}
 
@@ -258,6 +261,8 @@ public class PrimitiveFtpdActivity extends Activity {
 	    	if (fp != null) {
 	    		fingerprintKde = fp;
 	    	}
+
+			keyPresent = true;
 
     	} catch (Exception e) {
     		logger.debug("key does probably not exist");
@@ -695,8 +700,12 @@ public class PrimitiveFtpdActivity extends Activity {
 				Toast.LENGTH_LONG).show();
 
 		} else {
-	    	startService(createFtpServiceIntent());
-	    	startService(createSshServiceIntent());
+			if (prefsBean.getServerToStart().startFtp()) {
+				startService(createFtpServiceIntent());
+			}
+			if (keyPresent && prefsBean.getServerToStart().startSftp()) {
+				startService(createSshServiceIntent());
+			}
 	    	startIcon.setVisible(false);
 	    	stopIcon.setVisible(true);
 		}
@@ -756,6 +765,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	public static final String PREF_KEY_SECURE_PORT = "securePortPref";
 	public static final String PREF_KEY_ANNOUNCE = "announcePref";
 	public static final String PREF_KEY_WAKELOCK = "wakelockPref";
+	public static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
 
 	/**
 	 * Loads preferences and stores in member {@link #prefsBean}.
@@ -778,6 +788,11 @@ public class PrimitiveFtpdActivity extends Activity {
 		// load wakelock setting
 		boolean wakelock = prefs.getBoolean(PREF_KEY_WAKELOCK, Boolean.TRUE);
 		logger.debug("got wakelock: {}", Boolean.valueOf(wakelock));
+
+		// load list pref: which server to start
+		String whichServerStr = prefs.getString(PREF_KEY_WHICH_SERVER, "0");
+		ServerToStart serverToStart = ServerToStart.byXmlVal(whichServerStr);
+		logger.debug("got 'which server': {}", serverToStart);
 
 		// load port
 		int port = loadAndValidatePort(
@@ -820,7 +835,8 @@ public class PrimitiveFtpdActivity extends Activity {
 			port,
 			securePort,
 			announce,
-			wakelock);
+			wakelock,
+			serverToStart);
 
 		if (prefsChanged) {
 			prefsChanged = false;

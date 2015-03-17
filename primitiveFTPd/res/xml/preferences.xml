@@ -16,6 +16,14 @@
 			android:summary="@string/prefSummaryPassword"
 			android:password="true"
 		/>
+		<ListPreference
+			android:name="whichServerToStart"
+            android:key="whichServerToStartPref"
+            android:title="@string/prefTitleWhichServerToStart"
+			android:summary="@string/prefSummaryWhichServerToStart"
+            android:defaultValue="0"
+            android:entries="@array/prefWhichServerToStartNames"
+            android:entryValues="@array/prefWhichServerToStartValues" />
 		<EditTextPreference
 			android:name="port"
 			android:key="portPref"

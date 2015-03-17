@@ -2,6 +2,8 @@ package org.primftpd;
 
 import java.io.Serializable;
 
+import org.primftpd.prefs.ServerToStart;
+
 public class PrefsBean implements Serializable
 {
 	private static final long serialVersionUID = 1L;
@@ -14,6 +16,7 @@ public class PrefsBean implements Serializable
 	private final int securePort;
 	private final boolean announce;
 	private final boolean wakelock;
+	private final ServerToStart serverToStart;
 
 	public PrefsBean(
 		String userName,
@@ -21,7 +24,8 @@ public class PrefsBean implements Serializable
 		int port,
 		int securePort,
 		boolean announce,
-		boolean wakelock)
+		boolean wakelock,
+		ServerToStart serverToStart)
 	{
 		super();
 		this.userName = userName;
@@ -32,6 +36,7 @@ public class PrefsBean implements Serializable
 		this.securePortStr = String.valueOf(securePort);
 		this.announce = announce;
 		this.wakelock = wakelock;
+		this.serverToStart = serverToStart;
 	}
 
 	public String getUserName() {
@@ -66,5 +71,10 @@ public class PrefsBean implements Serializable
 	public boolean isWakelock()
 	{
 		return wakelock;
+	}
+
+	public ServerToStart getServerToStart()
+	{
+		return serverToStart;
 	}
 }

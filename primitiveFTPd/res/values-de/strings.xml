@@ -43,5 +43,19 @@
     <string name="prefSummaryAnnounce">Announciert den FTP Server im LAN via DNS-SD (Bonjour)</string>
     <string name="prefTitleWakelock">Standby Verhindern</string>
     <string name="prefSummaryWakelock">Verhindert Standby während der Server läuft. Standby kann dazu führen dass uplodas/dwonloads abgebrochen werden.</string>
+    <string name="prefTitleWhichServerToStart">Zu startende Server</string>
+    <string name="prefSummaryWhichServerToStart">Welche Server sollen gestartet werden: nur FTP Server, nur SFTP Server oder beide.</string>
+
+    <string-array name="prefWhichServerToStartNames">
+        <item>FTP und SFTP</item>
+        <item>nur FTP</item>
+        <item>nur SFTP</item>
+    </string-array>
+
+    <string-array name="prefWhichServerToStartValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 
 </resources>

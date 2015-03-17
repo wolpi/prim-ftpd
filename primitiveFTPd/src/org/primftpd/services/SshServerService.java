@@ -121,43 +121,38 @@ public class SshServerService extends AbstractServerService
 		});
 
 		try {
-			// start server only when keys were generated
-			final FileInputStream pubkeyFis = openFileInput(
-				PrimitiveFtpdActivity.PUBLICKEY_FILENAME);
-			if (pubkeyFis.available() > 0) {
-				// read keys here, cannot open private files on server callback
-				final Iterable<KeyPair> keys = loadKeys(pubkeyFis);
-				// and close fis
-				IoUtils.close(pubkeyFis);
+			// read keys here, cannot open private files on server callback
+			final Iterable<KeyPair> keys = loadKeys();
 
-				// setKeyPairProvider
-				sshServer.setKeyPairProvider(new AbstractKeyPairProvider() {
-					@Override
-					public Iterable<KeyPair> loadKeys() {
-						// just return keys that have been loaded before
-						return keys;
-					}
-				});
+			// setKeyPairProvider
+			sshServer.setKeyPairProvider(new AbstractKeyPairProvider() {
+				@Override
+				public Iterable<KeyPair> loadKeys() {
+					// just return keys that have been loaded before
+					return keys;
+				}
+			});
 
-				sshServer.start();
-			}
+			sshServer.start();
     	} catch (Exception e) {
     		sshServer = null;
 			handleServerStartError(e);
     	}
 	}
 
-	protected Iterable<KeyPair> loadKeys(FileInputStream pubkeyFis) {
+	protected Iterable<KeyPair> loadKeys() {
 		List<KeyPair> keyPairList = new ArrayList<KeyPair>(1);
+		FileInputStream pubkeyFis = null;
 		FileInputStream privkeyFis = null;
         try {
     		// read pub key
         	KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
+
+        	pubkeyFis = openFileInput(PrimitiveFtpdActivity.PUBLICKEY_FILENAME);
         	PublicKey publicKey = keyInfoProvider.readPublicKey(pubkeyFis);
 
     		// read priv key from it's own file
-    		privkeyFis = openFileInput(
-    			PrimitiveFtpdActivity.PRIVATEKEY_FILENAME);
+    		privkeyFis = openFileInput(PrimitiveFtpdActivity.PRIVATEKEY_FILENAME);
     		PrivateKey privateKey = keyInfoProvider.readPrivatekey(privkeyFis);
 
 			// return key pair
@@ -165,6 +160,9 @@ public class SshServerService extends AbstractServerService
         } catch (Exception e) {
         	logger.debug("could not read key: " + e.getMessage(), e);
     	} finally {
+			if (pubkeyFis != null) {
+				IoUtils.close(pubkeyFis);
+			}
 			if (privkeyFis != null) {
 				IoUtils.close(privkeyFis);
 			}
