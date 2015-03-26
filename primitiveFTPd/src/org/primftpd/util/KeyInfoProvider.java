@@ -79,30 +79,27 @@ public class KeyInfoProvider
 			fingerPrint.append(hexString.toUpperCase(Locale.ENGLISH));
 			if (i != fingerPrintBytes.length -1) {
 				fingerPrint.append(":");
-			}
-			if ((i + 1) % 8 == 0) {
-				// force line breaks in UI
-				fingerPrint.append("\n");
+
+				if ((i + 1) % 8 == 0) {
+					// force line breaks in UI
+					fingerPrint.append("\n");
+				}
 			}
 		}
 		return fingerPrint.toString();
 	}
 
-	public byte[] encodeAsSsh(RSAPublicKey pubKey, boolean forKdeDolphin)
+	public byte[] encodeAsSsh(RSAPublicKey pubKey)
 		throws IOException
 	{
 		ByteArrayOutputStream buf = new ByteArrayOutputStream();
-		if (forKdeDolphin) {
-			byte[] name = "ssh-rsa".getBytes("US-ASCII");
-			writeKeyPart(name, buf);
 
-			writeKeyPart(pubKey.getPublicExponent().toByteArray(), buf);
-			writeKeyPart(pubKey.getModulus().toByteArray(), buf);
-		} else {
-			// TODO figure out what openSSH/putty are doing
-			writeKeyPart(pubKey.getModulus().toByteArray(), buf);
-			writeKeyPart(pubKey.getPublicExponent().toByteArray(), buf);
-		}
+		byte[] name = "ssh-rsa".getBytes("US-ASCII");
+		writeKeyPart(name, buf);
+
+		writeKeyPart(pubKey.getPublicExponent().toByteArray(), buf);
+		writeKeyPart(pubKey.getModulus().toByteArray(), buf);
+
 		return buf.toByteArray();
 	}
 

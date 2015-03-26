@@ -117,7 +117,6 @@ public class PrimitiveFtpdActivity extends Activity {
 	private String fingerprintMd5 = " - ";
 	private String fingerprintSha1 = " - ";
 	private String fingerprintSha256 = " - ";
-	private String fingerprintKde = " - ";
 
 	/** Called when the activity is first created. */
     @Override
@@ -238,8 +237,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	    	KeyInfoProvider keyInfoprovider = new KeyInfoProvider();
     		PublicKey pubKey = keyInfoprovider.readPublicKey(fis);
     		RSAPublicKey rsaPubKey = (RSAPublicKey) pubKey;
-    		byte[] encodedKey = keyInfoprovider.encodeAsSsh(rsaPubKey, false);
-    		byte[] encodedKeyKde = keyInfoprovider.encodeAsSsh(rsaPubKey, true);
+    		byte[] encodedKey = keyInfoprovider.encodeAsSsh(rsaPubKey);
 
     		// fingerprints
     		String fp = keyInfoprovider.fingerprint(encodedKey, "MD5");
@@ -255,11 +253,6 @@ public class PrimitiveFtpdActivity extends Activity {
 	    	fp = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
 	    	if (fp != null) {
 	    		fingerprintSha256 = fp;
-	    	}
-
-	    	fp = keyInfoprovider.fingerprint(encodedKeyKde, "SHA-1");
-	    	if (fp != null) {
-	    		fingerprintKde = fp;
 	    	}
 
 			keyPresent = true;
@@ -527,10 +520,6 @@ public class PrimitiveFtpdActivity extends Activity {
     		table,
     		"SHA256",
     		fingerprintSha256);
-    	createTableRowKeyFingerprint(
-    		table,
-    		getText(R.string.fingerprintKde),
-    		fingerprintKde);
 
     	// create onRefreshListener
     	View refreshButton = findViewById(KEYS_REFRESH_ICON_ID);

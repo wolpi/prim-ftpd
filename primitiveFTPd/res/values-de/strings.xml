@@ -12,7 +12,6 @@
     <string name="generatingKeysMessage">Schlüssel werden erzeugt &#8230;</string>
     <string name="generate">Erzeugen</string>
     <string name="cancel">Abbrechen</string>
-    <string name="fingerprintKde">SHA1 inklusive Schlüssel Name (z.B. KDE Dolphin)</string>
     <string name="state">Status</string>
     <string name="serverStarted">Gestartet &#8230;</string>
     <string name="serverStopped">Gestoppt</string>
