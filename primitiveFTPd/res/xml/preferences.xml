@@ -50,7 +50,7 @@
 		<CheckBoxPreference 
 			android:name="announce"
 			android:key="announcePref"
-			android:defaultValue="true"
+			android:defaultValue="false"
 			android:title="@string/prefTitleAnnounce"
 			android:summary="@string/prefSummaryAnnounce"
 		/>

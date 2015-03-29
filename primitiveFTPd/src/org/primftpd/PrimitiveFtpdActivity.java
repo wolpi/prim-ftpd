@@ -770,7 +770,8 @@ public class PrimitiveFtpdActivity extends Activity {
 		logger.debug("got password: {}", password);
 
 		// load announcement setting
-		boolean announce = prefs.getBoolean(PREF_KEY_ANNOUNCE, Boolean.TRUE);
+		// default to false as it may cause crashes
+		boolean announce = prefs.getBoolean(PREF_KEY_ANNOUNCE, Boolean.FALSE);
 		logger.debug("got announce: {}", Boolean.valueOf(announce));
 
 		// load wakelock setting
