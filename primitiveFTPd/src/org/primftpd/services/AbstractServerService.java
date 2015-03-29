@@ -160,14 +160,38 @@ public abstract class AbstractServerService
      * Register a DNS-SD service (to be discoverable through Bonjour/Avahi).
      */
     protected void announceService () {
-		nsdRegistrationListener = new NsdManager.RegistrationListener() {
+    	nsdRegistrationListener = new NsdManager.RegistrationListener() {
 			@Override
 			public void onServiceRegistered(NsdServiceInfo serviceInfo) {
-				logger.debug("onServiceRegistered()");
+				logger.debug(
+					"onServiceRegistered(serviceType: '{}')",
+					serviceInfo.getServiceType());
 			}
 			@Override
 			public void onRegistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
-				logger.debug("onRegistrationFailed()");
+				String errorName = null;
+				switch (errorCode) {
+				case NsdManager.FAILURE_INTERNAL_ERROR:
+					errorName = "INTERNAL_ERROR";
+					break;
+				case NsdManager.FAILURE_ALREADY_ACTIVE:
+					errorName = "ALREADY_ACTIVE";
+					break;
+				case NsdManager.FAILURE_MAX_LIMIT:
+					errorName = "MAX_LIMIT";
+					break;
+				default:
+					errorName = "have no idea";
+					break;
+				}
+				logger.error(
+					"onRegistrationFailed(serviceType: '{}', errorCode: '{}, ({})')",
+					new Object[]{
+						serviceInfo.getServiceType(),
+						Integer.valueOf(errorCode),
+						errorName
+					}
+				);
 			}
 			@Override
 			public void onServiceUnregistered(NsdServiceInfo serviceInfo) {
@@ -186,6 +210,7 @@ public abstract class AbstractServerService
 
 		NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
 
+		logger.debug("registering nsd service: '{}'", serviceInfo.getServiceType());
 		nsdManager.registerService(
 			serviceInfo,
 			NsdManager.PROTOCOL_DNS_SD,
@@ -194,6 +219,12 @@ public abstract class AbstractServerService
 
 	protected void unannounceService () {
 		NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
-		nsdManager.unregisterService(nsdRegistrationListener);
+		try {
+			nsdManager.unregisterService(nsdRegistrationListener);
+		} catch (Exception e) {
+			logger.debug("could not unregister service, '{}', '{}'",
+				e.getClass().getName(),
+				e.getMessage());
+		}
 	}
 }

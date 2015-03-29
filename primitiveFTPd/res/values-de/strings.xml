@@ -39,7 +39,7 @@
     <string name="prefTitlePortSecure">Sicherer Port</string>
     <string name="prefSummaryPortSecure">FTP Server port (verschlüsselt)</string>
     <string name="prefTitleAnnounce">Server im LAN bekanntmachen</string>
-    <string name="prefSummaryAnnounce">Announciert den FTP Server im LAN via DNS-SD (Bonjour)</string>
+    <string name="prefSummaryAnnounce">Announciert den FTP Server im LAN via DNS-SD (Bonjour). Kann auf manchen Geräten Abstürze verursachen.</string>
     <string name="prefTitleWakelock">Standby Verhindern</string>
     <string name="prefSummaryWakelock">Verhindert Standby während der Server läuft. Standby kann dazu führen dass uplodas/dwonloads abgebrochen werden.</string>
     <string name="prefTitleWhichServerToStart">Zu startende Server</string>

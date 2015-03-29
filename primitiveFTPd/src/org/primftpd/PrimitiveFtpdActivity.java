@@ -306,7 +306,6 @@ public class PrimitiveFtpdActivity extends Activity {
 
                     createTableRow(table, ifaceDispName, hostAddr);
                 }
-
             }
         } catch (SocketException e) {
         	logger.info("exception while iterating network interfaces", e);

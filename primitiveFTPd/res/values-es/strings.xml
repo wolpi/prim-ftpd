@@ -33,6 +33,5 @@
 
     <!--  Versión 2.3  -->
     <string name="prefTitleAnnounce">Divulgar servidor en LAN</string>
-    <string name="prefSummaryAnnounce">Divulgar el servidor FTP en la LAN a través de DNS-SD (Bonjour)</string>
     
 </resources>
