@@ -29,23 +29,23 @@ public abstract class AndroidFile<T> {
 	protected abstract T createFile(File file);
 
 	public String getAbsolutePath() {
-		logger.debug("getAbsolutePath()");
+		logger.trace("getAbsolutePath()");
 		return file.getAbsolutePath();
 	}
 
 	public String getName() {
-		logger.debug("getName()");
+		logger.trace("getName()");
 		return file.getName();
 	}
 
 	public boolean isHidden() {
-		logger.debug("isHidden()");
+		logger.trace("isHidden()");
 		return file.isHidden();
 	}
 
 	public boolean isDirectory() {
 		boolean isDirectory = file.isDirectory();
-		logger.debug(
+		logger.trace(
 			"isDirectory(), ({}): {}",
 			file.getAbsolutePath(),
 			Boolean.valueOf(isDirectory));
@@ -54,7 +54,7 @@ public abstract class AndroidFile<T> {
 
 	public boolean isFile() {
 		boolean isFile = file.isFile();
-		logger.debug(
+		logger.trace(
 			"isFile(), ({}): {}",
 			file.getAbsolutePath(),
 			Boolean.valueOf(isFile));
@@ -63,7 +63,7 @@ public abstract class AndroidFile<T> {
 
 	public boolean doesExist() {
 		boolean exists = file.exists();
-		logger.debug(
+		logger.trace(
 			"doesExist(), ({}): {}",
 			file.getAbsolutePath(),
 			Boolean.valueOf(exists));
@@ -72,7 +72,7 @@ public abstract class AndroidFile<T> {
 
 	public boolean isReadable() {
 		boolean canRead = file.canRead();
-		logger.debug(
+		logger.trace(
 			"isReadable(), ({}): {}",
 			file.getAbsolutePath(),
 			Boolean.valueOf(canRead));
@@ -80,7 +80,7 @@ public abstract class AndroidFile<T> {
 	}
 
 	public boolean isWritable() {
-		logger.debug(
+		logger.trace(
 			"writable: {}, exists: {}, file: '{}'",
 			new Object[]{
 				file.canWrite(),
@@ -106,48 +106,48 @@ public abstract class AndroidFile<T> {
 	}
 
 	public boolean isRemovable() {
-		logger.debug("isRemovable()");
+		logger.trace("isRemovable()");
 		return file.canWrite();
 	}
 
 	public int getLinkCount() {
-		logger.debug("getLinkCount()");
+		logger.trace("getLinkCount()");
 		return 0;
 	}
 
 	public long getLastModified() {
-		logger.debug("getLastModified()");
+		logger.trace("getLastModified()");
 		return file.lastModified();
 	}
 
 	public boolean setLastModified(long time) {
-		logger.debug("setLastModified({})", time);
+		logger.trace("setLastModified({})", time);
 		return file.setLastModified(time);
 	}
 
 	public long getSize() {
-		logger.debug("getSize()");
+		logger.trace("getSize()");
 		return file.length();
 	}
 
 	public boolean mkdir() {
-		logger.debug("mkdir()");
+		logger.trace("mkdir()");
 		return file.mkdir();
 	}
 
 	public boolean delete() {
-		logger.debug("delete()");
+		logger.trace("delete()");
 		return file.delete();
 	}
 
 	public boolean move(AndroidFile<T> destination) {
-		logger.debug("move({})", destination.getAbsolutePath());
+		logger.trace("move({})", destination.getAbsolutePath());
 		file.renameTo(new File(destination.getAbsolutePath()));
 		return true;
 	}
 
 	public List<T> listFiles() {
-		logger.debug("listFiles()");
+		logger.trace("listFiles()");
 		File[] filesArray = file.listFiles();
 		if (filesArray != null) {
 			List<T> files = new ArrayList<T>(filesArray.length);
@@ -163,7 +163,7 @@ public abstract class AndroidFile<T> {
 	public static final int BUFFER_SIZE = 1024 * 1024;
 
 	public OutputStream createOutputStream(long offset) throws IOException {
-		logger.debug("createOutputStream({})", offset);
+		logger.trace("createOutputStream({})", offset);
 
 		// may be necessary to create dirs
 		// see isWritable()
@@ -198,7 +198,7 @@ public abstract class AndroidFile<T> {
 	}
 
 	public InputStream createInputStream(long offset) throws IOException {
-		logger.debug("createInputStream(), offset: {}, file: {}", offset, file.getAbsolutePath());
+		logger.trace("createInputStream(), offset: {}, file: {}", offset, file.getAbsolutePath());
 		FileInputStream fis = new FileInputStream(file);
 		fis.skip(offset);
 		BufferedInputStream bis = new BufferedInputStream(fis, BUFFER_SIZE);

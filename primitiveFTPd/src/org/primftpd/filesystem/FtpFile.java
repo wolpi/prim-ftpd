@@ -23,13 +23,13 @@ public class FtpFile extends AndroidFile<org.apache.ftpserver.ftplet.FtpFile>
 
 	@Override
 	public String getOwnerName() {
-		logger.debug("getOwnerName()");
+		logger.trace("getOwnerName()");
 		return user.getName();
 	}
 
 	@Override
 	public String getGroupName() {
-		logger.debug("getGroupName()");
+		logger.trace("getGroupName()");
 		return user.getName();
 	}
 

@@ -26,17 +26,17 @@ public abstract class AndroidFileSystemView<T extends AndroidFile<X>, X> {
 	}
 
 	public T getHomeDirectory() {
-		logger.debug("getHomeDirectory()");
+		logger.trace("getHomeDirectory()");
 		return createHomeDirObj();
 	}
 
 	public T getWorkingDirectory() {
-		logger.debug("getWorkingDirectory()");
+		logger.trace("getWorkingDirectory()");
 		return workingDir;
 	}
 
 	public boolean changeWorkingDirectory(String dir) {
-		logger.debug("changeWorkingDirectory({})", dir);
+		logger.trace("changeWorkingDirectory({})", dir);
 
 		File dirObj = new File(dir);
 
@@ -55,28 +55,28 @@ public abstract class AndroidFileSystemView<T extends AndroidFile<X>, X> {
 	}
 
 	public T getFile(String file) {
-		logger.debug("getFile({})", file);
+		logger.trace("getFile({})", file);
 
 		File fileObj = new File(file);
 		if (fileObj.isAbsolute()) {
-			logger.debug("getFile(), returning abs: '{}'", file);
+			logger.trace("getFile(), returning abs: '{}'", file);
 			return createFile(fileObj);
 		}
 
 		// handle relative paths
 		file = workingDir.getAbsolutePath() + File.separator + file;
 
-		logger.debug("getFile(), returning rel: '{}'", file);
+		logger.trace("getFile(), returning rel: '{}'", file);
 
 		return createFile(new File(file));
 	}
 
 	public boolean isRandomAccessible() throws FtpException {
-		logger.debug("isRandomAccessible()");
+		logger.trace("isRandomAccessible()");
 		return true;
 	}
 
 	public void dispose() {
-		logger.debug("dispose()");
+		logger.trace("dispose()");
 	}
 }
