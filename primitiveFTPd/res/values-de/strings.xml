@@ -19,7 +19,6 @@
     <string name="startService">Server Starten</string>
     <string name="stopService">Server Stoppen</string>
     <string name="notificationTitle">FTP Server</string>
-    <string name="exit">Beenden</string>
 
     <string name="haveToSetPassword">Sie müssen erst ein Passwort setzen</string>
     <string name="serverRunning">FTP Server läuft</string>

@@ -19,7 +19,6 @@
     <string name="startService">Encender servidor</string>
     <string name="stopService">Apagar servidor</string>
     <string name="notificationTitle">Servidor FTP</string>
-    <string name="exit">Salir</string>
     
     <string name="haveToSetPassword">Tienes que establecer una contraseña primero</string>
     <string name="serverRunning">El servidor FTP Server está funcionando</string>

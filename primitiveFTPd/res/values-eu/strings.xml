@@ -12,7 +12,6 @@
     <string name="startService">Zerbitzaria hasi</string>
     <string name="stopService">Zerbitzaria gelditu</string>
     <string name="notificationTitle">FTP zerbitzaria</string>
-    <string name="exit">Irten</string>
 
     <string name="haveToSetPassword">Pasahitz bat ezarri behar duzu lehenago</string>
     <string name="serverRunning">FTP zerbitzaria abian dago</string>
