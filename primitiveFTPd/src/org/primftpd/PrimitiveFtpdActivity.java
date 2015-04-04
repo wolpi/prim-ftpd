@@ -71,6 +71,9 @@ public class PrimitiveFtpdActivity extends Activity {
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
+	        logger.debug(
+	        	"BroadcastReceiver.onReceive(), action: '{}'",
+	        	intent.getAction());
 			if (FtpServerService.BROADCAST_ACTION_COULD_NOT_START.equals(intent.getAction())) {
 				updateButtonStates();
 			}
@@ -128,10 +131,6 @@ public class PrimitiveFtpdActivity extends Activity {
 
         setContentView(R.layout.main);
 
-    	// button handlers
-        // makes no sense anymore since buttons have been moved to action bar
-    	//updateButtonStates();
-
     	// calc keys fingerprints
         calcPubkeyFingerprints();
     	createFingerprintTable();
@@ -151,14 +150,6 @@ public class PrimitiveFtpdActivity extends Activity {
 		prefs.unregisterOnSharedPreferenceChangeListener(prefsChangeListener);
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-    	if (hasFocus) {
-        	logger.debug("onWindowFocusChanged(true)");
-        	updateButtonStates();
-    	}
-    }
-
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -166,9 +157,6 @@ public class PrimitiveFtpdActivity extends Activity {
 		logger.debug("onStart()");
 
 		loadPrefs();
-
-		checkServicesRunning();
-		createPortsTable();
 		createUsernameTable();
 	}
 
@@ -187,7 +175,9 @@ public class PrimitiveFtpdActivity extends Activity {
     	// register listener to reprint interfaces table when network connections change
     	filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     	registerReceiver(this.networkStateReceiver, filter);
-    }
+
+    	displayServersState();
+	}
 
     @Override
     protected void onPause() {
@@ -596,6 +586,28 @@ public class PrimitiveFtpdActivity extends Activity {
 		}
     }
 
+    /**
+	 * Displays UI-elements showing if servers are running. That includes
+	 * Actionbar Icon and Ports-Table. When Activity is shown the first time
+	 * this is triggered by {@link #onCreateOptionsMenu()}, when user comes back from
+	 * preferences, this is triggered by {@link #onResume()}.
+	 */
+    protected void displayServersState() {
+    	logger.debug("displayServersState()");
+
+    	// should be triggered by onCreateOptionsMenu() to avoid icon flicker
+    	// when invoked via notification
+		updateButtonStates();
+
+		// by checking ButtonStates we get info which services are running
+		// that is displayed in portsTable
+		// as there are no icons when this runs first time,
+		// we don't get serversRunning, yet
+		if (serversRunning != null) {
+			createPortsTable();
+		}
+    }
+
     protected void checkServicesRunning() {
     	logger.debug("checkServicesRunning()");
     	ServersRunningBean serversRunning = new ServersRunningBean();
@@ -653,13 +665,12 @@ public class PrimitiveFtpdActivity extends Activity {
 		startIcon = menu.findItem(R.id.menu_start);
 		stopIcon = menu.findItem(R.id.menu_stop);
 
-		// to avoid icon flicker when invoked via notification
-		updateButtonStates();
+		displayServersState();
 
 		return true;
 	}
 
-	@Override
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_start:
@@ -673,8 +684,7 @@ public class PrimitiveFtpdActivity extends Activity {
 			break;
 		}
 
-		updateButtonStates();
-		createPortsTable();
+		displayServersState();
 
 		return super.onOptionsItemSelected(item);
 	}
