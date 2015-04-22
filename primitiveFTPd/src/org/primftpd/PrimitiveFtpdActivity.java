@@ -19,6 +19,7 @@ import org.primftpd.services.SshServerService;
 import org.primftpd.util.KeyGenerator;
 import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.NotificationUtil;
+import org.primftpd.util.PrngFixes;
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,6 +129,9 @@ public class PrimitiveFtpdActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         logger.debug("onCreate()");
+
+        // fixes/workarounds for android security issue below 4.3 regarding key generation
+		PrngFixes.apply();
 
         setContentView(R.layout.main);
 
