@@ -1,8 +1,5 @@
 package org.primftpd.prefs;
 
-import org.primftpd.PrimitiveFtpdActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
