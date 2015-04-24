@@ -30,5 +30,18 @@
     <string name="prefTitlePortSecure">Port (chiffré)</string>
     <string name="prefSummaryPortSecure">Port du serveur FTP (chiffré)</string>
     <string name="prefTitleAnnounce">Annoncer le serveur sur le réseau local</string>
+    <string name="cancel">Annuler</string>
+    <string name="fingerprintsLabel">Empreintes de la clé</string>
+    <string name="generate">Générer</string>
+    <string name="generateKeysMessage">Générer une clé ?</string>
+    <string name="generatingKeysMessage">Génération de la clé&#8230;</string>
+    <string name="prefSummaryAnnounce">Announcer le serveur FTP sur le LAN via DNS-SD (Bonjour). Peut être à l\'origine de crashs sur certains appareils.</string>
+    <string name="prefSummaryWakelock">Empêcher la mise en veille quand le serveur est en marche. La mise en veille peut être la cause de l\'annulation de certains téléchargement/envois.</string>
+    <string name="serverStopped">Arrêté</string>
+    <string name="state">État</string>
+    <string name="serverStarted">En marche&#8230;</string>
+    <string name="prefTitleWakelock">Empêcher la mise en veille</string>
+    <string name="prefTitleWhichServerToStart">Serveur(s) à démarrer</string>
+    <string name="prefSummaryWhichServerToStart">Choisissez de lancer le serveur FTP, le serveur SFTP, ou les deux</string>
 
 </resources>
