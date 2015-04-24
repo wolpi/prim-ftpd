@@ -133,6 +133,13 @@ public class SshServerService extends AbstractServerService
 				}
 			});
 
+			// XXX preference to enable shell? seems to need root to access /dev/tty
+//			sshServer.setShellFactory(new ProcessShellFactory(new String[] {
+//				"/system/bin/sh",
+//				"-i",
+//				"-l"
+//			}));
+
 			sshServer.start();
     	} catch (Exception e) {
     		sshServer = null;
