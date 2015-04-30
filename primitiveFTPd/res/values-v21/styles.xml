@@ -1,0 +1,4 @@
+<resources>
+	<style name="PrimFtpdTheme" parent="android:Theme.Material">
+	</style>
+</resources>
