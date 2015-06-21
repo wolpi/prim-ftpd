@@ -12,7 +12,9 @@ import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.ftpserver.util.IoUtils;
+import org.primftpd.log.PrimFtpdLoggerBinder;
 import org.primftpd.prefs.FtpPrefsActivity;
+import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.ServerToStart;
 import org.primftpd.services.FtpServerService;
 import org.primftpd.services.SshServerService;
@@ -768,6 +770,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	public static final String PREF_KEY_ANNOUNCE = "announcePref";
 	public static final String PREF_KEY_WAKELOCK = "wakelockPref";
 	public static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
+	public static final String PREF_KEY_LOGGING = "loggingPref";
 
 	/**
 	 * Loads preferences and stores in member {@link #prefsBean}.
@@ -793,7 +796,9 @@ public class PrimitiveFtpdActivity extends Activity {
 		logger.debug("got wakelock: {}", Boolean.valueOf(wakelock));
 
 		// load list pref: which server to start
-		String whichServerStr = prefs.getString(PREF_KEY_WHICH_SERVER, "0");
+		String whichServerStr = prefs.getString(
+			PREF_KEY_WHICH_SERVER,
+			ServerToStart.ALL.xmlValue());
 		ServerToStart serverToStart = ServerToStart.byXmlVal(whichServerStr);
 		logger.debug("got 'which server': {}", serverToStart);
 
@@ -850,6 +855,17 @@ public class PrimitiveFtpdActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 			}
 		}
+
+		// load list pref: logging
+		String loggingStr = prefs.getString(
+			PREF_KEY_LOGGING,
+			Logging.NONE.xmlValue());
+		Logging logging = Logging.byXmlVal(loggingStr);
+		// one could argue if this makes sense :)
+		logger.debug("got 'logging': {}", logging);
+		PrimFtpdLoggerBinder.setLoggingPref(logging);
+		// re-create own log, don't care about other classes
+		this.logger = LoggerFactory.getLogger(getClass());
 	}
 
 	protected int loadAndValidatePort(

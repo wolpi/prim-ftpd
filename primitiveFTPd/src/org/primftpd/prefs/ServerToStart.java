@@ -41,6 +41,9 @@ public enum ServerToStart
 	private ServerToStart(String xmlValue) {
 		this.xmlValue = xmlValue;
 	}
+	public String xmlValue() {
+		return xmlValue;
+	}
 
 	private static final Map<String, ServerToStart> XML_TO_ENUM;
 	static {

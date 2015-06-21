@@ -43,6 +43,8 @@
     <string name="prefSummaryWakelock">Verhindert Standby während der Server läuft. Standby kann dazu führen dass uplodas/downloads abgebrochen werden.</string>
     <string name="prefTitleWhichServerToStart">Zu startende Server</string>
     <string name="prefSummaryWhichServerToStart">Welche Server sollen gestartet werden: nur FTP Server, nur SFTP Server oder beide.</string>
+    <string name="prefTitleLogging">Log</string>
+    <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>
 
     <string-array name="prefWhichServerToStartNames">
         <item>FTP und SFTP</item>
@@ -54,6 +56,12 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+
+    <string-array name="prefLoggingNames">
+        <item>Kein Log</item>
+        <item>In Textdatei loggen</item>
+        <item>In Android Log schreiben</item>
     </string-array>
 
 </resources>

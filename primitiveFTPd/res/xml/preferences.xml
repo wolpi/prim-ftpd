@@ -54,6 +54,14 @@
 			android:title="@string/prefTitleAnnounce"
 			android:summary="@string/prefSummaryAnnounce"
 		/>
+		<ListPreference
+			android:name="logging"
+            android:key="loggingPref"
+            android:title="@string/prefTitleLogging"
+			android:summary="@string/prefSummaryLogging"
+            android:defaultValue="0"
+            android:entries="@array/prefLoggingNames"
+            android:entryValues="@array/prefLoggingValues" />
 	</PreferenceCategory>
 
 </PreferenceScreen>
