@@ -527,19 +527,30 @@ public class PrimitiveFtpdActivity extends Activity {
     	});
     }
 
-    protected void genKeysAndShowProgressDiag() {
+    protected void genKeysAndShowProgressDiag(boolean startServerOnFinish) {
     	// critical: do not pass getApplicationContext() to dialog
     	final ProgressDialog progressDiag = new ProgressDialog(this);
     	progressDiag.setCancelable(false);
     	progressDiag.setMessage(getText(R.string.generatingKeysMessage));
 
-    	AsyncTask<Void, Void, Void> task = new GenKeysAsyncTask(progressDiag);
+    	AsyncTask<Void, Void, Void> task = new GenKeysAsyncTask(
+			progressDiag,
+			startServerOnFinish);
 		task.execute();
 
 		progressDiag.show();
     }
 
     class GenKeysAskDialogFragment extends DialogFragment {
+    	private final boolean startServerOnFinish;
+
+    	public GenKeysAskDialogFragment() {
+    		this(false);
+    	}
+    	public GenKeysAskDialogFragment(boolean startServerOnFinish) {
+    		this.startServerOnFinish = startServerOnFinish;
+    	}
+
     	@Override
     	public Dialog onCreateDialog(Bundle savedInstanceState) {
     		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -547,7 +558,7 @@ public class PrimitiveFtpdActivity extends Activity {
             builder.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
             	@Override
 				public void onClick(DialogInterface dialog, int id) {
-            		genKeysAndShowProgressDiag();
+            		genKeysAndShowProgressDiag(startServerOnFinish);
             	}
             });
             builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -561,10 +572,15 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
-    	private ProgressDialog progressDiag;
+    	private final ProgressDialog progressDiag;
+    	private final boolean startServerOnFinish;
 
-    	public GenKeysAsyncTask(ProgressDialog progressDiag) {
+		public GenKeysAsyncTask(
+			ProgressDialog progressDiag,
+			boolean startServerOnFinish)
+		{
     		this.progressDiag = progressDiag;
+    		this.startServerOnFinish = startServerOnFinish;
     	}
 
     	@Override
@@ -589,6 +605,13 @@ public class PrimitiveFtpdActivity extends Activity {
 			calcPubkeyFingerprints();
 			progressDiag.dismiss();
 			createFingerprintTable();
+
+			if (startServerOnFinish) {
+				// icon members should be set at this time
+				handleStart();
+				// must update server state after start
+				displayServersState();
+			}
 		}
     }
 
@@ -596,7 +619,8 @@ public class PrimitiveFtpdActivity extends Activity {
 	 * Displays UI-elements showing if servers are running. That includes
 	 * Actionbar Icon and Ports-Table. When Activity is shown the first time
 	 * this is triggered by {@link #onCreateOptionsMenu()}, when user comes back from
-	 * preferences, this is triggered by {@link #onResume()}.
+	 * preferences, this is triggered by {@link #onResume()}. It may be invoked by
+	 * {@link GenKeysAsyncTask}.
 	 */
     protected void displayServersState() {
     	logger.debug("displayServersState()");
@@ -695,6 +719,13 @@ public class PrimitiveFtpdActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+    /**
+	 * if this version of the method is called, it is necessary to call
+	 * {@link #displayServersState()} afterwards.
+	 */
+    protected void handleStart() {
+    	handleStart(null, null);
+    }
     protected void handleStart(MenuItem startIcon, MenuItem stopIcon) {
 		if (StringUtils.isBlank(prefsBean.getPassword()))
 		{
@@ -704,14 +735,28 @@ public class PrimitiveFtpdActivity extends Activity {
 				Toast.LENGTH_LONG).show();
 
 		} else {
-			if (prefsBean.getServerToStart().startFtp()) {
-				startService(createFtpServiceIntent());
+			boolean continueServerStart = true;
+			if (prefsBean.getServerToStart().startSftp()) {
+				if (!keyPresent) {
+					// cannot start sftp server when key is not present
+					// ask user to generate it
+	    			GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment(true);
+	    			askDiag.show(getFragmentManager(), DIALOG_TAG);
+	    			continueServerStart = false;
+				}
+				if (keyPresent) {
+					startService(createSshServiceIntent());
+				}
 			}
-			if (keyPresent && prefsBean.getServerToStart().startSftp()) {
-				startService(createSshServiceIntent());
+			if (continueServerStart) {
+				if (prefsBean.getServerToStart().startFtp()) {
+					startService(createFtpServiceIntent());
+				}
+				if (startIcon != null && stopIcon != null) {
+			    	startIcon.setVisible(false);
+			    	stopIcon.setVisible(true);
+				}
 			}
-	    	startIcon.setVisible(false);
-	    	stopIcon.setVisible(true);
 		}
     }
 
