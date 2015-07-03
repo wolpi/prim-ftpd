@@ -12,6 +12,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
@@ -132,6 +134,13 @@ public abstract class AbstractServerService
 		CharSequence contentTitle = getText(R.string.notificationTitle);
 		CharSequence contentText = tickerText;
 
+		// I don't think it makes much sense to set
+		// the same image as small and large icon
+		// but it is required by a cyanogen theme
+		Bitmap largeIcon = BitmapFactory.decodeResource(
+			getResources(),
+			R.drawable.ic_launcher);
+
 		long when = System.currentTimeMillis();
 
 		Notification notification = new Notification.Builder(getApplicationContext())
@@ -139,6 +148,7 @@ public abstract class AbstractServerService
 			.setContentTitle(contentTitle)
 			.setContentText(contentText)
 			.setSmallIcon(icon)
+			.setLargeIcon(largeIcon)
 			.setContentIntent(contentIntent)
 			.setWhen(when)
 			.build();
@@ -160,38 +170,14 @@ public abstract class AbstractServerService
      * Register a DNS-SD service (to be discoverable through Bonjour/Avahi).
      */
     protected void announceService () {
-    	nsdRegistrationListener = new NsdManager.RegistrationListener() {
+		nsdRegistrationListener = new NsdManager.RegistrationListener() {
 			@Override
 			public void onServiceRegistered(NsdServiceInfo serviceInfo) {
-				logger.debug(
-					"onServiceRegistered(serviceType: '{}')",
-					serviceInfo.getServiceType());
+				logger.debug("onServiceRegistered()");
 			}
 			@Override
 			public void onRegistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
-				String errorName = null;
-				switch (errorCode) {
-				case NsdManager.FAILURE_INTERNAL_ERROR:
-					errorName = "INTERNAL_ERROR";
-					break;
-				case NsdManager.FAILURE_ALREADY_ACTIVE:
-					errorName = "ALREADY_ACTIVE";
-					break;
-				case NsdManager.FAILURE_MAX_LIMIT:
-					errorName = "MAX_LIMIT";
-					break;
-				default:
-					errorName = "have no idea";
-					break;
-				}
-				logger.error(
-					"onRegistrationFailed(serviceType: '{}', errorCode: '{}, ({})')",
-					new Object[]{
-						serviceInfo.getServiceType(),
-						Integer.valueOf(errorCode),
-						errorName
-					}
-				);
+				logger.debug("onRegistrationFailed()");
 			}
 			@Override
 			public void onServiceUnregistered(NsdServiceInfo serviceInfo) {
@@ -210,7 +196,6 @@ public abstract class AbstractServerService
 
 		NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
 
-		logger.debug("registering nsd service: '{}'", serviceInfo.getServiceType());
 		nsdManager.registerService(
 			serviceInfo,
 			NsdManager.PROTOCOL_DNS_SD,
@@ -219,12 +204,6 @@ public abstract class AbstractServerService
 
 	protected void unannounceService () {
 		NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
-		try {
-			nsdManager.unregisterService(nsdRegistrationListener);
-		} catch (Exception e) {
-			logger.debug("could not unregister service, '{}', '{}'",
-				e.getClass().getName(),
-				e.getMessage());
-		}
+		nsdManager.unregisterService(nsdRegistrationListener);
 	}
 }
