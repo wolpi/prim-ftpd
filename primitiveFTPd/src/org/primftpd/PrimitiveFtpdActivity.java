@@ -419,7 +419,6 @@ public class PrimitiveFtpdActivity extends Activity {
     	View valueView = null;
     	if (value != null) {
     		TextView valueTextView = new TextView(row.getContext());
-    		valueTextView.setGravity(Gravity.LEFT);
     		valueTextView.setText(value);
     		valueView = valueTextView;
     		if (monospace) {
@@ -437,6 +436,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	LayoutParams params = new LayoutParams();
     	params.height = LayoutParams.WRAP_CONTENT;
+    	params.gravity = Gravity.LEFT;
     	valueView.setLayoutParams(params);
 
     	if (serverState != null) {
