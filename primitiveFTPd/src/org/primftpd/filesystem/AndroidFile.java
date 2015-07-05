@@ -116,18 +116,20 @@ public abstract class AndroidFile<T> {
 	}
 
 	public long getLastModified() {
-		logger.trace("getLastModified()");
-		return file.lastModified();
+		long lastModified = file.lastModified();
+		logger.trace("getLastModified() -> {}", Long.valueOf(lastModified));
+		return lastModified;
 	}
 
 	public boolean setLastModified(long time) {
-		logger.trace("setLastModified({})", time);
+		logger.trace("setLastModified({})", Long.valueOf(time));
 		return file.setLastModified(time);
 	}
 
 	public long getSize() {
-		logger.trace("getSize()");
-		return file.length();
+		long size = file.length();
+		logger.trace("getSize() -> {}", Long.valueOf(size));
+		return size;
 	}
 
 	public boolean mkdir() {

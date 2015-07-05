@@ -41,14 +41,36 @@ public abstract class AndroidFileSystemView<T extends AndroidFile<X>, X> {
 		File dirObj = new File(dir);
 
 		if (dirObj.isFile()) {
+			logger.trace("not changing WD as new one is file");
 			return false;
+		}
+
+		// some clients issue CWD commands
+		// and are confused about home dir
+		// do some checks to avoid issues
+		// happened for keepass
+		String currentAbsPath = workingDir.getAbsolutePath();
+		String paraAbs = dirObj.getAbsolutePath();
+		if (currentAbsPath.length() * 2 == paraAbs.length()) {
+			String pathDoubled = currentAbsPath + currentAbsPath;
+			if (pathDoubled.equals(paraAbs)) {
+				// this is the confusion case
+				// just tell client everything is alright
+				logger.trace(
+					"client is confused about WD ({}), just tell him it is alright",
+					currentAbsPath);
+				return true;
+			}
 		}
 
 		String path = dir;
 		if (!dirObj.isAbsolute()) {
-			path = workingDir.getAbsolutePath() + File.separator + dir;
+			path = currentAbsPath + File.separator + dir;
 		}
 
+		logger.trace("current WD '{}', new path '{}'",
+			currentAbsPath,
+			path);
 		workingDir = createFile(new File(path));
 
 		return true;
