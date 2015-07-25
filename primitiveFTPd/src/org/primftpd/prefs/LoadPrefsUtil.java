@@ -11,20 +11,20 @@ import android.widget.Toast;
 
 public class LoadPrefsUtil
 {
-	public static final String PREF_KEY_USER = "userNamePref";
-	public static final String PREF_KEY_PASSWORD = "passwordPref";
-	public static final String PREF_KEY_PORT = "portPref";
-	public static final String PREF_KEY_SECURE_PORT = "securePortPref";
-	public static final String PREF_KEY_ANNOUNCE = "announcePref";
-	public static final String PREF_KEY_WAKELOCK = "wakelockPref";
-	public static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
-	public static final String PREF_KEY_THEME = "themePref";
+	private static final String PREF_KEY_USER = "userNamePref";
+	private static final String PREF_KEY_PASSWORD = "passwordPref";
+	private static final String PREF_KEY_PORT = "portPref";
+	private static final String PREF_KEY_SECURE_PORT = "securePortPref";
+	private static final String PREF_KEY_ANNOUNCE = "announcePref";
+	private static final String PREF_KEY_WAKELOCK = "wakelockPref";
+	private static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
+	private static final String PREF_KEY_THEME = "themePref";
 	public static final String PREF_KEY_LOGGING = "loggingPref";
 
 	public static final int PORT_DEFAULT_VAL = 12345;
-	public static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
+	private static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
 	public static final int SECURE_PORT_DEFAULT_VAL = 1234;
-	public static final String SECURE_PORT_DEFAULT_VAL_STR =
+	private static final String SECURE_PORT_DEFAULT_VAL_STR =
 		String.valueOf(SECURE_PORT_DEFAULT_VAL);
 
 	/**
@@ -34,15 +34,74 @@ public class LoadPrefsUtil
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
+	public static String userName(SharedPreferences prefs) {
+		return prefs.getString(
+			LoadPrefsUtil.PREF_KEY_USER,
+			"user");
+	}
+
+	public static String password(SharedPreferences prefs) {
+		return prefs.getString(
+			LoadPrefsUtil.PREF_KEY_PASSWORD,
+			null);
+	}
+
+	public static Boolean announce(SharedPreferences prefs) {
+		// default to false as it may cause crashes
+		return prefs.getBoolean(
+			LoadPrefsUtil.PREF_KEY_ANNOUNCE,
+			Boolean.FALSE);
+	}
+
+	public static Boolean wakelock(SharedPreferences prefs) {
+		return prefs.getBoolean(
+			LoadPrefsUtil.PREF_KEY_WAKELOCK,
+			Boolean.TRUE);
+	}
+
+	public static ServerToStart serverToStart(SharedPreferences prefs) {
+		String whichServerStr = prefs.getString(
+			LoadPrefsUtil.PREF_KEY_WHICH_SERVER,
+			ServerToStart.ALL.xmlValue());
+		return ServerToStart.byXmlVal(whichServerStr);
+	}
+
 	public static Theme theme(SharedPreferences prefs) {
 		String themeStr = prefs.getString(
 			PREF_KEY_THEME,
 			Theme.DARK.xmlValue());
-		Theme theme = Theme.byXmlVal(themeStr);
-		return theme;
+		return Theme.byXmlVal(themeStr);
 	}
 
-	public static int loadAndValidatePort(
+	public static int loadAndValidatePortInsecure(
+		Context context,
+		Logger logger,
+		SharedPreferences prefs)
+	{
+		return loadAndValidatePort(
+			context,
+			logger,
+			prefs,
+			PREF_KEY_PORT,
+			PORT_DEFAULT_VAL,
+			PORT_DEFAULT_VAL_STR);
+	}
+
+	public static int loadAndValidatePortSecure(
+		Context context,
+		Logger logger,
+		SharedPreferences prefs)
+	{
+		return loadAndValidatePort(
+			context,
+			logger,
+			prefs,
+			PREF_KEY_SECURE_PORT,
+			SECURE_PORT_DEFAULT_VAL,
+			SECURE_PORT_DEFAULT_VAL_STR);
+	}
+
+	private static int loadAndValidatePort(
 		Context context,
 		Logger logger,
 		SharedPreferences prefs,
@@ -88,5 +147,16 @@ public class LoadPrefsUtil
 			return true;
 		}
 		return false;
+	}
+
+	public static void resetPortsToDefault(SharedPreferences prefs) {
+		Editor prefsEditor = prefs.edit();
+		prefsEditor.putString(
+			LoadPrefsUtil.PREF_KEY_PORT,
+			LoadPrefsUtil.PORT_DEFAULT_VAL_STR);
+		prefsEditor.putString(
+			LoadPrefsUtil.PREF_KEY_SECURE_PORT,
+			LoadPrefsUtil.SECURE_PORT_DEFAULT_VAL_STR);
+		prefsEditor.commit();
 	}
 }

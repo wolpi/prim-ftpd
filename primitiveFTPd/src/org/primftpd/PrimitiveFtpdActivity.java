@@ -41,7 +41,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -808,53 +807,32 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
 
-		String userName = prefs.getString(
-			LoadPrefsUtil.PREF_KEY_USER,
-			"user");
+		String userName = LoadPrefsUtil.userName(prefs);
+		logger.debug("got userName: {}", userName);
 
-		// load password
-		String password = prefs.getString(
-			LoadPrefsUtil.PREF_KEY_PASSWORD,
-			null);
+		String password = LoadPrefsUtil.password(prefs);
 		logger.debug("got password: {}", password);
 
-		// load announcement setting
-		// default to false as it may cause crashes
-		boolean announce = prefs.getBoolean(
-			LoadPrefsUtil.PREF_KEY_ANNOUNCE,
-			Boolean.FALSE);
+		boolean announce = LoadPrefsUtil.announce(prefs);
 		logger.debug("got announce: {}", Boolean.valueOf(announce));
 
-		// load wakelock setting
-		boolean wakelock = prefs.getBoolean(
-			LoadPrefsUtil.PREF_KEY_WAKELOCK,
-			Boolean.TRUE);
+		boolean wakelock = LoadPrefsUtil.wakelock(prefs);
 		logger.debug("got wakelock: {}", Boolean.valueOf(wakelock));
 
-		// load list pref: which server to start
-		String whichServerStr = prefs.getString(
-			LoadPrefsUtil.PREF_KEY_WHICH_SERVER,
-			ServerToStart.ALL.xmlValue());
-		ServerToStart serverToStart = ServerToStart.byXmlVal(whichServerStr);
+		ServerToStart serverToStart = LoadPrefsUtil.serverToStart(prefs);
 		logger.debug("got 'which server': {}", serverToStart);
 
 		// load port
-		int port = LoadPrefsUtil.loadAndValidatePort(
+		int port = LoadPrefsUtil.loadAndValidatePortInsecure(
 			getBaseContext(),
 			logger,
-			prefs,
-			LoadPrefsUtil.PREF_KEY_PORT,
-			LoadPrefsUtil.PORT_DEFAULT_VAL,
-			LoadPrefsUtil.PORT_DEFAULT_VAL_STR);
+			prefs);
 
 		// load secure port
-		int securePort = LoadPrefsUtil.loadAndValidatePort(
+		int securePort = LoadPrefsUtil.loadAndValidatePortSecure(
 			getBaseContext(),
 			logger,
-			prefs,
-			LoadPrefsUtil.PREF_KEY_SECURE_PORT,
-			LoadPrefsUtil.SECURE_PORT_DEFAULT_VAL,
-			LoadPrefsUtil.SECURE_PORT_DEFAULT_VAL_STR);
+			prefs);
 
 		// check if ports are equal
 		if (port == securePort) {
@@ -866,14 +844,7 @@ public class PrimitiveFtpdActivity extends Activity {
 			securePort = LoadPrefsUtil.SECURE_PORT_DEFAULT_VAL;
 
 			// reset in persistent prefs
-			Editor prefsEditor = prefs.edit();
-			prefsEditor.putString(
-				LoadPrefsUtil.PREF_KEY_PORT,
-				LoadPrefsUtil.PORT_DEFAULT_VAL_STR);
-			prefsEditor.putString(
-				LoadPrefsUtil.PREF_KEY_SECURE_PORT,
-				LoadPrefsUtil.SECURE_PORT_DEFAULT_VAL_STR);
-			prefsEditor.commit();
+			LoadPrefsUtil.resetPortsToDefault(prefs);
 		}
 
 		// create prefsBean
@@ -886,6 +857,11 @@ public class PrimitiveFtpdActivity extends Activity {
 			wakelock,
 			serverToStart);
 
+		handlePrefsChanged();
+		handleLoggingPref(prefs);
+	}
+
+	protected void handlePrefsChanged() {
 		if (prefsChanged) {
 			prefsChanged = false;
 			if (serversRunning != null && serversRunning.atLeastOneRunning()) {
@@ -895,8 +871,9 @@ public class PrimitiveFtpdActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 			}
 		}
+	}
 
-		// load list pref: logging
+	protected void handleLoggingPref(SharedPreferences prefs) {
 		String loggingStr = prefs.getString(
 			LoadPrefsUtil.PREF_KEY_LOGGING,
 			Logging.NONE.xmlValue());
