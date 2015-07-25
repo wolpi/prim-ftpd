@@ -28,8 +28,15 @@
         </activity>
 
         <activity
-            android:name="org.primftpd.prefs.FtpPrefsActivity"
-            android:label="@string/prefCategoryTitle">
+            android:name="org.primftpd.prefs.FtpPrefsActivityThemeDark"
+            android:label="@string/prefCategoryTitle"
+            android:theme="@style/PrimFtpdDarkTheme">
+        </activity>
+
+        <activity
+            android:name="org.primftpd.prefs.FtpPrefsActivityThemeLight"
+            android:label="@string/prefCategoryTitle"
+            android:theme="@style/PrimFtpdLightTheme">
         </activity>
 
         <activity

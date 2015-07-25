@@ -1,6 +1,5 @@
 package org.primftpd.prefs;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
@@ -10,15 +9,13 @@ public class FtpPrefsActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // theme
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        Theme theme = LoadPrefsUtil.theme(prefs);
-        setTheme(theme.resourceId());
+        // note: setting theme here does not work for PreferenceActivity
+        // -> sub classes necessary
 
         // prefs fragment
         getFragmentManager().beginTransaction().replace(
-                android.R.id.content,
-                new FtpPrefsFragment()
+            android.R.id.content,
+            new FtpPrefsFragment()
         ).commit();
 
         // allow to navigate back with action bar
@@ -31,7 +28,7 @@ public class FtpPrefsActivity extends PreferenceActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case android.R.id.home:
-                FtpPrefsActivity.this.finish();
+                finish();
                 break;
         }
         return true;

@@ -13,7 +13,8 @@ import java.util.List;
 
 import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.log.PrimFtpdLoggerBinder;
-import org.primftpd.prefs.FtpPrefsActivity;
+import org.primftpd.prefs.FtpPrefsActivityThemeDark;
+import org.primftpd.prefs.FtpPrefsActivityThemeLight;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.ServerToStart;
@@ -118,6 +119,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PrefsBean prefsBean;
+	private Theme theme;
 	private ServersRunningBean serversRunning;
 	private boolean keyPresent = false;
 	private String fingerprintMd5 = " - ";
@@ -140,7 +142,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener);
 
 		// layout & theme
-		Theme theme = LoadPrefsUtil.theme(prefs);
+		theme = LoadPrefsUtil.theme(prefs);
 		setTheme(theme.resourceId());
         setContentView(R.layout.main);
 
@@ -777,7 +779,10 @@ public class PrimitiveFtpdActivity extends Activity {
     }
 
     protected void handlePrefs() {
-    	Intent intent = new Intent(this, FtpPrefsActivity.class);
+    	Class<?> prefsActivityClass = theme == Theme.DARK
+    		? FtpPrefsActivityThemeDark.class
+    		: FtpPrefsActivityThemeLight.class;
+    	Intent intent = new Intent(this, prefsActivityClass);
 		startActivity(intent);
     }
 
