@@ -45,15 +45,9 @@
     <string name="prefSummaryWhichServerToStart">Elige si deseas encender solo FTP, solo SFTP o ambos.</string>
 
     <string-array name="prefWhichServerToStartNames">
-    <item>FTP y SFTP</item>
-    <item>solo FTP</item>
-    <item>solo SFTP</item>
-    </string-array>
-
-    <string-array name="prefWhichServerToStartValues">
-    <item>0</item>
-    <item>1</item>
-    <item>2</item>
+	    <item>FTP y SFTP</item>
+	    <item>solo FTP</item>
+	    <item>solo SFTP</item>
     </string-array>
 
 </resources>

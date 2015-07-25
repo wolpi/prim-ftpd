@@ -13,6 +13,15 @@ import android.widget.TextView;
 
 public class AboutActivity extends Activity
 {
+	public static final String URL_APL =
+		"https://www.apache.org/licenses/LICENSE-2.0";
+	public static final String URL_GITHUB =
+		"https://github.com/wolpi/prim-ftpd";
+	public static final String URL_FDROID =
+		"https://f-droid.org/repository/browse/?fdfilter=ftpd&fdid=org.primftpd";
+	public static final String URL_GOOGLE_PLAY =
+		"https://play.google.com/store/apps/details?id=org.primftpd";
+
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
@@ -48,6 +57,20 @@ public class AboutActivity extends Activity
         logger.debug("versionName: '{}'", version);
 
         versionView.setText(version);
+
+        // show licence
+        TextView lisenseView = ((TextView)findViewById(R.id.licenceTextView));
+        lisenseView.setText("APL \n"+URL_APL);
+
+        // show other links
+        ((TextView)findViewById(R.id.githubLabel)).setText("Github");
+        ((TextView)findViewById(R.id.githubTextView)).setText(URL_GITHUB);
+
+        ((TextView)findViewById(R.id.fdroidLabel)).setText("F-Droid");
+        ((TextView)findViewById(R.id.fdroidTextView)).setText(URL_FDROID);
+
+        ((TextView)findViewById(R.id.googlePlayLabel)).setText("Google Play");
+        ((TextView)findViewById(R.id.googlePlayTextView)).setText(URL_GOOGLE_PLAY);
 	}
 
     @Override

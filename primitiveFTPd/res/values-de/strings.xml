@@ -46,16 +46,12 @@
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>
 
+    <string name="licence">Lizenz</string>
+    
     <string-array name="prefWhichServerToStartNames">
         <item>FTP und SFTP</item>
         <item>nur FTP</item>
         <item>nur SFTP</item>
-    </string-array>
-
-    <string-array name="prefWhichServerToStartValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
     </string-array>
 
     <string-array name="prefLoggingNames">
