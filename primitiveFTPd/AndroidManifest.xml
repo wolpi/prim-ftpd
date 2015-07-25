@@ -32,7 +32,9 @@
             android:name="org.primftpd.prefs.FtpPrefsActivity"
             android:label="@string/prefCategoryTitle">
         </activity>
-            
+
+        <activity android:name="org.primftpd.prefs.AboutActivity" />
+
         <service android:name="org.primftpd.services.FtpServerService" />
         <service android:name="org.primftpd.services.SshServerService" />
         
