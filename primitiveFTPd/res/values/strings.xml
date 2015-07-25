@@ -43,6 +43,8 @@
     <string name="prefSummaryWakelock">Prevents Standby while server is running. Standby can cause uploads/downloads to abort.</string>
     <string name="prefTitleWhichServerToStart">Server(s) to be started</string>
     <string name="prefSummaryWhichServerToStart">Choose whether to start FTP server only, SFTP server only or both.</string>
+    <string name="prefTheme">Theme</string>
+    <string name="prefSummaryTheme">Changing Theme may require to restart the app.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log serves analyzing of errors. If the app does not work properly on your device you can send a log to developers. May require to restart the app.</string>
     
@@ -58,6 +60,16 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+
+    <string-array name="prefThemeNames">
+        <item>Dark</item>
+        <item>Light</item>
+    </string-array>
+
+    <string-array name="prefThemeValues">
+        <item>0</item>
+        <item>1</item>
     </string-array>
 
     <string-array name="prefLoggingNames">

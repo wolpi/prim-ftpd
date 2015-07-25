@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -28,6 +29,11 @@ public class AboutActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
+		// set theme
+        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+        Theme theme = LoadPrefsUtil.theme(prefs);
+        setTheme(theme.resourceId());
 
 		// set layout
 		setContentView(R.layout.about);

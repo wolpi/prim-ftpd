@@ -43,6 +43,7 @@
     <string name="prefSummaryWakelock">Verhindert Standby während der Server läuft. Standby kann dazu führen dass uplodas/downloads abgebrochen werden.</string>
     <string name="prefTitleWhichServerToStart">Zu startende Server</string>
     <string name="prefSummaryWhichServerToStart">Welche Server sollen gestartet werden: nur FTP Server, nur SFTP Server oder beide.</string>
+    <string name="prefSummaryTheme">Den Theme zu ändern kann einen App Neustart erfordern.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>
 
@@ -52,6 +53,11 @@
         <item>FTP und SFTP</item>
         <item>nur FTP</item>
         <item>nur SFTP</item>
+    </string-array>
+
+    <string-array name="prefThemeNames">
+        <item>Dunkel</item>
+        <item>Hell</item>
     </string-array>
 
     <string-array name="prefLoggingNames">

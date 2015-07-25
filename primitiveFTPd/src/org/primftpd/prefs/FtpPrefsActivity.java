@@ -1,5 +1,6 @@
 package org.primftpd.prefs;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.MenuItem;
@@ -8,6 +9,11 @@ public class FtpPrefsActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // theme
+        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+        Theme theme = LoadPrefsUtil.theme(prefs);
+        setTheme(theme.resourceId());
 
         // prefs fragment
         getFragmentManager().beginTransaction().replace(

@@ -55,6 +55,14 @@
 			android:summary="@string/prefSummaryAnnounce"
 		/>
 		<ListPreference
+			android:name="theme"
+            android:key="themePref"
+            android:title="@string/prefTheme"
+			android:summary="@string/prefSummaryTheme"
+            android:defaultValue="0"
+            android:entries="@array/prefThemeNames"
+            android:entryValues="@array/prefThemeValues" />
+		<ListPreference
 			android:name="logging"
             android:key="loggingPref"
             android:title="@string/prefTitleLogging"

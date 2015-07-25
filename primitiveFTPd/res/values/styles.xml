@@ -1,4 +1,7 @@
 <resources>
-	<style name="PrimFtpdTheme" parent="android:Theme.Holo">
+	<style name="PrimFtpdDarkTheme" parent="android:Theme.Holo">
+	</style>
+
+	<style name="PrimFtpdLightTheme" parent="android:Theme.Holo.Light">
 	</style>
 </resources>
