@@ -135,7 +135,7 @@ public class PrimitiveFtpdActivity extends Activity {
         // fixes/workarounds for android security issue below 4.3 regarding key generation
 		PrngFixes.apply();
 
-    	// prefs change
+		// prefs change
     	SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
 		prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener);
 
@@ -147,6 +147,9 @@ public class PrimitiveFtpdActivity extends Activity {
     	// calc keys fingerprints
         calcPubkeyFingerprints();
     	createFingerprintTable();
+
+		// allow to finish activity
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -715,6 +718,9 @@ public class PrimitiveFtpdActivity extends Activity {
 		case R.id.menu_prefs:
 			handlePrefs();
 			break;
+        case android.R.id.home:
+            finish();
+            break;
 		}
 
 		displayServersState();
