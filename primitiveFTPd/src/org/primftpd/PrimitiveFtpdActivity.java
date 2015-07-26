@@ -43,7 +43,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -51,10 +50,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TableRow.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,9 +84,9 @@ public class PrimitiveFtpdActivity extends Activity {
 	    @Override
 	    public void onReceive(Context context, Intent intent) {
 	        logger.debug("network connectivity changed, data str: '{}', action: '{}'",
-	        		intent.getDataString(),
-	        		intent.getAction());
-	        createIfaceTable();
+        		intent.getDataString(),
+        		intent.getAction());
+	        showAddresses();
 	    }
 	};
 
@@ -111,8 +107,6 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	public static final String PUBLICKEY_FILENAME = "pftpd-pub.bin";
 	public static final String PRIVATEKEY_FILENAME = "pftpd-priv.pk8";
-
-	public static final int KEYS_REFRESH_ICON_ID = 1;
 
 	public static final String DIALOG_TAG = "dialogs";
 
@@ -148,9 +142,20 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	// calc keys fingerprints
         calcPubkeyFingerprints();
-    	createFingerprintTable();
+    	showKeyFingerprints();
 
-		// allow to finish activity
+    	// create addresses label
+    	((TextView)findViewById(R.id.addressesLabel)).setText(
+    		getText(R.string.ipAddrLabel) + " (" +
+    		getText(R.string.ifacesLabel) + ")");
+
+    	// create ports label
+    	((TextView)findViewById(R.id.portsLabel)).setText(
+    		getText(R.string.protocolLabel) + " / " +
+    		getText(R.string.portLabel) + " / " +
+    		getText(R.string.state));
+
+    	// allow to finish activity
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -171,7 +176,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		logger.debug("onStart()");
 
 		loadPrefs();
-		createUsernameTable();
+		showUsername();
 	}
 
 	@Override
@@ -273,17 +278,11 @@ public class PrimitiveFtpdActivity extends Activity {
     /**
      * Creates table containing network interfaces.
      */
-    protected void createIfaceTable() {
-    	TableLayout table = (TableLayout)findViewById(R.id.ifacesTable);
+    protected void showAddresses() {
+    	LinearLayout container = (LinearLayout)findViewById(R.id.addressesContainer);
 
         // clear old entries
-    	table.removeAllViews();
-
-    	// create header line
-    	createTableRow(
-    		table,
-    		getText(R.string.ifacesLabel),
-    		getText(R.string.ipAddrLabel));
+    	container.removeAllViews();
 
     	try {
         	Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
@@ -308,7 +307,11 @@ public class PrimitiveFtpdActivity extends Activity {
                     	continue;
                     }
 
-                    createTableRow(table, ifaceDispName, hostAddr);
+                    String displayText = hostAddr + " (" + ifaceDispName + ")";
+                    TextView textView = new TextView(container.getContext());
+                    container.addView(textView);
+                    textView.setText(displayText);
+                    textView.setGravity(Gravity.CENTER_HORIZONTAL);
                 }
             }
         } catch (SocketException e) {
@@ -319,213 +322,42 @@ public class PrimitiveFtpdActivity extends Activity {
         }
     }
 
-    /**
-     * Creates a 2 column row in a table.
-     *
-     * @param table Table to add row to.
-     * @param label Text for left column.
-     * @param value Text for right column.
-     */
-    protected void createTableRow(
-		TableLayout table,
-		CharSequence label,
-		CharSequence value)
-    {
-    	createTableRow(table, label, value, 0, null, false, null);
+    protected void showPortsAndServerState() {
+    	((TextView)findViewById(R.id.ftpTextView))
+			.setText("ftp / " + prefsBean.getPortStr() + " / " +
+			getText(serversRunning.ftp
+				? R.string.serverStarted
+				: R.string.serverStopped));
+
+    	((TextView)findViewById(R.id.sftpTextView))
+			.setText("sftp / " + prefsBean.getSecurePortStr() + " / " +
+			getText(serversRunning.ssh
+				? R.string.serverStarted
+				: R.string.serverStopped));
     }
 
-    /**
-	 * Creates a 3 column row. To be used for header line of ports table.
-	 * 3rd col is left empty but is required for data-rows.
-	 *
-     * @param table Table to add row to.
-     * @param label Text for left column.
-     * @param value Text for middle column.
-	 * @param serverRunning Flag indicating which icon to show.
-	 */
-    protected void createTableRowPortHeader(
-		TableLayout table,
-		CharSequence label,
-		CharSequence value)
-    {
-		createTableRow(
-			table,
-			label,
-			value,
-			0,
-			null,
-			false,
-			getText(R.string.state));
+    protected void showUsername() {
+    	TextView usernameView = (TextView)findViewById(R.id.usernameTextView);
+    	usernameView.setText(prefsBean.getUserName());
     }
 
-    /**
-	 * Creates a 3 column row. To be used for ports, 3rd col shows icon for
-	 * server state.
-	 *
-     * @param table Table to add row to.
-     * @param label Text for left column.
-     * @param value Text for middle column.
-	 * @param serverRunning Flag indicating which icon to show.
-	 */
-    protected void createTableRowPort(
-		TableLayout table,
-		CharSequence label,
-		CharSequence value,
-		boolean serverRunning)
-    {
-    	CharSequence serverState = getText(serverRunning
-    		? R.string.serverStarted
-    		: R.string.serverStopped);
-    	createTableRow(table, label, value, 0, null, false, serverState);
-    }
+    protected void showKeyFingerprints() {
+    	((TextView)findViewById(R.id.keyFingerprintMd5Label))
+    		.setText("MD5");
+    	((TextView)findViewById(R.id.keyFingerprintSha1Label))
+    		.setText("SHA1");
+    	((TextView)findViewById(R.id.keyFingerprintSha256Label))
+    		.setText("SHA256");
 
-    /**
-     * Creates a 2 column row. Instead of a value string it uses an image id.
-     *
-     * @param table Table to add row to.
-     * @param label Text for left column.
-     * @param value Resource id of image to show in right column.
-     */
-    protected void createTableRowKeyFingerprintHeader(
-		TableLayout table,
-		CharSequence label,
-		int imageId)
-    {
-    	createTableRow(table, label, null, imageId, null, false, null);
-    }
-
-    protected void createTableRowKeyFingerprint(
-		TableLayout table,
-		CharSequence label,
-		CharSequence value)
-    {
-    	Integer labelMaxWidth = Integer.valueOf(150);
-    	createTableRow(table, label, value, 0, labelMaxWidth, true, null);
-    }
-
-    protected void createTableRow(
-		TableLayout table,
-		CharSequence label,
-		CharSequence value,
-		int imageId,
-		Integer labelMaxWidth,
-		boolean monospace,
-		CharSequence serverState)
-    {
-    	TableRow row = new TableRow(table.getContext());
-    	table.addView(row);
-    	row.setPadding(1, 1, 1, 5);
-
-    	TextView labelView = new TextView(row.getContext());
-    	row.addView(labelView);
-    	labelView.setPadding(0, 0, 20, 0);
-    	if (labelMaxWidth != null) {
-    		labelView.setMaxWidth(labelMaxWidth.intValue());
-    	}
-    	labelView.setText(label);
-
-    	View valueView = null;
-    	if (value != null) {
-    		TextView valueTextView = new TextView(row.getContext());
-    		valueTextView.setText(value);
-    		valueView = valueTextView;
-    		if (monospace) {
-    			valueTextView.setTypeface(Typeface.MONOSPACE);
-    		}
-    	} else {
-    		// it is a little hacky to always create refresh icon
-    		// but this is the only case we need an imageId here
-    		ImageView valueImgView = new ImageView(row.getContext());
-    		valueImgView.setImageResource(imageId);
-    		valueImgView.setId(KEYS_REFRESH_ICON_ID);
-    		valueView = valueImgView;
-    	}
-    	row.addView(valueView);
-
-    	LayoutParams params = new LayoutParams();
-    	params.height = LayoutParams.WRAP_CONTENT;
-    	params.gravity = Gravity.LEFT;
-    	valueView.setLayoutParams(params);
-
-    	if (serverState != null) {
-    		TextView serverStateView = new TextView(row.getContext());
-        	row.addView(serverStateView);
-    		serverStateView.setText(serverState);
-    		serverStateView.setGravity(Gravity.LEFT);
-    		serverStateView.setPadding(50, 0, 0, 0);
-    	}
-    }
-
-    /**
-     * Creates UI table showing ports.
-     */
-    protected void createPortsTable() {
-    	TableLayout table = (TableLayout)findViewById(R.id.portsTable);
-
-        // clear old entries
-    	table.removeAllViews();
-
-    	// create header line
-    	createTableRowPortHeader(
-    		table,
-    		getText(R.string.protocolLabel),
-    		getText(R.string.portLabel));
-
-    	createTableRowPort(
-    		table,
-    		"ftp",
-    		prefsBean.getPortStr(),
-    		serversRunning.ftp);
-
-    	createTableRowPort(
-    		table,
-    		"sftp",
-    		prefsBean.getSecurePortStr(),
-    		serversRunning.ssh);
-    }
-
-    protected void createUsernameTable() {
-    	TableLayout table = (TableLayout)findViewById(R.id.usernameTable);
-
-        // clear old entries
-    	table.removeAllViews();
-
-    	// create header line
-    	createTableRow(
-    		table,
-    		getText(R.string.prefTitleUser),
-    		prefsBean.getUserName());
-    }
-
-    protected void createFingerprintTable() {
-    	TableLayout table = (TableLayout)findViewById(R.id.keysInfoTable);
-        // clear old entries
-    	table.removeAllViews();
-
-    	createTableRowKeyFingerprintHeader(
-    		table,
-    		getText(R.string.fingerprintsLabel),
-    		R.drawable.refresh);
-
-    	table = (TableLayout)findViewById(R.id.fingerprintsTable);
-        // clear old entries
-    	table.removeAllViews();
-
-    	createTableRowKeyFingerprint(
-    		table,
-    		"MD5",
-    		fingerprintMd5);
-    	createTableRowKeyFingerprint(
-    		table,
-    		"SHA1",
-    		fingerprintSha1);
-    	createTableRowKeyFingerprint(
-    		table,
-    		"SHA256",
-    		fingerprintSha256);
+    	((TextView)findViewById(R.id.keyFingerprintMd5TextView))
+			.setText(fingerprintMd5);
+		((TextView)findViewById(R.id.keyFingerprintSha1TextView))
+			.setText(fingerprintSha1);
+		((TextView)findViewById(R.id.keyFingerprintSha256TextView))
+			.setText(fingerprintSha256);
 
     	// create onRefreshListener
-    	View refreshButton = findViewById(KEYS_REFRESH_ICON_ID);
+    	View refreshButton = findViewById(R.id.keyFingerprintsLabel);
     	refreshButton.setOnClickListener(new View.OnClickListener() {
     		@Override
     		public void onClick(View v) {
@@ -612,7 +444,7 @@ public class PrimitiveFtpdActivity extends Activity {
 			super.onPostExecute(result);
 			calcPubkeyFingerprints();
 			progressDiag.dismiss();
-			createFingerprintTable();
+			showKeyFingerprints();
 
 			if (startServerOnFinish) {
 				// icon members should be set at this time
@@ -642,7 +474,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		// as there are no icons when this runs first time,
 		// we don't get serversRunning, yet
 		if (serversRunning != null) {
-			createPortsTable();
+			showPortsAndServerState();
 		}
     }
 

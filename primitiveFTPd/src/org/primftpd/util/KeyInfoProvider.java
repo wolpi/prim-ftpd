@@ -80,7 +80,7 @@ public class KeyInfoProvider
 			if (i != fingerPrintBytes.length -1) {
 				fingerPrint.append(":");
 
-				if ((i + 1) % 8 == 0) {
+				if ((i + 1) % 10 == 0) {
 					// force line breaks in UI
 					fingerPrint.append("\n");
 				}

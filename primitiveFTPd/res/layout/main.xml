@@ -9,35 +9,120 @@
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content">
 
-        <TableLayout
-	        android:id="@+id/ifacesTable"
-	        android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-	    	android:stretchColumns="1" />
-	
-	    <TableLayout
-	        android:id="@+id/portsTable"
-	        android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		/>
-	
-	    <TableLayout
-	        android:id="@+id/usernameTable"
-	        android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-	    	android:stretchColumns="1" />
 
-	    <TableLayout
-	        android:id="@+id/keysInfoTable"
+        <!-- addresses / interfaces -->
+        <TextView
+	        android:id="@+id/addressesLabel"
 	        android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-	    	android:stretchColumns="1" />
-	    	    
-	    <TableLayout
-	        android:id="@+id/fingerprintsTable"
+        	android:layout_height="wrap_content"
+        	android:gravity="center_horizontal"
+        	android:textStyle="bold"
+		/>
+
+        <LinearLayout
+            android:id="@+id/addressesContainer"
+	        android:orientation="vertical"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	    />
+
+		<!-- ports -->
+        <TextView
+	        android:id="@+id/portsLabel"
 	        android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-	    	android:stretchColumns="1" />
+        	android:layout_height="wrap_content"
+        	android:gravity="center_horizontal"
+        	android:textStyle="bold"
+        	android:layout_marginTop="16dp"
+		/>
+	    <TextView
+	        android:id="@+id/ftpTextView"
+	        android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:gravity="center_horizontal"
+        />
+   	    <TextView
+	        android:id="@+id/sftpTextView"
+	        android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:gravity="center_horizontal"
+        />
+
+        <!-- user name -->
+	    <TextView
+	        android:id="@+id/usernameLabel"
+	        android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:gravity="center_horizontal"
+        	android:textStyle="bold"
+        	android:layout_marginTop="16dp"
+	        android:text="@string/prefTitleUser"
+		/>
+	    <TextView
+	        android:id="@+id/usernameTextView"
+	        android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:gravity="center_horizontal"
+        />
+
+        <!-- key fingerprints -->
+	    <TextView
+	        android:id="@+id/keyFingerprintsLabel"
+	        android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+        	android:textStyle="bold"
+        	android:layout_marginTop="16dp"
+	        android:text="@string/fingerprintsLabel"
+	        android:drawableRight="@drawable/refresh"
+	        android:drawablePadding="4dp"
+		/>
+
+        <!-- MD 5 -->
+	    <TextView
+	        android:id="@+id/keyFingerprintMd5Label"
+	        android:layout_width="fill_parent"
+	       	android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+		/>
+	    <TextView
+	        android:id="@+id/keyFingerprintMd5TextView"
+	        android:layout_width="fill_parent"
+	       	android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:typeface="monospace"
+		/>
+        <!-- SHA 1 -->
+	    <TextView
+	        android:id="@+id/keyFingerprintSha1Label"
+	        android:layout_width="fill_parent"
+	       	android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+        	android:layout_marginTop="8dp"
+		/>
+	    <TextView
+	        android:id="@+id/keyFingerprintSha1TextView"
+	        android:layout_width="fill_parent"
+	       	android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:typeface="monospace"
+		/>
+        <!-- SHA 256 -->
+	    <TextView
+	        android:id="@+id/keyFingerprintSha256Label"
+	        android:layout_width="fill_parent"
+	       	android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+        	android:layout_marginTop="8dp"
+		/>
+	    <TextView
+	        android:id="@+id/keyFingerprintSha256TextView"
+	        android:layout_width="fill_parent"
+	       	android:layout_height="wrap_content"
+	        android:gravity="center_horizontal"
+	        android:typeface="monospace"
+		/>
 	
 	</LinearLayout>
 </ScrollView>
