@@ -17,6 +17,7 @@
         	android:layout_height="wrap_content"
         	android:gravity="center_horizontal"
         	android:textStyle="bold"
+        	android:layout_marginTop="16dp"
 		/>
 
         <LinearLayout
