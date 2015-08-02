@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -49,14 +50,19 @@ public class AboutActivity extends Activity
         TextView versionView = (TextView)findViewById(R.id.versionTextView);
         String pkgName = getPackageName();
         PackageManager pkgMgr = getPackageManager();
-        PackageInfo packageInfo = pkgMgr.getPackageArchiveInfo(
-        	pkgName,
-        	0);
+        PackageInfo packageInfo = null;
+		try {
+			packageInfo = pkgMgr.getPackageInfo(
+				pkgName,
+				0);
+		} catch (NameNotFoundException e) {
+			logger.error("could not get version", e);
+		}
         String version = packageInfo != null
         	? packageInfo.versionName
         	: "unknown";
         if (packageInfo != null) {
-        	version += " (" + packageInfo.versionCode + ")";
+        	version += " (code: " + packageInfo.versionCode + ")";
         }
 
         logger.debug("pkgName: '{}'", pkgName);
