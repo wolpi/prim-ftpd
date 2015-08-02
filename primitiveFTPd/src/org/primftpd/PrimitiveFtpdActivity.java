@@ -312,6 +312,7 @@ public class PrimitiveFtpdActivity extends Activity {
                     container.addView(textView);
                     textView.setText(displayText);
                     textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                    textView.setTextIsSelectable(true);
                 }
             }
         } catch (SocketException e) {
