@@ -1,3 +1,6 @@
 # IDE files
 .metadata
 RemoteSystemsTempFiles
+.idea
+out
+build
