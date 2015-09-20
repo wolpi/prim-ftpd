@@ -11,7 +11,8 @@ public class SshFileSystemView
 {
 	private final Session session;
 
-	public SshFileSystemView(Session session) {
+	public SshFileSystemView(File homeDir, Session session) {
+		super(homeDir);
 		this.session = session;
 	}
 

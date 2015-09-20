@@ -26,6 +26,7 @@
     <string name="portInvalid">Port ist ungültig. Er wird auf den Default Wert zurückgesetzt.</string>
     <string name="portsEqual">Ports sind gleich. Beide werden auf den Default Wert zurückgesetzt.</string>
     <string name="restartServer">Sie müssen den Server neu starten damit die Änderungen wirksam werden.</string>
+    <string name="invalidDir">Verzeichnis ist ungültig.</string>
 
     <string name="prefs">Einstellungen</string>
     <string name="prefCategoryTitle">FTP Server Einstellungen</string>
@@ -37,6 +38,8 @@
     <string name="prefSummaryPort">FTP Server Port</string>
     <string name="prefTitlePortSecure">Sicherer Port</string>
     <string name="prefSummaryPortSecure">FTP Server port (verschlüsselt)</string>
+    <string name="prefTitleStartDir">Server Start Verzeichnis</string>
+    <string name="prefSummaryStartDir">Erstes Verzeichnis nach login</string>
     <string name="prefTitleAnnounce">Server im LAN bekanntmachen</string>
     <string name="prefSummaryAnnounce">Announciert den FTP Server im LAN via DNS-SD (Bonjour). Kann auf manchen Geräten Abstürze verursachen.</string>
     <string name="prefTitleWakelock">Standby Verhindern</string>

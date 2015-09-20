@@ -26,6 +26,7 @@ import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.filesystem.SshFileSystemView;
+import org.primftpd.util.Defaults;
 import org.primftpd.util.KeyInfoProvider;
 
 import android.os.Looper;
@@ -116,7 +117,7 @@ public class SshServerService extends AbstractServerService
 			@Override
 			public FileSystemView createFileSystemView(Session session) throws IOException
 			{
-				return new SshFileSystemView(session);
+				return new SshFileSystemView(prefsBean.getStartDir(), session);
 			}
 		});
 

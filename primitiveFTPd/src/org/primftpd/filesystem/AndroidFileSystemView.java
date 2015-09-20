@@ -12,17 +12,18 @@ public abstract class AndroidFileSystemView<T extends AndroidFile<X>, X> {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
+	private final File homeDir;
 	private T workingDir;
 
-	public AndroidFileSystemView() {
+	public AndroidFileSystemView(File homeDir) {
+		this.homeDir = homeDir;
 		workingDir = createHomeDirObj();
 	}
 
 	protected abstract T createFile(File file);
 
 	private T createHomeDirObj() {
-		File androidHomeDir = Environment.getExternalStorageDirectory();
-		return createFile(androidHomeDir);
+		return createFile(homeDir);
 	}
 
 	public T getHomeDirectory() {

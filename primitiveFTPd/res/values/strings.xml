@@ -26,6 +26,7 @@
     <string name="portInvalid">Port value is invalid. Resetting it to default.</string>
     <string name="portsEqual">Ports are equal. Resetting both to default.</string>
     <string name="restartServer">You have to restart Server for changes to take effect.</string>
+    <string name="invalidDir">Directory is not valild.</string>
 
     <string name="prefs">Preferences</string>
     <string name="prefCategoryTitle">FTP Server Preferences</string>
@@ -37,6 +38,8 @@
     <string name="prefSummaryPort">FTP server port</string>
     <string name="prefTitlePortSecure">Secure Port</string>
     <string name="prefSummaryPortSecure">FTP server port (encrypted)</string>
+    <string name="prefTitleStartDir">Server Start Directory</string>
+    <string name="prefSummaryStartDir">First directory after login</string>
     <string name="prefTitleAnnounce">Announce server in LAN</string>
     <string name="prefSummaryAnnounce">Announces FTP server in LAN via DNS-SD (Bonjour). May cause crashes on some devices.</string>
     <string name="prefTitleWakelock">Prevent Standby</string>

@@ -66,7 +66,7 @@ public class FtpServerService extends AbstractServerService
 			@Override
 			public FileSystemView createFileSystemView(User user) throws FtpException
 			{
-				return new FtpFileSystemView(user);
+				return new FtpFileSystemView(prefsBean.getStartDir(), user);
 			}
     	});
 

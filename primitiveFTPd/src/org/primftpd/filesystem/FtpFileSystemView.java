@@ -11,7 +11,8 @@ public class FtpFileSystemView
 {
 	private final User user;
 
-	public FtpFileSystemView(User user) {
+	public FtpFileSystemView(File homeDir, User user) {
+		super(homeDir);
 		this.user = user;
 	}
 

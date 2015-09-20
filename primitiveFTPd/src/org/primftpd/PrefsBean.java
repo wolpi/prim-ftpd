@@ -1,5 +1,6 @@
 package org.primftpd;
 
+import java.io.File;
 import java.io.Serializable;
 
 import org.primftpd.prefs.ServerToStart;
@@ -14,6 +15,7 @@ public class PrefsBean implements Serializable
 	private final String securePortStr;
 	private final int port;
 	private final int securePort;
+	private final File startDir;
 	private final boolean announce;
 	private final boolean wakelock;
 	private final ServerToStart serverToStart;
@@ -23,6 +25,7 @@ public class PrefsBean implements Serializable
 		String password,
 		int port,
 		int securePort,
+		File startDir,
 		boolean announce,
 		boolean wakelock,
 		ServerToStart serverToStart)
@@ -34,6 +37,7 @@ public class PrefsBean implements Serializable
 		this.securePort = securePort;
 		this.portStr = String.valueOf(port);
 		this.securePortStr = String.valueOf(securePort);
+		this.startDir = startDir;
 		this.announce = announce;
 		this.wakelock = wakelock;
 		this.serverToStart = serverToStart;
@@ -61,6 +65,10 @@ public class PrefsBean implements Serializable
 
 	public int getSecurePort()	{
 		return securePort;
+	}
+
+	public File getStartDir() {
+		return startDir;
 	}
 
 	public boolean isAnnounce()

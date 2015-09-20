@@ -1,5 +1,6 @@
 package org.primftpd;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -657,6 +658,9 @@ public class PrimitiveFtpdActivity extends Activity {
 		String password = LoadPrefsUtil.password(prefs);
 		logger.debug("got password: {}", password);
 
+		File startDir = LoadPrefsUtil.startDir(prefs);
+		logger.debug("got startDir: {}", startDir);
+
 		boolean announce = LoadPrefsUtil.announce(prefs);
 		logger.debug("got announce: {}", Boolean.valueOf(announce));
 
@@ -697,6 +701,7 @@ public class PrimitiveFtpdActivity extends Activity {
 			password,
 			port,
 			securePort,
+			startDir,
 			announce,
 			wakelock,
 			serverToStart);

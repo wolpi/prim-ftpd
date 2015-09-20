@@ -1,6 +1,7 @@
 package org.primftpd.prefs;
 
 import org.primftpd.R;
+import org.primftpd.util.Defaults;
 import org.slf4j.Logger;
 
 import android.content.Context;
@@ -9,16 +10,19 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import java.io.File;
+
 public class LoadPrefsUtil
 {
-	private static final String PREF_KEY_USER = "userNamePref";
-	private static final String PREF_KEY_PASSWORD = "passwordPref";
-	private static final String PREF_KEY_PORT = "portPref";
-	private static final String PREF_KEY_SECURE_PORT = "securePortPref";
-	private static final String PREF_KEY_ANNOUNCE = "announcePref";
-	private static final String PREF_KEY_WAKELOCK = "wakelockPref";
-	private static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
-	private static final String PREF_KEY_THEME = "themePref";
+	public static final String PREF_KEY_USER = "userNamePref";
+	public static final String PREF_KEY_PASSWORD = "passwordPref";
+	public static final String PREF_KEY_PORT = "portPref";
+	public static final String PREF_KEY_SECURE_PORT = "securePortPref";
+	public static final String PREF_KEY_START_DIR = "startDirPref";
+	public static final String PREF_KEY_ANNOUNCE = "announcePref";
+	public static final String PREF_KEY_WAKELOCK = "wakelockPref";
+	public static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
+	public static final String PREF_KEY_THEME = "themePref";
 	public static final String PREF_KEY_LOGGING = "loggingPref";
 
 	public static final int PORT_DEFAULT_VAL = 12345;
@@ -44,6 +48,13 @@ public class LoadPrefsUtil
 		return prefs.getString(
 			LoadPrefsUtil.PREF_KEY_PASSWORD,
 			null);
+	}
+
+	public static File startDir(SharedPreferences prefs) {
+		String prefStr = prefs.getString(
+			LoadPrefsUtil.PREF_KEY_START_DIR,
+			null);
+		return prefStr != null ? new File(prefStr) : Defaults.HOME_DIR;
 	}
 
 	public static Boolean announce(SharedPreferences prefs) {

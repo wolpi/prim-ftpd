@@ -40,7 +40,14 @@
 			android:summary="@string/prefSummaryPortSecure"
 			android:numeric="integer"
 		/>
-		<CheckBoxPreference 
+		<org.primftpd.prefs.StartDirEditTextPreference
+			android:name="startDir"
+			android:key="startDirPref"
+			android:title="@string/prefTitleStartDir"
+			android:summary="@string/prefSummaryStartDir"
+
+		/>
+		<CheckBoxPreference
 			android:name="wakelock"
 			android:key="wakelockPref"
 			android:defaultValue="true"
