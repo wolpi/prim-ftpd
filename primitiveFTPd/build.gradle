@@ -30,8 +30,6 @@ android {
 
             java {
                 srcDir 'src'
-                srcDir 'sl4j-android' // this seems not to work
-
             }
             res {
                 srcDir 'res'
