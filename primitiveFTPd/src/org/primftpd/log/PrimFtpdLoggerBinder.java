@@ -14,7 +14,7 @@ public class PrimFtpdLoggerBinder implements LoggerFactoryBinder
 	private final ILoggerFactory loggerFactoryAndroid;
 	private final ILoggerFactory loggerFactoryText;
 
-	private PrimFtpdLoggerBinder()
+	protected PrimFtpdLoggerBinder()
 	{
 		loggerFactoryNone = new NOPLoggerFactory();
 		loggerFactoryAndroid = new AndroidLoggerFactory();
