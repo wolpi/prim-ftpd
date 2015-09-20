@@ -20,9 +20,11 @@ public class AboutActivity extends Activity
 	public static final String URL_GITHUB =
 		"https://github.com/wolpi/prim-ftpd";
 	public static final String URL_FDROID =
-		"https://f-droid.org/repository/browse/?fdfilter=ftpd&fdid=org.primftpd";
+		"https://f-droid.org/repository/browse/?fdid=org.primftpd";
 	public static final String URL_GOOGLE_PLAY =
 		"https://play.google.com/store/apps/details?id=org.primftpd";
+    public static final String URL_AMAZON =
+		"http://www.amazon.com/wolpi-primitive-FTPd/dp/B00KERCPNY/ref=sr_1_1";
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -75,7 +77,7 @@ public class AboutActivity extends Activity
         lisenseView.setText("APL \n"+URL_APL);
 
         // show other links
-        ((TextView)findViewById(R.id.githubLabel)).setText("Github");
+        ((TextView)findViewById(R.id.githubLabel)).setText("GitHub");
         ((TextView)findViewById(R.id.githubTextView)).setText(URL_GITHUB);
 
         ((TextView)findViewById(R.id.fdroidLabel)).setText("F-Droid");
@@ -83,6 +85,9 @@ public class AboutActivity extends Activity
 
         ((TextView)findViewById(R.id.googlePlayLabel)).setText("Google Play");
         ((TextView)findViewById(R.id.googlePlayTextView)).setText(URL_GOOGLE_PLAY);
+
+        ((TextView)findViewById(R.id.amazonLabel)).setText("Amazon");
+        ((TextView)findViewById(R.id.amazonTextView)).setText(URL_AMAZON);
 	}
 
     @Override

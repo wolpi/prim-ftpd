@@ -89,5 +89,22 @@
 	        android:layout_marginTop="5dp"
 	        android:layout_marginLeft="20dp" />
 
+		<TextView
+			android:id="@+id/amazonLabel"
+			android:text="@string/licence"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textStyle="bold"
+			android:layout_marginTop="20dp"
+			android:layout_marginLeft="20dp" />
+
+		<TextView
+			android:id="@+id/amazonTextView"
+			android:autoLink="web"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
+			android:layout_marginLeft="20dp" />
+
 	</LinearLayout>
 </ScrollView>
