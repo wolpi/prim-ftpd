@@ -52,6 +52,7 @@
     <string name="prefSummaryLogging">Log serves analyzing of errors. If the app does not work properly on your device you can send a log to developers. May require to restart the app.</string>
     
     <string name="licence">Licence</string>
+    <string name="reset">Reset</string>
     
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
