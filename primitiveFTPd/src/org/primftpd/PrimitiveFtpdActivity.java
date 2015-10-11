@@ -670,30 +670,11 @@ public class PrimitiveFtpdActivity extends Activity {
 		ServerToStart serverToStart = LoadPrefsUtil.serverToStart(prefs);
 		logger.debug("got 'which server': {}", serverToStart);
 
-		// load port
-		int port = LoadPrefsUtil.loadAndValidatePortInsecure(
-			getBaseContext(),
-			logger,
-			prefs);
+		int port = LoadPrefsUtil.loadPortInsecure(logger, prefs);
+		logger.debug("got 'port': {}", Integer.valueOf(port));
 
-		// load secure port
-		int securePort = LoadPrefsUtil.loadAndValidatePortSecure(
-			getBaseContext(),
-			logger,
-			prefs);
-
-		// check if ports are equal
-		if (port == securePort) {
-			Toast.makeText(
-				getBaseContext(),
-				R.string.portsEqual,
-				Toast.LENGTH_LONG).show();
-			port = LoadPrefsUtil.PORT_DEFAULT_VAL;
-			securePort = LoadPrefsUtil.SECURE_PORT_DEFAULT_VAL;
-
-			// reset in persistent prefs
-			LoadPrefsUtil.resetPortsToDefault(prefs);
-		}
+		int securePort = LoadPrefsUtil.loadPortSecure(logger,prefs);
+		logger.debug("got 'secure port': {}", Integer.valueOf(securePort));
 
 		// create prefsBean
 		prefsBean = new PrefsBean(

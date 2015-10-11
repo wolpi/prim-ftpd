@@ -21,12 +21,12 @@ public class StartDirEditTextPreference extends EditTextPreference implements Pr
 			AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
-        setOnPreferenceChangeListener(this);
+		setOnPreferenceChangeListener(this);
 	}
 
 	public StartDirEditTextPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
-        setOnPreferenceChangeListener(this);
+		setOnPreferenceChangeListener(this);
 	}
 
 	@Override

@@ -24,7 +24,7 @@
             android:defaultValue="0"
             android:entries="@array/prefWhichServerToStartNames"
             android:entryValues="@array/prefWhichServerToStartValues" />
-		<EditTextPreference
+		<org.primftpd.prefs.PortEditTextPreference
 			android:name="port"
 			android:key="portPref"
 			android:defaultValue="12345"
@@ -32,7 +32,7 @@
 			android:summary="@string/prefSummaryPort"
 			android:numeric="integer"
 		/>
-		<EditTextPreference
+		<org.primftpd.prefs.PortEditTextPreference
 			android:name="sslPort"
 			android:key="securePortPref"
 			android:defaultValue="1234"

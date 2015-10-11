@@ -23,8 +23,8 @@
     <string name="haveToSetPassword">You have to set a password first</string>
     <string name="serverRunning">FTP Server is running</string>
     <string name="serverCouldNotBeStarted">Server could not be started! Error message: </string>
-    <string name="portInvalid">Port value is invalid. Resetting it to default.</string>
-    <string name="portsEqual">Ports are equal. Resetting both to default.</string>
+    <string name="portInvalid_v2">Port value is invalid. Must be between 1024 and 64000.</string>
+    <string name="portsEqual_v2">Ports are equal. This cannot work.</string>
     <string name="restartServer">You have to restart Server for changes to take effect.</string>
     <string name="invalidDir">Directory is not valild.</string>
 

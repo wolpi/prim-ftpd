@@ -15,8 +15,6 @@
     <string name="haveToSetPassword">Vous devez d\'abord définir un mot de passe</string>
     <string name="serverRunning">Serveur FTP en marche</string>
     <string name="serverCouldNotBeStarted">Impossible de démarrer le serveur ! Erreur : </string>
-    <string name="portInvalid">Port invalide. Retour à la valeur par défaut.</string>
-    <string name="portsEqual">Les ports sont identiques. Retour aux valeurs par défaut.</string>
     <string name="restartServer">Vous devez redémarrer le serveur pour que les changements soient pris en compte.</string>
 
     <string name="prefs">Préférences</string>

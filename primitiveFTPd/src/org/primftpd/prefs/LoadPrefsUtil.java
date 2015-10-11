@@ -1,6 +1,5 @@
 package org.primftpd.prefs;
 
-import org.primftpd.R;
 import org.primftpd.util.Defaults;
 import org.slf4j.Logger;
 
@@ -8,7 +7,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import java.io.File;
 
@@ -26,9 +24,9 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_LOGGING = "loggingPref";
 
 	public static final int PORT_DEFAULT_VAL = 12345;
-	private static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
+	static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
 	public static final int SECURE_PORT_DEFAULT_VAL = 1234;
-	private static final String SECURE_PORT_DEFAULT_VAL_STR =
+	static final String SECURE_PORT_DEFAULT_VAL_STR =
 		String.valueOf(SECURE_PORT_DEFAULT_VAL);
 
 	/**
@@ -84,36 +82,31 @@ public class LoadPrefsUtil
 		return Theme.byXmlVal(themeStr);
 	}
 
-	public static int loadAndValidatePortInsecure(
-		Context context,
+	public static int loadPortInsecure(
 		Logger logger,
 		SharedPreferences prefs)
 	{
-		return loadAndValidatePort(
-			context,
-			logger,
-			prefs,
-			PREF_KEY_PORT,
-			PORT_DEFAULT_VAL,
-			PORT_DEFAULT_VAL_STR);
+		return loadPort(
+				logger,
+				prefs,
+				PREF_KEY_PORT,
+				PORT_DEFAULT_VAL,
+				PORT_DEFAULT_VAL_STR);
 	}
 
-	public static int loadAndValidatePortSecure(
-		Context context,
+	public static int loadPortSecure(
 		Logger logger,
 		SharedPreferences prefs)
 	{
-		return loadAndValidatePort(
-			context,
-			logger,
-			prefs,
-			PREF_KEY_SECURE_PORT,
-			SECURE_PORT_DEFAULT_VAL,
-			SECURE_PORT_DEFAULT_VAL_STR);
+		return loadPort(
+				logger,
+				prefs,
+				PREF_KEY_SECURE_PORT,
+				SECURE_PORT_DEFAULT_VAL,
+				SECURE_PORT_DEFAULT_VAL_STR);
 	}
 
-	private static int loadAndValidatePort(
-		Context context,
+	static int loadPort(
 		Logger logger,
 		SharedPreferences prefs,
 		String prefsKey,
@@ -131,21 +124,6 @@ public class LoadPrefsUtil
 			logger.info("NumberFormatException while parsing port key '{}'", prefsKey);
 		}
 
-		// validate port
-		// I would prefer to do this in a prefsChangeListener, but that seems not to work
-		if (!validatePort(port)) {
-			Toast.makeText(
-				context,
-				R.string.portInvalid,
-				Toast.LENGTH_LONG).show();
-			port = defaultVal;
-			Editor prefsEditor = prefs.edit();
-			prefsEditor.putString(
-				prefsKey,
-				defaultValStr);
-			prefsEditor.commit();
-		}
-
 		return port;
 	}
 
@@ -153,21 +131,7 @@ public class LoadPrefsUtil
 	 * @param port
 	 * @return True if port is valid, false if invalid.
 	 */
-	private static boolean validatePort(int port) {
-		if (port > 1024 && port < 64000) {
-			return true;
-		}
-		return false;
-	}
-
-	public static void resetPortsToDefault(SharedPreferences prefs) {
-		Editor prefsEditor = prefs.edit();
-		prefsEditor.putString(
-			LoadPrefsUtil.PREF_KEY_PORT,
-			LoadPrefsUtil.PORT_DEFAULT_VAL_STR);
-		prefsEditor.putString(
-			LoadPrefsUtil.PREF_KEY_SECURE_PORT,
-			LoadPrefsUtil.SECURE_PORT_DEFAULT_VAL_STR);
-		prefsEditor.commit();
+	static boolean validatePort(int port) {
+		return port > 1024 && port <= 64000;
 	}
 }

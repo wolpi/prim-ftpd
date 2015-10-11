@@ -16,8 +16,6 @@
     <string name="haveToSetPassword">Pasahitz bat ezarri behar duzu lehenago</string>
     <string name="serverRunning">FTP zerbitzaria abian dago</string>
     <string name="serverCouldNotBeStarted">Zerbitzaria ezin izan da abiarazi! Akats mezua: </string>
-    <string name="portInvalid">Ataka balioa ez da baliozkoa. Lehenetsira berrezartzen.</string>
-    <string name="portsEqual">Atakak berdinak dira. Biak lehenetsira berrezartzen.</string>
     <string name="restartServer">Zerbitzaria berrabiarazi behar duzu aldaketak eragina izan dezaten.</string>
 
     <string name="prefs">Hobespenak</string>
