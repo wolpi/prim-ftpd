@@ -61,6 +61,13 @@
 			android:title="@string/prefTitleAnnounce"
 			android:summary="@string/prefSummaryAnnounce"
 		/>
+		<CheckBoxPreference
+			android:name="startOnBoot"
+			android:key="startOnBootPref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleStartOnBoot"
+			android:summary="@string/prefSummaryStartOnBoot"
+			/>
 		<ListPreference
 			android:name="theme"
             android:key="themePref"

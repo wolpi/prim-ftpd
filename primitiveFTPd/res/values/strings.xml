@@ -46,6 +46,8 @@
     <string name="prefSummaryWakelock">Prevents Standby while server is running. Standby can cause uploads/downloads to abort.</string>
     <string name="prefTitleWhichServerToStart">Server(s) to be started</string>
     <string name="prefSummaryWhichServerToStart">Choose whether to start FTP server only, SFTP server only or both.</string>
+    <string name="prefTitleStartOnBoot">Start on boot</string>
+    <string name="prefSummaryStartOnBoot">Start server on system boot.</string>
     <string name="prefTheme">Theme</string>
     <string name="prefSummaryTheme">Changing Theme may require to restart the app.</string>
     <string name="prefTitleLogging">Log</string>

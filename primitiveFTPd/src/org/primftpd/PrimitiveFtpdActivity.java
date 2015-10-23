@@ -47,6 +47,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -158,6 +159,22 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	// allow to finish activity
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+		// handle starting of server at boot
+		Bundle intentExtras = getIntent().getExtras();
+		if(intentExtras != null
+				&& intentExtras.getBoolean(BootUpReceiver.EXTRAS_KEY)) {
+			// start server
+			boolean startOnBoot = LoadPrefsUtil.startOnBoot(prefs);
+			if (startOnBoot) {
+				logger.debug("starting server on boot");
+				handleStart();
+			}
+
+			// stop activity
+			moveTaskToBack(true);
+			finish();
+		}
     }
 
     @Override
