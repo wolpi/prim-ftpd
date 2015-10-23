@@ -1,5 +1,6 @@
 package org.primftpd.services;
 
+import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.FileSystemFactory;
@@ -64,11 +65,17 @@ public class FtpServerService extends AbstractServerService
     	serverFactory.setUserManager(new AndroidPrefsUserManager(prefsBean));
     	serverFactory.setFileSystem(new FileSystemFactory() {
 			@Override
-			public FileSystemView createFileSystemView(User user) throws FtpException
-			{
+			public FileSystemView createFileSystemView(User user) throws FtpException {
 				return new FtpFileSystemView(prefsBean.getStartDir(), user);
 			}
-    	});
+		});
+
+		// connection settings with some security improvements
+		ConnectionConfigFactory conCfg = new ConnectionConfigFactory();
+		conCfg.setAnonymousLoginEnabled(false);
+		conCfg.setMaxLoginFailures(5);
+		conCfg.setLoginFailureDelay(2000);
+		serverFactory.setConnectionConfig(conCfg.createConnectionConfig());
 
     	// do start server
     	ftpServer = serverFactory.createServer();
