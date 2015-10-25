@@ -55,6 +55,9 @@
     
     <string name="licence">Licence</string>
     <string name="reset">Reset</string>
+
+    <string name="widgetTextStart">start (s)ftpd</string>
+    <string name="widgetTextStop">stop (s)ftpd</string>
     
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>

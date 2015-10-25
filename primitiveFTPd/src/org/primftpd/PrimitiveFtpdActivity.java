@@ -37,7 +37,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,12 +49,12 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,7 +79,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	        	"BroadcastReceiver.onReceive(), action: '{}'",
 	        	intent.getAction());
 			if (FtpServerService.BROADCAST_ACTION_COULD_NOT_START.equals(intent.getAction())) {
-				updateButtonStates();
+				updateButtonStates(null);
 			}
 		}
 	};
@@ -153,17 +155,17 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	// create ports label
     	((TextView)findViewById(R.id.portsLabel)).setText(
-    		getText(R.string.protocolLabel) + " / " +
-    		getText(R.string.portLabel) + " / " +
-    		getText(R.string.state));
+				getText(R.string.protocolLabel) + " / " +
+				getText(R.string.portLabel) + " / " +
+				getText(R.string.state));
 
     	// allow to finish activity
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// handle starting of server at boot
 		Bundle intentExtras = getIntent().getExtras();
-		if(intentExtras != null
-				&& intentExtras.getBoolean(BootUpReceiver.EXTRAS_KEY)) {
+		if(intentExtras != null &&
+				intentExtras.getBoolean(BootUpReceiver.EXTRAS_KEY)) {
 			// start server
 			boolean startOnBoot = LoadPrefsUtil.startOnBoot(prefs);
 			if (startOnBoot) {
@@ -196,6 +198,23 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		loadPrefs();
 		showUsername();
+
+		// handle toggling start/stop via widget
+		Bundle intentExtras = getIntent().getExtras();
+		if (intentExtras != null &&
+				intentExtras.getBoolean(StartStopWidgetProvider.EXTRAS_KEY_TOGGLE)) {
+			// toggle server start/stop
+			checkServicesRunning();
+			if (!serversRunning.atLeastOneRunning()) {
+				// not running -> start
+				handleStart();
+			} else {
+				handleStop();
+			}
+			// stop activity
+			moveTaskToBack(true);
+			finish();
+		}
 	}
 
 	@Override
@@ -478,16 +497,22 @@ public class PrimitiveFtpdActivity extends Activity {
     /**
 	 * Displays UI-elements showing if servers are running. That includes
 	 * Actionbar Icon and Ports-Table. When Activity is shown the first time
-	 * this is triggered by {@link #onCreateOptionsMenu()}, when user comes back from
+	 * this is triggered by {@link #onCreateOptionsMenu(Menu)}, when user comes back from
 	 * preferences, this is triggered by {@link #onResume()}. It may be invoked by
 	 * {@link GenKeysAsyncTask}.
 	 */
     protected void displayServersState() {
     	logger.debug("displayServersState()");
 
+		checkServicesRunning();
+		Boolean running = null;
+		if (serversRunning != null) {
+			running = Boolean.valueOf(serversRunning.atLeastOneRunning());
+		}
+
     	// should be triggered by onCreateOptionsMenu() to avoid icon flicker
     	// when invoked via notification
-		updateButtonStates();
+		updateButtonStates(running);
 
 		// by checking ButtonStates we get info which services are running
 		// that is displayed in portsTable
@@ -495,6 +520,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		// we don't get serversRunning, yet
 		if (serversRunning != null) {
 			showPortsAndServerState();
+			updateWidget(running.booleanValue());
 		}
     }
 
@@ -523,7 +549,7 @@ public class PrimitiveFtpdActivity extends Activity {
     /**
      * Updates enabled state of start/stop buttons.
      */
-    protected void updateButtonStates() {
+    protected void updateButtonStates(Boolean running) {
     	if (startIcon == null || stopIcon == null) {
             logger.debug("updateButtonStates(), no icons");
     		return;
@@ -531,8 +557,13 @@ public class PrimitiveFtpdActivity extends Activity {
 
         logger.debug("updateButtonStates()");
 
-    	checkServicesRunning();
-    	boolean atLeastOneRunning = serversRunning.atLeastOneRunning();
+		boolean atLeastOneRunning;
+		if (running == null) {
+			checkServicesRunning();
+			atLeastOneRunning = serversRunning.atLeastOneRunning();
+		} else {
+			atLeastOneRunning = running.booleanValue();
+		}
 
     	startIcon.setVisible(!atLeastOneRunning);
     	stopIcon.setVisible(atLeastOneRunning);
@@ -619,15 +650,23 @@ public class PrimitiveFtpdActivity extends Activity {
 			    	startIcon.setVisible(false);
 			    	stopIcon.setVisible(true);
 				}
+				updateWidget(true);
 			}
 		}
     }
 
+	protected void handleStop() {
+		handleStop(null, null);
+	}
+
     protected void handleStop(MenuItem startIcon, MenuItem stopIcon) {
     	stopService(createFtpServiceIntent());
     	stopService(createSshServiceIntent());
-    	startIcon.setVisible(true);
-    	stopIcon.setVisible(false);
+		if (startIcon != null && stopIcon != null) {
+			startIcon.setVisible(true);
+			stopIcon.setVisible(false);
+		}
+		updateWidget(false);
     }
 
     protected void handlePrefs() {
@@ -731,5 +770,30 @@ public class PrimitiveFtpdActivity extends Activity {
 		PrimFtpdLoggerBinder.setLoggingPref(logging);
 		// re-create own log, don't care about other classes
 		this.logger = LoggerFactory.getLogger(getClass());
+	}
+
+	public void updateWidget(boolean running)
+	{
+		RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
+
+		if (running) {
+			remoteViews.setImageViewResource(
+					R.id.widgetIcon,
+					android.R.drawable.ic_media_pause);
+			remoteViews.setTextViewText(
+					R.id.widgetText,
+					getText(R.string.widgetTextStop));
+		} else {
+			remoteViews.setImageViewResource(
+					R.id.widgetIcon,
+					android.R.drawable.ic_media_play);
+			remoteViews.setTextViewText(
+					R.id.widgetText,
+					getText(R.string.widgetTextStart));
+		}
+
+		ComponentName thisWidget = new ComponentName(this, StartStopWidgetProvider.class);
+		AppWidgetManager manager = AppWidgetManager.getInstance(this);
+		manager.updateAppWidget(thisWidget, remoteViews);
 	}
 }
