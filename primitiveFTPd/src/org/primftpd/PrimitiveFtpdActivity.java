@@ -168,6 +168,7 @@ public class PrimitiveFtpdActivity extends Activity {
 			boolean startOnBoot = LoadPrefsUtil.startOnBoot(prefs);
 			if (startOnBoot) {
 				logger.debug("starting server on boot");
+				loadPrefs();
 				handleStart();
 			}
 
