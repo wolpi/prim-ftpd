@@ -18,6 +18,7 @@ public class PrefsBean implements Serializable
 	private final File startDir;
 	private final boolean announce;
 	private final boolean wakelock;
+	private final boolean pubKeyAuth;
 	private final ServerToStart serverToStart;
 
 	public PrefsBean(
@@ -28,6 +29,7 @@ public class PrefsBean implements Serializable
 		File startDir,
 		boolean announce,
 		boolean wakelock,
+		boolean pubKeyAuth,
 		ServerToStart serverToStart)
 	{
 		super();
@@ -40,6 +42,7 @@ public class PrefsBean implements Serializable
 		this.startDir = startDir;
 		this.announce = announce;
 		this.wakelock = wakelock;
+		this.pubKeyAuth = pubKeyAuth;
 		this.serverToStart = serverToStart;
 	}
 
@@ -79,6 +82,10 @@ public class PrefsBean implements Serializable
 	public boolean isWakelock()
 	{
 		return wakelock;
+	}
+
+	public boolean isPubKeyAuth() {
+		return pubKeyAuth;
 	}
 
 	public ServerToStart getServerToStart()

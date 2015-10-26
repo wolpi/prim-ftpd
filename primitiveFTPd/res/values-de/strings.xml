@@ -27,6 +27,7 @@
     <string name="portsEqual_v2">Ports sind gleich. Das kann nicht funktionieren.</string>
     <string name="restartServer">Sie müssen den Server neu starten damit die Änderungen wirksam werden.</string>
     <string name="invalidDir">Verzeichnis ist ungültig.</string>
+    <string name="couldNotReadKeyAuthKey">Öffentlicher Schlüssel für key authentication konnte nicht gelesen werden. Prüfen sie die logs.</string>
 
     <string name="prefs">Einstellungen</string>
     <string name="prefCategoryTitle">FTP Server Einstellungen</string>
@@ -48,6 +49,7 @@
     <string name="prefSummaryWhichServerToStart">Welche Server sollen gestartet werden: nur FTP Server, nur SFTP Server oder beide.</string>
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Server beim System-Boot starten.</string>
+    <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 RSA public key in .ssh/authorized_key.pub ab.</string>
     <string name="prefSummaryTheme">Den Theme zu ändern kann einen App Neustart erfordern.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>

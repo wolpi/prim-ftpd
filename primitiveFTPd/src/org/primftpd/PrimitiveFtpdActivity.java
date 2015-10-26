@@ -724,6 +724,9 @@ public class PrimitiveFtpdActivity extends Activity {
 		boolean wakelock = LoadPrefsUtil.wakelock(prefs);
 		logger.debug("got wakelock: {}", Boolean.valueOf(wakelock));
 
+		boolean pubKeyAuth = LoadPrefsUtil.pubKeyAuth(prefs);
+		logger.debug("got pubKeyAuth: {}", Boolean.valueOf(pubKeyAuth));
+
 		ServerToStart serverToStart = LoadPrefsUtil.serverToStart(prefs);
 		logger.debug("got 'which server': {}", serverToStart);
 
@@ -742,6 +745,7 @@ public class PrimitiveFtpdActivity extends Activity {
 			startDir,
 			announce,
 			wakelock,
+			pubKeyAuth,
 			serverToStart);
 
 		handlePrefsChanged();

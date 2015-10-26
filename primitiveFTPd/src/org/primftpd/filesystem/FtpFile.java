@@ -36,7 +36,7 @@ public class FtpFile extends AndroidFile<org.apache.ftpserver.ftplet.FtpFile>
 	@Override
 	public boolean move(org.apache.ftpserver.ftplet.FtpFile target)
 	{
-		return move(target);
+		return super.move((AndroidFile) target);
 	}
 
 	public User getUser() {

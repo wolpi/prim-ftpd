@@ -68,6 +68,13 @@
 			android:title="@string/prefTitleStartOnBoot"
 			android:summary="@string/prefSummaryStartOnBoot"
 			/>
+		<CheckBoxPreference
+			android:name="pubKeyAuth"
+			android:key="pubKeyAuthPref"
+			android:defaultValue="false"
+			android:title="@string/prefTitlePubKeyAuth"
+			android:summary="@string/prefSummaryPubKeyAuth"
+			/>
 		<ListPreference
 			android:name="theme"
             android:key="themePref"

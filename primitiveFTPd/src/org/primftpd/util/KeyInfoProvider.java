@@ -1,9 +1,19 @@
 package org.primftpd.util;
 
+import com.sshtools.publickey.SshPublicKeyFile;
+import com.sshtools.publickey.SshPublicKeyFileFactory;
+import com.sshtools.ssh.components.SshPublicKey;
+import com.sshtools.ssh.components.jce.Ssh2RsaPublicKey;
+
+import org.apache.ftpserver.util.IoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,12 +22,9 @@ import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Locale;
-
-import org.apache.ftpserver.util.IoUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class KeyInfoProvider
 {
@@ -110,5 +117,38 @@ public class KeyInfoProvider
 			os.write((bytes.length >>> shift) & 0xFF);
 		}
 		os.write(bytes);
+	}
+
+	public PublicKey readKeyAuthKey(String path)
+	{
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(path);
+			SshPublicKeyFile sshPubKeyFile = SshPublicKeyFileFactory.parse(fis);
+			SshPublicKey sshPubKey = sshPubKeyFile.toPublicKey();
+			// ssh2 rsa only
+			if (sshPubKey instanceof Ssh2RsaPublicKey) {
+				Ssh2RsaPublicKey rsaPubKey = (Ssh2RsaPublicKey)sshPubKey;
+				BigInteger modulus = rsaPubKey.getModulus();
+				BigInteger exponent = rsaPubKey.getPublicExponent();
+				RSAPublicKeySpec pubKeySpec = new RSAPublicKeySpec(modulus, exponent);
+				KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+				return keyFactory.generatePublic(pubKeySpec);
+			} else {
+				logger.error("Could not read public key! Expected: '{}', but got: '{}'",
+						Ssh2RsaPublicKey.class.getName(),
+						sshPubKey.getClass().getName());
+			}
+		} catch (Exception e) {
+			logger.error("could not read key auth key", e);
+		} finally {
+			try {
+				if (fis != null) {
+					fis.close();
+				}
+			} catch (IOException e) {
+			}
+		}
+		return null;
 	}
 }

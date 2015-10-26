@@ -156,7 +156,7 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	@Override
 	public boolean move(org.apache.sshd.common.file.SshFile target)
 	{
-		return move(target);
+		return super.move((AndroidFile)target);
 	}
 
 	@Override

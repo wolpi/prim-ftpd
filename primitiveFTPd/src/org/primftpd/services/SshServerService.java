@@ -20,16 +20,19 @@ import org.apache.sshd.common.io.mina.MinaServiceFactoryFactory;
 import org.apache.sshd.common.keyprovider.AbstractKeyPairProvider;
 import org.apache.sshd.server.Command;
 import org.apache.sshd.server.PasswordAuthenticator;
+import org.apache.sshd.server.PublickeyAuthenticator;
 import org.apache.sshd.server.command.ScpCommandFactory;
 import org.apache.sshd.server.session.ServerSession;
 import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.PrimitiveFtpdActivity;
+import org.primftpd.R;
 import org.primftpd.filesystem.SshFileSystemView;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.KeyInfoProvider;
 
 import android.os.Looper;
+import android.widget.Toast;
 
 /**
  * Implements a SSH server. Intended to be used for sftp.
@@ -95,10 +98,11 @@ public class SshServerService extends AbstractServerService
 		sshServer.setPasswordAuthenticator(new PasswordAuthenticator() {
 			@Override
 			public boolean authenticate(
-				String username,
-				String password,
-				ServerSession session)
+                String username,
+                String password,
+                ServerSession session)
 			{
+				logger.debug("password auth for user: {}", username);
 				try {
 					userManager.authenticate(
 						new UsernamePasswordAuthentication(
@@ -111,6 +115,27 @@ public class SshServerService extends AbstractServerService
 				return true;
 			}
 		});
+
+		if (prefsBean.isPubKeyAuth()) {
+			String pubKeyPath = Defaults.PUB_KEY_AUTH_KEY_PATH;
+			final PublicKey pubKey = new KeyInfoProvider().readKeyAuthKey(pubKeyPath);
+			if (pubKey != null) {
+				sshServer.setPublickeyAuthenticator(new PublickeyAuthenticator() {
+					@Override
+					public boolean authenticate(String username, PublicKey key, ServerSession session) {
+						// never mind username
+						boolean keyEquals = pubKey.equals(key);
+						logger.debug("pub key auth, success: {}", keyEquals);
+						return keyEquals;
+					}
+				});
+			} else {
+				Toast.makeText(
+					getApplicationContext(),
+					getText(R.string.couldNotReadKeyAuthKey),
+					Toast.LENGTH_SHORT).show();
+			}
+		}
 
 		// android filesystem view
 		sshServer.setFileSystemFactory(new FileSystemFactory() {
