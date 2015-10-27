@@ -30,6 +30,7 @@ import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -150,17 +151,25 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	// create addresses label
     	((TextView)findViewById(R.id.addressesLabel)).setText(
-    		getText(R.string.ipAddrLabel) + " (" +
-    		getText(R.string.ifacesLabel) + ")");
+				getText(R.string.ipAddrLabel) + " (" +
+						getText(R.string.ifacesLabel) + ")");
 
     	// create ports label
     	((TextView)findViewById(R.id.portsLabel)).setText(
 				getText(R.string.protocolLabel) + " / " +
-				getText(R.string.portLabel) + " / " +
-				getText(R.string.state));
+						getText(R.string.portLabel) + " / " +
+						getText(R.string.state));
 
     	// allow to finish activity
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+
+		// show icon for android 5, see GH issues #23, #28
+		// XXX not working
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setLogo(R.drawable.ic_launcher);
+		actionBar.setDisplayUseLogoEnabled(true);
+		//actionBar.setIcon(R.drawable.ic_launcher);
 
 		// handle starting of server at boot
 		Bundle intentExtras = getIntent().getExtras();
@@ -783,14 +792,14 @@ public class PrimitiveFtpdActivity extends Activity {
 		if (running) {
 			remoteViews.setImageViewResource(
 					R.id.widgetIcon,
-					android.R.drawable.ic_media_pause);
+					R.drawable.ic_stop_dark);
 			remoteViews.setTextViewText(
 					R.id.widgetText,
 					getText(R.string.widgetTextStop));
 		} else {
 			remoteViews.setImageViewResource(
 					R.id.widgetIcon,
-					android.R.drawable.ic_media_play);
+					R.drawable.ic_start_dark);
 			remoteViews.setTextViewText(
 					R.id.widgetText,
 					getText(R.string.widgetTextStart));

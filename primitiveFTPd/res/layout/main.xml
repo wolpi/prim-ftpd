@@ -79,7 +79,7 @@
         	android:textStyle="bold"
         	android:layout_marginTop="16dp"
 	        android:text="@string/fingerprintsLabel"
-	        android:drawableRight="@drawable/refresh"
+	        android:drawableRight="?attr/iconRefresh"
 	        android:drawablePadding="4dp"
 		/>
 

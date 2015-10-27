@@ -4,14 +4,14 @@
         android:orderInCategory="100"
         android:showAsAction="ifRoom|withText"
         android:title="@string/startService"
-        android:icon="@android:drawable/ic_media_play" />
+        android:icon="?attr/iconStart" />
 
     <item
         android:id="@+id/menu_stop"
         android:orderInCategory="100"
         android:showAsAction="ifRoom|withText"
         android:title="@string/stopService"
-        android:icon="@android:drawable/ic_media_pause" />
+        android:icon="?attr/iconStop" />
 
     <item
         android:id="@+id/menu_prefs"
