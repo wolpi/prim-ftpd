@@ -129,14 +129,12 @@ public abstract class AbstractServerService
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
 		// create notification
-		int icon = R.drawable.ic_launcher;
+		int icon = R.drawable.ic_notification;
 		CharSequence tickerText = getText(R.string.serverRunning);
 		CharSequence contentTitle = getText(R.string.notificationTitle);
 		CharSequence contentText = tickerText;
 
-		// I don't think it makes much sense to set
-		// the same image as small and large icon
-		// but it is required by a cyanogen theme
+		// use main icon as large one
 		Bitmap largeIcon = BitmapFactory.decodeResource(
 			getResources(),
 			R.drawable.ic_launcher);
