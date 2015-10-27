@@ -1,7 +1,13 @@
 <resources>
 	<style name="PrimFtpdDarkTheme" parent="android:Theme.Holo">
+		<item name="android:actionBarStyle">@style/PrimFtpdActionBar</item>
 	</style>
 
 	<style name="PrimFtpdLightTheme" parent="android:Theme.Holo.Light">
+		<item name="android:actionBarStyle">@style/PrimFtpdActionBar</item>
+	</style>
+
+	<style name="PrimFtpdActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+		<item name="android:background">@color/primary</item>
 	</style>
 </resources>

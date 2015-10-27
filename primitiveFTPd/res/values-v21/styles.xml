@@ -1,6 +1,12 @@
 <resources>
 	<style name="PrimFtpdDarkTheme" parent="android:Theme.Material">
+		<item name="android:colorPrimary">@color/primary</item>
+		<item name="android:colorPrimaryDark">@color/primaryDark</item>
+		<item name="android:colorAccent">@color/accent</item>
 	</style>
 	<style name="PrimFtpdLightTheme" parent="android:Theme.Material.Light">
+		<item name="android:colorPrimary">@color/primary</item>
+		<item name="android:colorPrimaryDark">@color/primaryDark</item>
+		<item name="android:colorAccent">@color/accent</item>
 	</style>
 </resources>
