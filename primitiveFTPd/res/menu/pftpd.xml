@@ -18,5 +18,5 @@
         android:orderInCategory="100"
         android:showAsAction="ifRoom|withText"
         android:title="@string/prefs"
-        android:icon="@android:drawable/ic_menu_preferences" />
+        android:icon="?attr/iconSettings" />
 </menu>

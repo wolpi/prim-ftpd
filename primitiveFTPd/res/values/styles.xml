@@ -3,6 +3,7 @@
 		<item name="android:actionBarStyle">@style/PrimFtpdActionBar</item>
 		<item name="iconStart">@drawable/ic_start_dark</item>
 		<item name="iconStop">@drawable/ic_stop_dark</item>
+		<item name="iconSettings">@drawable/ic_settings_dark</item>
 		<item name="iconRefresh">@drawable/ic_refresh_dark</item>
 	</style>
 
@@ -10,6 +11,7 @@
 		<item name="android:actionBarStyle">@style/PrimFtpdActionBar</item>
 		<item name="iconStart">@drawable/ic_start_light</item>
 		<item name="iconStop">@drawable/ic_stop_light</item>
+		<item name="iconSettings">@drawable/ic_settings_light</item>
 		<item name="iconRefresh">@drawable/ic_refresh_light</item>
 	</style>
 
@@ -20,6 +22,7 @@
 	<declare-styleable name="customAttrs">
 		<attr name="iconStart" format="reference" />
 		<attr name="iconStop" format="reference" />
+		<attr name="iconSettings" format="reference" />
 		<attr name="iconRefresh" format="reference" />
 	</declare-styleable>
 </resources>
