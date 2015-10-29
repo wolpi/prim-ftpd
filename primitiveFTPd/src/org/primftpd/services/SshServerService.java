@@ -64,7 +64,7 @@ public class SshServerService extends AbstractServerService
 	@Override
 	protected String getServiceName()
 	{
-		return "sftp";
+		return "sftp-ssh";
 	}
 
 	@Override
