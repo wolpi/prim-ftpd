@@ -3,10 +3,20 @@
 		<item name="android:colorPrimary">@color/primary</item>
 		<item name="android:colorPrimaryDark">@color/primaryDark</item>
 		<item name="android:colorAccent">@color/accent</item>
+
+		<item name="iconStart">@drawable/ic_start_dark</item>
+		<item name="iconStop">@drawable/ic_stop_dark</item>
+		<item name="iconSettings">@drawable/ic_settings_dark</item>
+		<item name="iconRefresh">@drawable/ic_refresh_dark</item>
 	</style>
 	<style name="PrimFtpdLightTheme" parent="android:Theme.Material.Light">
 		<item name="android:colorPrimary">@color/primary</item>
 		<item name="android:colorPrimaryDark">@color/primaryDark</item>
 		<item name="android:colorAccent">@color/accent</item>
+
+		<item name="iconStart">@drawable/ic_start_light</item>
+		<item name="iconStop">@drawable/ic_stop_light</item>
+		<item name="iconSettings">@drawable/ic_settings_light</item>
+		<item name="iconRefresh">@drawable/ic_refresh_light</item>
 	</style>
 </resources>
