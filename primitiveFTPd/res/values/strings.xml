@@ -50,7 +50,7 @@
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Start server on system boot.</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>
-    <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 RSA public key in .ssh/authorized_key.pub.</string>
+    <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 RSA public key in .ssh/authorized_key.pub. SFTP only.</string>
     <string name="prefTheme">Theme</string>
     <string name="prefSummaryTheme">Changing Theme may require to restart the app.</string>
     <string name="prefTitleLogging">Log</string>
