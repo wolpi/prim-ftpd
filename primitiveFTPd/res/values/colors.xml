@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="primary" type="color">#9c27b0</item>
-    <item name="primaryDark" type="color">#7b1fa2</item>
-    <item name="accent" type="color">#7b1fa2</item>
+    <item name="purpleIcon" type="color">#9c27b0</item>
+    <item name="purpleIconDark" type="color">#7b1fa2</item>
+    <item name="purpleIconAccent" type="color">#7b1fa2</item>
+
+    <item name="blueIcon" type="color">#03A9F4</item>
+    <item name="blueIconDark" type="color">#0288d1</item>
+    <item name="blueIconAccent" type="color">#00b0ff</item>
 </resources>

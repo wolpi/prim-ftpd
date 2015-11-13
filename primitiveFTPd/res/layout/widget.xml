@@ -11,7 +11,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center"
-        android:src="@drawable/ic_start_dark" />
+        android:src="@drawable/ic_play_white_48dp" />
 
     <TextView
         android:id="@+id/widgetText"

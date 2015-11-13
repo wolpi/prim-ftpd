@@ -1,22 +1,23 @@
 <resources>
 	<style name="PrimFtpdDarkTheme" parent="android:Theme.Material">
-		<item name="android:colorPrimary">@color/primary</item>
-		<item name="android:colorPrimaryDark">@color/primaryDark</item>
-		<item name="android:colorAccent">@color/accent</item>
+		<item name="android:colorPrimary">@color/blueIcon</item>
+		<item name="android:colorPrimaryDark">@color/blueIconDark</item>
+		<item name="android:colorAccent">@color/blueIconAccent</item>
 
-		<item name="iconStart">@drawable/ic_start_dark</item>
-		<item name="iconStop">@drawable/ic_stop_dark</item>
-		<item name="iconSettings">@drawable/ic_settings_dark</item>
-		<item name="iconRefresh">@drawable/ic_refresh_dark</item>
+		<item name="iconStart">@drawable/ic_play_white_48dp</item>
+		<item name="iconStop">@drawable/ic_stop_white_48dp</item>
+		<item name="iconSettings">@drawable/ic_settings_white_48dp</item>
+		<item name="iconRefresh">@drawable/ic_refresh_white_18dp</item>
 	</style>
-	<style name="PrimFtpdLightTheme" parent="android:Theme.Material.Light">
-		<item name="android:colorPrimary">@color/primary</item>
-		<item name="android:colorPrimaryDark">@color/primaryDark</item>
-		<item name="android:colorAccent">@color/accent</item>
+	<style name="PrimFtpdLightTheme" parent="android:Theme.Material.Light.DarkActionBar">
+		<item name="android:colorPrimary">@color/blueIcon</item>
+		<item name="android:colorPrimaryDark">@color/blueIconDark</item>
+		<item name="android:colorAccent">@color/blueIconAccent</item>
 
-		<item name="iconStart">@drawable/ic_start_light</item>
-		<item name="iconStop">@drawable/ic_stop_light</item>
-		<item name="iconSettings">@drawable/ic_settings_light</item>
-		<item name="iconRefresh">@drawable/ic_refresh_light</item>
+		<item name="iconStart">@drawable/ic_play_white_48dp</item>
+		<item name="iconStop">@drawable/ic_stop_white_48dp</item>
+		<item name="iconSettings">@drawable/ic_settings_white_48dp</item>
+
+		<item name="iconRefresh">@drawable/ic_refresh_black_18dp</item>
 	</style>
 </resources>

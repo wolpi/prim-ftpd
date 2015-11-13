@@ -797,14 +797,14 @@ public class PrimitiveFtpdActivity extends Activity {
 		if (running) {
 			remoteViews.setImageViewResource(
 					R.id.widgetIcon,
-					R.drawable.ic_stop_dark);
+					R.drawable.ic_stop_white_48dp);
 			remoteViews.setTextViewText(
 					R.id.widgetText,
 					getText(R.string.widgetTextStop));
 		} else {
 			remoteViews.setImageViewResource(
 					R.id.widgetIcon,
-					R.drawable.ic_start_dark);
+					R.drawable.ic_play_white_48dp);
 			remoteViews.setTextViewText(
 					R.id.widgetText,
 					getText(R.string.widgetTextStart));
