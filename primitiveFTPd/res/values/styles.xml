@@ -17,6 +17,11 @@
 
 	<style name="PrimFtpdActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
 		<item name="android:background">@color/blueIconDark</item>
+		<item name="android:titleTextStyle">@style/PrimFtpdActionBar.Text</item>
+	</style>
+
+	<style name="PrimFtpdActionBar.Text" parent="@android:style/TextAppearance">
+		<item name="android:textColor">@android:color/white</item>
 	</style>
 
 	<declare-styleable name="customAttrs">
