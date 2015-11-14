@@ -47,28 +47,28 @@
 			android:summary="@string/prefSummaryStartDir"
 
 		/>
-		<CheckBoxPreference
+		<SwitchPreference
 			android:name="wakelock"
 			android:key="wakelockPref"
 			android:defaultValue="true"
 			android:title="@string/prefTitleWakelock"
 			android:summary="@string/prefSummaryWakelock"
 		/>
-		<CheckBoxPreference 
+		<SwitchPreference
 			android:name="announce"
 			android:key="announcePref"
 			android:defaultValue="false"
 			android:title="@string/prefTitleAnnounce"
 			android:summary="@string/prefSummaryAnnounce"
 		/>
-		<CheckBoxPreference
+		<SwitchPreference
 			android:name="startOnBoot"
 			android:key="startOnBootPref"
 			android:defaultValue="false"
 			android:title="@string/prefTitleStartOnBoot"
 			android:summary="@string/prefSummaryStartOnBoot"
 			/>
-		<CheckBoxPreference
+		<SwitchPreference
 			android:name="pubKeyAuth"
 			android:key="pubKeyAuthPref"
 			android:defaultValue="false"
