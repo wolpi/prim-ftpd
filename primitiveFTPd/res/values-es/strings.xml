@@ -68,32 +68,15 @@
         <item>Solo SFTP</item>
     </string-array>
 
-    <string-array name="prefWhichServerToStartValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
     <string-array name="prefThemeNames">
         <item>Oscuro</item>
         <item>Claro</item>
-    </string-array>
-
-    <string-array name="prefThemeValues">
-        <item>0</item>
-        <item>1</item>
     </string-array>
 
     <string-array name="prefLoggingNames">
         <item>Sin registro</item>
         <item>Registrar en txt</item>
         <item>Registrar en Android</item>
-    </string-array>
-
-    <string-array name="prefLoggingValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
     </string-array>
 
 </resources>
