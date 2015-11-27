@@ -7,7 +7,14 @@
     <string name="ifacesError">Akatsa: </string>
     <string name="protocolLabel">Protokoloa</string>
     <string name="portLabel">Ataka</string>
-    <string name="fingerprintsLabel">ziurtagiri hatz-marka</string>
+    <string name="fingerprintsLabel">Gakoaren hatz-marka</string>
+    <string name="generateKeysMessage">Gakoak sortu?</string>
+    <string name="generatingKeysMessage">Gakoak sortzen&#8230;</string>
+    <string name="generate">Sortu</string>
+    <string name="cancel">Utzi</string>
+    <string name="state">Egoera</string>
+    <string name="serverStarted">Exekutatzen&#8230;</string>
+    <string name="serverStopped">Geldituta</string>
         
     <string name="startService">Zerbitzaria hasi</string>
     <string name="stopService">Zerbitzaria gelditu</string>
@@ -16,17 +23,77 @@
     <string name="haveToSetPassword">Pasahitz bat ezarri behar duzu lehenago</string>
     <string name="serverRunning">FTP zerbitzaria abian dago</string>
     <string name="serverCouldNotBeStarted">Zerbitzaria ezin izan da abiarazi! Akats mezua: </string>
+    <string name="portInvalid_v2">Atakaren balioa ez da baliozkoa. 1024 eta 64000 tartean egon behar da.</string>
+    <string name="portsEqual_v2">Atakak berdinak dira. Honek ezin du funtzionatu.</string>
     <string name="restartServer">Zerbitzaria berrabiarazi behar duzu aldaketak eragina izan dezaten.</string>
+    <string name="invalidDir">Direktorioa ez da baliozkoa.</string>
+    <string name="couldNotReadKeyAuthKey">Baimena emateko gako publikoa ezin izan da irakurri. Erregistroak begiratu.</string>
 
     <string name="prefs">Hobespenak</string>
-    <string name="prefCategoryTitle">FTP zerbitzari hobespenak</string>
+    <string name="prefCategoryTitle">FTP zerbitzariaren hobespenak</string>
     <string name="prefTitleUser">Erabiltzaile izena</string>
-    <string name="prefSummaryUser">FTP zerbitzari erabiltzaile izena</string>
+    <string name="prefSummaryUser">FTP zerbitzariaren erabiltzaile izena</string>
     <string name="prefTitlePassword">Pasahitza</string>
-    <string name="prefSummaryPassword">FTP zerbitzari pasahitza</string>
+    <string name="prefSummaryPassword">FTP zerbitzariaren pasahitza</string>
     <string name="prefTitlePort">Ataka</string>
-    <string name="prefSummaryPort">FTP zerbitzari ataka</string>
-    <string name="prefTitlePortSecure">ataka (enkriptatuta)</string>
-    <string name="prefSummaryPortSecure">FTP zerbitzari ataka (enkriptatuta)</string>
+    <string name="prefSummaryPort">FTP zerbitzariaren ataka</string>
+    <string name="prefTitlePortSecure">Ataka segurua</string>
+    <string name="prefSummaryPortSecure">FTP zerbitzariaren ataka (enkriptatuta)</string>
+    <string name="prefTitleStartDir">Zerbitzariaren hasierako direktorioa</string>
+    <string name="prefSummaryStartDir">Saioa hasi ondoren lehen direktorioa</string>
+    <string name="prefTitleAnnounce">Zerbitzaria LAN sarean iragarri</string>
+    <string name="prefSummaryAnnounce">FTP zerbitzaria LAN sarean iragartzen du DNS-SD (Bonjour) bidez. Gelditzeak eragin ditzake gailu batzuetan.</string>
+    <string name="prefTitleWakelock">Atseden egoeran sartzea saihestu</string>
+    <string name="prefSummaryWakelock">Atseden egoera saihesten du zerbitzaria abian dagoen bitartean. Atseden egoerak kargak/deskargak geldiaraztea eragin dezake.</string>
+    <string name="prefTitleWhichServerToStart">Abiarazi beharreko zerbitzaria(k)</string>
+    <string name="prefSummaryWhichServerToStart">Hautatu FTP zerbitzaria soilik, SFTP zerbitzaria soilik edo biak abiarazi behar diren.</string>
+    <string name="prefTitleStartOnBoot">Abioan abiarazi</string>
+    <string name="prefSummaryStartOnBoot">Zerbitzaria abiarazi sistemaren abioan.</string>
+    <string name="prefTitlePubKeyAuth">Baimentzeko gako publiko</string>
+    <string name="prefSummaryPubKeyAuth">Gaituta dagoenean jarri ezazu zure ssh2 RSA gako publikoa .ssh/authorized_key.pub kokalekuan. SFTPrentzat soilik.</string>
+    <string name="prefTheme">Gaia</string>
+    <string name="prefSummaryTheme">Gaia aldatzeak aplikazioa berrabiaraztea behar izan dezake.</string>
+    <string name="prefTitleLogging">Erregistroa</string>
+    <string name="prefSummaryLogging">Erregistroa akatsak aztertzeko balio du. Aplikazioa zure gailuan zuzen funtzionatzen ez badu garatzaileei erregistroa bidali diezaiekezu. Aplikazioa berrabiaraztea behar izan dezake.</string>
+    
+    <string name="licence">Lizentzia</string>
+    <string name="reset">Berrezarri</string>
+
+    <string name="widgetTextStart">(s)ftpd abiarazi</string>
+    <string name="widgetTextStop">(s)ftpd gelditu</string>
+    
+    <string-array name="prefWhichServerToStartNames">
+        <item>FTP eta SFTP</item>
+        <item>FTP soilik</item>
+        <item>SFTP soilik</item>
+    </string-array>
+
+    <string-array name="prefWhichServerToStartValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="prefThemeNames">
+        <item>Iluna</item>
+        <item>Argia</item>
+    </string-array>
+
+    <string-array name="prefThemeValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="prefLoggingNames">
+        <item>Erregistrorik ez</item>
+        <item>Testu fitxategi batera erregistratu</item>
+        <item>Androidera erregistratu</item>
+    </string-array>
+
+    <string-array name="prefLoggingValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 
 </resources>
