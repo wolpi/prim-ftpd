@@ -632,7 +632,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		handleStart(null, null);
 	}
 	protected void handleStart(MenuItem startIcon, MenuItem stopIcon) {
-		if (StringUtils.isBlank(prefsBean.getPassword()))
+		if (!isPasswordOk())
 		{
 			Toast.makeText(
 				getApplicationContext(),
@@ -690,6 +690,15 @@ public class PrimitiveFtpdActivity extends Activity {
     	Intent intent = new Intent(this, prefsActivityClass);
 		startActivity(intent);
     }
+
+	protected boolean isPasswordOk() {
+		if (!prefsBean.getServerToStart().isPasswordMandatory()
+				&& prefsBean.isPubKeyAuth())
+		{
+			return true;
+		}
+		return !StringUtils.isBlank(prefsBean.getPassword());
+	}
 
     /**
      * @return Intent to start/stop {@link FtpServerService}.

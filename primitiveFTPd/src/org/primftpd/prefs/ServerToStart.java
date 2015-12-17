@@ -25,6 +25,10 @@ public enum ServerToStart
 		public boolean startSftp() {
 			return true;
 		}
+		@Override
+		public boolean isPasswordMandatory() {
+			return false;
+		}
 	},
 	ALL("0") {
 		@Override
@@ -60,4 +64,7 @@ public enum ServerToStart
 
 	public abstract boolean startFtp();
 	public abstract boolean startSftp();
+	public boolean isPasswordMandatory() {
+		return true;
+	}
 }
