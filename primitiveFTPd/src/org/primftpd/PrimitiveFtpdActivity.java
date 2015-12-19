@@ -614,9 +614,6 @@ public class PrimitiveFtpdActivity extends Activity {
 		case R.id.menu_prefs:
 			handlePrefs();
 			break;
-        case android.R.id.home:
-            finish();
-            break;
 		}
 
 		displayServersState();
