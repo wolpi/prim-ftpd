@@ -162,11 +162,11 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	// allow to finish activity
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayHomeAsUpEnabled(false);
 
 		// show icon for android 5, see GH issues #23, #28
 		// XXX not working
-		actionBar.setHomeButtonEnabled(true);
+		actionBar.setHomeButtonEnabled(false);
 		actionBar.setLogo(R.drawable.ic_launcher);
 		actionBar.setDisplayUseLogoEnabled(true);
 		//actionBar.setIcon(R.drawable.ic_launcher);
@@ -614,9 +614,6 @@ public class PrimitiveFtpdActivity extends Activity {
 		case R.id.menu_prefs:
 			handlePrefs();
 			break;
-        case android.R.id.home:
-            finish();
-            break;
 		}
 
 		displayServersState();
