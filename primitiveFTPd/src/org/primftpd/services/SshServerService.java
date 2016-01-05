@@ -30,6 +30,7 @@ import org.primftpd.R;
 import org.primftpd.filesystem.SshFileSystemView;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.KeyInfoProvider;
+import org.primftpd.util.StringUtils;
 
 import android.os.Looper;
 import android.widget.Toast;
@@ -94,14 +95,14 @@ public class SshServerService extends AbstractServerService
 		sshServer.setSubsystemFactories(factoryList);
 
 		// PasswordAuthenticator based on android preferences
-		final AndroidPrefsUserManager userManager = new AndroidPrefsUserManager(prefsBean);
-		sshServer.setPasswordAuthenticator(new PasswordAuthenticator() {
-			@Override
-			public boolean authenticate(
-                String username,
-                String password,
-                ServerSession session)
-			{
+		if (StringUtils.isNotEmpty(prefsBean.getPassword())) {
+			final AndroidPrefsUserManager userManager = new AndroidPrefsUserManager(prefsBean);
+			sshServer.setPasswordAuthenticator(new PasswordAuthenticator() {
+				@Override
+				public boolean authenticate(
+					String username,
+					String password,
+					ServerSession session) {
 				logger.debug("password auth for user: {}", username);
 				try {
 					userManager.authenticate(
@@ -113,8 +114,9 @@ public class SshServerService extends AbstractServerService
 					return false;
 				}
 				return true;
-			}
-		});
+				}
+			});
+		}
 
 		if (prefsBean.isPubKeyAuth()) {
 			String pubKeyPath = Defaults.PUB_KEY_AUTH_KEY_PATH;
