@@ -26,6 +26,8 @@ import org.primftpd.util.KeyGenerator;
 import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.PrngFixes;
+import org.primftpd.util.ServersRunningBean;
+import org.primftpd.util.ServicesStartStopUtil;
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,21 +66,12 @@ import android.widget.Toast;
  */
 public class PrimitiveFtpdActivity extends Activity {
 
-	public static class ServersRunningBean {
-		boolean ftp = false;
-		boolean ssh = false;
-
-		boolean atLeastOneRunning() {
-			return ftp || ssh;
-		}
-	}
-
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-	        logger.debug(
-	        	"BroadcastReceiver.onReceive(), action: '{}'",
-	        	intent.getAction());
+			logger.debug(
+				"BroadcastReceiver.onReceive(), action: '{}'",
+				intent.getAction());
 			if (FtpServerService.BROADCAST_ACTION_COULD_NOT_START.equals(intent.getAction())) {
 				updateButtonStates(null);
 			}
@@ -86,13 +79,13 @@ public class PrimitiveFtpdActivity extends Activity {
 	};
 
 	private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
-	    @Override
-	    public void onReceive(Context context, Intent intent) {
-	        logger.debug("network connectivity changed, data str: '{}', action: '{}'",
-        		intent.getDataString(),
-        		intent.getAction());
-	        showAddresses();
-	    }
+		@Override
+	 	public void onReceive(Context context, Intent intent) {
+			logger.debug("network connectivity changed, data str: '{}', action: '{}'",
+				intent.getDataString(),
+				intent.getAction());
+			showAddresses();
+		}
 	};
 
 	// flag must be static to be avail after activity change
@@ -107,8 +100,6 @@ public class PrimitiveFtpdActivity extends Activity {
 			prefsChanged = true;
 		}
 	};
-
-	public static final String EXTRA_PREFS_BEAN = "prefs.bean";
 
 	public static final String PUBLICKEY_FILENAME = "pftpd-pub.bin";
 	public static final String PRIVATEKEY_FILENAME = "pftpd-priv.pk8";
@@ -170,24 +161,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		actionBar.setLogo(R.drawable.ic_launcher);
 		actionBar.setDisplayUseLogoEnabled(true);
 		//actionBar.setIcon(R.drawable.ic_launcher);
-
-		// handle starting of server at boot
-		Bundle intentExtras = getIntent().getExtras();
-		if(intentExtras != null &&
-				intentExtras.getBoolean(BootUpReceiver.EXTRAS_KEY)) {
-			// start server
-			boolean startOnBoot = LoadPrefsUtil.startOnBoot(prefs);
-			if (startOnBoot) {
-				logger.debug("starting server on boot");
-				loadPrefs();
-				handleStart();
-			}
-
-			// stop activity
-			moveTaskToBack(true);
-			finish();
-		}
-    }
+	}
 
     @Override
     protected void onDestroy()
@@ -207,23 +181,6 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		loadPrefs();
 		showUsername();
-
-		// handle toggling start/stop via widget
-		Bundle intentExtras = getIntent().getExtras();
-		if (intentExtras != null &&
-				intentExtras.getBoolean(StartStopWidgetProvider.EXTRAS_KEY_TOGGLE)) {
-			// toggle server start/stop
-			checkServicesRunning();
-			if (!serversRunning.atLeastOneRunning()) {
-				// not running -> start
-				handleStart();
-			} else {
-				handleStop();
-			}
-			// stop activity
-			moveTaskToBack(true);
-			finish();
-		}
 	}
 
 	@Override
@@ -531,30 +488,13 @@ public class PrimitiveFtpdActivity extends Activity {
 		// we don't get serversRunning, yet
 		if (serversRunning != null) {
 			showPortsAndServerState();
-			updateWidget(running.booleanValue());
+			ServicesStartStopUtil.updateWidget(this, running.booleanValue());
 		}
-    }
+	}
 
-    protected void checkServicesRunning() {
-    	logger.debug("checkServicesRunning()");
-    	ServersRunningBean serversRunning = new ServersRunningBean();
-		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-		List<RunningServiceInfo> runningServices = manager.getRunningServices(Integer.MAX_VALUE);
-		String ftpServiceClassName = FtpServerService.class.getName();
-		String sshServiceClassName = SshServerService.class.getName();
-		for (RunningServiceInfo service : runningServices) {
-			String currentClassName = service.service.getClassName();
-			if (ftpServiceClassName.equals(currentClassName)) {
-				serversRunning.ftp = true;
-			}
-			if (sshServiceClassName.equals(currentClassName)) {
-				serversRunning.ssh = true;
-			}
-			if (serversRunning.ftp && serversRunning.ssh) {
-				break;
-			}
-		}
-		this.serversRunning = serversRunning;
+	protected void checkServicesRunning() {
+		logger.debug("checkServicesRunning()");
+		this.serversRunning = ServicesStartStopUtil.checkServicesRunning(this);
 	}
 
     /**
@@ -602,7 +542,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		return true;
 	}
 
-    @Override
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_start:
@@ -614,9 +554,9 @@ public class PrimitiveFtpdActivity extends Activity {
 		case R.id.menu_prefs:
 			handlePrefs();
 			break;
-        case android.R.id.home:
-            finish();
-            break;
+		case android.R.id.home:
+			finish();
+			break;
 		}
 
 		displayServersState();
@@ -632,95 +572,36 @@ public class PrimitiveFtpdActivity extends Activity {
 		handleStart(null, null);
 	}
 	protected void handleStart(MenuItem startIcon, MenuItem stopIcon) {
-		if (!isPasswordOk())
-		{
-			Toast.makeText(
-				getApplicationContext(),
-				R.string.haveToSetPassword,
-				Toast.LENGTH_LONG).show();
+		ServicesStartStopUtil.startServers(this, prefsBean, this, startIcon, stopIcon);
+	}
 
-		} else {
-			boolean continueServerStart = true;
-			if (prefsBean.getServerToStart().startSftp()) {
-				if (!keyPresent) {
-					// cannot start sftp server when key is not present
-					// ask user to generate it
-					GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
-					Bundle diagArgs = new Bundle();
-					diagArgs.putBoolean(GenKeysAskDialogFragment.KEY_START_SERVER, true);
-					askDiag.setArguments(diagArgs);
-					askDiag.show(getFragmentManager(), DIALOG_TAG);
-					continueServerStart = false;
-				}
-				if (keyPresent) {
-					startService(createSshServiceIntent());
-				}
-			}
-			if (continueServerStart) {
-				if (prefsBean.getServerToStart().startFtp()) {
-					startService(createFtpServiceIntent());
-				}
-				if (startIcon != null && stopIcon != null) {
-			    	startIcon.setVisible(false);
-			    	stopIcon.setVisible(true);
-				}
-				updateWidget(true);
-			}
-		}
-    }
+	public boolean isKeyPresent() {
+		return keyPresent;
+	}
+
+	public void showGenKeyDialog() {
+		GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
+		Bundle diagArgs = new Bundle();
+		diagArgs.putBoolean(GenKeysAskDialogFragment.KEY_START_SERVER, true);
+		askDiag.setArguments(diagArgs);
+		askDiag.show(getFragmentManager(), DIALOG_TAG);
+	}
 
 	protected void handleStop() {
 		handleStop(null, null);
 	}
 
-    protected void handleStop(MenuItem startIcon, MenuItem stopIcon) {
-    	stopService(createFtpServiceIntent());
-    	stopService(createSshServiceIntent());
-		if (startIcon != null && stopIcon != null) {
-			startIcon.setVisible(true);
-			stopIcon.setVisible(false);
-		}
-		updateWidget(false);
-    }
-
-    protected void handlePrefs() {
-    	Class<?> prefsActivityClass = theme == Theme.DARK
-    		? FtpPrefsActivityThemeDark.class
-    		: FtpPrefsActivityThemeLight.class;
-    	Intent intent = new Intent(this, prefsActivityClass);
-		startActivity(intent);
-    }
-
-	protected boolean isPasswordOk() {
-		if (!prefsBean.getServerToStart().isPasswordMandatory()
-				&& prefsBean.isPubKeyAuth())
-		{
-			return true;
-		}
-		return !StringUtils.isBlank(prefsBean.getPassword());
+	protected void handleStop(MenuItem startIcon, MenuItem stopIcon) {
+		ServicesStartStopUtil.stopServers(this, startIcon, stopIcon);
 	}
 
-    /**
-     * @return Intent to start/stop {@link FtpServerService}.
-     */
-    protected Intent createFtpServiceIntent() {
-    	Intent intent = new Intent(this, FtpServerService.class);
-    	putPrefsInIntent(intent);
-    	return intent;
-    }
-
-    /**
-     * @return Intent to start/stop {@link SshServerService}.
-     */
-    protected Intent createSshServiceIntent() {
-    	Intent intent = new Intent(this, SshServerService.class);
-    	putPrefsInIntent(intent);
-    	return intent;
-    }
-
-    protected void putPrefsInIntent(Intent intent) {
-    	intent.putExtra(EXTRA_PREFS_BEAN, prefsBean);
-    }
+	protected void handlePrefs() {
+		Class<?> prefsActivityClass = theme == Theme.DARK
+			? FtpPrefsActivityThemeDark.class
+			: FtpPrefsActivityThemeLight.class;
+		Intent intent = new Intent(this, prefsActivityClass);
+		startActivity(intent);
+	}
 
 	/**
 	 * Loads and parses preferences.
@@ -731,45 +612,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		logger.debug("loadPrefs()");
 
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-
-		String userName = LoadPrefsUtil.userName(prefs);
-		logger.debug("got userName: {}", userName);
-
-		String password = LoadPrefsUtil.password(prefs);
-		logger.debug("got password: {}", password);
-
-		File startDir = LoadPrefsUtil.startDir(prefs);
-		logger.debug("got startDir: {}", startDir);
-
-		boolean announce = LoadPrefsUtil.announce(prefs);
-		logger.debug("got announce: {}", Boolean.valueOf(announce));
-
-		boolean wakelock = LoadPrefsUtil.wakelock(prefs);
-		logger.debug("got wakelock: {}", Boolean.valueOf(wakelock));
-
-		boolean pubKeyAuth = LoadPrefsUtil.pubKeyAuth(prefs);
-		logger.debug("got pubKeyAuth: {}", Boolean.valueOf(pubKeyAuth));
-
-		ServerToStart serverToStart = LoadPrefsUtil.serverToStart(prefs);
-		logger.debug("got 'which server': {}", serverToStart);
-
-		int port = LoadPrefsUtil.loadPortInsecure(logger, prefs);
-		logger.debug("got 'port': {}", Integer.valueOf(port));
-
-		int securePort = LoadPrefsUtil.loadPortSecure(logger,prefs);
-		logger.debug("got 'secure port': {}", Integer.valueOf(securePort));
-
-		// create prefsBean
-		prefsBean = new PrefsBean(
-			userName,
-			password,
-			port,
-			securePort,
-			startDir,
-			announce,
-			wakelock,
-			pubKeyAuth,
-			serverToStart);
+		this.prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
 
 		handlePrefsChanged();
 		handleLoggingPref(prefs);
@@ -797,30 +640,5 @@ public class PrimitiveFtpdActivity extends Activity {
 		PrimFtpdLoggerBinder.setLoggingPref(logging);
 		// re-create own log, don't care about other classes
 		this.logger = LoggerFactory.getLogger(getClass());
-	}
-
-	public void updateWidget(boolean running)
-	{
-		RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.widget);
-
-		if (running) {
-			remoteViews.setImageViewResource(
-					R.id.widgetIcon,
-					R.drawable.ic_stop_white_48dp);
-			remoteViews.setTextViewText(
-					R.id.widgetText,
-					getText(R.string.widgetTextStop));
-		} else {
-			remoteViews.setImageViewResource(
-					R.id.widgetIcon,
-					R.drawable.ic_play_white_48dp);
-			remoteViews.setTextViewText(
-					R.id.widgetText,
-					getText(R.string.widgetTextStart));
-		}
-
-		ComponentName thisWidget = new ComponentName(this, StartStopWidgetProvider.class);
-		AppWidgetManager manager = AppWidgetManager.getInstance(this);
-		manager.updateAppWidget(thisWidget, remoteViews);
 	}
 }

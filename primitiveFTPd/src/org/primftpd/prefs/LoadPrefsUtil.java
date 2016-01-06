@@ -1,5 +1,6 @@
 package org.primftpd.prefs;
 
+import org.primftpd.PrefsBean;
 import org.primftpd.util.Defaults;
 import org.slf4j.Logger;
 
@@ -142,10 +143,51 @@ public class LoadPrefsUtil
 	}
 
 	/**
-	 * @param port
+	 * @param port Port to validate
 	 * @return True if port is valid, false if invalid.
 	 */
 	static boolean validatePort(int port) {
 		return port > 1024 && port <= 64000;
+	}
+
+	public static PrefsBean loadPrefs(Logger logger, SharedPreferences prefs) {
+		String userName = userName(prefs);
+		logger.debug("got userName: {}", userName);
+
+		String password = password(prefs);
+		logger.debug("got password: {}", password);
+
+		File startDir = startDir(prefs);
+		logger.debug("got startDir: {}", startDir);
+
+		boolean announce = announce(prefs);
+		logger.debug("got announce: {}", Boolean.valueOf(announce));
+
+		boolean wakelock = wakelock(prefs);
+		logger.debug("got wakelock: {}", Boolean.valueOf(wakelock));
+
+		boolean pubKeyAuth = pubKeyAuth(prefs);
+		logger.debug("got pubKeyAuth: {}", Boolean.valueOf(pubKeyAuth));
+
+		ServerToStart serverToStart = serverToStart(prefs);
+		logger.debug("got 'which server': {}", serverToStart);
+
+		int port = loadPortInsecure(logger, prefs);
+		logger.debug("got 'port': {}", Integer.valueOf(port));
+
+		int securePort = loadPortSecure(logger, prefs);
+		logger.debug("got 'secure port': {}", Integer.valueOf(securePort));
+
+		// create prefsBean
+		return new PrefsBean(
+				userName,
+				password,
+				port,
+				securePort,
+				startDir,
+				announce,
+				wakelock,
+				pubKeyAuth,
+				serverToStart);
 	}
 }

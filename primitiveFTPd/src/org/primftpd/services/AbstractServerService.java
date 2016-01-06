@@ -4,6 +4,7 @@ import org.primftpd.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.util.NotificationUtil;
+import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +100,7 @@ public abstract class AbstractServerService
 
 		// get parameters
 		Bundle extras = intent.getExtras();
-		prefsBean = (PrefsBean)extras.get(PrimitiveFtpdActivity.EXTRA_PREFS_BEAN);
+		prefsBean = (PrefsBean)extras.get(ServicesStartStopUtil.EXTRA_PREFS_BEAN);
 
 		// send start message
 		Message msg = serviceHandler.obtainMessage();
