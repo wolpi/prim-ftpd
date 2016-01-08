@@ -92,13 +92,5 @@
             android:entries="@array/prefLoggingNames"
             android:entryValues="@array/prefLoggingValues" />
 
-
-		<!-- show version num -->
-		<PreferenceScreen android:title="About">
-	        <intent android:action="android.intent.action.VIEW"
-                android:targetPackage="org.primftpd"
-                android:targetClass="org.primftpd.prefs.AboutActivity" />
-	    </PreferenceScreen>
-
 	</PreferenceCategory>
 </PreferenceScreen>

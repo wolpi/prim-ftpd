@@ -1,48 +1,11 @@
 package org.primftpd;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
-import java.util.Enumeration;
-import java.util.List;
-
-import org.apache.ftpserver.util.IoUtils;
-import org.primftpd.log.PrimFtpdLoggerBinder;
-import org.primftpd.prefs.FtpPrefsActivityThemeDark;
-import org.primftpd.prefs.FtpPrefsActivityThemeLight;
-import org.primftpd.prefs.LoadPrefsUtil;
-import org.primftpd.prefs.Logging;
-import org.primftpd.prefs.ServerToStart;
-import org.primftpd.prefs.Theme;
-import org.primftpd.services.FtpServerService;
-import org.primftpd.services.SshServerService;
-import org.primftpd.util.KeyGenerator;
-import org.primftpd.util.KeyInfoProvider;
-import org.primftpd.util.NotificationUtil;
-import org.primftpd.util.PrngFixes;
-import org.primftpd.util.ServersRunningBean;
-import org.primftpd.util.ServicesStartStopUtil;
-import org.primftpd.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,9 +20,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.apache.ftpserver.util.IoUtils;
+import org.primftpd.log.PrimFtpdLoggerBinder;
+import org.primftpd.prefs.AboutActivity;
+import org.primftpd.prefs.FtpPrefsActivityThemeDark;
+import org.primftpd.prefs.FtpPrefsActivityThemeLight;
+import org.primftpd.prefs.LoadPrefsUtil;
+import org.primftpd.prefs.Logging;
+import org.primftpd.prefs.Theme;
+import org.primftpd.services.FtpServerService;
+import org.primftpd.util.KeyGenerator;
+import org.primftpd.util.KeyInfoProvider;
+import org.primftpd.util.NotificationUtil;
+import org.primftpd.util.PrngFixes;
+import org.primftpd.util.ServersRunningBean;
+import org.primftpd.util.ServicesStartStopUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
+import java.util.Enumeration;
 
 /**
  * Activity to display network info and to start FTP service.
@@ -150,17 +140,6 @@ public class PrimitiveFtpdActivity extends Activity {
 				getText(R.string.protocolLabel) + " / " +
 						getText(R.string.portLabel) + " / " +
 						getText(R.string.state));
-
-    	// allow to finish activity
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-
-		// show icon for android 5, see GH issues #23, #28
-		// XXX not working
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setLogo(R.drawable.ic_launcher);
-		actionBar.setDisplayUseLogoEnabled(true);
-		//actionBar.setIcon(R.drawable.ic_launcher);
 	}
 
     @Override
@@ -554,7 +533,10 @@ public class PrimitiveFtpdActivity extends Activity {
 		case R.id.menu_prefs:
 			handlePrefs();
 			break;
-		case android.R.id.home:
+		case R.id.menu_about:
+			handleAbout();
+			break;
+		case R.id.menu_exit:
 			finish();
 			break;
 		}
@@ -600,6 +582,11 @@ public class PrimitiveFtpdActivity extends Activity {
 			? FtpPrefsActivityThemeDark.class
 			: FtpPrefsActivityThemeLight.class;
 		Intent intent = new Intent(this, prefsActivityClass);
+		startActivity(intent);
+	}
+
+	protected void handleAbout() {
+		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
 	}
 

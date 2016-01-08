@@ -2,21 +2,33 @@
     <item
         android:id="@+id/menu_start"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="always|withText"
         android:title="@string/startService"
         android:icon="?attr/iconStart" />
 
     <item
         android:id="@+id/menu_stop"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="always|withText"
         android:title="@string/stopService"
         android:icon="?attr/iconStop" />
 
     <item
         android:id="@+id/menu_prefs"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="always|withText"
         android:title="@string/prefs"
         android:icon="?attr/iconSettings" />
+
+    <item
+        android:id="@+id/menu_about"
+        android:orderInCategory="100"
+        android:showAsAction="collapseActionView|withText"
+        android:title="About" />
+
+    <item
+        android:id="@+id/menu_exit"
+        android:orderInCategory="100"
+        android:showAsAction="collapseActionView|withText"
+        android:title="Exit" />
 </menu>
