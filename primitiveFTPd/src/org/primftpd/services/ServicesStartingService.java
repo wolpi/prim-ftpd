@@ -41,7 +41,7 @@ public class ServicesStartingService extends Service {
             ServicesStartStopUtil.stopServers(context, null, null);
         }
 
-        return Service.START_NOT_STICKY;
+        return 0;
     }
 
     @Override
