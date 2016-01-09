@@ -41,6 +41,10 @@ public class ServicesStartingService extends Service {
             ServicesStartStopUtil.stopServers(context, null, null);
         }
 
+        // this service is not intended to run in background
+        // it is just used as relay for widget pendingIntent
+        stopSelf();
+
         return 0;
     }
 
