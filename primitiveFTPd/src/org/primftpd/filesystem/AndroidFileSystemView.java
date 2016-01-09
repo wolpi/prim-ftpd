@@ -1,12 +1,10 @@
 package org.primftpd.filesystem;
 
-import java.io.File;
-
 import org.apache.ftpserver.ftplet.FtpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.os.Environment;
+import java.io.File;
 
 public abstract class AndroidFileSystemView<T extends AndroidFile<X>, X> {
 
@@ -41,7 +39,8 @@ public abstract class AndroidFileSystemView<T extends AndroidFile<X>, X> {
 
 		File dirObj = new File(dir);
 
-		if (dirObj.isFile()) {
+		// don't use isFile() as that does not give correct result
+		if (!dirObj.isDirectory()) {
 			logger.trace("not changing WD as new one is file");
 			return false;
 		}
