@@ -66,9 +66,9 @@ public class ServerServiceHandler extends Handler
 			System.setProperty("java.net.preferIPv4Stack", "true");
 			System.setProperty("java.net.preferIPv6Addresses", "false");
 
-			service.launchServer();
+			boolean started = service.launchServer();
 
-			if (service.getServer() != null) {
+			if (started && service.getServer() != null) {
 				service.createStatusbarNotification();
 
 				PowerManager powerMgr =

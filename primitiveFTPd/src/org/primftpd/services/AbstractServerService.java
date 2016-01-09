@@ -58,7 +58,7 @@ public abstract class AbstractServerService
 		AbstractServerService service);
 
 	protected abstract Object getServer();
-	protected abstract void launchServer();
+	protected abstract boolean launchServer();
 	protected abstract void stopServer();
 	protected abstract int getPort();
 	protected abstract String getServiceName();

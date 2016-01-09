@@ -80,7 +80,7 @@ public class SshServerService extends AbstractServerService
 	}
 
 	@Override
-	protected void launchServer()
+	protected boolean launchServer()
 	{
 		sshServer = SshServer.setUpDefaultServer();
 		sshServer.setPort(prefsBean.getSecurePort());
@@ -149,18 +149,6 @@ public class SshServerService extends AbstractServerService
 		});
 
 		try {
-			// read keys here, cannot open private files on server callback
-			final Iterable<KeyPair> keys = loadKeys();
-
-			// setKeyPairProvider
-			sshServer.setKeyPairProvider(new AbstractKeyPairProvider() {
-				@Override
-				public Iterable<KeyPair> loadKeys() {
-					// just return keys that have been loaded before
-					return keys;
-				}
-			});
-
 			// XXX preference to enable shell? seems to need root to access /dev/tty
 //			sshServer.setShellFactory(new ProcessShellFactory(new String[] {
 //				"/system/bin/sh",
@@ -168,14 +156,30 @@ public class SshServerService extends AbstractServerService
 //				"-l"
 //			}));
 
-			sshServer.start();
-    	} catch (Exception e) {
-    		sshServer = null;
+			// read keys here, cannot open private files on server callback
+			final List<KeyPair> keys = loadKeys();
+
+			// keys may not be present when started via widget
+			if (!keys.isEmpty()) {
+				// setKeyPairProvider
+				sshServer.setKeyPairProvider(new AbstractKeyPairProvider() {
+					@Override
+					public Iterable<KeyPair> loadKeys() {
+						// just return keys that have been loaded before
+						return keys;
+					}
+				});
+				sshServer.start();
+				return true;
+			}
+		} catch (Exception e) {
+			sshServer = null;
 			handleServerStartError(e);
-    	}
+		}
+		return false;
 	}
 
-	protected Iterable<KeyPair> loadKeys() {
+	protected List<KeyPair> loadKeys() {
 		List<KeyPair> keyPairList = new ArrayList<KeyPair>(1);
 		FileInputStream pubkeyFis = null;
 		FileInputStream privkeyFis = null;

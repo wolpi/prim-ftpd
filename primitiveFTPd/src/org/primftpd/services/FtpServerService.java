@@ -54,7 +54,7 @@ public class FtpServerService extends AbstractServerService
 	}
 
     @Override
-	protected void launchServer() {
+	protected boolean launchServer() {
     	ListenerFactory listenerFactory = new ListenerFactory();
     	listenerFactory.setPort(prefsBean.getPort());
 
@@ -81,10 +81,12 @@ public class FtpServerService extends AbstractServerService
     	ftpServer = serverFactory.createServer();
     	try {
     		ftpServer.start();
+			return true;
     	} catch (Exception e) {
     		// note: createServer() throws RuntimeExceptions, too
     		ftpServer = null;
 			handleServerStartError(e);
+			return false;
 		}
     }
 }
