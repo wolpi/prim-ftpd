@@ -38,10 +38,17 @@ public abstract class AndroidFileSystemView<T extends AndroidFile<X>, X> {
 		logger.trace("changeWorkingDirectory({})", dir);
 
 		File dirObj = new File(dir);
+		String currentAbsPath = workingDir.getAbsolutePath();
+		String path = dir;
+		if (!dirObj.isAbsolute()) {
+			path = currentAbsPath + File.separator + dir;
+		}
+		logger.trace("using path for cwd operation: {}", path);
+		dirObj = new File(path);
 
-		// don't use isFile() as that does not give correct result
+		// check if new path is a dir
 		if (!dirObj.isDirectory()) {
-			logger.trace("not changing WD as new one is file");
+			logger.trace("not changing WD as new one is not a directory");
 			return false;
 		}
 
@@ -49,7 +56,6 @@ public abstract class AndroidFileSystemView<T extends AndroidFile<X>, X> {
 		// and are confused about home dir
 		// do some checks to avoid issues
 		// happened for keepass
-		String currentAbsPath = workingDir.getAbsolutePath();
 		String paraAbs = dirObj.getAbsolutePath();
 		if (currentAbsPath.length() * 2 == paraAbs.length()) {
 			String pathDoubled = currentAbsPath + currentAbsPath;
@@ -61,11 +67,6 @@ public abstract class AndroidFileSystemView<T extends AndroidFile<X>, X> {
 					currentAbsPath);
 				return true;
 			}
-		}
-
-		String path = dir;
-		if (!dirObj.isAbsolute()) {
-			path = currentAbsPath + File.separator + dir;
 		}
 
 		logger.trace("current WD '{}', new path '{}'",
