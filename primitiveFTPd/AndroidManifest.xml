@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.primftpd"
     android:versionCode="18"
-    android:versionName="4.4-SNAPSHOT" >
+    android:versionName="4.4" >
 
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
 
