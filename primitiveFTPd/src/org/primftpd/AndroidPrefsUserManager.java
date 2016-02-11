@@ -1,7 +1,6 @@
 package org.primftpd;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.os.Environment;
 
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
@@ -9,6 +8,7 @@ import org.apache.ftpserver.ftplet.Authority;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
+import org.apache.ftpserver.usermanager.AnonymousAuthentication;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 import org.apache.ftpserver.usermanager.impl.BaseUser;
 import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
@@ -19,7 +19,8 @@ import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.os.Environment;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AndroidPrefsUserManager implements UserManager {
 
@@ -48,19 +49,29 @@ public class AndroidPrefsUserManager implements UserManager {
 	}
 
 	protected User buildUser() {
-		BaseUser user = new BaseUser();
-		user.setEnabled(true);
-
-		String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath();
-		logger.debug("rootDir: {}", rootDir);
-		user.setHomeDirectory(rootDir);
-
-		user.setMaxIdleTime(60);
-		user.setName(prefsBean.getUserName());
-		user.setPassword(prefsBean.getPassword());
-		user.setAuthorities(buildAuthorities());
-		return user;
+        return createUser(prefsBean.getUserName(), prefsBean.getPassword());
 	}
+
+    protected User anonymousUser() {
+        return createUser("anonymous", null);
+    }
+
+    private User createUser(String username, String password) {
+        BaseUser user = new BaseUser();
+        user.setEnabled(true);
+
+        String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+        logger.debug("rootDir: {}", rootDir);
+        user.setHomeDirectory(rootDir);
+
+        user.setMaxIdleTime(60);
+        user.setName(username);
+        if(password != null) {
+            user.setPassword(prefsBean.getPassword());
+        }
+        user.setAuthorities(buildAuthorities());
+        return user;
+    }
 
 	@Override
 	public User getUserByName(String username) throws FtpException {
@@ -72,7 +83,7 @@ public class AndroidPrefsUserManager implements UserManager {
 
 	@Override
 	public String[] getAllUserNames() throws FtpException {
-		return new String[]{prefsBean.getUserName()};
+		return new String[]{prefsBean.getUserName(), "anonymous"};
 	}
 
 	@Override
@@ -85,7 +96,7 @@ public class AndroidPrefsUserManager implements UserManager {
 
 	@Override
 	public boolean doesExist(String username) {
-		return prefsBean.getUserName().equals(username);
+		return prefsBean.getUserName().equals(username) || "anonymous".equals(username);
 	}
 
 	@Override
@@ -105,7 +116,11 @@ public class AndroidPrefsUserManager implements UserManager {
 					}
 				}
 			}
-		}
+		} else if(authentication instanceof AnonymousAuthentication) {
+            if(prefsBean.isAnonymousLogin()) {
+                return anonymousUser();
+            }
+        }
 		throw new AuthenticationFailedException();
 	}
 
@@ -116,7 +131,7 @@ public class AndroidPrefsUserManager implements UserManager {
 
 	@Override
 	public boolean isAdmin(String username) throws FtpException {
-		return doesExist(username);
+		return prefsBean.getUserName().equals(username);
 	}
 
 }
