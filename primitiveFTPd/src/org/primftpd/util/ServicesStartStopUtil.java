@@ -78,7 +78,7 @@ public class ServicesStartStopUtil {
         updateWidget(context, false);
     }
 
-    protected static  Intent createFtpServiceIntent(Context context, PrefsBean prefsBean) {
+    protected static Intent createFtpServiceIntent(Context context, PrefsBean prefsBean) {
         Intent intent = new Intent(context, FtpServerService.class);
         putPrefsInIntent(intent, prefsBean);
         return intent;
@@ -97,7 +97,7 @@ public class ServicesStartStopUtil {
     }
 
     protected static boolean isPasswordOk(PrefsBean prefsBean) {
-        if (!prefsBean.getServerToStart().isPasswordMandatory()
+        if (prefsBean.isAnonymousLogin() || !prefsBean.getServerToStart().isPasswordMandatory()
                 && prefsBean.isPubKeyAuth())
         {
             return true;
