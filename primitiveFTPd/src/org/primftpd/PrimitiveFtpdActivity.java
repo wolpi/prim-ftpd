@@ -25,6 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.ftpserver.util.IoUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.primftpd.events.ServerStatusUpdateEvent;
 import org.primftpd.log.PrimFtpdLoggerBinder;
 import org.primftpd.prefs.AboutActivity;
 import org.primftpd.prefs.FtpPrefsActivityThemeDark;
@@ -112,6 +116,7 @@ public class PrimitiveFtpdActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	// basic setup
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
 
         logger.debug("onCreate()");
 
@@ -147,6 +152,7 @@ public class PrimitiveFtpdActivity extends Activity {
     protected void onDestroy()
     {
     	super.onDestroy();
+        EventBus.getDefault().unregister(this); // remove our subscriber
 
     	// prefs change
     	SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
@@ -192,6 +198,11 @@ public class PrimitiveFtpdActivity extends Activity {
     	// unregister broadcast receivers
         this.unregisterReceiver(this.receiver);
         this.unregisterReceiver(this.networkStateReceiver);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(ServerStatusUpdateEvent event) {
+        displayServersState();
     }
 
     protected FileInputStream buildPublickeyInStream() throws IOException {

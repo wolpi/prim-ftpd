@@ -9,10 +9,12 @@ import android.view.MenuItem;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
 import org.primftpd.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.StartStopWidgetProvider;
+import org.primftpd.events.ServerStatusUpdateEvent;
 import org.primftpd.services.FtpServerService;
 import org.primftpd.services.SshServerService;
 
@@ -34,10 +36,16 @@ public class ServicesStartStopUtil {
         if (!isPasswordOk(prefsBean))
         {
             Toast.makeText(
-                context,
-                R.string.haveToSetPassword,
-                Toast.LENGTH_LONG).show();
+                    context,
+                    R.string.haveToSetPassword,
+                    Toast.LENGTH_SHORT).show();
 
+            if(activity == null ){
+                // Launch the main activity so that the user may set their password.
+                Intent activityIntent = new Intent(context, PrimitiveFtpdActivity.class);
+                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(activityIntent);
+            }
         } else {
             boolean continueServerStart = true;
             if (prefsBean.getServerToStart().startSftp()) {
@@ -62,6 +70,9 @@ public class ServicesStartStopUtil {
                 if (startIcon != null && stopIcon != null) {
                     startIcon.setVisible(false);
                     stopIcon.setVisible(true);
+                } else {
+                    // Post a server status update event for the activity to respond to.
+                    EventBus.getDefault().post(ServerStatusUpdateEvent.STARTING);
                 }
                 updateWidget(context, true);
             }
@@ -74,6 +85,9 @@ public class ServicesStartStopUtil {
         if (startIcon != null && stopIcon != null) {
             startIcon.setVisible(true);
             stopIcon.setVisible(false);
+        } else {
+            // Post a server status update event for the activity to respond to.
+            EventBus.getDefault().post(ServerStatusUpdateEvent.STOPPING);
         }
         updateWidget(context, false);
     }
