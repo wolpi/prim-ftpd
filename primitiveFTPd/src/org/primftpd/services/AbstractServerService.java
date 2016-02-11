@@ -1,13 +1,5 @@
 package org.primftpd.services;
 
-import org.primftpd.PrefsBean;
-import org.primftpd.PrimitiveFtpdActivity;
-import org.primftpd.R;
-import org.primftpd.util.NotificationUtil;
-import org.primftpd.util.ServicesStartStopUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -15,8 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Icon;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -24,6 +18,14 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.widget.Toast;
+
+import org.primftpd.PrefsBean;
+import org.primftpd.PrimitiveFtpdActivity;
+import org.primftpd.R;
+import org.primftpd.util.NotificationUtil;
+import org.primftpd.util.ServicesStartStopUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract base class for {@link Service}s wrapping servers.
@@ -43,8 +45,8 @@ public abstract class AbstractServerService
 	public static final String BROADCAST_ACTION_COULD_NOT_START =
 		"org.primftpd.CouldNotStartServer";
 
-	protected static final int MSG_START = 1;
-	protected static final int MSG_STOP = 2;
+	public static final int MSG_START = 1;
+	public static final int MSG_STOP = 2;
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -53,7 +55,7 @@ public abstract class AbstractServerService
 	PrefsBean prefsBean;
 	private NsdManager.RegistrationListener nsdRegistrationListener;
 
-	protected abstract ServerServiceHandler createServiceHandler(
+    protected abstract ServerServiceHandler createServiceHandler(
 		Looper serviceLooper,
 		AbstractServerService service);
 
@@ -142,13 +144,25 @@ public abstract class AbstractServerService
 
 		long when = System.currentTimeMillis();
 
-		Notification notification = new Notification.Builder(getApplicationContext())
-			.setTicker(tickerText)
-			.setContentTitle(contentTitle)
-			.setContentText(contentText)
-			.setSmallIcon(icon)
-			.setLargeIcon(largeIcon)
-			.setContentIntent(contentIntent)
+        Intent stopIntent = new Intent(getApplicationContext(), ServicesStartingService.class);
+        PendingIntent stopServerPendingIntent = PendingIntent.getService(getApplicationContext(), 0, stopIntent, 0);
+
+        Notification.Builder builder = new Notification.Builder(getApplicationContext())
+                .setTicker(tickerText)
+                .setContentTitle(contentTitle)
+                .setContentText(contentText)
+                .setSmallIcon(icon)
+                .setLargeIcon(largeIcon)
+                .setContentIntent(contentIntent);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            builder.addAction(new Notification.Action.Builder(
+                    Icon.createWithResource("", R.drawable.stop),
+                    getString(R.string.stopService),
+                    stopServerPendingIntent).build());
+        } else {
+            builder.addAction(R.drawable.stop, getString(R.string.stopService), stopServerPendingIntent);
+        }
+        Notification notification = builder
 			.setWhen(when)
 			.build();
 
