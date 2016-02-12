@@ -1,5 +1,7 @@
 package org.primftpd.services;
 
+import android.os.Looper;
+
 import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
@@ -10,8 +12,6 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.filesystem.FtpFileSystemView;
-
-import android.os.Looper;
 
 /**
  * Implements a FTP server.
@@ -72,7 +72,7 @@ public class FtpServerService extends AbstractServerService
 
 		// connection settings with some security improvements
 		ConnectionConfigFactory conCfg = new ConnectionConfigFactory();
-		conCfg.setAnonymousLoginEnabled(false);
+		conCfg.setAnonymousLoginEnabled(prefsBean.isAnonymousLogin());
 		conCfg.setMaxLoginFailures(5);
 		conCfg.setLoginFailureDelay(2000);
 		serverFactory.setConnectionConfig(conCfg.createConnectionConfig());

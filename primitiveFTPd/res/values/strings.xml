@@ -51,6 +51,8 @@
     <string name="prefSummaryStartOnBoot">Start server on system boot.</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>
     <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 RSA public key in .ssh/authorized_key.pub. SFTP only.</string>
+    <string name="prefTitleAnonymousLogin">Anonymous Login</string>
+    <string name="prefSummaryAnonymousLogin">Set if anonymous login is allowed on the server.</string>
     <string name="prefTheme">Theme</string>
     <string name="prefSummaryTheme">Changing Theme may require to restart the app.</string>
     <string name="prefTitleLogging">Log</string>
@@ -61,7 +63,8 @@
 
     <string name="widgetTextStart">start (s)ftpd</string>
     <string name="widgetTextStop">stop (s)ftpd</string>
-    
+    <string name="isAnonymous">Allow anonymous users: %1$b</string>
+
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
         <item>FTP only</item>

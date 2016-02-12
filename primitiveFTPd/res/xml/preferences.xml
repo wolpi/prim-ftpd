@@ -2,6 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<PreferenceCategory android:title="@string/prefCategoryTitle">
+        <SwitchPreference
+            android:name="anonymousLogin"
+            android:key="anonymousLoginPref"
+            android:defaultValue="false"
+            android:title="@string/prefTitleAnonymousLogin"
+            android:summary="@string/prefSummaryAnonymousLogin"
+        />
 		<EditTextPreference
 			android:name="user_name"
 			android:key="userNamePref"
