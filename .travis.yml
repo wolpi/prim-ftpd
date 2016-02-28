@@ -4,3 +4,4 @@ android:
     - build-tools-23.0.2
     - android-23
     - tools
+    - extra-android-m2repository
