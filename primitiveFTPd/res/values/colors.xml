@@ -7,4 +7,7 @@
     <item name="blueIcon" type="color">#03A9F4</item>
     <item name="blueIconDark" type="color">#0288d1</item>
     <item name="blueIconAccent" type="color">#00b0ff</item>
+
+    <color name="widgetBackgroundDisabled">#9b9b9b</color>
+    <color name="widgetBackgroundEnabled">#00cc1f</color>
 </resources>
