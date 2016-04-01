@@ -1,5 +1,7 @@
 package org.primftpd.prefs;
 
+import org.primftpd.PrefsBean;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +17,10 @@ public enum ServerToStart
 		public boolean startSftp() {
 			return false;
 		}
+		@Override
+		public boolean isPasswordMandatory(PrefsBean prefsBean) {
+			return !prefsBean.isAnonymousLogin();
+		}
 	},
 	SFTP("2") {
 		@Override
@@ -26,8 +32,8 @@ public enum ServerToStart
 			return true;
 		}
 		@Override
-		public boolean isPasswordMandatory(boolean anonymousAllowed) {
-			return false;
+		public boolean isPasswordMandatory(PrefsBean prefsBean) {
+			return !prefsBean.isAnonymousLogin() && !prefsBean.isPubKeyAuth();
 		}
 	},
 	ALL("0") {
@@ -38,6 +44,9 @@ public enum ServerToStart
 		@Override
 		public boolean startSftp() {
 			return true;
+		}
+		public boolean isPasswordMandatory(PrefsBean prefsBean) {
+			return FTP.isPasswordMandatory(prefsBean) && SFTP.isPasswordMandatory(prefsBean);
 		}
 	};
 
@@ -64,7 +73,5 @@ public enum ServerToStart
 
 	public abstract boolean startFtp();
 	public abstract boolean startSftp();
-	public boolean isPasswordMandatory(boolean anonymousAllowed) {
-		return !anonymousAllowed;
-	}
+	public abstract boolean isPasswordMandatory(PrefsBean prefsBean);
 }

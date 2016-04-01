@@ -97,9 +97,7 @@ public class ServicesStartStopUtil {
     }
 
     protected static boolean isPasswordOk(PrefsBean prefsBean) {
-        if (!prefsBean.getServerToStart().isPasswordMandatory(prefsBean.isAnonymousLogin())
-                && prefsBean.isPubKeyAuth())
-        {
+        if (!prefsBean.getServerToStart().isPasswordMandatory(prefsBean)) {
             return true;
         }
         return !StringUtils.isBlank(prefsBean.getPassword());
