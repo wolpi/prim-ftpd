@@ -72,5 +72,5 @@ dependencies {
     compile('com.sshtools:j2ssh-maverick:1.5.3') {
         transitive false
     }
-    //compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }

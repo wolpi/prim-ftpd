@@ -1,16 +1,16 @@
 package org.primftpd.services;
 
-import java.lang.ref.WeakReference;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Handles starting and stopping of Servers, including {@link WakeLock}.
