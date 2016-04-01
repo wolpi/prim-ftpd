@@ -23,22 +23,22 @@ public class PrefsBean implements Serializable
 	private final ServerToStart serverToStart;
 
 	public PrefsBean(
-            String userName,
-            String password,
-            boolean anonymousLogin,
-            int securePort,
-            File startDir,
-            boolean announce,
-            boolean wakelock,
-            boolean pubKeyAuth,
-            int port,
-            ServerToStart serverToStart)
+		String userName,
+		String password,
+		boolean anonymousLogin,
+		int securePort,
+		File startDir,
+		boolean announce,
+		boolean wakelock,
+		boolean pubKeyAuth,
+		int port,
+		ServerToStart serverToStart)
 	{
 		super();
 		this.userName = userName;
 		this.password = password;
-        this.anonymousLogin = anonymousLogin;
-        this.port = port;
+		this.anonymousLogin = anonymousLogin;
+		this.port = port;
 		this.securePort = securePort;
 		this.portStr = String.valueOf(port);
 		this.securePortStr = String.valueOf(securePort);

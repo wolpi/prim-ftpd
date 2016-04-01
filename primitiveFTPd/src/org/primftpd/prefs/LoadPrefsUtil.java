@@ -14,7 +14,7 @@ public class LoadPrefsUtil
 {
 	public static final String PREF_KEY_USER = "userNamePref";
 	public static final String PREF_KEY_PASSWORD = "passwordPref";
-    public static final String PREF_ANONYMOUS_LOGIN = "anonymousLoginPref";
+	public static final String PREF_ANONYMOUS_LOGIN = "anonymousLoginPref";
 	public static final String PREF_KEY_PORT = "portPref";
 	public static final String PREF_KEY_SECURE_PORT = "securePortPref";
 	public static final String PREF_KEY_START_DIR = "startDirPref";
@@ -39,11 +39,11 @@ public class LoadPrefsUtil
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-    public static Boolean anonymousLogin(SharedPreferences prefs) {
-        return prefs.getBoolean(
-                LoadPrefsUtil.PREF_ANONYMOUS_LOGIN,
-				Boolean.FALSE);
-    }
+	public static Boolean anonymousLogin(SharedPreferences prefs) {
+		return prefs.getBoolean(
+			LoadPrefsUtil.PREF_ANONYMOUS_LOGIN,
+			Boolean.FALSE);
+	}
 
 	public static String userName(SharedPreferences prefs) {
 		return prefs.getString(
@@ -157,8 +157,8 @@ public class LoadPrefsUtil
 	}
 
 	public static PrefsBean loadPrefs(Logger logger, SharedPreferences prefs) {
-        boolean anonymousLogin = anonymousLogin(prefs);
-        logger.debug("got anonymousLogin: {}", Boolean.valueOf(anonymousLogin));
+		boolean anonymousLogin = anonymousLogin(prefs);
+		logger.debug("got anonymousLogin: {}", Boolean.valueOf(anonymousLogin));
 
 		String userName = userName(prefs);
 		logger.debug("got userName: {}", userName);

@@ -60,22 +60,22 @@ public class PrimitiveFtpdActivity extends Activity {
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			logger.debug(
-				"BroadcastReceiver.onReceive(), action: '{}'",
-				intent.getAction());
-			if (FtpServerService.BROADCAST_ACTION_COULD_NOT_START.equals(intent.getAction())) {
-				updateButtonStates(null);
-			}
+		logger.debug(
+			"BroadcastReceiver.onReceive(), action: '{}'",
+			intent.getAction());
+		if (FtpServerService.BROADCAST_ACTION_COULD_NOT_START.equals(intent.getAction())) {
+			updateButtonStates(null);
+		}
 		}
 	};
 
 	private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 		@Override
 	 	public void onReceive(Context context, Intent intent) {
-			logger.debug("network connectivity changed, data str: '{}', action: '{}'",
-				intent.getDataString(),
-				intent.getAction());
-			showAddresses();
+		logger.debug("network connectivity changed, data str: '{}', action: '{}'",
+			intent.getDataString(),
+			intent.getAction());
+		showAddresses();
 		}
 	};
 
@@ -107,51 +107,51 @@ public class PrimitiveFtpdActivity extends Activity {
 	private String fingerprintSha1 = " - ";
 	private String fingerprintSha256 = " - ";
 
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	// basic setup
-        super.onCreate(savedInstanceState);
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// basic setup
+		super.onCreate(savedInstanceState);
 
-        logger.debug("onCreate()");
+		logger.debug("onCreate()");
 
-        // fixes/workarounds for android security issue below 4.3 regarding key generation
+		// fixes/workarounds for android security issue below 4.3 regarding key generation
 		PrngFixes.apply();
 
 		// prefs change
-    	SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
 		prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener);
 
 		// layout & theme
 		theme = LoadPrefsUtil.theme(prefs);
 		setTheme(theme.resourceId());
-        setContentView(R.layout.main);
+		setContentView(R.layout.main);
 
-    	// calc keys fingerprints
-        calcPubkeyFingerprints();
-    	showKeyFingerprints();
+		// calc keys fingerprints
+		calcPubkeyFingerprints();
+		showKeyFingerprints();
 
-    	// create addresses label
-    	((TextView)findViewById(R.id.addressesLabel)).setText(
-                String.format("%s (%s)", getText(R.string.ipAddrLabel), getText(R.string.ifacesLabel) )
-        );
+		// create addresses label
+		((TextView)findViewById(R.id.addressesLabel)).setText(
+			String.format("%s (%s)", getText(R.string.ipAddrLabel), getText(R.string.ifacesLabel) )
+		);
 
-    	// create ports label
-    	((TextView)findViewById(R.id.portsLabel)).setText(
-                String.format("%s / %s / %s", getText(R.string.protocolLabel), getText(R.string.portLabel),
-						getText(R.string.state))
-        );
+		// create ports label
+		((TextView)findViewById(R.id.portsLabel)).setText(
+			String.format("%s / %s / %s",
+				getText(R.string.protocolLabel), getText(R.string.portLabel), getText(R.string.state))
+		);
 	}
 
-    @Override
-    protected void onDestroy()
-    {
-    	super.onDestroy();
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
 
-    	// prefs change
-    	SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+		// prefs change
+		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
 		prefs.unregisterOnSharedPreferenceChangeListener(prefsChangeListener);
-    }
+	}
 
 	@Override
 	protected void onStart() {
@@ -161,217 +161,217 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		loadPrefs();
 		showUsername();
-        showAnonymousLogin();
+		showAnonymousLogin();
 	}
 
-    @Override
-    protected void onResume() {
-    	super.onResume();
+	@Override
+	protected void onResume() {
+		super.onResume();
 
-    	logger.debug("onResume()");
+		logger.debug("onResume()");
 
-    	// broadcast receiver to update buttons
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(FtpServerService.BROADCAST_ACTION_COULD_NOT_START);
-        this.registerReceiver(this.receiver, filter);
+		// broadcast receiver to update buttons
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(FtpServerService.BROADCAST_ACTION_COULD_NOT_START);
+		this.registerReceiver(this.receiver, filter);
 
 
-    	// register listener to reprint interfaces table when network connections change
-    	filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-    	registerReceiver(this.networkStateReceiver, filter);
+		// register listener to reprint interfaces table when network connections change
+		filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+		registerReceiver(this.networkStateReceiver, filter);
 
-    	displayServersState();
+		displayServersState();
 	}
 
-    @Override
-    protected void onPause() {
-    	super.onPause();
+	@Override
+	protected void onPause() {
+		super.onPause();
 
-    	logger.debug("onPause()");
+		logger.debug("onPause()");
 
-    	// unregister broadcast receivers
-        this.unregisterReceiver(this.receiver);
-        this.unregisterReceiver(this.networkStateReceiver);
-    }
+		// unregister broadcast receivers
+		this.unregisterReceiver(this.receiver);
+		this.unregisterReceiver(this.networkStateReceiver);
+	}
 
-    protected FileInputStream buildPublickeyInStream() throws IOException {
+	protected FileInputStream buildPublickeyInStream() throws IOException {
 		FileInputStream fis = openFileInput(PUBLICKEY_FILENAME);
 		return fis;
-    }
+	}
 
-    protected FileOutputStream buildPublickeyOutStream() throws IOException {
+	protected FileOutputStream buildPublickeyOutStream() throws IOException {
 		FileOutputStream fos = openFileOutput(PUBLICKEY_FILENAME, Context.MODE_PRIVATE);
 		return fos;
-    }
+	}
 
-    protected FileInputStream buildPrivatekeyInStream() throws IOException {
+	protected FileInputStream buildPrivatekeyInStream() throws IOException {
 		FileInputStream fis = openFileInput(PRIVATEKEY_FILENAME);
 		return fis;
-    }
+	}
 
-    protected FileOutputStream buildPrivatekeyOutStream() throws IOException {
+	protected FileOutputStream buildPrivatekeyOutStream() throws IOException {
 		FileOutputStream fos = openFileOutput(PRIVATEKEY_FILENAME, Context.MODE_PRIVATE);
 		return fos;
-    }
+	}
 
-    /**
+	/**
 	 * Creates figerprints of public key.
 	 */
-    protected void calcPubkeyFingerprints() {
-    	FileInputStream fis = null;
-    	try {
-        	fis = buildPublickeyInStream();
+	protected void calcPubkeyFingerprints() {
+		FileInputStream fis = null;
+		try {
+			fis = buildPublickeyInStream();
 
-	    	// check if key is present
-    		if (fis.available() <= 0) {
-    			keyPresent = false;
-    			throw new Exception("key seems not to be present");
-    		}
+			// check if key is present
+			if (fis.available() <= 0) {
+				keyPresent = false;
+				throw new Exception("key seems not to be present");
+			}
 
-	    	KeyInfoProvider keyInfoprovider = new KeyInfoProvider();
-    		PublicKey pubKey = keyInfoprovider.readPublicKey(fis);
-    		RSAPublicKey rsaPubKey = (RSAPublicKey) pubKey;
-    		byte[] encodedKey = keyInfoprovider.encodeAsSsh(rsaPubKey);
+			KeyInfoProvider keyInfoprovider = new KeyInfoProvider();
+			PublicKey pubKey = keyInfoprovider.readPublicKey(fis);
+			RSAPublicKey rsaPubKey = (RSAPublicKey) pubKey;
+			byte[] encodedKey = keyInfoprovider.encodeAsSsh(rsaPubKey);
 
-    		// fingerprints
-    		String fp = keyInfoprovider.fingerprint(encodedKey, "MD5");
-	    	if (fp != null) {
-	    		fingerprintMd5 = fp;
-	    	}
+			// fingerprints
+			String fp = keyInfoprovider.fingerprint(encodedKey, "MD5");
+			if (fp != null) {
+				fingerprintMd5 = fp;
+			}
 
-	    	fp = keyInfoprovider.fingerprint(encodedKey, "SHA-1");
-	    	if (fp != null) {
-	    		fingerprintSha1 = fp;
-	    	}
+			fp = keyInfoprovider.fingerprint(encodedKey, "SHA-1");
+			if (fp != null) {
+				fingerprintSha1 = fp;
+			}
 
-	    	fp = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
-	    	if (fp != null) {
-	    		fingerprintSha256 = fp;
-	    	}
+			fp = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
+			if (fp != null) {
+				fingerprintSha256 = fp;
+			}
 
 			keyPresent = true;
 
-    	} catch (Exception e) {
-    		logger.debug("key does probably not exist");
+		} catch (Exception e) {
+			logger.debug("key does probably not exist");
 		} finally {
 			if (fis != null) {
 				IoUtils.close(fis);
 			}
 		}
-    }
+	}
 
-    /**
-     * Creates table containing network interfaces.
-     */
-    protected void showAddresses() {
-    	LinearLayout container = (LinearLayout)findViewById(R.id.addressesContainer);
+	/**
+	 * Creates table containing network interfaces.
+	 */
+	protected void showAddresses() {
+		LinearLayout container = (LinearLayout)findViewById(R.id.addressesContainer);
 
-        // clear old entries
-    	container.removeAllViews();
+		// clear old entries
+		container.removeAllViews();
 
-    	try {
-        	Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
-            while (ifaces.hasMoreElements()) {
-                NetworkInterface iface = ifaces.nextElement();
-                String ifaceDispName = iface.getDisplayName();
-                String ifaceName = iface.getName();
-                Enumeration<InetAddress> inetAddrs = iface.getInetAddresses();
+		try {
+			Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
+			while (ifaces.hasMoreElements()) {
+				NetworkInterface iface = ifaces.nextElement();
+				String ifaceDispName = iface.getDisplayName();
+				String ifaceName = iface.getName();
+				Enumeration<InetAddress> inetAddrs = iface.getInetAddresses();
 
-                while (inetAddrs.hasMoreElements()) {
-                    InetAddress inetAddr = inetAddrs.nextElement();
-                    String hostAddr = inetAddr.getHostAddress();
+				while (inetAddrs.hasMoreElements()) {
+					InetAddress inetAddr = inetAddrs.nextElement();
+					String hostAddr = inetAddr.getHostAddress();
 
-                    logger.debug("addr: '{}', iface name: '{}', disp name: '{}', loopback: '{}'",
-                    		new Object[]{
-                    			inetAddr,
-                    			ifaceName,
-                    			ifaceDispName,
-                    			inetAddr.isLoopbackAddress()});
+					logger.debug("addr: '{}', iface name: '{}', disp name: '{}', loopback: '{}'",
+						new Object[]{
+							inetAddr,
+							ifaceName,
+							ifaceDispName,
+							inetAddr.isLoopbackAddress()});
 
-                    if (inetAddr.isLoopbackAddress()) {
-                    	continue;
-                    }
+					if (inetAddr.isLoopbackAddress()) {
+						continue;
+					}
 
-                    String displayText = hostAddr + " (" + ifaceDispName + ")";
-                    if(displayText.contains("::")) {
-                        // Don't include the raw encoded names. Just the raw IP addresses.
-                        logger.debug("Skipping IPv6 address '{}'", displayText);
-                        continue;
-                    }
-                    TextView textView = new TextView(container.getContext());
-                    container.addView(textView);
-                    textView.setText(displayText);
-                    textView.setGravity(Gravity.CENTER_HORIZONTAL);
-                    textView.setTextIsSelectable(true);
-                }
-            }
-        } catch (SocketException e) {
-        	logger.info("exception while iterating network interfaces", e);
+					String displayText = hostAddr + " (" + ifaceDispName + ")";
+					if(displayText.contains("::")) {
+						// Don't include the raw encoded names. Just the raw IP addresses.
+						logger.debug("Skipping IPv6 address '{}'", displayText);
+						continue;
+					}
+					TextView textView = new TextView(container.getContext());
+					container.addView(textView);
+					textView.setText(displayText);
+					textView.setGravity(Gravity.CENTER_HORIZONTAL);
+					textView.setTextIsSelectable(true);
+				}
+			}
+		} catch (SocketException e) {
+			logger.info("exception while iterating network interfaces", e);
 
-        	String msg = getText(R.string.ifacesError) + e.getLocalizedMessage();
-        	Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        }
-    }
+			String msg = getText(R.string.ifacesError) + e.getLocalizedMessage();
+			Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+		}
+	}
 
-    @SuppressLint("SetTextI18n")
-    protected void showPortsAndServerState() {
-    	((TextView)findViewById(R.id.ftpTextView))
+	@SuppressLint("SetTextI18n")
+	protected void showPortsAndServerState() {
+		((TextView)findViewById(R.id.ftpTextView))
 			.setText("ftp / " + prefsBean.getPortStr() + " / " +
 			getText(serversRunning.ftp
 				? R.string.serverStarted
 				: R.string.serverStopped));
 
-    	((TextView)findViewById(R.id.sftpTextView))
+		((TextView)findViewById(R.id.sftpTextView))
 			.setText("sftp / " + prefsBean.getSecurePortStr() + " / " +
 			getText(serversRunning.ssh
 				? R.string.serverStarted
 				: R.string.serverStopped));
-    }
+	}
 
-    protected void showUsername() {
-    	TextView usernameView = (TextView)findViewById(R.id.usernameTextView);
-    	usernameView.setText(prefsBean.getUserName());
-    }
+	protected void showUsername() {
+		TextView usernameView = (TextView)findViewById(R.id.usernameTextView);
+		usernameView.setText(prefsBean.getUserName());
+	}
 
-    protected void showAnonymousLogin() {
-        TextView anonymousView = (TextView)findViewById(R.id.anonymousLoginTextView);
-        anonymousView.setText(getString(R.string.isAnonymous, prefsBean.isAnonymousLogin()));
-    }
+	protected void showAnonymousLogin() {
+		TextView anonymousView = (TextView)findViewById(R.id.anonymousLoginTextView);
+		anonymousView.setText(getString(R.string.isAnonymous, prefsBean.isAnonymousLogin()));
+	}
 
-    @SuppressLint("SetTextI18n")
-    protected void showKeyFingerprints() {
-    	((TextView)findViewById(R.id.keyFingerprintMd5Label))
-    		.setText("MD5");
-    	((TextView)findViewById(R.id.keyFingerprintSha1Label))
-    		.setText("SHA1");
-    	((TextView)findViewById(R.id.keyFingerprintSha256Label))
-    		.setText("SHA256");
+	@SuppressLint("SetTextI18n")
+	protected void showKeyFingerprints() {
+		((TextView)findViewById(R.id.keyFingerprintMd5Label))
+			.setText("MD5");
+		((TextView)findViewById(R.id.keyFingerprintSha1Label))
+			.setText("SHA1");
+		((TextView)findViewById(R.id.keyFingerprintSha256Label))
+			.setText("SHA256");
 
-    	((TextView)findViewById(R.id.keyFingerprintMd5TextView))
+		((TextView)findViewById(R.id.keyFingerprintMd5TextView))
 			.setText(fingerprintMd5);
 		((TextView)findViewById(R.id.keyFingerprintSha1TextView))
 			.setText(fingerprintSha1);
 		((TextView)findViewById(R.id.keyFingerprintSha256TextView))
 			.setText(fingerprintSha256);
 
-    	// create onRefreshListener
-    	View refreshButton = findViewById(R.id.keyFingerprintsLabel);
-    	refreshButton.setOnClickListener(new View.OnClickListener() {
-    		@Override
-    		public void onClick(View v) {
-    			GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
-    			askDiag.show(getFragmentManager(), DIALOG_TAG);
-    		}
-    	});
-    }
+		// create onRefreshListener
+		View refreshButton = findViewById(R.id.keyFingerprintsLabel);
+		refreshButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
+				askDiag.show(getFragmentManager(), DIALOG_TAG);
+			}
+		});
+	}
 
-    protected void genKeysAndShowProgressDiag(boolean startServerOnFinish) {
-    	// critical: do not pass getApplicationContext() to dialog
-    	final ProgressDialog progressDiag = new ProgressDialog(this);
-    	progressDiag.setCancelable(false);
-    	progressDiag.setMessage(getText(R.string.generatingKeysMessage));
+	protected void genKeysAndShowProgressDiag(boolean startServerOnFinish) {
+		// critical: do not pass getApplicationContext() to dialog
+		final ProgressDialog progressDiag = new ProgressDialog(this);
+		progressDiag.setCancelable(false);
+		progressDiag.setMessage(getText(R.string.generatingKeysMessage));
 
-    	AsyncTask<Void, Void, Void> task = new GenKeysAsyncTask(
+		AsyncTask<Void, Void, Void> task = new GenKeysAsyncTask(
 			progressDiag,
 			startServerOnFinish);
 		task.execute();
@@ -411,29 +411,29 @@ public class PrimitiveFtpdActivity extends Activity {
 		}
 	}
 
-    class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
-    	private final ProgressDialog progressDiag;
-    	private final boolean startServerOnFinish;
+	class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
+		private final ProgressDialog progressDiag;
+		private final boolean startServerOnFinish;
 
 		public GenKeysAsyncTask(
 			ProgressDialog progressDiag,
 			boolean startServerOnFinish)
 		{
-    		this.progressDiag = progressDiag;
-    		this.startServerOnFinish = startServerOnFinish;
-    	}
+			this.progressDiag = progressDiag;
+			this.startServerOnFinish = startServerOnFinish;
+		}
 
-    	@Override
+		@Override
 		protected Void doInBackground(Void... params) {
 			try {
 				FileOutputStream publickeyFos = buildPublickeyOutStream();
 				FileOutputStream privatekeyFos = buildPrivatekeyOutStream();
 				try {
 					new KeyGenerator().generate(publickeyFos, privatekeyFos);
-	            } finally {
-	                publickeyFos.close();
-	                privatekeyFos.close();
-	            }
+				} finally {
+					publickeyFos.close();
+					privatekeyFos.close();
+				}
 			} catch (Exception e) {
 				logger.error("could not generate keys", e);
 			}
@@ -453,17 +453,17 @@ public class PrimitiveFtpdActivity extends Activity {
 				displayServersState();
 			}
 		}
-    }
+	}
 
-    /**
+	/**
 	 * Displays UI-elements showing if servers are running. That includes
 	 * Actionbar Icon and Ports-Table. When Activity is shown the first time
 	 * this is triggered by {@link #onCreateOptionsMenu(Menu)}, when user comes back from
 	 * preferences, this is triggered by {@link #onResume()}. It may be invoked by
 	 * {@link GenKeysAsyncTask}.
 	 */
-    protected void displayServersState() {
-    	logger.debug("displayServersState()");
+	protected void displayServersState() {
+		logger.debug("displayServersState()");
 
 		checkServicesRunning();
 		Boolean running = null;
@@ -471,8 +471,8 @@ public class PrimitiveFtpdActivity extends Activity {
 			running = Boolean.valueOf(serversRunning.atLeastOneRunning());
 		}
 
-    	// should be triggered by onCreateOptionsMenu() to avoid icon flicker
-    	// when invoked via notification
+		// should be triggered by onCreateOptionsMenu() to avoid icon flicker
+		// when invoked via notification
 		updateButtonStates(running);
 
 		// by checking ButtonStates we get info which services are running
@@ -490,16 +490,16 @@ public class PrimitiveFtpdActivity extends Activity {
 		this.serversRunning = ServicesStartStopUtil.checkServicesRunning(this);
 	}
 
-    /**
-     * Updates enabled state of start/stop buttons.
-     */
-    protected void updateButtonStates(Boolean running) {
-    	if (startIcon == null || stopIcon == null) {
-            logger.debug("updateButtonStates(), no icons");
-    		return;
-    	}
+	/**
+	 * Updates enabled state of start/stop buttons.
+	 */
+	protected void updateButtonStates(Boolean running) {
+		if (startIcon == null || stopIcon == null) {
+			logger.debug("updateButtonStates(), no icons");
+			return;
+		}
 
-        logger.debug("updateButtonStates()");
+		logger.debug("updateButtonStates()");
 
 		boolean atLeastOneRunning;
 		if (running == null) {
@@ -509,21 +509,21 @@ public class PrimitiveFtpdActivity extends Activity {
 			atLeastOneRunning = running.booleanValue();
 		}
 
-    	startIcon.setVisible(!atLeastOneRunning);
-    	stopIcon.setVisible(atLeastOneRunning);
+		startIcon.setVisible(!atLeastOneRunning);
+		stopIcon.setVisible(atLeastOneRunning);
 
-    	// remove status bar notification if server not running
-    	if (!atLeastOneRunning) {
-    		NotificationUtil.removeStatusbarNotification(this);
-    	}
-    }
+		// remove status bar notification if server not running
+		if (!atLeastOneRunning) {
+			NotificationUtil.removeStatusbarNotification(this);
+		}
+	}
 
-    protected MenuItem startIcon;
+	protected MenuItem startIcon;
 	protected MenuItem stopIcon;
 
-    @Override
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-        logger.debug("onCreateOptionsMenu()");
+		logger.debug("onCreateOptionsMenu()");
 
 		getMenuInflater().inflate(R.menu.pftpd, menu);
 

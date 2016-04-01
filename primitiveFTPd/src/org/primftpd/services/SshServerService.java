@@ -187,22 +187,22 @@ public class SshServerService extends AbstractServerService
 		List<KeyPair> keyPairList = new ArrayList<KeyPair>(1);
 		FileInputStream pubkeyFis = null;
 		FileInputStream privkeyFis = null;
-        try {
-    		// read pub key
-        	KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
+		try {
+			// read pub key
+			KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
 
-        	pubkeyFis = openFileInput(PrimitiveFtpdActivity.PUBLICKEY_FILENAME);
-        	PublicKey publicKey = keyInfoProvider.readPublicKey(pubkeyFis);
+			pubkeyFis = openFileInput(PrimitiveFtpdActivity.PUBLICKEY_FILENAME);
+			PublicKey publicKey = keyInfoProvider.readPublicKey(pubkeyFis);
 
-    		// read priv key from it's own file
-    		privkeyFis = openFileInput(PrimitiveFtpdActivity.PRIVATEKEY_FILENAME);
-    		PrivateKey privateKey = keyInfoProvider.readPrivatekey(privkeyFis);
+			// read priv key from it's own file
+			privkeyFis = openFileInput(PrimitiveFtpdActivity.PRIVATEKEY_FILENAME);
+			PrivateKey privateKey = keyInfoProvider.readPrivatekey(privkeyFis);
 
 			// return key pair
-            keyPairList.add(new KeyPair(publicKey, privateKey));
-        } catch (Exception e) {
-        	logger.debug("could not read key: " + e.getMessage(), e);
-    	} finally {
+			keyPairList.add(new KeyPair(publicKey, privateKey));
+		} catch (Exception e) {
+			logger.debug("could not read key: " + e.getMessage(), e);
+		} finally {
 			if (pubkeyFis != null) {
 				IoUtils.close(pubkeyFis);
 			}
@@ -210,6 +210,6 @@ public class SshServerService extends AbstractServerService
 				IoUtils.close(privkeyFis);
 			}
 		}
-        return keyPairList;
+		return keyPairList;
 	}
 }
