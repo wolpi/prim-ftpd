@@ -65,6 +65,7 @@ public class PrimitiveFtpdActivity extends Activity {
 			intent.getAction());
 		if (FtpServerService.BROADCAST_ACTION_COULD_NOT_START.equals(intent.getAction())) {
 			updateButtonStates(null);
+			displayServersState();
 		}
 		}
 	};
@@ -322,10 +323,10 @@ public class PrimitiveFtpdActivity extends Activity {
 				: R.string.serverStopped));
 
 		((TextView)findViewById(R.id.sftpTextView))
-			.setText("sftp / " + prefsBean.getSecurePortStr() + " / " +
-			getText(serversRunning.ssh
-				? R.string.serverStarted
-				: R.string.serverStopped));
+				.setText("sftp / " + prefsBean.getSecurePortStr() + " / " +
+						getText(serversRunning.ssh
+								? R.string.serverStarted
+								: R.string.serverStopped));
 	}
 
 	protected void showUsername() {
@@ -341,11 +342,11 @@ public class PrimitiveFtpdActivity extends Activity {
 	@SuppressLint("SetTextI18n")
 	protected void showKeyFingerprints() {
 		((TextView)findViewById(R.id.keyFingerprintMd5Label))
-			.setText("MD5");
+				.setText("MD5");
 		((TextView)findViewById(R.id.keyFingerprintSha1Label))
-			.setText("SHA1");
+				.setText("SHA1");
 		((TextView)findViewById(R.id.keyFingerprintSha256Label))
-			.setText("SHA256");
+				.setText("SHA256");
 
 		((TextView)findViewById(R.id.keyFingerprintMd5TextView))
 			.setText(fingerprintMd5);
