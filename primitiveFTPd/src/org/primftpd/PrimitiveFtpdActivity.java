@@ -1,5 +1,6 @@
 package org.primftpd;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -106,7 +107,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	private String fingerprintSha1 = " - ";
 	private String fingerprintSha256 = " - ";
 
-	/** Called when the activity is first created. */
+    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	// basic setup
@@ -132,14 +133,14 @@ public class PrimitiveFtpdActivity extends Activity {
 
     	// create addresses label
     	((TextView)findViewById(R.id.addressesLabel)).setText(
-				getText(R.string.ipAddrLabel) + " (" +
-						getText(R.string.ifacesLabel) + ")");
+                String.format("%s (%s)", getText(R.string.ipAddrLabel), getText(R.string.ifacesLabel) )
+        );
 
     	// create ports label
     	((TextView)findViewById(R.id.portsLabel)).setText(
-				getText(R.string.protocolLabel) + " / " +
-						getText(R.string.portLabel) + " / " +
-						getText(R.string.state));
+                String.format("%s / %s / %s", getText(R.string.protocolLabel), getText(R.string.portLabel),
+						getText(R.string.state))
+        );
 	}
 
     @Override
@@ -160,9 +161,10 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		loadPrefs();
 		showUsername();
+        showAnonymousLogin();
 	}
 
-	@Override
+    @Override
     protected void onResume() {
     	super.onResume();
 
@@ -291,6 +293,11 @@ public class PrimitiveFtpdActivity extends Activity {
                     }
 
                     String displayText = hostAddr + " (" + ifaceDispName + ")";
+                    if(displayText.contains("::")) {
+                        // Don't include the raw encoded names. Just the raw IP addresses.
+                        logger.debug("Skipping IPv6 address '{}'", displayText);
+                        continue;
+                    }
                     TextView textView = new TextView(container.getContext());
                     container.addView(textView);
                     textView.setText(displayText);
@@ -306,6 +313,7 @@ public class PrimitiveFtpdActivity extends Activity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     protected void showPortsAndServerState() {
     	((TextView)findViewById(R.id.ftpTextView))
 			.setText("ftp / " + prefsBean.getPortStr() + " / " +
@@ -325,6 +333,12 @@ public class PrimitiveFtpdActivity extends Activity {
     	usernameView.setText(prefsBean.getUserName());
     }
 
+    protected void showAnonymousLogin() {
+        TextView anonymousView = (TextView)findViewById(R.id.anonymousLoginTextView);
+        anonymousView.setText(getString(R.string.isAnonymous, prefsBean.isAnonymousLogin()));
+    }
+
+    @SuppressLint("SetTextI18n")
     protected void showKeyFingerprints() {
     	((TextView)findViewById(R.id.keyFingerprintMd5Label))
     		.setText("MD5");

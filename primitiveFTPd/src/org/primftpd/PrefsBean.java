@@ -1,9 +1,9 @@
 package org.primftpd;
 
+import org.primftpd.prefs.ServerToStart;
+
 import java.io.File;
 import java.io.Serializable;
-
-import org.primftpd.prefs.ServerToStart;
 
 public class PrefsBean implements Serializable
 {
@@ -19,23 +19,20 @@ public class PrefsBean implements Serializable
 	private final boolean announce;
 	private final boolean wakelock;
 	private final boolean pubKeyAuth;
+    private final boolean anonymousLogin;
 	private final ServerToStart serverToStart;
 
 	public PrefsBean(
-		String userName,
-		String password,
-		int port,
-		int securePort,
-		File startDir,
-		boolean announce,
-		boolean wakelock,
-		boolean pubKeyAuth,
-		ServerToStart serverToStart)
+            String userName,
+            String password,
+            boolean anonymousLogin, int securePort, File startDir, boolean announce, boolean wakelock, boolean pubKeyAuth, int port,
+            ServerToStart serverToStart)
 	{
 		super();
 		this.userName = userName;
 		this.password = password;
-		this.port = port;
+        this.anonymousLogin = anonymousLogin;
+        this.port = port;
 		this.securePort = securePort;
 		this.portStr = String.valueOf(port);
 		this.securePortStr = String.valueOf(securePort);
@@ -92,4 +89,8 @@ public class PrefsBean implements Serializable
 	{
 		return serverToStart;
 	}
+
+    public boolean isAnonymousLogin() {
+        return anonymousLogin;
+    }
 }

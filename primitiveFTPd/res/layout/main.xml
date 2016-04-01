@@ -69,6 +69,13 @@
         	android:gravity="center_horizontal"
 			android:textIsSelectable="true"
         />
+        <TextView
+            android:id="@+id/anonymousLoginTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textIsSelectable="true"
+            />
 
         <!-- key fingerprints -->
 	    <TextView
