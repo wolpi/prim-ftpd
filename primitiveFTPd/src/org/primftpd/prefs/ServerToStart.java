@@ -26,7 +26,7 @@ public enum ServerToStart
 			return true;
 		}
 		@Override
-		public boolean isPasswordMandatory() {
+		public boolean isPasswordMandatory(boolean anonymousAllowed) {
 			return false;
 		}
 	},
@@ -64,7 +64,7 @@ public enum ServerToStart
 
 	public abstract boolean startFtp();
 	public abstract boolean startSftp();
-	public boolean isPasswordMandatory() {
-		return true;
+	public boolean isPasswordMandatory(boolean anonymousAllowed) {
+		return !anonymousAllowed;
 	}
 }

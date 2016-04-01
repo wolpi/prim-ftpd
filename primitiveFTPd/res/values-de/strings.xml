@@ -50,12 +50,15 @@
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Server beim System-Boot starten.</string>
     <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 RSA public key in .ssh/authorized_key.pub ab. Nur SFTP.</string>
+    <string name="prefSummaryAnonymousLogin">Anonymous Login erlauben.</string>
     <string name="prefSummaryTheme">Den Theme zu ändern kann einen App Neustart erfordern.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>
 
     <string name="licence">Lizenz</string>
     <string name="reset">Zurücksetzen</string>
+
+    <string name="isAnonymous">Anonymous Login: %1$b</string>
 
     <string-array name="prefWhichServerToStartNames">
         <item>FTP und SFTP</item>

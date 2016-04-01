@@ -24,6 +24,8 @@ import java.util.List;
 
 public class AndroidPrefsUserManager implements UserManager {
 
+	public static final String ANONYMOUS_USER_NAME = "anonymous";
+
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final PrefsBean prefsBean;
@@ -53,7 +55,7 @@ public class AndroidPrefsUserManager implements UserManager {
 	}
 
     protected User anonymousUser() {
-        return createUser("anonymous", null);
+        return createUser(ANONYMOUS_USER_NAME, null);
     }
 
     private User createUser(String username, String password) {
@@ -83,7 +85,7 @@ public class AndroidPrefsUserManager implements UserManager {
 
 	@Override
 	public String[] getAllUserNames() throws FtpException {
-		return new String[]{prefsBean.getUserName(), "anonymous"};
+		return new String[]{prefsBean.getUserName(), ANONYMOUS_USER_NAME};
 	}
 
 	@Override
@@ -96,7 +98,7 @@ public class AndroidPrefsUserManager implements UserManager {
 
 	@Override
 	public boolean doesExist(String username) {
-		return prefsBean.getUserName().equals(username) || "anonymous".equals(username);
+		return prefsBean.getUserName().equals(username) || ANONYMOUS_USER_NAME.equals(username);
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class LoadPrefsUtil
     public static Boolean anonymousLogin(SharedPreferences prefs) {
         return prefs.getBoolean(
                 LoadPrefsUtil.PREF_ANONYMOUS_LOGIN,
-                false);
+				Boolean.FALSE);
     }
 
 	public static String userName(SharedPreferences prefs) {
@@ -191,7 +191,13 @@ public class LoadPrefsUtil
 		return new PrefsBean(
 				userName,
 				password,
-                anonymousLogin, securePort, startDir, announce, wakelock, pubKeyAuth, port,
-                serverToStart);
+				anonymousLogin,
+				securePort,
+				startDir,
+				announce,
+				wakelock,
+				pubKeyAuth,
+				port,
+				serverToStart);
 	}
 }

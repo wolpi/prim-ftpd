@@ -8,7 +8,9 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
+import org.apache.ftpserver.usermanager.AnonymousAuthentication;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.sshd.SshServer;
@@ -95,7 +97,9 @@ public class SshServerService extends AbstractServerService
 		sshServer.setSubsystemFactories(factoryList);
 
 		// PasswordAuthenticator based on android preferences
-		if (StringUtils.isNotEmpty(prefsBean.getPassword())) {
+		if (StringUtils.isNotEmpty(prefsBean.getPassword())
+				|| prefsBean.isAnonymousLogin())
+		{
 			final AndroidPrefsUserManager userManager = new AndroidPrefsUserManager(prefsBean);
 			sshServer.setPasswordAuthenticator(new PasswordAuthenticator() {
 				@Override
@@ -104,11 +108,11 @@ public class SshServerService extends AbstractServerService
 					String password,
 					ServerSession session) {
 				logger.debug("password auth for user: {}", username);
+				Authentication authentication = AndroidPrefsUserManager.ANONYMOUS_USER_NAME.equals(username)
+					? new AnonymousAuthentication()
+					: new UsernamePasswordAuthentication(username, password);
 				try {
-					userManager.authenticate(
-						new UsernamePasswordAuthentication(
-							username,
-							password));
+					userManager.authenticate(authentication);
 				} catch (AuthenticationFailedException e) {
 					logger.debug("AuthenticationFailed", e);
 					return false;

@@ -11,6 +11,7 @@ public class PrefsBean implements Serializable
 
 	private final String userName;
 	private final String password;
+	private final boolean anonymousLogin;
 	private final String portStr;
 	private final String securePortStr;
 	private final int port;
@@ -19,13 +20,18 @@ public class PrefsBean implements Serializable
 	private final boolean announce;
 	private final boolean wakelock;
 	private final boolean pubKeyAuth;
-    private final boolean anonymousLogin;
 	private final ServerToStart serverToStart;
 
 	public PrefsBean(
             String userName,
             String password,
-            boolean anonymousLogin, int securePort, File startDir, boolean announce, boolean wakelock, boolean pubKeyAuth, int port,
+            boolean anonymousLogin,
+            int securePort,
+            File startDir,
+            boolean announce,
+            boolean wakelock,
+            boolean pubKeyAuth,
+            int port,
             ServerToStart serverToStart)
 	{
 		super();
@@ -49,6 +55,10 @@ public class PrefsBean implements Serializable
 
 	public String getPassword() {
 		return password;
+	}
+
+	public boolean isAnonymousLogin() {
+		return anonymousLogin;
 	}
 
 	public String getPortStr() {
@@ -89,8 +99,4 @@ public class PrefsBean implements Serializable
 	{
 		return serverToStart;
 	}
-
-    public boolean isAnonymousLogin() {
-        return anonymousLogin;
-    }
 }
