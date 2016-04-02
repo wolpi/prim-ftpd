@@ -15,8 +15,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Icon;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -129,6 +131,9 @@ public abstract class AbstractServerService
 		Intent notificationIntent = new Intent(this, PrimitiveFtpdActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
+		Intent stopIntent = new Intent(this, ServicesStartingService.class);
+		PendingIntent pendingStopIntent = PendingIntent.getService(this, 0, stopIntent, 0);
+
 		// create notification
 		int icon = R.drawable.ic_notification;
 		CharSequence tickerText = getText(R.string.serverRunning);
@@ -137,21 +142,32 @@ public abstract class AbstractServerService
 
 		// use main icon as large one
 		Bitmap largeIcon = BitmapFactory.decodeResource(
-			getResources(),
-			R.drawable.ic_launcher);
+				getResources(),
+				R.drawable.ic_launcher);
 
 		long when = System.currentTimeMillis();
 
-		Notification notification = new Notification.Builder(getApplicationContext())
+		Notification.Builder builder = new Notification.Builder(getApplicationContext())
 			.setTicker(tickerText)
 			.setContentTitle(contentTitle)
 			.setContentText(contentText)
 			.setSmallIcon(icon)
 			.setLargeIcon(largeIcon)
 			.setContentIntent(contentIntent)
-			.setWhen(when)
-			.build();
-
+			.setWhen(when);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			Notification.Action stopAction = new Notification.Action.Builder(
+				Icon.createWithResource("", R.drawable.ic_stop_white_24dp),
+				getString(R.string.stopService),
+				pendingStopIntent).build();
+			builder.addAction(stopAction);
+		} else {
+			builder.addAction(
+				R.drawable.ic_stop_white_24dp,
+				getString(R.string.stopService),
+				pendingStopIntent);
+		}
+		Notification notification =builder.build();
 		notification.flags |= Notification.FLAG_NO_CLEAR;
 
 		// notification manager
