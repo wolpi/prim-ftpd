@@ -1,24 +1,10 @@
 package org.primftpd.services;
 
-import org.primftpd.PrefsBean;
-import org.primftpd.PrimitiveFtpdActivity;
-import org.primftpd.R;
-import org.primftpd.util.NotificationUtil;
-import org.primftpd.util.ServicesStartStopUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Icon;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -26,6 +12,14 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.primftpd.PrefsBean;
+import org.primftpd.R;
+import org.primftpd.ServerStateChangedEvent;
+import org.primftpd.util.ServicesStartStopUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract base class for {@link Service}s wrapping servers.
@@ -42,9 +36,6 @@ import android.widget.Toast;
 public abstract class AbstractServerService
 	extends Service
 {
-	public static final String BROADCAST_ACTION_COULD_NOT_START =
-		"org.primftpd.CouldNotStartServer";
-
 	protected static final int MSG_START = 1;
 	protected static final int MSG_STOP = 2;
 
@@ -83,11 +74,11 @@ public abstract class AbstractServerService
 	public void onCreate() {
 		HandlerThread thread = new HandlerThread(
 			"ServiceStartArguments",
-            Process.THREAD_PRIORITY_BACKGROUND);
-	    thread.start();
+			Process.THREAD_PRIORITY_BACKGROUND);
+		thread.start();
 
-	    serviceLooper = thread.getLooper();
-	    serviceHandler = createServiceHandler(serviceLooper, this);
+		serviceLooper = thread.getLooper();
+		serviceHandler = createServiceHandler(serviceLooper, this);
 	}
 
 	@Override
@@ -104,10 +95,13 @@ public abstract class AbstractServerService
 		Bundle extras = intent.getExtras();
 		prefsBean = (PrefsBean)extras.get(ServicesStartStopUtil.EXTRA_PREFS_BEAN);
 
-		// send start message
+		// send start message (to handler)
 		Message msg = serviceHandler.obtainMessage();
 		msg.arg1 = MSG_START;
 		serviceHandler.sendMessage(msg);
+
+		// post event
+		EventBus.getDefault().post(new ServerStateChangedEvent());
 
 		// we don't want the system to kill the ftp server
 		//return START_NOT_STICKY;
@@ -118,73 +112,19 @@ public abstract class AbstractServerService
 	public void onDestroy() {
 		logger.debug("onDestroy()");
 
+		// send stop message (to handler)
 		Message msg = serviceHandler.obtainMessage();
 		msg.arg1 = MSG_STOP;
 		serviceHandler.sendMessage(msg);
+
+		// post event
+		EventBus.getDefault().post(new ServerStateChangedEvent());
 	}
 
 	/**
-	 * Creates Statusbar Notification.
+	 * Register a DNS-SD service (to be discoverable through Bonjour/Avahi).
 	 */
-	protected void createStatusbarNotification() {
-		// create pending intent
-		Intent notificationIntent = new Intent(this, PrimitiveFtpdActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
-		Intent stopIntent = new Intent(this, ServicesStartingService.class);
-		PendingIntent pendingStopIntent = PendingIntent.getService(this, 0, stopIntent, 0);
-
-		// create notification
-		int icon = R.drawable.ic_notification;
-		CharSequence tickerText = getText(R.string.serverRunning);
-		CharSequence contentTitle = getText(R.string.notificationTitle);
-		CharSequence contentText = tickerText;
-
-		// use main icon as large one
-		Bitmap largeIcon = BitmapFactory.decodeResource(
-				getResources(),
-				R.drawable.ic_launcher);
-
-		long when = System.currentTimeMillis();
-
-		Notification.Builder builder = new Notification.Builder(getApplicationContext())
-			.setTicker(tickerText)
-			.setContentTitle(contentTitle)
-			.setContentText(contentText)
-			.setSmallIcon(icon)
-			.setLargeIcon(largeIcon)
-			.setContentIntent(contentIntent)
-			.setWhen(when);
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			Notification.Action stopAction = new Notification.Action.Builder(
-				Icon.createWithResource("", R.drawable.ic_stop_white_24dp),
-				getString(R.string.stopService),
-				pendingStopIntent).build();
-			builder.addAction(stopAction);
-		} else {
-			builder.addAction(
-				R.drawable.ic_stop_white_24dp,
-				getString(R.string.stopService),
-				pendingStopIntent);
-		}
-		Notification notification =builder.build();
-		notification.flags |= Notification.FLAG_NO_CLEAR;
-
-		// notification manager
-		NotificationUtil.createStatusbarNotification(this, notification);
-	}
-
-	/**
-	 * Removes Statusbar Notification.
-	 */
-	protected void removeStatusbarNotification() {
-		NotificationUtil.removeStatusbarNotification(this);
-	}
-
-    /**
-     * Register a DNS-SD service (to be discoverable through Bonjour/Avahi).
-     */
-    protected void announceService () {
+	protected void announceService () {
 		nsdRegistrationListener = new NsdManager.RegistrationListener() {
 			@Override
 			public void onServiceRegistered(NsdServiceInfo serviceInfo) {

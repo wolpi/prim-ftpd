@@ -25,6 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.ftpserver.util.IoUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.log.PrimFtpdLoggerBinder;
 import org.primftpd.prefs.AboutActivity;
 import org.primftpd.prefs.FtpPrefsActivityThemeDark;
@@ -32,7 +35,6 @@ import org.primftpd.prefs.FtpPrefsActivityThemeLight;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.Theme;
-import org.primftpd.services.FtpServerService;
 import org.primftpd.util.KeyGenerator;
 import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.NotificationUtil;
@@ -56,19 +58,6 @@ import java.util.Enumeration;
  * Activity to display network info and to start FTP service.
  */
 public class PrimitiveFtpdActivity extends Activity {
-
-	private BroadcastReceiver receiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-		logger.debug(
-			"BroadcastReceiver.onReceive(), action: '{}'",
-			intent.getAction());
-		if (FtpServerService.BROADCAST_ACTION_COULD_NOT_START.equals(intent.getAction())) {
-			updateButtonStates(null);
-			displayServersState();
-		}
-		}
-	};
 
 	private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 		@Override
@@ -142,6 +131,9 @@ public class PrimitiveFtpdActivity extends Activity {
 			String.format("%s / %s / %s",
 				getText(R.string.protocolLabel), getText(R.string.portLabel), getText(R.string.state))
 		);
+
+		// listen for events
+		EventBus.getDefault().register(this);
 	}
 
 	@Override
@@ -152,6 +144,9 @@ public class PrimitiveFtpdActivity extends Activity {
 		// prefs change
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
 		prefs.unregisterOnSharedPreferenceChangeListener(prefsChangeListener);
+
+		// server state change events
+		EventBus.getDefault().unregister(this);
 	}
 
 	@Override
@@ -171,17 +166,9 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		logger.debug("onResume()");
 
-		// broadcast receiver to update buttons
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(FtpServerService.BROADCAST_ACTION_COULD_NOT_START);
-		this.registerReceiver(this.receiver, filter);
-
-
 		// register listener to reprint interfaces table when network connections change
-		filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(this.networkStateReceiver, filter);
-
-		displayServersState();
 	}
 
 	@Override
@@ -190,8 +177,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		logger.debug("onPause()");
 
-		// unregister broadcast receivers
-		this.unregisterReceiver(this.receiver);
+		// unregister broadcast receiver
 		this.unregisterReceiver(this.networkStateReceiver);
 	}
 
@@ -450,10 +436,13 @@ public class PrimitiveFtpdActivity extends Activity {
 			if (startServerOnFinish) {
 				// icon members should be set at this time
 				handleStart();
-				// must update server state after start
-				displayServersState();
 			}
 		}
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+	public void onEvent(ServerStateChangedEvent event) {
+		displayServersState();
 	}
 
 	/**
@@ -483,6 +472,12 @@ public class PrimitiveFtpdActivity extends Activity {
 		if (serversRunning != null) {
 			showPortsAndServerState();
 			ServicesStartStopUtil.updateWidget(this, running.booleanValue());
+		}
+
+		if (Boolean.TRUE == running) {
+			ServicesStartStopUtil.createStatusbarNotification(this);
+		} else if (Boolean.FALSE == running) {
+			NotificationUtil.removeStatusbarNotification(this);
 		}
 	}
 
@@ -531,6 +526,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		startIcon = menu.findItem(R.id.menu_start);
 		stopIcon = menu.findItem(R.id.menu_stop);
 
+		// at least required on app start
 		displayServersState();
 
 		return true;
@@ -540,10 +536,10 @@ public class PrimitiveFtpdActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_start:
-			handleStart(startIcon, stopIcon);
+			handleStart();
 			break;
 		case R.id.menu_stop:
-			handleStop(startIcon, stopIcon);
+			handleStop();
 			break;
 		case R.id.menu_prefs:
 			handlePrefs();
@@ -556,20 +552,11 @@ public class PrimitiveFtpdActivity extends Activity {
 			break;
 		}
 
-		displayServersState();
-
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * if this version of the method is called, it is necessary to call
-	 * {@link #displayServersState()} afterwards.
-	 */
 	protected void handleStart() {
-		handleStart(null, null);
-	}
-	protected void handleStart(MenuItem startIcon, MenuItem stopIcon) {
-		ServicesStartStopUtil.startServers(this, prefsBean, this, startIcon, stopIcon);
+		ServicesStartStopUtil.startServers(this, prefsBean, this);
 	}
 
 	public boolean isKeyPresent() {
@@ -585,11 +572,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	}
 
 	protected void handleStop() {
-		handleStop(null, null);
-	}
-
-	protected void handleStop(MenuItem startIcon, MenuItem stopIcon) {
-		ServicesStartStopUtil.stopServers(this, startIcon, stopIcon);
+		ServicesStartStopUtil.stopServers(this);
 	}
 
 	protected void handlePrefs() {

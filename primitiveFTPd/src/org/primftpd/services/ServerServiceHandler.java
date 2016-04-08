@@ -1,16 +1,15 @@
 package org.primftpd.services;
 
-import java.lang.ref.WeakReference;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Handles starting and stopping of Servers, including {@link WakeLock}.
@@ -69,8 +68,6 @@ public class ServerServiceHandler extends Handler
 			boolean started = service.launchServer();
 
 			if (started && service.getServer() != null) {
-				service.createStatusbarNotification();
-
 				PowerManager powerMgr =
 					(PowerManager) service.getSystemService(
 						AbstractServerService.POWER_SERVICE);
@@ -81,11 +78,6 @@ public class ServerServiceHandler extends Handler
 				}
 			} else {
 				service.stopSelf();
-
-				// tell activity to update button states
-				Intent intent = new Intent(
-					AbstractServerService.BROADCAST_ACTION_COULD_NOT_START);
-				service.sendBroadcast(intent);
 			}
 		}
 	}
@@ -99,9 +91,6 @@ public class ServerServiceHandler extends Handler
 			if (service.prefsBean.isAnnounce()) {
 				service.unannounceService();
 			}
-		}
-		if (service.getServer() == null) {
-			service.removeStatusbarNotification();
 		}
 		releaseWakeLock();
 		logger.debug("stopSelf ({})", logName);

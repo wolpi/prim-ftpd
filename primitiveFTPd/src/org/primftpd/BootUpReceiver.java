@@ -27,7 +27,7 @@ public class BootUpReceiver extends BroadcastReceiver
 		Boolean startOnBoot = LoadPrefsUtil.startOnBoot(prefs);
 		if (startOnBoot != null && startOnBoot.booleanValue()) {
 			PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-			ServicesStartStopUtil.startServers(context, prefsBean, null, null, null);
+			ServicesStartStopUtil.startServers(context, prefsBean, null);
 		}
 	}
 }
