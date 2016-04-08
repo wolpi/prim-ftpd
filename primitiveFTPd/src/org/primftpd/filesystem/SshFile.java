@@ -66,8 +66,19 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 		case IsRegularFile:
 			return Boolean.valueOf(isFile());
 		case IsSymbolicLink:
-			// TODO ssh sym links
-			return Boolean.FALSE;
+			File fileToUseForCheck = this.file;
+			if (file.isDirectory()) {
+				File[] children = file.listFiles();
+				if (children != null && children.length > 0) {
+					File firstChild = children[0];
+					fileToUseForCheck = firstChild;
+				}
+			}
+			String absPath = fileToUseForCheck.getAbsolutePath();
+			String canonPath = fileToUseForCheck.getCanonicalPath();
+			Boolean isSymLink = Boolean.valueOf(!absPath.equals(canonPath));
+			logger.trace("  sym link {}, canon path used: {}", isSymLink, canonPath);
+			return isSymLink;
 		case Permissions:
 			boolean read = isReadable();
 			boolean write = isWritable();
@@ -162,9 +173,10 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	@Override
 	public String readSymbolicLink() throws IOException
 	{
-		// TODO ssh readSymbolicLink
 		logger.trace("readSymbolicLink()");
-		return null;
+		logger.trace("sym link abs path: {}", file.getAbsolutePath());
+		logger.trace("sym link can path: {}", file.getCanonicalPath());
+		return file.getCanonicalPath();
 	}
 
 	@Override
