@@ -42,6 +42,12 @@ public class ServicesStartStopUtil {
                 R.string.haveToSetPassword,
                 Toast.LENGTH_LONG).show();
 
+                if (activity == null) {
+                    // Launch the main activity so that the user may set their password.
+                    Intent activityIntent = new Intent(context, PrimitiveFtpdActivity.class);
+                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(activityIntent);
+                }
         } else {
             boolean continueServerStart = true;
             if (prefsBean.getServerToStart().startSftp()) {
