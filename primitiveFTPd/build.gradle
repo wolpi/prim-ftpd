@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-beta2'
+        classpath 'com.android.tools.build:gradle:1.5.0'
     }
 }
 
@@ -56,7 +56,21 @@ android {
     }
 }
 
+configurations {
+    compile.exclude group: 'org.slf4j', module: 'slf4j-api'
+    compile.exclude group: 'org.apache.ftpserver', module: 'ftplet-api'
+}
+
 dependencies {
+    // print dependency tree:
+    // ./gradlew primitiveFTPd:dependencies --configuration compile
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'org.apache.ftpserver:ftpserver-core:1.0.6'
+    compile 'org.apache.sshd:sshd-core:0.13.0'
+    compile 'org.bouncycastle:bcpg-jdk15on:1.54'
+    compile 'org.bouncycastle:bcpkix-jdk15on:1.54'
+    compile('com.sshtools:j2ssh-maverick:1.5.3') {
+        transitive false
+    }
     compile 'org.greenrobot:eventbus:3.0.0'
 }

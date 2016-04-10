@@ -8,7 +8,9 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
+import org.apache.ftpserver.usermanager.AnonymousAuthentication;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.sshd.SshServer;
@@ -95,7 +97,9 @@ public class SshServerService extends AbstractServerService
 		sshServer.setSubsystemFactories(factoryList);
 
 		// PasswordAuthenticator based on android preferences
-		if (StringUtils.isNotEmpty(prefsBean.getPassword())) {
+		if (StringUtils.isNotEmpty(prefsBean.getPassword())
+				|| prefsBean.isAnonymousLogin())
+		{
 			final AndroidPrefsUserManager userManager = new AndroidPrefsUserManager(prefsBean);
 			sshServer.setPasswordAuthenticator(new PasswordAuthenticator() {
 				@Override
@@ -104,11 +108,11 @@ public class SshServerService extends AbstractServerService
 					String password,
 					ServerSession session) {
 				logger.debug("password auth for user: {}", username);
+				Authentication authentication = AndroidPrefsUserManager.ANONYMOUS_USER_NAME.equals(username)
+					? new AnonymousAuthentication()
+					: new UsernamePasswordAuthentication(username, password);
 				try {
-					userManager.authenticate(
-						new UsernamePasswordAuthentication(
-							username,
-							password));
+					userManager.authenticate(authentication);
 				} catch (AuthenticationFailedException e) {
 					logger.debug("AuthenticationFailed", e);
 					return false;
@@ -183,22 +187,22 @@ public class SshServerService extends AbstractServerService
 		List<KeyPair> keyPairList = new ArrayList<KeyPair>(1);
 		FileInputStream pubkeyFis = null;
 		FileInputStream privkeyFis = null;
-        try {
-    		// read pub key
-        	KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
+		try {
+			// read pub key
+			KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
 
-        	pubkeyFis = openFileInput(PrimitiveFtpdActivity.PUBLICKEY_FILENAME);
-        	PublicKey publicKey = keyInfoProvider.readPublicKey(pubkeyFis);
+			pubkeyFis = openFileInput(PrimitiveFtpdActivity.PUBLICKEY_FILENAME);
+			PublicKey publicKey = keyInfoProvider.readPublicKey(pubkeyFis);
 
-    		// read priv key from it's own file
-    		privkeyFis = openFileInput(PrimitiveFtpdActivity.PRIVATEKEY_FILENAME);
-    		PrivateKey privateKey = keyInfoProvider.readPrivatekey(privkeyFis);
+			// read priv key from it's own file
+			privkeyFis = openFileInput(PrimitiveFtpdActivity.PRIVATEKEY_FILENAME);
+			PrivateKey privateKey = keyInfoProvider.readPrivatekey(privkeyFis);
 
 			// return key pair
-            keyPairList.add(new KeyPair(publicKey, privateKey));
-        } catch (Exception e) {
-        	logger.debug("could not read key: " + e.getMessage(), e);
-    	} finally {
+			keyPairList.add(new KeyPair(publicKey, privateKey));
+		} catch (Exception e) {
+			logger.debug("could not read key: " + e.getMessage(), e);
+		} finally {
 			if (pubkeyFis != null) {
 				IoUtils.close(pubkeyFis);
 			}
@@ -206,6 +210,6 @@ public class SshServerService extends AbstractServerService
 				IoUtils.close(privkeyFis);
 			}
 		}
-        return keyPairList;
+		return keyPairList;
 	}
 }

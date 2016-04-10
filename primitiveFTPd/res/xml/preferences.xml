@@ -2,13 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<PreferenceCategory android:title="@string/prefCategoryTitle">
-        <SwitchPreference
-            android:name="anonymousLogin"
-            android:key="anonymousLoginPref"
-            android:defaultValue="false"
-            android:title="@string/prefTitleAnonymousLogin"
-            android:summary="@string/prefSummaryAnonymousLogin"
-        />
+		<SwitchPreference
+			android:name="anonymousLogin"
+			android:key="anonymousLoginPref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleAnonymousLogin"
+			android:summary="@string/prefSummaryAnonymousLogin"
+		/>
 		<EditTextPreference
 			android:name="user_name"
 			android:key="userNamePref"
@@ -25,12 +25,12 @@
 		/>
 		<ListPreference
 			android:name="whichServerToStart"
-            android:key="whichServerToStartPref"
-            android:title="@string/prefTitleWhichServerToStart"
+			android:key="whichServerToStartPref"
+			android:title="@string/prefTitleWhichServerToStart"
 			android:summary="@string/prefSummaryWhichServerToStart"
-            android:defaultValue="0"
-            android:entries="@array/prefWhichServerToStartNames"
-            android:entryValues="@array/prefWhichServerToStartValues" />
+			android:defaultValue="0"
+			android:entries="@array/prefWhichServerToStartNames"
+			android:entryValues="@array/prefWhichServerToStartValues" />
 		<org.primftpd.prefs.PortEditTextPreference
 			android:name="port"
 			android:key="portPref"
@@ -84,20 +84,20 @@
 			/>
 		<ListPreference
 			android:name="theme"
-            android:key="themePref"
-            android:title="@string/prefTheme"
+			android:key="themePref"
+			android:title="@string/prefTheme"
 			android:summary="@string/prefSummaryTheme"
-            android:defaultValue="0"
-            android:entries="@array/prefThemeNames"
-            android:entryValues="@array/prefThemeValues" />
+			android:defaultValue="0"
+			android:entries="@array/prefThemeNames"
+			android:entryValues="@array/prefThemeValues" />
 		<ListPreference
 			android:name="logging"
-            android:key="loggingPref"
-            android:title="@string/prefTitleLogging"
+			android:key="loggingPref"
+			android:title="@string/prefTitleLogging"
 			android:summary="@string/prefSummaryLogging"
-            android:defaultValue="0"
-            android:entries="@array/prefLoggingNames"
-            android:entryValues="@array/prefLoggingValues" />
+			android:defaultValue="0"
+			android:entries="@array/prefLoggingNames"
+			android:entryValues="@array/prefLoggingValues" />
 
 	</PreferenceCategory>
 </PreferenceScreen>

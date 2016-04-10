@@ -53,17 +53,17 @@ public class FtpServerService extends AbstractServerService
 		ftpServer = null;
 	}
 
-    @Override
+	@Override
 	protected boolean launchServer() {
-    	ListenerFactory listenerFactory = new ListenerFactory();
-    	listenerFactory.setPort(prefsBean.getPort());
+		ListenerFactory listenerFactory = new ListenerFactory();
+		listenerFactory.setPort(prefsBean.getPort());
 
-    	FtpServerFactory serverFactory = new FtpServerFactory();
-    	serverFactory.addListener("default", listenerFactory.createListener());
+		FtpServerFactory serverFactory = new FtpServerFactory();
+		serverFactory.addListener("default", listenerFactory.createListener());
 
-    	// user manager & file system
-    	serverFactory.setUserManager(new AndroidPrefsUserManager(prefsBean));
-    	serverFactory.setFileSystem(new FileSystemFactory() {
+		// user manager & file system
+		serverFactory.setUserManager(new AndroidPrefsUserManager(prefsBean));
+		serverFactory.setFileSystem(new FileSystemFactory() {
 			@Override
 			public FileSystemView createFileSystemView(User user) throws FtpException {
 				return new FtpFileSystemView(prefsBean.getStartDir(), user);
@@ -77,16 +77,16 @@ public class FtpServerService extends AbstractServerService
 		conCfg.setLoginFailureDelay(2000);
 		serverFactory.setConnectionConfig(conCfg.createConnectionConfig());
 
-    	// do start server
-    	ftpServer = serverFactory.createServer();
-    	try {
-    		ftpServer.start();
+		// do start server
+		ftpServer = serverFactory.createServer();
+		try {
+			ftpServer.start();
 			return true;
-    	} catch (Exception e) {
-    		// note: createServer() throws RuntimeExceptions, too
-    		ftpServer = null;
+		} catch (Exception e) {
+			// note: createServer() throws RuntimeExceptions, too
+			ftpServer = null;
 			handleServerStartError(e);
 			return false;
 		}
-    }
+	}
 }

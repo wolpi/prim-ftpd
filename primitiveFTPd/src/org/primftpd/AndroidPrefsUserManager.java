@@ -24,6 +24,8 @@ import java.util.List;
 
 public class AndroidPrefsUserManager implements UserManager {
 
+	public static final String ANONYMOUS_USER_NAME = "anonymous";
+
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final PrefsBean prefsBean;
@@ -49,29 +51,29 @@ public class AndroidPrefsUserManager implements UserManager {
 	}
 
 	protected User buildUser() {
-        return createUser(prefsBean.getUserName(), prefsBean.getPassword());
+		return createUser(prefsBean.getUserName(), prefsBean.getPassword());
 	}
 
-    protected User anonymousUser() {
-        return createUser("anonymous", null);
-    }
+	protected User anonymousUser() {
+		return createUser(ANONYMOUS_USER_NAME, null);
+	}
 
-    private User createUser(String username, String password) {
-        BaseUser user = new BaseUser();
-        user.setEnabled(true);
+	private User createUser(String username, String password) {
+		BaseUser user = new BaseUser();
+		user.setEnabled(true);
 
-        String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath();
-        logger.debug("rootDir: {}", rootDir);
-        user.setHomeDirectory(rootDir);
+		String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+		logger.debug("rootDir: {}", rootDir);
+		user.setHomeDirectory(rootDir);
 
-        user.setMaxIdleTime(60);
-        user.setName(username);
-        if(password != null) {
-            user.setPassword(prefsBean.getPassword());
-        }
-        user.setAuthorities(buildAuthorities());
-        return user;
-    }
+		user.setMaxIdleTime(60);
+		user.setName(username);
+		if(password != null) {
+			user.setPassword(prefsBean.getPassword());
+		}
+		user.setAuthorities(buildAuthorities());
+		return user;
+	}
 
 	@Override
 	public User getUserByName(String username) throws FtpException {
@@ -83,7 +85,7 @@ public class AndroidPrefsUserManager implements UserManager {
 
 	@Override
 	public String[] getAllUserNames() throws FtpException {
-		return new String[]{prefsBean.getUserName(), "anonymous"};
+		return new String[]{prefsBean.getUserName(), ANONYMOUS_USER_NAME};
 	}
 
 	@Override
@@ -96,7 +98,7 @@ public class AndroidPrefsUserManager implements UserManager {
 
 	@Override
 	public boolean doesExist(String username) {
-		return prefsBean.getUserName().equals(username) || "anonymous".equals(username);
+		return prefsBean.getUserName().equals(username) || ANONYMOUS_USER_NAME.equals(username);
 	}
 
 	@Override
@@ -117,10 +119,10 @@ public class AndroidPrefsUserManager implements UserManager {
 				}
 			}
 		} else if(authentication instanceof AnonymousAuthentication) {
-            if(prefsBean.isAnonymousLogin()) {
-                return anonymousUser();
-            }
-        }
+			if(prefsBean.isAnonymousLogin()) {
+				return anonymousUser();
+			}
+		}
 		throw new AuthenticationFailedException();
 	}
 

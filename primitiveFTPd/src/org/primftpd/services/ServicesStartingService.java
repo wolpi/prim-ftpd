@@ -36,9 +36,9 @@ public class ServicesStartingService extends Service {
         if (!serversRunningBean.atLeastOneRunning()) {
             SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
             PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-            ServicesStartStopUtil.startServers(context, prefsBean, null, null, null);
+            ServicesStartStopUtil.startServers(context, prefsBean, null);
         } else {
-            ServicesStartStopUtil.stopServers(context, null, null);
+            ServicesStartStopUtil.stopServers(context);
         }
 
         // this service is not intended to run in background

@@ -1,21 +1,25 @@
 package org.primftpd.util;
 
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.view.MenuItem;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
 import org.primftpd.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.StartStopWidgetProvider;
-import org.primftpd.events.ServerStatusUpdateEvent;
 import org.primftpd.services.FtpServerService;
+import org.primftpd.services.ServicesStartingService;
 import org.primftpd.services.SshServerService;
 
 import java.util.List;
@@ -30,22 +34,20 @@ public class ServicesStartStopUtil {
     public static void startServers(
             Context context,
             PrefsBean prefsBean,
-            PrimitiveFtpdActivity activity,
-            MenuItem startIcon,
-            MenuItem stopIcon) {
+            PrimitiveFtpdActivity activity) {
         if (!isPasswordOk(prefsBean))
         {
             Toast.makeText(
-                    context,
-                    R.string.haveToSetPassword,
-                    Toast.LENGTH_SHORT).show();
+                context,
+                R.string.haveToSetPassword,
+                Toast.LENGTH_LONG).show();
 
-            if(activity == null ){
-                // Launch the main activity so that the user may set their password.
-                Intent activityIntent = new Intent(context, PrimitiveFtpdActivity.class);
-                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(activityIntent);
-            }
+                if (activity == null) {
+                    // Launch the main activity so that the user may set their password.
+                    Intent activityIntent = new Intent(context, PrimitiveFtpdActivity.class);
+                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(activityIntent);
+                }
         } else {
             boolean continueServerStart = true;
             if (prefsBean.getServerToStart().startSftp()) {
@@ -67,29 +69,13 @@ public class ServicesStartStopUtil {
                 if (prefsBean.getServerToStart().startFtp()) {
                     context.startService(createFtpServiceIntent(context, prefsBean));
                 }
-                if (startIcon != null && stopIcon != null) {
-                    startIcon.setVisible(false);
-                    stopIcon.setVisible(true);
-                } else {
-                    // Post a server status update event for the activity to respond to.
-                    EventBus.getDefault().post(ServerStatusUpdateEvent.STARTING);
-                }
-                updateWidget(context, true);
             }
         }
     }
 
-    public static void stopServers(Context context, MenuItem startIcon, MenuItem stopIcon) {
+    public static void stopServers(Context context) {
         context.stopService(createFtpServiceIntent(context, null));
         context.stopService(createSshServiceIntent(context, null));
-        if (startIcon != null && stopIcon != null) {
-            startIcon.setVisible(true);
-            stopIcon.setVisible(false);
-        } else {
-            // Post a server status update event for the activity to respond to.
-            EventBus.getDefault().post(ServerStatusUpdateEvent.STOPPING);
-        }
-        updateWidget(context, false);
     }
 
     protected static Intent createFtpServiceIntent(Context context, PrefsBean prefsBean) {
@@ -111,9 +97,7 @@ public class ServicesStartStopUtil {
     }
 
     protected static boolean isPasswordOk(PrefsBean prefsBean) {
-        if (prefsBean.isAnonymousLogin() || !prefsBean.getServerToStart().isPasswordMandatory()
-                && prefsBean.isPubKeyAuth())
-        {
+        if (!prefsBean.getServerToStart().isPasswordMandatory(prefsBean)) {
             return true;
         }
         return !StringUtils.isBlank(prefsBean.getPassword());
@@ -138,6 +122,54 @@ public class ServicesStartStopUtil {
             }
         }
         return serversRunning;
+    }
+
+    public static void createStatusbarNotification(Context ctxt) {
+        // create pending intent
+        Intent notificationIntent = new Intent(ctxt, PrimitiveFtpdActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(ctxt, 0, notificationIntent, 0);
+
+        Intent stopIntent = new Intent(ctxt, ServicesStartingService.class);
+        PendingIntent pendingStopIntent = PendingIntent.getService(ctxt, 0, stopIntent, 0);
+
+        // create notification
+        int icon = R.drawable.ic_notification;
+        CharSequence tickerText = ctxt.getText(R.string.serverRunning);
+        CharSequence contentTitle = ctxt.getText(R.string.notificationTitle);
+        CharSequence contentText = tickerText;
+
+        // use main icon as large one
+        Bitmap largeIcon = BitmapFactory.decodeResource(
+                ctxt.getResources(),
+                R.drawable.ic_launcher);
+
+        long when = System.currentTimeMillis();
+
+        Notification.Builder builder = new Notification.Builder(ctxt)
+                .setTicker(tickerText)
+                .setContentTitle(contentTitle)
+                .setContentText(contentText)
+                .setSmallIcon(icon)
+                .setLargeIcon(largeIcon)
+                .setContentIntent(contentIntent)
+                .setWhen(when);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Notification.Action stopAction = new Notification.Action.Builder(
+                    Icon.createWithResource("", R.drawable.ic_stop_white_24dp),
+                    ctxt.getString(R.string.stopService),
+                    pendingStopIntent).build();
+            builder.addAction(stopAction);
+        } else {
+            builder.addAction(
+                    R.drawable.ic_stop_white_24dp,
+                    ctxt.getString(R.string.stopService),
+                    pendingStopIntent);
+        }
+        Notification notification =builder.build();
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+
+        // notification manager
+        NotificationUtil.createStatusbarNotification(ctxt, notification);
     }
 
     public static void updateWidget(Context context, boolean running)
