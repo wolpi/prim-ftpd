@@ -153,19 +153,24 @@ public class ServicesStartStopUtil {
                 .setLargeIcon(largeIcon)
                 .setContentIntent(contentIntent)
                 .setWhen(when);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Notification.Action stopAction = new Notification.Action.Builder(
                     Icon.createWithResource("", R.drawable.ic_stop_white_24dp),
                     ctxt.getString(R.string.stopService),
                     pendingStopIntent).build();
             builder.addAction(stopAction);
-        } else {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             builder.addAction(
                     R.drawable.ic_stop_white_24dp,
                     ctxt.getString(R.string.stopService),
                     pendingStopIntent);
         }
-        Notification notification =builder.build();
+        Notification notification = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            notification = builder.build();
+        } else {
+            notification = builder.getNotification();
+        }
         notification.flags |= Notification.FLAG_NO_CLEAR;
 
         // notification manager

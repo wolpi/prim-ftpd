@@ -5,7 +5,7 @@
     android:versionCode="19"
     android:versionName="4.5-SNAPSHOT" >
 
-    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21" />
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
