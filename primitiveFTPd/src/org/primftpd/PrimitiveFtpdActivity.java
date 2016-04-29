@@ -96,6 +96,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	private String fingerprintMd5 = " - ";
 	private String fingerprintSha1 = " - ";
 	private String fingerprintSha256 = " - ";
+	private long timestampOfLastEvent = 0;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -442,7 +443,15 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
 	public void onEvent(ServerStateChangedEvent event) {
-		displayServersState();
+		long currentTime = System.currentTimeMillis();
+		long offset = currentTime - timestampOfLastEvent;
+		if (offset > 300) {
+			logger.debug("handling event, offset: {} ms", Long.valueOf(offset));
+			timestampOfLastEvent = currentTime;
+			displayServersState();
+		} else {
+			logger.debug("ignoring event, offset: {} ms", Long.valueOf(offset));
+		}
 	}
 
 	/**
