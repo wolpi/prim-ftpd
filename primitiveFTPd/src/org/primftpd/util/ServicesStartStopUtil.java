@@ -18,6 +18,7 @@ import org.primftpd.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.StartStopWidgetProvider;
+import org.primftpd.remotecontrol.PftpdPowerTogglesPlugin;
 import org.primftpd.services.FtpServerService;
 import org.primftpd.services.ServicesStartingService;
 import org.primftpd.services.SshServerService;
@@ -35,19 +36,18 @@ public class ServicesStartStopUtil {
             Context context,
             PrefsBean prefsBean,
             PrimitiveFtpdActivity activity) {
-        if (!isPasswordOk(prefsBean))
-        {
+        if (!isPasswordOk(prefsBean)) {
             Toast.makeText(
                 context,
                 R.string.haveToSetPassword,
                 Toast.LENGTH_LONG).show();
 
-                if (activity == null) {
-                    // Launch the main activity so that the user may set their password.
-                    Intent activityIntent = new Intent(context, PrimitiveFtpdActivity.class);
-                    activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(activityIntent);
-                }
+            if (activity == null) {
+                // Launch the main activity so that the user may set their password.
+                Intent activityIntent = new Intent(context, PrimitiveFtpdActivity.class);
+                activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(activityIntent);
+            }
         } else {
             boolean continueServerStart = true;
             if (prefsBean.getServerToStart().startSftp()) {
@@ -124,7 +124,7 @@ public class ServicesStartStopUtil {
         return serversRunning;
     }
 
-    public static void createStatusbarNotification(Context ctxt) {
+    private static void createStatusbarNotification(Context ctxt) {
         // create pending intent
         Intent notificationIntent = new Intent(ctxt, PrimitiveFtpdActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(ctxt, 0, notificationIntent, 0);
@@ -177,7 +177,7 @@ public class ServicesStartStopUtil {
         NotificationUtil.createStatusbarNotification(ctxt, notification);
     }
 
-    public static void updateWidget(Context context, boolean running)
+    private static void updateWidget(Context context, boolean running)
     {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
 
@@ -206,5 +206,15 @@ public class ServicesStartStopUtil {
         ComponentName thisWidget = new ComponentName(context, StartStopWidgetProvider.class);
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         manager.updateAppWidget(thisWidget, remoteViews);
+    }
+
+    public static void updateNonActivityUI(Context ctxt, boolean serverRunning) {
+        updateWidget(ctxt, serverRunning);
+        if (serverRunning) {
+            createStatusbarNotification(ctxt);
+        } else {
+            NotificationUtil.removeStatusbarNotification(ctxt);
+        }
+        new PftpdPowerTogglesPlugin().sendStateUpdate(ctxt, serverRunning);
     }
 }

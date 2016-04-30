@@ -6,6 +6,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
+import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +77,7 @@ public class ServerServiceHandler extends Handler
 				if (service.prefsBean.isAnnounce()) {
 					service.announceService();
 				}
+				ServicesStartStopUtil.updateNonActivityUI(service, true);
 			} else {
 				service.stopSelf();
 			}
@@ -95,6 +97,7 @@ public class ServerServiceHandler extends Handler
 		releaseWakeLock();
 		logger.debug("stopSelf ({})", logName);
 		service.stopSelf();
+		ServicesStartStopUtil.updateNonActivityUI(service, false);
 	}
 
 	private synchronized void obtainWakeLock(

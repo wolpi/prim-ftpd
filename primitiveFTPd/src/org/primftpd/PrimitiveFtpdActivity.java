@@ -480,13 +480,6 @@ public class PrimitiveFtpdActivity extends Activity {
 		// we don't get serversRunning, yet
 		if (serversRunning != null) {
 			showPortsAndServerState();
-			ServicesStartStopUtil.updateWidget(this, running.booleanValue());
-		}
-
-		if (Boolean.TRUE == running) {
-			ServicesStartStopUtil.createStatusbarNotification(this);
-		} else if (Boolean.FALSE == running) {
-			NotificationUtil.removeStatusbarNotification(this);
 		}
 	}
 

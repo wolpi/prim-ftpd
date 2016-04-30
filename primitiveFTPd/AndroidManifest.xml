@@ -38,6 +38,14 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
+        <receiver android:enabled="true" android:name=".remotecontrol.PftpdPowerTogglesPlugin"
+                  android:permission="com.painless.pc.permission.CONTROL_PLUGIN"
+                  android:icon="@drawable/ic_notification">
+            <intent-filter>
+                <action android:name="com.painless.pc.ACTION_SET_STATE" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".PrimitiveFtpdActivity"
             android:label="@string/app_name"
