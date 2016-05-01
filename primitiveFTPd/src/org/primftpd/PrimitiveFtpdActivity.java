@@ -35,6 +35,7 @@ import org.primftpd.prefs.FtpPrefsActivityThemeLight;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.Theme;
+import org.primftpd.remotecontrol.PftpdTaskerReceiver;
 import org.primftpd.util.KeyGenerator;
 import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.NotificationUtil;
@@ -627,5 +628,14 @@ public class PrimitiveFtpdActivity extends Activity {
 		PrimFtpdLoggerBinder.setLoggingPref(logging);
 		// re-create own log, don't care about other classes
 		this.logger = LoggerFactory.getLogger(getClass());
+	}
+
+	@Override
+	public void finish() {
+		// tasker integration
+		Intent resultIntent = PftpdTaskerReceiver.buildResultIntent(this);
+		setResult(RESULT_OK, resultIntent);
+
+		super.finish();
 	}
 }
