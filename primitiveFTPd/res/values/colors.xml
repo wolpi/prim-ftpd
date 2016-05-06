@@ -9,5 +9,6 @@
     <item name="blueIconAccent" type="color">#00b0ff</item>
 
     <color name="widgetBackgroundDisabled">#9b9b9b</color>
-    <color name="widgetBackgroundEnabled">#68cc64</color>
+    <color name="widgetBackgroundEnabled">#1dcc1c</color>
+    <color name="widgetTextColorEnabled">#000000</color>
 </resources>
