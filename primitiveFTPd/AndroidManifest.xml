@@ -64,9 +64,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-
-                <!-- required for tasker -->
-                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
             </intent-filter>
         </activity>
 
@@ -85,6 +82,14 @@
         <activity
             android:name="org.primftpd.prefs.AboutActivity"
             android:label="About">
+        </activity>
+
+        <activity
+            android:name="org.primftpd.remotecontrol.TaskerEditActionActivity"
+            android:label="@string/selectServerAction">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
+            </intent-filter>
         </activity>
 
         <service android:name="org.primftpd.services.FtpServerService" />
