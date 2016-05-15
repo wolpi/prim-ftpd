@@ -12,9 +12,9 @@ import org.primftpd.R;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Theme;
 
-public class TaskerEditActionActivity extends ListActivity {
+public class TaskerEditConditionActivity extends ListActivity {
 
-    private TaskerAction selectedAction;
+    private TaskerCondition selectedCondition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +24,10 @@ public class TaskerEditActionActivity extends ListActivity {
         setTheme(theme.resourceId());
         setContentView(R.layout.tasker_edit_activity);
 
-        TaskerAction[] actions = TaskerAction.values();
-        String[] data = new String[actions.length];
-        for (int i=0; i<actions.length; i++) {
-            data[i] = getText(actions[i].getStringId()).toString();
+        TaskerCondition[] conditions = TaskerCondition.values();
+        String[] data = new String[conditions.length];
+        for (int i=0; i<conditions.length; i++) {
+            data[i] = getText(conditions[i].getStringId()).toString();
         }
 
         ListView listView = (ListView) findViewById(android.R.id.list);
@@ -40,13 +40,13 @@ public class TaskerEditActionActivity extends ListActivity {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        this.selectedAction = TaskerAction.values()[position];
+        this.selectedCondition = TaskerCondition.values()[position];
         finish();
     }
 
     @Override
     public void finish() {
-        Intent resultIntent = TaskerReceiver.buildResultIntent(this, selectedAction.getBlurb());
+        Intent resultIntent = TaskerReceiver.buildResultIntent(this, selectedCondition.getBlurb());
         setResult(RESULT_OK, resultIntent);
 
         super.finish();

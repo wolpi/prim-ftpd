@@ -19,6 +19,7 @@ import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.StartStopWidgetProvider;
 import org.primftpd.remotecontrol.PftpdPowerTogglesPlugin;
+import org.primftpd.remotecontrol.TaskerReceiver;
 import org.primftpd.services.FtpServerService;
 import org.primftpd.services.ServicesStartingService;
 import org.primftpd.services.SshServerService;
@@ -216,5 +217,6 @@ public class ServicesStartStopUtil {
             NotificationUtil.removeStatusbarNotification(ctxt);
         }
         new PftpdPowerTogglesPlugin().sendStateUpdate(ctxt, serverRunning);
+        TaskerReceiver.sendRequestQueryCondition(ctxt);
     }
 }

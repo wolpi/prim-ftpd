@@ -49,11 +49,12 @@
         </receiver>
 
         <receiver
-                android:name=".remotecontrol.PftpdTaskerReceiver"
+                android:name=".remotecontrol.TaskerReceiver"
                 android:exported="true"
                 android:process=":background">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
+                <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
             </intent-filter>
         </receiver>
 
@@ -89,6 +90,13 @@
             android:label="@string/selectServerAction">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="org.primftpd.remotecontrol.TaskerEditConditionActivity"
+            android:label="@string/state">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_CONDITION" />
             </intent-filter>
         </activity>
 

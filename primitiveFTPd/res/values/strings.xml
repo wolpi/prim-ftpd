@@ -66,6 +66,7 @@
     <string name="widgetTextStop">stop (s)ftpd</string>
     <string name="isAnonymous">Anonymous Login: %1$b</string>
     <string name="selectServerAction">Select Server Action</string>
+    <string name="isServerRunning">Is server running?</string>
 
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
