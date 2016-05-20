@@ -21,7 +21,8 @@ public class TaskerReceiver extends BroadcastReceiver {
     // see
     // https://github.com/twofortyfouram/android-plugin-api-for-locale/blob/master/pluginApiLib/src/main/java/com/twofortyfouram/locale/api/Intent.java
     private static final String ACTION_FIRE_SETTING = "com.twofortyfouram.locale.intent.action.FIRE_SETTING";
-    private static final String ACTION_QUERY_CONDITION = "com.twofortyfouram.locale.intent.action.ACTION_QUERY_CONDITION";
+    private static final String ACTION_QUERY_CONDITION = "com.twofortyfouram.locale.intent.action.QUERY_CONDITION";
+    private static final String ACTION_REQUEST_QUERY = "com.twofortyfouram.locale.intent.action.REQUEST_QUERY";
     private static final String EXTRA_BUNDLE = "com.twofortyfouram.locale.intent.extra.BUNDLE";
     private static final String EXTRA_STRING_BLURB = "com.twofortyfouram.locale.intent.extra.BLURB";
     private static final String EXTRA_STRING_ACTIVITY_CLASS_NAME = "com.twofortyfouram.locale.intent.extra.ACTIVITY_CLASS_NAME";
@@ -64,9 +65,9 @@ public class TaskerReceiver extends BroadcastReceiver {
                 switch (condition) {
                     case IS_SERVER_RUNNING:
                         int conditionResult = running ? RESULT_CONDITION_SATISFIED : RESULT_CONDITION_UNSATISFIED;
-                        final PendingResult result = goAsync();
-                        result.setResultCode(conditionResult);
-                        result.finish();
+                        logger.debug("got query condition with blurb: {}, setting result: {}",
+                                blurb, Boolean.valueOf(running));
+                        setResultCode(conditionResult);
                         break;
                 }
             }
@@ -108,10 +109,9 @@ public class TaskerReceiver extends BroadcastReceiver {
     }
 
     public static void sendRequestQueryCondition(Context context) {
-        final Intent intent = new Intent();
-        final Bundle resultBundle = generateBundle(context);
-        intent.putExtra(EXTRA_BUNDLE, resultBundle);
+        final Intent intent = new Intent(ACTION_REQUEST_QUERY);
         intent.putExtra(EXTRA_STRING_ACTIVITY_CLASS_NAME, TaskerEditConditionActivity.class.getName());
+        logger.debug("sending tasker RequestQueryCondition");
         context.sendBroadcast(intent);
     }
 }
