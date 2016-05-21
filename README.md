@@ -8,7 +8,7 @@ Some features:
 * Can optionally be started on system boot
 * Shows statusbar notification when server is running
 * Server can be stopped from statusbar
-* Shows connection information on main screen
+* Shows information about how to connect on main screen
 * Optional wakelock while server runs to avoid uploads and downloads to be aborted
 * Optional encryption via sftp
 * Server can be announced
