@@ -1,0 +1,9 @@
+# IDE files
+.metadata
+RemoteSystemsTempFiles
+.idea
+out
+build
+*.iml
+.gradle
+local.properties
