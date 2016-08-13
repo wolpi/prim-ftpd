@@ -1,6 +1,9 @@
 package org.primftpd.util;
 
+import android.util.Base64;
+
 import org.apache.ftpserver.util.IoUtils;
+import org.primftpd.pojo.Base64Decoder;
 import org.primftpd.pojo.KeyParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,7 +121,14 @@ public class KeyInfoProvider
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(path);
-			PublicKey pubKey = KeyParser.parsePublicKey(fis);
+			PublicKey pubKey = KeyParser.parsePublicKey(
+					fis,
+					new Base64Decoder() {
+						@Override
+						public byte[] decode(String str) {
+							return Base64.decode(str, Base64.DEFAULT);
+						}
+					});
 
 			if (pubKey == null) {
 				logger.error("Could not read public key! Is it a valid file?");

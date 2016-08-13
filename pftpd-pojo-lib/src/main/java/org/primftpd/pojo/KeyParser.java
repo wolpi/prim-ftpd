@@ -24,7 +24,7 @@ public class KeyParser {
     public static final String NAME_ECDSA = "ecdsa-sha2-nistp256";
     public static final int LENGTH_LENGTH = 4;
 
-    public static PublicKey parsePublicKey(InputStream is)
+    public static PublicKey parsePublicKey(InputStream is, Base64Decoder base64Decoder)
             throws IOException, InvalidKeySpecException, NoSuchAlgorithmException {
         if (is == null) {
             throw new IllegalArgumentException("input stream cannot be null");
@@ -41,7 +41,7 @@ public class KeyParser {
         }
 
         if (keyEncoded != null) {
-            byte[] keyBytes = Base64.getDecoder().decode(keyEncoded);
+            byte[] keyBytes = base64Decoder.decode(keyEncoded);
 
             if (NAME_RSA.equals(name)) {
                 return parsePublicKeyRsa(keyBytes);

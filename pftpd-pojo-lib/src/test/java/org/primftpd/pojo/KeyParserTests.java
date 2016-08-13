@@ -1,5 +1,6 @@
 package org.primftpd.pojo;
 
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ public class KeyParserTests {
     public void parsePubKeyRsa() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/rsa.key.pub");
 
-        RSAPublicKey pubKey = (RSAPublicKey)KeyParser.parsePublicKey(is);
+        RSAPublicKey pubKey = (RSAPublicKey)KeyParser.parsePublicKey(is, new CommonsBase64Decoder());
 
         Assert.assertEquals(new BigInteger("65537"), pubKey.getPublicExponent());
 
@@ -33,7 +34,7 @@ public class KeyParserTests {
     public void parsePubKeyDsa() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/dsa.key.pub");
 
-        DSAPublicKey pubKey = (DSAPublicKey)KeyParser.parsePublicKey(is);
+        DSAPublicKey pubKey = (DSAPublicKey)KeyParser.parsePublicKey(is, new CommonsBase64Decoder());
 
         final String y = "4075820517720311789755060432555041302495713535036194101055101600952719" +
                 "8027506134078097330328538489864134942817893994891118803853518548361792777130885" +
@@ -56,5 +57,12 @@ public class KeyParserTests {
         Assert.assertEquals(new BigInteger(p), pubKey.getParams().getP());
         Assert.assertEquals(new BigInteger(q), pubKey.getParams().getQ());
         Assert.assertEquals(new BigInteger(g), pubKey.getParams().getG());
+    }
+
+    public static class CommonsBase64Decoder implements Base64Decoder {
+        @Override
+        public byte[] decode(String str) {
+            return Base64.decodeBase64(str);
+        }
     }
 }
