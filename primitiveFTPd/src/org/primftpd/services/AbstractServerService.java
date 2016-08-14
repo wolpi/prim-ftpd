@@ -1,10 +1,12 @@
 package org.primftpd.services;
 
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -124,41 +126,50 @@ public abstract class AbstractServerService
 	/**
 	 * Register a DNS-SD service (to be discoverable through Bonjour/Avahi).
 	 */
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	protected void announceService () {
-		nsdRegistrationListener = new NsdManager.RegistrationListener() {
-			@Override
-			public void onServiceRegistered(NsdServiceInfo serviceInfo) {
-				logger.debug("onServiceRegistered()");
-			}
-			@Override
-			public void onRegistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
-				logger.debug("onRegistrationFailed()");
-			}
-			@Override
-			public void onServiceUnregistered(NsdServiceInfo serviceInfo) {
-				logger.debug("onServiceUnregistered()");
-			}
-			@Override
-			public void onUnregistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
-				logger.debug("onUnregistrationFailed()");
-			}
-		};
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			nsdRegistrationListener = new NsdManager.RegistrationListener() {
+				@Override
+				public void onServiceRegistered(NsdServiceInfo serviceInfo) {
+					logger.debug("onServiceRegistered()");
+				}
 
-		NsdServiceInfo serviceInfo  = new NsdServiceInfo();
-		serviceInfo.setServiceName("primitive ftpd");
-		serviceInfo.setServiceType("_" + getServiceName() + "._tcp.");
-		serviceInfo.setPort(getPort());
+				@Override
+				public void onRegistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
+					logger.debug("onRegistrationFailed()");
+				}
 
-		NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+				@Override
+				public void onServiceUnregistered(NsdServiceInfo serviceInfo) {
+					logger.debug("onServiceUnregistered()");
+				}
 
-		nsdManager.registerService(
-			serviceInfo,
-			NsdManager.PROTOCOL_DNS_SD,
-			nsdRegistrationListener);
+				@Override
+				public void onUnregistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
+					logger.debug("onUnregistrationFailed()");
+				}
+			};
+
+			NsdServiceInfo serviceInfo = new NsdServiceInfo();
+			serviceInfo.setServiceName("primitive ftpd");
+			serviceInfo.setServiceType("_" + getServiceName() + "._tcp.");
+			serviceInfo.setPort(getPort());
+
+			NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+
+			nsdManager.registerService(
+					serviceInfo,
+					NsdManager.PROTOCOL_DNS_SD,
+					nsdRegistrationListener);
+		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	protected void unannounceService () {
-		NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
-		nsdManager.unregisterService(nsdRegistrationListener);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+			nsdManager.unregisterService(nsdRegistrationListener);
+		}
 	}
 }

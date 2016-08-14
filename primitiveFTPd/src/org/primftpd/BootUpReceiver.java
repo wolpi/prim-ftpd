@@ -23,11 +23,13 @@ public class BootUpReceiver extends BroadcastReceiver
 		// adb shell
 		// am broadcast -a android.intent.action.BOOT_COMPLETED
 
-		SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
-		Boolean startOnBoot = LoadPrefsUtil.startOnBoot(prefs);
-		if (startOnBoot != null && startOnBoot.booleanValue()) {
-			PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-			ServicesStartStopUtil.startServers(context, prefsBean, null);
+		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+			SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
+			Boolean startOnBoot = LoadPrefsUtil.startOnBoot(prefs);
+			if (startOnBoot != null && startOnBoot.booleanValue()) {
+				PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
+				ServicesStartStopUtil.startServers(context, prefsBean, null);
+			}
 		}
 	}
 }

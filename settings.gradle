@@ -1,1 +1,1 @@
-include ':primitiveFTPd'
+include ':primitiveFTPd', ':pftpd-pojo-lib'

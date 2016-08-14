@@ -1,12 +1,10 @@
 package org.primftpd.util;
 
-import com.sshtools.publickey.SshPublicKeyFile;
-import com.sshtools.publickey.SshPublicKeyFileFactory;
-import com.sshtools.ssh.components.SshPublicKey;
-import com.sshtools.ssh.components.jce.Ssh2DsaPublicKey;
-import com.sshtools.ssh.components.jce.Ssh2RsaPublicKey;
+import android.util.Base64;
 
 import org.apache.ftpserver.util.IoUtils;
+import org.primftpd.pojo.Base64Decoder;
+import org.primftpd.pojo.KeyParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,17 +12,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Locale;
 
@@ -126,32 +121,20 @@ public class KeyInfoProvider
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(path);
-			SshPublicKeyFile sshPubKeyFile = SshPublicKeyFileFactory.parse(fis);
-			SshPublicKey sshPubKey = sshPubKeyFile.toPublicKey();
-			// ssh2 rsa only
-			if (sshPubKey instanceof Ssh2RsaPublicKey) {
-				Ssh2RsaPublicKey rsaPubKey = (Ssh2RsaPublicKey) sshPubKey;
-				BigInteger modulus = rsaPubKey.getModulus();
-				BigInteger exponent = rsaPubKey.getPublicExponent();
-				RSAPublicKeySpec pubKeySpec = new RSAPublicKeySpec(modulus, exponent);
-				KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-				return keyFactory.generatePublic(pubKeySpec);
-			} else if (sshPubKey instanceof Ssh2DsaPublicKey) {
-				Ssh2DsaPublicKey dsaPubKey = (Ssh2DsaPublicKey) sshPubKey;
-				DSAPublicKeySpec pubKeySpec = new DSAPublicKeySpec(
-					dsaPubKey.getY(),
-					dsaPubKey.getP(),
-					dsaPubKey.getQ(),
-					dsaPubKey.getG()
-				);
-				KeyFactory keyFactory = KeyFactory.getInstance("DSA");
-				return keyFactory.generatePublic(pubKeySpec);
-			} else {
-				logger.error("Could not read public key! Expected: '{}' or '{}', but got: '{}'",
-					new Object[]{Ssh2RsaPublicKey.class.getName(),
-						Ssh2DsaPublicKey.class.getName(),
-						sshPubKey.getClass().getName()});
+			PublicKey pubKey = KeyParser.parsePublicKey(
+					fis,
+					new Base64Decoder() {
+						@Override
+						public byte[] decode(String str) {
+							return Base64.decode(str, Base64.DEFAULT);
+						}
+					});
+
+			if (pubKey == null) {
+				logger.error("Could not read public key! Is it a valid file?");
 			}
+
+			return pubKey;
 		} catch (Exception e) {
 			logger.error("could not read key auth key", e);
 		} finally {

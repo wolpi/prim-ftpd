@@ -18,6 +18,7 @@
     
     <string name="startService">Server Starten</string>
     <string name="stopService">Server Stoppen</string>
+    <string name="toggleService">Server zwischen start/stop umschalten</string>
     <string name="notificationTitle">FTP Server</string>
 
     <string name="haveToSetPassword">Sie müssen erst ein Passwort setzen</string>
@@ -59,6 +60,7 @@
     <string name="reset">Zurücksetzen</string>
 
     <string name="isAnonymous">Anonymous Login: %1$b</string>
+    <string name="selectServerAction">Server Aktion wählen</string>
 
     <string-array name="prefWhichServerToStartNames">
         <item>FTP und SFTP</item>

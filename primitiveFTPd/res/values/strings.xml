@@ -18,6 +18,7 @@
     
     <string name="startService">Start Server</string>
     <string name="stopService">Stop Server</string>
+    <string name="toggleService">Toggle Server start/stop</string>
     <string name="notificationTitle">FTP Server</string>
 
     <string name="haveToSetPassword">You have to set a password first</string>
@@ -64,6 +65,8 @@
     <string name="widgetTextStart">start (s)ftpd</string>
     <string name="widgetTextStop">stop (s)ftpd</string>
     <string name="isAnonymous">Anonymous Login: %1$b</string>
+    <string name="selectServerAction">Select Server Action</string>
+    <string name="isServerRunning">Is server running?</string>
 
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>

@@ -2,8 +2,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.primftpd"
-    android:versionCode="19"
-    android:versionName="4.5-SNAPSHOT" >
+    android:versionCode="20"
+    android:versionName="4.6-SNAPSHOT" >
 
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="23" />
 
@@ -38,6 +38,26 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
+        <receiver
+                android:name=".remotecontrol.PftpdPowerTogglesPlugin"
+                android:enabled="true"
+                android:permission="com.painless.pc.permission.CONTROL_PLUGIN"
+                android:icon="@drawable/ic_notification">
+            <intent-filter>
+                <action android:name="com.painless.pc.ACTION_SET_STATE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+                android:name=".remotecontrol.TaskerReceiver"
+                android:exported="true"
+                android:process=":background">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
+                <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".PrimitiveFtpdActivity"
             android:label="@string/app_name"
@@ -63,6 +83,21 @@
         <activity
             android:name="org.primftpd.prefs.AboutActivity"
             android:label="About">
+        </activity>
+
+        <activity
+            android:name="org.primftpd.remotecontrol.TaskerEditActionActivity"
+            android:label="@string/selectServerAction">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="org.primftpd.remotecontrol.TaskerEditConditionActivity"
+            android:label="@string/state">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_CONDITION" />
+            </intent-filter>
         </activity>
 
         <service android:name="org.primftpd.services.FtpServerService" />

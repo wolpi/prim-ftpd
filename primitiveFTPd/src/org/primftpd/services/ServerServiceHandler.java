@@ -6,6 +6,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
+import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ public class ServerServiceHandler extends Handler
 		String logName)
 	{
 		super(looper);
-		this.serviceRef = new WeakReference<AbstractServerService>(service);
+		this.serviceRef = new WeakReference<>(service);
 		this.logName = logName;
 	}
 
@@ -76,6 +77,7 @@ public class ServerServiceHandler extends Handler
 				if (service.prefsBean.isAnnounce()) {
 					service.announceService();
 				}
+				ServicesStartStopUtil.updateNonActivityUI(service, true);
 			} else {
 				service.stopSelf();
 			}
@@ -95,6 +97,7 @@ public class ServerServiceHandler extends Handler
 		releaseWakeLock();
 		logger.debug("stopSelf ({})", logName);
 		service.stopSelf();
+		ServicesStartStopUtil.updateNonActivityUI(service, false);
 	}
 
 	private synchronized void obtainWakeLock(
@@ -120,8 +123,12 @@ public class ServerServiceHandler extends Handler
 
 	private synchronized void releaseWakeLock() {
 		if (wakeLock != null) {
-			logger.debug("releasing wake lock ({})", logName);
-			wakeLock.release();
+			if (wakeLock.isHeld()) {
+				logger.debug("releasing wake lock ({})", logName);
+				wakeLock.release();
+			} else {
+				logger.debug("wake lock not held, not releasing it ({})", logName);
+			}
 			wakeLock = null;
 		} else {
 			logger.debug("wake lock already released ({})", logName);
