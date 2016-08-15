@@ -1,5 +1,6 @@
 package org.primftpd;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,8 +14,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -84,6 +87,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	public static final String PUBLICKEY_FILENAME = "pftpd-pub.bin";
 	public static final String PRIVATEKEY_FILENAME = "pftpd-priv.pk8";
+	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0xBEEF;
 
 	public static final String DIALOG_TAG = "dialogs";
 
@@ -159,6 +163,38 @@ public class PrimitiveFtpdActivity extends Activity {
 		loadPrefs();
 		showUsername();
 		showAnonymousLogin();
+	}
+
+	/**
+	 * Checks whether the app has the following permission.
+	 * @param permission The permission name
+	 * @param requestCode The request code to check against in the {@link #onRequestPermissionsResult} callback.
+     * @return true if permission has been granted.
+     */
+	protected boolean hasPermission(String permission, int requestCode) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			if(checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{permission}, requestCode);
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+				// If request is cancelled, the result arrays are empty.
+				boolean granted = grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
+				if(granted) {
+					ServicesStartStopUtil.startServers(this, prefsBean, this);
+				} else {
+					Toast.makeText(this, "Storage permission is required for this app to work!", Toast.LENGTH_LONG).show();
+				}
+			}
+		}
 	}
 
 	@Override
@@ -558,7 +594,9 @@ public class PrimitiveFtpdActivity extends Activity {
 	}
 
 	protected void handleStart() {
-		ServicesStartStopUtil.startServers(this, prefsBean, this);
+		if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)) {
+			ServicesStartStopUtil.startServers(this, prefsBean, this);
+		}
 	}
 
 	public boolean isKeyPresent() {
