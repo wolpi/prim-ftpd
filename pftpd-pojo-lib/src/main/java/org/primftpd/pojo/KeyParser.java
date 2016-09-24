@@ -13,7 +13,6 @@ import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class KeyParser {
@@ -66,35 +65,12 @@ public class KeyParser {
         // name is also included in bytes
         ByteBuffer byteBuffer = ByteBuffer.wrap(keyBytes);
         int nameLength = byteBuffer.getInt();
+        byteBuffer.position(nameLength + LENGTH_LENGTH);
 
-        // read exponent
-        int exponentLengthPos = nameLength + LENGTH_LENGTH;
-        byteBuffer.position(exponentLengthPos);
-        int exponentLength = byteBuffer.getInt();
-        byte[] exponentBytes = Arrays.copyOfRange(
-                keyBytes,
-                byteBuffer.position(),
-                byteBuffer.position() + exponentLength);
-        BigInteger exponent = new BigInteger(exponentBytes);
-
-        // read modulus
-        int modulusLengthPos = exponentLengthPos + exponentLength + LENGTH_LENGTH;
-        byteBuffer.position(modulusLengthPos);
-        int modulusLength = byteBuffer.getInt();
-        byte[] modulusBytes = Arrays.copyOfRange(
-                keyBytes,
-                byteBuffer.position(),
-                byteBuffer.position() + modulusLength);
-        BigInteger modulus = new BigInteger(modulusBytes);
+        BigInteger exponent = readNext(byteBuffer);
+        BigInteger modulus = readNext(byteBuffer);
 
         return createPubKeyRsa(exponent, modulus);
-    }
-
-    protected static PublicKey createPubKeyRsa(BigInteger exponent, BigInteger modulus)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
-        RSAPublicKeySpec keySpec = new RSAPublicKeySpec(modulus, exponent);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        return kf.generatePublic(keySpec);
     }
 
     protected static PublicKey parsePublicKeyDsa(byte[] keyBytes)
@@ -102,48 +78,28 @@ public class KeyParser {
         // name is also included in bytes
         ByteBuffer byteBuffer = ByteBuffer.wrap(keyBytes);
         int nameLength = byteBuffer.getInt();
+        byteBuffer.position(nameLength + LENGTH_LENGTH);
 
-        // read p
-        int pLengthPos = nameLength + LENGTH_LENGTH;
-        byteBuffer.position(pLengthPos);
-        int pLength = byteBuffer.getInt();
-        byte[] pBytes = Arrays.copyOfRange(
-                keyBytes,
-                byteBuffer.position(),
-                byteBuffer.position() + pLength);
-        BigInteger p = new BigInteger(pBytes);
-
-        // read q
-        int qLengthPos = pLengthPos + pLength + LENGTH_LENGTH;
-        byteBuffer.position(qLengthPos);
-        int qLength = byteBuffer.getInt();
-        byte[] qBytes = Arrays.copyOfRange(
-                keyBytes,
-                byteBuffer.position(),
-                byteBuffer.position() + qLength);
-        BigInteger q = new BigInteger(qBytes);
-
-        // read g
-        int gLengthPos = qLengthPos + qLength + LENGTH_LENGTH;
-        byteBuffer.position(gLengthPos);
-        int gLength = byteBuffer.getInt();
-        byte[] gBytes = Arrays.copyOfRange(
-                keyBytes,
-                byteBuffer.position(),
-                byteBuffer.position() + gLength);
-        BigInteger g = new BigInteger(gBytes);
-
-        // read y
-        int yLengthPos = gLengthPos + gLength + LENGTH_LENGTH;
-        byteBuffer.position(yLengthPos);
-        int yLength = byteBuffer.getInt();
-        byte[] yBytes = Arrays.copyOfRange(
-                keyBytes,
-                byteBuffer.position(),
-                byteBuffer.position() + yLength);
-        BigInteger y = new BigInteger(yBytes);
+        BigInteger p = readNext(byteBuffer);
+        BigInteger q = readNext(byteBuffer);
+        BigInteger g = readNext(byteBuffer);
+        BigInteger y = readNext(byteBuffer);
 
         return createPubKeyDsa(y, p, q, g);
+    }
+
+    protected static BigInteger readNext(ByteBuffer byteBuffer) {
+        int nextLength = byteBuffer.getInt();
+        byte[] nextBytes = new byte[nextLength];
+        byteBuffer.get(nextBytes);
+        return new BigInteger(nextBytes);
+    }
+
+    protected static PublicKey createPubKeyRsa(BigInteger exponent, BigInteger modulus)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
+        RSAPublicKeySpec keySpec = new RSAPublicKeySpec(modulus, exponent);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        return kf.generatePublic(keySpec);
     }
 
     protected static PublicKey createPubKeyDsa(
