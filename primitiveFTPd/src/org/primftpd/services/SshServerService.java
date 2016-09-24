@@ -124,15 +124,27 @@ public class SshServerService extends AbstractServerService
 
 		if (prefsBean.isPubKeyAuth()) {
 			String pubKeyPath = Defaults.PUB_KEY_AUTH_KEY_PATH;
-			final PublicKey pubKey = new KeyInfoProvider().readKeyAuthKey(pubKeyPath);
-			if (pubKey != null) {
+			String pubKeyPathOld = Defaults.PUB_KEY_AUTH_KEY_PATH_OLD;
+			KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
+			final List<PublicKey> pubKeys = keyInfoProvider.readKeyAuthKeys(pubKeyPath, false);
+			pubKeys.addAll(keyInfoProvider.readKeyAuthKeys(pubKeyPathOld, true));
+			logger.info("loaded {} keys for public key auth", pubKeys.size());
+			if (!pubKeys.isEmpty()) {
 				sshServer.setPublickeyAuthenticator(new PublickeyAuthenticator() {
 					@Override
 					public boolean authenticate(String username, PublicKey key, ServerSession session) {
+						logger.debug("attempting pub key auth, user: {}, client key class: '{}'",
+								username, key.getClass().getName());
 						// never mind username
-						boolean keyEquals = pubKey.equals(key);
-						logger.debug("pub key auth, success: {}", keyEquals);
-						return keyEquals;
+						for (PublicKey configuredKey : pubKeys) {
+							boolean keyEquals = configuredKey.equals(key);
+							logger.debug("pub key auth, success: {}, server key class '{}'",
+									keyEquals, configuredKey.getClass().getName());
+							if (keyEquals) {
+								return true;
+							}
+						}
+						return false;
 					}
 				});
 			} else {

@@ -50,7 +50,7 @@
     <string name="prefTitleStartOnBoot">Encender al inicio</string>
     <string name="prefSummaryStartOnBoot">Enciende el servidor al arrancar el sistema.</string>
     <string name="prefTitlePubKeyAuth">Autenticación de clave pública</string>
-    <string name="prefSummaryPubKeyAuth">Cuando se habilita sitúa tu clave pública RSA ssh2 en .ssh/authorized_key.pub. Solo SFTP.</string>
+    <string name="prefSummaryPubKeyAuth">Cuando se habilita sitúa tu clave pública ssh2 en %s. Solo SFTP.</string>
     <string name="prefTheme">Tema</string>
     <string name="prefSummaryTheme">Al cambiar el tema puede que necesites reiniciar la aplicación.</string>
     <string name="prefTitleLogging">Registro</string>

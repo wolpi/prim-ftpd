@@ -6,8 +6,10 @@ import org.junit.Test;
 
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.security.PublicKey;
 import java.security.interfaces.DSAPublicKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.List;
 
 public class KeyParserTests {
 
@@ -15,8 +17,31 @@ public class KeyParserTests {
     public void parsePubKeyRsa() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/rsa.key.pub");
 
-        RSAPublicKey pubKey = (RSAPublicKey)KeyParser.parsePublicKey(is, new CommonsBase64Decoder());
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
 
+        assertsRsaKey((RSAPublicKey)keys.get(0));
+    }
+
+    @Test
+    public void parsePubKeyDsa() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/keys/dsa.key.pub");
+
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+
+        assertsDsaKey((DSAPublicKey)keys.get(0));
+    }
+
+    @Test
+    public void parseAuthorizedKeys() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/keys/authorized_keys");
+
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+
+        assertsRsaKey((RSAPublicKey)keys.get(0));
+        assertsDsaKey((DSAPublicKey)keys.get(1));
+    }
+
+    protected void assertsRsaKey(RSAPublicKey pubKey) {
         Assert.assertEquals(new BigInteger("65537"), pubKey.getPublicExponent());
 
         final String modulus = "22840028388110743583131987675136887114153126223124011317437832666" +
@@ -30,12 +55,7 @@ public class KeyParserTests {
         Assert.assertEquals(new BigInteger(modulus), pubKey.getModulus());
     }
 
-    @Test
-    public void parsePubKeyDsa() throws Exception {
-        InputStream is = getClass().getResourceAsStream("/keys/dsa.key.pub");
-
-        DSAPublicKey pubKey = (DSAPublicKey)KeyParser.parsePublicKey(is, new CommonsBase64Decoder());
-
+    protected void assertsDsaKey(DSAPublicKey pubKey) {
         final String y = "4075820517720311789755060432555041302495713535036194101055101600952719" +
                 "8027506134078097330328538489864134942817893994891118803853518548361792777130885" +
                 "0845452847199857520010376744070518762657897263318144714919719488458432611731877" +

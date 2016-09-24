@@ -12,7 +12,9 @@ import java.security.PublicKey;
 import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class KeyParser {
 
@@ -23,33 +25,40 @@ public class KeyParser {
     public static final String NAME_ECDSA = "ecdsa-sha2-nistp256";
     public static final int LENGTH_LENGTH = 4;
 
-    public static PublicKey parsePublicKey(InputStream is, Base64Decoder base64Decoder)
+    public static List<PublicKey> parsePublicKeys(InputStream is, Base64Decoder base64Decoder)
             throws IOException, InvalidKeySpecException, NoSuchAlgorithmException {
         if (is == null) {
             throw new IllegalArgumentException("input stream cannot be null");
         }
+        List<PublicKey> keys = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        String keyLine = reader.readLine();
-        String[] parts = keyLine.split(" ");
+        while (reader.ready()) {
+            String keyLine = reader.readLine();
+            String[] parts = keyLine.split(" ");
 
-        String name = null;
-        String keyEncoded = null;
-        if (parts.length <= 3) {
-            name = parts[0];
-            keyEncoded = parts[1];
-        }
+            String name = null;
+            String keyEncoded = null;
+            if (parts.length <= 3) {
+                name = parts[0];
+                keyEncoded = parts[1];
+            }
 
-        if (keyEncoded != null) {
-            byte[] keyBytes = base64Decoder.decode(keyEncoded);
+            if (keyEncoded != null) {
+                byte[] keyBytes = base64Decoder.decode(keyEncoded);
 
-            if (NAME_RSA.equals(name)) {
-                return parsePublicKeyRsa(keyBytes);
-            } else if (NAME_DSA.equals(name)) {
-                return parsePublicKeyDsa(keyBytes);
+                PublicKey key = null;
+                if (NAME_RSA.equals(name)) {
+                    key = parsePublicKeyRsa(keyBytes);
+                } else if (NAME_DSA.equals(name)) {
+                    key = parsePublicKeyDsa(keyBytes);
+                }
+                if (key != null) {
+                    keys.add(key);
+                }
             }
         }
 
-        return null;
+        return keys;
     }
 
     protected static PublicKey parsePublicKeyRsa(byte[] keyBytes)

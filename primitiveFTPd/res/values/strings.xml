@@ -51,7 +51,7 @@
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Start server on system boot.</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>
-    <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 RSA public key in .ssh/authorized_key.pub. SFTP only.</string>
+    <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 public key in %s. SFTP only.</string>
     <string name="prefTitleAnonymousLogin">Anonymous Login</string>
     <string name="prefSummaryAnonymousLogin">Set if anonymous login is allowed on the server.</string>
     <string name="prefTheme">Theme</string>

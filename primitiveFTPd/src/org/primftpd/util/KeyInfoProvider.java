@@ -21,6 +21,8 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 public class KeyInfoProvider
@@ -116,12 +118,12 @@ public class KeyInfoProvider
 		os.write(bytes);
 	}
 
-	public PublicKey readKeyAuthKey(String path)
+	public List<PublicKey> readKeyAuthKeys(String path, boolean ignoreErrors)
 	{
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(path);
-			PublicKey pubKey = KeyParser.parsePublicKey(
+			return KeyParser.parsePublicKeys(
 					fis,
 					new Base64Decoder() {
 						@Override
@@ -130,13 +132,10 @@ public class KeyInfoProvider
 						}
 					});
 
-			if (pubKey == null) {
-				logger.error("Could not read public key! Is it a valid file?");
-			}
-
-			return pubKey;
 		} catch (Exception e) {
-			logger.error("could not read key auth key", e);
+			if (!ignoreErrors) {
+				logger.error("could not read key auth key", e);
+			}
 		} finally {
 			try {
 				if (fis != null) {
@@ -145,6 +144,6 @@ public class KeyInfoProvider
 			} catch (IOException e) {
 			}
 		}
-		return null;
+		return Collections.emptyList();
 	}
 }
