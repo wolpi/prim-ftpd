@@ -68,7 +68,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'org.apache.ftpserver:ftpserver-core:1.0.6'
     compile 'org.apache.sshd:sshd-core:0.13.0'
-    compile 'org.bouncycastle:bcpg-jdk15on:1.54'
-    compile 'org.bouncycastle:bcpkix-jdk15on:1.54'
     compile 'org.greenrobot:eventbus:3.0.0'
 }

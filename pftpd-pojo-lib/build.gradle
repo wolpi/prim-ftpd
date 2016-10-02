@@ -8,6 +8,9 @@ repositories {
 }
 
 dependencies {
+    compile 'org.bouncycastle:bcpg-jdk15on:1.54'
+    compile 'org.bouncycastle:bcpkix-jdk15on:1.54'
+
     testCompile 'junit:junit:4.12'
     testCompile 'commons-codec:commons-codec:1.10'
 }

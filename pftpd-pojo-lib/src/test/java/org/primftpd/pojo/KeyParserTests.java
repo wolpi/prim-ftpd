@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.PublicKey;
 import java.security.interfaces.DSAPublicKey;
+import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 
@@ -32,6 +33,15 @@ public class KeyParserTests {
     }
 
     @Test
+    public void parsePubKeyEcdsa() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/keys/ecdsa.key.pub");
+
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+
+        assertsEcdsaKey((ECPublicKey)keys.get(0));
+    }
+
+    @Test
     public void parseAuthorizedKeys() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/authorized_keys");
 
@@ -39,6 +49,7 @@ public class KeyParserTests {
 
         assertsRsaKey((RSAPublicKey)keys.get(0));
         assertsDsaKey((DSAPublicKey)keys.get(1));
+        assertsEcdsaKey((ECPublicKey)keys.get(2));
     }
 
     protected void assertsRsaKey(RSAPublicKey pubKey) {
@@ -77,6 +88,14 @@ public class KeyParserTests {
         Assert.assertEquals(new BigInteger(p), pubKey.getParams().getP());
         Assert.assertEquals(new BigInteger(q), pubKey.getParams().getQ());
         Assert.assertEquals(new BigInteger(g), pubKey.getParams().getG());
+    }
+
+    protected void assertsEcdsaKey(ECPublicKey pubKey) {
+        final String x = "48439561293906451759052585252797914202762949526041747995844080717082404635286";
+        final String y = "36134250956749795798585127919587881956611106672985015071877198253568414405109";
+
+        Assert.assertEquals(new BigInteger(x), pubKey.getParams().getGenerator().getAffineX());
+        Assert.assertEquals(new BigInteger(y), pubKey.getParams().getGenerator().getAffineY());
     }
 
     public static class CommonsBase64Decoder implements Base64Decoder {

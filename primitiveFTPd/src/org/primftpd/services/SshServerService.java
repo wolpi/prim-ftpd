@@ -1,12 +1,7 @@
 package org.primftpd.services;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.List;
+import android.os.Looper;
+import android.widget.Toast;
 
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
@@ -22,7 +17,6 @@ import org.apache.sshd.common.io.mina.MinaServiceFactoryFactory;
 import org.apache.sshd.common.keyprovider.AbstractKeyPairProvider;
 import org.apache.sshd.server.Command;
 import org.apache.sshd.server.PasswordAuthenticator;
-import org.apache.sshd.server.PublickeyAuthenticator;
 import org.apache.sshd.server.command.ScpCommandFactory;
 import org.apache.sshd.server.session.ServerSession;
 import org.apache.sshd.server.sftp.SftpSubsystem;
@@ -34,8 +28,13 @@ import org.primftpd.util.Defaults;
 import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.StringUtils;
 
-import android.os.Looper;
-import android.widget.Toast;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements a SSH server. Intended to be used for sftp.
@@ -92,7 +91,7 @@ public class SshServerService extends AbstractServerService
 
 		// enable scp and sftp
 		sshServer.setCommandFactory(new ScpCommandFactory());
-		List<NamedFactory<Command>> factoryList = new ArrayList<NamedFactory<Command>>(1);
+		List<NamedFactory<Command>> factoryList = new ArrayList<>(1);
 		factoryList.add(new SftpSubsystem.Factory());
 		sshServer.setSubsystemFactories(factoryList);
 
@@ -130,23 +129,7 @@ public class SshServerService extends AbstractServerService
 			pubKeys.addAll(keyInfoProvider.readKeyAuthKeys(pubKeyPathOld, true));
 			logger.info("loaded {} keys for public key auth", pubKeys.size());
 			if (!pubKeys.isEmpty()) {
-				sshServer.setPublickeyAuthenticator(new PublickeyAuthenticator() {
-					@Override
-					public boolean authenticate(String username, PublicKey key, ServerSession session) {
-						logger.debug("attempting pub key auth, user: {}, client key class: '{}'",
-								username, key.getClass().getName());
-						// never mind username
-						for (PublicKey configuredKey : pubKeys) {
-							boolean keyEquals = configuredKey.equals(key);
-							logger.debug("pub key auth, success: {}, server key class '{}'",
-									keyEquals, configuredKey.getClass().getName());
-							if (keyEquals) {
-								return true;
-							}
-						}
-						return false;
-					}
-				});
+				sshServer.setPublickeyAuthenticator(new PubKeyAuthenticator(pubKeys));
 			} else {
 				Toast.makeText(
 					getApplicationContext(),
@@ -196,7 +179,7 @@ public class SshServerService extends AbstractServerService
 	}
 
 	protected List<KeyPair> loadKeys() {
-		List<KeyPair> keyPairList = new ArrayList<KeyPair>(1);
+		List<KeyPair> keyPairList = new ArrayList<>(1);
 		FileInputStream pubkeyFis = null;
 		FileInputStream privkeyFis = null;
 		try {

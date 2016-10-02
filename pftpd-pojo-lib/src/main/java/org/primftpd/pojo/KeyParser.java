@@ -1,5 +1,11 @@
 package org.primftpd.pojo;
 
+import org.bouncycastle.jce.ECNamedCurveTable;
+import org.bouncycastle.jce.provider.JCEECPublicKey;
+import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
+import org.bouncycastle.jce.spec.ECPublicKeySpec;
+import org.bouncycastle.math.ec.ECPoint;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,12 +14,15 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class KeyParser {
 
@@ -25,7 +34,7 @@ public class KeyParser {
     public static final int LENGTH_LENGTH = 4;
 
     public static List<PublicKey> parsePublicKeys(InputStream is, Base64Decoder base64Decoder)
-            throws IOException, InvalidKeySpecException, NoSuchAlgorithmException {
+            throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
         if (is == null) {
             throw new IllegalArgumentException("input stream cannot be null");
         }
@@ -50,6 +59,8 @@ public class KeyParser {
                     key = parsePublicKeyRsa(keyBytes);
                 } else if (NAME_DSA.equals(name)) {
                     key = parsePublicKeyDsa(keyBytes);
+                } else if (NAME_ECDSA.equals(name)) {
+                    key = parsePublicKeyEcdsa(keyBytes);
                 }
                 if (key != null) {
                     keys.add(key);
@@ -108,5 +119,34 @@ public class KeyParser {
         DSAPublicKeySpec keySpec = new DSAPublicKeySpec(y, p, q, g);
         KeyFactory kf = KeyFactory.getInstance("DSA");
         return kf.generatePublic(keySpec);
+    }
+
+    protected static PublicKey parsePublicKeyEcdsa(byte[] keyBytes)
+            throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, NoSuchProviderException {
+
+        ByteBuffer byteBuffer = ByteBuffer.wrap(keyBytes);
+
+        // https://security.stackexchange.com/questions/129910/ecdsa-why-do-ssh-keygen-and-java-generated-public-keys-have-different-sizes
+        final int coordLength = 32;
+        byteBuffer.position(keyBytes.length - 2*coordLength);
+        byte[] xBytes = new byte[coordLength];
+        byteBuffer.get(xBytes);
+        BigInteger x = new BigInteger(1, xBytes);
+
+        byteBuffer.position(keyBytes.length - coordLength);
+        byte[] yBytes = new byte[coordLength];
+        byteBuffer.get(yBytes);
+        BigInteger y = new BigInteger(1, yBytes);
+
+        return createPubKeyEcdsa(x, y);
+    }
+
+    public static PublicKey createPubKeyEcdsa(BigInteger x, BigInteger y)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
+        final String name = "P-256"; // see org.bouncycastle.asn1.nist.NISTNamedCurves
+        ECNamedCurveParameterSpec curveParaSpecBc = ECNamedCurveTable.getParameterSpec(name);
+        ECPoint point = curveParaSpecBc.getCurve().createPoint(x, y);
+        ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(point, curveParaSpecBc);
+        return new JCEECPublicKey("EC", pubKeySpec);
     }
 }
