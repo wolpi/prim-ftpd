@@ -21,7 +21,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -120,10 +120,11 @@ public class KeyInfoProvider
 
 	public List<PublicKey> readKeyAuthKeys(String path, boolean ignoreErrors)
 	{
+		List<PublicKey> keys = null;
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(path);
-			return KeyParser.parsePublicKeys(
+			keys = KeyParser.parsePublicKeys(
 					fis,
 					new Base64Decoder() {
 						@Override
@@ -134,7 +135,7 @@ public class KeyInfoProvider
 
 		} catch (Exception e) {
 			if (!ignoreErrors) {
-				logger.error("could not read key auth key", e);
+				logger.error("could not read key auth keys", e);
 			}
 		} finally {
 			try {
@@ -142,8 +143,13 @@ public class KeyInfoProvider
 					fis.close();
 				}
 			} catch (IOException e) {
+				if (!ignoreErrors) {
+					logger.error("could not close key auth keys file", e);
+				}
 			}
 		}
-		return Collections.emptyList();
+		// there might be more keys added to this list, so don't use emptyList()
+		// see GH issue #68
+		return keys != null ? keys : new ArrayList<PublicKey>();
 	}
 }
