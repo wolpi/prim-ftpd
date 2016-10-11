@@ -1,10 +1,9 @@
-prim-ftpd
-=========
-[![Build Status](https://travis-ci.org/wolpi/prim-ftpd.png)](https://travis-ci.org/wolpi/prim-ftpd)
+#Primitive FTPd
 
-FTP server app for android.
+[<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/app/org.primftpd)
+<a href="https://play.google.com/store/apps/details?id=org.primftpd"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" height="60"></a>
 
-Some features:
+##Some features:
 * Can optionally be started on system boot
 * Shows statusbar notification when server is running
 * Server can be stopped from statusbar
@@ -16,3 +15,5 @@ Some features:
 * Optional anonymous login
 * Widget to start/stop server
 * Plugins for powertoggles and tasker
+
+###Build status: [![Build Status](https://travis-ci.org/wolpi/prim-ftpd.png)](https://travis-ci.org/wolpi/prim-ftpd)
