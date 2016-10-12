@@ -155,6 +155,7 @@ public class ServicesStartStopUtil {
                 .setContentIntent(contentIntent)
                 .setWhen(when);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // TODO check icon for android 7
             Notification.Action stopAction = new Notification.Action.Builder(
                     Icon.createWithResource("", R.drawable.ic_stop_white_24dp),
                     ctxt.getString(R.string.stopService),

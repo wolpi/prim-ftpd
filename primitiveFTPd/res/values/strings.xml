@@ -20,8 +20,6 @@
     <string name="stopService">Stop Server</string>
     <string name="toggleService">Toggle Server start/stop</string>
     <string name="notificationTitle">FTP Server</string>
-    <string name="quickSettingActive">pFTPd active</string>
-    <string name="quickSettingInactive">pFTPd inactive</string>
 
     <string name="haveToSetPassword">You have to set a password first</string>
     <string name="serverRunning">FTP Server is running</string>
