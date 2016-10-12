@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId "org.primftpd"
-        minSdkVersion 16
+        minSdkVersion 15
         targetSdkVersion 24
         versionCode 21
         versionName "4.7-SNAPSHOT"
