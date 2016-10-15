@@ -34,7 +34,9 @@ public class KeyInfoProvider
 			MessageDigest md = MessageDigest.getInstance(hashAlgo);
 			md.update(pubKeyEnc);
 			byte[] fingerPrintBytes = md.digest();
-			return beautify(fingerPrintBytes);
+			String base64 = Base64.encodeToString(fingerPrintBytes, Base64.NO_PADDING);
+			String beautified = beautify(fingerPrintBytes);
+			return beautified + "\nBase 64\n" + base64;
 		} catch (Exception e) {
 			logger.error("could not read key: " + e.getMessage(), e);
 		}
