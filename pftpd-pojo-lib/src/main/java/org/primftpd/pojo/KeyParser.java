@@ -20,8 +20,10 @@ import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 
 public class KeyParser {
@@ -30,8 +32,28 @@ public class KeyParser {
 
     public static final String NAME_RSA = "ssh-rsa";
     public static final String NAME_DSA = "ssh-dss";
-    public static final String NAME_ECDSA = "ecdsa-sha2-nistp256";
+    public static final String NAME_ECDSA_256 = "ecdsa-sha2-nistp256";
+    public static final String NAME_ECDSA_384 = "ecdsa-sha2-nistp384";
+    public static final String NAME_ECDSA_521 = "ecdsa-sha2-nistp521";
     public static final int LENGTH_LENGTH = 4;
+
+    public static final Map<String, Integer> EC_NAME_TO_COORD_SIZE;
+    public static final Map<String, String> EC_NAME_TO_CURVE_NAME;
+
+    static {
+        Map<String, Integer> tmpCoordSize = new HashMap<>();
+        tmpCoordSize.put(NAME_ECDSA_256, Integer.valueOf(32));
+        tmpCoordSize.put(NAME_ECDSA_384, Integer.valueOf(48));
+        tmpCoordSize.put(NAME_ECDSA_521, Integer.valueOf(66));
+        EC_NAME_TO_COORD_SIZE = Collections.unmodifiableMap(tmpCoordSize);
+
+        // see org.bouncycastle.asn1.nist.NISTNamedCurves
+        Map<String, String> tmpCurveName = new HashMap<>();
+        tmpCurveName.put(NAME_ECDSA_256, "P-256");
+        tmpCurveName.put(NAME_ECDSA_384, "P-384");
+        tmpCurveName.put(NAME_ECDSA_521, "P-521");
+        EC_NAME_TO_CURVE_NAME = Collections.unmodifiableMap(tmpCurveName);
+    }
 
     public static List<PublicKey> parsePublicKeys(InputStream is, Base64Decoder base64Decoder)
             throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
@@ -59,8 +81,12 @@ public class KeyParser {
                     key = parsePublicKeyRsa(keyBytes);
                 } else if (NAME_DSA.equals(name)) {
                     key = parsePublicKeyDsa(keyBytes);
-                } else if (NAME_ECDSA.equals(name)) {
-                    key = parsePublicKeyEcdsa(keyBytes);
+                } else if (NAME_ECDSA_256.equals(name)) {
+                    key = parsePublicKeyEcdsa(name, keyBytes);
+                } else if (NAME_ECDSA_384.equals(name)) {
+                    key = parsePublicKeyEcdsa(name, keyBytes);
+                } else if (NAME_ECDSA_521.equals(name)) {
+                    key = parsePublicKeyEcdsa(name, keyBytes);
                 }
                 if (key != null) {
                     keys.add(key);
@@ -121,13 +147,13 @@ public class KeyParser {
         return kf.generatePublic(keySpec);
     }
 
-    protected static PublicKey parsePublicKeyEcdsa(byte[] keyBytes)
+    protected static PublicKey parsePublicKeyEcdsa(String name, byte[] keyBytes)
             throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, NoSuchProviderException {
 
         ByteBuffer byteBuffer = ByteBuffer.wrap(keyBytes);
 
         // https://security.stackexchange.com/questions/129910/ecdsa-why-do-ssh-keygen-and-java-generated-public-keys-have-different-sizes
-        final int coordLength = 32;
+        final int coordLength = EC_NAME_TO_COORD_SIZE.get(name);
         byteBuffer.position(keyBytes.length - 2*coordLength);
         byte[] xBytes = new byte[coordLength];
         byteBuffer.get(xBytes);
@@ -138,13 +164,13 @@ public class KeyParser {
         byteBuffer.get(yBytes);
         BigInteger y = new BigInteger(1, yBytes);
 
-        return createPubKeyEcdsa(x, y);
+        return createPubKeyEcdsa(name, x, y);
     }
 
-    public static PublicKey createPubKeyEcdsa(BigInteger x, BigInteger y)
+    public static PublicKey createPubKeyEcdsa(String name, BigInteger x, BigInteger y)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
-        final String name = "P-256"; // see org.bouncycastle.asn1.nist.NISTNamedCurves
-        ECNamedCurveParameterSpec curveParaSpecBc = ECNamedCurveTable.getParameterSpec(name);
+        final String curveName = EC_NAME_TO_CURVE_NAME.get(name);
+        ECNamedCurveParameterSpec curveParaSpecBc = ECNamedCurveTable.getParameterSpec(curveName);
         ECPoint point = curveParaSpecBc.getCurve().createPoint(x, y);
         ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(point, curveParaSpecBc);
         return new JCEECPublicKey("EC", pubKeySpec);

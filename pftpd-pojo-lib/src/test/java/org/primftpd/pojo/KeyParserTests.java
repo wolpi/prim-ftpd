@@ -42,14 +42,35 @@ public class KeyParserTests {
     }
 
     @Test
+    public void parsePubKeyEcdsa384() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/keys/ecdsa.key.pub.384");
+
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+
+        assertsEcdsaKey384((ECPublicKey)keys.get(0));
+    }
+
+    @Test
+    public void parsePubKeyEcdsa521() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/keys/ecdsa.key.pub.521");
+
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+
+        assertsEcdsaKey521((ECPublicKey)keys.get(0));
+    }
+
+    @Test
     public void parseAuthorizedKeys() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/authorized_keys");
 
         List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
 
+        Assert.assertEquals(5, keys.size());
         assertsRsaKey((RSAPublicKey)keys.get(0));
         assertsDsaKey((DSAPublicKey)keys.get(1));
         assertsEcdsaKey((ECPublicKey)keys.get(2));
+        assertsEcdsaKey384((ECPublicKey)keys.get(3));
+        assertsEcdsaKey521((ECPublicKey)keys.get(4));
     }
 
     protected void assertsRsaKey(RSAPublicKey pubKey) {
@@ -93,6 +114,26 @@ public class KeyParserTests {
     protected void assertsEcdsaKey(ECPublicKey pubKey) {
         final String x = "48439561293906451759052585252797914202762949526041747995844080717082404635286";
         final String y = "36134250956749795798585127919587881956611106672985015071877198253568414405109";
+
+        Assert.assertEquals(new BigInteger(x), pubKey.getParams().getGenerator().getAffineX());
+        Assert.assertEquals(new BigInteger(y), pubKey.getParams().getGenerator().getAffineY());
+    }
+
+    protected void assertsEcdsaKey384(ECPublicKey pubKey) {
+        final String x = "26247035095799689268623156744566981891852923491109213387815615900925" +
+                "518854738050089022388053975719786650872476732087";
+        final String y = "83257109614890299855467512895201081792878530488613155947092059024805" +
+                "03199884419224438643760392947333078086511627871";
+
+        Assert.assertEquals(new BigInteger(x), pubKey.getParams().getGenerator().getAffineX());
+        Assert.assertEquals(new BigInteger(y), pubKey.getParams().getGenerator().getAffineY());
+    }
+
+    protected void assertsEcdsaKey521(ECPublicKey pubKey) {
+        final String x = "2661740802050217063228768716723360960729859168756973147706671368418802944" +
+                "996427808491545080627771902352094241225065558662157113545570916814161637315895999846";
+        final String y = "3757180025770020463545507224491183603594455134769762486694567779615544477" +
+                "440556316691234405012945539562144444537289428522585666729196580810124344277578376784";
 
         Assert.assertEquals(new BigInteger(x), pubKey.getParams().getGenerator().getAffineX());
         Assert.assertEquals(new BigInteger(y), pubKey.getParams().getGenerator().getAffineY());
