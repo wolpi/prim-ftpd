@@ -15,7 +15,9 @@
     <string name="state">Status</string>
     <string name="serverStarted">Gestartet &#8230;</string>
     <string name="serverStopped">Gestoppt</string>
-    
+    <string name="quickSettingsServerStarted">pFTPd läuft &#8230;</string>
+    <string name="quickSettingsServerStopped">pFTPd gestoppt</string>
+
     <string name="startService">Server Starten</string>
     <string name="stopService">Server Stoppen</string>
     <string name="toggleService">Server zwischen start/stop umschalten</string>
