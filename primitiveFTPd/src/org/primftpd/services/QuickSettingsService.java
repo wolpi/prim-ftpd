@@ -27,6 +27,8 @@ public class QuickSettingsService extends TileService {
     public void onCreate() {
         logger.debug("onCreate");
         super.onCreate();
+
+        // move prefs loading to onStartListening() ?
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
         prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
     }
@@ -59,10 +61,10 @@ public class QuickSettingsService extends TileService {
 
         // Change the tile to match the service status.
         if (isActive) {
-            newLabel = getString(R.string.quickSettingActive);
+            newLabel = getString(R.string.quickSettingsServerStarted);
             newState = Tile.STATE_ACTIVE;
         } else {
-            newLabel = getString(R.string.quickSettingInactive);
+            newLabel = getString(R.string.quickSettingsServerStopped);
             newState = Tile.STATE_INACTIVE;
         }
 

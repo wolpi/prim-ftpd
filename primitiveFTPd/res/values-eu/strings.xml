@@ -50,7 +50,7 @@
     <string name="prefTitleStartOnBoot">Abioan abiarazi</string>
     <string name="prefSummaryStartOnBoot">Zerbitzaria abiarazi sistemaren abioan.</string>
     <string name="prefTitlePubKeyAuth">Baimentzeko gako publiko</string>
-    <string name="prefSummaryPubKeyAuth">Gaituta dagoenean jarri ezazu zure ssh2 RSA gako publikoa .ssh/authorized_key.pub kokalekuan. SFTPrentzat soilik.</string>
+    <string name="prefSummaryPubKeyAuth">Gaituta dagoenean jarri ezazu zure ssh2 gako publikoa %s kokalekuan. SFTPrentzat soilik.</string>
     <string name="prefTheme">Gaia</string>
     <string name="prefSummaryTheme">Gaia aldatzeak aplikazioa berrabiaraztea behar izan dezake.</string>
     <string name="prefTitleLogging">Erregistroa</string>

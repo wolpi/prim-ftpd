@@ -15,7 +15,9 @@
     <string name="state">Status</string>
     <string name="serverStarted">Gestartet &#8230;</string>
     <string name="serverStopped">Gestoppt</string>
-    
+    <string name="quickSettingsServerStarted">pFTPd läuft &#8230;</string>
+    <string name="quickSettingsServerStopped">pFTPd gestoppt</string>
+
     <string name="startService">Server Starten</string>
     <string name="stopService">Server Stoppen</string>
     <string name="toggleService">Server zwischen start/stop umschalten</string>
@@ -50,7 +52,7 @@
     <string name="prefSummaryWhichServerToStart">Welche Server sollen gestartet werden: nur FTP Server, nur SFTP Server oder beide.</string>
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Server beim System-Boot starten.</string>
-    <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 RSA public key in .ssh/authorized_key.pub ab. Nur SFTP.</string>
+    <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 public key in %s ab. Nur SFTP.</string>
     <string name="prefSummaryAnonymousLogin">Anonymous Login erlauben.</string>
     <string name="prefSummaryTheme">Den Theme zu ändern kann einen App Neustart erfordern.</string>
     <string name="prefTitleLogging">Log</string>

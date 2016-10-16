@@ -15,13 +15,13 @@
     <string name="state">State</string>
     <string name="serverStarted">Running &#8230;</string>
     <string name="serverStopped">Stopped</string>
-    
+    <string name="quickSettingsServerStarted">pFTPd Running &#8230;</string>
+    <string name="quickSettingsServerStopped">pFTPd Stopped</string>
+
     <string name="startService">Start Server</string>
     <string name="stopService">Stop Server</string>
     <string name="toggleService">Toggle Server start/stop</string>
     <string name="notificationTitle">FTP Server</string>
-    <string name="quickSettingActive">pFTPd active</string>
-    <string name="quickSettingInactive">pFTPd inactive</string>
 
     <string name="haveToSetPassword">You have to set a password first</string>
     <string name="serverRunning">FTP Server is running</string>
@@ -53,7 +53,7 @@
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Start server on system boot.</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>
-    <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 RSA public key in .ssh/authorized_key.pub. SFTP only.</string>
+    <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 public key in %s. SFTP only.</string>
     <string name="prefTitleAnonymousLogin">Anonymous Login</string>
     <string name="prefSummaryAnonymousLogin">Set if anonymous login is allowed on the server.</string>
     <string name="prefTheme">Theme</string>

@@ -21,6 +21,8 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class KeyInfoProvider
@@ -32,7 +34,9 @@ public class KeyInfoProvider
 			MessageDigest md = MessageDigest.getInstance(hashAlgo);
 			md.update(pubKeyEnc);
 			byte[] fingerPrintBytes = md.digest();
-			return beautify(fingerPrintBytes);
+			String base64 = Base64.encodeToString(fingerPrintBytes, Base64.NO_PADDING);
+			String beautified = beautify(fingerPrintBytes);
+			return beautified + "\nBase 64\n" + base64;
 		} catch (Exception e) {
 			logger.error("could not read key: " + e.getMessage(), e);
 		}
@@ -116,12 +120,13 @@ public class KeyInfoProvider
 		os.write(bytes);
 	}
 
-	public PublicKey readKeyAuthKey(String path)
+	public List<PublicKey> readKeyAuthKeys(String path, boolean ignoreErrors)
 	{
+		List<PublicKey> keys = null;
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(path);
-			PublicKey pubKey = KeyParser.parsePublicKey(
+			keys = KeyParser.parsePublicKeys(
 					fis,
 					new Base64Decoder() {
 						@Override
@@ -130,21 +135,23 @@ public class KeyInfoProvider
 						}
 					});
 
-			if (pubKey == null) {
-				logger.error("Could not read public key! Is it a valid file?");
-			}
-
-			return pubKey;
 		} catch (Exception e) {
-			logger.error("could not read key auth key", e);
+			if (!ignoreErrors) {
+				logger.error("could not read key auth keys", e);
+			}
 		} finally {
 			try {
 				if (fis != null) {
 					fis.close();
 				}
 			} catch (IOException e) {
+				if (!ignoreErrors) {
+					logger.error("could not close key auth keys file", e);
+				}
 			}
 		}
-		return null;
+		// there might be more keys added to this list, so don't use emptyList()
+		// see GH issue #68
+		return keys != null ? keys : new ArrayList<PublicKey>();
 	}
 }
