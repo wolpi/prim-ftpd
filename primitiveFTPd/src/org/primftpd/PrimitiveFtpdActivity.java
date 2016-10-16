@@ -174,7 +174,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	protected boolean hasPermission(String permission, int requestCode) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			if(checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{permission}, requestCode);
+				requestPermissions(new String[]{permission}, requestCode);
 				return false;
 			}
 		}
@@ -191,7 +191,7 @@ public class PrimitiveFtpdActivity extends Activity {
 				if(granted) {
 					ServicesStartStopUtil.startServers(this, prefsBean, this);
 				} else {
-					Toast.makeText(this, "Storage permission is required for this app to work!", Toast.LENGTH_LONG).show();
+					Toast.makeText(this, getString(R.string.permissionRequired, "Storage"), Toast.LENGTH_LONG).show();
 				}
 			}
 		}
