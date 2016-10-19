@@ -165,38 +165,6 @@ public class PrimitiveFtpdActivity extends Activity {
 		showAnonymousLogin();
 	}
 
-	/**
-	 * Checks whether the app has the following permission.
-	 * @param permission The permission name
-	 * @param requestCode The request code to check against in the {@link #onRequestPermissionsResult} callback.
-     * @return true if permission has been granted.
-     */
-	protected boolean hasPermission(String permission, int requestCode) {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if(checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-				requestPermissions(new String[]{permission}, requestCode);
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-		switch (requestCode) {
-			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
-				// If request is cancelled, the result arrays are empty.
-				boolean granted = grantResults.length > 0
-						&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
-				if(granted) {
-					ServicesStartStopUtil.startServers(this, prefsBean, this);
-				} else {
-					Toast.makeText(this, getString(R.string.permissionRequired, "Storage"), Toast.LENGTH_LONG).show();
-				}
-			}
-		}
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -596,6 +564,39 @@ public class PrimitiveFtpdActivity extends Activity {
 	protected void handleStart() {
 		if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)) {
 			ServicesStartStopUtil.startServers(this, prefsBean, this);
+		}
+	}
+
+	/**
+	 * Checks whether the app has the following permission.
+	 * @param permission The permission name
+	 * @param requestCode The request code to check against in the {@link #onRequestPermissionsResult} callback.
+	 * @return true if permission has been granted.
+	 */
+	protected boolean hasPermission(String permission, int requestCode) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			if(checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+				requestPermissions(new String[]{permission}, requestCode);
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+				// If request is cancelled, the result arrays are empty.
+				boolean granted = grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
+				if(granted) {
+					ServicesStartStopUtil.startServers(this, prefsBean, this);
+				} else {
+					String textPara = getString(R.string.permissionNameStorage);
+					Toast.makeText(this, getString(R.string.permissionRequired, textPara), Toast.LENGTH_LONG).show();
+				}
+			}
 		}
 	}
 

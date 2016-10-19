@@ -15,7 +15,8 @@
     <string name="state">State</string>
     <string name="serverStarted">Running &#8230;</string>
     <string name="serverStopped">Stopped</string>
-    <string name="permissionRequired">%1$s permission is required for this app to work!</string>
+    <string name="permissionRequired">\"%1$s\" permission is required for this app to work!</string>
+    <string name="permissionNameStorage">Storage</string>
     <string name="quickSettingsServerStarted">pFTPd Running &#8230;</string>
     <string name="quickSettingsServerStopped">pFTPd Stopped</string>
 
