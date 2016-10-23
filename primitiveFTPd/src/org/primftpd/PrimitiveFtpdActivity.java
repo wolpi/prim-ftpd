@@ -172,6 +172,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		logger.debug("onResume()");
 
 		// register listener to reprint interfaces table when network connections change
+		// TODO show current IP for android 7
 		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(this.networkStateReceiver, filter);
 	}
