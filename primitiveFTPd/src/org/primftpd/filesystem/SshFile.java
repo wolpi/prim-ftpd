@@ -1,5 +1,7 @@
 package org.primftpd.filesystem;
 
+import org.apache.sshd.common.Session;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.EnumSet;
@@ -9,14 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.sshd.common.Session;
-
 public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	implements org.apache.sshd.common.file.SshFile
 {
 	private final Session session;
-
-	private Boolean symLinkCache;
 
 	public SshFile(File file, Session session)
 	{
@@ -68,7 +66,8 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 		case IsRegularFile:
 			return Boolean.valueOf(isFile());
 		case IsSymbolicLink:
-			return isSymLink();
+			// as there is no proper sym link support in java 7, just return false, see GH issue #68
+			return false;
 		case Permissions:
 			boolean read = isReadable();
 			boolean write = isWritable();
@@ -103,41 +102,6 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 		default:
 			return null;
 		}
-	}
-
-	protected boolean isSymLink() throws IOException {
-		if (symLinkCache == null) {
-			File fileToUseForCheck = this.file;
-			if (file.isDirectory()) {
-				File[] children = file.listFiles();
-				if (children != null && children.length > 0) {
-					File firstChild = children[0];
-					fileToUseForCheck = firstChild;
-				}
-			}
-			String absPath = fileToUseForCheck.getAbsolutePath();
-			String canonPath = fileToUseForCheck.getCanonicalPath();
-			Boolean isSymLink = Boolean.valueOf(!absPath.equals(canonPath));
-			symLinkCache = isSymLink;
-			logger.trace("  sym link {}, canon path used: {}", isSymLink, canonPath);
-		}
-		return symLinkCache.booleanValue();
-	}
-
-	@Override
-	public boolean doesExist() {
-		boolean superExists = super.doesExist();
-		boolean isSymlink = false;
-		try {
-			isSymlink = isSymLink();
-		} catch (IOException e) {
-			logger.error("cannot figure out if file is sym link", e);
-		}
-		if (!superExists && isSymlink) {
-			logger.trace("  doesExist() sym link check -> seems to be sym link, returning true");
-			return true;
-		}
-		return superExists;
 	}
 
 	@Override
