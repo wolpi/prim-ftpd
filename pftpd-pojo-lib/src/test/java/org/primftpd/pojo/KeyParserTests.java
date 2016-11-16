@@ -4,6 +4,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.PublicKey;
@@ -13,6 +14,16 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 
 public class KeyParserTests {
+
+    @Test
+    public void noSpaceInKey() throws Exception {
+        String key = "no-space";
+        InputStream is = new ByteArrayInputStream(key.getBytes("UTF8"));
+
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+
+        Assert.assertTrue(keys.isEmpty());
+    }
 
     @Test
     public void parsePubKeyRsa() throws Exception {

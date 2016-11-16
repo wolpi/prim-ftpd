@@ -68,7 +68,7 @@ public class KeyParser {
 
             String name = null;
             String keyEncoded = null;
-            if (parts.length <= 3) {
+            if (parts.length > 2 && parts.length <= 3) {
                 name = parts[0];
                 keyEncoded = parts[1];
             }
