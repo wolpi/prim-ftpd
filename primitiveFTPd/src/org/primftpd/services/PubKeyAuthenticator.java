@@ -10,17 +10,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.security.PublicKey;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PubKeyAuthenticator implements PublickeyAuthenticator {
-
-    private static final Set<String> ANDROID_EC_KEY_CLASS_NAMES = new HashSet<>(Arrays.asList(new String[]{
-        "com.android.org.bouncycastle.jce.provider.JCEECPublicKey",
-        "com.android.org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey"
-    }));
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -47,24 +39,21 @@ public class PubKeyAuthenticator implements PublickeyAuthenticator {
     }
     private boolean keysEqual(PublicKey serverKey, PublicKey clientKey) {
         if (serverKey != null && clientKey != null) {
-            String clientKeyClass = clientKey.getClass().getName();
-            if (serverKey instanceof org.bouncycastle.jce.provider.JCEECPublicKey
-                    && ANDROID_EC_KEY_CLASS_NAMES.contains(clientKeyClass))
+            if (serverKey instanceof org.bouncycastle.jce.provider.JCEECPublicKey)
             {
                 try {
-                    org.bouncycastle.jce.provider.JCEECPublicKey ecServerKey = (org.bouncycastle.jce.provider.JCEECPublicKey)serverKey;
+                    org.bouncycastle.jce.provider.JCEECPublicKey ecServerKey =
+                            (org.bouncycastle.jce.provider.JCEECPublicKey)serverKey;
                     org.bouncycastle.math.ec.ECPoint serverKeyQ = ecServerKey.getQ();
                     BigInteger serverKeyX = serverKeyQ.getAffineXCoord().toBigInteger();
                     BigInteger serverKeyY = serverKeyQ.getAffineYCoord().toBigInteger();
                     BigInteger[] clientKeyPoint = clientKeyPointQ(clientKey);
-//                    PublicKey clientKey2 = KeyParser.createPubKeyEcdsa(
-//                            how to get curve name from key???,
-//                            clientKeyPoint[0],
-//                            clientKeyPoint[1]);
-//                    return serverKey.equals(clientKey2);
                     return serverKeyX.equals(clientKeyPoint[0]) && serverKeyY.equals(clientKeyPoint[1]);
                 } catch (Exception e) {
-                    logger.error("could not get component of client key to compare with server key", e);
+                    logger.error(
+                            "Could not get component of client key to compare with server key. Client key class: "
+                                    + clientKey.getClass().getName(),
+                            e);
                 }
             } else {
                 return serverKey.equals(clientKey);
