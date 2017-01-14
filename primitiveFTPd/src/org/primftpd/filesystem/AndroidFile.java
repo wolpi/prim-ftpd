@@ -63,11 +63,27 @@ public abstract class AndroidFile<T> {
 
 	public boolean doesExist() {
 		boolean exists = file.exists();
+		boolean existsChecked = exists;
+		if (!exists) {
+			// exists may be false when we don't have read permission
+			// try to figure out if it really does not exist
+			File parentFile = file.getParentFile();
+			File[] children = parentFile.listFiles();
+			for (File child : children) {
+				if (file.equals(child)) {
+					existsChecked = true;
+					break;
+				}
+			}
+		}
 		logger.trace(
-			"doesExist(), ({}): {}",
-			file.getAbsolutePath(),
-			Boolean.valueOf(exists));
-		return exists;
+			"doesExist(), ({}): orig val: {}, checked val: {}",
+			new Object[]{
+				file.getAbsolutePath(),
+				Boolean.valueOf(exists),
+				Boolean.valueOf(existsChecked)
+			});
+		return existsChecked;
 	}
 
 	public boolean isReadable() {
