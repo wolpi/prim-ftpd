@@ -32,6 +32,7 @@ public class TaskerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String blurb = intent.getExtras().getString(EXTRA_STRING_BLURB);
+        logger.debug("onReceive() action: '{}', blurb: '{}'", intent.getAction(), blurb);
         if (ACTION_FIRE_SETTING.equals(intent.getAction())) {
             TaskerAction action = TaskerAction.byBlurb(blurb);
             if (action != null) {

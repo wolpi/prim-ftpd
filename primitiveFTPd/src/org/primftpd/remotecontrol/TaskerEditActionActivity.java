@@ -11,13 +11,18 @@ import android.widget.ListView;
 import org.primftpd.R;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Theme;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TaskerEditActionActivity extends ListActivity {
+
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     private TaskerAction selectedAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        logger.debug("onCreate()");
         super.onCreate(savedInstanceState);
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
         Theme theme = LoadPrefsUtil.theme(prefs);
@@ -41,11 +46,13 @@ public class TaskerEditActionActivity extends ListActivity {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         this.selectedAction = TaskerAction.values()[position];
+        logger.debug("onListItemClick() selectedAction: '{}'", selectedAction);
         finish();
     }
 
     @Override
     public void finish() {
+        logger.debug("finish()");
         Intent resultIntent = TaskerReceiver.buildResultIntent(this, selectedAction.getBlurb());
         setResult(RESULT_OK, resultIntent);
 
