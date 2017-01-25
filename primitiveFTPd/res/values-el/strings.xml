@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">primitive ftpd</string>
+    <string name="ifacesLabel">Διεπαφή Δικτύου</string>
+    <string name="ipAddrLabel">Διεύθυνση IP</string>
+    <string name="ifacesError">Σφάλμα:</string>
+    <string name="protocolLabel">Πρωτόκολλο</string>
+    <string name="portLabel">Πόρτα</string>
+    <string name="fingerprintsLabel">Fingerprints κλειδιού</string>
+    <string name="generateKeysMessage">Δημιουργία κλειδιών;</string>
+    <string name="generatingKeysMessage">Δημιουργία κλειδιών ...</string>
+    <string name="generate">Δημιουργία</string>
+    <string name="cancel">Ακύρωση</string>
+    <string name="state">Κατάσταση</string>
+    <string name="serverStarted">Εκκίνηση ...</string>
+    <string name="serverStopped">Ανενεργός</string>
+    <string name="permissionRequired">Η εφαρμογή χρειάζεται \"%1$s\"  άδεια για να λειτουργήσει!</string>
+    <string name="permissionNameStorage">Αποθηκευτικός χώρος</string>
+    <string name="quickSettingsServerStarted">Εκκίνηση του pFTPd ...</string>
+    <string name="quickSettingsServerStopped">Διακόπηκε ο pFTPd</string>
+
+    <string name="startService">Εκκίνηση Εξυπηρετητή</string>
+    <string name="stopService">Διακοπή του Eξυπηρετητή</string>
+    <string name="toggleService">Εναλλαγή έναρξης/διακοπής Εξυπηρετητή</string>
+    <string name="notificationTitle">Εξυπηρετητής FTP</string>
+
+    <string name="haveToSetPassword">Πρέπει πρώτα να οριστεί ένας κωδικός</string>
+    <string name="serverRunning">Ο εξυπηρετητής FTP είναι ενεργός</string>
+    <string name="serverCouldNotBeStarted">Ο εξυπηρετητής δεν μπόρεσε να εκκινηθεί! Μήνυμα σφάλματος:</string>
+    <string name="portInvalid_v2">Η τιμή της πόρτας δεν είναι έγκυρη. Πρέπει να είναι μεταξύ 1024 και 64000.</string>
+    <string name="portsEqual_v2">Οι πόρτες είναι ίδιες. Αυτό δεν θα δουλέψει.</string>
+    <string name="restartServer">Πρέπει να επανεκκινηθεί ο Εξυπηρετητής για να εφαρμοστούν οι αλλαγές.</string>
+    <string name="invalidDir">Ο κατάλογος αρχείων δεν είναι έγκυρος.</string>
+    <string name="couldNotReadKeyAuthKey">Το δημόσιο κλειδί (public key) για την πιστοποίηση με κλειδί δεν μπόρεσε να διαβαστεί. Ελέγξτε το αρχείο καταγραφής για πληροφορίες.</string>
+
+    <string name="prefs">Προτιμήσεις</string>
+    <string name="prefCategoryTitle">Προτιμήσεις εξυπηρετητή FTP</string>
+    <string name="prefTitleUser">Όνομα Χρήστη</string>
+    <string name="prefSummaryUser">Όνομα χρήστη FTP</string>
+    <string name="prefTitlePassword">Κωδικός πρόσβασης</string>
+    <string name="prefSummaryPassword">Κωδικός εξυπηρετητή FTP</string>
+    <string name="prefTitlePort">Πόρτα</string>
+    <string name="prefSummaryPort">Πόρτα εξυπηρετητή FTP</string>
+    <string name="prefTitlePortSecure">Πόρτα ασφαλείας</string>
+    <string name="prefSummaryPortSecure">Πόρτα εξυπηρετητή FTP (κρυπτογραφημένη)</string>
+    <string name="prefTitleStartDir">Αρχικός κατάλογος εξυπηρετητή</string>
+    <string name="prefSummaryStartDir">Αρχικός κατάλογος μετά την είσοδο</string>
+    <string name="prefTitleAnnounce">Αναγγελία του εξυπηρετητή στο τοπικό δίκτυο (LAN)</string>
+    <string name="prefSummaryAnnounce">Αναγγελία του εξυπηρετητή FTP στο τοπικό δίκτυο (LAN) μέσω του DNS-SD (Bonjour). Μπορεί να επιφέρει επιπλοκές σε ορισμένες συσκευές.</string>
+    <string name="prefTitleWakelock">Αναστολή κατάστασης αναμονής</string>
+    <string name="prefSummaryWakelock">Αναστολή κατάστασης αναμονής όσο ο εξυπηρετητής είναι ενεργός. Η κατάσταση αναμονής μπορεί να προκαλέσει ακύρωση των μεταφορτώσεων.</string>
+    <string name="prefTitleWhichServerToStart">Εξυπηρετητής(ες) για εκκίνηση</string>
+    <string name="prefSummaryWhichServerToStart">Επιλέγξτε εαν θα εκκινηθεί μονο ο FTP ή μόνο ο SFTP εξυπηρετητής ή και οι δύο.</string>
+    <string name="prefTitleStartOnBoot">Έναρξη κατα την εκκίνηση</string>
+    <string name="prefSummaryStartOnBoot">Εκκίνηση του εξυπηρετητή κατα την εκκίνηση του συστήματος</string>
+    <string name="prefTitlePubKeyAuth">Πιστοποίηση με την χρήση δημόσιου κλειδιού</string>
+    <string name="prefSummaryPubKeyAuth">Όταν είναι ενεργοποιημένο, τοποθετήστε το δημόσιο ssh2 κλειδί στο %s. SFTP μόνο.</string>
+    <string name="prefTitleAnonymousLogin">Ανώνυμη είσοδος</string>
+    <string name="prefSummaryAnonymousLogin">Ορίστε εάν οι ανώνυμες συνδέσεις επιτρέπονται από τον εξυπηρετητή.</string>
+    <string name="prefTheme">Θέμα</string>
+    <string name="prefSummaryTheme">Η αλλαγή θέματος ίσως απαιτήσει την επανεκκίνηση της εφαρμογής.</string>
+    <string name="prefTitleLogging">Αρχείο καταγραφής</string>
+    <string name="prefSummaryLogging">Το αρχείο καταγραφής εξυπηρετεί στην ανάλυση των σφαλμάτων. Εάν η εφαρμογή δεν λειτουργεί κανονικά στην συσκευή μπορεί να γίνει αποστολή του αρχείου στους προγραμματιστές. Ίσως να απαιτείται επανεκκίνηση της εφαρμογής.</string>
+    
+    <string name="licence">Άδεια χρήσης</string>
+    <string name="reset">Επαναφορά</string>
+
+    <string name="widgetTextStart">εκκίνηση (s)ftpd</string>
+    <string name="widgetTextStop">διακοπή (s)ftpd</string>
+    <string name="isAnonymous">Ανώνυμη σύνδεση: %1$b</string>
+    <string name="selectServerAction">Επιλογή ενέργειας εξυπηρετητή</string>
+    <string name="isServerRunning">Είναι ο εξυπηρετητής ενεργός;</string>
+
+    <string-array name="prefWhichServerToStartNames">
+        <item>FTP και SFTP</item>
+        <item>Μόνο FTP</item>
+        <item>Μόνο SFTP</item>
+    </string-array>
+    
+    <string-array name="prefThemeNames">
+        <item>Σκούρο</item>
+        <item>Φωτεινό</item>
+    </string-array>
+
+    <string-array name="prefLoggingNames">
+        <item>Κανένα αρχείο καταγραφής</item>
+        <item>Καταγραφή σε αρχείο κειμένου</item>
+        <item>Καταγραφή στο Android</item>
+    </string-array>
+    
+</resources>
