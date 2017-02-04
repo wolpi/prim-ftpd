@@ -25,6 +25,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_PUB_KEY_AUTH = "pubKeyAuthPref";
 	public static final String PREF_KEY_THEME = "themePref";
 	public static final String PREF_KEY_LOGGING = "loggingPref";
+	public static final String PREF_KEY_FTP_PASSIVE_PORTS = "ftpPassivePortsPref";
 
 	public static final int PORT_DEFAULT_VAL = 12345;
 	static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
@@ -101,6 +102,12 @@ public class LoadPrefsUtil
 			PREF_KEY_THEME,
 			Theme.DARK.xmlValue());
 		return Theme.byXmlVal(themeStr);
+	}
+
+	public static String ftpPassivePorts(SharedPreferences prefs) {
+		return prefs.getString(
+				LoadPrefsUtil.PREF_KEY_FTP_PASSIVE_PORTS,
+				null);
 	}
 
 	public static int loadPortInsecure(
@@ -181,6 +188,9 @@ public class LoadPrefsUtil
 		ServerToStart serverToStart = serverToStart(prefs);
 		logger.debug("got 'which server': {}", serverToStart);
 
+		String ftpPassivePorts = ftpPassivePorts(prefs);
+		logger.debug("got ftpPassivePorts: {}", ftpPassivePorts);
+
 		int port = loadPortInsecure(logger, prefs);
 		logger.debug("got 'port': {}", Integer.valueOf(port));
 
@@ -198,6 +208,7 @@ public class LoadPrefsUtil
 				wakelock,
 				pubKeyAuth,
 				port,
-				serverToStart);
+				serverToStart,
+				ftpPassivePorts);
 	}
 }

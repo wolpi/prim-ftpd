@@ -58,6 +58,8 @@
     <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 public key in %s. SFTP only.</string>
     <string name="prefTitleAnonymousLogin">Anonymous Login</string>
     <string name="prefSummaryAnonymousLogin">Set if anonymous login is allowed on the server.</string>
+    <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
+    <string name="prefSummaryFtpPassivePorts">Ports for FTP passive data connection. May be a single port, a list or range of ports. E.g. 5678,5700-5710,5800,5900.</string>
     <string name="prefTheme">Theme</string>
     <string name="prefSummaryTheme">Changing Theme may require to restart the app.</string>
     <string name="prefTitleLogging">Log</string>

@@ -82,6 +82,12 @@
 			android:title="@string/prefTitlePubKeyAuth"
 			android:summary="@string/prefSummaryPubKeyAuth"
 			/>
+		<EditTextPreference
+			android:name="ftpPassivePorts"
+			android:key="ftpPassivePortsPref"
+			android:title="@string/prefTitleFtpPassivePorts"
+			android:summary="@string/prefSummaryFtpPassivePorts"
+			/>
 		<ListPreference
 			android:name="theme"
 			android:key="themePref"

@@ -56,6 +56,8 @@
     <string name="prefSummaryStartOnBoot">Server beim System-Boot starten.</string>
     <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 public key in %s ab. Nur SFTP.</string>
     <string name="prefSummaryAnonymousLogin">Anonymous Login erlauben.</string>
+    <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
+    <string name="prefSummaryFtpPassivePorts">Ports für FTP Passive-Daten-Verbindung. Kann ein einzelner Port, eine Liste oder Bereich von Ports sein. Z.B. 5678,5700-5710,5800,5900.</string>
     <string name="prefSummaryTheme">Den Theme zu ändern kann einen App Neustart erfordern.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>

@@ -3,6 +3,7 @@ package org.primftpd.services;
 import android.os.Looper;
 
 import org.apache.ftpserver.ConnectionConfigFactory;
+import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.FileSystemFactory;
@@ -12,6 +13,7 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.filesystem.FtpFileSystemView;
+import org.primftpd.util.StringUtils;
 
 /**
  * Implements a FTP server.
@@ -57,6 +59,13 @@ public class FtpServerService extends AbstractServerService
 	protected boolean launchServer() {
 		ListenerFactory listenerFactory = new ListenerFactory();
 		listenerFactory.setPort(prefsBean.getPort());
+
+		DataConnectionConfigurationFactory dataConConfigFactory = new DataConnectionConfigurationFactory();
+		String passivePorts = prefsBean.getFtpPassivePorts();
+		if (StringUtils.isNotBlank(passivePorts)){
+			dataConConfigFactory.setPassivePorts(passivePorts);
+		}
+		listenerFactory.setDataConnectionConfiguration(dataConConfigFactory.createDataConnectionConfiguration());
 
 		FtpServerFactory serverFactory = new FtpServerFactory();
 		serverFactory.addListener("default", listenerFactory.createListener());

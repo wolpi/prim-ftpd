@@ -21,6 +21,7 @@ public class PrefsBean implements Serializable
 	private final boolean wakelock;
 	private final boolean pubKeyAuth;
 	private final ServerToStart serverToStart;
+	private final String ftpPassivePorts;
 
 	public PrefsBean(
 		String userName,
@@ -32,7 +33,8 @@ public class PrefsBean implements Serializable
 		boolean wakelock,
 		boolean pubKeyAuth,
 		int port,
-		ServerToStart serverToStart)
+		ServerToStart serverToStart,
+		String ftpPassivePorts)
 	{
 		super();
 		this.userName = userName;
@@ -47,6 +49,7 @@ public class PrefsBean implements Serializable
 		this.wakelock = wakelock;
 		this.pubKeyAuth = pubKeyAuth;
 		this.serverToStart = serverToStart;
+		this.ftpPassivePorts = ftpPassivePorts;
 	}
 
 	public String getUserName() {
@@ -98,5 +101,9 @@ public class PrefsBean implements Serializable
 	public ServerToStart getServerToStart()
 	{
 		return serverToStart;
+	}
+
+	public String getFtpPassivePorts() {
+		return ftpPassivePorts;
 	}
 }
