@@ -5,10 +5,10 @@ buildscript {
 
     dependencies {
         // avail in public repos
-        classpath 'com.android.tools.build:gradle:2.1.3'
+        classpath 'com.android.tools.build:gradle:2.2.3'
 
         // avail in android-studio only
-        //classpath 'com.android.tools.build:gradle:2.2.1'
+        //classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 
@@ -79,6 +79,7 @@ dependencies {
     compile project(':pftpd-pojo-lib')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'org.apache.ftpserver:ftpserver-core:1.0.6'
-    compile 'org.apache.sshd:sshd-core:0.13.0'
+    compile 'org.apache.sshd:sshd-core:0.13.0' // TODO upgrade sshd
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.nononsenseapps:filepicker:4.0.0'
 }

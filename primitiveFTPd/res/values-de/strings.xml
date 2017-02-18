@@ -19,6 +19,7 @@
     <string name="permissionNameStorage">Speicher</string>
     <string name="quickSettingsServerStarted">pFTPd läuft &#8230;</string>
     <string name="quickSettingsServerStopped">pFTPd gestoppt</string>
+    <string name="saveAs">Speichern unter</string>
 
     <string name="startService">Server Starten</string>
     <string name="stopService">Server Stoppen</string>

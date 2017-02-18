@@ -175,6 +175,9 @@ public class PrimitiveFtpdActivity extends Activity {
 		// TODO show current IP for android 7
 		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(this.networkStateReceiver, filter);
+
+		// e.g. necessary when ports preferences have been changed
+		displayServersState();
 	}
 
 	@Override
