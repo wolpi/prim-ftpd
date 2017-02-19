@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
@@ -28,7 +28,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 22
-        versionName "4.8"
+        versionName "4.8.1"
     }
 
     buildTypes {
