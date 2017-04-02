@@ -5,10 +5,7 @@ buildscript {
 
     dependencies {
         // avail in public repos
-        classpath 'com.android.tools.build:gradle:2.2.3'
-
-        // avail in android-studio only
-        //classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.0'
     }
 }
 
@@ -20,13 +17,13 @@ apply plugin: 'com.android.application'
 
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.1'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "org.primftpd"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 24
         versionName "4.9-SNAPSHOT"
     }
