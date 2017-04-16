@@ -23,6 +23,8 @@ import org.primftpd.remotecontrol.TaskerReceiver;
 import org.primftpd.services.FtpServerService;
 import org.primftpd.services.ServicesStartingService;
 import org.primftpd.services.SshServerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -32,6 +34,8 @@ import java.util.List;
 public class ServicesStartStopUtil {
 
     public static final String EXTRA_PREFS_BEAN = "prefs.bean";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServicesStartStopUtil.class);
 
     public static void startServers(
             Context context,
@@ -63,11 +67,13 @@ public class ServicesStartStopUtil {
                     }
                 }
                 if (keyPresent) {
+                    LOGGER.debug("going to start sshd");
                     context.startService(createSshServiceIntent(context, prefsBean));
                 }
             }
             if (continueServerStart) {
                 if (prefsBean.getServerToStart().startFtp()) {
+                    LOGGER.debug("going to start ftpd");
                     context.startService(createFtpServiceIntent(context, prefsBean));
                 }
             }
@@ -126,6 +132,8 @@ public class ServicesStartStopUtil {
     }
 
     private static void createStatusbarNotification(Context ctxt) {
+        LOGGER.debug("createStatusbarNotification()");
+
         // create pending intent
         Intent notificationIntent = new Intent(ctxt, PrimitiveFtpdActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(ctxt, 0, notificationIntent, 0);
@@ -181,6 +189,7 @@ public class ServicesStartStopUtil {
 
     private static void updateWidget(Context context, boolean running)
     {
+        LOGGER.debug("updateWidget()");
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
 
         if (running) {
@@ -215,6 +224,7 @@ public class ServicesStartStopUtil {
         if (serverRunning) {
             createStatusbarNotification(ctxt);
         } else {
+            LOGGER.debug("removeStatusbarNotification()");
             NotificationUtil.removeStatusbarNotification(ctxt);
         }
         new PftpdPowerTogglesPlugin().sendStateUpdate(ctxt, serverRunning);

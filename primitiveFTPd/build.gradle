@@ -4,8 +4,7 @@ buildscript {
     }
 
     dependencies {
-        // avail in public repos
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:2.3.1'
     }
 }
 
