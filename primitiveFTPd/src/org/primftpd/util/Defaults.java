@@ -6,6 +6,8 @@ import android.os.Environment;
 
 import com.nononsenseapps.filepicker.FilePickerActivity;
 
+import org.primftpd.filepicker.ResettingFilePickerActivity;
+
 import java.io.File;
 
 public final class Defaults {
@@ -22,7 +24,7 @@ public final class Defaults {
 	}
 
 	public static Intent createDefaultDirPicker(Context ctxt, File initialVal) {
-		Intent dirPickerIntent = new Intent(ctxt, FilePickerActivity.class);
+		Intent dirPickerIntent = new Intent(ctxt, ResettingFilePickerActivity.class);
 		dirPickerIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
 		dirPickerIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
 		dirPickerIntent.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
