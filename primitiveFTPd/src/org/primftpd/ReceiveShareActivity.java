@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -179,12 +178,15 @@ public class ReceiveShareActivity extends Activity {
         if (uri != null) {
             filename = uri.getLastPathSegment();
         }
-        if (filename == null) {
+        if (filename == null || !filename.contains(".")) {
             filename = FILENAME_DATEFORMAT.format(new Date());
             if (type != null) {
                 String fileExt = type.contains("/")
                         ? type.substring(type.lastIndexOf('/') + 1, type.length())
                         : type;
+                if ("plain".equals(fileExt)) {
+                    fileExt = "txt";
+                }
                 filename += "." + fileExt;
             }
         }
