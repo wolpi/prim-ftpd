@@ -108,8 +108,11 @@ public class ReceiveShareActivity extends Activity {
             File targetDir = com.nononsenseapps.filepicker.Utils.getFileForUri(targetUri);
             logger.debug("targetDir: {}", targetDir);
 
-            saveUris(targetDir);
-            saveContents(targetDir);
+            if (uris != null) {
+                saveUris(targetDir);
+            } else {
+                saveContents(targetDir);
+            }
         }
         finish();
     }
@@ -118,14 +121,19 @@ public class ReceiveShareActivity extends Activity {
         if (uris == null) {
             return;
         }
-        for (Uri uri : uris) {
+        for (int i=0; i<uris.size(); i++) {
+            Uri uri = uris.get(i);
             if (uri == null) {
                 continue;
+            }
+            String content = null;
+            if (contents != null && i < contents.size()) {
+                content = contents.get(i);
             }
             FileOutputStream fos = null;
             InputStream is = null;
             try {
-                String filename = filename(uri, this.type);
+                String filename = filename(uri, content, this.type, targetDir);
                 File targetFile = new File(targetDir, filename);
                 logger.debug("saving under: {}", targetFile);
                 fos = new FileOutputStream(targetFile);
@@ -154,7 +162,7 @@ public class ReceiveShareActivity extends Activity {
             }
             FileOutputStream fos = null;
             try {
-                String filename = filename(null, "txt");
+                String filename = filename(null, null, "txt", targetDir);
                 File targetFile = new File(targetDir, filename);
                 logger.debug("saving under: {}", targetFile);
                 fos = new FileOutputStream(targetFile);
@@ -173,23 +181,64 @@ public class ReceiveShareActivity extends Activity {
     }
 
     protected static DateFormat FILENAME_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS");
-    protected String filename(Uri uri, String type) {
+    protected String filename(Uri uri, String content, String type, File targetDir) {
         String filename = null;
-        if (uri != null) {
-            filename = uri.getLastPathSegment();
+        boolean addExtension = false;
+        if (content != null) {
+            // if we got content use that as filename
+            filename = content;
+            addExtension = true;
         }
-        if (filename == null || !filename.contains(".")) {
+        if (filename == null && uri != null) {
+            // if we don't got content use last fragment of url as filename
+            filename = uri.getLastPathSegment();
+            addExtension = !filename.contains(".");
+        }
+        if (filename == null || (content == null && addExtension)) {
+            // if we still don't have a filename or last part of url does not contain a extension
+            // use timestamp as filename
             filename = FILENAME_DATEFORMAT.format(new Date());
+            addExtension = true;
+        }
+        String fileExt = null;
+        if (addExtension) {
+            // try to add extension base on given mime type
             if (type != null) {
-                String fileExt = type.contains("/")
+                fileExt = type.contains("/")
                         ? type.substring(type.lastIndexOf('/') + 1, type.length())
                         : type;
                 if ("plain".equals(fileExt)) {
                     fileExt = "txt";
                 }
-                filename += "." + fileExt;
             }
         }
+
+        // check if file exists
+        boolean exists;
+        int counter = 0;
+        do {
+            String uniquePart = counter == 0 ? "" : "_" + counter;
+            String tmpName = fileExt != null ? filename + uniquePart + "." + fileExt : filename + uniquePart;
+            File targetFile = new File(targetDir, tmpName);
+            exists = targetFile.exists();
+            if (exists) {
+                logger.debug("file already exists: {}", targetFile.getAbsolutePath());
+                counter++;
+            }
+        } while (exists);
+
+        // make unique if was existing
+        if (counter > 0) {
+            filename += "_" + counter;
+        }
+
+        // add extension if present
+        if (fileExt != null) {
+            filename += "." + fileExt;
+        }
+
+        logger.debug("generated filename '{}' for uri '{}', content '{}', type '{}'",
+                new Object[]{filename, uri, content, type});
         return filename;
     }
 
