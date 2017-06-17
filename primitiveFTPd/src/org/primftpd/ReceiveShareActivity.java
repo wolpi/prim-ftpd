@@ -125,7 +125,7 @@ public class ReceiveShareActivity extends Activity {
             FileOutputStream fos = null;
             InputStream is = null;
             try {
-                String filename = filename(uri);
+                String filename = filename(uri, this.type);
                 File targetFile = new File(targetDir, filename);
                 logger.debug("saving under: {}", targetFile);
                 fos = new FileOutputStream(targetFile);
@@ -154,7 +154,7 @@ public class ReceiveShareActivity extends Activity {
             }
             FileOutputStream fos = null;
             try {
-                String filename = filename(null);
+                String filename = filename(null, "txt");
                 File targetFile = new File(targetDir, filename);
                 logger.debug("saving under: {}", targetFile);
                 fos = new FileOutputStream(targetFile);
@@ -173,7 +173,7 @@ public class ReceiveShareActivity extends Activity {
     }
 
     protected static DateFormat FILENAME_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS");
-    protected String filename(Uri uri) {
+    protected String filename(Uri uri, String type) {
         String filename = null;
         if (uri != null) {
             filename = uri.getLastPathSegment();
