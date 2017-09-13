@@ -19,6 +19,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_SECURE_PORT = "securePortPref";
 	public static final String PREF_KEY_START_DIR = "startDirPref";
 	public static final String PREF_KEY_ANNOUNCE = "announcePref";
+	public static final String PREF_KEY_ANNOUNCE_NAME = "announceNamePref";
 	public static final String PREF_KEY_WAKELOCK = "wakelockPref";
 	public static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
 	public static final String PREF_KEY_START_ON_BOOT = "startOnBootPref";
@@ -70,6 +71,12 @@ public class LoadPrefsUtil
 		return prefs.getBoolean(
 			LoadPrefsUtil.PREF_KEY_ANNOUNCE,
 			Boolean.FALSE);
+	}
+
+	public static String announceName(SharedPreferences prefs) {
+		return prefs.getString(
+			LoadPrefsUtil.PREF_KEY_ANNOUNCE_NAME,
+			"primitive ftpd");
 	}
 
 	public static Boolean wakelock(SharedPreferences prefs) {
@@ -179,6 +186,9 @@ public class LoadPrefsUtil
 		boolean announce = announce(prefs);
 		logger.debug("got announce: {}", Boolean.valueOf(announce));
 
+		String announceName = announceName(prefs);
+		logger.debug("got announceName: {}", announceName);
+
 		boolean wakelock = wakelock(prefs);
 		logger.debug("got wakelock: {}", Boolean.valueOf(wakelock));
 
@@ -205,6 +215,7 @@ public class LoadPrefsUtil
 				securePort,
 				startDir,
 				announce,
+				announceName,
 				wakelock,
 				pubKeyAuth,
 				port,
