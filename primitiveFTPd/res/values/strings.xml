@@ -49,6 +49,8 @@
     <string name="prefSummaryStartDir">First directory after login</string>
     <string name="prefTitleAnnounce">Announce server in LAN</string>
     <string name="prefSummaryAnnounce">Announces FTP server in LAN via DNS-SD (Bonjour). May cause crashes on some devices.</string>
+    <string name="prefTitleAnnounceName">Servername</string>
+    <string name="prefSummaryAnnounceName">Name to announce server with.</string>
     <string name="prefTitleWakelock">Prevent Standby</string>
     <string name="prefSummaryWakelock">Prevents Standby while server is running. Standby can cause uploads/downloads to abort.</string>
     <string name="prefTitleWhichServerToStart">Server(s) to be started</string>
@@ -65,7 +67,7 @@
     <string name="prefSummaryTheme">Changing Theme may require to restart the app.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log serves analyzing of errors. If the app does not work properly on your device you can send a log to developers. May require to restart the app.</string>
-    
+
     <string name="licence">Licence</string>
     <string name="reset">Reset</string>
 

@@ -31,10 +31,14 @@ public class FtpPrefsFragment extends PreferenceFragment
 		addPreferencesFromResource(R.xml.preferences);
 
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-			logger.debug("disabling announce pref, sdk: {}", Build.VERSION.SDK_INT);
-			Preference announcePref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_ANNOUNCE);
+			logger.debug("disabling announce prefs, sdk: {}", Build.VERSION.SDK_INT);
 			PreferenceCategory prefCat = (PreferenceCategory) getPreferenceManager().findPreference("ftpPrefCat");
+
+			Preference announcePref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_ANNOUNCE);
 			prefCat.removePreference(announcePref);
+
+			Preference announceNamePref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_ANNOUNCE_NAME);
+			prefCat.removePreference(announceNamePref);
 		}
 
 		// text parameter for pub key auth pref

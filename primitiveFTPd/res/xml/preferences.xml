@@ -68,6 +68,13 @@
 			android:title="@string/prefTitleAnnounce"
 			android:summary="@string/prefSummaryAnnounce"
 		/>
+		<EditTextPreference
+			android:name="announce_name"
+			android:key="announceNamePref"
+			android:defaultValue="primitive ftpd"
+			android:title="@string/prefTitleAnnounceName"
+			android:summary="@string/prefSummaryAnnounceName"
+		/>
 		<SwitchPreference
 			android:name="startOnBoot"
 			android:key="startOnBootPref"

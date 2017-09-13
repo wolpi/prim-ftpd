@@ -18,6 +18,7 @@ public class PrefsBean implements Serializable
 	private final int securePort;
 	private final File startDir;
 	private final boolean announce;
+	private final String announceName;
 	private final boolean wakelock;
 	private final boolean pubKeyAuth;
 	private final ServerToStart serverToStart;
@@ -30,6 +31,7 @@ public class PrefsBean implements Serializable
 		int securePort,
 		File startDir,
 		boolean announce,
+		String announceName,
 		boolean wakelock,
 		boolean pubKeyAuth,
 		int port,
@@ -46,6 +48,7 @@ public class PrefsBean implements Serializable
 		this.securePortStr = String.valueOf(securePort);
 		this.startDir = startDir;
 		this.announce = announce;
+		this.announceName = announceName;
 		this.wakelock = wakelock;
 		this.pubKeyAuth = pubKeyAuth;
 		this.serverToStart = serverToStart;
@@ -84,13 +87,15 @@ public class PrefsBean implements Serializable
 		return startDir;
 	}
 
-	public boolean isAnnounce()
-	{
+	public boolean isAnnounce() {
 		return announce;
 	}
 
-	public boolean isWakelock()
-	{
+	public String getAnnounceName() {
+		return announceName;
+	}
+
+	public boolean isWakelock() {
 		return wakelock;
 	}
 

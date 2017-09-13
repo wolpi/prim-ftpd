@@ -152,7 +152,13 @@ public abstract class AbstractServerService
 			};
 
 			NsdServiceInfo serviceInfo = new NsdServiceInfo();
-			serviceInfo.setServiceName("primitive ftpd");
+			String servicename = "primitive ftpd";
+			if (prefsBean != null) {
+				servicename = prefsBean.getAnnounceName();
+			} else {
+				logger.error("prefsBean is null, falling back to default service name");
+			}
+			serviceInfo.setServiceName(servicename);
 			serviceInfo.setServiceType("_" + getServiceName() + "._tcp.");
 			serviceInfo.setPort(getPort());
 
