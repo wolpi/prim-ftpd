@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<PreferenceCategory android:title="@string/prefCategoryTitle" android:key="ftpPrefCat">
-		<SwitchPreference
+		<CheckBoxPreference
 			android:name="anonymousLogin"
 			android:key="anonymousLoginPref"
 			android:defaultValue="false"
@@ -54,28 +54,28 @@
 			android:summary="@string/prefSummaryStartDir"
 
 		/>
-		<SwitchPreference
+		<CheckBoxPreference
 			android:name="wakelock"
 			android:key="wakelockPref"
 			android:defaultValue="true"
 			android:title="@string/prefTitleWakelock"
 			android:summary="@string/prefSummaryWakelock"
 		/>
-		<SwitchPreference
+		<CheckBoxPreference
 			android:name="announce"
 			android:key="announcePref"
 			android:defaultValue="false"
 			android:title="@string/prefTitleAnnounce"
 			android:summary="@string/prefSummaryAnnounce"
 		/>
-		<SwitchPreference
+		<CheckBoxPreference
 			android:name="startOnBoot"
 			android:key="startOnBootPref"
 			android:defaultValue="false"
 			android:title="@string/prefTitleStartOnBoot"
 			android:summary="@string/prefSummaryStartOnBoot"
 			/>
-		<SwitchPreference
+		<CheckBoxPreference
 			android:name="pubKeyAuth"
 			android:key="pubKeyAuthPref"
 			android:defaultValue="false"
