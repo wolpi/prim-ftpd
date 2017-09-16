@@ -84,22 +84,22 @@ public class CsvLoggerFactory implements ILoggerFactory
 				public int compare(File file1, File file2) {
 					Long time1 = Long.valueOf(file1.lastModified());
 					Long time2 = Long.valueOf(file2.lastModified());
-					return time2.compareTo(time1);
+					return time1.compareTo(time2);
 				}
 			});
 			for (File file : currentFiles) {
 				sorted.add(file);
 			}
 
-			int i=0;
+			int i = currentFiles.length;
 			Iterator<File> iterator = sorted.iterator();
 			while (iterator.hasNext()) {
-				if (i < NUM_LOGFILES_TO_KEEP) {
+				if (i >= NUM_LOGFILES_TO_KEEP) {
 					iterator.next().delete();
 				} else {
 					break;
 				}
-				i++;
+				i--;
 			}
 		}
 	}
