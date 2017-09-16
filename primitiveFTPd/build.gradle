@@ -24,7 +24,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 25
-        versionName "4.10-SNAPSHOT"
+        versionName "4.10"
     }
 
     buildTypes {
