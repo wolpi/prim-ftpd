@@ -42,4 +42,9 @@ public class FtpFile extends AndroidFile<org.apache.ftpserver.ftplet.FtpFile>
 	public User getUser() {
 		return user;
 	}
+
+	@Override
+	public Object getPhysicalFile() {
+		return file;
+	}
 }
