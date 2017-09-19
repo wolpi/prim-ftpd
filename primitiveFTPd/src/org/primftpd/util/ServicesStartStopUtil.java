@@ -131,7 +131,7 @@ public class ServicesStartStopUtil {
         return serversRunning;
     }
 
-    private static void createStatusbarNotification(Context ctxt) {
+    private static Notification createStatusbarNotification(Context ctxt) {
         LOGGER.debug("createStatusbarNotification()");
 
         // create pending intent
@@ -185,6 +185,7 @@ public class ServicesStartStopUtil {
 
         // notification manager
         NotificationUtil.createStatusbarNotification(ctxt, notification);
+        return notification;
     }
 
     private static void updateWidget(Context context, boolean running)
@@ -219,15 +220,17 @@ public class ServicesStartStopUtil {
         manager.updateAppWidget(thisWidget, remoteViews);
     }
 
-    public static void updateNonActivityUI(Context ctxt, boolean serverRunning) {
+    public static Notification updateNonActivityUI(Context ctxt, boolean serverRunning) {
+        Notification notification = null;
         updateWidget(ctxt, serverRunning);
         if (serverRunning) {
-            createStatusbarNotification(ctxt);
+            notification = createStatusbarNotification(ctxt);
         } else {
             LOGGER.debug("removeStatusbarNotification()");
             NotificationUtil.removeStatusbarNotification(ctxt);
         }
         new PftpdPowerTogglesPlugin().sendStateUpdate(ctxt, serverRunning);
         TaskerReceiver.sendRequestQueryCondition(ctxt);
+        return notification;
     }
 }

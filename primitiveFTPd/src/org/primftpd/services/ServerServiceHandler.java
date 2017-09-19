@@ -1,11 +1,13 @@
 package org.primftpd.services;
 
+import android.app.Notification;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
+import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +79,11 @@ public class ServerServiceHandler extends Handler
 				if (service.prefsBean.isAnnounce()) {
 					service.announceService();
 				}
-				ServicesStartStopUtil.updateNonActivityUI(service, true);
+				Notification notification = ServicesStartStopUtil.updateNonActivityUI(service, true);
+				if (service.prefsBean.isForegroundService()) {
+					logger.debug("setting server to foreground ({})", logName);
+					service.startForeground(NotificationUtil.NOTIFICATION_ID, notification);
+				}
 			} else {
 				service.stopSelf();
 			}

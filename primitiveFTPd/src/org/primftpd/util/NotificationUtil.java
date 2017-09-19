@@ -6,7 +6,7 @@ import android.content.Context;
 
 public class NotificationUtil
 {
-	protected static final int NOTIFICATION_ID = 1;
+	public static final int NOTIFICATION_ID = 1;
 
 	public static void createStatusbarNotification(
 			Context androidObject,
