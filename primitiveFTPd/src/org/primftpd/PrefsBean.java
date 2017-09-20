@@ -1,6 +1,7 @@
 package org.primftpd;
 
 import org.primftpd.prefs.ServerToStart;
+import org.primftpd.prefs.StorageType;
 
 import java.io.File;
 import java.io.Serializable;
@@ -24,11 +25,14 @@ public class PrefsBean implements Serializable
 	private final boolean foregroundService;
 	private final ServerToStart serverToStart;
 	private final String ftpPassivePorts;
+	private final StorageType storageType;
+	private final String safUrl;
 
 	public PrefsBean(
 		String userName,
 		String password,
 		boolean anonymousLogin,
+		int port,
 		int securePort,
 		File startDir,
 		boolean announce,
@@ -36,9 +40,10 @@ public class PrefsBean implements Serializable
 		boolean wakelock,
 		boolean pubKeyAuth,
 		boolean foregroundService,
-		int port,
 		ServerToStart serverToStart,
-		String ftpPassivePorts)
+		String ftpPassivePorts,
+		StorageType storageType,
+		String safUrl)
 	{
 		super();
 		this.userName = userName;
@@ -56,6 +61,9 @@ public class PrefsBean implements Serializable
 		this.foregroundService = foregroundService;
 		this.serverToStart = serverToStart;
 		this.ftpPassivePorts = ftpPassivePorts;
+		this.storageType = storageType;
+		this.safUrl = safUrl;
+
 	}
 
 	public String getUserName() {
@@ -117,5 +125,13 @@ public class PrefsBean implements Serializable
 
 	public String getFtpPassivePorts() {
 		return ftpPassivePorts;
+	}
+
+	public StorageType getStorageType() {
+		return storageType;
+	}
+
+	public String getSafUrl() {
+		return safUrl;
 	}
 }

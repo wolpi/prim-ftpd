@@ -28,6 +28,8 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_THEME = "themePref";
 	public static final String PREF_KEY_LOGGING = "loggingPref";
 	public static final String PREF_KEY_FTP_PASSIVE_PORTS = "ftpPassivePortsPref";
+	public static final String PREF_KEY_STORAGE_TYPE = "storageTypePref";
+	public static final String PREF_KEY_SAF_URL = "safUrlPref";
 
 	public static final int PORT_DEFAULT_VAL = 12345;
 	static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
@@ -124,6 +126,27 @@ public class LoadPrefsUtil
 				null);
 	}
 
+	public static StorageType storageType(SharedPreferences prefs) {
+		String storageTypeStr = prefs.getString(
+				PREF_KEY_STORAGE_TYPE,
+				StorageType.PLAIN.xmlValue());
+		return StorageType.byXmlVal(storageTypeStr);
+	}
+
+	public static void storeStorageType(SharedPreferences prefs, StorageType value) {
+		prefs.edit().putString(PREF_KEY_STORAGE_TYPE, value.xmlValue()).commit();
+	}
+
+	public static String safUrl(SharedPreferences prefs) {
+		return prefs.getString(
+				LoadPrefsUtil.PREF_KEY_SAF_URL,
+				"");
+	}
+
+	public static void storeSafUrl(SharedPreferences prefs, String value) {
+		prefs.edit().putString(PREF_KEY_SAF_URL, value).commit();
+	}
+
 	public static int loadPortInsecure(
 		Logger logger,
 		SharedPreferences prefs)
@@ -217,11 +240,18 @@ public class LoadPrefsUtil
 		int securePort = loadPortSecure(logger, prefs);
 		logger.debug("got 'secure port': {}", Integer.valueOf(securePort));
 
+		StorageType storageType = storageType(prefs);
+		logger.debug("got 'StorageType': {}", storageType);
+
+		String safUrl = safUrl(prefs);
+		logger.debug("got safUrl: {}", safUrl);
+
 		// create prefsBean
 		return new PrefsBean(
 				userName,
 				password,
 				anonymousLogin,
+				port,
 				securePort,
 				startDir,
 				announce,
@@ -229,8 +259,9 @@ public class LoadPrefsUtil
 				wakelock,
 				pubKeyAuth,
 				foregroundService,
-				port,
 				serverToStart,
-				ftpPassivePorts);
+				ftpPassivePorts,
+				storageType,
+				safUrl);
 	}
 }

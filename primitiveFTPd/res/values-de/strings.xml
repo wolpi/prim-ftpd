@@ -73,6 +73,12 @@
     <string name="isAnonymous">Anonymous Login: %1$b</string>
     <string name="selectServerAction">Server Aktion wählen</string>
 
+    <string name="storageType">Art des Speichers</string>
+    <string name="storageTypePlain">Gutes, altes Dateisystem</string>
+    <string name="storageTypeRoot">Super user (Gerät muss gerooted sein)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework\n(z.B. für SD-Karte)</string>
+    <string name="selectedSafUri">Ausgewählte Storage Access Framework URI:</string>
+
     <string-array name="prefWhichServerToStartNames">
         <item>FTP und SFTP</item>
         <item>nur FTP</item>

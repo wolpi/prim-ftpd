@@ -79,6 +79,12 @@
     <string name="selectServerAction">Select Server Action</string>
     <string name="isServerRunning">Is server running?</string>
 
+    <string name="storageType">Storage Type</string>
+    <string name="storageTypePlain">Plain old filesystem</string>
+    <string name="storageTypeRoot">Super user (device must be rooted)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework\n(e.g. for sd card)</string>
+    <string name="selectedSafUri">Selected Storage Access Framework URI:</string>
+
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
         <item>FTP only</item>

@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +24,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewManager;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +40,7 @@ import org.primftpd.prefs.FtpPrefsActivityThemeDark;
 import org.primftpd.prefs.FtpPrefsActivityThemeLight;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
+import org.primftpd.prefs.StorageType;
 import org.primftpd.prefs.Theme;
 import org.primftpd.util.KeyGenerator;
 import org.primftpd.util.KeyInfoProvider;
@@ -44,6 +48,7 @@ import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.PrngFixes;
 import org.primftpd.util.ServersRunningBean;
 import org.primftpd.util.ServicesStartStopUtil;
+import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,18 +132,24 @@ public class PrimitiveFtpdActivity extends Activity {
 		showKeyFingerprints();
 
 		// create addresses label
-		((TextView)findViewById(R.id.addressesLabel)).setText(
-			String.format("%s (%s)", getText(R.string.ipAddrLabel), getText(R.string.ifacesLabel) )
+		((TextView) findViewById(R.id.addressesLabel)).setText(
+				String.format("%s (%s)", getText(R.string.ipAddrLabel), getText(R.string.ifacesLabel))
 		);
 
 		// create ports label
-		((TextView)findViewById(R.id.portsLabel)).setText(
-			String.format("%s / %s / %s",
-				getText(R.string.protocolLabel), getText(R.string.portLabel), getText(R.string.state))
+		((TextView) findViewById(R.id.portsLabel)).setText(
+				String.format("%s / %s / %s",
+						getText(R.string.protocolLabel), getText(R.string.portLabel), getText(R.string.state))
 		);
 
 		// listen for events
 		EventBus.getDefault().register(this);
+
+		// hide storage type radios for old androids
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+			View storageContainer = findViewById(R.id.storageContainer);
+			((ViewManager)storageContainer.getParent()).removeView(storageContainer);
+		}
 	}
 
 	@Override
@@ -163,6 +174,20 @@ public class PrimitiveFtpdActivity extends Activity {
 		loadPrefs();
 		showUsername();
 		showAnonymousLogin();
+
+		// init storage type radio
+		switch (prefsBean.getStorageType()) {
+			case PLAIN:
+				((RadioButton)findViewById(R.id.radioStoragePlain)).setChecked(true);
+				break;
+			case ROOT:
+				((RadioButton)findViewById(R.id.radioStorageRoot)).setChecked(true);
+				break;
+			case SAF:
+				((RadioButton)findViewById(R.id.radioStorageSaf)).setChecked(true);
+				showSafUrl(prefsBean.getSafUrl());
+				break;
+		}
 	}
 
 	@Override
@@ -188,6 +213,69 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		// unregister broadcast receiver
 		this.unregisterReceiver(this.networkStateReceiver);
+	}
+
+	public void onRadioButtonClicked(View view) {
+		findViewById(R.id.safUriLabel).setVisibility(View.GONE);
+		findViewById(R.id.safUri).setVisibility(View.GONE);
+
+		StorageType storageType = null;
+
+		switch(view.getId()) {
+			case R.id.radioStoragePlain:
+				storageType = StorageType.PLAIN;
+				break;
+			case R.id.radioStorageRoot:
+				storageType = StorageType.ROOT;
+				break;
+			case R.id.radioStorageSaf:
+				storageType = StorageType.SAF;
+				Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+				startActivityForResult(intent, 0);
+				break;
+		}
+
+		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+		LoadPrefsUtil.storeStorageType(prefs, storageType);
+
+		if (storageType == StorageType.PLAIN || storageType == StorageType.ROOT) {
+			loadPrefs();
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+				if (intent != null) {
+					Uri uri = intent.getData();
+					String uriStr = uri.toString();
+					logger.debug("got uri: '{}'", uriStr);
+
+					int modeFlags =
+							(Intent.FLAG_GRANT_READ_URI_PERMISSION
+							| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+					// release old permissions
+					String oldUrl = prefsBean.getSafUrl();
+					if (!StringUtils.isBlank(oldUrl)) {
+						getContentResolver().releasePersistableUriPermission(Uri.parse(oldUrl), modeFlags);
+					}
+
+					// persist permissions
+					getContentResolver().takePersistableUriPermission(uri, modeFlags);
+					// store uri
+					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+					LoadPrefsUtil.storeSafUrl(prefs, uriStr);
+
+					// display uri
+					showSafUrl(uriStr);
+
+					// update prefs
+					loadPrefs();
+				}
+			}
+		}
 	}
 
 	protected FileInputStream buildPublickeyInStream() throws IOException {
@@ -332,6 +420,13 @@ public class PrimitiveFtpdActivity extends Activity {
 	protected void showAnonymousLogin() {
 		TextView anonymousView = (TextView)findViewById(R.id.anonymousLoginTextView);
 		anonymousView.setText(getString(R.string.isAnonymous, prefsBean.isAnonymousLogin()));
+	}
+
+	protected void showSafUrl(String url) {
+		findViewById(R.id.safUriLabel).setVisibility(View.VISIBLE);
+		TextView safUriView = (TextView)findViewById(R.id.safUri);
+		safUriView.setVisibility(View.VISIBLE);
+		safUriView.setText(url);
 	}
 
 	@SuppressLint("SetTextI18n")
