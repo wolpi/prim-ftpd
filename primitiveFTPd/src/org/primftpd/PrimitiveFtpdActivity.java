@@ -259,11 +259,19 @@ public class PrimitiveFtpdActivity extends Activity {
 					// release old permissions
 					String oldUrl = prefsBean.getSafUrl();
 					if (!StringUtils.isBlank(oldUrl)) {
-						getContentResolver().releasePersistableUriPermission(Uri.parse(oldUrl), modeFlags);
+						try {
+							getContentResolver().releasePersistableUriPermission(Uri.parse(oldUrl), modeFlags);
+						} catch (SecurityException e) {
+							logger.info("SecurityException while calling releasePersistableUriPermission()");
+						}
 					}
 
 					// persist permissions
-					getContentResolver().takePersistableUriPermission(uri, modeFlags);
+					try {
+						getContentResolver().takePersistableUriPermission(uri, modeFlags);
+					} catch (SecurityException e) {
+						logger.info("SecurityException while calling takePersistableUriPermission()");
+					}
 					// store uri
 					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
 					LoadPrefsUtil.storeSafUrl(prefs, uriStr);

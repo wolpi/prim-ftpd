@@ -48,60 +48,7 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 		throws IOException
 	{
 		logger.trace("getAttribute({}, {})", file, attribute);
-		switch (attribute) {
-		case Size:
-			return Long.valueOf(getSize());
-		case Uid:
-			// TODO ssh uid
-			return Integer.valueOf(1);
-		case Owner:
-			return getOwner();
-		case Gid:
-			// TODO ssh gid
-			return Integer.valueOf(1);
-		case Group:
-			return getOwner();
-		case IsDirectory:
-			return Boolean.valueOf(isDirectory());
-		case IsRegularFile:
-			return Boolean.valueOf(isFile());
-		case IsSymbolicLink:
-			// as there is no proper sym link support in java 7, just return false, see GH issue #68
-			return false;
-		case Permissions:
-			boolean read = isReadable();
-			boolean write = isWritable();
-			boolean exec = isExecutable();
-			Set<Permission> tmp = new HashSet<Permission>();
-			if (read) {
-				tmp.add(Permission.UserRead);
-				tmp.add(Permission.GroupRead);
-				tmp.add(Permission.OthersRead);
-			}
-			if (write) {
-				tmp.add(Permission.UserWrite);
-				tmp.add(Permission.GroupWrite);
-				tmp.add(Permission.OthersWrite);
-			}
-			if (exec) {
-				tmp.add(Permission.UserExecute);
-				tmp.add(Permission.GroupExecute);
-				tmp.add(Permission.OthersExecute);
-			}
-			return tmp.isEmpty()
-				? EnumSet.noneOf(Permission.class)
-				: EnumSet.copyOf(tmp);
-		case CreationTime:
-			// TODO ssh creation time
-			return Long.valueOf(getLastModified());
-		case LastModifiedTime:
-			return Long.valueOf(getLastModified());
-		case LastAccessTime:
-			// TODO ssh access time
-			return Long.valueOf(getLastModified());
-		default:
-			return null;
-		}
+		return SshUtils.getAttribute(this, attribute, followLinks);
 	}
 
 	@Override
@@ -110,8 +57,7 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	{
 		logger.trace("getAttributes()");
 
-		Map<SshFile.Attribute, Object> attributes =
-			new HashMap<SshFile.Attribute, Object>();
+		Map<SshFile.Attribute, Object> attributes = new HashMap<>();
 		for (SshFile.Attribute attr : SshFile.Attribute.values()) {
 			attributes.put(attr, getAttribute(attr, followLinks));
 		}
