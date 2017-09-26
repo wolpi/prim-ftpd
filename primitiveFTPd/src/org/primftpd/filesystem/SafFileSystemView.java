@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 public abstract class SafFileSystemView<T extends SafFile<X>, X> {
 
+    protected final static String ROOT_PATH = "/";
+
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final Context context;
     protected final ContentResolver contentResolver;
@@ -53,9 +55,11 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
     public T getFile(String file) {
         logger.trace("getFile({})", file);
 
-        if (!"/".equals(file)) {
-            if (file.charAt(0) == '/') {
-                file = file.substring(1, file.length());
+        // TODO SAF navigation
+
+        if (!ROOT_PATH.equals(file)) {
+            if (startsWithRoot(file)) {
+                file = removeRoot(file);
             }
             DocumentFile startDocFile = DocumentFile.fromTreeUri(context, startUrl);
             DocumentFile docFile = startDocFile.findFile(file);
@@ -77,5 +81,13 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
 
     public void dispose() {
         logger.trace("dispose()");
+    }
+
+    protected static boolean startsWithRoot(String name) {
+        return name.charAt(0) == ROOT_PATH.charAt(0);
+    }
+
+    protected static String removeRoot(String name) {
+        return name.substring(1, name.length());
     }
 }

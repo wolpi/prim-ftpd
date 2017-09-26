@@ -56,7 +56,9 @@ public abstract class SafFile<T> {
     private boolean exists;
 
     public SafFile(final Context context, ContentResolver contentResolver, Uri startUrl) {
+        // this c-tor is to be used for start directory
         super();
+        logger.trace("new SafFile() with startUrl");
         this.context = context;
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
@@ -78,7 +80,7 @@ public abstract class SafFile<T> {
             isDirectory = true;
             readable = true;
             exists = true;
-            name = "/";
+            name = SafFileSystemView.ROOT_PATH;
         } catch (Exception e) {
             final String msg = "[(s)ftpd] Error getting data from SAF: " + e.toString();
             logger.error(msg);
@@ -94,7 +96,9 @@ public abstract class SafFile<T> {
     }
 
     public SafFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor) {
+        // this c-tor is to be used to list existing files
         super();
+        logger.trace("new SafFile() with cursor");
         this.context = context;
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
@@ -102,7 +106,9 @@ public abstract class SafFile<T> {
     }
 
     public SafFile(Context context, ContentResolver contentResolver, Uri startUrl, DocumentFile documentFile) {
+        // this c-tor is to be used to access existing files
         super();
+        logger.trace("new SafFile() with documentFile");
         this.context = context;
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
@@ -122,6 +128,7 @@ public abstract class SafFile<T> {
     public SafFile(Context context, ContentResolver contentResolver, Uri startUrl, String name) {
         // this c-tor is to be used to upload new files, create directories or renaming
         super();
+        logger.trace("new SafFile() with name");
         this.context = context;
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
@@ -159,7 +166,7 @@ public abstract class SafFile<T> {
     public String getAbsolutePath() {
         logger.trace("[{}] getAbsolutePath()", name);
         // TODO SAF navigation
-        return name.charAt(0) == '/' ? name : "/" + name;
+        return SafFileSystemView.startsWithRoot(name) ? name : SafFileSystemView.ROOT_PATH + name;
     }
 
     public String getName() {
@@ -266,6 +273,7 @@ public abstract class SafFile<T> {
                 closeQuietly(childCursor);
             }
         }
+        logger.trace("[{}] listFiles(): num children: {}", name, Integer.valueOf(result.size()));
         return result;
     }
 
