@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.v4.provider.DocumentFile;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
@@ -27,6 +28,16 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
         this.session = session;
     }
 
+    public SafSshFile(Context context, ContentResolver contentResolver, Uri startUrl, DocumentFile documentFile, Session session) {
+        super(context, contentResolver, startUrl, documentFile);
+        this.session = session;
+    }
+
+    public SafSshFile(Context context, ContentResolver contentResolver, Uri startUrl, String name, Session session) {
+        super(context, contentResolver, startUrl, name);
+        this.session = session;
+    }
+
     @Override
     protected SshFile createFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor) {
         return new SafSshFile(context, contentResolver, startUrl, cursor, session);
@@ -34,8 +45,9 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
 
     @Override
     public boolean create() throws IOException {
-        logger.trace("create()");
-        return false;
+        logger.trace("[{}] create()", name);
+        // called e.g. when uploading a new file
+        return true;
     }
 
     @Override
@@ -43,14 +55,14 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             throws IOException
     {
         // TODO ssh createSymbolicLink
-        logger.trace("createSymbolicLink()");
+        logger.trace("[{}] createSymbolicLink()", name);
     }
 
     @Override
     public Object getAttribute(Attribute attribute, boolean followLinks)
             throws IOException
     {
-        logger.trace("getAttribute({})", attribute);
+        logger.trace("[{}] getAttribute({})", name, attribute);
         return SshUtils.getAttribute(this, attribute, followLinks);
     }
 
@@ -58,7 +70,7 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
     public Map<Attribute, Object> getAttributes(boolean followLinks)
             throws IOException
     {
-        logger.trace("getAttributes()");
+        logger.trace("[{}] getAttributes()", name);
 
         Map<SshFile.Attribute, Object> attributes = new HashMap<>();
         for (SshFile.Attribute attr : Attribute.values()) {
@@ -70,25 +82,25 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
 
     @Override
     public String getOwner() {
-        logger.trace("getOwner()");
+        logger.trace("[{}] getOwner()", name);
         return session.getUsername();
     }
 
     @Override
     public SshFile getParentFile() {
-        logger.trace("getParentFile()");
+        logger.trace("[{}] getParentFile()", name);
         return null;
     }
 
     @Override
     public void handleClose() throws IOException {
         // TODO ssh handleClose
-        logger.trace("handleClose()");
+        logger.trace("[{}] handleClose()", name);
     }
 
     @Override
     public boolean isExecutable() {
-        logger.trace("isExecutable()");
+        logger.trace("[{}] isExecutable()", name);
         return false;
     }
 
@@ -100,30 +112,30 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
     @Override
     public boolean move(SshFile target) {
         logger.trace("move()");
-        return false;
+        return super.move((SafFile)target);
     }
 
     @Override
     public String readSymbolicLink() throws IOException {
-        logger.trace("readSymbolicLink()");
+        logger.trace("[{}] readSymbolicLink()", name);
         return null;
     }
 
     @Override
     public void setAttribute(Attribute attribute, Object value) throws IOException {
         // TODO ssh saf setAttribute
-        logger.trace("setAttribute()");
+        logger.trace("[{}] setAttribute()", name);
     }
 
     @Override
     public void setAttributes(Map<Attribute, Object> attributes) throws IOException {
         // TODO ssh saf setAttributes
-        logger.trace("setAttributes()");
+        logger.trace("[{}] setAttributes()", name);
     }
 
     @Override
     public void truncate() throws IOException {
         // TODO ssh saf truncate
-        logger.trace("truncate()");
+        logger.trace("[{}] truncate()", name);
     }
 }

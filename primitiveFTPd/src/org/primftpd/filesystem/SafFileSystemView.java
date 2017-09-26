@@ -3,6 +3,7 @@ package org.primftpd.filesystem;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.provider.DocumentFile;
 
 import org.apache.ftpserver.ftplet.FtpException;
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
     }
 
     protected abstract T createFile();
+    protected abstract T createFile(DocumentFile documentFile);
+    protected abstract T createFile(String name);
 
     private T createHomeDirObj() {
         return createFile();
@@ -42,11 +45,26 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
     public boolean changeWorkingDirectory(String dir) {
         logger.trace("changeWorkingDirectory({})", dir);
 
+        // TODO SAF navigation
+
         return false;
     }
 
     public T getFile(String file) {
         logger.trace("getFile({})", file);
+
+        if (!"/".equals(file)) {
+            if (file.charAt(0) == '/') {
+                file = file.substring(1, file.length());
+            }
+            DocumentFile startDocFile = DocumentFile.fromTreeUri(context, startUrl);
+            DocumentFile docFile = startDocFile.findFile(file);
+            if (docFile != null) {
+                return createFile(docFile);
+            } else {
+                return createFile(file);
+            }
+        }
 
         return createFile();
     }

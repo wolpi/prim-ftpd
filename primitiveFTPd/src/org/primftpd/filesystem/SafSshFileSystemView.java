@@ -3,6 +3,7 @@ package org.primftpd.filesystem;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.provider.DocumentFile;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
@@ -24,8 +25,20 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
     }
 
     @Override
+    protected SafSshFile createFile(DocumentFile documentFile) {
+        logger.trace("createFile(DocumentFile)");
+        return new SafSshFile(context, contentResolver, startUrl, documentFile, session);
+    }
+
+    @Override
+    protected SafSshFile createFile(String name) {
+        logger.trace("createFile(String)");
+        return new SafSshFile(context, contentResolver, startUrl, name, session);
+    }
+
+    @Override
     public SshFile getFile(SshFile baseDir, String file) {
-        logger.trace("getFile()");
+        logger.trace("getFile(baseDir, {})", file);
         return null;
     }
 
