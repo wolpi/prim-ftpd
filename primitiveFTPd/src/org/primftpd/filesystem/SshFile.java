@@ -31,7 +31,7 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	@Override
 	public boolean create() throws IOException
 	{
-		logger.trace("create()");
+		logger.trace("[{}] create()", name);
 		return file.createNewFile();
 	}
 
@@ -40,14 +40,14 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 			throws IOException
 	{
 		// TODO ssh createSymbolicLink
-		logger.trace("createSymbolicLink()");
+		logger.trace("[{}] createSymbolicLink()", name);
 	}
 
 	@Override
 	public Object getAttribute(Attribute attribute, boolean followLinks)
 		throws IOException
 	{
-		logger.trace("getAttribute({}, {})", file, attribute);
+		logger.trace("[{}] getAttribute({})", name, attribute);
 		return SshUtils.getAttribute(this, attribute, followLinks);
 	}
 
@@ -55,7 +55,7 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	public Map<Attribute, Object> getAttributes(boolean followLinks)
 		throws IOException
 	{
-		logger.trace("getAttributes()");
+		logger.trace("[{}] getAttributes()", name);
 
 		Map<SshFile.Attribute, Object> attributes = new HashMap<>();
 		for (SshFile.Attribute attr : SshFile.Attribute.values()) {
@@ -68,14 +68,14 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	@Override
 	public String getOwner()
 	{
-		logger.trace("getOwner()");
+		logger.trace("[{}] getOwner()", name);
 		return session.getUsername();
 	}
 
 	@Override
 	public org.apache.sshd.common.file.SshFile getParentFile()
 	{
-		logger.trace("getParentFile()");
+		logger.trace("[{}] getParentFile()", name);
 		return new SshFile(file.getParentFile(), session);
 	}
 
@@ -83,13 +83,13 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	public void handleClose() throws IOException
 	{
 		// TODO ssh handleClose
-		logger.trace("handleClose()");
+		logger.trace("[{}] handleClose()", name);
 	}
 
 	@Override
 	public boolean isExecutable()
 	{
-		logger.trace("isExecutable()");
+		logger.trace("[{}] isExecutable()", name);
 		return file.canExecute();
 	}
 
@@ -108,7 +108,7 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	@Override
 	public String readSymbolicLink() throws IOException
 	{
-		logger.trace("readSymbolicLink()");
+		logger.trace("[{}] readSymbolicLink()", name);
 		logger.trace("sym link abs path: {}", file.getAbsolutePath());
 		logger.trace("sym link can path: {}", file.getCanonicalPath());
 		return file.getCanonicalPath();
@@ -118,20 +118,20 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	public void setAttribute(Attribute attribute, Object value) throws IOException
 	{
 		// TODO ssh setAttribute
-		logger.trace("setAttribute()");
+		logger.trace("[{}] setAttribute()", name);
 	}
 
 	@Override
 	public void setAttributes(Map<Attribute, Object> attributes) throws IOException
 	{
 		// TODO ssh setAttributes
-		logger.trace("setAttributes()");
+		logger.trace("[{}] setAttributes()", name);
 	}
 
 	@Override
 	public void truncate() throws IOException
 	{
 		// TODO ssh truncate
-		logger.trace("truncate()");
+		logger.trace("[{}] truncate()", name);
 	}
 }

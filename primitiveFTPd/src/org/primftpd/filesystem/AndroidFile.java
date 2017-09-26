@@ -20,44 +20,52 @@ public abstract class AndroidFile<T> {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected final File file;
+	protected final String name;
 
 	public AndroidFile(File file) {
 		super();
 		this.file = file;
+		this.name = file.getName();
 	}
 
 	protected abstract T createFile(File file);
 
 	public String getAbsolutePath() {
-		logger.trace("getAbsolutePath()");
+		logger.trace("[{}] getAbsolutePath()", name);
 		return file.getAbsolutePath();
 	}
 
 	public String getName() {
-		logger.trace("getName()");
+		logger.trace("[{}] getName()", name);
 		return file.getName();
 	}
 
 	public boolean isHidden() {
-		logger.trace("isHidden()");
+		logger.trace("[{}] isHidden()", name);
 		return file.isHidden();
 	}
 
 	public boolean isDirectory() {
 		boolean isDirectory = file.isDirectory();
 		logger.trace(
-			"isDirectory(), ({}): {}",
-			file.getAbsolutePath(),
-			Boolean.valueOf(isDirectory));
+			"[{}] isDirectory(), ({}): {}",
+				new Object[]{
+						name,
+						file.getAbsolutePath(),
+						Boolean.valueOf(isDirectory)
+				});
 		return isDirectory;
 	}
 
 	public boolean isFile() {
 		boolean isFile = file.isFile();
 		logger.trace(
-			"isFile(), ({}): {}",
-			file.getAbsolutePath(),
-			Boolean.valueOf(isFile));
+			"[{}] isFile(), ({}): {}",
+				new Object[]{
+						name,
+						file.getAbsolutePath(),
+						Boolean.valueOf(isFile)
+				});
 		return isFile;
 	}
 
@@ -77,8 +85,9 @@ public abstract class AndroidFile<T> {
 			}
 		}
 		logger.trace(
-			"doesExist(), ({}): orig val: {}, checked val: {}",
+			"[{}] doesExist(), ({}): orig val: {}, checked val: {}",
 			new Object[]{
+				name,
 				file.getAbsolutePath(),
 				Boolean.valueOf(exists),
 				Boolean.valueOf(existsChecked)
@@ -89,16 +98,20 @@ public abstract class AndroidFile<T> {
 	public boolean isReadable() {
 		boolean canRead = file.canRead();
 		logger.trace(
-			"isReadable(), ({}): {}",
-			file.getAbsolutePath(),
-			Boolean.valueOf(canRead));
+			"[{}] isReadable(), ({}): {}",
+				new Object[]{
+						name,
+						file.getAbsolutePath(),
+						Boolean.valueOf(canRead)
+				});
 		return canRead;
 	}
 
 	public boolean isWritable() {
 		logger.trace(
-			"writable: {}, exists: {}, file: '{}'",
+			"[{}] writable: {}, exists: {}, file: '{}'",
 			new Object[]{
+				name,
 				file.canWrite(),
 				file.exists(),
 				file.getName()
@@ -122,50 +135,50 @@ public abstract class AndroidFile<T> {
 	}
 
 	public boolean isRemovable() {
-		logger.trace("isRemovable()");
+		logger.trace("[{}] isRemovable()", name);
 		return file.canWrite();
 	}
 
 	public int getLinkCount() {
-		logger.trace("getLinkCount()");
+		logger.trace("[{}] getLinkCount()", name);
 		return 0;
 	}
 
 	public long getLastModified() {
 		long lastModified = file.lastModified();
-		logger.trace("getLastModified() -> {}", Long.valueOf(lastModified));
+		logger.trace("[{}] getLastModified() -> {}", name, Long.valueOf(lastModified));
 		return lastModified;
 	}
 
 	public boolean setLastModified(long time) {
-		logger.trace("setLastModified({})", Long.valueOf(time));
+		logger.trace("[{}] setLastModified({})", name, Long.valueOf(time));
 		return file.setLastModified(time);
 	}
 
 	public long getSize() {
 		long size = file.length();
-		logger.trace("getSize() -> {}", Long.valueOf(size));
+		logger.trace("[{}] getSize() -> {}", name, Long.valueOf(size));
 		return size;
 	}
 
 	public boolean mkdir() {
-		logger.trace("mkdir()");
+		logger.trace("[{}] mkdir()", name);
 		return file.mkdir();
 	}
 
 	public boolean delete() {
-		logger.trace("delete()");
+		logger.trace("[{}] delete()", name);
 		return file.delete();
 	}
 
 	public boolean move(AndroidFile<T> destination) {
-		logger.trace("move({})", destination.getAbsolutePath());
+		logger.trace("[{}] move({})", name, destination.getAbsolutePath());
 		file.renameTo(new File(destination.getAbsolutePath()));
 		return true;
 	}
 
 	public List<T> listFiles() {
-		logger.trace("listFiles()");
+		logger.trace("[{}] listFiles()", name);
 		File[] filesArray = file.listFiles();
 		if (filesArray != null) {
 			List<T> files = new ArrayList<T>(filesArray.length);
@@ -175,13 +188,13 @@ public abstract class AndroidFile<T> {
 			return files;
 		}
 		logger.debug("file.listFiles() returned null. Path: {}", file.getAbsolutePath());
-		return new ArrayList<T>(0);
+		return new ArrayList<>(0);
 	}
 
 	public static final int BUFFER_SIZE = 1024 * 1024;
 
 	public OutputStream createOutputStream(long offset) throws IOException {
-		logger.trace("createOutputStream({})", offset);
+		logger.trace("[{}] createOutputStream({})", name, offset);
 
 		// may be necessary to create dirs
 		// see isWritable()
@@ -216,7 +229,12 @@ public abstract class AndroidFile<T> {
 	}
 
 	public InputStream createInputStream(long offset) throws IOException {
-		logger.trace("createInputStream(), offset: {}, file: {}", offset, file.getAbsolutePath());
+		logger.trace("[{}] createInputStream(), offset: {}, file: {}",
+				new Object []{
+						name,
+						offset,
+						file.getAbsolutePath()
+		});
 		FileInputStream fis = new FileInputStream(file);
 		fis.skip(offset);
 		BufferedInputStream bis = new BufferedInputStream(fis, BUFFER_SIZE);
