@@ -174,11 +174,6 @@ public abstract class SafFile<T> {
         return name;
     }
 
-    public boolean isHidden() {
-        logger.trace("[{}] isHidden()", name);
-        return name.charAt(0) == '.';
-    }
-
     public boolean isDirectory() {
         logger.trace("[{}] isDirectory()", name);
         return isDirectory;
@@ -207,11 +202,6 @@ public abstract class SafFile<T> {
     public boolean isRemovable() {
         logger.trace("[{}] isRemovable()", name);
         return removable || deletable;
-    }
-
-    public int getLinkCount() {
-        logger.trace("[{}] getLinkCount()", name);
-        return 0;
     }
 
     public long getLastModified() {

@@ -39,6 +39,16 @@ public class FtpFile extends AndroidFile<org.apache.ftpserver.ftplet.FtpFile>
 		return super.move((AndroidFile) target);
 	}
 
+	public int getLinkCount() {
+		logger.trace("[{}] getLinkCount()", name);
+		return 0;
+	}
+
+	public boolean isHidden() {
+		logger.trace("[{}] isHidden()", name);
+		return file.isHidden();
+	}
+
 	public User getUser() {
 		return user;
 	}

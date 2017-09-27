@@ -9,10 +9,11 @@ public class SshFileSystemView
 	extends AndroidFileSystemView<SshFile, org.apache.sshd.common.file.SshFile>
 	implements FileSystemView
 {
+	private final File homeDir;
 	private final Session session;
 
 	public SshFileSystemView(File homeDir, Session session) {
-		super(homeDir);
+		this.homeDir = homeDir;
 		this.session = session;
 	}
 
@@ -20,6 +21,15 @@ public class SshFileSystemView
 	protected SshFile createFile(File file)
 	{
 		return new SshFile(file, session);
+	}
+
+	@Override
+	protected String absolute(String file) {
+		if (".".equals(file)) {
+			return homeDir.getAbsolutePath();
+		}
+		// is abs always
+		return file;
 	}
 
 	@Override

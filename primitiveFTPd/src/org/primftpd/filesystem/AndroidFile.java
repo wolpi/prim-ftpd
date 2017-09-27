@@ -40,11 +40,6 @@ public abstract class AndroidFile<T> {
 		return file.getName();
 	}
 
-	public boolean isHidden() {
-		logger.trace("[{}] isHidden()", name);
-		return file.isHidden();
-	}
-
 	public boolean isDirectory() {
 		boolean isDirectory = file.isDirectory();
 		logger.trace(
@@ -139,11 +134,6 @@ public abstract class AndroidFile<T> {
 		return file.canWrite();
 	}
 
-	public int getLinkCount() {
-		logger.trace("[{}] getLinkCount()", name);
-		return 0;
-	}
-
 	public long getLastModified() {
 		long lastModified = file.lastModified();
 		logger.trace("[{}] getLastModified() -> {}", name, Long.valueOf(lastModified));
@@ -173,15 +163,14 @@ public abstract class AndroidFile<T> {
 
 	public boolean move(AndroidFile<T> destination) {
 		logger.trace("[{}] move({})", name, destination.getAbsolutePath());
-		file.renameTo(new File(destination.getAbsolutePath()));
-		return true;
+		return file.renameTo(new File(destination.getAbsolutePath()));
 	}
 
 	public List<T> listFiles() {
 		logger.trace("[{}] listFiles()", name);
 		File[] filesArray = file.listFiles();
 		if (filesArray != null) {
-			List<T> files = new ArrayList<T>(filesArray.length);
+			List<T> files = new ArrayList<>(filesArray.length);
 			for (File file : filesArray) {
 				files.add(createFile(file));
 			}
@@ -224,8 +213,7 @@ public abstract class AndroidFile<T> {
 			};
 		}
 
-		BufferedOutputStream bos = new BufferedOutputStream(os, BUFFER_SIZE);
-		return bos;
+		return new BufferedOutputStream(os, BUFFER_SIZE);
 	}
 
 	public InputStream createInputStream(long offset) throws IOException {
@@ -237,11 +225,6 @@ public abstract class AndroidFile<T> {
 		});
 		FileInputStream fis = new FileInputStream(file);
 		fis.skip(offset);
-		BufferedInputStream bis = new BufferedInputStream(fis, BUFFER_SIZE);
-		return bis;
-	}
-
-	public File getFile() {
-		return file;
+		return new BufferedInputStream(fis, BUFFER_SIZE);
 	}
 }
