@@ -31,8 +31,11 @@ public abstract class SafFile<T> {
     private final Uri startUrl;
 
     private DocumentFile documentFile;
+    private DocumentFile parentDocumentFile;
 
-    private static final String[] SAF_QUERY_COLUMNS = {
+    static final int CURSOR_INDEX_NAME = 1;
+    static final String[] SAF_QUERY_COLUMNS = {
+            DocumentsContract.Document.COLUMN_DOCUMENT_ID,
             DocumentsContract.Document.COLUMN_DISPLAY_NAME,
             DocumentsContract.Document.COLUMN_LAST_MODIFIED,
             DocumentsContract.Document.COLUMN_SIZE,
@@ -41,8 +44,10 @@ public abstract class SafFile<T> {
     };
 
     private boolean isDirectory = false;
+    private String absPath;
 
     protected String name;
+    private String documentId;
     private long lastModified;
     private long size;
     private boolean writable;
@@ -62,6 +67,7 @@ public abstract class SafFile<T> {
         this.context = context;
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
+        this.absPath = SafFileSystemView.ROOT_PATH;
 
         try {
             Cursor cursor = contentResolver.query(
@@ -95,24 +101,34 @@ public abstract class SafFile<T> {
         }
     }
 
-    public SafFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor) {
+    public SafFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor, String absPath) {
         // this c-tor is to be used to list existing files
         super();
-        logger.trace("new SafFile() with cursor");
+        logger.trace("new SafFile() with cursor and absPath '{}'", absPath);
         this.context = context;
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
+        this.absPath = absPath;
         initByCursor(cursor);
     }
 
-    public SafFile(Context context, ContentResolver contentResolver, Uri startUrl, DocumentFile documentFile) {
+    public SafFile(
+            Context context,
+            ContentResolver contentResolver,
+            Uri startUrl,
+            DocumentFile parentDocumentFile,
+            DocumentFile documentFile,
+            String absPath) {
         // this c-tor is to be used to access existing files
         super();
-        logger.trace("new SafFile() with documentFile");
+        String parentName = parentDocumentFile != null ? parentDocumentFile.getName() : "null";
+        logger.trace("new SafFile() with documentFile, parent '{}' and absPath '{}'", parentName, absPath);
         this.context = context;
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
+        this.absPath = absPath;
 
+        this.parentDocumentFile = parentDocumentFile;
         this.documentFile = documentFile;
 
         name = documentFile.getName();
@@ -125,22 +141,33 @@ public abstract class SafFile<T> {
         size = documentFile.length();
     }
 
-    public SafFile(Context context, ContentResolver contentResolver, Uri startUrl, String name) {
+    public SafFile(
+            Context context,
+            ContentResolver contentResolver,
+            Uri startUrl,
+            DocumentFile parentDocumentFile,
+            String name,
+            String absPath) {
         // this c-tor is to be used to upload new files, create directories or renaming
         super();
-        logger.trace("new SafFile() with name");
+        String parentName = parentDocumentFile != null ? parentDocumentFile.getName() : "null";
+        logger.trace("new SafFile() with name, parent '{}' and absPath '{}'", parentName, absPath);
         this.context = context;
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
         this.name = name;
         this.writable = true;
+        this.absPath = absPath;
+
+        this.parentDocumentFile = parentDocumentFile;
     }
 
     private void initByCursor(Cursor cursor) {
-        name = cursor.getString(0);
-        lastModified = cursor.getLong(1);
-        size = cursor.getLong(2);
-        int flags = cursor.getInt(3);
+        documentId = cursor.getString(0);
+        name = cursor.getString(1);
+        lastModified = cursor.getLong(2);
+        size = cursor.getLong(3);
+        int flags = cursor.getInt(4);
         writable = flagPresent(flags, DocumentsContract.Document.FLAG_SUPPORTS_WRITE);
         deletable = flagPresent(flags, DocumentsContract.Document.FLAG_SUPPORTS_DELETE);
         removable = flagPresent(flags, DocumentsContract.Document.FLAG_SUPPORTS_REMOVE);
@@ -152,8 +179,8 @@ public abstract class SafFile<T> {
         readable = true;
         exists = true;
 
-        String mime = cursor.getString(4);
-        logger.trace("{} has mime: {}", name, mime);
+        String mime = cursor.getString(5);
+        logger.trace("[{}] has id: '{}', mime: '{}'", new Object[]{name, documentId, mime});
         isDirectory = MIME_TYPE_DIRECTORY.equals(mime);
     }
 
@@ -161,12 +188,22 @@ public abstract class SafFile<T> {
         return ((flags & flag) == flag);
     }
 
-    protected abstract T createFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor);
+    String getDocumentId() {
+        return documentId;
+    }
+
+    protected abstract T createFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor, String absPath);
+    protected abstract T createFile(
+            Context context,
+            ContentResolver contentResolver,
+            Uri startUrl,
+            DocumentFile parentDocumentFile,
+            DocumentFile documentFile,
+            String absPath);
 
     public String getAbsolutePath() {
-        logger.trace("[{}] getAbsolutePath()", name);
-        // TODO SAF navigation
-        return SafFileSystemView.startsWithRoot(name) ? name : SafFileSystemView.ROOT_PATH + name;
+        logger.trace("[{}] getAbsolutePath() -> '{}'", name, absPath);
+        return absPath;
     }
 
     public String getName() {
@@ -175,54 +212,58 @@ public abstract class SafFile<T> {
     }
 
     public boolean isDirectory() {
-        logger.trace("[{}] isDirectory()", name);
+        logger.trace("[{}] isDirectory() -> {}", name, isDirectory);
         return isDirectory;
     }
 
     public boolean isFile() {
-        logger.trace("[{}] isFile()", name);
-        return !isDirectory;
+        boolean result = !isDirectory;
+        logger.trace("[{}] isFile() -> {}", name, result);
+        return result;
     }
 
     public boolean doesExist() {
-        logger.trace("[{}] doesExist()", name);
+        logger.trace("[{}] doesExist() -> {}", name, exists);
         return exists;
     }
 
     public boolean isReadable() {
-        logger.trace("[{}] isReadable()", name);
+        logger.trace("[{}] isReadable() -> {}", name, readable);
         return readable;
     }
 
     public boolean isWritable() {
-        logger.trace("[{}] isWritable(): {}", name, Boolean.valueOf(writable));
+        logger.trace("[{}] isWritable() -> {}", name, writable);
         return writable;
     }
 
     public boolean isRemovable() {
-        logger.trace("[{}] isRemovable()", name);
-        return removable || deletable;
+        boolean result = removable || deletable;
+        logger.trace("[{}] isRemovable() -> {}", name, result);
+        return result;
     }
 
     public long getLastModified() {
-        logger.trace("[{}] getLastModified()", name);
+        logger.trace("[{}] getLastModified() -> {}", name, lastModified);
         return lastModified;
     }
 
     public boolean setLastModified(long time) {
-        logger.trace("[{}] setLastModified({})", name, Long.valueOf(time));
+        logger.trace("[{}] setLastModified({})", name, time);
         return false;
     }
 
     public long getSize() {
-        logger.trace("[{}] getSize()", name);
+        logger.trace("[{}] getSize() -> {}", name, size);
         return size;
     }
 
     public boolean mkdir() {
         logger.trace("[{}] mkdir()", name);
-        DocumentFile startDocFile = DocumentFile.fromTreeUri(context, startUrl);
-        return startDocFile.createDirectory(name) != null;
+        if (parentDocumentFile != null) {
+            return parentDocumentFile.createDirectory(name) != null;
+        }
+        return false;
     }
 
     public boolean delete() {
@@ -245,48 +286,73 @@ public abstract class SafFile<T> {
         logger.trace("[{}] listFiles()", name);
 
         List<T> result = new ArrayList<>(0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
-                    startUrl,
-                    DocumentsContract.getTreeDocumentId(startUrl));
-            Cursor childCursor = contentResolver.query(
-                    childrenUri,
-                    SAF_QUERY_COLUMNS,
-                    null,
-                    null,
-                    null);
-            try {
-                while (childCursor.moveToNext()) {
-                    result.add(createFile(context, contentResolver, startUrl, childCursor));
+        if (documentFile == null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                String parentId;
+                if (documentId != null) {
+                    parentId = documentId;
+                } else {
+                    parentId = DocumentsContract.getTreeDocumentId(startUrl);
                 }
-            } finally {
-                closeQuietly(childCursor);
+
+                Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
+                        startUrl,
+                        parentId);
+                Cursor childCursor = contentResolver.query(
+                        childrenUri,
+                        SAF_QUERY_COLUMNS,
+                        null,
+                        null,
+                        null);
+                try {
+                    while (childCursor.moveToNext()) {
+                        String absPath = this.absPath.endsWith("/")
+                                ? this.absPath + childCursor.getString(CURSOR_INDEX_NAME)
+                                : this.absPath + "/" + childCursor.getString(CURSOR_INDEX_NAME);
+                        result.add(createFile(context, contentResolver, startUrl, childCursor, absPath));
+                    }
+                } finally {
+                    closeQuietly(childCursor);
+                }
+            }
+        } else {
+            DocumentFile[] children = documentFile.listFiles();
+            for (DocumentFile child : children) {
+                String absPath = this.absPath.endsWith("/")
+                        ? this.absPath + child.getName()
+                        : this.absPath + "/" + child.getName();
+                result.add(createFile(context, contentResolver, startUrl, documentFile, child, absPath));
             }
         }
-        logger.trace("[{}] listFiles(): num children: {}", name, Integer.valueOf(result.size()));
+        logger.trace("  [{}] listFiles(): num children: {}", name, Integer.valueOf(result.size()));
         return result;
     }
 
     public OutputStream createOutputStream(long offset) throws IOException {
-        logger.trace("[{}] createOutputStream({})", name, offset);
+        logger.trace("[{}] createOutputStream(offset: {})", name, offset);
 
         Uri uri;
         if (documentFile != null) {
             // existing files
             uri = documentFile.getUri();
+        } else if (parentDocumentFile != null) {
+            // new files is sub dir
+            DocumentFile docFile = parentDocumentFile.createFile(null, name);
+            uri = docFile.getUri();
         } else {
-            // new files
+            // new files on root level
             DocumentFile startDocFile = DocumentFile.fromTreeUri(context, startUrl);
             DocumentFile docFile = startDocFile.createFile(null, name);
             uri = docFile.getUri();
         }
 
+        logger.trace("   createOutputStream() uri: {}", uri);
         ParcelFileDescriptor pfd = contentResolver.openFileDescriptor(uri, "w");
         return new FileOutputStream(pfd.getFileDescriptor());
     }
 
     public InputStream createInputStream(long offset) throws IOException {
-        logger.trace("[{}] createInputStream(), offset: {}", name, offset);
+        logger.trace("[{}] createInputStream(offset: {})", name, offset);
 
         if (documentFile != null) {
             return contentResolver.openInputStream(documentFile.getUri());

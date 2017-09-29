@@ -23,24 +23,49 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
         this.session = session;
     }
 
-    public SafSshFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor, Session session) {
-        super(context, contentResolver, startUrl, cursor);
+    public SafSshFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor, String absPath, Session session) {
+        super(context, contentResolver, startUrl, cursor, absPath);
         this.session = session;
     }
 
-    public SafSshFile(Context context, ContentResolver contentResolver, Uri startUrl, DocumentFile documentFile, Session session) {
-        super(context, contentResolver, startUrl, documentFile);
+    public SafSshFile(
+            Context context,
+            ContentResolver contentResolver,
+            Uri startUrl,
+            DocumentFile parentDocumentFile,
+            DocumentFile documentFile,
+            String absPath,
+            Session session) {
+        super(context, contentResolver, startUrl, parentDocumentFile, documentFile, absPath);
         this.session = session;
     }
 
-    public SafSshFile(Context context, ContentResolver contentResolver, Uri startUrl, String name, Session session) {
-        super(context, contentResolver, startUrl, name);
+    public SafSshFile(
+            Context context,
+            ContentResolver contentResolver,
+            Uri startUrl,
+            DocumentFile parentDocumentFile,
+            String name,
+            String absPath,
+            Session session) {
+        super(context, contentResolver, startUrl, parentDocumentFile, name, absPath);
         this.session = session;
     }
 
     @Override
-    protected SshFile createFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor) {
-        return new SafSshFile(context, contentResolver, startUrl, cursor, session);
+    protected SshFile createFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor, String absPath) {
+        return new SafSshFile(context, contentResolver, startUrl, cursor, absPath, session);
+    }
+
+    @Override
+    protected SshFile createFile(
+            Context context,
+            ContentResolver contentResolver,
+            Uri startUrl,
+            DocumentFile parentDocumentFile,
+            DocumentFile documentFile,
+            String absPath) {
+        return new SafSshFile(context, contentResolver, startUrl, parentDocumentFile, documentFile, absPath, session);
     }
 
     @Override
