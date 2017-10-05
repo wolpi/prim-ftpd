@@ -151,8 +151,8 @@ public class SshServerService extends AbstractServerService
 					case SAF:
 						return new SafSshFileSystemView(
 								getApplicationContext(),
-								getContentResolver(),
 								Uri.parse(prefsBean.getSafUrl()),
+								getContentResolver(),
 								session);
 				}
 				return null;

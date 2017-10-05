@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.provider.DocumentFile;
 
@@ -14,33 +13,29 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
 
     private final Session session;
 
-    public SafSshFileSystemView(Context context, ContentResolver contentResolver, Uri startUrl, Session session) {
-        super(context, contentResolver, startUrl);
+    public SafSshFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, Session session) {
+        super(context, startUrl, contentResolver);
         this.session = session;
     }
 
     @Override
-    protected SafSshFile createFile() {
-        logger.trace("createFile()");
-        return new SafSshFile(context, contentResolver, startUrl, session);
-    }
-
-    @Override
-    protected SafSshFile createFile(Cursor cursor, String absPath) {
-        logger.trace("createFile(Cursor)");
-        return new SafSshFile(context, contentResolver, startUrl, cursor, absPath, session);
-    }
-
-    @Override
-    protected SafSshFile createFile(DocumentFile parentDocumentFile, DocumentFile documentFile, String absPath) {
+    protected SafSshFile createFile(
+            ContentResolver contentResolver,
+            DocumentFile parentDocumentFile,
+            DocumentFile documentFile,
+            String absPath) {
         logger.trace("createFile(DocumentFile)");
-        return new SafSshFile(context, contentResolver, startUrl, parentDocumentFile, documentFile, absPath, session);
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, session);
     }
 
     @Override
-    protected SafSshFile createFile(DocumentFile parentDocumentFile, String name, String absPath) {
+    protected SafSshFile createFile(
+            ContentResolver contentResolver,
+            DocumentFile parentDocumentFile,
+            String name,
+            String absPath) {
         logger.trace("createFile(String)");
-        return new SafSshFile(context, contentResolver, startUrl, parentDocumentFile, name, absPath, session);
+        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, session);
     }
 
     @Override

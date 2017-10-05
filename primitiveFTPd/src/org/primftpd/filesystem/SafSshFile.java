@@ -1,9 +1,6 @@
 package org.primftpd.filesystem;
 
 import android.content.ContentResolver;
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.support.v4.provider.DocumentFile;
 
 import org.apache.sshd.common.Session;
@@ -18,54 +15,33 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
 
     private final Session session;
 
-    public SafSshFile(Context context, ContentResolver contentResolver, Uri startUrl, Session session) {
-        super(context, contentResolver, startUrl);
-        this.session = session;
-    }
-
-    public SafSshFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor, String absPath, Session session) {
-        super(context, contentResolver, startUrl, cursor, absPath);
-        this.session = session;
-    }
-
     public SafSshFile(
-            Context context,
             ContentResolver contentResolver,
-            Uri startUrl,
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
             Session session) {
-        super(context, contentResolver, startUrl, parentDocumentFile, documentFile, absPath);
+        super(contentResolver, parentDocumentFile, documentFile, absPath);
         this.session = session;
     }
 
     public SafSshFile(
-            Context context,
             ContentResolver contentResolver,
-            Uri startUrl,
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
             Session session) {
-        super(context, contentResolver, startUrl, parentDocumentFile, name, absPath);
+        super(contentResolver, parentDocumentFile, name, absPath);
         this.session = session;
     }
 
     @Override
-    protected SshFile createFile(Context context, ContentResolver contentResolver, Uri startUrl, Cursor cursor, String absPath) {
-        return new SafSshFile(context, contentResolver, startUrl, cursor, absPath, session);
-    }
-
-    @Override
     protected SshFile createFile(
-            Context context,
             ContentResolver contentResolver,
-            Uri startUrl,
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath) {
-        return new SafSshFile(context, contentResolver, startUrl, parentDocumentFile, documentFile, absPath, session);
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, session);
     }
 
     @Override
