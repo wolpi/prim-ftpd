@@ -39,8 +39,12 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
             String name,
             String absPath);
 
+    protected abstract String absolute(String file);
+
     public T getFile(String file) {
         logger.trace("getFile({})", file);
+
+        file = absolute(file);
 
         try {
             List<String> parts = normalizePath(file);

@@ -1,5 +1,6 @@
 package org.primftpd.services;
 
+import android.net.Uri;
 import android.os.Looper;
 
 import org.apache.ftpserver.ConnectionConfigFactory;
@@ -13,6 +14,7 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.filesystem.FtpFileSystemView;
+import org.primftpd.filesystem.SafFtpFileSystemView;
 import org.primftpd.util.StringUtils;
 
 /**
@@ -75,7 +77,17 @@ public class FtpServerService extends AbstractServerService
 		serverFactory.setFileSystem(new FileSystemFactory() {
 			@Override
 			public FileSystemView createFileSystemView(User user) throws FtpException {
-				return new FtpFileSystemView(prefsBean.getStartDir(), user);
+				switch (prefsBean.getStorageType()) {
+					case PLAIN:
+						return new FtpFileSystemView(prefsBean.getStartDir(), user);
+					case SAF:
+						return new SafFtpFileSystemView(
+								getApplicationContext(),
+								Uri.parse(prefsBean.getSafUrl()),
+								getContentResolver(),
+								user);
+				}
+				return null;
 			}
 		});
 

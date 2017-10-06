@@ -39,6 +39,11 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
     }
 
     @Override
+    protected String absolute(String file) {
+        return file;
+    }
+
+    @Override
     public SshFile getFile(SshFile baseDir, String file) {
         logger.trace("getFile(baseDir, {})", file);
         return null;

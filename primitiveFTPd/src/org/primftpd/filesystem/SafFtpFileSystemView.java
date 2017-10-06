@@ -1,4 +1,83 @@
 package org.primftpd.filesystem;
 
-public class SafFtpFileSystemView {
+import android.content.ContentResolver;
+import android.content.Context;
+import android.net.Uri;
+import android.support.v4.provider.DocumentFile;
+
+import org.apache.ftpserver.ftplet.FileSystemView;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpFile;
+import org.apache.ftpserver.ftplet.User;
+
+public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile> implements FileSystemView {
+
+    private final User user;
+    private SafFtpFile workingDir;
+
+    public SafFtpFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, User user) {
+        super(context, startUrl, contentResolver);
+        this.user = user;
+        this.workingDir = getHomeDirectory();
+    }
+
+    @Override
+    protected SafFtpFile createFile(
+            ContentResolver contentResolver,
+            DocumentFile parentDocumentFile,
+            DocumentFile documentFile,
+            String absPath) {
+        logger.trace("createFile(DocumentFile)");
+        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, user);
+    }
+
+    @Override
+    protected SafFtpFile createFile(
+            ContentResolver contentResolver,
+            DocumentFile parentDocumentFile,
+            String name,
+            String absPath) {
+        logger.trace("createFile(String)");
+        return new SafFtpFile(contentResolver, parentDocumentFile, name, absPath, user);
+    }
+
+    @Override
+    protected String absolute(String file) {
+        if (file.charAt(0) == '/') {
+            return file;
+        }
+        return workingDir.getAbsolutePath() + "/" + file;
+    }
+
+    public SafFtpFile getHomeDirectory() {
+        logger.trace("getHomeDirectory()");
+
+        return getFile(SafFtpFileSystemView.ROOT_PATH);
+    }
+
+    public SafFtpFile getWorkingDirectory() {
+        logger.trace("getWorkingDirectory()");
+
+        return workingDir;
+    }
+
+    public boolean changeWorkingDirectory(String dir) {
+        logger.trace("changeWorkingDirectory({})", dir);
+        SafFtpFile newWorkingDir = getFile(dir);
+        if (newWorkingDir.doesExist() && newWorkingDir.isDirectory()) {
+            workingDir = newWorkingDir;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isRandomAccessible() throws FtpException {
+        logger.trace("isRandomAccessible()");
+
+        return true;
+    }
+
+    public void dispose() {
+        logger.trace("dispose()");
+    }
 }
