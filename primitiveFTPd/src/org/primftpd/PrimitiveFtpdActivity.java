@@ -15,11 +15,13 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -203,6 +205,9 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		// e.g. necessary when ports preferences have been changed
 		displayServersState();
+
+		// check if chosen SAF directory can be accessed
+		checkSafAccess();
 	}
 
 	@Override
@@ -281,6 +286,45 @@ public class PrimitiveFtpdActivity extends Activity {
 
 					// update prefs
 					loadPrefs();
+
+					// note: onResume() is about to be called
+				}
+			}
+		}
+	}
+
+	protected void checkSafAccess() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if (prefsBean.getStorageType() == StorageType.SAF) {
+				RadioButton safRadio = findViewById(R.id.radioStorageSaf);
+				Cursor cursor = null;
+				try {
+					String url = prefsBean.getSafUrl();
+					Uri uri = Uri.parse(url);
+					cursor = getContentResolver().query(
+							uri,
+							new String[]{DocumentsContract.Document.COLUMN_DOCUMENT_ID},
+							null,
+							null,
+							null,
+							null);
+					cursor.moveToFirst();
+
+					// remove warning if it was present
+					safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+				} catch (UnsupportedOperationException e) {
+					// this seems to be the normal case for directory uris
+					safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+				} catch (SecurityException e) {
+					logger.debug("checkSafAccess failed: {}", e.toString());
+
+					// add warning
+					safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.ic_dialog_alert, 0);
+				} finally {
+					if (cursor != null) {
+						cursor.close();
+					}
 				}
 			}
 		}
