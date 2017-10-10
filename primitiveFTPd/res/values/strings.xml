@@ -82,8 +82,10 @@
     <string name="storageType">Storage Type</string>
     <string name="storageTypePlain">Plain old filesystem</string>
     <string name="storageTypeRoot">Super user (device must be rooted)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework\n(e.g. for sd card)</string>
-    <string name="selectedSafUri">Selected Storage Access Framework URI:</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(e.g. for sd card)</string>
+    <string name="safExplainHeading">How SAF works</string>
+    <string name="safExplain">Android will ask you to choose a directory. That will be available via server(s). From time to time permission might be revoked and you have to re-select.</string>
+    <string name="selectedSafUri">Selected SAF URI:</string>
 
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>

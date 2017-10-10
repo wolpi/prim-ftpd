@@ -116,11 +116,27 @@
             </RadioGroup>
         </LinearLayout>
         <TextView
+            android:id="@+id/safExplainHeading"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/safExplainHeading"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/safExplain"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/safExplain"
+            />
+        <TextView
             android:id="@+id/safUriLabel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/selectedSafUri"
+            android:textStyle="bold"
             android:visibility="gone"
             />
         <TextView

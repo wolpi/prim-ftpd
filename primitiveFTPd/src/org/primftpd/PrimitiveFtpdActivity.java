@@ -151,6 +151,10 @@ public class PrimitiveFtpdActivity extends Activity {
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
 			View storageContainer = findViewById(R.id.storageContainer);
 			((ViewManager)storageContainer.getParent()).removeView(storageContainer);
+			View safExplainHeading = findViewById(R.id.safExplainHeading);
+			((ViewManager)storageContainer.getParent()).removeView(safExplainHeading);
+			View safExplain = findViewById(R.id.safExplain);
+			((ViewManager)storageContainer.getParent()).removeView(safExplain);
 		}
 	}
 
@@ -245,6 +249,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		if (storageType == StorageType.PLAIN || storageType == StorageType.ROOT) {
 			loadPrefs();
+			checkSafAccess();
 		}
 	}
 
@@ -295,8 +300,9 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	protected void checkSafAccess() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			boolean hideWarning = true;
+			RadioButton safRadio = findViewById(R.id.radioStorageSaf);
 			if (prefsBean.getStorageType() == StorageType.SAF) {
-				RadioButton safRadio = findViewById(R.id.radioStorageSaf);
 				Cursor cursor = null;
 				try {
 					String url = prefsBean.getSafUrl();
@@ -310,22 +316,25 @@ public class PrimitiveFtpdActivity extends Activity {
 							null);
 					cursor.moveToFirst();
 
-					// remove warning if it was present
-					safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-
 				} catch (UnsupportedOperationException e) {
 					// this seems to be the normal case for directory uris
-					safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 				} catch (SecurityException e) {
 					logger.debug("checkSafAccess failed: {}", e.toString());
-
-					// add warning
-					safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.ic_dialog_alert, 0);
+					hideWarning = false;
 				} finally {
 					if (cursor != null) {
 						cursor.close();
 					}
 				}
+			}
+			if (hideWarning) {
+				// remove warning if it was present
+				safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+			} else {
+				int icon = theme == Theme.DARK
+						? R.drawable.ic_warning_white_36dp
+						: R.drawable.ic_warning_black_36dp;
+				safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0);
 			}
 		}
 	}
@@ -726,9 +735,11 @@ public class PrimitiveFtpdActivity extends Activity {
 	 */
 	protected boolean hasPermission(String permission, int requestCode) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			if(checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-				requestPermissions(new String[]{permission}, requestCode);
-				return false;
+			if (prefsBean.getStorageType() == StorageType.PLAIN) {
+				if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+					requestPermissions(new String[]{permission}, requestCode);
+					return false;
+				}
 			}
 		}
 		return true;
