@@ -137,6 +137,7 @@ public class LsOutputParser {
             }
         }
         try {
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             date = dateFormat.parse(dateStr);
             if (offset > 0) {
                 date = new Date(date.getTime() + offset);

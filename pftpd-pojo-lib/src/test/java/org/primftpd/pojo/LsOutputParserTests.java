@@ -52,7 +52,7 @@ public class LsOutputParserTests {
         Assert.assertEquals("dir_name", dir.getName());
         Assert.assertNull(dir.getLinkTarget());
         Assert.assertNotNull(dir.getDate());
-        Assert.assertEquals(84600000, dir.getDate().getTime());
+        Assert.assertEquals(88200000, dir.getDate().getTime());
 
         LsOutputBean file1 = beans.get(1);
         Assert.assertTrue(file1.isFile());
@@ -60,14 +60,14 @@ public class LsOutputParserTests {
         Assert.assertFalse(file1.isLink());
         Assert.assertEquals("file_name", file1.getName());
         Assert.assertNotNull(file1.getDate());
-        Assert.assertEquals(82800000, file1.getDate().getTime());
+        Assert.assertEquals(86400000, file1.getDate().getTime());
 
         LsOutputBean file2 = beans.get(2);
         Assert.assertTrue(file2.isFile());
         Assert.assertTrue(file2.isHasAcl());
         Assert.assertEquals("file_2", file2.getName());
         Assert.assertNotNull(file2.getDate());
-        Assert.assertEquals(1483313400000L, file2.getDate().getTime());
+        Assert.assertEquals(1483317000000L, file2.getDate().getTime());
     }
 
     @Test
