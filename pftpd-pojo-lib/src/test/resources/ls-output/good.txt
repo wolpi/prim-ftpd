@@ -1,0 +1,4 @@
+total 12345
+drwxr-xr-x 1 user group 1234  1970-01-02 00:30  dir_name
+-rwxr-xr-x 1 user group 1234  2. Jan 1970  file_name
+-rwxr-xr-x. 1 user group 1234  2. Jan 00:30  file_2

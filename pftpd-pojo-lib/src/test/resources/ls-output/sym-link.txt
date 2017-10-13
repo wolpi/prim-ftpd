@@ -1,0 +1,1 @@
+lrwxrwxrwx 1 user group   37  1970-01-02 00:30  link_name -> /absolute/link/target
