@@ -1,5 +1,8 @@
 package org.primftpd.pojo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +17,8 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 public class LsOutputParser {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     public List<LsOutputBean> parse(InputStream stream) throws IOException {
         List<LsOutputBean> result = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -29,6 +34,8 @@ public class LsOutputParser {
     }
 
     protected LsOutputBean parseLine(String line) {
+        logger.trace("ls output: '{}'", line);
+
         if (line == null) {
             return null;
         }

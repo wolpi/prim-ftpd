@@ -21,11 +21,11 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
 
         file = absolute(file);
 
+        LsOutputParser parser = new LsOutputParser();
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "ls", "-lAd", file);
         try {
             Process proc = processBuilder.start();
-            LsOutputParser parser = new LsOutputParser();
             List<LsOutputBean> beans = parser.parse(proc.getInputStream());
             if (!beans.isEmpty()) {
                 return createFile(beans.get(0), file);

@@ -99,7 +99,12 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     @Override
     public String getOwner() {
         logger.trace("[{}] getOwner()", name);
-        return session.getUsername();
+        try {
+            return (String)getAttribute(Attribute.Owner, false);
+        } catch (IOException e) {
+            logger.error("getOwner()", e);
+        }
+        return null;
     }
 
     @Override

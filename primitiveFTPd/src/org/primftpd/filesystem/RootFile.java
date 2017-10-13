@@ -106,11 +106,11 @@ public abstract class RootFile<T> {
         logger.trace("[{}] listFiles()", name);
 
         List<T> result = new ArrayList<>();
+        LsOutputParser parser = new LsOutputParser();
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "ls", "-lA", absPath);
         try {
             Process proc = processBuilder.start();
-            LsOutputParser parser = new LsOutputParser();
             List<LsOutputBean> beans = parser.parse(proc.getInputStream());
             for (LsOutputBean bean : beans) {
                 String path = absPath + "/" + bean.getName();
