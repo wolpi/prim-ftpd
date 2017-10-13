@@ -133,7 +133,7 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     @Override
     public boolean move(SshFile target) {
         logger.trace("move()");
-        return super.move((SafFile)target);
+        return super.move((RootFile)target);
     }
 
     @Override

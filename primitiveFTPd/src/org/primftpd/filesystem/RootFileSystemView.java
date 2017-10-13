@@ -29,6 +29,16 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
             List<LsOutputBean> beans = parser.parse(proc.getInputStream());
             if (!beans.isEmpty()) {
                 return createFile(beans.get(0), file);
+            } else {
+                // probably new
+                String name;
+                if (file.contains("/")) {
+                    name = file.substring(file.lastIndexOf('/') + 1, file.length());
+                } else {
+                    name = file;
+                }
+                LsOutputBean bean = new LsOutputBean(name);
+                return createFile(bean, file);
             }
         } catch (IOException e) {
             logger.error("could not run su", e);

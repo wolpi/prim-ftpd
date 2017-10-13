@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class RootFile<T> {
@@ -86,20 +87,17 @@ public abstract class RootFile<T> {
 
     public boolean mkdir() {
         logger.trace("[{}] mkdir()", name);
-        // TODO root mkdir()
-        return false;
+        return runCommand(new String[]{"mkdir", absPath});
     }
 
     public boolean delete() {
         logger.trace("[{}] delete()", name);
-        // TODO root delete()
-        return false;
+        return runCommand(new String[]{"rm", "-rf", absPath});
     }
 
-    public boolean move(SafFile<T> destination) {
+    public boolean move(RootFile<T> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
-        // TODO root move()
-        return false;
+        return runCommand(new String[]{"mv", absPath, destination.getAbsolutePath()});
     }
 
     public List<T> listFiles() {
@@ -133,5 +131,23 @@ public abstract class RootFile<T> {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
         // TODO root createInputStream()
         return null;
+    }
+
+    protected boolean runCommand(String[] cmd) {
+        String[] suCmd = new String[]{"su", "-c"};
+        String[] wholeCmd = new String[suCmd.length + cmd.length];
+        System.arraycopy(suCmd, 0, wholeCmd, 0, suCmd.length);
+        System.arraycopy(cmd, 0, wholeCmd, suCmd.length, cmd.length);
+        logger.trace("running cmd: '{}'", Arrays.toString(wholeCmd));
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command(wholeCmd);
+        try {
+            Process proc = processBuilder.start();
+            proc.waitFor();
+            return proc.exitValue() == 0;
+        } catch (Exception e) {
+            logger.error("could not run command", e);
+        }
+        return false;
     }
 }
