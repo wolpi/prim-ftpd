@@ -129,8 +129,11 @@ public abstract class RootFile<T> {
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
-        // TODO root createInputStream()
-        return null;
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("su", "-c", "cat", absPath);
+        Process proc = processBuilder.start();
+        return proc.getInputStream();
     }
 
     protected boolean runCommand(String[] cmd) {
