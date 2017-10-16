@@ -84,4 +84,16 @@ public class LsOutputParserTests {
         Assert.assertNotNull(link.getDate());
         Assert.assertTrue(link.getDate().getTime() > 0);
     }
+
+    @Test
+    public void nameWithSpaces() throws IOException {
+        List<LsOutputBean> beans = new LsOutputParser().parse(stream("name-with-spaces.txt"));
+        Assert.assertEquals(4, beans.size());
+
+        Assert.assertEquals("dir name", beans.get(0).getName());
+        Assert.assertEquals("file name", beans.get(1).getName());
+        Assert.assertEquals("file 2", beans.get(2).getName());
+        Assert.assertEquals("link name", beans.get(3).getName());
+        Assert.assertEquals("/absolute/link target", beans.get(3).getLinkTarget());
+    }
 }

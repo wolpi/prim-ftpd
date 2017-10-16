@@ -123,9 +123,11 @@ public class LsOutputParser {
         Date date;
         long offset = 0;
         String firstDateCol = parts.get(5);
+        int dateEndIndex;
         if (firstDateCol.length() == 10) {
             dateStr = firstDateCol + " " + parts.get(6);
             dateFormat = DATE_FORMAT_1;
+            dateEndIndex = 6;
         } else {
             String lastDateCol = parts.get(7);
             dateStr = firstDateCol + " " + parts.get(6) + " " + lastDateCol;
@@ -135,6 +137,7 @@ public class LsOutputParser {
             } else {
                 dateFormat = DATE_FORMAT_2;
             }
+            dateEndIndex = 7;
         }
         try {
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -148,12 +151,40 @@ public class LsOutputParser {
         builder.setDate(date);
 
         // name
+        int nameEndIndex = 0;
         if (!builder.isLink()) {
-            builder.setName(parts.get(parts.size() -1));
+            nameEndIndex = parts.size();
         } else {
-            builder.setName(parts.get(parts.size() -3));
-            builder.setLinkTarget(parts.get(parts.size() -1));
+            boolean found = false;
+            int targetStartIndex = parts.size();
+            for (int i = dateEndIndex + 1; i<parts.size(); i++) {
+                String part = parts.get(i);
+                if ("->".equals(part)) {
+                    if (!found) {
+                        nameEndIndex = i;
+                        targetStartIndex = i;
+                    } else {
+                        return null;
+                    }
+                }
+            }
+            StringBuilder sb = new StringBuilder();
+            String prefix = "";
+            for (int i = targetStartIndex + 1; i<parts.size(); i++) {
+                sb.append(prefix);
+                sb.append(parts.get(i));
+                prefix = " ";
+            }
+            builder.setLinkTarget(sb.toString());
         }
+        StringBuilder sb = new StringBuilder();
+        String prefix = "";
+        for (int i = dateEndIndex + 1; i<nameEndIndex; i++) {
+            sb.append(prefix);
+            sb.append(parts.get(i));
+            prefix = " ";
+        }
+        builder.setName(sb.toString());
 
         return builder.build();
     }
