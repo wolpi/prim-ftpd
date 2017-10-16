@@ -123,8 +123,11 @@ public abstract class RootFile<T> {
 
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
-        // TODO root createOutputStream()
-        return null;
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("su", "-c", "tee", absPath);
+        Process proc = processBuilder.start();
+        return proc.getOutputStream();
     }
 
     public InputStream createInputStream(long offset) throws IOException {
