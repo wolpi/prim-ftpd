@@ -14,6 +14,7 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.filesystem.FtpFileSystemView;
+import org.primftpd.filesystem.RootFtpFileSystemView;
 import org.primftpd.filesystem.SafFtpFileSystemView;
 import org.primftpd.util.StringUtils;
 
@@ -80,6 +81,8 @@ public class FtpServerService extends AbstractServerService
 				switch (prefsBean.getStorageType()) {
 					case PLAIN:
 						return new FtpFileSystemView(prefsBean.getStartDir(), user);
+					case ROOT:
+						return new RootFtpFileSystemView(prefsBean.getStartDir(), user);
 					case SAF:
 						return new SafFtpFileSystemView(
 								getApplicationContext(),
