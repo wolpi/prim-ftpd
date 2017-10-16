@@ -161,6 +161,7 @@ public class LsOutputParser {
                 String part = parts.get(i);
                 if ("->".equals(part)) {
                     if (!found) {
+                        found = true;
                         nameEndIndex = i;
                         targetStartIndex = i;
                     } else {
