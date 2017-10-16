@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public abstract class AndroidFileSystemView<T extends AndroidFile<X>, X> {
+public abstract class FsFileSystemView<T extends FsFile<X>, X> {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 

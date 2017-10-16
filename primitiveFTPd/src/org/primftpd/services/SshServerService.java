@@ -26,7 +26,7 @@ import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.filesystem.RootSshFileSystemView;
 import org.primftpd.filesystem.SafSshFileSystemView;
-import org.primftpd.filesystem.SshFileSystemView;
+import org.primftpd.filesystem.FsSshFileSystemView;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.StringUtils;
@@ -148,7 +148,7 @@ public class SshServerService extends AbstractServerService
 			{
 				switch (prefsBean.getStorageType()) {
 					case PLAIN:
-						return new SshFileSystemView(prefsBean.getStartDir(), session);
+						return new FsSshFileSystemView(prefsBean.getStartDir(), session);
 					case ROOT:
 						return new RootSshFileSystemView(prefsBean.getStartDir(), session);
 					case SAF:

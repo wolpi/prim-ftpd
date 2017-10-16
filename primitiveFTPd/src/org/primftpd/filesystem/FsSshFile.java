@@ -4,19 +4,16 @@ import org.apache.sshd.common.Session;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
+public class FsSshFile extends FsFile<org.apache.sshd.common.file.SshFile>
 	implements org.apache.sshd.common.file.SshFile
 {
 	private final Session session;
 
-	public SshFile(File file, Session session)
+	public FsSshFile(File file, Session session)
 	{
 		super(file);
 		this.session = session;
@@ -25,7 +22,7 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	@Override
 	protected org.apache.sshd.common.file.SshFile createFile(File file)
 	{
-		return new SshFile(file, session);
+		return new FsSshFile(file, session);
 	}
 
 	@Override
@@ -57,8 +54,8 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	{
 		logger.trace("[{}] getAttributes()", name);
 
-		Map<SshFile.Attribute, Object> attributes = new HashMap<>();
-		for (SshFile.Attribute attr : SshFile.Attribute.values()) {
+		Map<FsSshFile.Attribute, Object> attributes = new HashMap<>();
+		for (FsSshFile.Attribute attr : FsSshFile.Attribute.values()) {
 			attributes.put(attr, getAttribute(attr, followLinks));
 		}
 
@@ -76,7 +73,7 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	public org.apache.sshd.common.file.SshFile getParentFile()
 	{
 		logger.trace("[{}] getParentFile()", name);
-		return new SshFile(file.getParentFile(), session);
+		return new FsSshFile(file.getParentFile(), session);
 	}
 
 	@Override
@@ -102,7 +99,7 @@ public class SshFile extends AndroidFile<org.apache.sshd.common.file.SshFile>
 	@Override
 	public boolean move(org.apache.sshd.common.file.SshFile target)
 	{
-		return super.move((AndroidFile)target);
+		return super.move((FsFile)target);
 	}
 
 	@Override

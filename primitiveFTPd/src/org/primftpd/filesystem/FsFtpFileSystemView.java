@@ -6,25 +6,25 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 
-public class FtpFileSystemView
-	extends AndroidFileSystemView<FtpFile, org.apache.ftpserver.ftplet.FtpFile>
+public class FsFtpFileSystemView
+	extends FsFileSystemView<FsFtpFile, org.apache.ftpserver.ftplet.FtpFile>
 	implements FileSystemView
 {
 	private final File homeDir;
-	private FtpFile workingDir;
+	private FsFtpFile workingDir;
 
 	private final User user;
 
-	public FtpFileSystemView(File homeDir, User user) {
+	public FsFtpFileSystemView(File homeDir, User user) {
 		this.homeDir = homeDir;
 		workingDir = createHomeDirObj();
 		this.user = user;
 	}
 
 	@Override
-	protected FtpFile createFile(File file)
+	protected FsFtpFile createFile(File file)
 	{
-		return new FtpFile(file, user);
+		return new FsFtpFile(file, user);
 	}
 
 	@Override
@@ -36,16 +36,16 @@ public class FtpFileSystemView
 		return workingDir.getAbsolutePath() + File.separator + file;
 	}
 
-	private FtpFile createHomeDirObj() {
+	private FsFtpFile createHomeDirObj() {
 		return createFile(homeDir);
 	}
 
-	public FtpFile getHomeDirectory() {
+	public FsFtpFile getHomeDirectory() {
 		logger.trace("getHomeDirectory()");
 		return createHomeDirObj();
 	}
 
-	public FtpFile getWorkingDirectory() {
+	public FsFtpFile getWorkingDirectory() {
 		logger.trace("getWorkingDirectory()");
 		return workingDir;
 	}

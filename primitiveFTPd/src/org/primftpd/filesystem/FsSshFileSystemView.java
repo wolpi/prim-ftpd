@@ -5,22 +5,22 @@ import java.io.File;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
 
-public class SshFileSystemView
-	extends AndroidFileSystemView<SshFile, org.apache.sshd.common.file.SshFile>
+public class FsSshFileSystemView
+	extends FsFileSystemView<FsSshFile, org.apache.sshd.common.file.SshFile>
 	implements FileSystemView
 {
 	private final File homeDir;
 	private final Session session;
 
-	public SshFileSystemView(File homeDir, Session session) {
+	public FsSshFileSystemView(File homeDir, Session session) {
 		this.homeDir = homeDir;
 		this.session = session;
 	}
 
 	@Override
-	protected SshFile createFile(File file)
+	protected FsSshFile createFile(File file)
 	{
-		return new SshFile(file, session);
+		return new FsSshFile(file, session);
 	}
 
 	@Override

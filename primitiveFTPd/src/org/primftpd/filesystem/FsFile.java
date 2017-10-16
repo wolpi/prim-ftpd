@@ -15,14 +15,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AndroidFile<T> {
+public abstract class FsFile<T> {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected final File file;
 	protected final String name;
 
-	public AndroidFile(File file) {
+	public FsFile(File file) {
 		super();
 		this.file = file;
 		this.name = file.getName();
@@ -161,7 +161,7 @@ public abstract class AndroidFile<T> {
 		return file.delete();
 	}
 
-	public boolean move(AndroidFile<T> destination) {
+	public boolean move(FsFile<T> destination) {
 		logger.trace("[{}] move({})", name, destination.getAbsolutePath());
 		return file.renameTo(new File(destination.getAbsolutePath()));
 	}
