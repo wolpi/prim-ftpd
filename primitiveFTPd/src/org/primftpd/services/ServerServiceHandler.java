@@ -7,6 +7,9 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
+import eu.chainfire.libsuperuser.Shell;
+
+import org.primftpd.prefs.StorageType;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
@@ -28,6 +31,7 @@ public class ServerServiceHandler extends Handler
 	private final String logName;
 
 	private static WakeLock wakeLock;
+	private static Shell.Interactive shell;
 
 
 	protected ServerServiceHandler(
@@ -68,7 +72,11 @@ public class ServerServiceHandler extends Handler
 			System.setProperty("java.net.preferIPv4Stack", "true");
 			System.setProperty("java.net.preferIPv6Addresses", "false");
 
-			boolean started = service.launchServer();
+			if (service.prefsBean.getStorageType() == StorageType.ROOT) {
+				shellOpen();
+			}
+
+			boolean started = service.launchServer(shell);
 
 			if (started && service.getServer() != null) {
 				PowerManager powerMgr =
@@ -101,6 +109,7 @@ public class ServerServiceHandler extends Handler
 			}
 		}
 		releaseWakeLock();
+		shellClose();
 		logger.debug("stopSelf ({})", logName);
 		service.stopSelf();
 		ServicesStartStopUtil.updateNonActivityUI(service, false);
@@ -138,6 +147,23 @@ public class ServerServiceHandler extends Handler
 			wakeLock = null;
 		} else {
 			logger.debug("wake lock already released ({})", logName);
+		}
+	}
+
+	private synchronized void shellOpen() {
+		if (shell == null) {
+			logger.debug("opening root shell ({})", logName);
+			shell = (new Shell.Builder()).useSU().open();
+		} else {
+			logger.debug("root shell already open ({})", logName);
+		}
+	}
+
+	private synchronized void shellClose() {
+		if (shell != null) {
+			logger.debug("closing root shell ({})", logName);
+			shell.close();
+			shell = null;
 		}
 	}
 }

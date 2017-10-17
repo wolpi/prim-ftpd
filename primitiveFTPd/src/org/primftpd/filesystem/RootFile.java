@@ -9,24 +9,28 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import eu.chainfire.libsuperuser.Shell;
 
 public abstract class RootFile<T> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+    private final Shell.Interactive shell;
+
     protected final LsOutputBean bean;
     private final String absPath;
     protected final String name;
 
-    public RootFile(LsOutputBean bean, String absPath) {
+    public RootFile(Shell.Interactive shell, LsOutputBean bean, String absPath) {
+        this.shell = shell;
         this.bean = bean;
         this.absPath = absPath;
         this.name = bean.getName();
     }
 
-    protected abstract T createFile(LsOutputBean bean, String absPath);
+    protected abstract T createFile(Shell.Interactive shell, LsOutputBean bean, String absPath);
 
     public String getAbsolutePath() {
         logger.trace("[{}] getAbsolutePath() -> '{}'", name, absPath);
@@ -87,35 +91,42 @@ public abstract class RootFile<T> {
 
     public boolean mkdir() {
         logger.trace("[{}] mkdir()", name);
-        return runCommand(new String[]{"mkdir", absPath});
+        return runCommand("mkdir " + absPath);
     }
 
     public boolean delete() {
         logger.trace("[{}] delete()", name);
-        return runCommand(new String[]{"rm", "-rf", absPath});
+        return runCommand("rm -rf " + absPath);
     }
 
     public boolean move(RootFile<T> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
-        return runCommand(new String[]{"mv", absPath, destination.getAbsolutePath()});
+        return runCommand("mv " + absPath + " " + destination.getAbsolutePath());
     }
 
     public List<T> listFiles() {
         logger.trace("[{}] listFiles()", name);
 
         List<T> result = new ArrayList<>();
-        LsOutputParser parser = new LsOutputParser();
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("su", "-c", "ls", "-lA", absPath);
-        try {
-            Process proc = processBuilder.start();
-            List<LsOutputBean> beans = parser.parse(proc.getInputStream());
-            for (LsOutputBean bean : beans) {
-                String path = absPath + "/" + bean.getName();
-                result.add(createFile(bean, path));
+        final LsOutputParser parser = new LsOutputParser();
+        final List<LsOutputBean> beans = new ArrayList<>();
+        shell.addCommand("ls -lA " + absPath, 0, new Shell.OnCommandLineListener() {
+            @Override
+            public void onLine(String s) {
+                LsOutputBean bean = parser.parseLine(s);
+                if (bean != null) {
+                    beans.add(bean);
+                }
             }
-        } catch (IOException e) {
-            logger.error("could not run su", e);
+            @Override
+            public void onCommandResult(int i, int i1) {
+            }
+        });
+        shell.waitForIdle();
+
+        for (LsOutputBean bean : beans) {
+            String path = absPath + "/" + bean.getName();
+            result.add(createFile(shell, bean, path));
         }
 
         return result;
@@ -124,36 +135,40 @@ public abstract class RootFile<T> {
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
 
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("su", "-c", "tee", absPath);
-        Process proc = processBuilder.start();
-        return proc.getOutputStream();
+//        ProcessBuilder processBuilder = new ProcessBuilder();
+//        processBuilder.command(/*"su", "-c",*/ "tee", absPath);
+//        Process proc = processBuilder.start();
+//        return proc.getOutputStream();
+
+        // TODO root upload
+        return null;
     }
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
 
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("su", "-c", "cat", absPath);
-        Process proc = processBuilder.start();
-        return proc.getInputStream();
+//        ProcessBuilder processBuilder = new ProcessBuilder();
+//        processBuilder.command(/*"su", "-c",*/ "cat", absPath);
+//        Process proc = processBuilder.start();
+//        return proc.getInputStream();
+
+        // TODO root download
+        return null;
     }
 
-    protected boolean runCommand(String[] cmd) {
-        String[] suCmd = new String[]{"su", "-c"};
-        String[] wholeCmd = new String[suCmd.length + cmd.length];
-        System.arraycopy(suCmd, 0, wholeCmd, 0, suCmd.length);
-        System.arraycopy(cmd, 0, wholeCmd, suCmd.length, cmd.length);
-        logger.trace("running cmd: '{}'", Arrays.toString(wholeCmd));
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command(wholeCmd);
-        try {
-            Process proc = processBuilder.start();
-            proc.waitFor();
-            return proc.exitValue() == 0;
-        } catch (Exception e) {
-            logger.error("could not run command", e);
-        }
-        return false;
+    protected boolean runCommand(String cmd) {
+        logger.trace("running cmd: '{}'", cmd);
+        final Boolean[] wrapper = new Boolean[1];
+        shell.addCommand(cmd, 0, new Shell.OnCommandLineListener() {
+            @Override
+            public void onLine(String s) {
+            }
+            @Override
+            public void onCommandResult(int i, int i1) {
+                wrapper[0] = i == 0;
+            }
+        });
+        shell.waitForIdle();
+        return wrapper[0];
     }
 }

@@ -39,6 +39,8 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.chainfire.libsuperuser.Shell;
+
 /**
  * Implements a SSH server. Intended to be used for sftp.
  */
@@ -84,7 +86,7 @@ public class SshServerService extends AbstractServerService
 	}
 
 	@Override
-	protected boolean launchServer()
+	protected boolean launchServer(final Shell.Interactive shell)
 	{
 		sshServer = SshServer.setUpDefaultServer();
 		sshServer.setPort(prefsBean.getSecurePort());
@@ -150,7 +152,7 @@ public class SshServerService extends AbstractServerService
 					case PLAIN:
 						return new FsSshFileSystemView(prefsBean.getStartDir(), session);
 					case ROOT:
-						return new RootSshFileSystemView(prefsBean.getStartDir(), session);
+						return new RootSshFileSystemView(shell, prefsBean.getStartDir(), session);
 					case SAF:
 						return new SafSshFileSystemView(
 								getApplicationContext(),

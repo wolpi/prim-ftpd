@@ -5,12 +5,17 @@ import org.primftpd.pojo.LsOutputParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.List;
+import eu.chainfire.libsuperuser.Shell;
 
 public abstract class RootFileSystemView<T extends RootFile<X>, X> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+    protected final Shell.Interactive shell;
+
+    public RootFileSystemView(Shell.Interactive shell) {
+        this.shell = shell;
+    }
 
     protected abstract T createFile(LsOutputBean bean, String absPath);
 
@@ -21,29 +26,31 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
 
         file = absolute(file);
 
-        LsOutputParser parser = new LsOutputParser();
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("su", "-c", "ls", "-lAd", file);
-        try {
-            Process proc = processBuilder.start();
-            List<LsOutputBean> beans = parser.parse(proc.getInputStream());
-            if (!beans.isEmpty()) {
-                return createFile(beans.get(0), file);
-            } else {
-                // probably new
-                String name;
-                if (file.contains("/")) {
-                    name = file.substring(file.lastIndexOf('/') + 1, file.length());
-                } else {
-                    name = file;
-                }
-                LsOutputBean bean = new LsOutputBean(name);
-                return createFile(bean, file);
+        final LsOutputParser parser = new LsOutputParser();
+        final LsOutputBean[] wrapper = new LsOutputBean[1];
+        shell.addCommand("ls -lAd " + file, 0, new Shell.OnCommandLineListener() {
+            @Override
+            public void onLine(String s) {
+                wrapper[0] = parser.parseLine(s);
             }
-        } catch (IOException e) {
-            logger.error("could not run su", e);
+            @Override
+            public void onCommandResult(int i, int i1) {
+            }
+        });
+        shell.waitForIdle();
+        LsOutputBean bean = wrapper[0];
+        if (bean != null) {
+            return createFile(bean, file);
+        } else {
+            // probably new
+            String name;
+            if (file.contains("/")) {
+                name = file.substring(file.lastIndexOf('/') + 1, file.length());
+            } else {
+                name = file;
+            }
+            bean = new LsOutputBean(name);
+            return createFile(bean, file);
         }
-        logger.error("bad path: '{}'", file);
-        return null;
     }
 }

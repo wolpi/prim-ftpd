@@ -12,17 +12,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import eu.chainfire.libsuperuser.Shell;
+
 public class RootSshFile extends RootFile<SshFile> implements SshFile {
 
     private final Session session;
 
-    public RootSshFile(LsOutputBean bean, String absPath, Session session) {
-        super(bean, absPath);
+    public RootSshFile(Shell.Interactive shell, LsOutputBean bean, String absPath, Session session) {
+        super(shell, bean, absPath);
         this.session = session;
     }
 
-    protected RootSshFile createFile(LsOutputBean bean, String absPath) {
-        return new RootSshFile(bean, absPath, session);
+    protected RootSshFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath) {
+        return new RootSshFile(shell, bean, absPath, session);
     }
 
     @Override

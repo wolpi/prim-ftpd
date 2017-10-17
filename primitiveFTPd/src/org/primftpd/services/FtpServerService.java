@@ -18,6 +18,8 @@ import org.primftpd.filesystem.RootFtpFileSystemView;
 import org.primftpd.filesystem.SafFtpFileSystemView;
 import org.primftpd.util.StringUtils;
 
+import eu.chainfire.libsuperuser.Shell;
+
 /**
  * Implements a FTP server.
  */
@@ -59,7 +61,7 @@ public class FtpServerService extends AbstractServerService
 	}
 
 	@Override
-	protected boolean launchServer() {
+	protected boolean launchServer(final Shell.Interactive shell) {
 		ListenerFactory listenerFactory = new ListenerFactory();
 		listenerFactory.setPort(prefsBean.getPort());
 
@@ -82,7 +84,7 @@ public class FtpServerService extends AbstractServerService
 					case PLAIN:
 						return new FsFtpFileSystemView(prefsBean.getStartDir(), user);
 					case ROOT:
-						return new RootFtpFileSystemView(prefsBean.getStartDir(), user);
+						return new RootFtpFileSystemView(shell, prefsBean.getStartDir(), user);
 					case SAF:
 						return new SafFtpFileSystemView(
 								getApplicationContext(),

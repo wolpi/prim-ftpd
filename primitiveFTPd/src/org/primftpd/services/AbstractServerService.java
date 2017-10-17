@@ -23,6 +23,8 @@ import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.chainfire.libsuperuser.Shell;
+
 /**
  * Abstract base class for {@link Service}s wrapping servers.
  * <div>
@@ -53,7 +55,7 @@ public abstract class AbstractServerService
 		AbstractServerService service);
 
 	protected abstract Object getServer();
-	protected abstract boolean launchServer();
+	protected abstract boolean launchServer(final Shell.Interactive shell);
 	protected abstract void stopServer();
 	protected abstract int getPort();
 	protected abstract String getServiceName();

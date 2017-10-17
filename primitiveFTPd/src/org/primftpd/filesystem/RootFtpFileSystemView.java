@@ -8,20 +8,23 @@ import org.primftpd.pojo.LsOutputBean;
 
 import java.io.File;
 
+import eu.chainfire.libsuperuser.Shell;
+
 public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFile> implements FileSystemView {
 
     private final User user;
     private final RootFtpFile homeDir;
     private RootFtpFile workingDir;
 
-    public RootFtpFileSystemView(File homeDir, User user) {
+    public RootFtpFileSystemView(Shell.Interactive shell, File homeDir, User user) {
+        super(shell);
         this.user = user;
         this.workingDir = this.homeDir = getFile(homeDir.getAbsolutePath());
     }
 
     @Override
     protected RootFtpFile createFile(LsOutputBean bean, String absPath) {
-        return new RootFtpFile(bean, absPath, user);
+        return new RootFtpFile(shell, bean, absPath, user);
     }
 
     @Override

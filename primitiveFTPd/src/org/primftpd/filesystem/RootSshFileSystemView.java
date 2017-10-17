@@ -7,19 +7,22 @@ import org.primftpd.pojo.LsOutputBean;
 
 import java.io.File;
 
+import eu.chainfire.libsuperuser.Shell;
+
 public class RootSshFileSystemView extends RootFileSystemView<RootSshFile, SshFile> implements FileSystemView {
 
     private final File homeDir;
     private final Session session;
 
-    public RootSshFileSystemView(File homeDir, Session session) {
+    public RootSshFileSystemView(Shell.Interactive shell, File homeDir, Session session) {
+        super(shell);
         this.homeDir = homeDir;
         this.session = session;
     }
 
     @Override
     protected RootSshFile createFile(LsOutputBean bean, String absPath) {
-        return new RootSshFile(bean, absPath, session);
+        return new RootSshFile(shell, bean, absPath, session);
     }
 
     @Override

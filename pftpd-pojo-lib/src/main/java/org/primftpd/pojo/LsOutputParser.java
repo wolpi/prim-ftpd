@@ -33,7 +33,7 @@ public class LsOutputParser {
         return result;
     }
 
-    protected LsOutputBean parseLine(String line) {
+    public LsOutputBean parseLine(String line) {
         logger.trace("ls output: '{}'", line);
 
         if (line == null) {

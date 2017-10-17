@@ -4,17 +4,19 @@ import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.primftpd.pojo.LsOutputBean;
 
+import eu.chainfire.libsuperuser.Shell;
+
 public class RootFtpFile extends RootFile<FtpFile> implements FtpFile {
 
     private final User user;
 
-    public RootFtpFile(LsOutputBean bean, String absPath, User user) {
-        super(bean, absPath);
+    public RootFtpFile(Shell.Interactive shell, LsOutputBean bean, String absPath, User user) {
+        super(shell, bean, absPath);
         this.user = user;
     }
 
-    protected RootFtpFile createFile(LsOutputBean bean, String absPath) {
-        return new RootFtpFile(bean, absPath, user);
+    protected RootFtpFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath) {
+        return new RootFtpFile(shell, bean, absPath, user);
     }
 
     @Override
