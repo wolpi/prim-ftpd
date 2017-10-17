@@ -5,6 +5,8 @@ import org.primftpd.pojo.LsOutputParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -135,25 +137,47 @@ public abstract class RootFile<T> {
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
 
-//        ProcessBuilder processBuilder = new ProcessBuilder();
-//        processBuilder.command(/*"su", "-c",*/ "tee", absPath);
-//        Process proc = processBuilder.start();
-//        return proc.getOutputStream();
+        // new file or existing file?
+        final String pathToUpdatePerm;
+        if (bean.isExists()) {
+            pathToUpdatePerm = absPath;
+        } else {
+            pathToUpdatePerm = absPath.substring(0, absPath.lastIndexOf('/'));
+        }
 
-        // TODO root upload
-        return null;
+        // remember current permission
+        final String perm = readCommandOutput("stat -c %a " + pathToUpdatePerm);
+
+        // set perm to be able to read file
+        runCommand("chmod 0777 " + pathToUpdatePerm);
+
+        return new FileOutputStream(absPath) {
+            @Override
+            public void close() throws IOException {
+                super.close();
+                // restore permission
+                runCommand("chmod 0" + perm + " " + pathToUpdatePerm);
+            }
+        };
     }
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
 
-//        ProcessBuilder processBuilder = new ProcessBuilder();
-//        processBuilder.command(/*"su", "-c",*/ "cat", absPath);
-//        Process proc = processBuilder.start();
-//        return proc.getInputStream();
+        // remember current permission
+        final String perm = readCommandOutput("stat -c %a " + absPath);
 
-        // TODO root download
-        return null;
+        // set perm to be able to read file
+        runCommand("chmod 0777 " + absPath);
+
+        return new FileInputStream(absPath) {
+            @Override
+            public void close() throws IOException {
+                super.close();
+                // restore permission
+                runCommand("chmod 0" + perm + " " + absPath);
+            }
+        };
     }
 
     protected boolean runCommand(String cmd) {
@@ -170,5 +194,24 @@ public abstract class RootFile<T> {
         });
         shell.waitForIdle();
         return wrapper[0];
+    }
+
+    protected String readCommandOutput(String cmd) {
+        final StringBuilder sb = new StringBuilder();
+        shell.addCommand(cmd, 0, new Shell.OnCommandLineListener() {
+            @Override
+            public void onCommandResult(int i, int i1) {
+            }
+            @Override
+            public void onLine(String s) {
+                if (s != null) {
+                    sb.append(s);
+                }
+            }
+        });
+        shell.waitForIdle();
+        String result = sb.toString();
+        logger.trace("read output of cmd '{}': '{}'", cmd, result);
+        return result;
     }
 }
