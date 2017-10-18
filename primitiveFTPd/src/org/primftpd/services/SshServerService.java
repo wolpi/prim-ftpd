@@ -24,6 +24,7 @@ import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
+import org.primftpd.filesystem.RoSafSshFileSystemView;
 import org.primftpd.filesystem.RootSshFileSystemView;
 import org.primftpd.filesystem.SafSshFileSystemView;
 import org.primftpd.filesystem.FsSshFileSystemView;
@@ -156,6 +157,11 @@ public class SshServerService extends AbstractServerService
 					case SAF:
 						return new SafSshFileSystemView(
 								getApplicationContext(),
+								Uri.parse(prefsBean.getSafUrl()),
+								getContentResolver(),
+								session);
+					case RO_SAF:
+						return new RoSafSshFileSystemView(
 								Uri.parse(prefsBean.getSafUrl()),
 								getContentResolver(),
 								session);

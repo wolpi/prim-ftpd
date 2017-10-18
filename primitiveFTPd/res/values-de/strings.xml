@@ -77,6 +77,7 @@
     <string name="storageTypePlain">Gutes, altes Dateisystem</string>
     <string name="storageTypeRoot">Super user (Gerät muss gerooted sein)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(z.B. für SD-Karte)</string>
+    <string name="storageTypeRoSaf">Nur-Lesen SAF (schneller !)</string>
     <string name="safExplainHeading">Wie SAF funktioniert</string>
     <string name="safExplain">Android wird sie darum bitten ein Verzeichnis auszuwählen. Dieses wird über die Server verfügbar gemacht. Von Zeit zu Zeit kann die Berechtigung zurückgezogen werden und das Verzeichnis muss erneut ausgewählt werden.</string>
     <string name="selectedSafUri">Ausgewählte SAF URI:</string>

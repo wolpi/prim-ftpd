@@ -193,6 +193,10 @@ public class PrimitiveFtpdActivity extends Activity {
 				((RadioButton)findViewById(R.id.radioStorageSaf)).setChecked(true);
 				showSafUrl(prefsBean.getSafUrl());
 				break;
+			case RO_SAF:
+				((RadioButton)findViewById(R.id.radioStorageRoSaf)).setChecked(true);
+				showSafUrl(prefsBean.getSafUrl());
+				break;
 		}
 	}
 
@@ -230,6 +234,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 		StorageType storageType = null;
 
+		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
 		switch(view.getId()) {
 			case R.id.radioStoragePlain:
 				storageType = StorageType.PLAIN;
@@ -239,7 +244,10 @@ public class PrimitiveFtpdActivity extends Activity {
 				break;
 			case R.id.radioStorageSaf:
 				storageType = StorageType.SAF;
-				Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+				startActivityForResult(intent, 0);
+				break;
+			case R.id.radioStorageRoSaf:
+				storageType = StorageType.RO_SAF;
 				startActivityForResult(intent, 0);
 				break;
 		}
@@ -302,7 +310,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			boolean hideWarning = true;
 			RadioButton safRadio = findViewById(R.id.radioStorageSaf);
-			if (prefsBean.getStorageType() == StorageType.SAF) {
+			if (prefsBean.getStorageType() == StorageType.SAF || prefsBean.getStorageType() == StorageType.RO_SAF) {
 				Cursor cursor = null;
 				try {
 					String url = prefsBean.getSafUrl();

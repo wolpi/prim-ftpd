@@ -113,6 +113,11 @@
                              android:layout_height="wrap_content"
                              android:text="@string/storageTypeSaf"
                              android:onClick="onRadioButtonClicked"/>
+                <RadioButton android:id="@+id/radioStorageRoSaf"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:text="@string/storageTypeRoSaf"
+                             android:onClick="onRadioButtonClicked"/>
             </RadioGroup>
         </LinearLayout>
         <TextView

@@ -14,6 +14,7 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.filesystem.FsFtpFileSystemView;
+import org.primftpd.filesystem.RoSafFtpFileSystemView;
 import org.primftpd.filesystem.RootFtpFileSystemView;
 import org.primftpd.filesystem.SafFtpFileSystemView;
 import org.primftpd.util.StringUtils;
@@ -88,6 +89,11 @@ public class FtpServerService extends AbstractServerService
 					case SAF:
 						return new SafFtpFileSystemView(
 								getApplicationContext(),
+								Uri.parse(prefsBean.getSafUrl()),
+								getContentResolver(),
+								user);
+					case RO_SAF:
+						return new RoSafFtpFileSystemView(
 								Uri.parse(prefsBean.getSafUrl()),
 								getContentResolver(),
 								user);
