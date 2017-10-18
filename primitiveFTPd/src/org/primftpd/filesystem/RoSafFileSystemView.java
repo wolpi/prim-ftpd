@@ -35,6 +35,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
 
         file = absolute(file);
 
+        logger.trace("    getFile(abs: {})", file);
         if (ROOT_PATH.equals(file)) {
             return createFile(contentResolver, startUrl, ROOT_PATH);
         }

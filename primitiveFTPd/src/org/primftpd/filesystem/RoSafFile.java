@@ -169,12 +169,13 @@ public abstract class RoSafFile<T> {
     }
 
     public boolean isWritable() {
-        logger.trace("[{}] isWritable() -> {}", name, writable);
-        return writable;
+        boolean result = false;
+        logger.trace("[{}] isWritable() -> {}", name, result);
+        return result;
     }
 
     public boolean isRemovable() {
-        boolean result = writable;
+        boolean result = false;
         logger.trace("[{}] isRemovable() -> {}", name, result);
         return result;
     }

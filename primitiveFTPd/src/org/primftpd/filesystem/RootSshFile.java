@@ -78,7 +78,7 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
                 if (bean.isOtherExecutable())
                     tmp.add(Permission.OthersExecute);
                 logger.trace("  [{}] getAttribute({}) -> {}", new Object[]{name, attribute, tmp});
-                return  EnumSet.copyOf(tmp);
+                return  tmp.isEmpty() ? EnumSet.noneOf(Permission.class) : EnumSet.copyOf(tmp);
             default:
                 return SshUtils.getAttribute(this, attribute, followLinks);
         }

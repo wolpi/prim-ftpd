@@ -34,6 +34,9 @@ public class RoSafFtpFileSystemView extends RoSafFileSystemView<RoSafFtpFile, Ft
         if (file.charAt(0) == '/') {
             return file;
         }
+        if ("./".equals(file) || ".".equals(file)) {
+            return workingDir.getAbsolutePath();
+        }
         return workingDir.getAbsolutePath() + "/" + file;
     }
 
