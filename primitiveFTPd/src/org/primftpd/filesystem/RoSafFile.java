@@ -4,13 +4,11 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -260,8 +258,7 @@ public abstract class RoSafFile<T> {
                     startUrl,
                     documentId);
 
-            ParcelFileDescriptor pfd = contentResolver.openFileDescriptor(uri, "r");
-            return new FileInputStream(pfd.getFileDescriptor());
+            return contentResolver.openInputStream(uri);
         }
         return null;
     }
