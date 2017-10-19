@@ -40,6 +40,11 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
         shell.waitForIdle();
         LsOutputBean bean = wrapper[0];
         if (bean != null) {
+            if (bean.isLink()) {
+                bean = findFinalLinkTarget(bean, parser);
+                // TODO make sym link target absolute
+                file = bean.getName();
+            }
             return createFile(bean, file);
         } else {
             // probably new
@@ -53,4 +58,30 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
             return createFile(bean, file);
         }
     }
+
+    protected LsOutputBean findFinalLinkTarget(LsOutputBean bean, final LsOutputParser parser ) {
+        LsOutputBean tmp = bean;
+        final LsOutputBean[] wrapper = new LsOutputBean[1];
+        int i=0;
+        while (tmp.isLink()) {
+            shell.addCommand("ls -lAd " + tmp.getLinkTarget(), 0, new Shell.OnCommandLineListener() {
+                @Override
+                public void onLine(String s) {
+                    wrapper[0] = parser.parseLine(s);
+                }
+                @Override
+                public void onCommandResult(int i, int i1) {
+                }
+            });
+            shell.waitForIdle();
+
+            tmp = wrapper[0];
+            i++;
+            if (i > 20) {
+                break;
+            }
+        }
+        return tmp;
+    }
+
 }
