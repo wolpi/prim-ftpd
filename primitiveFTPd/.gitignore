@@ -19,3 +19,6 @@ local.properties
 .settings
 *.iml
 .gradle
+
+# gradle cq plugin
+cq-configs
