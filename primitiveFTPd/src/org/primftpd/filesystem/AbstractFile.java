@@ -1,7 +1,12 @@
 package org.primftpd.filesystem;
 
+import org.apache.sshd.common.file.SshFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class AbstractFile {
 
@@ -61,5 +66,89 @@ public abstract class AbstractFile {
         return size;
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // ftp
+    ///////////////////////////////////////////////////////////////////////////
+
+    public Object getPhysicalFile() {
+        return this;
+    }
+
+    public int getLinkCount() {
+        logger.trace("[{}] getLinkCount()", name);
+        return 0;
+    }
+
+    public boolean isHidden() {
+        logger.trace("[{}] isHidden()", name);
+        return name.charAt(0) == '.';
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // ssh
+    ///////////////////////////////////////////////////////////////////////////
+
+    public void handleClose() throws IOException {
+        // TODO ssh handleClose
+        logger.trace("[{}] handleClose()", name);
+    }
+
+    public void truncate() throws IOException {
+        // TODO ssh truncate
+        logger.trace("[{}] truncate()", name);
+    }
+
+    public String readSymbolicLink() throws IOException {
+        logger.trace("[{}] readSymbolicLink()", name);
+        return null;
+    }
+
+    public void createSymbolicLink(SshFile arg0)
+            throws IOException
+    {
+        // TODO ssh createSymbolicLink
+        logger.trace("[{}] createSymbolicLink()", name);
+    }
+
+    public void setAttribute(SshFile.Attribute attribute, Object value) throws IOException {
+        // TODO ssh setAttribute
+        logger.trace("[{}] setAttribute()", name);
+    }
+
+    public void setAttributes(Map<SshFile.Attribute, Object> attributes) throws IOException {
+        // TODO ssh setAttributes
+        logger.trace("[{}] setAttributes()", name);
+    }
+
+    public Object getAttribute(SshFile.Attribute attribute, boolean followLinks)
+            throws IOException
+    {
+        logger.trace("[{}] getAttribute({})", name, attribute);
+        return SshUtils.getAttribute((SshFile)this, attribute, followLinks);
+    }
+
+    public Map<SshFile.Attribute, Object> getAttributes(boolean followLinks)
+            throws IOException
+    {
+        logger.trace("[{}] getAttributes()", name);
+
+        Map<SshFile.Attribute, Object> attributes = new HashMap<>();
+        for (SshFile.Attribute attr : SshFile.Attribute.values()) {
+            attributes.put(attr, getAttribute(attr, followLinks));
+        }
+
+        return attributes;
+    }
+
+    public boolean isExecutable() {
+        logger.trace("[{}] isExecutable()", name);
+        return false;
+    }
+
+    public boolean create() throws IOException {
+        logger.trace("[{}] create()", name);
+        // called e.g. when uploading a new file
+        return true;
+    }
 
 }

@@ -24,17 +24,6 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 	}
 
 	@Override
-	public Object getPhysicalFile() {
-		return file;
-	}
-
-	@Override
-	public boolean isHidden() {
-		logger.trace("[{}] isHidden()", name);
-		return file.isHidden();
-	}
-
-	@Override
 	public String getOwnerName() {
 		logger.trace("[{}] getOwnerName()", name);
 		return user.getName();
@@ -47,12 +36,13 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 	}
 
 	@Override
-	public int getLinkCount() {
-		logger.trace("[{}] getLinkCount()", name);
-		return 0;
+	public Object getPhysicalFile() {
+		return file;
 	}
 
-	public User getUser() {
-		return user;
+	@Override
+	public boolean isHidden() {
+		logger.trace("[{}] isHidden()", name);
+		return file.isHidden();
 	}
 }

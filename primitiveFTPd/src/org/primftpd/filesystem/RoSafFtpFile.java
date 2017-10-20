@@ -56,17 +56,6 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
     }
 
     @Override
-    public Object getPhysicalFile() {
-        return this;
-    }
-
-    @Override
-    public boolean isHidden() {
-        logger.trace("[{}] isHidden()", name);
-        return name.charAt(0) == '.';
-    }
-
-    @Override
     public String getOwnerName() {
         logger.trace("[{}] getOwnerName()", name);
         return user.getName();
@@ -76,15 +65,5 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
     public String getGroupName() {
         logger.trace("[{}] getGroupName()", name);
         return user.getName();
-    }
-
-    @Override
-    public int getLinkCount() {
-        logger.trace("[{}] getLinkCount()", name);
-        return 0;
-    }
-
-    public User getUser() {
-        return user;
     }
 }

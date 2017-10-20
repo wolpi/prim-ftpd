@@ -115,50 +115,13 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     }
 
     @Override
-    public boolean create() throws IOException {
-        logger.trace("[{}] create()", name);
-        // called e.g. when uploading a new file
-        return true;
-    }
-
-    @Override
     public SshFile getParentFile() {
         logger.trace("[{}] getParentFile()", name);
         return null;
     }
 
     @Override
-    public boolean isExecutable() {
-        logger.trace("[{}] isExecutable()", name);
-        return false;
-    }
-
-    @Override
-    public void handleClose() throws IOException {
-        // TODO ssh handleClose
-        logger.trace("[{}] handleClose()", name);
-    }
-
-    @Override
     public List<SshFile> listSshFiles() {
         return listFiles();
-    }
-
-    @Override
-    public void setAttribute(Attribute attribute, Object value) throws IOException {
-        // TODO ssh setAttribute
-        logger.trace("[{}] setAttribute()", name);
-    }
-
-    @Override
-    public void setAttributes(Map<Attribute, Object> attributes) throws IOException {
-        // TODO ssh setAttributes
-        logger.trace("[{}] setAttributes()", name);
-    }
-
-    @Override
-    public void truncate() throws IOException {
-        // TODO ssh truncate
-        logger.trace("[{}] truncate()", name);
     }
 }
