@@ -2,8 +2,6 @@ package org.primftpd.filesystem;
 
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,53 +13,30 @@ import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
 
-public abstract class RootFile<T> {
-
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+public abstract class RootFile<T> extends AbstractFile {
 
     private final Shell.Interactive shell;
 
     protected final LsOutputBean bean;
-    private final String absPath;
-    protected final String name;
 
     public RootFile(Shell.Interactive shell, LsOutputBean bean, String absPath) {
+        super(
+                absPath,
+                bean.getName(),
+                bean.getDate().getTime(),
+                bean.getSize(),
+                true,
+                bean.isExists(),
+                bean.isDir());
         this.shell = shell;
         this.bean = bean;
-        this.absPath = absPath;
-        this.name = bean.getName();
     }
 
     protected abstract T createFile(Shell.Interactive shell, LsOutputBean bean, String absPath);
 
-    public String getAbsolutePath() {
-        logger.trace("[{}] getAbsolutePath() -> '{}'", name, absPath);
-        return absPath;
-    }
-
-    public String getName() {
-        logger.trace("[{}] getName()", name);
-        return name;
-    }
-
-    public boolean isDirectory() {
-        logger.trace("[{}] isDirectory() -> {}", name, bean.isDir());
-        return bean.isDir();
-    }
-
     public boolean isFile() {
         logger.trace("[{}] isFile() -> {}", name, bean.isFile());
         return bean.isFile();
-    }
-
-    public boolean doesExist() {
-        logger.trace("[{}] doesExist() -> {}", name, bean.isExists());
-        return bean.isExists();
-    }
-
-    public boolean isReadable() {
-        logger.trace("[{}] isReadable()", name);
-        return true;
     }
 
     public boolean isWritable() {
@@ -74,21 +49,10 @@ public abstract class RootFile<T> {
         return true;
     }
 
-    public long getLastModified() {
-        long time = bean.getDate().getTime();
-        logger.trace("[{}] getLastModified() -> {}", name, time);
-        return time;
-    }
-
     public boolean setLastModified(long time) {
         logger.trace("[{}] setLastModified({})", name, time);
         // TODO root setLastModified()
         return false;
-    }
-
-    public long getSize() {
-        logger.trace("[{}] getSize() -> {}", name, bean.getSize());
-        return bean.getSize();
     }
 
     public boolean mkdir() {

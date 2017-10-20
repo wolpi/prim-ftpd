@@ -12,55 +12,28 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public abstract class FsFile<T> {
-
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+public abstract class FsFile<T> extends AbstractFile {
 
 	protected final File file;
-	protected final String name;
 
 	public FsFile(File file) {
-		super();
+		super(
+				file.getAbsolutePath(),
+				file.getName(),
+				file.lastModified(),
+				file.length(),
+				file.canRead(),
+				file.exists(),
+				file.isDirectory());
 		this.file = file;
 		this.name = file.getName();
 	}
 
 	protected abstract T createFile(File file);
 
-	public String getAbsolutePath() {
-		logger.trace("[{}] getAbsolutePath()", name);
-		return file.getAbsolutePath();
-	}
-
-	public String getName() {
-		logger.trace("[{}] getName()", name);
-		return file.getName();
-	}
-
-	public boolean isDirectory() {
-		boolean isDirectory = file.isDirectory();
-		logger.trace(
-			"[{}] isDirectory(), ({}): {}",
-				new Object[]{
-						name,
-						file.getAbsolutePath(),
-						Boolean.valueOf(isDirectory)
-				});
-		return isDirectory;
-	}
-
 	public boolean isFile() {
 		boolean isFile = file.isFile();
-		logger.trace(
-			"[{}] isFile(), ({}): {}",
-				new Object[]{
-						name,
-						file.getAbsolutePath(),
-						Boolean.valueOf(isFile)
-				});
+		logger.trace("[{}] isFile() -> {}", name, isFile);
 		return isFile;
 	}
 
@@ -92,19 +65,12 @@ public abstract class FsFile<T> {
 
 	public boolean isReadable() {
 		boolean canRead = file.canRead();
-		logger.trace(
-			"[{}] isReadable(), ({}): {}",
-				new Object[]{
-						name,
-						file.getAbsolutePath(),
-						Boolean.valueOf(canRead)
-				});
+		logger.trace("[{}] isReadable() -> {}", name, canRead);
 		return canRead;
 	}
 
 	public boolean isWritable() {
-		logger.trace(
-			"[{}] writable: {}, exists: {}, file: '{}'",
+		logger.trace("[{}] writable: {}, exists: {}, file: '{}'",
 			new Object[]{
 				name,
 				file.canWrite(),
@@ -134,21 +100,9 @@ public abstract class FsFile<T> {
 		return file.canWrite();
 	}
 
-	public long getLastModified() {
-		long lastModified = file.lastModified();
-		logger.trace("[{}] getLastModified() -> {}", name, Long.valueOf(lastModified));
-		return lastModified;
-	}
-
 	public boolean setLastModified(long time) {
 		logger.trace("[{}] setLastModified({})", name, Long.valueOf(time));
 		return file.setLastModified(time);
-	}
-
-	public long getSize() {
-		long size = file.length();
-		logger.trace("[{}] getSize() -> {}", name, Long.valueOf(size));
-		return size;
 	}
 
 	public boolean mkdir() {

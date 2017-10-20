@@ -5,9 +5,6 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.support.v4.provider.DocumentFile;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,23 +12,14 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SafFile<T> {
+public abstract class SafFile<T> extends AbstractFile {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
     private final ContentResolver contentResolver;
 
     private DocumentFile documentFile;
     private DocumentFile parentDocumentFile;
 
-    private boolean isDirectory = false;
-    private String absPath;
-
-    protected String name;
-    private long lastModified;
-    private long size;
     private boolean writable;
-    private boolean readable;
-    private boolean exists;
 
     public SafFile(
             ContentResolver contentResolver,
@@ -39,11 +27,17 @@ public abstract class SafFile<T> {
             DocumentFile documentFile,
             String absPath) {
         // this c-tor is to be used to access existing files
-        super();
+        super(
+                absPath,
+                null,
+                documentFile.lastModified(),
+                documentFile.length(),
+                documentFile.canRead(),
+                documentFile.exists(),
+                documentFile.isDirectory());
         String parentName = parentDocumentFile.getName();
         logger.trace("new SafFile() with documentFile, parent '{}' and absPath '{}'", parentName, absPath);
         this.contentResolver = contentResolver;
-        this.absPath = absPath;
 
         this.parentDocumentFile = parentDocumentFile;
         this.documentFile = documentFile;
@@ -52,12 +46,7 @@ public abstract class SafFile<T> {
         if (name == null && SafFileSystemView.ROOT_PATH.equals(absPath)) {
             name = SafFileSystemView.ROOT_PATH;
         }
-        readable = documentFile.canRead();
         writable = documentFile.canWrite();
-        exists = documentFile.exists();
-        isDirectory = documentFile.isDirectory();
-        lastModified = documentFile.lastModified();
-        size = documentFile.length();
     }
 
     public SafFile(
@@ -66,14 +55,13 @@ public abstract class SafFile<T> {
             String name,
             String absPath) {
         // this c-tor is to be used to upload new files, create directories or renaming
-        super();
+        super(absPath, name, 0, 0, false, false, false);
         String parentName = parentDocumentFile.getName();
         logger.trace("new SafFile() with name '{}', parent '{}' and absPath '{}'",
                 new Object[]{name, parentName, absPath});
         this.contentResolver = contentResolver;
         this.name = name;
         this.writable = true;
-        this.absPath = absPath;
 
         this.parentDocumentFile = parentDocumentFile;
     }
@@ -84,35 +72,10 @@ public abstract class SafFile<T> {
             DocumentFile documentFile,
             String absPath);
 
-    public String getAbsolutePath() {
-        logger.trace("[{}] getAbsolutePath() -> '{}'", name, absPath);
-        return absPath;
-    }
-
-    public String getName() {
-        logger.trace("[{}] getName()", name);
-        return name;
-    }
-
-    public boolean isDirectory() {
-        logger.trace("[{}] isDirectory() -> {}", name, isDirectory);
-        return isDirectory;
-    }
-
     public boolean isFile() {
         boolean result = !isDirectory;
         logger.trace("[{}] isFile() -> {}", name, result);
         return result;
-    }
-
-    public boolean doesExist() {
-        logger.trace("[{}] doesExist() -> {}", name, exists);
-        return exists;
-    }
-
-    public boolean isReadable() {
-        logger.trace("[{}] isReadable() -> {}", name, readable);
-        return readable;
     }
 
     public boolean isWritable() {
@@ -126,19 +89,9 @@ public abstract class SafFile<T> {
         return result;
     }
 
-    public long getLastModified() {
-        logger.trace("[{}] getLastModified() -> {}", name, lastModified);
-        return lastModified;
-    }
-
     public boolean setLastModified(long time) {
         logger.trace("[{}] setLastModified({})", name, time);
         return false;
-    }
-
-    public long getSize() {
-        logger.trace("[{}] getSize() -> {}", name, size);
-        return size;
     }
 
     public boolean mkdir() {

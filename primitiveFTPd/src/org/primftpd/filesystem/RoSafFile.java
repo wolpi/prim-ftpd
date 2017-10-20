@@ -6,21 +6,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class RoSafFile<T> {
+public abstract class RoSafFile<T> extends AbstractFile {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
     private final ContentResolver contentResolver;
     protected final Uri startUrl;
 
+    private String documentId;
 
     private static final String MIME_TYPE_DIRECTORY = "vnd.android.document/directory";
 
@@ -30,28 +27,14 @@ public abstract class RoSafFile<T> {
             DocumentsContract.Document.COLUMN_DISPLAY_NAME,
             DocumentsContract.Document.COLUMN_LAST_MODIFIED,
             DocumentsContract.Document.COLUMN_SIZE,
-            DocumentsContract.Document.COLUMN_FLAGS,
             DocumentsContract.Document.COLUMN_MIME_TYPE,
     };
 
-    private String documentId;
-
-    private boolean isDirectory = false;
-    private String absPath;
-
-    protected String name;
-    private long lastModified;
-    private long size;
-    private boolean writable;
-    private boolean readable;
-    private boolean exists;
-
     public RoSafFile(ContentResolver contentResolver, Uri startUrl, String absPath) {
         // this c-tor is to be used for start directory
-        super();
+        super(absPath, null, 0, 0, false, false, false);
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
-        this.absPath = absPath;
 
         try {
             Cursor cursor = contentResolver.query(
@@ -76,10 +59,9 @@ public abstract class RoSafFile<T> {
 
     public RoSafFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath) {
         // this c-tor is to be used for FileSystemView.getFile()
-        super();
+        super(absPath, null, 0, 0, false, false, false);
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
-        this.absPath = absPath;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Uri uri = DocumentsContract.buildDocumentUriUsingTree(
@@ -103,10 +85,9 @@ public abstract class RoSafFile<T> {
 
     public RoSafFile(ContentResolver contentResolver, Uri startUrl, Cursor cursor, String absPath) {
         // this c-tor is to be used by listFiles()
-        super();
+        super(absPath, null, 0, 0, false, false, false);
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
-        this.absPath = absPath;
         initByCursor(cursor);
     }
 
@@ -115,18 +96,12 @@ public abstract class RoSafFile<T> {
         name = cursor.getString(1);
         lastModified = cursor.getLong(2);
         size = cursor.getLong(3);
-        int flags = cursor.getInt(4);
-        writable = flagPresent(flags, DocumentsContract.Document.FLAG_SUPPORTS_WRITE);
 
         readable = true;
         exists = true;
 
-        String mime = cursor.getString(5);
+        String mime = cursor.getString(4);
         isDirectory = MIME_TYPE_DIRECTORY.equals(mime);
-    }
-
-    private boolean flagPresent(int flags, int flag) {
-        return ((flags & flag) == flag);
     }
 
     protected abstract T createFile(
@@ -135,35 +110,10 @@ public abstract class RoSafFile<T> {
             Cursor cursor,
             String absPath);
 
-    public String getAbsolutePath() {
-        logger.trace("[{}] getAbsolutePath() -> '{}'", name, absPath);
-        return absPath;
-    }
-
-    public String getName() {
-        logger.trace("[{}] getName()", name);
-        return name;
-    }
-
-    public boolean isDirectory() {
-        logger.trace("[{}] isDirectory() -> {}", name, isDirectory);
-        return isDirectory;
-    }
-
     public boolean isFile() {
         boolean result = !isDirectory;
         logger.trace("[{}] isFile() -> {}", name, result);
         return result;
-    }
-
-    public boolean doesExist() {
-        logger.trace("[{}] doesExist() -> {}", name, exists);
-        return exists;
-    }
-
-    public boolean isReadable() {
-        logger.trace("[{}] isReadable() -> {}", name, readable);
-        return readable;
     }
 
     public boolean isWritable() {
@@ -178,19 +128,9 @@ public abstract class RoSafFile<T> {
         return result;
     }
 
-    public long getLastModified() {
-        logger.trace("[{}] getLastModified() -> {}", name, lastModified);
-        return lastModified;
-    }
-
     public boolean setLastModified(long time) {
         logger.trace("[{}] setLastModified({})", name, time);
         return false;
-    }
-
-    public long getSize() {
-        logger.trace("[{}] getSize() -> {}", name, size);
-        return size;
     }
 
     public boolean mkdir() {
