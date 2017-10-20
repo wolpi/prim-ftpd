@@ -55,18 +55,29 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
     }
 
     @Override
-    public boolean create() throws IOException {
-        logger.trace("[{}] create()", name);
-        // called e.g. when uploading a new file
-        return true;
+    public boolean move(SshFile target) {
+        logger.trace("move()");
+        return super.move((RoSafFile)target);
+    }
+
+    @Override
+    public String readSymbolicLink() throws IOException {
+        logger.trace("[{}] readSymbolicLink()", name);
+        return null;
     }
 
     @Override
     public void createSymbolicLink(org.apache.sshd.common.file.SshFile arg0)
             throws IOException
     {
-        // TODO ssh ro saf createSymbolicLink
+        // TODO ssh createSymbolicLink
         logger.trace("[{}] createSymbolicLink()", name);
+    }
+
+    @Override
+    public String getOwner() {
+        logger.trace("[{}] getOwner()", name);
+        return session.getUsername();
     }
 
     @Override
@@ -92,9 +103,10 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
     }
 
     @Override
-    public String getOwner() {
-        logger.trace("[{}] getOwner()", name);
-        return session.getUsername();
+    public boolean create() throws IOException {
+        logger.trace("[{}] create()", name);
+        // called e.g. when uploading a new file
+        return true;
     }
 
     @Override
@@ -104,15 +116,15 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
     }
 
     @Override
-    public void handleClose() throws IOException {
-        // TODO ssh handleClose
-        logger.trace("[{}] handleClose()", name);
-    }
-
-    @Override
     public boolean isExecutable() {
         logger.trace("[{}] isExecutable()", name);
         return false;
+    }
+
+    @Override
+    public void handleClose() throws IOException {
+        // TODO ssh handleClose
+        logger.trace("[{}] handleClose()", name);
     }
 
     @Override
@@ -121,32 +133,20 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
     }
 
     @Override
-    public boolean move(SshFile target) {
-        logger.trace("move()");
-        return super.move((RoSafFile)target);
-    }
-
-    @Override
-    public String readSymbolicLink() throws IOException {
-        logger.trace("[{}] readSymbolicLink()", name);
-        return null;
-    }
-
-    @Override
     public void setAttribute(Attribute attribute, Object value) throws IOException {
-        // TODO ssh ro saf setAttribute
+        // TODO ssh setAttribute
         logger.trace("[{}] setAttribute()", name);
     }
 
     @Override
     public void setAttributes(Map<Attribute, Object> attributes) throws IOException {
-        // TODO ssh ro saf setAttributes
+        // TODO ssh setAttributes
         logger.trace("[{}] setAttributes()", name);
     }
 
     @Override
     public void truncate() throws IOException {
-        // TODO ssh ro saf truncate
+        // TODO ssh truncate
         logger.trace("[{}] truncate()", name);
     }
 }

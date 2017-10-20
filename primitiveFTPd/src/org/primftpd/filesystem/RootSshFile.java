@@ -28,18 +28,34 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     }
 
     @Override
-    public boolean create() throws IOException {
-        logger.trace("[{}] create()", name);
-        // called e.g. when uploading a new file
-        return true;
+    public boolean move(SshFile target) {
+        logger.trace("move()");
+        return super.move((RootFile)target);
+    }
+
+    @Override
+    public String readSymbolicLink() throws IOException {
+        logger.trace("[{}] readSymbolicLink()", name);
+        return bean.getLinkTarget();
     }
 
     @Override
     public void createSymbolicLink(SshFile arg0)
             throws IOException
     {
-        // TODO root ssh createSymbolicLink
+        // TODO ssh createSymbolicLink
         logger.trace("[{}] createSymbolicLink()", name);
+    }
+
+    @Override
+    public String getOwner() {
+        logger.trace("[{}] getOwner()", name);
+        try {
+            return (String)getAttribute(Attribute.Owner, false);
+        } catch (IOException e) {
+            logger.error("getOwner()", e);
+        }
+        return null;
     }
 
     @Override
@@ -99,14 +115,10 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     }
 
     @Override
-    public String getOwner() {
-        logger.trace("[{}] getOwner()", name);
-        try {
-            return (String)getAttribute(Attribute.Owner, false);
-        } catch (IOException e) {
-            logger.error("getOwner()", e);
-        }
-        return null;
+    public boolean create() throws IOException {
+        logger.trace("[{}] create()", name);
+        // called e.g. when uploading a new file
+        return true;
     }
 
     @Override
@@ -116,15 +128,15 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     }
 
     @Override
-    public void handleClose() throws IOException {
-        // TODO ssh handleClose
-        logger.trace("[{}] handleClose()", name);
-    }
-
-    @Override
     public boolean isExecutable() {
         logger.trace("[{}] isExecutable()", name);
         return false;
+    }
+
+    @Override
+    public void handleClose() throws IOException {
+        // TODO ssh handleClose
+        logger.trace("[{}] handleClose()", name);
     }
 
     @Override
@@ -133,32 +145,20 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     }
 
     @Override
-    public boolean move(SshFile target) {
-        logger.trace("move()");
-        return super.move((RootFile)target);
-    }
-
-    @Override
-    public String readSymbolicLink() throws IOException {
-        logger.trace("[{}] readSymbolicLink()", name);
-        return bean.getLinkTarget();
-    }
-
-    @Override
     public void setAttribute(Attribute attribute, Object value) throws IOException {
-        // TODO root ssh setAttribute
+        // TODO ssh setAttribute
         logger.trace("[{}] setAttribute()", name);
     }
 
     @Override
     public void setAttributes(Map<Attribute, Object> attributes) throws IOException {
-        // TODO root ssh setAttributes
+        // TODO ssh setAttributes
         logger.trace("[{}] setAttributes()", name);
     }
 
     @Override
     public void truncate() throws IOException {
-        // TODO root ssh truncate
+        // TODO ssh truncate
         logger.trace("[{}] truncate()", name);
     }
 }
