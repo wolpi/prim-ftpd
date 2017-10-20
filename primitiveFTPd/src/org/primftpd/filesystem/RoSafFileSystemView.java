@@ -9,7 +9,6 @@ import android.provider.DocumentsContract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
@@ -43,7 +42,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String parentId = DocumentsContract.getTreeDocumentId(startUrl);
 
-            List<String> parts = normalizePath(file);
+            List<String> parts = Utils.normalizePath(file);
             for (int i=0; i<parts.size(); i++) {
                 String currentPart = parts.get(i);
 
@@ -65,7 +64,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                         String docName = childCursor.getString(1);
                         if (currentPart.equals(docName)) {
                             if (i == parts.size() - 1) {
-                                return createFile(contentResolver, startUrl, docId, toPath(parts));
+                                return createFile(contentResolver, startUrl, docId, Utils.toPath(parts));
                             } else {
                                 parentId = docId;
                                 break;
@@ -78,38 +77,6 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             }
         }
         return null;
-    }
-
-    private List<String> normalizePath(String path) {
-        String[] parts = path.split("/");
-        List<String> result = new ArrayList<>();
-        for (String part : parts) {
-            if (".".equals(part) || "".equals(part)) {
-                continue;
-            } else if ("..".equals(part)) {
-                if (!result.isEmpty()) {
-                    result.remove(result.size() - 1);
-                }
-                continue;
-            } else {
-                result.add(part);
-            }
-        }
-        return result;
-    }
-
-    private String toPath(List<String> parts) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(ROOT_PATH);
-        int i=0;
-        for (String part : parts) {
-            sb.append(part);
-            if (i < parts.size() - 1) {
-                sb.append("/");
-            }
-            i++;
-        }
-        return sb.toString();
     }
 
     private void closeQuietly(Cursor cursor) {
