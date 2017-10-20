@@ -2,28 +2,25 @@ package org.primftpd.filesystem;
 
 import java.io.File;
 
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 
-public class FsFtpFileSystemView
-	extends FsFileSystemView<FsFtpFile, org.apache.ftpserver.ftplet.FtpFile>
-	implements FileSystemView
-{
+public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> implements FileSystemView {
+
+	private final User user;
 	private final File homeDir;
 	private FsFtpFile workingDir;
 
-	private final User user;
-
 	public FsFtpFileSystemView(File homeDir, User user) {
 		this.homeDir = homeDir;
-		workingDir = createHomeDirObj();
+		workingDir = getHomeDirectory();
 		this.user = user;
 	}
 
 	@Override
-	protected FsFtpFile createFile(File file)
-	{
+	protected FsFtpFile createFile(File file) {
 		return new FsFtpFile(file, user);
 	}
 
@@ -32,21 +29,18 @@ public class FsFtpFileSystemView
 		if ('/' == file.charAt(0)) {
 			return file;
 		}
-
 		return workingDir.getAbsolutePath() + File.separator + file;
-	}
-
-	private FsFtpFile createHomeDirObj() {
-		return createFile(homeDir);
 	}
 
 	public FsFtpFile getHomeDirectory() {
 		logger.trace("getHomeDirectory()");
-		return createHomeDirObj();
+
+		return createFile(homeDir);
 	}
 
 	public FsFtpFile getWorkingDirectory() {
 		logger.trace("getWorkingDirectory()");
+
 		return workingDir;
 	}
 
@@ -95,6 +89,7 @@ public class FsFtpFileSystemView
 
 	public boolean isRandomAccessible() throws FtpException {
 		logger.trace("isRandomAccessible()");
+
 		return true;
 	}
 

@@ -66,5 +66,4 @@ public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFi
     public void dispose() {
         logger.trace("dispose()");
     }
-
 }

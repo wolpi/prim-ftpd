@@ -24,7 +24,6 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath) {
-        logger.trace("createFile(DocumentFile)");
         return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, session);
     }
 
@@ -34,7 +33,6 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             DocumentFile parentDocumentFile,
             String name,
             String absPath) {
-        logger.trace("createFile(String)");
         return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, session);
     }
 
