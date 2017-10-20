@@ -15,6 +15,13 @@ class Utils {
         return workingDir + "/" + rel;
     }
 
+    static String absoluteOrHome(String path, String homeDir) {
+        if (".".equals(path) || "/.".equals(path)) {
+            return homeDir;
+        }
+        return path;
+    }
+
     static List<String> normalizePath(String path) {
         String[] parts = path.split("/");
         List<String> result = new ArrayList<>();

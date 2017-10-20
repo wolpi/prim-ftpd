@@ -28,10 +28,7 @@ public class RoSafSshFileSystemView extends RoSafFileSystemView<RoSafSshFile, Ss
 
     @Override
     protected String absolute(String file) {
-        if (".".equals(file) || "/.".equals(file)) {
-            return ROOT_PATH;
-        }
-        return file;
+        return Utils.absoluteOrHome(file, ROOT_PATH);
     }
 
     @Override
