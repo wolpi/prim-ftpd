@@ -31,13 +31,7 @@ public class RoSafFtpFileSystemView extends RoSafFileSystemView<RoSafFtpFile, Ft
 
     @Override
     protected String absolute(String file) {
-        if (file.charAt(0) == '/') {
-            return file;
-        }
-        if ("./".equals(file) || ".".equals(file)) {
-            return workingDir.getAbsolutePath();
-        }
-        return workingDir.getAbsolutePath() + "/" + file;
+        return Utils.absolute(file, workingDir.getAbsolutePath());
     }
 
     public RoSafFtpFile getHomeDirectory() {

@@ -43,10 +43,7 @@ public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile>
 
     @Override
     protected String absolute(String file) {
-        if (file.charAt(0) == '/') {
-            return file;
-        }
-        return workingDir.getAbsolutePath() + "/" + file;
+        return Utils.absolute(file, workingDir.getAbsolutePath());
     }
 
     public SafFtpFile getHomeDirectory() {

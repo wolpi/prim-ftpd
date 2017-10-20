@@ -26,10 +26,7 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 
 	@Override
 	protected String absolute(String file) {
-		if ('/' == file.charAt(0)) {
-			return file;
-		}
-		return workingDir.getAbsolutePath() + File.separator + file;
+		return Utils.absolute(file, workingDir.getAbsolutePath());
 	}
 
 	public FsFtpFile getHomeDirectory() {

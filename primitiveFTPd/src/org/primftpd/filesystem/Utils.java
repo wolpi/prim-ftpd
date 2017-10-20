@@ -5,6 +5,16 @@ import java.util.List;
 
 class Utils {
 
+    static String absolute(String rel, String workingDir) {
+        if (rel.charAt(0) == '/') {
+            return rel;
+        }
+        if ("./".equals(rel) || ".".equals(rel)) {
+            return workingDir;
+        }
+        return workingDir + "/" + rel;
+    }
+
     static List<String> normalizePath(String path) {
         String[] parts = path.split("/");
         List<String> result = new ArrayList<>();

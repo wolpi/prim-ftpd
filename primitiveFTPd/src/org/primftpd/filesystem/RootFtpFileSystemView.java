@@ -29,10 +29,7 @@ public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFi
 
     @Override
     protected String absolute(String file) {
-        if (file.charAt(0) == '/') {
-            return file;
-        }
-        return workingDir.getAbsolutePath() + "/" + file;
+        return Utils.absolute(file, workingDir.getAbsolutePath());
     }
 
     public RootFtpFile getHomeDirectory() {
