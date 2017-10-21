@@ -1,4 +1,4 @@
-#Primitive FTPd
+# Primitive FTPd
 
 FTP server app for android.
 
@@ -11,7 +11,7 @@ FTP server app for android.
 [<img alt="Get it on Amazon" height="45" style="margin-left: 8px;" src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png" />](http://www.amazon.com/wolpi-primitive-FTPd/dp/B00KERCPNY/ref=sr_1_1)
 
 
-##Some features:
+## Some features:
 * Can optionally be started on system boot
 * Shows statusbar notification when server is running
 * Server can be stopped from statusbar
