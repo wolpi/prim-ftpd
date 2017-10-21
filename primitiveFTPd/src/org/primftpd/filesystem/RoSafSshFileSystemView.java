@@ -33,8 +33,9 @@ public class RoSafSshFileSystemView extends RoSafFileSystemView<RoSafSshFile, Ss
 
     @Override
     public SshFile getFile(SshFile baseDir, String file) {
-        logger.trace("getFile(baseDir, {})", file);
-        return null;
+        logger.trace("getFile(baseDir: {}, file: {})", baseDir.getAbsolutePath(), file);
+        // e.g. for scp
+        return getFile(baseDir.getAbsolutePath() + "/" + file);
     }
 
     @Override

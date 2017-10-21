@@ -28,8 +28,9 @@ public class FsSshFileSystemView extends FsFileSystemView<FsSshFile, SshFile> im
 
 	@Override
 	public SshFile getFile(SshFile baseDir, String file) {
-		logger.trace("getFile(baseDir, {})", file);
-		return getFile(baseDir.getAbsolutePath());
+		logger.trace("getFile(baseDir: {}, file: {})", baseDir.getAbsolutePath(), file);
+		// e.g. for scp
+		return getFile(baseDir.getAbsolutePath() + "/" + file);
 	}
 
 	@Override
