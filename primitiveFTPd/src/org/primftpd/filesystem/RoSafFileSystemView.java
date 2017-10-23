@@ -43,6 +43,8 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             String parentId = DocumentsContract.getTreeDocumentId(startUrl);
 
             List<String> parts = Utils.normalizePath(file);
+            logger.trace("    getFile(normalized: {})", parts);
+
             for (int i=0; i<parts.size(); i++) {
                 String currentPart = parts.get(i);
 
@@ -76,7 +78,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                 }
             }
         }
-        return null;
+        return createFile(contentResolver, startUrl, ROOT_PATH);
     }
 
     private void closeQuietly(Cursor cursor) {

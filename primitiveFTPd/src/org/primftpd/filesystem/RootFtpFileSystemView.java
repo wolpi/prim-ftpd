@@ -29,6 +29,9 @@ public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFi
 
     @Override
     protected String absolute(String file) {
+        if (workingDir == null) {
+            return file; // during c-tor
+        }
         return Utils.absolute(file, workingDir.getAbsolutePath());
     }
 

@@ -63,13 +63,10 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
                     if (found) {
                         return child;
                     }
-                } else if (i == parts.size() - 1) {
-                    // if just last part is not found -> probably upload -> create object just with name
+                } else {
+                    // probably upload -> create object just with name
                     String absPath = Utils.toPath(parts);
                     return createFile(contentResolver, parentDocFile, currentPart, absPath);
-
-                } else {
-                    break;
                 }
             }
 

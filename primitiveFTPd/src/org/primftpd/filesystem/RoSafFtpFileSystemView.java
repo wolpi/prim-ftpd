@@ -31,6 +31,9 @@ public class RoSafFtpFileSystemView extends RoSafFileSystemView<RoSafFtpFile, Ft
 
     @Override
     protected String absolute(String file) {
+        if (workingDir == null) {
+            return file; // during c-tor
+        }
         return Utils.absolute(file, workingDir.getAbsolutePath());
     }
 
