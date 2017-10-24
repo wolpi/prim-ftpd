@@ -45,10 +45,12 @@ public abstract class FsFile<T> extends AbstractFile {
 			// try to figure out if it really does not exist
 			File parentFile = file.getParentFile();
 			File[] children = parentFile.listFiles();
-			for (File child : children) {
-				if (file.equals(child)) {
-					existsChecked = true;
-					break;
+			if (children != null) {
+				for (File child : children) {
+					if (file.equals(child)) {
+						existsChecked = true;
+						break;
+					}
 				}
 			}
 		}

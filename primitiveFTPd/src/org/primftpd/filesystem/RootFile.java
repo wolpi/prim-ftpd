@@ -23,7 +23,7 @@ public abstract class RootFile<T> extends AbstractFile {
         super(
                 absPath,
                 bean.getName(),
-                bean.getDate().getTime(),
+                bean.getDate() != null ? bean.getDate().getTime() : 0,
                 bean.getSize(),
                 true,
                 bean.isExists(),
