@@ -28,7 +28,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
 
         final LsOutputParser parser = new LsOutputParser();
         final LsOutputBean[] wrapper = new LsOutputBean[1];
-        shell.addCommand("ls -lAd " + file, 0, new Shell.OnCommandLineListener() {
+        shell.addCommand("ls -lAd \"" + file + "\"", 0, new Shell.OnCommandLineListener() {
             @Override
             public void onLine(String s) {
                 wrapper[0] = parser.parseLine(s);
@@ -64,7 +64,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
         final LsOutputBean[] wrapper = new LsOutputBean[1];
         int i=0;
         while (tmp.isLink()) {
-            shell.addCommand("ls -lAd " + tmp.getLinkTarget(), 0, new Shell.OnCommandLineListener() {
+            shell.addCommand("ls -lAd \"" + tmp.getLinkTarget() + "\"", 0, new Shell.OnCommandLineListener() {
                 @Override
                 public void onLine(String s) {
                     wrapper[0] = parser.parseLine(s);

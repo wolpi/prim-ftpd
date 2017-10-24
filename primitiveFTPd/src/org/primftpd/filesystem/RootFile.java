@@ -57,17 +57,17 @@ public abstract class RootFile<T> extends AbstractFile {
 
     public boolean mkdir() {
         logger.trace("[{}] mkdir()", name);
-        return runCommand("mkdir " + absPath);
+        return runCommand("mkdir \"" + absPath + "\"");
     }
 
     public boolean delete() {
         logger.trace("[{}] delete()", name);
-        return runCommand("rm -rf " + absPath);
+        return runCommand("rm -rf \"" + absPath + "\"");
     }
 
     public boolean move(RootFile<T> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
-        return runCommand("mv " + absPath + " " + destination.getAbsolutePath());
+        return runCommand("mv \"" + absPath + "\" \"" + destination.getAbsolutePath() + "\"");
     }
 
     public List<T> listFiles() {
@@ -110,17 +110,17 @@ public abstract class RootFile<T> extends AbstractFile {
         }
 
         // remember current permission
-        final String perm = readCommandOutput("stat -c %a " + pathToUpdatePerm);
+        final String perm = readCommandOutput("stat -c %a \"" + pathToUpdatePerm + "\"");
 
         // set perm to be able to read file
-        runCommand("chmod 0777 " + pathToUpdatePerm);
+        runCommand("chmod 0777 \"" + pathToUpdatePerm + "\"");
 
         return new FileOutputStream(absPath) {
             @Override
             public void close() throws IOException {
                 super.close();
                 // restore permission
-                runCommand("chmod 0" + perm + " " + pathToUpdatePerm);
+                runCommand("chmod 0" + perm + " \"" + pathToUpdatePerm + "\"");
             }
         };
     }
@@ -129,17 +129,17 @@ public abstract class RootFile<T> extends AbstractFile {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
 
         // remember current permission
-        final String perm = readCommandOutput("stat -c %a " + absPath);
+        final String perm = readCommandOutput("stat -c %a \"" + absPath + "\"");
 
         // set perm to be able to read file
-        runCommand("chmod 0777 " + absPath);
+        runCommand("chmod 0777 \"" + absPath + "\"");
 
         return new FileInputStream(absPath) {
             @Override
             public void close() throws IOException {
                 super.close();
                 // restore permission
-                runCommand("chmod 0" + perm + " " + absPath);
+                runCommand("chmod 0" + perm + " \"" + absPath + "\"");
             }
         };
     }
