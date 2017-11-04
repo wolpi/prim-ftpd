@@ -24,3 +24,5 @@ FTP server app for android.
 * Widget to start/stop server
 * Plugins for powertoggles and tasker
 * Android 7 Quicksettings Tile
+* Optional root access
+* Optional support for Android Storage Access Framework to access external sd-card the official way
