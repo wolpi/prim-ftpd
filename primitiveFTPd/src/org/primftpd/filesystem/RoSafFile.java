@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,6 +19,8 @@ public abstract class RoSafFile<T> extends AbstractFile {
     protected final Uri startUrl;
 
     private String documentId;
+    private boolean writable;
+    private boolean deletable;
 
     private static final String MIME_TYPE_DIRECTORY = "vnd.android.document/directory";
 
@@ -28,6 +31,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             DocumentsContract.Document.COLUMN_LAST_MODIFIED,
             DocumentsContract.Document.COLUMN_SIZE,
             DocumentsContract.Document.COLUMN_MIME_TYPE,
+            DocumentsContract.Document.COLUMN_FLAGS,
     };
 
     public RoSafFile(ContentResolver contentResolver, Uri startUrl, String absPath) {
@@ -57,29 +61,34 @@ public abstract class RoSafFile<T> extends AbstractFile {
         }
     }
 
-    public RoSafFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath) {
+    public RoSafFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath, boolean exists) {
         // this c-tor is to be used for FileSystemView.getFile()
-        super(absPath, null, 0, 0, false, false, false);
+        super(absPath, null, 0, 0, false, exists, false);
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Uri uri = DocumentsContract.buildDocumentUriUsingTree(
-                    startUrl,
-                    docId);
+        if (exists) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Uri uri = DocumentsContract.buildDocumentUriUsingTree(
+                        startUrl,
+                        docId);
 
-            Cursor cursor = contentResolver.query(
-                    uri,
-                    SAF_QUERY_COLUMNS,
-                    null,
-                    null,
-                    null);
-            cursor.moveToNext();
-            try {
-                initByCursor(cursor);
-            } finally {
-                closeQuietly(cursor);
+                Cursor cursor = contentResolver.query(
+                        uri,
+                        SAF_QUERY_COLUMNS,
+                        null,
+                        null,
+                        null);
+                cursor.moveToNext();
+                try {
+                    initByCursor(cursor);
+                } finally {
+                    closeQuietly(cursor);
+                }
             }
+        } else {
+            name = docId;
+            writable = true;
         }
     }
 
@@ -102,6 +111,14 @@ public abstract class RoSafFile<T> extends AbstractFile {
 
         String mime = cursor.getString(4);
         isDirectory = MIME_TYPE_DIRECTORY.equals(mime);
+
+        int flags = cursor.getInt(5);
+        writable = flagPresent(flags, DocumentsContract.Document.FLAG_SUPPORTS_WRITE);
+        deletable = flagPresent(flags, DocumentsContract.Document.FLAG_SUPPORTS_DELETE);
+    }
+
+    private boolean flagPresent(int flags, int flag) {
+        return ((flags & flag) == flag);
     }
 
     protected abstract T createFile(
@@ -117,12 +134,16 @@ public abstract class RoSafFile<T> extends AbstractFile {
     }
 
     public boolean isWritable() {
+        // TODO writing with SAF cursor/uri api
+        //boolean result = writable;
         boolean result = false;
         logger.trace("[{}] isWritable() -> {}", name, result);
         return result;
     }
 
     public boolean isRemovable() {
+        // TODO writing with SAF cursor/uri api
+        //boolean result = deletable;
         boolean result = false;
         logger.trace("[{}] isRemovable() -> {}", name, result);
         return result;
@@ -135,16 +156,52 @@ public abstract class RoSafFile<T> extends AbstractFile {
 
     public boolean mkdir() {
         logger.trace("[{}] mkdir()", name);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Uri parentUri;
+            if (documentId != null) {
+                parentUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, documentId);
+            } else {
+                parentUri = startUrl;
+            }
+            logger.trace("mkdir(): parent uri: '{}'", parentUri);
+            try {
+                Uri newDirUri = DocumentsContract.createDocument(contentResolver, parentUri, MIME_TYPE_DIRECTORY, name);
+                return newDirUri != null;
+            } catch (FileNotFoundException e) {
+                logger.error("could not create dir " + name, e);
+            }
+        }
         return false;
     }
 
     public boolean delete() {
         logger.trace("[{}] delete()", name);
+        // TODO writing with SAF cursor/uri api
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Uri docUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, documentId);
+//            logger.trace("delete(): docUri: '{}'", docUri);
+//            try {
+//                return DocumentsContract.deleteDocument(contentResolver, docUri);
+//            } catch (FileNotFoundException e) {
+//                logger.error("could not delete " + name, e);
+//            }
+//        }
         return false;
     }
 
     public boolean move(RoSafFile<T> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
+        // TODO writing with SAF cursor/uri api
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Uri docUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, documentId);
+//            logger.trace("move(): docUri: '{}'", docUri);
+//            try {
+//                Uri newNameUri = DocumentsContract.renameDocument(contentResolver, docUri, destination.getName());
+//                return newNameUri != null;
+//            } catch (FileNotFoundException e) {
+//                logger.error("could not rename " + name, e);
+//            }
+//        }
         return false;
     }
 
@@ -186,6 +243,12 @@ public abstract class RoSafFile<T> extends AbstractFile {
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Uri uri = DocumentsContract.buildDocumentUriUsingTree(
+                    startUrl,
+                    documentId);
+            return contentResolver.openOutputStream(uri);
+        }
         return null;
     }
 
@@ -193,11 +256,9 @@ public abstract class RoSafFile<T> extends AbstractFile {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
             Uri uri = DocumentsContract.buildDocumentUriUsingTree(
                     startUrl,
                     documentId);
-
             return contentResolver.openInputStream(uri);
         }
         return null;

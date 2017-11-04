@@ -27,8 +27,9 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             Uri startUrl,
             String docId,
             String absPath,
+            boolean exists,
             Session session) {
-        super(contentResolver, startUrl, docId, absPath);
+        super(contentResolver, startUrl, docId, absPath, exists);
         this.session = session;
     }
 

@@ -28,6 +28,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
 
     protected abstract T createFile(ContentResolver contentResolver, Uri startUrl, String absPath);
     protected abstract T createFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath);
+    protected abstract T createFileNonExistant(ContentResolver contentResolver, Uri startUrl, String name, String absPath);
 
     public T getFile(String file) {
         logger.trace("getFile({})", file);
@@ -73,6 +74,8 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                             }
                         }
                     }
+                    // not found -> probably upload -> create object just with name
+                    return createFileNonExistant(contentResolver, startUrl, currentPart, Utils.toPath(parts));
                 } finally {
                     closeQuietly(childCursor);
                 }

@@ -25,8 +25,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             Uri startUrl,
             String docId,
             String absPath,
+            boolean exists,
             User user) {
-        super(contentResolver, startUrl, docId, absPath);
+        super(contentResolver, startUrl, docId, absPath, exists);
         this.user = user;
     }
 
