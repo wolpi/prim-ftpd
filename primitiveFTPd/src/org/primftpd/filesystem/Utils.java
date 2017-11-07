@@ -19,6 +19,10 @@ class Utils {
         if (".".equals(path) || "/.".equals(path)) {
             return homeDir;
         }
+        if (path.charAt(0) != '/') {
+            // assume it is relative to home dir, see GH issue #111
+            return homeDir + "/" + path;
+        }
         return path;
     }
 
