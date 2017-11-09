@@ -152,9 +152,9 @@ public class PrimitiveFtpdActivity extends Activity {
 			View storageContainer = findViewById(R.id.storageContainer);
 			((ViewManager)storageContainer.getParent()).removeView(storageContainer);
 			View safExplainHeading = findViewById(R.id.safExplainHeading);
-			((ViewManager)storageContainer.getParent()).removeView(safExplainHeading);
+			((ViewManager)safExplainHeading.getParent()).removeView(safExplainHeading);
 			View safExplain = findViewById(R.id.safExplain);
-			((ViewManager)storageContainer.getParent()).removeView(safExplain);
+			((ViewManager)safExplain.getParent()).removeView(safExplain);
 		}
 	}
 
@@ -326,7 +326,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 				} catch (UnsupportedOperationException e) {
 					// this seems to be the normal case for directory uris
-				} catch (SecurityException e) {
+				} catch (SecurityException | NullPointerException e) {
 					logger.debug("checkSafAccess failed: {}", e.toString());
 					hideWarning = false;
 				} finally {
