@@ -181,23 +181,25 @@ public class PrimitiveFtpdActivity extends Activity {
 		showUsername();
 		showAnonymousLogin();
 
-		// init storage type radio
-		switch (prefsBean.getStorageType()) {
-			case PLAIN:
-				((RadioButton)findViewById(R.id.radioStoragePlain)).setChecked(true);
-				break;
-			case ROOT:
-				((RadioButton)findViewById(R.id.radioStorageRoot)).setChecked(true);
-				break;
-			case SAF:
-				((RadioButton)findViewById(R.id.radioStorageSaf)).setChecked(true);
-				showSafUrl(prefsBean.getSafUrl());
-				break;
-			case RO_SAF:
-				((RadioButton)findViewById(R.id.radioStorageRoSaf)).setChecked(true);
-				showSafUrl(prefsBean.getSafUrl());
-				break;
-		}
+        // init storage type radio
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            switch (prefsBean.getStorageType()) {
+                case PLAIN:
+                    ((RadioButton) findViewById(R.id.radioStoragePlain)).setChecked(true);
+                    break;
+                case ROOT:
+                    ((RadioButton) findViewById(R.id.radioStorageRoot)).setChecked(true);
+                    break;
+                case SAF:
+                    ((RadioButton) findViewById(R.id.radioStorageSaf)).setChecked(true);
+                    showSafUrl(prefsBean.getSafUrl());
+                    break;
+                case RO_SAF:
+                    ((RadioButton) findViewById(R.id.radioStorageRoSaf)).setChecked(true);
+                    showSafUrl(prefsBean.getSafUrl());
+                    break;
+            }
+        }
 	}
 
 	@Override
