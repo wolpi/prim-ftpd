@@ -1,0 +1,25 @@
+apply plugin: 'java'
+
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+jar {
+    exclude('org/slf4j/LoggerFactory*')
+    exclude('org/slf4j/impl/StaticLoggerBinder*')
+}
+
+repositories {
+    jcenter();
+}
+
+dependencies {
+    compileOnly 'com.google.android:android:2.1.2'
+}

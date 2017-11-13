@@ -73,7 +73,7 @@ dependencies {
     // print dependency tree:
     // ./gradlew primitiveFTPd:dependencies --configuration compile
     compile project(':pftpd-pojo-lib')
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':slf4j-android-1.6.1-RC1')
     compile 'org.apache.ftpserver:ftpserver-core:1.1.1'
     compile 'org.apache.sshd:sshd-core:0.14.0'
     compile 'org.greenrobot:eventbus:3.0.0'
