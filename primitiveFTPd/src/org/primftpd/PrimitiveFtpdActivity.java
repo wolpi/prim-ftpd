@@ -147,12 +147,17 @@ public class PrimitiveFtpdActivity extends Activity {
 		// listen for events
 		EventBus.getDefault().register(this);
 
-		// hide storage type radios for old androids
+		// hide SAF storage type radios and texts for old androids
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			View storageContainer = findViewById(R.id.storageContainer);
-			((ViewManager)storageContainer.getParent()).removeView(storageContainer);
+			View radioStorageSaf = findViewById(R.id.radioStorageSaf);
+			((ViewManager)radioStorageSaf.getParent()).removeView(radioStorageSaf);
+
+			View radioStorageRoSaf = findViewById(R.id.radioStorageRoSaf);
+			((ViewManager)radioStorageRoSaf.getParent()).removeView(radioStorageRoSaf);
+
 			View safExplainHeading = findViewById(R.id.safExplainHeading);
 			((ViewManager)safExplainHeading.getParent()).removeView(safExplainHeading);
+
 			View safExplain = findViewById(R.id.safExplain);
 			((ViewManager)safExplain.getParent()).removeView(safExplain);
 		}
@@ -197,6 +202,15 @@ public class PrimitiveFtpdActivity extends Activity {
                 case RO_SAF:
                     ((RadioButton) findViewById(R.id.radioStorageRoSaf)).setChecked(true);
                     showSafUrl(prefsBean.getSafUrl());
+                    break;
+            }
+        } else {
+            switch (prefsBean.getStorageType()) {
+                case PLAIN:
+                    ((RadioButton) findViewById(R.id.radioStoragePlain)).setChecked(true);
+                    break;
+                case ROOT:
+                    ((RadioButton) findViewById(R.id.radioStorageRoot)).setChecked(true);
                     break;
             }
         }
