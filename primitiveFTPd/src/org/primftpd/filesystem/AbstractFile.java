@@ -100,7 +100,10 @@ public abstract class AbstractFile {
 
     public String readSymbolicLink() throws IOException {
         logger.trace("[{}] readSymbolicLink()", name);
-        return null;
+        //return null;
+        // returning null causes issues with some clients, e.g. GH issue #121
+        // let's try empty string and see what users report
+        return "";
     }
 
     public void createSymbolicLink(SshFile arg0)
