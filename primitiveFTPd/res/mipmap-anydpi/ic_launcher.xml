@@ -1,0 +1,4 @@
+<adaptive-icon xmlns:android="http://schemas.android.com/tools">
+    <background android:drawable="@color/blueIconDark"/>
+    <foreground android:drawable="@drawable/ic_launcher"/>
+</adaptive-icon>
