@@ -25,6 +25,7 @@ public class PrefsBean implements Serializable
 	private final boolean foregroundService;
 	private final ServerToStart serverToStart;
 	private final String ftpPassivePorts;
+	private final Integer idleTimeout;
 	private final StorageType storageType;
 	private final String safUrl;
 
@@ -42,6 +43,7 @@ public class PrefsBean implements Serializable
 		boolean foregroundService,
 		ServerToStart serverToStart,
 		String ftpPassivePorts,
+		Integer idleTimeout,
 		StorageType storageType,
 		String safUrl)
 	{
@@ -61,6 +63,7 @@ public class PrefsBean implements Serializable
 		this.foregroundService = foregroundService;
 		this.serverToStart = serverToStart;
 		this.ftpPassivePorts = ftpPassivePorts;
+		this.idleTimeout = idleTimeout;
 		this.storageType = storageType;
 		this.safUrl = safUrl;
 
@@ -125,6 +128,10 @@ public class PrefsBean implements Serializable
 
 	public String getFtpPassivePorts() {
 		return ftpPassivePorts;
+	}
+
+	public Integer getIdleTimeout() {
+		return idleTimeout;
 	}
 
 	public StorageType getStorageType() {

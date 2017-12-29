@@ -63,6 +63,8 @@
     <string name="prefSummaryForegroundService">Markiert Dienst(e) um im Vordergrund zu laufen. Auf manchen Geräten notwendig, um zu vermeiden, dass Dienst(e) abgebrochen werden.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
     <string name="prefSummaryFtpPassivePorts">Ports für FTP Passive-Daten-Verbindung. Kann ein einzelner Port, eine Liste oder Bereich von Ports sein. Z.B. 5678,5700-5710,5800,5900.</string>
+    <string name="prefTitleIdleTimeout">Server Idle Timeout</string>
+    <string name="prefSummaryIdleTimeout">Server wird ungenutzte Verbindungen nach dieser Zeit beenden (nur FTP)</string>
     <string name="prefSummaryTheme">Den Theme zu ändern kann einen App Neustart erfordern.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>

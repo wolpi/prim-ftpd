@@ -102,6 +102,13 @@
 			android:title="@string/prefTitleFtpPassivePorts"
 			android:summary="@string/prefSummaryFtpPassivePorts"
 			/>
+		<EditTextPreference
+			android:name="idleTimeout"
+			android:key="idleTimeoutPref"
+			android:title="@string/prefTitleIdleTimeout"
+			android:summary="@string/prefSummaryIdleTimeout"
+			android:numeric="integer"
+			/>
 		<ListPreference
 			android:name="theme"
 			android:key="themePref"

@@ -28,6 +28,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_THEME = "themePref";
 	public static final String PREF_KEY_LOGGING = "loggingPref";
 	public static final String PREF_KEY_FTP_PASSIVE_PORTS = "ftpPassivePortsPref";
+	public static final String PREF_KEY_IDLE_TIMEOUT = "idleTimeoutPref";
 	public static final String PREF_KEY_STORAGE_TYPE = "storageTypePref";
 	public static final String PREF_KEY_SAF_URL = "safUrlPref";
 
@@ -124,6 +125,19 @@ public class LoadPrefsUtil
 		return prefs.getString(
 				LoadPrefsUtil.PREF_KEY_FTP_PASSIVE_PORTS,
 				null);
+	}
+
+	public static Integer idleTimeout(SharedPreferences prefs) {
+		String str = prefs.getString(PREF_KEY_IDLE_TIMEOUT, "");
+		Integer val = null;
+		if (str != null && str.length() > 0) {
+			try {
+				val = Integer.valueOf(str);
+			} catch (NumberFormatException e) {
+				// never mind
+			}
+		}
+		return val;
 	}
 
 	public static StorageType storageType(SharedPreferences prefs) {
@@ -234,6 +248,9 @@ public class LoadPrefsUtil
 		String ftpPassivePorts = ftpPassivePorts(prefs);
 		logger.debug("got ftpPassivePorts: {}", ftpPassivePorts);
 
+		Integer idleTimeout = idleTimeout(prefs);
+		logger.debug("got idleTimeout: {}", idleTimeout);
+
 		int port = loadPortInsecure(logger, prefs);
 		logger.debug("got 'port': {}", Integer.valueOf(port));
 
@@ -261,6 +278,7 @@ public class LoadPrefsUtil
 				foregroundService,
 				serverToStart,
 				ftpPassivePorts,
+				idleTimeout,
 				storageType,
 				safUrl);
 	}
