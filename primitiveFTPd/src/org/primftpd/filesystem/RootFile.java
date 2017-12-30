@@ -101,26 +101,23 @@ public abstract class RootFile<T> extends AbstractFile {
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
 
-        // new file or existing file?
-        final String pathToUpdatePerm;
-        if (bean.isExists()) {
-            pathToUpdatePerm = absPath;
-        } else {
-            pathToUpdatePerm = absPath.substring(0, absPath.lastIndexOf('/'));
+        if (!bean.isExists()) {
+            // if file does not exist, explicitly create it as root, see GH issue #117
+            runCommand("touch" + " \"" + absPath + "\"");
         }
 
         // remember current permission
-        final String perm = readCommandOutput("stat -c %a \"" + pathToUpdatePerm + "\"");
+        final String perm = readCommandOutput("stat -c %a \"" + absPath + "\"");
 
         // set perm to be able to read file
-        runCommand("chmod 0777 \"" + pathToUpdatePerm + "\"");
+        runCommand("chmod 0777 \"" + absPath + "\"");
 
         return new FileOutputStream(absPath) {
             @Override
             public void close() throws IOException {
                 super.close();
                 // restore permission
-                runCommand("chmod 0" + perm + " \"" + pathToUpdatePerm + "\"");
+                runCommand("chmod 0" + perm + " \"" + absPath + "\"");
             }
         };
     }
