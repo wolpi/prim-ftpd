@@ -84,6 +84,9 @@
     <string name="safExplain">Android wird sie darum bitten ein Verzeichnis auszuwählen. Dieses wird über die Server verfügbar gemacht. Von Zeit zu Zeit kann die Berechtigung zurückgezogen werden und das Verzeichnis muss erneut ausgewählt werden.</string>
     <string name="selectedSafUri">Ausgewählte SAF URI:</string>
 
+    <string name="startServerAndExit">starte nur server</string>
+    <string name="startServerAndUi">starte mit server</string>
+
     <string-array name="prefWhichServerToStartNames">
         <item>FTP und SFTP</item>
         <item>nur FTP</item>

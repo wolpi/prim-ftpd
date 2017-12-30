@@ -90,6 +90,9 @@
     <string name="safExplain">Android will ask you to choose a directory. That will be available via server(s). From time to time permission might be revoked and you have to re-select.</string>
     <string name="selectedSafUri">Selected SAF URI:</string>
 
+    <string name="startServerAndExit">start server only</string>
+    <string name="startServerAndUi">start with server</string>
+
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
         <item>FTP only</item>
