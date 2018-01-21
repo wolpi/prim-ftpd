@@ -67,7 +67,11 @@ public class LsOutputParserTests {
         Assert.assertTrue(file2.isHasAcl());
         Assert.assertEquals("file_2", file2.getName());
         Assert.assertNotNull(file2.getDate());
-        Assert.assertEquals(1483317000000L, file2.getDate().getTime());
+        long expectedTime =
+                LsOutputParser.CURRENT_YEAR_MILLIS +
+                        (24 * 60 * 60 * 1000) +
+                        (30 * 60 * 1000);
+        Assert.assertEquals(expectedTime, file2.getDate().getTime());
     }
 
     @Test

@@ -194,7 +194,7 @@ public class LsOutputParser {
     private static final DateFormat DATE_FORMAT_2 = new SimpleDateFormat("dd. MMM yyyy");
     private static final DateFormat DATE_FORMAT_3 = new SimpleDateFormat("dd. MMM HH:mm");
 
-    private static final long CURRENT_YEAR_MILLIS;
+    static final long CURRENT_YEAR_MILLIS;
     static {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
