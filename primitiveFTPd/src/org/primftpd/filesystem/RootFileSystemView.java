@@ -31,13 +31,15 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
 
         final LsOutputParser parser = new LsOutputParser();
         final LsOutputBean[] wrapper = new LsOutputBean[1];
-        shell.addCommand("ls -lAd \"" + file + "\"", 0, new Shell.OnCommandResultListener() {
+        final String cmd = "ls -lAd \"" + file + "\"";
+        logger.trace("  running command: {}", cmd);
+        shell.addCommand(cmd, 0, new Shell.OnCommandResultListener() {
             @Override
             public void onCommandResult(int commandCode, int exitCode, List<String> output) {
                 if (exitCode == 0) {
                     wrapper[0] = parser.parseLine(output.get(0));
                 } else {
-                    logger.error("could not run 'ls' command:");
+                    logger.error("could not run 'ls' command");
                     for (String line : output) {
                         logger.error("{}", line);
                     }
