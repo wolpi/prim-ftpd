@@ -25,6 +25,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
         logger.trace("getFile({})", file);
 
         file = absolute(file);
+        logger.trace("  getFile(abs: {})", file);
 
         final LsOutputParser parser = new LsOutputParser();
         final LsOutputBean[] wrapper = new LsOutputBean[1];

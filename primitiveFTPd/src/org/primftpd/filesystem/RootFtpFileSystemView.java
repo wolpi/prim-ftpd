@@ -29,6 +29,7 @@ public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFi
 
     @Override
     protected String absolute(String file) {
+        logger.trace("  finding abs path for '{}' with wd '{}'", file, (workingDir != null ? workingDir.getAbsolutePath() : "null"));
         if (workingDir == null) {
             return file; // during c-tor
         }
@@ -36,13 +37,13 @@ public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFi
     }
 
     public RootFtpFile getHomeDirectory() {
-        logger.trace("getHomeDirectory()");
+        logger.trace("getHomeDirectory() -> {}", (homeDir != null ? homeDir.getAbsolutePath() : "null"));
 
         return homeDir;
     }
 
     public RootFtpFile getWorkingDirectory() {
-        logger.trace("getWorkingDirectory()");
+        logger.trace("getWorkingDirectory() -> {}", (workingDir != null ? workingDir.getAbsolutePath() : "null"));
 
         return workingDir;
     }
