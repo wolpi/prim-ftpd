@@ -20,8 +20,9 @@ public class BootUpReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// note: can be tested with:
+		// adb root
 		// adb shell
-		// am broadcast -a android.intent.action.BOOT_COMPLETED
+		// am broadcast -a android.intent.action.BOOT_COMPLETED -p org.primftpd
 
 		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
 			SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
