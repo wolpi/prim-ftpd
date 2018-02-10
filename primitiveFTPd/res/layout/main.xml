@@ -27,7 +27,8 @@
                 android:layout_height="wrap_content"
                 android:nextFocusDown="@+id/radioStoragePlain"
                 android:text="@string/startService"
-                style="?android:attr/buttonBarButtonStyle"/>
+                style="?android:attr/buttonBarButtonStyle"
+                android:focusedByDefault="true"/>
             <Button
                 android:id="@+id/fallbackButtonStopServer"
                 android:visibility="gone"
