@@ -129,6 +129,31 @@ public class PrimitiveFtpdActivity extends Activity {
 		setTheme(theme.resourceId());
 		setContentView(R.layout.main);
 
+		// leanback / tv / fallback buttons
+		if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN)) {
+			findViewById(R.id.fallbackButtonsContainer).setVisibility(View.VISIBLE);
+
+			findViewById(R.id.fallbackButtonStartServer).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					handleStart();
+				}
+			});
+			findViewById(R.id.fallbackButtonStopServer).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					handleStop();
+				}
+			});
+			findViewById(R.id.fallbackButtonPrefs).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					handlePrefs();
+				}
+			});
+		}
+
+
 		// calc keys fingerprints
 		calcPubkeyFingerprints();
 		showKeyFingerprints();
@@ -680,11 +705,6 @@ public class PrimitiveFtpdActivity extends Activity {
 	 * Updates enabled state of start/stop buttons.
 	 */
 	protected void updateButtonStates(Boolean running) {
-		if (startIcon == null || stopIcon == null) {
-			logger.debug("updateButtonStates(), no icons");
-			return;
-		}
-
 		logger.debug("updateButtonStates()");
 
 		boolean atLeastOneRunning;
@@ -695,13 +715,24 @@ public class PrimitiveFtpdActivity extends Activity {
 			atLeastOneRunning = running.booleanValue();
 		}
 
-		startIcon.setVisible(!atLeastOneRunning);
-		stopIcon.setVisible(atLeastOneRunning);
+		// update fallback buttons
+		findViewById(R.id.fallbackButtonStartServer).setVisibility(
+				atLeastOneRunning ? View.GONE : View.VISIBLE);
+		findViewById(R.id.fallbackButtonStopServer).setVisibility(
+				atLeastOneRunning ? View.VISIBLE : View.GONE);
 
 		// remove status bar notification if server not running
 		if (!atLeastOneRunning) {
 			NotificationUtil.removeStatusbarNotification(this);
 		}
+
+		// action bar icons
+		if (startIcon == null || stopIcon == null) {
+			return;
+		}
+
+		startIcon.setVisible(!atLeastOneRunning);
+		stopIcon.setVisible(atLeastOneRunning);
 	}
 
 	protected MenuItem startIcon;
