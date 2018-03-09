@@ -57,6 +57,8 @@
     <string name="prefSummaryWhichServerToStart">Choose whether to start FTP server only, SFTP server only or both.</string>
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Start server on system boot.</string>
+    <string name="prefTitleStartOnOpen">Start on open</string>
+    <string name="prefSummaryStartOnOpen">Start server when app is opened.</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>
     <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 public key in %s. SFTP only.</string>
     <string name="prefTitleAnonymousLogin">Anonymous Login</string>

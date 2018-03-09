@@ -23,6 +23,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_WAKELOCK = "wakelockPref";
 	public static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
 	public static final String PREF_KEY_START_ON_BOOT = "startOnBootPref";
+	public static final String PREF_KEY_START_ON_OPEN = "startOnOpenPref";
 	public static final String PREF_KEY_PUB_KEY_AUTH = "pubKeyAuthPref";
 	public static final String PREF_KEY_FOREGROUND_SERVICE = "foregroundServicePref";
 	public static final String PREF_KEY_THEME = "themePref";
@@ -92,6 +93,12 @@ public class LoadPrefsUtil
 	public static Boolean startOnBoot(SharedPreferences prefs) {
 		return prefs.getBoolean(
 			LoadPrefsUtil.PREF_KEY_START_ON_BOOT,
+			Boolean.FALSE);
+	}
+
+	public static Boolean startOnOpen(SharedPreferences prefs) {
+		return prefs.getBoolean(
+			LoadPrefsUtil.PREF_KEY_START_ON_OPEN,
 			Boolean.FALSE);
 	}
 

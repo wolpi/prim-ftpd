@@ -186,6 +186,13 @@ public class PrimitiveFtpdActivity extends Activity {
 			View safExplain = findViewById(R.id.safExplain);
 			((ViewManager)safExplain.getParent()).removeView(safExplain);
 		}
+
+		// start on open ?
+		Boolean startOnOpen = LoadPrefsUtil.startOnOpen(prefs);
+		if (startOnOpen) {
+			PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
+			ServicesStartStopUtil.startServers(getBaseContext(), prefsBean, this);
+		}
 	}
 
 	@Override

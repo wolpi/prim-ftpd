@@ -83,26 +83,6 @@
         </activity>
 
         <activity
-            android:name=".StartServerAndExitActivity"
-            android:label="@string/startServerAndExit"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".StartServerAndUiActivity"
-            android:label="@string/startServerAndUi"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name="org.primftpd.prefs.FtpPrefsActivityThemeDark"
             android:label="@string/prefCategoryTitle"
             android:theme="@style/PrimFtpdDarkTheme">

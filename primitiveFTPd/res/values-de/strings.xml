@@ -57,6 +57,8 @@
     <string name="prefSummaryWhichServerToStart">Welche Server sollen gestartet werden: nur FTP-Server, nur SFTP-Server oder beide.</string>
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Server beim System-Boot starten.</string>
+    <string name="prefTitleStartOnOpen">Start beim Öffnen</string>
+    <string name="prefSummaryStartOnOpen">Starte Server beim öffnen der App.</string>
     <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 public key in %s ab. Nur SFTP.</string>
     <string name="prefSummaryAnonymousLogin">Anonymous Login erlauben.</string>
     <string name="prefForegroundService">Vordergrunddienst(e)</string>

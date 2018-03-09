@@ -30,7 +30,8 @@
 			android:summary="@string/prefSummaryWhichServerToStart"
 			android:defaultValue="0"
 			android:entries="@array/prefWhichServerToStartNames"
-			android:entryValues="@array/prefWhichServerToStartValues" />
+			android:entryValues="@array/prefWhichServerToStartValues"
+		/>
 		<org.primftpd.prefs.PortEditTextPreference
 			android:name="port"
 			android:key="portPref"
@@ -52,7 +53,6 @@
 			android:key="startDirPref"
 			android:title="@string/prefTitleStartDir"
 			android:summary="@string/prefSummaryStartDir"
-
 		/>
 		<SwitchPreference
 			android:name="wakelock"
@@ -81,34 +81,41 @@
 			android:defaultValue="false"
 			android:title="@string/prefTitleStartOnBoot"
 			android:summary="@string/prefSummaryStartOnBoot"
-			/>
+		/>
+		<SwitchPreference
+			android:name="startOnOpen"
+			android:key="startOnOpenPref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleStartOnOpen"
+			android:summary="@string/prefSummaryStartOnOpen"
+		/>
 		<SwitchPreference
 			android:name="pubKeyAuth"
 			android:key="pubKeyAuthPref"
 			android:defaultValue="false"
 			android:title="@string/prefTitlePubKeyAuth"
 			android:summary="@string/prefSummaryPubKeyAuth"
-			/>
+		/>
 		<SwitchPreference
 			android:name="foregroundService"
 			android:key="foregroundServicePref"
 			android:defaultValue="false"
 			android:title="@string/prefForegroundService"
 			android:summary="@string/prefSummaryForegroundService"
-			/>
+		/>
 		<EditTextPreference
 			android:name="ftpPassivePorts"
 			android:key="ftpPassivePortsPref"
 			android:title="@string/prefTitleFtpPassivePorts"
 			android:summary="@string/prefSummaryFtpPassivePorts"
-			/>
+		/>
 		<EditTextPreference
 			android:name="idleTimeout"
 			android:key="idleTimeoutPref"
 			android:title="@string/prefTitleIdleTimeout"
 			android:summary="@string/prefSummaryIdleTimeout"
 			android:numeric="integer"
-			/>
+		/>
 		<ListPreference
 			android:name="theme"
 			android:key="themePref"
@@ -116,7 +123,8 @@
 			android:summary="@string/prefSummaryTheme"
 			android:defaultValue="0"
 			android:entries="@array/prefThemeNames"
-			android:entryValues="@array/prefThemeValues" />
+			android:entryValues="@array/prefThemeValues"
+		/>
 		<ListPreference
 			android:name="logging"
 			android:key="loggingPref"
@@ -124,7 +132,8 @@
 			android:summary="@string/prefSummaryLogging"
 			android:defaultValue="0"
 			android:entries="@array/prefLoggingNames"
-			android:entryValues="@array/prefLoggingValues" />
+			android:entryValues="@array/prefLoggingValues"
+		/>
 
 	</PreferenceCategory>
 </PreferenceScreen>
