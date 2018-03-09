@@ -128,6 +128,10 @@ public class LoadPrefsUtil
 		return Theme.byXmlVal(themeStr);
 	}
 
+	public static void storeLogging(SharedPreferences prefs, Logging value) {
+		prefs.edit().putString(PREF_KEY_LOGGING, value.xmlValue()).commit();
+	}
+
 	public static String ftpPassivePorts(SharedPreferences prefs) {
 		return prefs.getString(
 				LoadPrefsUtil.PREF_KEY_FTP_PASSIVE_PORTS,

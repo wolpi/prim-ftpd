@@ -96,6 +96,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	public static final String PUBLICKEY_FILENAME = "pftpd-pub.bin";
 	public static final String PRIVATEKEY_FILENAME = "pftpd-priv.pk8";
 	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0xBEEF;
+	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING = 0xCAFE;
 
 	public static final String DIALOG_TAG = "dialogs";
 
@@ -815,16 +816,25 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		boolean granted = grantResults.length > 0
+				&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
 		switch (requestCode) {
 			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
 				// If request is cancelled, the result arrays are empty.
-				boolean granted = grantResults.length > 0
-						&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
-				if(granted) {
+				if (granted) {
 					ServicesStartStopUtil.startServers(this, prefsBean, this);
 				} else {
 					String textPara = getString(R.string.permissionNameStorage);
 					Toast.makeText(this, getString(R.string.permissionRequired, textPara), Toast.LENGTH_LONG).show();
+				}
+			}
+			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING: {
+				if (granted) {
+					PrimFtpdLoggerBinder.setLoggingPref(Logging.TEXT);
+					this.logger = LoggerFactory.getLogger(getClass());
+				} else {
+					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+					LoadPrefsUtil.storeLogging(prefs, Logging.NONE);
 				}
 			}
 		}
@@ -893,8 +903,19 @@ public class PrimitiveFtpdActivity extends Activity {
 		Logging logging = Logging.byXmlVal(loggingStr);
 		// one could argue if this makes sense :)
 		logger.debug("got 'logging': {}", logging);
-		PrimFtpdLoggerBinder.setLoggingPref(logging);
-		// re-create own log, don't care about other classes
-		this.logger = LoggerFactory.getLogger(getClass());
+
+		boolean recreateLogger = true;
+		// request storage permission if necessary for logging
+		if (logging == Logging.TEXT) {
+			recreateLogger = hasPermission(
+					Manifest.permission.WRITE_EXTERNAL_STORAGE,
+					PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING);
+		}
+
+		if (recreateLogger) {
+			// re-create own log, don't care about other classes
+			PrimFtpdLoggerBinder.setLoggingPref(logging);
+			this.logger = LoggerFactory.getLogger(getClass());
+		}
 	}
 }
