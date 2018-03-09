@@ -25,8 +25,8 @@ android {
         applicationId "org.primftpd"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 33
-        versionName "5.7"
+        versionCode 34
+        versionName "5.8-SNAPSHOT"
     }
 
     buildTypes {
