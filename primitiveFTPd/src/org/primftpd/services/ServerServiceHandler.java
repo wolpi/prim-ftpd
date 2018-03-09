@@ -140,7 +140,11 @@ public class ServerServiceHandler extends Handler
 		if (wakeLock != null) {
 			if (wakeLock.isHeld()) {
 				logger.debug("releasing wake lock ({})", logName);
-				wakeLock.release();
+				try {
+					wakeLock.release();
+				} catch (Exception e) {
+					logger.warn("error while releasing wake lock", e);
+				}
 			} else {
 				logger.debug("wake lock not held, not releasing it ({})", logName);
 			}

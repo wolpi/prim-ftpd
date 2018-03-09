@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -283,21 +284,26 @@ public class PrimitiveFtpdActivity extends Activity {
 		StorageType storageType = null;
 
 		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-		switch(view.getId()) {
-			case R.id.radioStoragePlain:
-				storageType = StorageType.PLAIN;
-				break;
-			case R.id.radioStorageRoot:
-				storageType = StorageType.ROOT;
-				break;
-			case R.id.radioStorageSaf:
-				storageType = StorageType.SAF;
-				startActivityForResult(intent, 0);
-				break;
-			case R.id.radioStorageRoSaf:
-				storageType = StorageType.RO_SAF;
-				startActivityForResult(intent, 0);
-				break;
+		try {
+			switch (view.getId()) {
+				case R.id.radioStoragePlain:
+					storageType = StorageType.PLAIN;
+					break;
+				case R.id.radioStorageRoot:
+					storageType = StorageType.ROOT;
+					break;
+				case R.id.radioStorageSaf:
+					storageType = StorageType.SAF;
+					startActivityForResult(intent, 0);
+					break;
+				case R.id.radioStorageRoSaf:
+					storageType = StorageType.RO_SAF;
+					startActivityForResult(intent, 0);
+					break;
+			}
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(getBaseContext(), "SAF seems to be broken on your device :(", Toast.LENGTH_SHORT);
+			storageType = StorageType.PLAIN;
 		}
 
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
