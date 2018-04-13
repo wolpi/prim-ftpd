@@ -87,11 +87,10 @@ public class ServerServiceHandler extends Handler
 				if (service.prefsBean.isAnnounce()) {
 					service.announceService();
 				}
+
+				// make service high priority
 				Notification notification = ServicesStartStopUtil.updateNonActivityUI(service, true);
-				if (service.prefsBean.isForegroundService()) {
-					logger.debug("setting server to foreground ({})", logName);
-					service.startForeground(NotificationUtil.NOTIFICATION_ID, notification);
-				}
+				service.startForeground(NotificationUtil.NOTIFICATION_ID, notification);
 			} else {
 				service.stopSelf();
 			}

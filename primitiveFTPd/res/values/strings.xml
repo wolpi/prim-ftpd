@@ -63,8 +63,6 @@
     <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 public key in %s. SFTP only.</string>
     <string name="prefTitleAnonymousLogin">Anonymous Login</string>
     <string name="prefSummaryAnonymousLogin">Set if anonymous login is allowed on the server.</string>
-    <string name="prefForegroundService">Foreground Service(s)</string>
-    <string name="prefSummaryForegroundService">Marks service(s) to be run in foreground. Required on some devices to avoid service(s) to be terminated.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
     <string name="prefSummaryFtpPassivePorts">Ports for FTP passive data connection. May be a single port, a list or range of ports. E.g. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Server Idle Timeout</string>

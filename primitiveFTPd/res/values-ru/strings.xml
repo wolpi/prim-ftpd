@@ -22,11 +22,9 @@
     <string name="portLabel">Порт</string>
     <string name="portsEqual_v2">Номера портов должны быть разными.</string>
     <string name="prefCategoryTitle">Настройки FTP сервера</string>
-    <string name="prefForegroundService">Сервис(ы) на переднем плане</string>
     <string name="prefSummaryAnnounce">Публикует FTP сервер в локальной сети через DNS-SD (Bonjour). На некоторых устройствах может приводить к падению приложения.</string>
     <string name="prefSummaryAnnounceName">Имя, под которым публикуется сервер.</string>
     <string name="prefSummaryAnonymousLogin">Разрешает анонимный вход на сервер.</string>
-    <string name="prefSummaryForegroundService">Сервис(ы) будут выполняться на переднем плане. Предотвращает остановку сервисов на некоторых устройствах.</string>
     <string name="prefSummaryFtpPassivePorts">Порты для пассивного подключения данных FTP. Можно указать одиночный порт, список или диапазон портов. Например, 5678,5700-5710,5800,5900.</string>
     <string name="prefSummaryLogging">Журнал помогает анализировать ошибки. Если приложение работает некорректно на вашем устройстве, вы можете отправить журнал разработчикам.\nМожет потребовать перезапуска приложения.</string>
     <string name="prefSummaryPassword">Пароль FTP сервера</string>

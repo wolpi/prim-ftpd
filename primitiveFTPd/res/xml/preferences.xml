@@ -96,13 +96,6 @@
 			android:title="@string/prefTitlePubKeyAuth"
 			android:summary="@string/prefSummaryPubKeyAuth"
 		/>
-		<SwitchPreference
-			android:name="foregroundService"
-			android:key="foregroundServicePref"
-			android:defaultValue="false"
-			android:title="@string/prefForegroundService"
-			android:summary="@string/prefSummaryForegroundService"
-		/>
 		<EditTextPreference
 			android:name="ftpPassivePorts"
 			android:key="ftpPassivePortsPref"

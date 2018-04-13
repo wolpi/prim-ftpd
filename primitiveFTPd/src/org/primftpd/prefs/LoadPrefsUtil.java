@@ -25,7 +25,6 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_START_ON_BOOT = "startOnBootPref";
 	public static final String PREF_KEY_START_ON_OPEN = "startOnOpenPref";
 	public static final String PREF_KEY_PUB_KEY_AUTH = "pubKeyAuthPref";
-	public static final String PREF_KEY_FOREGROUND_SERVICE = "foregroundServicePref";
 	public static final String PREF_KEY_THEME = "themePref";
 	public static final String PREF_KEY_LOGGING = "loggingPref";
 	public static final String PREF_KEY_FTP_PASSIVE_PORTS = "ftpPassivePortsPref";
@@ -106,12 +105,6 @@ public class LoadPrefsUtil
 		return prefs.getBoolean(
 			LoadPrefsUtil.PREF_KEY_PUB_KEY_AUTH,
 			Boolean.FALSE);
-	}
-
-	public static Boolean foregroundService(SharedPreferences prefs) {
-		return prefs.getBoolean(
-				LoadPrefsUtil.PREF_KEY_FOREGROUND_SERVICE,
-				Boolean.FALSE);
 	}
 
 	public static ServerToStart serverToStart(SharedPreferences prefs) {
@@ -250,9 +243,6 @@ public class LoadPrefsUtil
 		boolean pubKeyAuth = pubKeyAuth(prefs);
 		logger.debug("got pubKeyAuth: {}", Boolean.valueOf(pubKeyAuth));
 
-		boolean foregroundService = foregroundService(prefs);
-		logger.debug("got foregroundService: {}", Boolean.valueOf(foregroundService));
-
 		ServerToStart serverToStart = serverToStart(prefs);
 		logger.debug("got 'which server': {}", serverToStart);
 
@@ -286,7 +276,6 @@ public class LoadPrefsUtil
 				announceName,
 				wakelock,
 				pubKeyAuth,
-				foregroundService,
 				serverToStart,
 				ftpPassivePorts,
 				idleTimeout,

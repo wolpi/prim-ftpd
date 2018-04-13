@@ -61,8 +61,6 @@
     <string name="prefSummaryStartOnOpen">Starte Server beim öffnen der App.</string>
     <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 public key in %s ab. Nur SFTP.</string>
     <string name="prefSummaryAnonymousLogin">Anonymous Login erlauben.</string>
-    <string name="prefForegroundService">Vordergrunddienst(e)</string>
-    <string name="prefSummaryForegroundService">Markiert Dienst(e) um im Vordergrund zu laufen. Auf manchen Geräten notwendig, um zu vermeiden, dass Dienst(e) abgebrochen werden.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
     <string name="prefSummaryFtpPassivePorts">Ports für FTP Passive-Daten-Verbindung. Kann ein einzelner Port, eine Liste oder Bereich von Ports sein. Z.B. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Server Idle-Timeout</string>
