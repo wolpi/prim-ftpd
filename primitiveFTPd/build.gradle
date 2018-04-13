@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-	google()
+        google()
         jcenter()
     }
 
@@ -11,6 +11,7 @@ buildscript {
 }
 
 repositories {
+    google()
     jcenter()
 }
 
@@ -67,17 +68,17 @@ android {
 }
 
 configurations {
-    compile.exclude group: 'org.slf4j', module: 'slf4j-api'
+    implementation.exclude group: 'org.slf4j', module: 'slf4j-api'
 }
 
 dependencies {
     // print dependency tree:
-    // ./gradlew primitiveFTPd:dependencies --configuration compile
-    compile project(':pftpd-pojo-lib')
-    compile project(':slf4j-android-1.6.1-RC1')
-    compile 'org.apache.ftpserver:ftpserver-core:1.1.1'
-    compile 'org.apache.sshd:sshd-core:0.14.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.nononsenseapps:filepicker:4.0.0'
-    compile 'eu.chainfire:libsuperuser:1.0.0.201704021214'
+    // ./gradlew primitiveFTPd:dependencies --configuration implementation
+    implementation project(':pftpd-pojo-lib')
+    implementation project(':slf4j-android-1.6.1-RC1')
+    implementation 'org.apache.ftpserver:ftpserver-core:1.1.1'
+    implementation 'org.apache.sshd:sshd-core:0.14.0'
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'com.nononsenseapps:filepicker:4.0.0'
+    implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
 }
