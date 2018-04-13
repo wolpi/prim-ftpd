@@ -76,7 +76,7 @@ public abstract class RootFile<T> extends AbstractFile {
         List<T> result = new ArrayList<>();
         final LsOutputParser parser = new LsOutputParser();
         final List<LsOutputBean> beans = new ArrayList<>();
-        shell.addCommand("ls -lA " + absPath, 0, new Shell.OnCommandLineListener() {
+        shell.addCommand("ls -la " + absPath, 0, new Shell.OnCommandLineListener() {
             @Override
             public void onLine(String s) {
                 LsOutputBean bean = parser.parseLine(s);
