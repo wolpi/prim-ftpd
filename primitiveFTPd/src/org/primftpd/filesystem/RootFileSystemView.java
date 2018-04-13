@@ -40,8 +40,10 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
                     wrapper[0] = parser.parseLine(output.get(0));
                 } else {
                     logger.error("could not run 'ls' command");
-                    for (String line : output) {
-                        logger.error("{}", line);
+                    if (output != null) {
+                        for (String line : output) {
+                            logger.error("{}", line);
+                        }
                     }
                 }
             }
