@@ -68,13 +68,29 @@ public class ServicesStartStopUtil {
                 }
                 if (keyPresent) {
                     LOGGER.debug("going to start sshd");
-                    context.startService(createSshServiceIntent(context, prefsBean));
+                    try {
+                        context.startService(createSshServiceIntent(context, prefsBean));
+                    } catch (Exception e) {
+                        LOGGER.error("could not start sftp server", e);
+                        Toast.makeText(
+                                context,
+                                "could not start sftp server, " + e.getMessage(),
+                                Toast.LENGTH_SHORT);
+                    }
                 }
             }
             if (continueServerStart) {
                 if (prefsBean.getServerToStart().startFtp()) {
                     LOGGER.debug("going to start ftpd");
-                    context.startService(createFtpServiceIntent(context, prefsBean));
+                    try {
+                        context.startService(createFtpServiceIntent(context, prefsBean));
+                    } catch (Exception e) {
+                        LOGGER.error("could not start ftp server", e);
+                        Toast.makeText(
+                                context,
+                                "could not start ftp server, " + e.getMessage(),
+                                Toast.LENGTH_SHORT);
+                    }
                 }
             }
         }
