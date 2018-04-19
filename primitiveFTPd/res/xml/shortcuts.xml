@@ -5,8 +5,8 @@
         android:shortcutId="RunSettings"
         android:enabled="true"
         android:icon="@drawable/ic_settings_black_18dp"
-        android:shortcutShortLabel="@string/label_short_screen"
-        android:shortcutLongLabel="@string/label_long_screen">
+        android:shortcutShortLabel="@string/prefs"
+        android:shortcutLongLabel="@string/prefs">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="org.primftpd"
