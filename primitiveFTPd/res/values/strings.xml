@@ -122,7 +122,4 @@
         <item>2</item>
     </string-array>
 
-    <string name="label_short_screen">Preferences</string>
-    <string name="label_long_screen">Preferences</string>
-
 </resources>
