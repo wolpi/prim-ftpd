@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="RunSettings"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings_black_18dp"
+        android:shortcutShortLabel="@string/prefs"
+        android:shortcutLongLabel="@string/prefs">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="org.primftpd"
+            android:targetClass="org.primftpd.prefs.FtpPrefsActivityThemeDark" />
+    </shortcut>
+</shortcuts>
