@@ -23,21 +23,21 @@
     <string name="portsEqual_v2">Номера портов должны быть разными.</string>
     <string name="prefCategoryTitle">Настройки FTP сервера</string>
     <string name="prefForegroundService">Сервис(ы) на переднем плане</string>
-    <string name="prefSummaryAnnounce">Публикует FTP сервер в локальной сети через DNS-SD (Bonjour). На некоторых устройствах может приводить к падению приложения.</string>
+    <string name="prefSummaryAnnounce">Публикует FTP сервер в локальной сети через DNS-SD (Bonjour). На некоторых устройствах может приводить к закрытию приложения.</string>
     <string name="prefSummaryAnnounceName">Имя, под которым публикуется сервер.</string>
     <string name="prefSummaryAnonymousLogin">Разрешает анонимный вход на сервер.</string>
     <string name="prefSummaryForegroundService">Сервис(ы) будут выполняться на переднем плане. Предотвращает остановку сервисов на некоторых устройствах.</string>
     <string name="prefSummaryFtpPassivePorts">Порты для пассивного подключения данных FTP. Можно указать одиночный порт, список или диапазон портов. Например, 5678,5700-5710,5800,5900.</string>
-    <string name="prefSummaryLogging">Журнал помогает анализировать ошибки. Если приложение работает некорректно на вашем устройстве, вы можете отправить журнал разработчикам.\nМожет потребовать перезапуска приложения.</string>
+    <string name="prefSummaryLogging">Журнал помогает анализировать ошибки. Если приложение работает некорректно на вашем устройстве, вы можете отправить журнал разработчикам.\nМожет потребоваться перезапуск приложения.</string>
     <string name="prefSummaryPassword">Пароль FTP сервера</string>
     <string name="prefSummaryPort">Порт FTP сервера</string>
     <string name="prefSummaryPortSecure">Порт FTP сервера (с шифрованием)</string>
     <string name="prefSummaryPubKeyAuth">Если включено, разместите ваши открытые ключи ssh2 в %s. Только для SFTP.</string>
     <string name="prefSummaryStartDir">Директория, отображаемая при входе на сервер</string>
     <string name="prefSummaryStartOnBoot">Запускать сервер после загрузки системы.</string>
-    <string name="prefSummaryTheme">Смена темы оформления может потребовать перезапуска приложения.</string>
+    <string name="prefSummaryTheme">Смена темы оформления, может потребоваться перезапуск приложения.</string>
     <string name="prefSummaryUser">Имя пользователя FTP сервера</string>
-    <string name="prefSummaryWakelock">Предотвращает засыпание устройства, когда сервер запущен. Засыпание может приводить к остановке передач файлов.</string>
+    <string name="prefSummaryWakelock">Предотвращает засыпание устройства, когда сервер запущен. Засыпание может приводить к прекращению передачи файлов.</string>
     <string name="prefSummaryWhichServerToStart">Выберите серверы для запуска: FTP, SFTP или оба одновременно.</string>
     <string name="prefTheme">Тема</string>
     <string name="prefTitleAnnounce">Опубликовать сервер в локальной сети</string>
@@ -50,7 +50,7 @@
     <string name="prefTitlePortSecure">Порт с шифрованием</string>
     <string name="prefTitlePubKeyAuth">Аутентификация по ключу</string>
     <string name="prefTitleStartDir">Корневая директория сервера</string>
-    <string name="prefTitleStartOnBoot">Запускать при загрузке</string>
+    <string name="prefTitleStartOnBoot">Автозапуск</string>
     <string name="prefTitleUser">Имя пользователя</string>
     <string name="prefTitleWakelock">Предотвращать засыпание устройства</string>
     <string name="prefTitleWhichServerToStart">Запускаемые серверы</string>
@@ -78,6 +78,22 @@
     <string name="storageTypeRoot">Суперпользователь (необходим root на устройстве)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF) (например, для карты SD)</string>
     <string name="toggleService">Переключить запуск/остановку сервера</string>
-    <string name="widgetTextStart">запустить (s)ftpd</string>
-    <string name="widgetTextStop">остановить (s)ftpd</string>
+    <string name="widgetTextStart">Запуск ftpd</string>
+    <string name="widgetTextStop">Отключить ftpd</string>
+    <string name="prefTitleIdleTimeout">Время бездействия</string>
+    <string name="prefSummaryIdleTimeout">Сервер остановится после указанного времени бездействия (только для FTP)</string>
+    <string name="prefTitleStartOnOpen">Запуск при открытии</string>
+    <string name="prefSummaryStartOnOpen">Запуск сервера при открытии приложения</string>
+
+    <string-array name="prefThemeNames">
+        <item>Темная</item>
+        <item>Светлая</item>
+    </string-array>
+
+    <string-array name="prefWhichServerToStartNames">
+        <item>FTP и SFTP</item>
+        <item>Только FTP</item>
+        <item>Только SFTP</item>
+    </string-array>
+
 </resources>
