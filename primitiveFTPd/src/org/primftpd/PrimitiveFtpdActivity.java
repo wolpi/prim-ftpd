@@ -779,6 +779,10 @@ public class PrimitiveFtpdActivity extends Activity {
 		case R.id.menu_prefs:
 			handlePrefs();
 			break;
+		case R.id.menu_translate:
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://pftpd.rocks/projects/pftpd/pftpd/"));
+			startActivity(intent);
+			break;
 		case R.id.menu_about:
 			handleAbout();
 			break;
