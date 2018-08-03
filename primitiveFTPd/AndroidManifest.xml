@@ -181,6 +181,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="org.primftpd.StartServerAndExitActivity"
+            android:label="@string/startService">
+        </activity>
+
         <service android:name="org.primftpd.services.FtpServerService" />
         <service android:name="org.primftpd.services.SshServerService" />
         <service android:name="org.primftpd.services.ServicesStartingService" />
