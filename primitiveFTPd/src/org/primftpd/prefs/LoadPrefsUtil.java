@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import org.apache.ftpserver.impl.PassivePorts;
 import org.primftpd.PrefsBean;
 import org.primftpd.util.Defaults;
 import org.slf4j.Logger;
@@ -126,9 +127,14 @@ public class LoadPrefsUtil
 	}
 
 	public static String ftpPassivePorts(SharedPreferences prefs) {
-		return prefs.getString(
+		String passivePorts = null;
+		String prefVal = prefs.getString(
 				LoadPrefsUtil.PREF_KEY_FTP_PASSIVE_PORTS,
 				null);
+		if (prefVal != null && validateFtpPassivePorts(prefVal)) {
+			passivePorts = prefVal;
+		}
+		return passivePorts;
 	}
 
 	public static Integer idleTimeout(SharedPreferences prefs) {
@@ -216,6 +222,15 @@ public class LoadPrefsUtil
 	 */
 	static boolean validatePort(int port) {
 		return port > 1024 && port <= 64000;
+	}
+
+	static boolean validateFtpPassivePorts(String ports) {
+		try {
+			new PassivePorts(ports, false);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 	public static PrefsBean loadPrefs(Logger logger, SharedPreferences prefs) {

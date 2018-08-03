@@ -35,6 +35,7 @@
     <string name="restartServer">Sie müssen den Server neu starten damit die Änderungen wirksam werden.</string>
     <string name="invalidDir">Verzeichnis ist ungültig.</string>
     <string name="couldNotReadKeyAuthKey">Öffentlicher Schlüssel für key authentication konnte nicht gelesen werden. Prüfen sie die Logs.</string>
+    <string name="ftpPassivePortsInvalid">Wert für FTP Passive Ports ist ungültig.</string>
 
     <string name="prefs">Einstellungen</string>
     <string name="prefCategoryTitle">FTP-Server Einstellungen</string>

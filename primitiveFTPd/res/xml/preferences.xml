@@ -96,7 +96,7 @@
 			android:title="@string/prefTitlePubKeyAuth"
 			android:summary="@string/prefSummaryPubKeyAuth"
 		/>
-		<EditTextPreference
+		<org.primftpd.prefs.FtpPassivePortsEditTextPreference
 			android:name="ftpPassivePorts"
 			android:key="ftpPassivePortsPref"
 			android:title="@string/prefTitleFtpPassivePorts"

@@ -35,6 +35,7 @@
     <string name="restartServer">You have to restart Server for changes to take effect.</string>
     <string name="invalidDir">Directory is not valid.</string>
     <string name="couldNotReadKeyAuthKey">Public key for key authentication could not be read. Check logs.</string>
+    <string name="ftpPassivePortsInvalid">Value of FTP Passive Ports is invalid.</string>
 
     <string name="prefs">Preferences</string>
     <string name="prefCategoryTitle">FTP Server Preferences</string>
