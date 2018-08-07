@@ -73,7 +73,7 @@ configurations {
 
 dependencies {
     // print dependency tree:
-    // ./gradlew primitiveFTPd:dependencies --configuration implementation
+    // ./gradlew primitiveFTPd:dependencies --configuration releaseCompileClasspath
     implementation project(':pftpd-pojo-lib')
     implementation project(':slf4j-android-1.6.1-RC1')
     implementation 'org.apache.ftpserver:ftpserver-core:1.1.1'
