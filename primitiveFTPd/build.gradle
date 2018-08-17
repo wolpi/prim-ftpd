@@ -5,8 +5,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.1'
-        classpath 'com.github.nrudenko:gradle-android-cq-plugin:0.1+'
+        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.github.nrudenko:gradle-android-cq-plugin:0.1.7'
     }
 }
 
@@ -19,13 +19,13 @@ apply plugin: 'com.android.application'
 //apply plugin: 'android-cq'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
     buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "org.primftpd"
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 36
         versionName "5.10-SNAPSHOT"
     }
