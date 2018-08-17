@@ -2,6 +2,8 @@ package org.primftpd.util;
 
 import android.app.ActivityManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -34,6 +36,8 @@ import java.util.List;
 public class ServicesStartStopUtil {
 
     public static final String EXTRA_PREFS_BEAN = "prefs.bean";
+
+    public static final String NOTIFICATION_CHANNEL_ID = "pftpd running";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServicesStartStopUtil.class);
 
@@ -157,8 +161,19 @@ public class ServicesStartStopUtil {
         Intent stopIntent = new Intent(ctxt, ServicesStartingService.class);
         PendingIntent pendingStopIntent = PendingIntent.getService(ctxt, 0, stopIntent, 0);
 
+        // create channel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    NOTIFICATION_CHANNEL_ID,
+                    NotificationManager.IMPORTANCE_LOW);
+            NotificationManager notificationManager = ctxt.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
         // create notification
-        int icon = R.drawable.ic_notification;
+        int iconId = R.drawable.ic_notification;
+        int stopIconId = R.drawable.ic_stop_white_24dp;
         CharSequence tickerText = ctxt.getText(R.string.serverRunning);
         CharSequence contentTitle = ctxt.getText(R.string.notificationTitle);
         CharSequence contentText = tickerText;
@@ -174,23 +189,31 @@ public class ServicesStartStopUtil {
                 .setTicker(tickerText)
                 .setContentTitle(contentTitle)
                 .setContentText(contentText)
-                .setSmallIcon(icon)
+                .setSmallIcon(iconId)
                 .setLargeIcon(largeIcon)
                 .setContentIntent(contentIntent)
                 .setWhen(when);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId(NOTIFICATION_CHANNEL_ID);
+        }
+
+        // notification action
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // TODO check icon for android 7
+            Icon icon = Icon.createWithResource(ctxt, stopIconId);
             Notification.Action stopAction = new Notification.Action.Builder(
-                    Icon.createWithResource("", R.drawable.ic_stop_white_24dp),
+                    icon,
                     ctxt.getString(R.string.stopService),
                     pendingStopIntent).build();
             builder.addAction(stopAction);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             builder.addAction(
-                    R.drawable.ic_stop_white_24dp,
+                    stopIconId,
                     ctxt.getString(R.string.stopService),
                     pendingStopIntent);
         }
+
+        // finally notification itself
         Notification notification = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             notification = builder.build();
