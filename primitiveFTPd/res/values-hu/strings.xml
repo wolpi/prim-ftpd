@@ -1,2 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="app_name">primitív ftpd</string>
+    <string name="ifacesLabel">Hálózati felület</string>
+    <string name="ipAddrLabel">IP cím</string>
+    <string name="ifacesError">Hiba:</string>
+    <string name="protocolLabel">Protokol</string>
+    <string name="portLabel">Port</string>
+    <string name="fingerprintsLabel">Ujjlenyomatos kulcs</string>
+    <string name="generateKeysMessage">Létrehozunk kulcsot?</string>
+    <string name="generatingKeysMessage">Kulcs létrehozása…</string>
+    <string name="generate">Létrehozás</string>
+    <string name="cancel">Mégse</string>
+    <string name="state">Állapot</string>
+    <string name="serverStarted">Kiszolgáló működik …</string>
+    <string name="serverStopped">Kiszolgáló leállítva</string>
+    <string name="permissionRequired">"\"%1$s\"  engedély szükséges ehhez az alkalmazáshoz!"</string>
+    <string name="permissionNameStorage">Tárhely</string>
+    <string name="quickSettingsServerStarted">pFTPd működik …</string>
+    <string name="quickSettingsServerStopped">pFTPd leállt</string>
+    <string name="saveAs">Mentés másként</string>
+
+    <string name="startService">Szerver indítása</string>
+    <string name="stopService">Szerver leállítása</string>
+    <string name="notificationTitle">FTP Szerver</string>
+
+    <string name="haveToSetPassword">Először jelszót kell beállítani</string>
+    <string name="serverRunning">FTP Szerver működik</string>
+    <string name="invalidDir">A könyvtár nem érvényes.</string>
+    <string name="prefTitleUser">Felhasználónév</string>
+    <string name="prefTitlePort">Port</string>
+    <string name="safExplainHeading">Hogyan működik a SAF</string>
+    </resources>
