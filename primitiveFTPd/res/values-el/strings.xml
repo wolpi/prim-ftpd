@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <string name="app_name">primitive ftpd</string>
@@ -9,7 +9,7 @@
     <string name="portLabel">Πόρτα</string>
     <string name="fingerprintsLabel">Fingerprints κλειδιού</string>
     <string name="generateKeysMessage">Δημιουργία κλειδιών;</string>
-    <string name="generatingKeysMessage">Δημιουργία κλειδιών ...</string>
+    <string name="generatingKeysMessage">Δημιουργία κλειδιών …</string>
     <string name="generate">Δημιουργία</string>
     <string name="cancel">Ακύρωση</string>
     <string name="state">Κατάσταση</string>
