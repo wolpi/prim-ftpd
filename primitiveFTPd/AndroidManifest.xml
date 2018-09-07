@@ -86,13 +86,13 @@
 
         <activity
             android:name="org.primftpd.prefs.FtpPrefsActivityThemeDark"
-            android:label="@string/prefCategoryTitle"
+            android:label="@string/prefs"
             android:theme="@style/PrimFtpdDarkTheme">
         </activity>
 
         <activity
             android:name="org.primftpd.prefs.FtpPrefsActivityThemeLight"
-            android:label="@string/prefCategoryTitle"
+            android:label="@string/prefs"
             android:theme="@style/PrimFtpdLightTheme">
         </activity>
 

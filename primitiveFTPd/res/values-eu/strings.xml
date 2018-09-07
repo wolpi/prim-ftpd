@@ -30,7 +30,6 @@
     <string name="couldNotReadKeyAuthKey">Baimena emateko gako publikoa ezin izan da irakurri. Erregistroak begiratu.</string>
 
     <string name="prefs">Hobespenak</string>
-    <string name="prefCategoryTitle">FTP zerbitzariaren hobespenak</string>
     <string name="prefTitleUser">Erabiltzaile izena</string>
     <string name="prefSummaryUser">FTP zerbitzariaren erabiltzaile izena</string>
     <string name="prefTitlePassword">Pasahitza</string>

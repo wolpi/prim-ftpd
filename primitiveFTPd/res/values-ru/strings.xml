@@ -21,7 +21,6 @@
     <string name="portInvalid_v2">Недействительный номер порта: должно быть значение из диапазона 1024–64000.</string>
     <string name="portLabel">Порт</string>
     <string name="portsEqual_v2">Номера портов должны быть разными.</string>
-    <string name="prefCategoryTitle">Настройки FTP сервера</string>
     <string name="prefForegroundService">Сервис(ы) на переднем плане</string>
     <string name="prefSummaryAnnounce">Публикует FTP сервер в локальной сети через DNS-SD (Bonjour). На некоторых устройствах может приводить к закрытию приложения.</string>
     <string name="prefSummaryAnnounceName">Имя, под которым публикуется сервер.</string>

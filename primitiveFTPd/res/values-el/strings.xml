@@ -36,7 +36,6 @@
     <string name="couldNotReadKeyAuthKey">Το δημόσιο κλειδί (public key) για την πιστοποίηση με κλειδί δεν μπόρεσε να διαβαστεί. Ελέγξτε το αρχείο καταγραφής για πληροφορίες.</string>
 
     <string name="prefs">Προτιμήσεις</string>
-    <string name="prefCategoryTitle">Προτιμήσεις εξυπηρετητή FTP</string>
     <string name="prefTitleUser">Όνομα Χρήστη</string>
     <string name="prefSummaryUser">Όνομα χρήστη FTP</string>
     <string name="prefTitlePassword">Κωδικός πρόσβασης</string>

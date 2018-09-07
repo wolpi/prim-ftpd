@@ -30,7 +30,6 @@
     <string name="couldNotReadKeyAuthKey">La clave pública para autenticar no puede ser leída. Comprueba los registros.</string>
 
     <string name="prefs">Preferencias</string>
-    <string name="prefCategoryTitle">Preferencias del servidor FTP</string>
     <string name="prefTitleUser">Usuario</string>
     <string name="prefSummaryUser">Usuario para el servidor FTP</string>
     <string name="prefTitlePassword">Contraseña</string>

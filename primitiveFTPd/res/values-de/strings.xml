@@ -38,7 +38,10 @@
     <string name="ftpPassivePortsInvalid">Wert für FTP Passive Ports ist ungültig.</string>
 
     <string name="prefs">Einstellungen</string>
-    <string name="prefCategoryTitle">FTP-Server Einstellungen</string>
+    <string name="prefsCategoryTitleAuth">Auth</string>
+    <string name="prefsCategoryTitleConnectivity">Konnektivität</string>
+    <string name="prefsCategoryTitleUi">UI</string>
+    <string name="prefsCategoryTitleSystem">System</string>
     <string name="prefTitleUser">Benutzername</string>
     <string name="prefSummaryUser">FTP-Server Benutzername</string>
     <string name="prefTitlePassword">Passwort</string>

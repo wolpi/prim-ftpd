@@ -11,7 +11,6 @@
     <string name="portInvalid_v2">Недійсний номер порту: має бути значення з проміжку 1024–64000.</string>
     <string name="portLabel">Порт</string>
     <string name="portsEqual_v2">Номера портів повинні бути різними.</string>
-    <string name="prefCategoryTitle">Налаштування FTP сервера</string>
     <string name="prefSummaryAnnounce">Публікує FTP сервер в локальній мережі через DNS-SD (Bonjour). На деяких пристроях може призводити до падіння додатку.</string>
     <string name="prefSummaryAnnounceName">Ім\'я під яким публікувати сервер.</string>
     <string name="prefSummaryAnonymousLogin">Дозволити анонімний вхід на сервер.</string>
