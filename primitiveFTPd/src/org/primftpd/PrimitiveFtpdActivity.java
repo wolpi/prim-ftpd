@@ -3,14 +3,10 @@ package org.primftpd;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -23,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
+import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,8 +41,10 @@ import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.StorageType;
 import org.primftpd.prefs.Theme;
+import org.primftpd.ui.CalcPubkeyFinterprintsTask;
+import org.primftpd.ui.GenKeysAskDialogFragment;
+import org.primftpd.ui.GenKeysAsyncTask;
 import org.primftpd.util.KeyFingerprintProvider;
-import org.primftpd.util.KeyGenerator;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.PrngFixes;
 import org.primftpd.util.ServersRunningBean;
@@ -54,7 +53,6 @@ import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileOutputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -63,7 +61,7 @@ import java.util.Enumeration;
 /**
  * Activity to display network info and to start FTP service.
  */
-public class PrimitiveFtpdActivity extends Activity {
+public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 		@Override
@@ -147,18 +145,7 @@ public class PrimitiveFtpdActivity extends Activity {
 
 
 		// calc keys fingerprints
-		AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
-			@Override
-			protected Void doInBackground(Void... params) {
-				keyFingerprintProvider.calcPubkeyFingerprints();
-				return null;
-			}
-			@Override
-			protected void onPostExecute(Void result){
-				super.onPostExecute(result);
-				showKeyFingerprints();
-			}
-		};
+		AsyncTask<Void, Void, Void> task = new CalcPubkeyFinterprintsTask(keyFingerprintProvider, this);
 		task.execute();
 
 		// create addresses label
@@ -489,7 +476,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	}
 
 	@SuppressLint("SetTextI18n")
-	protected void showKeyFingerprints() {
+	public void showKeyFingerprints() {
 		((TextView)findViewById(R.id.keyFingerprintMd5Label))
 				.setText("MD5");
 		((TextView)findViewById(R.id.keyFingerprintSha1Label))
@@ -505,102 +492,31 @@ public class PrimitiveFtpdActivity extends Activity {
 			.setText(keyFingerprintProvider.getFingerprintSha256());
 
 		// create onRefreshListener
+		final PrimitiveFtpdActivity activity = this;
 		View refreshButton = findViewById(R.id.keyFingerprintsLabel);
 		refreshButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
-				askDiag.show(getFragmentManager(), DIALOG_TAG);
+				askDiag.show(activity.getSupportFragmentManager(), DIALOG_TAG);
 			}
 		});
 	}
 
-	protected void genKeysAndShowProgressDiag(boolean startServerOnFinish) {
+	public void genKeysAndShowProgressDiag(boolean startServerOnFinish) {
 		// critical: do not pass getApplicationContext() to dialog
 		final ProgressDialog progressDiag = new ProgressDialog(this);
 		progressDiag.setCancelable(false);
 		progressDiag.setMessage(getText(R.string.generatingKeysMessage));
 
 		AsyncTask<Void, Void, Void> task = new GenKeysAsyncTask(
+			keyFingerprintProvider,
+			this,
 			progressDiag,
 			startServerOnFinish);
 		task.execute();
 
 		progressDiag.show();
-	}
-
-	public static class GenKeysAskDialogFragment extends DialogFragment {
-		public static final String KEY_START_SERVER = "START_SERVER";
-
-		private boolean startServerOnFinish;
-
-		@Override
-		public void setArguments(Bundle args) {
-			super.setArguments(args);
-			startServerOnFinish = args.getBoolean(KEY_START_SERVER);
-		}
-
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setMessage(R.string.generateKeysMessage);
-			builder.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					PrimitiveFtpdActivity activity = (PrimitiveFtpdActivity) getActivity();
-					activity.genKeysAndShowProgressDiag(startServerOnFinish);
-				}
-			});
-			builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					// nothing
-				}
-			});
-			return builder.create();
-		}
-	}
-
-	class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
-		private final ProgressDialog progressDiag;
-		private final boolean startServerOnFinish;
-
-		public GenKeysAsyncTask(
-			ProgressDialog progressDiag,
-			boolean startServerOnFinish)
-		{
-			this.progressDiag = progressDiag;
-			this.startServerOnFinish = startServerOnFinish;
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			try {
-				FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream();
-				FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream();
-				try {
-					new KeyGenerator().generate(publickeyFos, privatekeyFos);
-				} finally {
-					publickeyFos.close();
-					privatekeyFos.close();
-				}
-			} catch (Exception e) {
-				logger.error("could not generate keys", e);
-			}
-			return null;
-		}
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			keyFingerprintProvider.calcPubkeyFingerprints();
-			progressDiag.dismiss();
-			showKeyFingerprints();
-
-			if (startServerOnFinish) {
-				// icon members should be set at this time
-				handleStart();
-			}
-		}
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -729,7 +645,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	protected void handleStart() {
+	public void handleStart() {
 		if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)) {
 			ServicesStartStopUtil.startServers(this, prefsBean, this);
 		}
@@ -788,7 +704,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		Bundle diagArgs = new Bundle();
 		diagArgs.putBoolean(GenKeysAskDialogFragment.KEY_START_SERVER, true);
 		askDiag.setArguments(diagArgs);
-		askDiag.show(getFragmentManager(), DIALOG_TAG);
+		askDiag.show(getSupportFragmentManager(), DIALOG_TAG);
 	}
 
 	protected void handleStop() {
