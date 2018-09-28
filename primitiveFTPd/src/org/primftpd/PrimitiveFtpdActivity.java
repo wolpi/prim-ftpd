@@ -33,7 +33,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.ftpserver.util.IoUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -45,8 +44,8 @@ import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.StorageType;
 import org.primftpd.prefs.Theme;
+import org.primftpd.util.KeyFingerprintProvider;
 import org.primftpd.util.KeyGenerator;
-import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.PrngFixes;
 import org.primftpd.util.ServersRunningBean;
@@ -55,14 +54,10 @@ import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
 import java.util.Enumeration;
 
 /**
@@ -93,8 +88,6 @@ public class PrimitiveFtpdActivity extends Activity {
 		}
 	};
 
-	public static final String PUBLICKEY_FILENAME = "pftpd-pub.bin";
-	public static final String PRIVATEKEY_FILENAME = "pftpd-priv.pk8";
 	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0xBEEF;
 	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING = 0xCAFE;
 
@@ -103,12 +96,9 @@ public class PrimitiveFtpdActivity extends Activity {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PrefsBean prefsBean;
+	private KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider(this);
 	private Theme theme;
 	private ServersRunningBean serversRunning;
-	private boolean keyPresent = false;
-	private String fingerprintMd5 = " - ";
-	private String fingerprintSha1 = " - ";
-	private String fingerprintSha256 = " - ";
 	private long timestampOfLastEvent = 0;
 
 	/** Called when the activity is first created. */
@@ -157,8 +147,19 @@ public class PrimitiveFtpdActivity extends Activity {
 
 
 		// calc keys fingerprints
-		calcPubkeyFingerprints();
-		showKeyFingerprints();
+		AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
+			@Override
+			protected Void doInBackground(Void... params) {
+				keyFingerprintProvider.calcPubkeyFingerprints();
+				return null;
+			}
+			@Override
+			protected void onPostExecute(Void result){
+				super.onPostExecute(result);
+				showKeyFingerprints();
+			}
+		};
+		task.execute();
 
 		// create addresses label
 		((TextView) findViewById(R.id.addressesLabel)).setText(
@@ -402,72 +403,6 @@ public class PrimitiveFtpdActivity extends Activity {
 		}
 	}
 
-	protected FileInputStream buildPublickeyInStream() throws IOException {
-		FileInputStream fis = openFileInput(PUBLICKEY_FILENAME);
-		return fis;
-	}
-
-	protected FileOutputStream buildPublickeyOutStream() throws IOException {
-		FileOutputStream fos = openFileOutput(PUBLICKEY_FILENAME, Context.MODE_PRIVATE);
-		return fos;
-	}
-
-	protected FileInputStream buildPrivatekeyInStream() throws IOException {
-		FileInputStream fis = openFileInput(PRIVATEKEY_FILENAME);
-		return fis;
-	}
-
-	protected FileOutputStream buildPrivatekeyOutStream() throws IOException {
-		FileOutputStream fos = openFileOutput(PRIVATEKEY_FILENAME, Context.MODE_PRIVATE);
-		return fos;
-	}
-
-	/**
-	 * Creates figerprints of public key.
-	 */
-	protected void calcPubkeyFingerprints() {
-		FileInputStream fis = null;
-		try {
-			fis = buildPublickeyInStream();
-
-			// check if key is present
-			if (fis.available() <= 0) {
-				keyPresent = false;
-				throw new Exception("key seems not to be present");
-			}
-
-			KeyInfoProvider keyInfoprovider = new KeyInfoProvider();
-			PublicKey pubKey = keyInfoprovider.readPublicKey(fis);
-			RSAPublicKey rsaPubKey = (RSAPublicKey) pubKey;
-			byte[] encodedKey = keyInfoprovider.encodeAsSsh(rsaPubKey);
-
-			// fingerprints
-			String fp = keyInfoprovider.fingerprint(encodedKey, "MD5");
-			if (fp != null) {
-				fingerprintMd5 = fp;
-			}
-
-			fp = keyInfoprovider.fingerprint(encodedKey, "SHA-1");
-			if (fp != null) {
-				fingerprintSha1 = fp;
-			}
-
-			fp = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
-			if (fp != null) {
-				fingerprintSha256 = fp;
-			}
-
-			keyPresent = true;
-
-		} catch (Exception e) {
-			logger.debug("key does probably not exist");
-		} finally {
-			if (fis != null) {
-				IoUtils.close(fis);
-			}
-		}
-	}
-
 	/**
 	 * Creates table containing network interfaces.
 	 */
@@ -563,11 +498,11 @@ public class PrimitiveFtpdActivity extends Activity {
 				.setText("SHA256");
 
 		((TextView)findViewById(R.id.keyFingerprintMd5TextView))
-			.setText(fingerprintMd5);
+			.setText(keyFingerprintProvider.getFingerprintMd5());
 		((TextView)findViewById(R.id.keyFingerprintSha1TextView))
-			.setText(fingerprintSha1);
+			.setText(keyFingerprintProvider.getFingerprintSha1());
 		((TextView)findViewById(R.id.keyFingerprintSha256TextView))
-			.setText(fingerprintSha256);
+			.setText(keyFingerprintProvider.getFingerprintSha256());
 
 		// create onRefreshListener
 		View refreshButton = findViewById(R.id.keyFingerprintsLabel);
@@ -641,8 +576,8 @@ public class PrimitiveFtpdActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... params) {
 			try {
-				FileOutputStream publickeyFos = buildPublickeyOutStream();
-				FileOutputStream privatekeyFos = buildPrivatekeyOutStream();
+				FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream();
+				FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream();
 				try {
 					new KeyGenerator().generate(publickeyFos, privatekeyFos);
 				} finally {
@@ -657,7 +592,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			calcPubkeyFingerprints();
+			keyFingerprintProvider.calcPubkeyFingerprints();
 			progressDiag.dismiss();
 			showKeyFingerprints();
 
@@ -845,7 +780,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	}
 
 	public boolean isKeyPresent() {
-		return keyPresent;
+		return keyFingerprintProvider.isKeyPresent();
 	}
 
 	public void showGenKeyDialog() {
