@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import org.primftpd.prefs.LoadPrefsUtil;
+import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,11 @@ public class BootUpReceiver extends BroadcastReceiver
 			Boolean startOnBoot = LoadPrefsUtil.startOnBoot(prefs);
 			if (startOnBoot != null && startOnBoot.booleanValue()) {
 				ServicesStartStopUtil.startServers(context);
+			}
+
+			Boolean showStartStopNotification = LoadPrefsUtil.showStartStopNotification(prefs);
+			if (showStartStopNotification != null && showStartStopNotification.booleanValue()) {
+				NotificationUtil.createStartStopNotification(context);
 			}
 		}
 	}

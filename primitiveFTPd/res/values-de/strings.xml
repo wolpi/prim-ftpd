@@ -66,6 +66,8 @@
     <string name="prefSummaryStartOnOpen">Starte Server beim öffnen der App.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Zeige Konnektivitätsinfo in Benachrichtigung</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Zeige Konnektivitätsinfo wie IP-Adresse in Benachrichtigung.</string>
+    <string name="prefTitleShowStartStopNotification">Zeige Benachrichtigung um Server zu starten/stopen</string>
+    <string name="prefSummaryShowStartStopNotification">Zeige dauerhafte Benachrichtigung um eine weitere Möglichkeit zu haben Server schnell zu starten/stopen.</string>
     <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 public key in %s ab. Nur SFTP.</string>
     <string name="prefSummaryAnonymousLogin">Anonymous Login erlauben.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>

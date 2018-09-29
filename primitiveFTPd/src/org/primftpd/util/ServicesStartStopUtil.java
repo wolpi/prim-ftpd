@@ -2,18 +2,11 @@ package org.primftpd.util;
 
 import android.app.ActivityManager;
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Icon;
-import android.os.Build;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -25,7 +18,6 @@ import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.remotecontrol.PftpdPowerTogglesPlugin;
 import org.primftpd.remotecontrol.TaskerReceiver;
 import org.primftpd.services.FtpServerService;
-import org.primftpd.services.ServicesStartingService;
 import org.primftpd.services.SshServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +31,6 @@ public class ServicesStartStopUtil {
 
     public static final String EXTRA_PREFS_BEAN = "prefs.bean";
     public static final String EXTRA_FINGERPRINT_PROVIDER = "fingerprint.provider";
-
-    public static final String NOTIFICATION_CHANNEL_ID = "pftpd running";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServicesStartStopUtil.class);
 
@@ -177,132 +167,6 @@ public class ServicesStartStopUtil {
         return serversRunning;
     }
 
-    private static Notification createStatusbarNotification(
-            Context ctxt,
-            PrefsBean prefsBean,
-            KeyFingerprintProvider keyFingerprintProvider) {
-        LOGGER.debug("createStatusbarNotification()");
-
-        // create pending intent
-        Intent notificationIntent = new Intent(ctxt, PrimitiveFtpdActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(ctxt, 0, notificationIntent, 0);
-
-        Intent stopIntent = new Intent(ctxt, ServicesStartingService.class);
-        PendingIntent pendingStopIntent = PendingIntent.getService(ctxt, 0, stopIntent, 0);
-
-        // create channel
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    NOTIFICATION_CHANNEL_ID,
-                    NOTIFICATION_CHANNEL_ID,
-                    NotificationManager.IMPORTANCE_LOW);
-            NotificationManager notificationManager = ctxt.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        // create notification
-        int iconId = R.drawable.ic_notification;
-        int stopIconId = R.drawable.ic_stop_white_24dp;
-        CharSequence tickerText = ctxt.getText(R.string.serverRunning);
-        CharSequence contentTitle = ctxt.getText(R.string.notificationTitle);
-        CharSequence contentText = tickerText;
-
-        // use main icon as large one
-        Bitmap largeIcon = BitmapFactory.decodeResource(
-                ctxt.getResources(),
-                R.drawable.ic_launcher);
-
-        long when = System.currentTimeMillis();
-
-        Notification.Builder builder = new Notification.Builder(ctxt)
-                .setTicker(tickerText)
-                .setContentTitle(contentTitle)
-                .setContentText(contentText)
-                .setSmallIcon(iconId)
-                .setLargeIcon(largeIcon)
-                .setContentIntent(contentIntent)
-                .setWhen(when);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(NOTIFICATION_CHANNEL_ID);
-        }
-
-        // notification action
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // TODO check icon for android 7
-            Icon icon = Icon.createWithResource(ctxt, stopIconId);
-            Notification.Action stopAction = new Notification.Action.Builder(
-                    icon,
-                    ctxt.getString(R.string.stopService),
-                    pendingStopIntent).build();
-            builder.addAction(stopAction);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder.addAction(
-                    stopIconId,
-                    ctxt.getString(R.string.stopService),
-                    pendingStopIntent);
-        }
-
-        // finally notification itself
-        Notification notification = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (prefsBean.showConnectionInfoInNotification()) {
-                String longText = buildLongText(ctxt, prefsBean, keyFingerprintProvider);
-                builder.setStyle(new Notification.BigTextStyle().bigText(longText));
-            }
-
-            notification = builder.build();
-        } else {
-            notification = builder.getNotification();
-        }
-        notification.flags |= Notification.FLAG_NO_CLEAR;
-
-        // notification manager
-        NotificationUtil.createStatusbarNotification(ctxt, notification);
-        return notification;
-    }
-
-    private static String buildLongText(
-            Context ctxt,
-            PrefsBean prefsBean,
-            KeyFingerprintProvider keyFingerprintProvider) {
-        StringBuilder str = new StringBuilder();
-        IpAddressProvider ipAddressProvider = new IpAddressProvider();
-        List<String> ipAddressTexts = ipAddressProvider.ipAddressTexts(ctxt, false);
-        for (String ipAddressText : ipAddressTexts) {
-            if (prefsBean.getServerToStart().startFtp()) {
-                str.append("ftp://");
-                str.append(ipAddressText);
-                str.append(":");
-                str.append(prefsBean.getPortStr());
-                str.append("\n");
-            }
-            if (prefsBean.getServerToStart().startSftp()) {
-                str.append("sftp://");
-                str.append(ipAddressText);
-                str.append(":");
-                str.append(prefsBean.getSecurePortStr());
-                str.append("\n");
-            }
-        }
-
-        if (prefsBean.getServerToStart().startSftp()) {
-            if (!keyFingerprintProvider.areFingerprintsGenerated()) {
-                keyFingerprintProvider.calcPubkeyFingerprints(ctxt);
-            }
-            str.append("\n");
-            str.append("Key Fingerprints");
-            str.append("\n");
-            str.append("MD5: ");
-            str.append(keyFingerprintProvider.getBase64Md5());
-            str.append("SHA1: ");
-            str.append(keyFingerprintProvider.getBase64Sha1());
-            str.append("SHA256: ");
-            str.append(keyFingerprintProvider.getBase64Sha256());
-        }
-
-        return str.toString();
-    }
-
     private static void updateWidget(Context context, boolean running)
     {
         LOGGER.debug("updateWidget()");
@@ -343,7 +207,10 @@ public class ServicesStartStopUtil {
         Notification notification = null;
         updateWidget(ctxt, serverRunning);
         if (serverRunning) {
-            notification = createStatusbarNotification(ctxt, prefsBean, keyFingerprintProvider);
+            notification = NotificationUtil.createStatusbarNotification(
+                    ctxt,
+                    prefsBean,
+                    keyFingerprintProvider);
         } else {
             LOGGER.debug("removeStatusbarNotification()");
             NotificationUtil.removeStatusbarNotification(ctxt);

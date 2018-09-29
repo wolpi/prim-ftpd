@@ -88,6 +88,13 @@
 			android:title="@string/prefTitleShowConnectionInfoInNotification"
 			android:summary="@string/prefSummaryShowConnectionInfoInNotification"
 			/>
+		<SwitchPreference
+			android:name="showStartStopNotification"
+			android:key="showStartStopNotificationPref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleShowStartStopNotification"
+			android:summary="@string/prefSummaryShowStartStopNotification"
+			/>
 		<ListPreference
 			android:name="theme"
 			android:key="themePref"

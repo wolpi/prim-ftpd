@@ -13,6 +13,7 @@ import android.preference.PreferenceFragment;
 
 import org.primftpd.R;
 import org.primftpd.util.Defaults;
+import org.primftpd.util.NotificationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,20 @@ public class FtpPrefsFragment extends PreferenceFragment
 		String text = String.format(res.getString(R.string.prefSummaryPubKeyAuth), Defaults.PUB_KEY_AUTH_KEY_PATH);
 		Preference pubKeyAuthPref = findPreference(LoadPrefsUtil.PREF_KEY_PUB_KEY_AUTH);
 		pubKeyAuthPref.setSummary(text);
+
+		// create / remove notification when pref is toggled
+		Preference startStopNotificationPref = findPreference(LoadPrefsUtil.PREF_KEY_SHOW_START_STOP_NOTIFICATION);
+		startStopNotificationPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (Boolean.TRUE.equals(newValue)) {
+					NotificationUtil.createStartStopNotification(getActivity());
+				} else {
+					NotificationUtil.removeStartStopNotification(getActivity());
+				}
+				return true;
+			}
+		});
 
 		// directory picker for choosing home dir
 		startDirPref = (EditTextPreference)findPreference(LoadPrefsUtil.PREF_KEY_START_DIR);
