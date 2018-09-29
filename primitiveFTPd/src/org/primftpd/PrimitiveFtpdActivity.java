@@ -44,6 +44,7 @@ import org.primftpd.prefs.Theme;
 import org.primftpd.ui.CalcPubkeyFinterprintsTask;
 import org.primftpd.ui.GenKeysAskDialogFragment;
 import org.primftpd.ui.GenKeysAsyncTask;
+import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.KeyFingerprintProvider;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.PrngFixes;
@@ -53,10 +54,7 @@ import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Activity to display network info and to start FTP service.
@@ -94,6 +92,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PrefsBean prefsBean;
+	private IpAddressProvider ipAddressProvider = new IpAddressProvider();
 	private KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider(this);
 	private Theme theme;
 	private ServersRunningBean serversRunning;
@@ -245,7 +244,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		logger.debug("onResume()");
 
 		// register listener to reprint interfaces table when network connections change
-		// TODO show current IP for android 7
+		// android sends those events when registered in code but not when registered in manifest
 		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(this.networkStateReceiver, filter);
 
@@ -399,48 +398,15 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		// clear old entries
 		container.removeAllViews();
 
-		try {
-			Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
-			while (ifaces.hasMoreElements()) {
-				NetworkInterface iface = ifaces.nextElement();
-				String ifaceDispName = iface.getDisplayName();
-				String ifaceName = iface.getName();
-				Enumeration<InetAddress> inetAddrs = iface.getInetAddresses();
-
-				while (inetAddrs.hasMoreElements()) {
-					InetAddress inetAddr = inetAddrs.nextElement();
-					String hostAddr = inetAddr.getHostAddress();
-
-					logger.debug("addr: '{}', iface name: '{}', disp name: '{}', loopback: '{}'",
-						new Object[]{
-							inetAddr,
-							ifaceName,
-							ifaceDispName,
-							inetAddr.isLoopbackAddress()});
-
-					if (inetAddr.isLoopbackAddress()) {
-						continue;
-					}
-
-					String displayText = hostAddr + " (" + ifaceDispName + ")";
-					if(displayText.contains("::")) {
-						// Don't include the raw encoded names. Just the raw IP addresses.
-						logger.debug("Skipping IPv6 address '{}'", displayText);
-						continue;
-					}
-					TextView textView = new TextView(container.getContext());
-					container.addView(textView);
-					textView.setText(displayText);
-					textView.setGravity(Gravity.CENTER_HORIZONTAL);
-					textView.setTextIsSelectable(true);
-				}
-			}
-		} catch (SocketException e) {
-			logger.info("exception while iterating network interfaces", e);
-
-			String msg = getText(R.string.ifacesError) + e.getLocalizedMessage();
-			Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+		List<String> displayTexts = ipAddressProvider.ipAddressTexts(this);
+		for (String displayText : displayTexts) {
+			TextView textView = new TextView(container.getContext());
+			container.addView(textView);
+			textView.setText(displayText);
+			textView.setGravity(Gravity.CENTER_HORIZONTAL);
+			textView.setTextIsSelectable(true);
 		}
+
 	}
 
 	@SuppressLint("SetTextI18n")
