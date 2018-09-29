@@ -245,8 +245,10 @@ public class ServicesStartStopUtil {
         // finally notification itself
         Notification notification = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            String longText = buildLongText(ctxt, prefsBean, keyFingerprintProvider);
-            builder.setStyle(new Notification.BigTextStyle().bigText(longText));
+            if (prefsBean.showConnectionInfoInNotification()) {
+                String longText = buildLongText(ctxt, prefsBean, keyFingerprintProvider);
+                builder.setStyle(new Notification.BigTextStyle().bigText(longText));
+            }
 
             notification = builder.build();
         } else {

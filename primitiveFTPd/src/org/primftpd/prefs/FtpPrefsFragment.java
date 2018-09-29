@@ -39,6 +39,9 @@ public class FtpPrefsFragment extends PreferenceFragment
 
 			Preference announceNamePref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_ANNOUNCE_NAME);
 			prefCat.removePreference(announceNamePref);
+
+			Preference showConnInfoPref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_SHOW_CONN_INFO);
+			prefCat.removePreference(showConnInfoPref);
 		}
 
 		// text parameter for pub key auth pref

@@ -25,6 +25,7 @@ public class PrefsBean implements Serializable
 	private final ServerToStart serverToStart;
 	private final String ftpPassivePorts;
 	private final Integer idleTimeout;
+	private final boolean showConnectionInfoInNotification;
 	private final StorageType storageType;
 	private final String safUrl;
 
@@ -42,6 +43,7 @@ public class PrefsBean implements Serializable
 		ServerToStart serverToStart,
 		String ftpPassivePorts,
 		Integer idleTimeout,
+		boolean showConnectionInfoInNotification,
 		StorageType storageType,
 		String safUrl)
 	{
@@ -61,6 +63,7 @@ public class PrefsBean implements Serializable
 		this.serverToStart = serverToStart;
 		this.ftpPassivePorts = ftpPassivePorts;
 		this.idleTimeout = idleTimeout;
+		this.showConnectionInfoInNotification = showConnectionInfoInNotification;
 		this.storageType = storageType;
 		this.safUrl = safUrl;
 
@@ -125,6 +128,10 @@ public class PrefsBean implements Serializable
 
 	public Integer getIdleTimeout() {
 		return idleTimeout;
+	}
+
+	public boolean showConnectionInfoInNotification() {
+		return showConnectionInfoInNotification;
 	}
 
 	public StorageType getStorageType() {

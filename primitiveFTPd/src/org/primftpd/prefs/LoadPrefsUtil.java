@@ -25,6 +25,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
 	public static final String PREF_KEY_START_ON_BOOT = "startOnBootPref";
 	public static final String PREF_KEY_START_ON_OPEN = "startOnOpenPref";
+	public static final String PREF_KEY_SHOW_CONN_INFO = "showConnectionInfoInNotificationPref";
 	public static final String PREF_KEY_PUB_KEY_AUTH = "pubKeyAuthPref";
 	public static final String PREF_KEY_THEME = "themePref";
 	public static final String PREF_KEY_LOGGING = "loggingPref";
@@ -100,6 +101,12 @@ public class LoadPrefsUtil
 		return prefs.getBoolean(
 			LoadPrefsUtil.PREF_KEY_START_ON_OPEN,
 			Boolean.FALSE);
+	}
+
+	public static Boolean showConnectionInfoInNotification(SharedPreferences prefs) {
+		return prefs.getBoolean(
+				LoadPrefsUtil.PREF_KEY_SHOW_CONN_INFO,
+				Boolean.TRUE);
 	}
 
 	public static Boolean pubKeyAuth(SharedPreferences prefs) {
@@ -273,6 +280,9 @@ public class LoadPrefsUtil
 		int securePort = loadPortSecure(logger, prefs);
 		logger.debug("got 'secure port': {}", Integer.valueOf(securePort));
 
+		boolean showConnectionInfo = showConnectionInfoInNotification(prefs);
+		logger.debug("got showConnectionInfo: {}", Boolean.valueOf(showConnectionInfo));
+
 		StorageType storageType = storageType(prefs);
 		logger.debug("got 'StorageType': {}", storageType);
 
@@ -294,6 +304,7 @@ public class LoadPrefsUtil
 				serverToStart,
 				ftpPassivePorts,
 				idleTimeout,
+				showConnectionInfo,
 				storageType,
 				safUrl);
 	}

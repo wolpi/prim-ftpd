@@ -81,6 +81,13 @@
 			android:title="@string/prefTitleStartOnOpen"
 			android:summary="@string/prefSummaryStartOnOpen"
 			/>
+		<SwitchPreference
+			android:name="showConnectionInfoInNotification"
+			android:key="showConnectionInfoInNotificationPref"
+			android:defaultValue="true"
+			android:title="@string/prefTitleShowConnectionInfoInNotification"
+			android:summary="@string/prefSummaryShowConnectionInfoInNotification"
+			/>
 		<ListPreference
 			android:name="theme"
 			android:key="themePref"
