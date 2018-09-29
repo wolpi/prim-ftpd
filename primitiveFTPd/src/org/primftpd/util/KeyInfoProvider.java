@@ -29,14 +29,14 @@ public class KeyInfoProvider
 {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public String fingerprint(byte[] pubKeyEnc, String hashAlgo) {
+	public FingerprintBean fingerprint(byte[] pubKeyEnc, String hashAlgo) {
 		try {
 			MessageDigest md = MessageDigest.getInstance(hashAlgo);
 			md.update(pubKeyEnc);
 			byte[] fingerPrintBytes = md.digest();
 			String base64 = Base64.encodeToString(fingerPrintBytes, Base64.NO_PADDING);
 			String beautified = beautify(fingerPrintBytes);
-			return beautified + "\nBase 64\n" + base64;
+			return new FingerprintBean(beautified, base64);
 		} catch (Exception e) {
 			logger.error("could not read key: " + e.getMessage(), e);
 		}

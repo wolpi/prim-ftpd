@@ -3,11 +3,8 @@ package org.primftpd.services;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.IBinder;
 
-import org.primftpd.PrefsBean;
-import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.util.ServersRunningBean;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
@@ -34,9 +31,7 @@ public class ServicesStartingService extends Service {
         Context context = getBaseContext();
         ServersRunningBean serversRunningBean = ServicesStartStopUtil.checkServicesRunning(context);
         if (!serversRunningBean.atLeastOneRunning()) {
-            SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
-            PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-            ServicesStartStopUtil.startServers(context, prefsBean, null);
+            ServicesStartStopUtil.startServers(context);
         } else {
             ServicesStartStopUtil.stopServers(context);
         }
@@ -45,7 +40,7 @@ public class ServicesStartingService extends Service {
         // it is just used as relay for widget pendingIntent
         stopSelf();
 
-        return 0;
+        return Service.START_NOT_STICKY;
     }
 
     @Override

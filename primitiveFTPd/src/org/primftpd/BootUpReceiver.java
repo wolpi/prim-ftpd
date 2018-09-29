@@ -28,8 +28,7 @@ public class BootUpReceiver extends BroadcastReceiver
 			SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
 			Boolean startOnBoot = LoadPrefsUtil.startOnBoot(prefs);
 			if (startOnBoot != null && startOnBoot.booleanValue()) {
-				PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-				ServicesStartStopUtil.startServers(context, prefsBean, null);
+				ServicesStartStopUtil.startServers(context);
 			}
 		}
 	}

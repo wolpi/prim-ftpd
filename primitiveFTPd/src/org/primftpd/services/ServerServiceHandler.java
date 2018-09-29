@@ -89,7 +89,11 @@ public class ServerServiceHandler extends Handler
 				}
 
 				// make service high priority
-				Notification notification = ServicesStartStopUtil.updateNonActivityUI(service, true);
+				Notification notification = ServicesStartStopUtil.updateNonActivityUI(
+						service,
+						true,
+						service.prefsBean,
+						service.keyFingerprintProvider);
 				service.startForeground(NotificationUtil.NOTIFICATION_ID, notification);
 			} else {
 				service.stopSelf();
@@ -111,7 +115,11 @@ public class ServerServiceHandler extends Handler
 		shellClose();
 		logger.debug("stopSelf ({})", logName);
 		service.stopSelf();
-		ServicesStartStopUtil.updateNonActivityUI(service, false);
+		ServicesStartStopUtil.updateNonActivityUI(
+				service,
+				false,
+				service.prefsBean,
+				null);
 	}
 
 	private synchronized void obtainWakeLock(
@@ -124,7 +132,7 @@ public class ServerServiceHandler extends Handler
 			logger.debug("acquiring wake lock ({})", logName);
 			wakeLock = powerMgr.newWakeLock(
 				PowerManager.SCREEN_DIM_WAKE_LOCK,
-				APP_NAME);
+				APP_NAME + ":wakelock");
 			wakeLock.acquire();
 		} else {
 			if (takeWakeLock) {

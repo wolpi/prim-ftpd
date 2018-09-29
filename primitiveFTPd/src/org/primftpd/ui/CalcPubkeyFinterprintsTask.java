@@ -17,7 +17,7 @@ public class CalcPubkeyFinterprintsTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        keyFingerprintProvider.calcPubkeyFingerprints();
+        keyFingerprintProvider.calcPubkeyFingerprints(activity);
         return null;
     }
     @Override

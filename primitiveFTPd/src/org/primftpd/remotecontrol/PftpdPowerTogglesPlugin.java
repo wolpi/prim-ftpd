@@ -1,10 +1,7 @@
 package org.primftpd.remotecontrol;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
-import org.primftpd.PrefsBean;
-import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +13,7 @@ public class PftpdPowerTogglesPlugin extends PowerTogglesPlugin {
     @Override
     protected void changeState(Context context, boolean newState) {
         if (newState) {
-            SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
-            PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-            ServicesStartStopUtil.startServers(context, prefsBean, null);
+            ServicesStartStopUtil.startServers(context);
         } else {
             ServicesStartStopUtil.stopServers(context);
         }

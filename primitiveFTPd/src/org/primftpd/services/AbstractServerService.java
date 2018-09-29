@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.primftpd.PrefsBean;
 import org.primftpd.R;
 import org.primftpd.ServerStateChangedEvent;
+import org.primftpd.util.KeyFingerprintProvider;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,7 @@ public abstract class AbstractServerService
 	private Looper serviceLooper;
 	private ServerServiceHandler serviceHandler;
 	PrefsBean prefsBean;
+	KeyFingerprintProvider keyFingerprintProvider;
 	private NsdManager.RegistrationListener nsdRegistrationListener;
 
 	protected abstract ServerServiceHandler createServiceHandler(
@@ -98,6 +100,8 @@ public abstract class AbstractServerService
 		// get parameters
 		Bundle extras = intent.getExtras();
 		prefsBean = (PrefsBean)extras.get(ServicesStartStopUtil.EXTRA_PREFS_BEAN);
+		keyFingerprintProvider = (KeyFingerprintProvider)extras.get(
+				ServicesStartStopUtil.EXTRA_FINGERPRINT_PROVIDER);
 
 		// send start message (to handler)
 		Message msg = serviceHandler.obtainMessage();

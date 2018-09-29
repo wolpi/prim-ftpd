@@ -9,41 +9,39 @@ import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 
-public class KeyFingerprintProvider {
+public class KeyFingerprintProvider implements Serializable {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    private final Context ctxt;
+    private static final long serialVersionUID = 1L;
 
     private boolean fingerprintsGenerated = false;
     private boolean keyPresent = false;
     private String fingerprintMd5 = " - ";
     private String fingerprintSha1 = " - ";
     private String fingerprintSha256 = " - ";
+    private String base64Md5 = "";
+    private String base64Sha1 = "";
+    private String base64Sha256 = "";
 
-    public KeyFingerprintProvider(Context ctxt) {
-        this.ctxt = ctxt;
-    }
-
-    public FileInputStream buildPublickeyInStream() throws IOException {
+    public FileInputStream buildPublickeyInStream(Context ctxt) throws IOException {
         FileInputStream fis = ctxt.openFileInput(Defaults.PUBLICKEY_FILENAME);
         return fis;
     }
 
-    public FileOutputStream buildPublickeyOutStream() throws IOException {
+    public FileOutputStream buildPublickeyOutStream(Context ctxt) throws IOException {
         FileOutputStream fos = ctxt.openFileOutput(Defaults.PUBLICKEY_FILENAME, Context.MODE_PRIVATE);
         return fos;
     }
 
-    public FileInputStream buildPrivatekeyInStream() throws IOException {
+    public FileInputStream buildPrivatekeyInStream(Context ctxt) throws IOException {
         FileInputStream fis = ctxt.openFileInput(Defaults.PRIVATEKEY_FILENAME);
         return fis;
     }
 
-    public FileOutputStream buildPrivatekeyOutStream() throws IOException {
+    public FileOutputStream buildPrivatekeyOutStream(Context ctxt) throws IOException {
         FileOutputStream fos = ctxt.openFileOutput(Defaults.PRIVATEKEY_FILENAME, Context.MODE_PRIVATE);
         return fos;
     }
@@ -51,11 +49,13 @@ public class KeyFingerprintProvider {
     /**
      * Creates figerprints of public key.
      */
-    public void calcPubkeyFingerprints() {
+    public void calcPubkeyFingerprints(Context ctxt) {
+        Logger logger = LoggerFactory.getLogger(getClass());
+        logger.trace("calcPubkeyFingerprints()");
         fingerprintsGenerated = true;
         FileInputStream fis = null;
         try {
-            fis = buildPublickeyInStream();
+            fis = buildPublickeyInStream(ctxt);
 
             // check if key is present
             if (fis.available() <= 0) {
@@ -69,25 +69,28 @@ public class KeyFingerprintProvider {
             byte[] encodedKey = keyInfoprovider.encodeAsSsh(rsaPubKey);
 
             // fingerprints
-            String fp = keyInfoprovider.fingerprint(encodedKey, "MD5");
-            if (fp != null) {
-                fingerprintMd5 = fp;
+            FingerprintBean bean = keyInfoprovider.fingerprint(encodedKey, "MD5");
+            if (bean != null) {
+                fingerprintMd5 = bean.fingerprint();
+                base64Md5 = bean.base64;
             }
 
-            fp = keyInfoprovider.fingerprint(encodedKey, "SHA-1");
-            if (fp != null) {
-                fingerprintSha1 = fp;
+            bean = keyInfoprovider.fingerprint(encodedKey, "SHA-1");
+            if (bean != null) {
+                fingerprintSha1 = bean.fingerprint();
+                base64Sha1 = bean.base64;
             }
 
-            fp = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
-            if (fp != null) {
-                fingerprintSha256 = fp;
+            bean = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
+            if (bean != null) {
+                fingerprintSha256 = bean.fingerprint();
+                base64Sha256 = bean.base64;
             }
 
             keyPresent = true;
 
         } catch (Exception e) {
-            logger.debug("key does probably not exist");
+            logger.info("key does probably not exist");
         } finally {
             if (fis != null) {
                 IoUtils.close(fis);
@@ -113,5 +116,17 @@ public class KeyFingerprintProvider {
 
     public String getFingerprintSha256() {
         return fingerprintSha256;
+    }
+
+    public String getBase64Md5() {
+        return base64Md5;
+    }
+
+    public String getBase64Sha1() {
+        return base64Sha1;
+    }
+
+    public String getBase64Sha256() {
+        return base64Sha256;
     }
 }

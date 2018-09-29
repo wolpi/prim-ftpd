@@ -1,14 +1,11 @@
 package org.primftpd.services;
 
 import android.annotation.TargetApi;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
-import org.primftpd.PrefsBean;
 import org.primftpd.R;
-import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.util.ServersRunningBean;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
@@ -21,16 +18,11 @@ import org.slf4j.LoggerFactory;
 public class QuickSettingsService extends TileService {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
-    private PrefsBean prefsBean;
 
     @Override
     public void onCreate() {
         logger.debug("onCreate");
         super.onCreate();
-
-        // move prefs loading to onStartListening() ?
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
     }
 
     @Override
@@ -43,7 +35,7 @@ public class QuickSettingsService extends TileService {
             ServicesStartStopUtil.stopServers(this);
         } else {
             // Start FTP service.
-            ServicesStartStopUtil.startServers(this, prefsBean, null);
+            ServicesStartStopUtil.startServers(this);
         }
         updateTile();
     }

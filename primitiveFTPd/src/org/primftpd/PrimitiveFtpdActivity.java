@@ -93,7 +93,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	private PrefsBean prefsBean;
 	private IpAddressProvider ipAddressProvider = new IpAddressProvider();
-	private KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider(this);
+	private KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider();
 	private Theme theme;
 	private ServersRunningBean serversRunning;
 	private long timestampOfLastEvent = 0;
@@ -180,7 +180,11 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		Boolean startOnOpen = LoadPrefsUtil.startOnOpen(prefs);
 		if (startOnOpen) {
 			PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-			ServicesStartStopUtil.startServers(getBaseContext(), prefsBean, this);
+			ServicesStartStopUtil.startServers(
+					getBaseContext(),
+					prefsBean,
+					keyFingerprintProvider,
+					this);
 		}
 	}
 
@@ -398,7 +402,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		// clear old entries
 		container.removeAllViews();
 
-		List<String> displayTexts = ipAddressProvider.ipAddressTexts(this);
+		List<String> displayTexts = ipAddressProvider.ipAddressTexts(this, true);
 		for (String displayText : displayTexts) {
 			TextView textView = new TextView(container.getContext());
 			container.addView(textView);
@@ -613,7 +617,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	public void handleStart() {
 		if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)) {
-			ServicesStartStopUtil.startServers(this, prefsBean, this);
+			ServicesStartStopUtil.startServers(this, prefsBean, keyFingerprintProvider, this);
 		}
 	}
 
@@ -643,7 +647,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
 				// If request is cancelled, the result arrays are empty.
 				if (granted) {
-					ServicesStartStopUtil.startServers(this, prefsBean, this);
+					ServicesStartStopUtil.startServers(this, prefsBean, keyFingerprintProvider, this);
 				} else {
 					String textPara = getString(R.string.permissionNameStorage);
 					Toast.makeText(this, getString(R.string.permissionRequired, textPara), Toast.LENGTH_LONG).show();

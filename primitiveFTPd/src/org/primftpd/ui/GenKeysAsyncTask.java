@@ -33,8 +33,8 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         try {
-            FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream();
-            FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream();
+            FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream(activity);
+            FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream(activity);
             try {
                 new KeyGenerator().generate(publickeyFos, privatekeyFos);
             } finally {
@@ -50,7 +50,7 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        keyFingerprintProvider.calcPubkeyFingerprints();
+        keyFingerprintProvider.calcPubkeyFingerprints(activity);
         progressDiag.dismiss();
         activity.showKeyFingerprints();
 

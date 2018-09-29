@@ -18,7 +18,7 @@ public class IpAddressProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public List<String> ipAddressTexts(Context ctxt) {
+    public List<String> ipAddressTexts(Context ctxt, boolean verbose) {
         List<String> result = new ArrayList<>();
         try {
             Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
@@ -43,11 +43,19 @@ public class IpAddressProvider {
                         continue;
                     }
 
-                    String displayText = hostAddr + " (" + ifaceDispName + ")";
-                    if(displayText.contains("::")) {
+                    if (hostAddr.contains("::")) {
                         // Don't include the raw encoded names. Just the raw IP addresses.
-                        logger.debug("Skipping IPv6 address '{}'", displayText);
+                        logger.debug("Skipping IPv6 address '{}'", hostAddr);
                         continue;
+                    }
+
+                    if (!verbose && !ifaceDispName.startsWith("wlan")) {
+                        continue;
+                    }
+
+                    String displayText = hostAddr;
+                    if (verbose) {
+                        displayText += " (" + ifaceDispName + ")";
                     }
 
                     result.add(displayText);

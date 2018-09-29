@@ -9,6 +9,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
@@ -20,6 +21,7 @@ import org.primftpd.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.StartStopWidgetProvider;
+import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.remotecontrol.PftpdPowerTogglesPlugin;
 import org.primftpd.remotecontrol.TaskerReceiver;
 import org.primftpd.services.FtpServerService;
@@ -36,14 +38,22 @@ import java.util.List;
 public class ServicesStartStopUtil {
 
     public static final String EXTRA_PREFS_BEAN = "prefs.bean";
+    public static final String EXTRA_FINGERPRINT_PROVIDER = "fingerprint.provider";
 
     public static final String NOTIFICATION_CHANNEL_ID = "pftpd running";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServicesStartStopUtil.class);
 
+    public static void startServers(Context context) {
+        SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
+        PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(LOGGER, prefs);
+        startServers(context, prefsBean, new KeyFingerprintProvider(), null);
+    }
+
     public static void startServers(
             Context context,
             PrefsBean prefsBean,
+            KeyFingerprintProvider keyFingerprintProvider,
             PrimitiveFtpdActivity activity) {
         if (!isPasswordOk(prefsBean)) {
             Toast.makeText(
@@ -73,7 +83,8 @@ public class ServicesStartStopUtil {
                 if (keyPresent) {
                     LOGGER.debug("going to start sshd");
                     try {
-                        context.startService(createSshServiceIntent(context, prefsBean));
+                        Intent intent = createSshServiceIntent(context, prefsBean, keyFingerprintProvider);
+                        context.startService(intent);
                     } catch (Exception e) {
                         LOGGER.error("could not start sftp server", e);
                         Toast.makeText(
@@ -87,7 +98,8 @@ public class ServicesStartStopUtil {
                 if (prefsBean.getServerToStart().startFtp()) {
                     LOGGER.debug("going to start ftpd");
                     try {
-                        context.startService(createFtpServiceIntent(context, prefsBean));
+                        Intent intent = createFtpServiceIntent(context, prefsBean, keyFingerprintProvider);
+                        context.startService(intent);
                     } catch (Exception e) {
                         LOGGER.error("could not start ftp server", e);
                         Toast.makeText(
@@ -101,25 +113,39 @@ public class ServicesStartStopUtil {
     }
 
     public static void stopServers(Context context) {
-        context.stopService(createFtpServiceIntent(context, null));
-        context.stopService(createSshServiceIntent(context, null));
+        context.stopService(createFtpServiceIntent(context, null, null));
+        context.stopService(createSshServiceIntent(context, null, null));
     }
 
-    protected static Intent createFtpServiceIntent(Context context, PrefsBean prefsBean) {
+    protected static Intent createFtpServiceIntent(
+            Context context,
+            PrefsBean prefsBean,
+            KeyFingerprintProvider keyFingerprintProvider) {
         Intent intent = new Intent(context, FtpServerService.class);
         putPrefsInIntent(intent, prefsBean);
+        putKeyFingerprintProviderInIntent(intent, keyFingerprintProvider);
         return intent;
     }
 
-    protected static Intent createSshServiceIntent(Context context, PrefsBean prefsBean) {
+    protected static Intent createSshServiceIntent(
+            Context context,
+            PrefsBean prefsBean,
+            KeyFingerprintProvider keyFingerprintProvider) {
         Intent intent = new Intent(context, SshServerService.class);
         putPrefsInIntent(intent, prefsBean);
+        putKeyFingerprintProviderInIntent(intent, keyFingerprintProvider);
         return intent;
     }
 
     protected static void putPrefsInIntent(Intent intent, PrefsBean prefsBean) {
         if (prefsBean != null) {
             intent.putExtra(EXTRA_PREFS_BEAN, prefsBean);
+        }
+    }
+
+    protected static void putKeyFingerprintProviderInIntent(Intent intent, KeyFingerprintProvider keyFingerprintProvider) {
+        if (keyFingerprintProvider != null) {
+            intent.putExtra(EXTRA_FINGERPRINT_PROVIDER, keyFingerprintProvider);
         }
     }
 
@@ -151,7 +177,10 @@ public class ServicesStartStopUtil {
         return serversRunning;
     }
 
-    private static Notification createStatusbarNotification(Context ctxt) {
+    private static Notification createStatusbarNotification(
+            Context ctxt,
+            PrefsBean prefsBean,
+            KeyFingerprintProvider keyFingerprintProvider) {
         LOGGER.debug("createStatusbarNotification()");
 
         // create pending intent
@@ -216,6 +245,9 @@ public class ServicesStartStopUtil {
         // finally notification itself
         Notification notification = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            String longText = buildLongText(ctxt, prefsBean, keyFingerprintProvider);
+            builder.setStyle(new Notification.BigTextStyle().bigText(longText));
+
             notification = builder.build();
         } else {
             notification = builder.getNotification();
@@ -225,6 +257,48 @@ public class ServicesStartStopUtil {
         // notification manager
         NotificationUtil.createStatusbarNotification(ctxt, notification);
         return notification;
+    }
+
+    private static String buildLongText(
+            Context ctxt,
+            PrefsBean prefsBean,
+            KeyFingerprintProvider keyFingerprintProvider) {
+        StringBuilder str = new StringBuilder();
+        IpAddressProvider ipAddressProvider = new IpAddressProvider();
+        List<String> ipAddressTexts = ipAddressProvider.ipAddressTexts(ctxt, false);
+        for (String ipAddressText : ipAddressTexts) {
+            if (prefsBean.getServerToStart().startFtp()) {
+                str.append("ftp://");
+                str.append(ipAddressText);
+                str.append(":");
+                str.append(prefsBean.getPortStr());
+                str.append("\n");
+            }
+            if (prefsBean.getServerToStart().startSftp()) {
+                str.append("sftp://");
+                str.append(ipAddressText);
+                str.append(":");
+                str.append(prefsBean.getSecurePortStr());
+                str.append("\n");
+            }
+        }
+
+        if (prefsBean.getServerToStart().startSftp()) {
+            if (!keyFingerprintProvider.areFingerprintsGenerated()) {
+                keyFingerprintProvider.calcPubkeyFingerprints(ctxt);
+            }
+            str.append("\n");
+            str.append("Key Fingerprints");
+            str.append("\n");
+            str.append("MD5: ");
+            str.append(keyFingerprintProvider.getBase64Md5());
+            str.append("SHA1: ");
+            str.append(keyFingerprintProvider.getBase64Sha1());
+            str.append("SHA256: ");
+            str.append(keyFingerprintProvider.getBase64Sha256());
+        }
+
+        return str.toString();
     }
 
     private static void updateWidget(Context context, boolean running)
@@ -259,11 +333,15 @@ public class ServicesStartStopUtil {
         manager.updateAppWidget(thisWidget, remoteViews);
     }
 
-    public static Notification updateNonActivityUI(Context ctxt, boolean serverRunning) {
+    public static Notification updateNonActivityUI(
+            Context ctxt,
+            boolean serverRunning,
+            PrefsBean prefsBean,
+            KeyFingerprintProvider keyFingerprintProvider) {
         Notification notification = null;
         updateWidget(ctxt, serverRunning);
         if (serverRunning) {
-            notification = createStatusbarNotification(ctxt);
+            notification = createStatusbarNotification(ctxt, prefsBean, keyFingerprintProvider);
         } else {
             LOGGER.debug("removeStatusbarNotification()");
             NotificationUtil.removeStatusbarNotification(ctxt);
