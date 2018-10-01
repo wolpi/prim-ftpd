@@ -98,6 +98,10 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	private ServersRunningBean serversRunning;
 	private long timestampOfLastEvent = 0;
 
+	protected int getLayoutId() {
+		return R.layout.main;
+	}
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -116,32 +120,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		// layout & theme
 		theme = LoadPrefsUtil.theme(prefs);
 		setTheme(theme.resourceId());
-		setContentView(R.layout.main);
-
-		// leanback / tv / fallback buttons
-		if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN)) {
-			findViewById(R.id.fallbackButtonsContainer).setVisibility(View.VISIBLE);
-
-			findViewById(R.id.fallbackButtonStartServer).setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					handleStart();
-				}
-			});
-			findViewById(R.id.fallbackButtonStopServer).setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					handleStop();
-				}
-			});
-			findViewById(R.id.fallbackButtonPrefs).setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					handlePrefs();
-				}
-			});
-		}
-
+		setContentView(getLayoutId());
 
 		// calc keys fingerprints
 		AsyncTask<Void, Void, Void> task = new CalcPubkeyFinterprintsTask(keyFingerprintProvider, this);
@@ -551,10 +530,14 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		}
 
 		// update fallback buttons
-		findViewById(R.id.fallbackButtonStartServer).setVisibility(
-				atLeastOneRunning ? View.GONE : View.VISIBLE);
-		findViewById(R.id.fallbackButtonStopServer).setVisibility(
-				atLeastOneRunning ? View.VISIBLE : View.GONE);
+		View fallbackButtonStart = findViewById(R.id.fallbackButtonStartServer);
+		if (fallbackButtonStart != null) {
+			fallbackButtonStart.setVisibility(atLeastOneRunning ? View.GONE : View.VISIBLE);
+		}
+		View fallbackButtonStop = findViewById(R.id.fallbackButtonStopServer);
+		if (fallbackButtonStop != null) {
+			fallbackButtonStop.setVisibility(atLeastOneRunning ? View.VISIBLE : View.GONE);
+		}
 
 		// remove status bar notification if server not running
 		if (!atLeastOneRunning) {
