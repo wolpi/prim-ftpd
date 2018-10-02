@@ -1,2 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="ifacesLabel">网络接口</string>
+    <string name="ipAddrLabel">IP 地址</string>
+    <string name="ifacesError">错误：</string>
+    <string name="protocolLabel">协议</string>
+    <string name="portLabel">端口</string>
+    <string name="fingerprintsLabel">密钥指纹</string>
+    <string name="generateKeysMessage">新建密钥？</string>
+    <string name="generatingKeysMessage">正在创建密钥…</string>
+    <string name="generate">创建</string>
+    <string name="cancel">取消</string>
+    <string name="state">状态</string>
+    <string name="serverStarted">运行中…</string>
+    <string name="serverStopped">已停止</string>
+    <string name="permissionRequired">这个应用需要 \"%1$s\" 权限才能工作！</string>
+    <string name="permissionNameStorage">存储</string>
+    <string name="quickSettingsServerStarted">pFTPd 运行中…</string>
+    <string name="quickSettingsServerStopped">pFTPd 已停止</string>
+    <string name="saveAs">另存为</string>
+
+    <string name="startService">启动服务器</string>
+    <string name="stopService">停止服务器</string>
+    <string name="toggleService">调整服务器启动/停止</string>
+    <string name="notificationTitle">FTP 服务器</string>
+
+    <string name="haveToSetPassword">首先您需要设置密码</string>
+    <string name="serverRunning">FTP 服务器正在运行</string>
+    <string name="serverCouldNotBeStarted">无法启动服务器！错误信息：</string>
+    <string name="portInvalid_v2">端口号无效。值必须在1024到64000之间。</string>
+    <string name="portsEqual_v2">端口号是一样的。这不行。</string>
+    <string name="restartServer">你需要重启服务器以使更改生效。</string>
+    <string name="invalidDir">文件夹无效。</string>
+    <string name="couldNotReadKeyAuthKey">用于密钥验证的公钥不能被读取。 检查日志。</string>
+
+    <string name="prefs">设置</string>
+    <string name="prefCategoryTitle">FTP 服务器设置</string>
+    <string name="prefTitleUser">用户名</string>
+    <string name="prefSummaryUser">FTP 服务器用户名</string>
+    <string name="prefTitlePassword">密码</string>
+    <string name="prefSummaryPassword">FTP 服务器密码</string>
+    <string name="prefTitlePort">端口</string>
+    <string name="prefSummaryPort">FTP 服务器端口号</string>
+    <string name="prefTitlePortSecure">安全端口号</string>
+    <string name="prefSummaryPortSecure">FTP 服务器端口 (加密的)</string>
+    <string name="prefTitleStartDir">服务器开始目录</string>
+    <string name="prefSummaryStartDir">登录之后所在的文件夹</string>
+    <string name="prefTitleAnnounce">在局域网广播服务器</string>
+    <string name="prefSummaryAnnounce">通过DNS-SD(Bonjour)广播FTP服务器。 可能在一些设备上导致崩溃。</string>
+    <string name="prefTitleAnnounceName">服务名</string>
+    <string name="prefSummaryAnnounceName">广播的服务器名称。</string>
+    <string name="prefTitleWakelock">防止挂起</string>
+    <string name="prefSummaryWakelock">当服务器正在运行时防止挂起。挂起会导致上传/下载中断。</string>
+    <string name="prefTitleWhichServerToStart">要启动的服务器</string>
+    <string name="prefSummaryWhichServerToStart">选择使用仅FTP，还是仅SFTP，还是都启用。</string>
+    <string name="prefTitleStartOnBoot">开机时启动</string>
+    <string name="prefSummaryStartOnBoot">系统启动时打开服务器。</string>
+    <string name="prefTitleStartOnOpen">打开应用时启动服务器</string>
+    <string name="prefSummaryStartOnOpen">当打开应用时开始服务器。</string>
+    <string name="prefTitlePubKeyAuth">公钥验证</string>
+    <string name="prefSummaryPubKeyAuth">当启用时放置您的ssh2公钥于 %s。 仅用于SFTP。</string>
+    <string name="prefTitleAnonymousLogin">匿名登录</string>
+    <string name="prefSummaryAnonymousLogin">打开以允许匿名登录。</string>
+    <string name="prefTitleFtpPassivePorts">FTP 被动端口</string>
+    </resources>
