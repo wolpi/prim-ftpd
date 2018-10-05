@@ -3,8 +3,8 @@ package org.primftpd.filesystem;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -98,6 +98,10 @@ public abstract class RootFile<T> extends AbstractFile {
         return result;
     }
 
+    private String escapePathForDD(String path) {
+        return path.replaceAll(" ", "\\ ");
+    }
+
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
 
@@ -106,39 +110,28 @@ public abstract class RootFile<T> extends AbstractFile {
             runCommand("touch" + " \"" + absPath + "\"");
         }
 
-        // remember current permission
-        final String perm = readCommandOutput("stat -c %a \"" + absPath + "\"");
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("su", "-c", "\"dd of=" + escapePathForDD(absPath) + "\"");
+        Process proc = processBuilder.start();
 
-        // set perm to be able to read file
-        runCommand("chmod 0777 \"" + absPath + "\"");
-
-        return new FileOutputStream(absPath) {
-            @Override
-            public void close() throws IOException {
-                super.close();
-                // restore permission
-                runCommand("chmod 0" + perm + " \"" + absPath + "\"");
-            }
-        };
+        return new BufferedOutputStream(proc.getOutputStream());
     }
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
 
-        // remember current permission
-        final String perm = readCommandOutput("stat -c %a \"" + absPath + "\"");
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("su", "-c", "\"dd if=" + escapePathForDD(absPath) + "\"");
+        Process proc = processBuilder.start();
 
-        // set perm to be able to read file
-        runCommand("chmod 0777 \"" + absPath + "\"");
+        try {
+            // workaround for weird errors
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            throw new IOException(e);
+        }
 
-        return new FileInputStream(absPath) {
-            @Override
-            public void close() throws IOException {
-                super.close();
-                // restore permission
-                runCommand("chmod 0" + perm + " \"" + absPath + "\"");
-            }
-        };
+        return new BufferedInputStream(proc.getInputStream());
     }
 
     protected boolean runCommand(String cmd) {

@@ -7,8 +7,6 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
-import eu.chainfire.libsuperuser.Shell;
-
 import org.primftpd.prefs.StorageType;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.ServicesStartStopUtil;
@@ -16,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
+
+import eu.chainfire.libsuperuser.Shell;
 
 /**
  * Handles starting and stopping of Servers, including {@link WakeLock}.
@@ -164,6 +164,7 @@ public class ServerServiceHandler extends Handler
 	private synchronized void shellOpen() {
 		if (shell == null) {
 			logger.debug("opening root shell ({})", logName);
+			// TODO test .setShell()
 			shell = (new Shell.Builder()).useSU().open();
 		} else {
 			logger.debug("root shell already open ({})", logName);
