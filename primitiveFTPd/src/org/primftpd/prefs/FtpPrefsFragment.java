@@ -33,7 +33,7 @@ public class FtpPrefsFragment extends PreferenceFragment
 
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
 			logger.debug("disabling announce prefs, sdk: {}", Build.VERSION.SDK_INT);
-			PreferenceCategory prefCat = (PreferenceCategory) getPreferenceManager().findPreference("ftpPrefCat");
+			PreferenceCategory prefCat = (PreferenceCategory) getPreferenceManager().findPreference("ftpPrefCatSystem");
 
 			Preference announcePref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_ANNOUNCE);
 			prefCat.removePreference(announcePref);
@@ -41,6 +41,7 @@ public class FtpPrefsFragment extends PreferenceFragment
 			Preference announceNamePref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_ANNOUNCE_NAME);
 			prefCat.removePreference(announceNamePref);
 
+			prefCat = (PreferenceCategory) getPreferenceManager().findPreference("ftpPrefCatUi");
 			Preference showConnInfoPref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_SHOW_CONN_INFO);
 			prefCat.removePreference(showConnInfoPref);
 		}
