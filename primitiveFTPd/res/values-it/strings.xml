@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="app_name">primitive ftpd</string>
+<resources><string name="app_name">Primitive FTPd</string>
     <string name="ifacesLabel">Interfaccia di rete</string>
     <string name="ipAddrLabel">Indirizzo IP</string>
     <string name="ifacesError">Errore:</string>
