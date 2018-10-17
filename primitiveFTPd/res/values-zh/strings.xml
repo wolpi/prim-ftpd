@@ -61,4 +61,21 @@
     <string name="prefTitleAnonymousLogin">匿名登录</string>
     <string name="prefSummaryAnonymousLogin">打开以允许匿名登录。</string>
     <string name="prefTitleFtpPassivePorts">FTP 被动端口</string>
+    <string name="prefSummaryFtpPassivePorts">用于被动模式的数据端口。可以是单个端口，一个范围的或一些随机端口。E.g. 5678,5700-5710,5800,5900.</string>
+    <string name="prefTitleIdleTimeout">服务器空闲超时</string>
+    <string name="prefSummaryIdleTimeout">服务器将会在这段时间后终止空闲的连接(仅限于FTP)</string>
+    <string name="prefTheme">主题</string>
+    <string name="prefSummaryTheme">改变主题需要重启应用。</string>
+    <string name="prefTitleLogging">日志</string>
+    <string name="prefSummaryLogging">日志是为了分析错误。如果应用在你的设备上运行不正确，你可以发送日志到开发者。需要重启应用。</string>
+
+    <string name="licence">许可</string>
+    <string name="reset">重置</string>
+
+    <string name="widgetTextStart">启动 ftpd</string>
+    <string name="widgetTextStop">停止 ftpd</string>
+    <string name="isAnonymous">匿名登录 ： %1$b</string>
+    <string name="isServerRunning">服务器正在运行吗？</string>
+
+    <string name="storageType">存储类型</string>
     </resources>
