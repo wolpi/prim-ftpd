@@ -42,4 +42,7 @@
     <string name="prefTitleStartDir">Directório de Arranque do Servidor</string>
     <string name="prefSummaryStartDir">Primeiro diretório após inicio de sessão</string>
     <string name="prefTitleAnnounce">Anunciar o servidor na rede LAN</string>
+    <string name="prefTitleAnnounceName">Nome do servidor</string>
+    <string name="prefSummaryAnnounceName">Nome usado para anunciar o servidor.</string>
+    <string name="prefTitleWakelock">Prevenir Standby</string>
     </resources>
