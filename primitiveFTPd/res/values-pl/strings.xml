@@ -92,4 +92,13 @@
     <string name="selectedSafUri">Wybrany identyfikator SAF URI:</string>
 
     <string name="startServerAndExit">tylko serwer startowy</string>
+    <string name="fingerprintsLabel">Klucz Linii Papilarnych</string>
+    <string name="state">Stan</string>
+    <string name="serverStarted">Uruchamianie …</string>
+    <string name="quickSettingsServerStopped">Zatrzymaj pFTPd</string>
+    <string name="prefsCategoryTitleAuth">Autoryzacja</string>
+    <string name="prefTitleStartOnOpen">Uruchom otwarte</string>
+    <string name="prefTitleShowConnectionInfoInNotification">Pokaż informacje o połączeniu w powiadomieniu</string>
+    <string name="startServerAndUi">zacznij od serwera</string>
+
     </resources>
