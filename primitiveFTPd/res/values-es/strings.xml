@@ -1,33 +1,33 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name">\'primitive ftpd\'</string>
     <string name="ifacesLabel">Interfaz de red</string>
     <string name="ipAddrLabel">Dirección IP</string>
     <string name="ifacesError">Error: </string>
     <string name="protocolLabel">Protocolo</string>
     <string name="portLabel">Puerto</string>
-    <string name="fingerprintsLabel">Huellas de la clave</string>
+    <string name="fingerprintsLabel">Clave de huella dactilar</string>
     <string name="generateKeysMessage">¿Generar claves ?</string>
     <string name="generatingKeysMessage">Generando Claves …</string>
     <string name="generate">Generar</string>
     <string name="cancel">Cancelar</string>
     <string name="state">Estado</string>
     <string name="serverStarted">Funcionando …</string>
-    <string name="serverStopped">Apagado</string>
+    <string name="serverStopped">Detenido</string>
     
-    <string name="startService">Encender servidor</string>
-    <string name="stopService">Apagar servidor</string>
+    <string name="startService">Iniciar servidor</string>
+    <string name="stopService">Detener servidor</string>
     <string name="notificationTitle">Servidor FTP</string>
     
-    <string name="haveToSetPassword">Tienes que establecer una contraseña primero</string>
-    <string name="serverRunning">El servidor FTP Server está funcionando</string>
+    <string name="haveToSetPassword">Debes establecer una contraseña primero</string>
+    <string name="serverRunning">El servidor FTP está funcionando</string>
     <string name="serverCouldNotBeStarted">¡El servidor no pudo arrancar! Mensaje de error: </string>
-    <string name="portInvalid_v2">Ese puerto no es correcto. Debe estar entre 1024 y 64000.</string>
+    <string name="portInvalid_v2">Puerto inválido. Debe estar entre 1024 y 64000.</string>
     <string name="portsEqual_v2">Los puertos son iguales. Esto no puede funcionar.</string>
     <string name="restartServer">Tienes que reiniciar el servidor para que los cambios surtan efecto.</string>
-    <string name="invalidDir">El directorio no es correcto.</string>
-    <string name="couldNotReadKeyAuthKey">La clave pública para autenticar no puede ser leída. Comprueba los registros.</string>
+    <string name="invalidDir">Directorio inválido.</string>
+    <string name="couldNotReadKeyAuthKey">La clave pública de autenticación no puede leerse. Comprueba los registros.</string>
 
     <string name="prefs">Preferencias</string>
     <string name="prefTitleUser">Usuario</string>
@@ -41,15 +41,15 @@
     <string name="prefTitleStartDir">Directorio de inicio</string>
     <string name="prefSummaryStartDir">Primer directorio en el servidor después de iniciar sesión</string>
     <string name="prefTitleAnnounce">Divulgar servidor en LAN</string>
-    <string name="prefSummaryAnnounce">Divulga el servidor FTP en la LAN a través de DNS-SD (Bonjour). Puede causar fallos en algunos dispositivos.</string>
+    <string name="prefSummaryAnnounce">Divulga el servidor FTP en LAN a través de DNS-SD (Bonjour). Puede causar fallos en algunos dispositivos.</string>
     <string name="prefTitleWakelock">Evitar modo espera</string>
-    <string name="prefSummaryWakelock">Evita entrar en modo espera mientras el servidor está encendido. El modo espera puede provocar que las transferencias se interrumpan.</string>
-    <string name="prefTitleWhichServerToStart">Servidor/es a encender</string>
-    <string name="prefSummaryWhichServerToStart">Elige si deseas encender solo FTP, solo SFTP o ambos.</string>
-    <string name="prefTitleStartOnBoot">Encender al inicio</string>
-    <string name="prefSummaryStartOnBoot">Enciende el servidor al arrancar el sistema.</string>
+    <string name="prefSummaryWakelock">Evita el modo espera mientras el servidor está encendido. El modo espera puede provocar que las transferencias se interrumpan.</string>
+    <string name="prefTitleWhichServerToStart">Servidor/es a iniciar</string>
+    <string name="prefSummaryWhichServerToStart">Elige si deseas iniciar FTP, SFTP o ambos.</string>
+    <string name="prefTitleStartOnBoot">Iniciar en arranque</string>
+    <string name="prefSummaryStartOnBoot">Iniciar el servidor al arrancar el sistema.</string>
     <string name="prefTitlePubKeyAuth">Autenticación de clave pública</string>
-    <string name="prefSummaryPubKeyAuth">Cuando se habilite, pon tu clave pública ssh2 en %s (sólo SFTP).</string>
+    <string name="prefSummaryPubKeyAuth">Cuando se habilite, pon tu clave pública ssh2 en %s (solo SFTP).</string>
     <string name="prefTheme">Tema</string>
     <string name="prefSummaryTheme">Al cambiar el tema deberías reiniciar la aplicación.</string>
     <string name="prefTitleLogging">Registro</string>
@@ -58,7 +58,7 @@
     <string name="licence">Licencia</string>
     <string name="reset">Reinicializar</string>
 
-    <string name="widgetTextStart">arrancar (s)ftpd</string>
+    <string name="widgetTextStart">iniciar (s)ftpd</string>
     <string name="widgetTextStop">detener (s)ftpd</string>
     
     <string-array name="prefWhichServerToStartNames">
@@ -86,16 +86,16 @@
     <string name="translate">Traducir</string>
 
     <string name="toggleService">Iniciar/detener servidor</string>
-    <string name="ftpPassivePortsInvalid">Valor de Puertos Pasivos FTP no es válido</string>
+    <string name="ftpPassivePortsInvalid">Valor de Puertos Pasivos FTP no es válido.</string>
 
     <string name="prefsCategoryTitleAuth">Autenticación</string>
     <string name="prefsCategoryTitleConnectivity">Conectividad</string>
     <string name="prefsCategoryTitleUi">Interfaz de usuario</string>
     <string name="prefsCategoryTitleSystem">Sistema</string>
     <string name="prefTitleAnnounceName">Nombre de servidor</string>
-    <string name="prefSummaryAnnounceName">Nombre para anunciar el servidor</string>
+    <string name="prefSummaryAnnounceName">Nombre para anunciar el servidor.</string>
     <string name="prefTitleStartOnOpen">Iniciar al abrir</string>
-    <string name="prefSummaryStartOnOpen">Iniciar servidor cuando se abre la aplicación</string>
+    <string name="prefSummaryStartOnOpen">Iniciar servidor cuando se abre la aplicación.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Mostrar información en notificaciones</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Mostrar información de la conexión en notificación.</string>
     <string name="prefTitleShowStartStopNotification">Mostrar notificación en inicio/parada de servidor(es)</string>
