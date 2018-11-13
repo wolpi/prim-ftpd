@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <string name="app_name">primitive ftpd</string>
@@ -9,11 +9,11 @@
     <string name="portLabel">Puerto</string>
     <string name="fingerprintsLabel">Huellas de la clave</string>
     <string name="generateKeysMessage">¿Generar claves ?</string>
-    <string name="generatingKeysMessage">Generando Claves &#8230;</string>
+    <string name="generatingKeysMessage">Generando Claves …</string>
     <string name="generate">Generar</string>
     <string name="cancel">Cancelar</string>
     <string name="state">Estado</string>
-    <string name="serverStarted">Funcionando &#8230;</string>
+    <string name="serverStarted">Funcionando …</string>
     <string name="serverStopped">Apagado</string>
     
     <string name="startService">Encender servidor</string>
@@ -49,17 +49,17 @@
     <string name="prefTitleStartOnBoot">Encender al inicio</string>
     <string name="prefSummaryStartOnBoot">Enciende el servidor al arrancar el sistema.</string>
     <string name="prefTitlePubKeyAuth">Autenticación de clave pública</string>
-    <string name="prefSummaryPubKeyAuth">Cuando se habilita sitúa tu clave pública ssh2 en %s. Solo SFTP.</string>
+    <string name="prefSummaryPubKeyAuth">Cuando se habilite, pon tu clave pública ssh2 en %s (sólo SFTP).</string>
     <string name="prefTheme">Tema</string>
-    <string name="prefSummaryTheme">Al cambiar el tema puede que necesites reiniciar la aplicación.</string>
+    <string name="prefSummaryTheme">Al cambiar el tema deberías reiniciar la aplicación.</string>
     <string name="prefTitleLogging">Registro</string>
-    <string name="prefSummaryLogging">El registro sirve para analizar los errores. Si la aplicación no funciona correctamente en tu dispositivo puede enviar un registro a los desarrolladores. Puede necesitar reiniciar la app.</string>
+    <string name="prefSummaryLogging">El registro permite analizar errores. Si la aplicación no funciona correctamente puedes enviar un registro a los desarrolladores. Deberías reiniciar la aplicación.</string>
     
     <string name="licence">Licencia</string>
     <string name="reset">Reinicializar</string>
 
     <string name="widgetTextStart">arrancar (s)ftpd</string>
-    <string name="widgetTextStop">apagar (s)ftpd</string>
+    <string name="widgetTextStop">detener (s)ftpd</string>
     
     <string-array name="prefWhichServerToStartNames">
         <item>FTP y SFTP</item>
@@ -78,4 +78,49 @@
         <item>Registrar en Android</item>
     </string-array>
 
-</resources>
+<string name="permissionRequired">\"%1$s\" permiso necesario para el funcionamiento de la aplicación!</string>
+    <string name="permissionNameStorage">Almacenamiento</string>
+    <string name="quickSettingsServerStarted">pFTPd Funcionando …</string>
+    <string name="quickSettingsServerStopped">pFTPd Detenido</string>
+    <string name="saveAs">Guardar como</string>
+    <string name="translate">Traducir</string>
+
+    <string name="toggleService">Iniciar/detener servidor</string>
+    <string name="ftpPassivePortsInvalid">Valor de Puertos Pasivos FTP no es válido</string>
+
+    <string name="prefsCategoryTitleAuth">Autenticación</string>
+    <string name="prefsCategoryTitleConnectivity">Conectividad</string>
+    <string name="prefsCategoryTitleUi">Interfaz de usuario</string>
+    <string name="prefsCategoryTitleSystem">Sistema</string>
+    <string name="prefTitleAnnounceName">Nombre de servidor</string>
+    <string name="prefSummaryAnnounceName">Nombre para anunciar el servidor</string>
+    <string name="prefTitleStartOnOpen">Iniciar al abrir</string>
+    <string name="prefSummaryStartOnOpen">Iniciar servidor cuando se abre la aplicación</string>
+    <string name="prefTitleShowConnectionInfoInNotification">Mostrar información en notificaciones</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">Mostrar información de la conexión en notificación.</string>
+    <string name="prefTitleShowStartStopNotification">Mostrar notificación en inicio/parada de servidor(es)</string>
+    <string name="prefSummaryShowStartStopNotification">Mostrar notificación permanente para inicio/parada de servidor(es).</string>
+    <string name="prefTitleAnonymousLogin">Inicio de sesión anónimo</string>
+    <string name="prefSummaryAnonymousLogin">Selecciona si permites inicio de sesión anónimo.</string>
+    <string name="prefTitleFtpPassivePorts">Puertos pasivos FTP</string>
+    <string name="prefSummaryFtpPassivePorts">Puertos para conexión FTP de datos pasivos. Puede ser un único puerto o una lista. Ej.: 5678,5700-5710,5800,5900.</string>
+    <string name="prefTitleIdleTimeout">Tiempo de espera de inactividad del servidor</string>
+    <string name="prefSummaryIdleTimeout">El servidor terminará las conexiones inactivas después de este tiempo (sólo FTP)</string>
+    <string name="isAnonymous">Inicio de sesión anónimo: %1$b</string>
+    <string name="selectServerAction">Selecciona acción del servidor</string>
+    <string name="isServerRunning">¿Está funcionando el servidor?</string>
+
+    <string name="storageType">Tipo de almacenamiento</string>
+    <string name="storageTypePlain">Sistema de archivos antiguo simple</string>
+    <string name="storageTypeRoot">Super usuario (en dispositivo \"rooteado\")</string>
+    <string name="storageTypeSaf">Marco de acceso de almacenamiento de Android (SAF)
+\n(por ejemplo, para la tarjeta sd)</string>
+    <string name="storageTypeRoSaf">Sólo lectura SAF (¡el más rápido!)</string>
+    <string name="safExplainHeading">Cómo funciona SAF</string>
+    <string name="safExplain">Android te pedirá que elijas un directorio que estará disponible mediante el servidor. De vez en cuando el permiso puede revocarse y tendrás que seleccionarlo de nuevo.</string>
+    <string name="selectedSafUri">Seleccionar SAF URI:</string>
+
+    <string name="startServerAndExit">Iniciar sólo el servidor</string>
+    <string name="startServerAndUi">iniciar con el servidor</string>
+
+    </resources>
