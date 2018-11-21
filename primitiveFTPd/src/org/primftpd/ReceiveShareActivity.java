@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.provider.DocumentFile;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -81,7 +82,7 @@ public class ReceiveShareActivity extends Activity {
         }
 
         // display uris, usually that should not be visible
-        ListView listView = (ListView) findViewById(android.R.id.list);
+        ListView listView = findViewById(android.R.id.list);
         if (uris != null) {
             listView.setAdapter(new ArrayAdapter<>(
                     this,
@@ -190,8 +191,19 @@ public class ReceiveShareActivity extends Activity {
             addExtension = true;
         }
         if (filename == null && uri != null) {
-            // if we don't got content use last fragment of url as filename
-            filename = uri.getLastPathSegment();
+            // if we don't got content derive filename from url
+
+            // 1st: try to resolve content url
+            try {
+                DocumentFile documentFile = DocumentFile.fromSingleUri(this, uri);
+                filename = documentFile.getName();
+            } catch (Exception e) {
+                logger.error("could not resolve content url: " + uri, e);
+
+                // 2nd: use last segment of url
+                filename = uri.getLastPathSegment();
+            }
+
             addExtension = !filename.contains(".");
         }
         if (filename == null || (content == null && addExtension)) {
@@ -246,7 +258,7 @@ public class ReceiveShareActivity extends Activity {
 
     private void copyStream(InputStream is, OutputStream os) {
         try {
-            byte[] bytes = new byte[4096];
+            byte[] bytes = new byte[BUFFER_SIZE];
             for (;;) {
                 int count = is.read(bytes, 0, BUFFER_SIZE);
                 if (count == -1) {
