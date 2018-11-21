@@ -19,6 +19,7 @@ if len(keystorePath) < 1:
     print("env var PFTPD_KEYSTORE not set!")
     sys.exit(-1)
 
+fullBuild = len(sys.argv) > 1 and sys.argv[1] == '--full'
 
 storePassword = getpass("store password: ")
 keyPassword = getpass("key password: ")
@@ -49,30 +50,31 @@ newMinor = oldMinor + 1
 newVersion = major + "." + str(newMinor)
 newSnapshotVersion = newVersion + "-SNAPSHOT"
 
-print("oldVersionCode: " + oldVersionCode)
-print("newVersionCode: " + newVersionCode)
-print("oldSnapshotVersion: " + oldSnapshotVersion)
-print("releaseVersion: " + releaseVersion)
-print("major: " + major)
-print("oldMinor: " + str(oldMinor))
-print("newMinor: " + str(newMinor))
-print("newVersion: " + newVersion)
-print("newSnapshotVersion: " + newSnapshotVersion)
-print()
+if fullBuild:
+    print("oldVersionCode: " + oldVersionCode)
+    print("newVersionCode: " + newVersionCode)
+    print("oldSnapshotVersion: " + oldSnapshotVersion)
+    print("releaseVersion: " + releaseVersion)
+    print("major: " + major)
+    print("oldMinor: " + str(oldMinor))
+    print("newMinor: " + str(newMinor))
+    print("newVersion: " + newVersion)
+    print("newSnapshotVersion: " + newSnapshotVersion)
+    print()
 
-# write release version in file
-oldVersionCodeLine = "versionCode " + oldVersionCode
-newVersionCodeLine = "versionCode " + newVersionCode 
-oldVersionLine = "versionName \"" + oldSnapshotVersion + "\""
-releaseVersionLine = "versionName \"" + releaseVersion + "\""
-newSnapshotVersionLine = "versionName \"" + newSnapshotVersion + "\""
+    # write release version in file
+    oldVersionCodeLine = "versionCode " + oldVersionCode
+    newVersionCodeLine = "versionCode " + newVersionCode
+    oldVersionLine = "versionName \"" + oldSnapshotVersion + "\""
+    releaseVersionLine = "versionName \"" + releaseVersion + "\""
+    newSnapshotVersionLine = "versionName \"" + newSnapshotVersion + "\""
 
-content = content.replace(oldVersionLine, releaseVersionLine)
-print("writing release version in file")
-print()
-file = open(path, "w")
-file.write(content)
-file.close()
+    content = content.replace(oldVersionLine, releaseVersionLine)
+    print("writing release version in file")
+    print()
+    file = open(path, "w")
+    file.write(content)
+    file.close()
 
 # run build
 print("running build")
@@ -87,65 +89,68 @@ subprocess.run([
     "-Pandroid.injected.signing.key.password=" + keyPassword
 ], stdout=subprocess.PIPE, check=True)
 
-# commit version change
-msg = "set version to " + releaseVersion
-print("commiting, \"" + msg + "\"")
-print()
-subprocess.run([
-    "git",
-    "add",
-    path
-], stdout=subprocess.PIPE, check=True)
-subprocess.run([
-    "git",
-    "commit",
-    "-m",
-    msg
-], stdout=subprocess.PIPE, check=True)
+if fullBuild:
+    # commit version change
+    msg = "set version to " + releaseVersion
+    print("commiting, \"" + msg + "\"")
+    print()
+    subprocess.run([
+        "git",
+        "add",
+        path
+    ], stdout=subprocess.PIPE, check=True)
+    subprocess.run([
+        "git",
+        "commit",
+        "-m",
+        msg
+    ], stdout=subprocess.PIPE, check=True)
 
-# tag
-print("tagging")
-print() #git tag -a prim-ftpd-1.0.1 -m 'prim-ftpd-1.0.1'
-subprocess.run([
-    "git",
-    "tag",
-    "-a",
-    "prim-ftpd-" + releaseVersion,
-    "-m",
-    "'prim-ftpd-" + releaseVersion + "'"
-], stdout=subprocess.PIPE, check=True)
+    # tag
+    print("tagging")
+    print() #git tag -a prim-ftpd-1.0.1 -m 'prim-ftpd-1.0.1'
+    subprocess.run([
+        "git",
+        "tag",
+        "-a",
+        "prim-ftpd-" + releaseVersion,
+        "-m",
+        "'prim-ftpd-" + releaseVersion + "'"
+    ], stdout=subprocess.PIPE, check=True)
 
-# write new snapshot version in file
-content = content.replace(oldVersionCodeLine, newVersionCodeLine)
-content = content.replace(releaseVersionLine, newSnapshotVersionLine)
-print("writing new snapshot version in file")
-print()
-file = open(path, "w")
-file.write(content)
-file.close()
+    # write new snapshot version in file
+    content = content.replace(oldVersionCodeLine, newVersionCodeLine)
+    content = content.replace(releaseVersionLine, newSnapshotVersionLine)
+    print("writing new snapshot version in file")
+    print()
+    file = open(path, "w")
+    file.write(content)
+    file.close()
 
-# commit
-msg = "set version to " + newSnapshotVersion + " and code to " + newVersionCode
-print("commiting, \"" + msg + "\"")
-print()
-subprocess.run([
-    "git",
-    "add",
-    path
-], stdout=subprocess.PIPE, check=True)
-subprocess.run([
-    "git",
-    "commit",
-    "-m",
-    msg
-], stdout=subprocess.PIPE, check=True)
+    # commit
+    msg = "set version to " + newSnapshotVersion + " and code to " + newVersionCode
+    print("commiting, \"" + msg + "\"")
+    print()
+    subprocess.run([
+        "git",
+        "add",
+        path
+    ], stdout=subprocess.PIPE, check=True)
+    subprocess.run([
+        "git",
+        "commit",
+        "-m",
+        msg
+    ], stdout=subprocess.PIPE, check=True)
 
 if len(releasesPath) > 0:
     print("copy to releases dir")
-    copyfile("primitiveFTPd/build/outputs/apk/release/primitiveFTPd-release.apk", releasesPath + "/primitiveFTPd-" + releaseVersion + ".apk")
+    targetPath = releasesPath + "/primitiveFTPd-" + (releaseVersion if fullBuild else oldSnapshotVersion) + ".apk"
+    copyfile("primitiveFTPd/build/outputs/apk/release/primitiveFTPd-release.apk", targetPath)
 else:
     print("releases dir not set, no copy")
 
-print()
-print("you should push !!!")
-print()
+if fullBuild:
+    print()
+    print("you should push !!!")
+    print()
