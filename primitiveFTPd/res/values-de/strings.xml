@@ -28,6 +28,7 @@
     <string name="notificationTitle">FTP-Server</string>
 
     <string name="haveToSetPassword">Sie müssen erst ein Passwort setzen</string>
+    <string name="haveToSetAuthMechanism">Sie müssen erst einen Authentifizierungs-Mechanismus festlegen</string>
     <string name="serverRunning">FTP-Server läuft</string>
     <string name="serverCouldNotBeStarted">Server konnte nicht gestartet werden! Fehlermeldung: </string>
     <string name="portInvalid_v2">Port ist ungültig. Er muss zwischen 1024 und 64000 liegen.</string>

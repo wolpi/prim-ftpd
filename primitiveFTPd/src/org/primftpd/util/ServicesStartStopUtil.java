@@ -48,7 +48,7 @@ public class ServicesStartStopUtil {
         if (!isPasswordOk(prefsBean)) {
             Toast.makeText(
                 context,
-                R.string.haveToSetPassword,
+                R.string.haveToSetAuthMechanism,
                 Toast.LENGTH_LONG).show();
 
             if (activity == null) {
