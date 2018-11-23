@@ -34,4 +34,13 @@ public final class Defaults {
 		dirPickerIntent.putExtra(FilePickerActivity.EXTRA_START_PATH, initialVal.getAbsolutePath());
 		return dirPickerIntent;
 	}
+
+	public static Intent createDirAndFilePicker(Context ctxt) {
+		Intent intent = new Intent(ctxt, ResettingFilePickerActivity.class);
+		intent.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false);
+		intent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
+		intent.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_FILE_AND_DIR);
+		intent.putExtra(FilePickerActivity.EXTRA_START_PATH, HOME_DIR.getAbsolutePath());
+		return intent;
+	}
 }
