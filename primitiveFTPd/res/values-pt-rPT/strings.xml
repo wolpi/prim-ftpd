@@ -45,4 +45,16 @@
     <string name="prefTitleAnnounceName">Nome do servidor</string>
     <string name="prefSummaryAnnounceName">Nome usado para anunciar o servidor.</string>
     <string name="prefTitleWakelock">Prevenir Standby</string>
+    <string name="prefSummaryWakelock">Previne o Standby enquanto o servidor estiver a correr. Standby pode fazer com que uploads/downloads sejam interrompidos.</string>
+    <string name="prefTitleWhichServerToStart">Servidor(es) a arrancar</string>
+    <string name="prefSummaryWhichServerToStart">Escolher se arranca apenas o servidor FTP, o servidor SFTP, ou ambos.</string>
+    <string name="prefTitleStartOnBoot">Iniciar no arranque</string>
+    <string name="prefSummaryStartOnBoot">Arrancar o servidor com o arranque do sistema.</string>
+    <string name="prefTitleStartOnOpen">Arrancar ao abrir</string>
+    <string name="prefSummaryStartOnOpen">Arrancar o servidor quando a aplicação é aberta.</string>
+    <string name="prefTitlePubKeyAuth">"Chave de Autenticação Pública "</string>
+    <string name="prefSummaryPubKeyAuth">Quando activado coloque a chave pública ssh2 em %s. SFTP apenas.</string>
+    <string name="prefTitleAnonymousLogin">Autenticação Anónima</string>
+    <string name="prefSummaryAnonymousLogin">Ativar se autenticação anónima é permitida no servidor.</string>
+    <string name="prefTitleFtpPassivePorts">Portas Passivas FTP</string>
     </resources>
