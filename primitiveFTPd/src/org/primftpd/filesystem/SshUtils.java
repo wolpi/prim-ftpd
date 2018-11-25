@@ -66,4 +66,35 @@ class SshUtils {
                 return null;
         }
     }
+
+    static void setAttribute(SshFile sshFile, SshFile.Attribute attribute, Object value) {
+        // TODO ssh set attribute
+        switch (attribute) {
+            case Size:
+                break;
+            case Uid:
+                break;
+            case Owner:
+                break;
+            case Gid:
+                break;
+            case Group:
+                break;
+            case IsDirectory:
+                break;
+            case IsRegularFile:
+                break;
+            case IsSymbolicLink:
+                break;
+            case Permissions:
+                break;
+            case CreationTime:
+                break;
+            case LastModifiedTime:
+                sshFile.setLastModified((Long)value);
+                break;
+            case LastAccessTime:
+                break;
+        }
+    }
 }

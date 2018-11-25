@@ -114,13 +114,15 @@ public abstract class AbstractFile {
     }
 
     public void setAttribute(SshFile.Attribute attribute, Object value) throws IOException {
-        // TODO ssh setAttribute
-        logger.trace("[{}] setAttribute()", name);
+        logger.trace("[{}] setAttribute({})", name, attribute);
+        SshUtils.setAttribute((SshFile)this, attribute, value);
     }
 
     public void setAttributes(Map<SshFile.Attribute, Object> attributes) throws IOException {
-        // TODO ssh setAttributes
         logger.trace("[{}] setAttributes()", name);
+        for (SshFile.Attribute attr : attributes.keySet()) {
+            setAttribute(attr, attributes.get(attr));
+        }
     }
 
     public Object getAttribute(SshFile.Attribute attribute, boolean followLinks)
