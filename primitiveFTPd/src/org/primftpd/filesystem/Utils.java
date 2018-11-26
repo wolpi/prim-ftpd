@@ -57,4 +57,8 @@ class Utils {
         }
         return sb.toString();
     }
+
+    static String parent(String path) {
+        return path.substring(0, path.lastIndexOf('/'));
+    }
 }

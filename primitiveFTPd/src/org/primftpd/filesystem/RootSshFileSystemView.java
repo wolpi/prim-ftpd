@@ -22,7 +22,7 @@ public class RootSshFileSystemView extends RootFileSystemView<RootSshFile, SshFi
 
     @Override
     protected RootSshFile createFile(LsOutputBean bean, String absPath) {
-        return new RootSshFile(shell, bean, absPath, session);
+        return new RootSshFile(shell, bean, absPath, session, this);
     }
 
     @Override

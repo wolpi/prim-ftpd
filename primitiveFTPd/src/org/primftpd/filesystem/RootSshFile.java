@@ -17,14 +17,16 @@ import eu.chainfire.libsuperuser.Shell;
 public class RootSshFile extends RootFile<SshFile> implements SshFile {
 
     private final Session session;
+    private final RootSshFileSystemView fileSystemView;
 
-    public RootSshFile(Shell.Interactive shell, LsOutputBean bean, String absPath, Session session) {
+    public RootSshFile(Shell.Interactive shell, LsOutputBean bean, String absPath, Session session, RootSshFileSystemView fileSystemView) {
         super(shell, bean, absPath);
         this.session = session;
+        this.fileSystemView = fileSystemView;
     }
 
     protected RootSshFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath) {
-        return new RootSshFile(shell, bean, absPath, session);
+        return new RootSshFile(shell, bean, absPath, session, fileSystemView);
     }
 
     @Override
@@ -117,7 +119,9 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     @Override
     public SshFile getParentFile() {
         logger.trace("[{}] getParentFile()", name);
-        return null;
+        String parentPath = Utils.parent(absPath);
+        logger.trace("[{}]   getParentFile() -> {}", name, parentPath);
+        return fileSystemView.getFile(parentPath);
     }
 
     @Override
