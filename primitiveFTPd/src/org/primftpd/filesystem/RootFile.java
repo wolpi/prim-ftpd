@@ -51,8 +51,9 @@ public abstract class RootFile<T> extends AbstractFile {
 
     public boolean setLastModified(long time) {
         logger.trace("[{}] setLastModified({})", name, time);
-        // TODO root setLastModified()
-        return false;
+
+        String dateStr = Utils.touchDate(time);
+        return runCommand("touch -t " + dateStr + " \"" + absPath + "\"");
     }
 
     public boolean mkdir() {
