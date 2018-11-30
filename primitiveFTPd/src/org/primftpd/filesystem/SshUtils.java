@@ -62,6 +62,8 @@ class SshUtils {
             case LastAccessTime:
                 // TODO ssh access time
                 return Long.valueOf(sshFile.getLastModified());
+            case NLink:
+                return 0;
             default:
                 return null;
         }
@@ -94,6 +96,8 @@ class SshUtils {
                 sshFile.setLastModified((Long)value);
                 break;
             case LastAccessTime:
+                break;
+            case NLink:
                 break;
         }
     }
