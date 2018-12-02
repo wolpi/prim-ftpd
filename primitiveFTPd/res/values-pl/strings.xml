@@ -101,4 +101,5 @@
     <string name="prefTitleShowConnectionInfoInNotification">Pokaż informacje o połączeniu w powiadomieniu</string>
     <string name="startServerAndUi">zacznij od serwera</string>
 
+    <string name="haveToSetAuthMechanism">Najpierw musisz ustawić mechanizm uwierzytelniania</string>
     </resources>
