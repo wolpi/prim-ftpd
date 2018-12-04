@@ -123,4 +123,5 @@
     <string name="startServerAndExit">Iniciar sólo el servidor</string>
     <string name="startServerAndUi">iniciar con el servidor</string>
 
+    <string name="haveToSetAuthMechanism">Primero debes configurar un método de autenticación</string>
     </resources>
