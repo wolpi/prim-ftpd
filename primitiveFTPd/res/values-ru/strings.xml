@@ -96,4 +96,10 @@
         <item>Только SFTP</item>
     </string-array>
 
+    <string-array name="prefLoggingNames">
+        <item>Без журнала</item>
+        <item>Журнал текстовом файле</item>
+        <item>Журнал в системе андроид</item>
+    </string-array>
+
 </resources>
