@@ -70,6 +70,10 @@ class Utils {
         TOUCH_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
     static String touchDate(long time) {
-        return TOUCH_DATE_FORMAT.format(time * 1000);
+        return TOUCH_DATE_FORMAT.format(sshTimeToFileTime(time));
+    }
+
+    static long sshTimeToFileTime(long time) {
+        return time * 1000;
     }
 }

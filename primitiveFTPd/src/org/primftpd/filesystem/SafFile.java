@@ -1,7 +1,10 @@
 package org.primftpd.filesystem;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.DocumentsContract;
 import android.support.v4.provider.DocumentFile;
 
 import java.io.IOException;
@@ -89,6 +92,19 @@ public abstract class SafFile<T> extends AbstractFile {
 
     public boolean setLastModified(long time) {
         logger.trace("[{}] setLastModified({})", name, time);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            try {
+                ContentValues updateValues = new ContentValues();
+                //time = Utils.sshTimeToFileTime(time);
+                updateValues.put(DocumentsContract.Document.COLUMN_LAST_MODIFIED, time);
+                Uri docUri = documentFile.getUri();
+                int updated = contentResolver.update(docUri, updateValues, null, null);
+                return updated == 1;
+            } catch (Exception e) {
+                logger.error("could not set last modified time", e);
+            }
+        }
         return false;
     }
 
