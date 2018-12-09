@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <string name="app_name">primitive ftpd</string>
@@ -9,7 +9,7 @@
     <string name="portLabel">Πόρτα</string>
     <string name="fingerprintsLabel">Fingerprints κλειδιού</string>
     <string name="generateKeysMessage">Δημιουργία κλειδιών;</string>
-    <string name="generatingKeysMessage">Δημιουργία κλειδιών ...</string>
+    <string name="generatingKeysMessage">Δημιουργία κλειδιών …</string>
     <string name="generate">Δημιουργία</string>
     <string name="cancel">Ακύρωση</string>
     <string name="state">Κατάσταση</string>
@@ -19,6 +19,7 @@
     <string name="permissionNameStorage">Αποθηκευτικός χώρος</string>
     <string name="quickSettingsServerStarted">Εκκίνηση του pFTPd ...</string>
     <string name="quickSettingsServerStopped">Διακόπηκε ο pFTPd</string>
+    <string name="saveAs">Αποθήκευση ώς</string>
 
     <string name="startService">Εκκίνηση Εξυπηρετητή</string>
     <string name="stopService">Διακοπή του Eξυπηρετητή</string>
@@ -35,7 +36,6 @@
     <string name="couldNotReadKeyAuthKey">Το δημόσιο κλειδί (public key) για την πιστοποίηση με κλειδί δεν μπόρεσε να διαβαστεί. Ελέγξτε το αρχείο καταγραφής για πληροφορίες.</string>
 
     <string name="prefs">Προτιμήσεις</string>
-    <string name="prefCategoryTitle">Προτιμήσεις εξυπηρετητή FTP</string>
     <string name="prefTitleUser">Όνομα Χρήστη</string>
     <string name="prefSummaryUser">Όνομα χρήστη FTP</string>
     <string name="prefTitlePassword">Κωδικός πρόσβασης</string>
@@ -48,21 +48,29 @@
     <string name="prefSummaryStartDir">Αρχικός κατάλογος μετά την είσοδο</string>
     <string name="prefTitleAnnounce">Αναγγελία του εξυπηρετητή στο τοπικό δίκτυο (LAN)</string>
     <string name="prefSummaryAnnounce">Αναγγελία του εξυπηρετητή FTP στο τοπικό δίκτυο (LAN) μέσω του DNS-SD (Bonjour). Μπορεί να επιφέρει επιπλοκές σε ορισμένες συσκευές.</string>
+    <string name="prefTitleAnnounceName">Όνομα εξυπηρετητή</string>
+    <string name="prefSummaryAnnounceName">Όνομα εξυπηρετητή.</string>
     <string name="prefTitleWakelock">Αναστολή κατάστασης αναμονής</string>
     <string name="prefSummaryWakelock">Αναστολή κατάστασης αναμονής όσο ο εξυπηρετητής είναι ενεργός. Η κατάσταση αναμονής μπορεί να προκαλέσει ακύρωση των μεταφορτώσεων.</string>
     <string name="prefTitleWhichServerToStart">Εξυπηρετητής(ες) για εκκίνηση</string>
     <string name="prefSummaryWhichServerToStart">Επιλέγξτε εαν θα εκκινηθεί μονο ο FTP ή μόνο ο SFTP εξυπηρετητής ή και οι δύο.</string>
     <string name="prefTitleStartOnBoot">Έναρξη κατα την εκκίνηση</string>
     <string name="prefSummaryStartOnBoot">Εκκίνηση του εξυπηρετητή κατα την εκκίνηση του συστήματος</string>
+    <string name="prefTitleStartOnOpen">Εκκίνηση κατά το άνοιγμα</string>
+    <string name="prefSummaryStartOnOpen">Εκκίνηση του εξυπηρετητή με το άνοιγμα της εφαρμογής.</string>
     <string name="prefTitlePubKeyAuth">Πιστοποίηση με την χρήση δημόσιου κλειδιού</string>
     <string name="prefSummaryPubKeyAuth">Όταν είναι ενεργοποιημένο, τοποθετήστε το δημόσιο ssh2 κλειδί στο %s. SFTP μόνο.</string>
     <string name="prefTitleAnonymousLogin">Ανώνυμη είσοδος</string>
     <string name="prefSummaryAnonymousLogin">Ορίστε εάν οι ανώνυμες συνδέσεις επιτρέπονται από τον εξυπηρετητή.</string>
+    <string name="prefTitleFtpPassivePorts">Παθητικές Πόρτες FTP</string>
+    <string name="prefSummaryFtpPassivePorts">Πόρτες για παθητική σύνδεση δεδομένων FTP. Μπορεί να είναι μία πόρτα ή μία λίστα από πόρτες. Π.χ. 5678,5700-5710,5800,5900.</string>
+    <string name="prefTitleIdleTimeout">Χρονικό όριο Αδράνειας Εξυπηρετητή</string>
+    <string name="prefSummaryIdleTimeout">Ο εξυπηρετητής θα τερματίζει ανενεργές συνδέσεις ύστερα από χρονικό όριο (Μόνο για FTP)</string>
     <string name="prefTheme">Θέμα</string>
     <string name="prefSummaryTheme">Η αλλαγή θέματος ίσως απαιτήσει την επανεκκίνηση της εφαρμογής.</string>
     <string name="prefTitleLogging">Αρχείο καταγραφής</string>
     <string name="prefSummaryLogging">Το αρχείο καταγραφής εξυπηρετεί στην ανάλυση των σφαλμάτων. Εάν η εφαρμογή δεν λειτουργεί κανονικά στην συσκευή μπορεί να γίνει αποστολή του αρχείου στους προγραμματιστές. Ίσως να απαιτείται επανεκκίνηση της εφαρμογής.</string>
-    
+
     <string name="licence">Άδεια χρήσης</string>
     <string name="reset">Επαναφορά</string>
 
@@ -72,12 +80,24 @@
     <string name="selectServerAction">Επιλογή ενέργειας εξυπηρετητή</string>
     <string name="isServerRunning">Είναι ο εξυπηρετητής ενεργός;</string>
 
+    <string name="storageType">Τύπος Αποθήκευσης</string>
+    <string name="storageTypePlain">Απλό σύστημα αρχείων</string>
+    <string name="storageTypeRoot">Υπερχρήστης (η συσκευή πρέπει να είναι rooted)</string>
+    <string name="storageTypeSaf">Σύστημα Πρόσβασης Αποθηκευτικού χώρου (ΣΠΑ/SAF) (π.χ. για κάρτα μνήμης SD)</string>
+    <string name="storageTypeRoSaf">SAF Μόνο για ανάγνωση (ταχύτερο!)</string>
+    <string name="safExplainHeading">Πώς λειτουργεί το ΣΑΠ (SAF)</string>
+    <string name="safExplain">Το λειτουργικό θα ρωτήσει να επιλέξετε φάκελο. Αυτός θα είναι διαθέσιμος μέσω του εξυπηρετητή. Κατά διαστήματα η άδεια χρήσης θα ανακαλείται και θα πρέπει να ξανά επιλέξετε τον φάκελο.</string>
+    <string name="selectedSafUri">Επιλεγμένο SAF URI:</string>
+
+    <string name="startServerAndExit">εκκίνηση του εξυπηρετητή μόνο</string>
+    <string name="startServerAndUi">εκκίνηση με τον εξυπηρετητή</string>
+
     <string-array name="prefWhichServerToStartNames">
         <item>FTP και SFTP</item>
         <item>Μόνο FTP</item>
         <item>Μόνο SFTP</item>
     </string-array>
-    
+
     <string-array name="prefThemeNames">
         <item>Σκούρο</item>
         <item>Φωτεινό</item>
@@ -88,5 +108,5 @@
         <item>Καταγραφή σε αρχείο κειμένου</item>
         <item>Καταγραφή στο Android</item>
     </string-array>
-    
+
 </resources>

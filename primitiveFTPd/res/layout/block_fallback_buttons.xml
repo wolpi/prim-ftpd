@@ -1,0 +1,44 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- fallback buttons container (e.g. for leanback) -->
+    <LinearLayout
+        android:id="@+id/fallbackButtonsContainer"
+        android:visibility="visible"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        style="?android:attr/buttonBarStyle">
+
+        <Button
+            android:id="@+id/fallbackButtonStartServer"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/radioStoragePlain"
+            android:text="@string/startService"
+            style="?android:attr/buttonBarButtonStyle"
+            android:focusedByDefault="true"
+            android:onClick="handleStart"/>
+        <Button
+            android:id="@+id/fallbackButtonStopServer"
+            android:visibility="gone"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/radioStoragePlain"
+            android:text="@string/stopService"
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="handleStop"/>
+        <Button
+            android:id="@+id/fallbackButtonPrefs"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/radioStoragePlain"
+            android:text="@string/prefs"
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="handlePrefs"/>
+    </LinearLayout>
+
+</merge>

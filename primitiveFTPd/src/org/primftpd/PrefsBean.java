@@ -22,9 +22,10 @@ public class PrefsBean implements Serializable
 	private final String announceName;
 	private final boolean wakelock;
 	private final boolean pubKeyAuth;
-	private final boolean foregroundService;
 	private final ServerToStart serverToStart;
 	private final String ftpPassivePorts;
+	private final Integer idleTimeout;
+	private final boolean showConnectionInfoInNotification;
 	private final StorageType storageType;
 	private final String safUrl;
 
@@ -39,9 +40,10 @@ public class PrefsBean implements Serializable
 		String announceName,
 		boolean wakelock,
 		boolean pubKeyAuth,
-		boolean foregroundService,
 		ServerToStart serverToStart,
 		String ftpPassivePorts,
+		Integer idleTimeout,
+		boolean showConnectionInfoInNotification,
 		StorageType storageType,
 		String safUrl)
 	{
@@ -58,9 +60,10 @@ public class PrefsBean implements Serializable
 		this.announceName = announceName;
 		this.wakelock = wakelock;
 		this.pubKeyAuth = pubKeyAuth;
-		this.foregroundService = foregroundService;
 		this.serverToStart = serverToStart;
 		this.ftpPassivePorts = ftpPassivePorts;
+		this.idleTimeout = idleTimeout;
+		this.showConnectionInfoInNotification = showConnectionInfoInNotification;
 		this.storageType = storageType;
 		this.safUrl = safUrl;
 
@@ -114,10 +117,6 @@ public class PrefsBean implements Serializable
 		return pubKeyAuth;
 	}
 
-	public boolean isForegroundService() {
-		return foregroundService;
-	}
-
 	public ServerToStart getServerToStart()
 	{
 		return serverToStart;
@@ -125,6 +124,14 @@ public class PrefsBean implements Serializable
 
 	public String getFtpPassivePorts() {
 		return ftpPassivePorts;
+	}
+
+	public Integer getIdleTimeout() {
+		return idleTimeout;
+	}
+
+	public boolean showConnectionInfoInNotification() {
+		return showConnectionInfoInNotification;
 	}
 
 	public StorageType getStorageType() {

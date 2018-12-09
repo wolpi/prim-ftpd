@@ -1,0 +1,68 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- addresses / interfaces -->
+    <TextView
+        android:id="@+id/addressesLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+    />
+
+    <LinearLayout
+        android:id="@+id/addressesContainer"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+    />
+
+    <!-- ports -->
+    <TextView
+        android:id="@+id/portsLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+    />
+    <TextView
+        android:id="@+id/ftpTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textIsSelectable="true"
+    />
+    <TextView
+        android:id="@+id/sftpTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textIsSelectable="true"
+    />
+
+    <!-- user name -->
+    <TextView
+        android:id="@+id/usernameLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:text="@string/prefTitleUser"
+    />
+    <TextView
+        android:id="@+id/usernameTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textIsSelectable="true"
+    />
+    <TextView
+        android:id="@+id/anonymousLoginTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+    />
+</merge>

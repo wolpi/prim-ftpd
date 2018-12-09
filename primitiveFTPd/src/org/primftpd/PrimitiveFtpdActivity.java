@@ -3,13 +3,10 @@ package org.primftpd;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -22,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
+import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +30,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.ftpserver.util.IoUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -44,8 +41,11 @@ import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.StorageType;
 import org.primftpd.prefs.Theme;
-import org.primftpd.util.KeyGenerator;
-import org.primftpd.util.KeyInfoProvider;
+import org.primftpd.ui.CalcPubkeyFinterprintsTask;
+import org.primftpd.ui.GenKeysAskDialogFragment;
+import org.primftpd.ui.GenKeysAsyncTask;
+import org.primftpd.util.IpAddressProvider;
+import org.primftpd.util.KeyFingerprintProvider;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.PrngFixes;
 import org.primftpd.util.ServersRunningBean;
@@ -54,20 +54,12 @@ import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
-import java.util.Enumeration;
+import java.util.List;
 
 /**
  * Activity to display network info and to start FTP service.
  */
-public class PrimitiveFtpdActivity extends Activity {
+public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 		@Override
@@ -92,22 +84,23 @@ public class PrimitiveFtpdActivity extends Activity {
 		}
 	};
 
-	public static final String PUBLICKEY_FILENAME = "pftpd-pub.bin";
-	public static final String PRIVATEKEY_FILENAME = "pftpd-priv.pk8";
 	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0xBEEF;
+	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING = 0xCAFE;
 
 	public static final String DIALOG_TAG = "dialogs";
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PrefsBean prefsBean;
+	private IpAddressProvider ipAddressProvider = new IpAddressProvider();
+	private KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider();
 	private Theme theme;
 	private ServersRunningBean serversRunning;
-	private boolean keyPresent = false;
-	private String fingerprintMd5 = " - ";
-	private String fingerprintSha1 = " - ";
-	private String fingerprintSha256 = " - ";
 	private long timestampOfLastEvent = 0;
+
+	protected int getLayoutId() {
+		return R.layout.main;
+	}
 
 	/** Called when the activity is first created. */
 	@Override
@@ -127,11 +120,11 @@ public class PrimitiveFtpdActivity extends Activity {
 		// layout & theme
 		theme = LoadPrefsUtil.theme(prefs);
 		setTheme(theme.resourceId());
-		setContentView(R.layout.main);
+		setContentView(getLayoutId());
 
 		// calc keys fingerprints
-		calcPubkeyFingerprints();
-		showKeyFingerprints();
+		AsyncTask<Void, Void, Void> task = new CalcPubkeyFinterprintsTask(keyFingerprintProvider, this);
+		task.execute();
 
 		// create addresses label
 		((TextView) findViewById(R.id.addressesLabel)).setText(
@@ -160,6 +153,17 @@ public class PrimitiveFtpdActivity extends Activity {
 
 			View safExplain = findViewById(R.id.safExplain);
 			((ViewManager)safExplain.getParent()).removeView(safExplain);
+		}
+
+		// start on open ?
+		Boolean startOnOpen = LoadPrefsUtil.startOnOpen(prefs);
+		if (startOnOpen) {
+			PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
+			ServicesStartStopUtil.startServers(
+					getBaseContext(),
+					prefsBean,
+					keyFingerprintProvider,
+					this);
 		}
 	}
 
@@ -223,7 +227,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		logger.debug("onResume()");
 
 		// register listener to reprint interfaces table when network connections change
-		// TODO show current IP for android 7
+		// android sends those events when registered in code but not when registered in manifest
 		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(this.networkStateReceiver, filter);
 
@@ -251,21 +255,26 @@ public class PrimitiveFtpdActivity extends Activity {
 		StorageType storageType = null;
 
 		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-		switch(view.getId()) {
-			case R.id.radioStoragePlain:
-				storageType = StorageType.PLAIN;
-				break;
-			case R.id.radioStorageRoot:
-				storageType = StorageType.ROOT;
-				break;
-			case R.id.radioStorageSaf:
-				storageType = StorageType.SAF;
-				startActivityForResult(intent, 0);
-				break;
-			case R.id.radioStorageRoSaf:
-				storageType = StorageType.RO_SAF;
-				startActivityForResult(intent, 0);
-				break;
+		try {
+			switch (view.getId()) {
+				case R.id.radioStoragePlain:
+					storageType = StorageType.PLAIN;
+					break;
+				case R.id.radioStorageRoot:
+					storageType = StorageType.ROOT;
+					break;
+				case R.id.radioStorageSaf:
+					storageType = StorageType.SAF;
+					startActivityForResult(intent, 0);
+					break;
+				case R.id.radioStorageRoSaf:
+					storageType = StorageType.RO_SAF;
+					startActivityForResult(intent, 0);
+					break;
+			}
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(getBaseContext(), "SAF seems to be broken on your device :(", Toast.LENGTH_SHORT);
+			storageType = StorageType.PLAIN;
 		}
 
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
@@ -363,72 +372,6 @@ public class PrimitiveFtpdActivity extends Activity {
 		}
 	}
 
-	protected FileInputStream buildPublickeyInStream() throws IOException {
-		FileInputStream fis = openFileInput(PUBLICKEY_FILENAME);
-		return fis;
-	}
-
-	protected FileOutputStream buildPublickeyOutStream() throws IOException {
-		FileOutputStream fos = openFileOutput(PUBLICKEY_FILENAME, Context.MODE_PRIVATE);
-		return fos;
-	}
-
-	protected FileInputStream buildPrivatekeyInStream() throws IOException {
-		FileInputStream fis = openFileInput(PRIVATEKEY_FILENAME);
-		return fis;
-	}
-
-	protected FileOutputStream buildPrivatekeyOutStream() throws IOException {
-		FileOutputStream fos = openFileOutput(PRIVATEKEY_FILENAME, Context.MODE_PRIVATE);
-		return fos;
-	}
-
-	/**
-	 * Creates figerprints of public key.
-	 */
-	protected void calcPubkeyFingerprints() {
-		FileInputStream fis = null;
-		try {
-			fis = buildPublickeyInStream();
-
-			// check if key is present
-			if (fis.available() <= 0) {
-				keyPresent = false;
-				throw new Exception("key seems not to be present");
-			}
-
-			KeyInfoProvider keyInfoprovider = new KeyInfoProvider();
-			PublicKey pubKey = keyInfoprovider.readPublicKey(fis);
-			RSAPublicKey rsaPubKey = (RSAPublicKey) pubKey;
-			byte[] encodedKey = keyInfoprovider.encodeAsSsh(rsaPubKey);
-
-			// fingerprints
-			String fp = keyInfoprovider.fingerprint(encodedKey, "MD5");
-			if (fp != null) {
-				fingerprintMd5 = fp;
-			}
-
-			fp = keyInfoprovider.fingerprint(encodedKey, "SHA-1");
-			if (fp != null) {
-				fingerprintSha1 = fp;
-			}
-
-			fp = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
-			if (fp != null) {
-				fingerprintSha256 = fp;
-			}
-
-			keyPresent = true;
-
-		} catch (Exception e) {
-			logger.debug("key does probably not exist");
-		} finally {
-			if (fis != null) {
-				IoUtils.close(fis);
-			}
-		}
-	}
-
 	/**
 	 * Creates table containing network interfaces.
 	 */
@@ -438,48 +381,15 @@ public class PrimitiveFtpdActivity extends Activity {
 		// clear old entries
 		container.removeAllViews();
 
-		try {
-			Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
-			while (ifaces.hasMoreElements()) {
-				NetworkInterface iface = ifaces.nextElement();
-				String ifaceDispName = iface.getDisplayName();
-				String ifaceName = iface.getName();
-				Enumeration<InetAddress> inetAddrs = iface.getInetAddresses();
-
-				while (inetAddrs.hasMoreElements()) {
-					InetAddress inetAddr = inetAddrs.nextElement();
-					String hostAddr = inetAddr.getHostAddress();
-
-					logger.debug("addr: '{}', iface name: '{}', disp name: '{}', loopback: '{}'",
-						new Object[]{
-							inetAddr,
-							ifaceName,
-							ifaceDispName,
-							inetAddr.isLoopbackAddress()});
-
-					if (inetAddr.isLoopbackAddress()) {
-						continue;
-					}
-
-					String displayText = hostAddr + " (" + ifaceDispName + ")";
-					if(displayText.contains("::")) {
-						// Don't include the raw encoded names. Just the raw IP addresses.
-						logger.debug("Skipping IPv6 address '{}'", displayText);
-						continue;
-					}
-					TextView textView = new TextView(container.getContext());
-					container.addView(textView);
-					textView.setText(displayText);
-					textView.setGravity(Gravity.CENTER_HORIZONTAL);
-					textView.setTextIsSelectable(true);
-				}
-			}
-		} catch (SocketException e) {
-			logger.info("exception while iterating network interfaces", e);
-
-			String msg = getText(R.string.ifacesError) + e.getLocalizedMessage();
-			Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+		List<String> displayTexts = ipAddressProvider.ipAddressTexts(this, true);
+		for (String displayText : displayTexts) {
+			TextView textView = new TextView(container.getContext());
+			container.addView(textView);
+			textView.setText(displayText);
+			textView.setGravity(Gravity.CENTER_HORIZONTAL);
+			textView.setTextIsSelectable(true);
 		}
+
 	}
 
 	@SuppressLint("SetTextI18n")
@@ -515,7 +425,7 @@ public class PrimitiveFtpdActivity extends Activity {
 	}
 
 	@SuppressLint("SetTextI18n")
-	protected void showKeyFingerprints() {
+	public void showKeyFingerprints() {
 		((TextView)findViewById(R.id.keyFingerprintMd5Label))
 				.setText("MD5");
 		((TextView)findViewById(R.id.keyFingerprintSha1Label))
@@ -524,109 +434,38 @@ public class PrimitiveFtpdActivity extends Activity {
 				.setText("SHA256");
 
 		((TextView)findViewById(R.id.keyFingerprintMd5TextView))
-			.setText(fingerprintMd5);
+			.setText(keyFingerprintProvider.getFingerprintMd5());
 		((TextView)findViewById(R.id.keyFingerprintSha1TextView))
-			.setText(fingerprintSha1);
+			.setText(keyFingerprintProvider.getFingerprintSha1());
 		((TextView)findViewById(R.id.keyFingerprintSha256TextView))
-			.setText(fingerprintSha256);
+			.setText(keyFingerprintProvider.getFingerprintSha256());
 
 		// create onRefreshListener
+		final PrimitiveFtpdActivity activity = this;
 		View refreshButton = findViewById(R.id.keyFingerprintsLabel);
 		refreshButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
-				askDiag.show(getFragmentManager(), DIALOG_TAG);
+				askDiag.show(activity.getSupportFragmentManager(), DIALOG_TAG);
 			}
 		});
 	}
 
-	protected void genKeysAndShowProgressDiag(boolean startServerOnFinish) {
+	public void genKeysAndShowProgressDiag(boolean startServerOnFinish) {
 		// critical: do not pass getApplicationContext() to dialog
 		final ProgressDialog progressDiag = new ProgressDialog(this);
 		progressDiag.setCancelable(false);
 		progressDiag.setMessage(getText(R.string.generatingKeysMessage));
 
 		AsyncTask<Void, Void, Void> task = new GenKeysAsyncTask(
+			keyFingerprintProvider,
+			this,
 			progressDiag,
 			startServerOnFinish);
 		task.execute();
 
 		progressDiag.show();
-	}
-
-	public static class GenKeysAskDialogFragment extends DialogFragment {
-		public static final String KEY_START_SERVER = "START_SERVER";
-
-		private boolean startServerOnFinish;
-
-		@Override
-		public void setArguments(Bundle args) {
-			super.setArguments(args);
-			startServerOnFinish = args.getBoolean(KEY_START_SERVER);
-		}
-
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setMessage(R.string.generateKeysMessage);
-			builder.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					PrimitiveFtpdActivity activity = (PrimitiveFtpdActivity) getActivity();
-					activity.genKeysAndShowProgressDiag(startServerOnFinish);
-				}
-			});
-			builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					// nothing
-				}
-			});
-			return builder.create();
-		}
-	}
-
-	class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
-		private final ProgressDialog progressDiag;
-		private final boolean startServerOnFinish;
-
-		public GenKeysAsyncTask(
-			ProgressDialog progressDiag,
-			boolean startServerOnFinish)
-		{
-			this.progressDiag = progressDiag;
-			this.startServerOnFinish = startServerOnFinish;
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			try {
-				FileOutputStream publickeyFos = buildPublickeyOutStream();
-				FileOutputStream privatekeyFos = buildPrivatekeyOutStream();
-				try {
-					new KeyGenerator().generate(publickeyFos, privatekeyFos);
-				} finally {
-					publickeyFos.close();
-					privatekeyFos.close();
-				}
-			} catch (Exception e) {
-				logger.error("could not generate keys", e);
-			}
-			return null;
-		}
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-			calcPubkeyFingerprints();
-			progressDiag.dismiss();
-			showKeyFingerprints();
-
-			if (startServerOnFinish) {
-				// icon members should be set at this time
-				handleStart();
-			}
-		}
 	}
 
 	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -680,11 +519,6 @@ public class PrimitiveFtpdActivity extends Activity {
 	 * Updates enabled state of start/stop buttons.
 	 */
 	protected void updateButtonStates(Boolean running) {
-		if (startIcon == null || stopIcon == null) {
-			logger.debug("updateButtonStates(), no icons");
-			return;
-		}
-
 		logger.debug("updateButtonStates()");
 
 		boolean atLeastOneRunning;
@@ -695,13 +529,28 @@ public class PrimitiveFtpdActivity extends Activity {
 			atLeastOneRunning = running.booleanValue();
 		}
 
-		startIcon.setVisible(!atLeastOneRunning);
-		stopIcon.setVisible(atLeastOneRunning);
+		// update fallback buttons
+		View fallbackButtonStart = findViewById(R.id.fallbackButtonStartServer);
+		if (fallbackButtonStart != null) {
+			fallbackButtonStart.setVisibility(atLeastOneRunning ? View.GONE : View.VISIBLE);
+		}
+		View fallbackButtonStop = findViewById(R.id.fallbackButtonStopServer);
+		if (fallbackButtonStop != null) {
+			fallbackButtonStop.setVisibility(atLeastOneRunning ? View.VISIBLE : View.GONE);
+		}
 
 		// remove status bar notification if server not running
 		if (!atLeastOneRunning) {
 			NotificationUtil.removeStatusbarNotification(this);
 		}
+
+		// action bar icons
+		if (startIcon == null || stopIcon == null) {
+			return;
+		}
+
+		startIcon.setVisible(!atLeastOneRunning);
+		stopIcon.setVisible(atLeastOneRunning);
 	}
 
 	protected MenuItem startIcon;
@@ -734,6 +583,10 @@ public class PrimitiveFtpdActivity extends Activity {
 		case R.id.menu_prefs:
 			handlePrefs();
 			break;
+		case R.id.menu_translate:
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://pftpd.rocks/projects/pftpd/pftpd/"));
+			startActivity(intent);
+			break;
 		case R.id.menu_about:
 			handleAbout();
 			break;
@@ -745,9 +598,9 @@ public class PrimitiveFtpdActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	protected void handleStart() {
+	public void handleStart() {
 		if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)) {
-			ServicesStartStopUtil.startServers(this, prefsBean, this);
+			ServicesStartStopUtil.startServers(this, prefsBean, keyFingerprintProvider, this);
 		}
 	}
 
@@ -771,23 +624,32 @@ public class PrimitiveFtpdActivity extends Activity {
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		boolean granted = grantResults.length > 0
+				&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
 		switch (requestCode) {
 			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
 				// If request is cancelled, the result arrays are empty.
-				boolean granted = grantResults.length > 0
-						&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
-				if(granted) {
-					ServicesStartStopUtil.startServers(this, prefsBean, this);
+				if (granted) {
+					ServicesStartStopUtil.startServers(this, prefsBean, keyFingerprintProvider, this);
 				} else {
 					String textPara = getString(R.string.permissionNameStorage);
 					Toast.makeText(this, getString(R.string.permissionRequired, textPara), Toast.LENGTH_LONG).show();
+				}
+			}
+			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING: {
+				if (granted) {
+					PrimFtpdLoggerBinder.setLoggingPref(Logging.TEXT);
+					this.logger = LoggerFactory.getLogger(getClass());
+				} else {
+					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+					LoadPrefsUtil.storeLogging(prefs, Logging.NONE);
 				}
 			}
 		}
 	}
 
 	public boolean isKeyPresent() {
-		return keyPresent;
+		return keyFingerprintProvider.isKeyPresent();
 	}
 
 	public void showGenKeyDialog() {
@@ -795,7 +657,7 @@ public class PrimitiveFtpdActivity extends Activity {
 		Bundle diagArgs = new Bundle();
 		diagArgs.putBoolean(GenKeysAskDialogFragment.KEY_START_SERVER, true);
 		askDiag.setArguments(diagArgs);
-		askDiag.show(getFragmentManager(), DIALOG_TAG);
+		askDiag.show(getSupportFragmentManager(), DIALOG_TAG);
 	}
 
 	protected void handleStop() {
@@ -849,8 +711,19 @@ public class PrimitiveFtpdActivity extends Activity {
 		Logging logging = Logging.byXmlVal(loggingStr);
 		// one could argue if this makes sense :)
 		logger.debug("got 'logging': {}", logging);
-		PrimFtpdLoggerBinder.setLoggingPref(logging);
-		// re-create own log, don't care about other classes
-		this.logger = LoggerFactory.getLogger(getClass());
+
+		boolean recreateLogger = true;
+		// request storage permission if necessary for logging
+		if (logging == Logging.TEXT) {
+			recreateLogger = hasPermission(
+					Manifest.permission.WRITE_EXTERNAL_STORAGE,
+					PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING);
+		}
+
+		if (recreateLogger) {
+			// re-create own log, don't care about other classes
+			PrimFtpdLoggerBinder.setLoggingPref(logging);
+			this.logger = LoggerFactory.getLogger(getClass());
+		}
 	}
 }

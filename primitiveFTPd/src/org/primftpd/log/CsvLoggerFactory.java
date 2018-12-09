@@ -78,6 +78,9 @@ public class CsvLoggerFactory implements ILoggerFactory
 				return name.startsWith(LOGFILE_BASENAME);
 			}
 		});
+		if (currentFiles == null) {
+			return;
+		}
 		if (currentFiles.length >= NUM_LOGFILES_TO_KEEP) {
 			SortedSet<File> sorted = new TreeSet<File>(new Comparator<File>() {
 				@Override

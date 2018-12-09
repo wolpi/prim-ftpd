@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="app_name">Primitive FTPd</string>
+    <string name="ifacesLabel">Interfaccia di rete</string>
+    <string name="ipAddrLabel">Indirizzo IP</string>
+    <string name="ifacesError">Errore:</string>
+    <string name="protocolLabel">Protocollo</string>
+    <string name="portLabel">Porta</string>
+    <string name="fingerprintsLabel">Firma Chiave</string>
+    <string name="generateKeysMessage">Genera nuove chiavi?</string>
+    <string name="generatingKeysMessage">Sto generando le chiavi …</string>
+    <string name="generate">Genera</string>
+    <string name="cancel">Annulla</string>
+    <string name="state">Stato</string>
+    <string name="serverStarted">Attivo …</string>
+    <string name="serverStopped">Non attivo</string>
+    <string name="permissionRequired">Questa app richiede il permesso \"%1$s\"!</string>
+    <string name="permissionNameStorage">Memoria</string>
+    <string name="quickSettingsServerStarted">pFTPd Attivo …</string>
+    <string name="quickSettingsServerStopped">pFTPd Non Attivo</string>
+    <string name="saveAs">Salva con nome</string>
+
+    <string name="startService">Avvia Server</string>
+    <string name="stopService">Arresta Server</string>
+    <string name="toggleService">Attiva/Arresta Server</string>
+    <string name="notificationTitle">Server FTP</string>
+
+    <string name="haveToSetPassword">Devi prima impostare una password</string>
+    <string name="serverRunning">Server FTP attivo</string>
+    <string name="serverCouldNotBeStarted">Il server non può essere avviato! Errore:</string>
+    <string name="portInvalid_v2">Il valore della porta non é valido. Deve stare tra 1024 e 64000.</string>
+    <string name="portsEqual_v2">Non é consentito avere le due porte sono uguali.</string>
+    <string name="restartServer">Devi riavviare il Server perché le modifiche abbiano effetto.</string>
+    <string name="invalidDir">La cartella non é valida.</string>
+    <string name="couldNotReadKeyAuthKey">Non é stato possibile leggere la chiave pubblica per l\'autenticazione. Controlla i logs.</string>
+
+    <string name="prefs">Preferenze</string>
+    <string name="prefCategoryTitle">Preferenze del Server FTP</string>
+    <string name="prefTitleUser">Nome Utente</string>
+    <string name="prefSummaryUser">Nome utente del server FTP</string>
+    <string name="prefTitlePassword">Password</string>
+    <string name="prefSummaryPassword">Password del server FTP</string>
+    <string name="prefTitlePort">Porta</string>
+    <string name="prefSummaryPort">Porta del server FTP</string>
+    <string name="prefTitlePortSecure">Porta Sicura</string>
+    <string name="prefSummaryPortSecure">Porta per la connessione cifrata</string>
+    <string name="prefTitleStartDir">Cartella iniziale</string>
+    <string name="prefSummaryStartDir">Cartella utilizzata dopo il login</string>
+    <string name="prefTitleAnnounce">Annuncia il server sulla LAN</string>
+    <string name="prefSummaryAnnounce">Annuncia il server FTP sulla LAN via DNS-SD (Bonjour). Può causare problemi su alcuni device.</string>
+    <string name="prefTitleAnnounceName">Nome del server</string>
+    <string name="prefSummaryAnnounceName">Nome con cui il server si presenta.</string>
+    <string name="prefTitleWakelock">Impedisci lo Standby</string>
+    <string name="prefSummaryWakelock">Impedisce lo Standby mentre il server é attivo. Lo Standby può far fallire gli upload/download.</string>
+    <string name="prefTitleWhichServerToStart">Server da avviare</string>
+    <string name="prefSummaryWhichServerToStart">Scegli quale server avviare: FTP, SFTP o entrambi.</string>
+    <string name="prefTitleStartOnBoot">Esegui all\'avvio</string>
+    <string name="prefSummaryStartOnBoot">Esegui il server all\'avvio del device.</string>
+    <string name="prefTitleStartOnOpen">Esegui all\'apertura</string>
+    <string name="prefSummaryStartOnOpen">Esegui il server all\'apertura dell\'app.</string>
+    <string name="prefTitlePubKeyAuth">Autenticazione Chiave Pubblica</string>
+    <string name="prefSummaryPubKeyAuth">Se abilitato metti la tua chiave pubblica ssh2 in %s. Solo SFTP.</string>
+    <string name="prefTitleAnonymousLogin">Login anonimo</string>
+    <string name="prefSummaryAnonymousLogin">Imposta se permettere il login anonimo sul server.</string>
+    <string name="prefTitleFtpPassivePorts">Porte FTP Passivo</string>
+    <string name="prefSummaryFtpPassivePorts">Porte per la connessione FTP passiva. Può essere una singola porta, una lista o un intervallo di porte. Es. 5678,5700-5710,5800,5900.</string>
+    <string name="prefTitleIdleTimeout">Timeout inattività Server</string>
+    <string name="prefSummaryIdleTimeout">Il Server terminerà le connessioni dopo questo periodo di inattività (Solo FTP)</string>
+    <string name="prefTheme">Tema</string>
+    <string name="prefSummaryTheme">La modifica del Tema richiede il riavvio dell\'app.</string>
+    <string name="prefTitleLogging">Log</string>
+    <string name="prefSummaryLogging">Il log permette di analizzare gli errori. Se l\'app non funziona correttamente sul tuo device puoi inviare il log agli sviluppatori. Questa modifica richiede il riavvio dell\'app.</string>
+
+    <string name="licence">Licenza</string>
+    <string name="reset">Reimposta</string>
+
+    <string name="widgetTextStart">avvia (s)ftpd</string>
+    <string name="widgetTextStop">ferma (s)ftpd</string>
+    <string name="isAnonymous">Login Anonima: %1$b</string>
+    <string name="selectServerAction">Scegli l\'azione del Server</string>
+    <string name="isServerRunning">Server attivo?</string>
+
+    <string name="storageType">Tipo di memoria</string>
+    <string name="storageTypePlain">Filesystem classico</string>
+    <string name="storageTypeRoot">Super user (richiede permessi root)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
+\n(es. per sd card)</string>
+    <string name="storageTypeRoSaf">SAF in sola lettura (più veloce!)</string>
+    <string name="safExplainHeading">Come funziona SAF</string>
+    <string name="safExplain">Android richiederà di scegliere una cartella. Questa sarà resa visibile al/ai server. Può capitare che il permesso venga revocato, e dovrai nuovamente selezionare la cartella.</string>
+    <string name="selectedSafUri">URI SAF selezionato:</string>
+
+    <string name="startServerAndExit">avvia solo il server</string>
+    <string name="startServerAndUi">avvia server e interfaccia</string>
+
+    </resources>

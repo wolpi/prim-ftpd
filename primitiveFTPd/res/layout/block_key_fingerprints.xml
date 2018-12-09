@@ -1,0 +1,67 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- key fingerprints -->
+    <TextView
+        android:id="@+id/keyFingerprintsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:text="@string/fingerprintsLabel"
+        android:drawableRight="?attr/iconRefresh"
+        android:drawablePadding="4dp"
+        />
+
+    <!-- MD 5 -->
+    <TextView
+        android:id="@+id/keyFingerprintMd5Label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        />
+    <TextView
+        android:id="@+id/keyFingerprintMd5TextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:typeface="monospace"
+        android:textIsSelectable="true"
+        android:selectAllOnFocus="true"
+        />
+    <!-- SHA 1 -->
+    <TextView
+        android:id="@+id/keyFingerprintSha1Label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        />
+    <TextView
+        android:id="@+id/keyFingerprintSha1TextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:typeface="monospace"
+        android:textIsSelectable="true"
+        android:selectAllOnFocus="true"
+        />
+    <!-- SHA 256 -->
+    <TextView
+        android:id="@+id/keyFingerprintSha256Label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        />
+    <TextView
+        android:id="@+id/keyFingerprintSha256TextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:typeface="monospace"
+        android:textIsSelectable="true"
+        android:selectAllOnFocus="true"
+        />
+
+</merge>

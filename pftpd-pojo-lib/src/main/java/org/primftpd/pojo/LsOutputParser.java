@@ -46,7 +46,8 @@ public class LsOutputParser {
             parts.add(tokenizer.nextToken());
         }
 
-        if (parts.size() < 8) {
+        // link count is optional, makes min size 7
+        if (parts.size() < 7) {
             return null;
         }
         String firstPart = parts.get(0);
@@ -100,19 +101,20 @@ public class LsOutputParser {
         }
 
         // link count
+        int linkCountOffset = 1;
         try {
             builder.setLinkCount(Long.parseLong(parts.get(1)));
         } catch (NumberFormatException e) {
-            return null;
+            linkCountOffset = 0;
         }
 
         // user & group
-        builder.setUser(parts.get(2));
-        builder.setGroup(parts.get(3));
+        builder.setUser(parts.get(1 + linkCountOffset));
+        builder.setGroup(parts.get(2 + linkCountOffset));
 
         // size
         try {
-            builder.setSize(Long.parseLong(parts.get(4)));
+            builder.setSize(Long.parseLong(parts.get(3 + linkCountOffset)));
         } catch (NumberFormatException e) {
             return null;
         }
@@ -122,22 +124,22 @@ public class LsOutputParser {
         DateFormat dateFormat;
         Date date;
         long offset = 0;
-        String firstDateCol = parts.get(5);
+        String firstDateCol = parts.get(4 + linkCountOffset);
         int dateEndIndex;
         if (firstDateCol.length() == 10) {
-            dateStr = firstDateCol + " " + parts.get(6);
+            dateStr = firstDateCol + " " + parts.get(5 + linkCountOffset);
             dateFormat = DATE_FORMAT_1;
-            dateEndIndex = 6;
+            dateEndIndex = 5 + linkCountOffset;
         } else {
-            String lastDateCol = parts.get(7);
-            dateStr = firstDateCol + " " + parts.get(6) + " " + lastDateCol;
+            String lastDateCol = parts.get(6 + linkCountOffset);
+            dateStr = firstDateCol + " " + parts.get(5 + linkCountOffset) + " " + lastDateCol;
             if (lastDateCol.contains(":")) {
                 dateFormat = DATE_FORMAT_3;
                 offset = CURRENT_YEAR_MILLIS;
             } else {
                 dateFormat = DATE_FORMAT_2;
             }
-            dateEndIndex = 7;
+            dateEndIndex = 6 + linkCountOffset;
         }
         try {
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -194,7 +196,7 @@ public class LsOutputParser {
     private static final DateFormat DATE_FORMAT_2 = new SimpleDateFormat("dd. MMM yyyy");
     private static final DateFormat DATE_FORMAT_3 = new SimpleDateFormat("dd. MMM HH:mm");
 
-    private static final long CURRENT_YEAR_MILLIS;
+    static final long CURRENT_YEAR_MILLIS;
     static {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);

@@ -16,7 +16,7 @@ public abstract class FsFileSystemView<T extends FsFile<X>, X> {
 	public T getFile(String file) {
 		logger.trace("getFile({})", file);
 		String abs = absolute(file);
-		logger.trace("  got abs: {}", abs);
+		logger.trace("  getFile(abs: {})", file);
 		return createFile(new File(abs));
 	}
 }

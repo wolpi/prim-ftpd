@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/block_fallback_buttons"  />
+        <include layout="@layout/block_connect_data"  />
+        <include layout="@layout/block_storage_type"  />
+        <include layout="@layout/block_key_fingerprints"  />
+
+    </LinearLayout>
+</ScrollView>

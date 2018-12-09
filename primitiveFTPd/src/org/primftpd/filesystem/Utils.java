@@ -1,7 +1,10 @@
 package org.primftpd.filesystem;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 class Utils {
 
@@ -56,5 +59,17 @@ class Utils {
             i++;
         }
         return sb.toString();
+    }
+
+    static String parent(String path) {
+        return path.substring(0, path.lastIndexOf('/'));
+    }
+
+    private static final DateFormat TOUCH_DATE_FORMAT = new SimpleDateFormat("yyMMddHHmm.ss");
+    static {
+        TOUCH_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+    static String touchDate(long time) {
+        return TOUCH_DATE_FORMAT.format(time * 1000);
     }
 }

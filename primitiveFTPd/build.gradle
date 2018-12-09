@@ -1,15 +1,17 @@
 buildscript {
     repositories {
+        google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.github.nrudenko:gradle-android-cq-plugin:0.1+'
+        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.github.nrudenko:gradle-android-cq-plugin:0.1.7'
     }
 }
 
 repositories {
+    google()
     jcenter()
 }
 
@@ -17,15 +19,14 @@ apply plugin: 'com.android.application'
 //apply plugin: 'android-cq'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId "org.primftpd"
         minSdkVersion 15
-        targetSdkVersion 26
-        versionCode 31
-        versionName "5.5-SNAPSHOT"
+        targetSdkVersion 27
+        versionCode 38
+        versionName "5.12-SNAPSHOT"
     }
 
     buildTypes {
@@ -66,17 +67,17 @@ android {
 }
 
 configurations {
-    compile.exclude group: 'org.slf4j', module: 'slf4j-api'
+    implementation.exclude group: 'org.slf4j', module: 'slf4j-api'
 }
 
 dependencies {
     // print dependency tree:
-    // ./gradlew primitiveFTPd:dependencies --configuration compile
-    compile project(':pftpd-pojo-lib')
-    compile project(':slf4j-android-1.6.1-RC1')
-    compile 'org.apache.ftpserver:ftpserver-core:1.1.1'
-    compile 'org.apache.sshd:sshd-core:0.14.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.nononsenseapps:filepicker:4.0.0'
-    compile 'eu.chainfire:libsuperuser:1.0.0.201704021214'
+    // ./gradlew primitiveFTPd:dependencies --configuration releaseCompileClasspath
+    implementation project(':pftpd-pojo-lib')
+    implementation project(':slf4j-android-1.6.1-RC1')
+    implementation 'org.apache.ftpserver:ftpserver-core:1.1.1'
+    implementation 'org.apache.sshd:sshd-core:0.14.0'
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'com.nononsenseapps:filepicker:4.2.1'
+    implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
 }

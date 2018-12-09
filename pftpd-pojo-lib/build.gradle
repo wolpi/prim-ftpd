@@ -8,8 +8,8 @@ repositories {
 }
 
 dependencies {
-    compile 'org.bouncycastle:bcpg-jdk15on:1.54'
-    compile 'org.bouncycastle:bcpkix-jdk15on:1.54'
+    compile 'org.bouncycastle:bcpg-jdk15on:1.60'
+    compile 'org.bouncycastle:bcpkix-jdk15on:1.60'
 
     compile 'org.slf4j:slf4j-api:1.6.1'
 

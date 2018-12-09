@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="ifacesLabel">Interface de Rede</string>
+    <string name="ipAddrLabel">Endereço IP</string>
+    <string name="ifacesError">Erro:</string>
+    <string name="protocolLabel">Protocolo</string>
+    <string name="portLabel">Porta</string>
+    <string name="generateKeysMessage">Gerar chaves ?</string>
+    <string name="generatingKeysMessage">A Gerar Chaves …</string>
+    <string name="generate">Gerar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="state">Estado</string>
+    <string name="serverStarted">A correr …</string>
+    <string name="serverStopped">Parado</string>
+    <string name="permissionRequired">A permissão \"%1$s\" é necessária para o funcionamento da aplicação!</string>
+    <string name="permissionNameStorage">Armazenamento</string>
+    <string name="quickSettingsServerStarted">pFTPd A Correr …</string>
+    <string name="quickSettingsServerStopped">pFTPd Parado</string>
+    <string name="saveAs">Guardar como</string>
+
+    <string name="startService">Iniciar Servidor</string>
+    <string name="stopService">Parar Servidor</string>
+    <string name="toggleService">Iniciar ou Parar o Servidor</string>
+    <string name="notificationTitle">Servidor FTP</string>
+
+    <string name="haveToSetPassword">Primeiro defina uma password</string>
+    <string name="serverRunning">O Servidor FTP está a correr</string>
+    <string name="serverCouldNotBeStarted">O Servidor FTP não pôde ser iniciado! Mensagem de erro:</string>
+    <string name="portInvalid_v2">O valor da porta é inválido. Deve ser entre 1024 e 64000.</string>
+    <string name="portsEqual_v2">As portas são iguais. Isto não vai funcionar.</string>
+    <string name="restartServer">Necessita de reiniciar o Servidor para as alterações tomarem efeito.</string>
+    <string name="invalidDir">O directório não é válido.</string>
+    <string name="prefs">Definições</string>
+    <string name="prefCategoryTitle">Definições do Servidor FTP</string>
+    <string name="prefTitleUser">Nome de Utilizador</string>
+    <string name="prefSummaryUser">Nome de utilizador do servidor FTP</string>
+    <string name="prefTitlePassword">Palavra-Passe</string>
+    <string name="prefSummaryPassword">Palavra-Passe do servidor FTP</string>
+    <string name="prefTitlePort">Porta</string>
+    <string name="prefSummaryPort">Porta do servidor FTP</string>
+    <string name="prefTitlePortSecure">Porta Segura</string>
+    <string name="prefSummaryPortSecure">Porta do servidor FTP (encriptada)</string>
+    <string name="prefTitleStartDir">Directório de Arranque do Servidor</string>
+    <string name="prefSummaryStartDir">Primeiro diretório após inicio de sessão</string>
+    <string name="prefTitleAnnounce">Anunciar o servidor na rede LAN</string>
+    <string name="prefTitleAnnounceName">Nome do servidor</string>
+    <string name="prefSummaryAnnounceName">Nome usado para anunciar o servidor.</string>
+    <string name="prefTitleWakelock">Prevenir Standby</string>
+    </resources>

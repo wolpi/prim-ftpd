@@ -3,12 +3,9 @@ package org.primftpd.remotecontrol;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import org.primftpd.PrefsBean;
-import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.util.ServersRunningBean;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
@@ -83,9 +80,7 @@ public class TaskerReceiver extends BroadcastReceiver {
     }
 
     private void startServer(Context context) {
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
-        PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-        ServicesStartStopUtil.startServers(context, prefsBean, null);
+        ServicesStartStopUtil.startServers(context);
     }
 
     private void stopServer(Context context) {

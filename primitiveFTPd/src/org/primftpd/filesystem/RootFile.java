@@ -3,8 +3,8 @@ package org.primftpd.filesystem;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -51,8 +51,9 @@ public abstract class RootFile<T> extends AbstractFile {
 
     public boolean setLastModified(long time) {
         logger.trace("[{}] setLastModified({})", name, time);
-        // TODO root setLastModified()
-        return false;
+
+        String dateStr = Utils.touchDate(time);
+        return runCommand("touch -t " + dateStr + " \"" + absPath + "\"");
     }
 
     public boolean mkdir() {
@@ -76,7 +77,7 @@ public abstract class RootFile<T> extends AbstractFile {
         List<T> result = new ArrayList<>();
         final LsOutputParser parser = new LsOutputParser();
         final List<LsOutputBean> beans = new ArrayList<>();
-        shell.addCommand("ls -lA " + absPath, 0, new Shell.OnCommandLineListener() {
+        shell.addCommand("ls -la " + absPath, 0, new Shell.OnCommandLineListener() {
             @Override
             public void onLine(String s) {
                 LsOutputBean bean = parser.parseLine(s);
@@ -98,50 +99,40 @@ public abstract class RootFile<T> extends AbstractFile {
         return result;
     }
 
+    private String escapePathForDD(String path) {
+        return path.replaceAll(" ", "\\ ");
+    }
+
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
 
-        // new file or existing file?
-        final String pathToUpdatePerm;
-        if (bean.isExists()) {
-            pathToUpdatePerm = absPath;
-        } else {
-            pathToUpdatePerm = absPath.substring(0, absPath.lastIndexOf('/'));
+        if (!bean.isExists()) {
+            // if file does not exist, explicitly create it as root, see GH issue #117
+            runCommand("touch" + " \"" + absPath + "\"");
         }
 
-        // remember current permission
-        final String perm = readCommandOutput("stat -c %a \"" + pathToUpdatePerm + "\"");
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("su", "-c", "\"dd of=" + escapePathForDD(absPath) + "\"");
+        Process proc = processBuilder.start();
 
-        // set perm to be able to read file
-        runCommand("chmod 0777 \"" + pathToUpdatePerm + "\"");
-
-        return new FileOutputStream(absPath) {
-            @Override
-            public void close() throws IOException {
-                super.close();
-                // restore permission
-                runCommand("chmod 0" + perm + " \"" + pathToUpdatePerm + "\"");
-            }
-        };
+        return new BufferedOutputStream(proc.getOutputStream());
     }
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
 
-        // remember current permission
-        final String perm = readCommandOutput("stat -c %a \"" + absPath + "\"");
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("su", "-c", "\"dd if=" + escapePathForDD(absPath) + "\"");
+        Process proc = processBuilder.start();
 
-        // set perm to be able to read file
-        runCommand("chmod 0777 \"" + absPath + "\"");
+        try {
+            // workaround for weird errors
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            throw new IOException(e);
+        }
 
-        return new FileInputStream(absPath) {
-            @Override
-            public void close() throws IOException {
-                super.close();
-                // restore permission
-                runCommand("chmod 0" + perm + " \"" + absPath + "\"");
-            }
-        };
+        return new BufferedInputStream(proc.getInputStream());
     }
 
     protected boolean runCommand(String cmd) {

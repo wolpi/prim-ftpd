@@ -12,4 +12,16 @@
             android:targetPackage="org.primftpd"
             android:targetClass="org.primftpd.prefs.FtpPrefsActivityThemeDark" />
     </shortcut>
+
+    <shortcut
+        android:shortcutId="StartServer"
+        android:enabled="true"
+        android:icon="@drawable/ic_play_black_18dp"
+        android:shortcutShortLabel="@string/startService"
+        android:shortcutLongLabel="@string/startService">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="org.primftpd"
+            android:targetClass="org.primftpd.StartServerAndExitActivity" />
+    </shortcut>
 </shortcuts>

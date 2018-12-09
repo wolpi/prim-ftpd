@@ -1,0 +1,84 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/storageContainer"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        >
+        <TextView
+            android:id="@+id/storageTypeLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:text="@string/storageType"
+            />
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RadioButton android:id="@+id/radioStoragePlain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/storageTypePlain"
+                android:onClick="onRadioButtonClicked"
+                android:nextFocusUp="@+id/fallbackButtonPrefs"
+                />
+            <RadioButton android:id="@+id/radioStorageRoot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/storageTypeRoot"
+                android:onClick="onRadioButtonClicked"
+                />
+            <RadioButton android:id="@+id/radioStorageSaf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/storageTypeSaf"
+                android:onClick="onRadioButtonClicked"
+                />
+            <RadioButton android:id="@+id/radioStorageRoSaf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/storageTypeRoSaf"
+                android:onClick="onRadioButtonClicked"
+                />
+        </RadioGroup>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/safExplainHeading"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/safExplainHeading"
+        android:textStyle="bold"
+        />
+    <TextView
+        android:id="@+id/safExplain"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/safExplain"
+        />
+    <TextView
+        android:id="@+id/safUriLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/selectedSafUri"
+        android:textStyle="bold"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/safUri"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        android:textIsSelectable="true"
+        android:selectAllOnFocus="true"
+        />
+
+</merge>

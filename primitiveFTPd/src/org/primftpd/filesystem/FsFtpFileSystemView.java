@@ -26,17 +26,18 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 
 	@Override
 	protected String absolute(String file) {
+		logger.trace("  finding abs path for '{}' with wd '{}'", file, (workingDir != null ? workingDir.getAbsolutePath() : "null"));
 		return Utils.absolute(file, workingDir.getAbsolutePath());
 	}
 
 	public FsFtpFile getHomeDirectory() {
-		logger.trace("getHomeDirectory()");
+		logger.trace("getHomeDirectory() -> {}", (homeDir != null ? homeDir.getAbsolutePath() : "null"));
 
 		return createFile(homeDir);
 	}
 
 	public FsFtpFile getWorkingDirectory() {
-		logger.trace("getWorkingDirectory()");
+		logger.trace("getWorkingDirectory() -> {}", (workingDir != null ? workingDir.getAbsolutePath() : "null"));
 
 		return workingDir;
 	}

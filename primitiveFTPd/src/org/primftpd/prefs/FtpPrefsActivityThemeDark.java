@@ -1,5 +1,7 @@
 package org.primftpd.prefs;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
 /**
@@ -9,4 +11,15 @@ import android.preference.PreferenceActivity;
  */
 public class FtpPrefsActivityThemeDark extends FtpPrefsActivity
 {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // check theme and launch the other activity if necessary
+        Theme theme = LoadPrefsUtil.theme(LoadPrefsUtil.getPrefs(getBaseContext()));
+        if (Theme.LIGHT == theme) {
+            this.finish();
+            startActivity(new Intent(this, FtpPrefsActivityThemeLight.class));
+        }
+    }
 }

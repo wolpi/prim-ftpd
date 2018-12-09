@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.provider.DocumentFile;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -72,7 +73,7 @@ public class ReceiveShareActivity extends Activity {
         if (uris != null || contents != null) {
             logger.debug("trying to create intent");
             try {
-                Intent dirPickerIntent = Defaults.createDefaultDirPicker(getBaseContext());
+                Intent dirPickerIntent = Defaults.createDirAndFilePicker(getBaseContext());
                 logger.debug("got intent: {}", dirPickerIntent);
                 startActivityForResult(dirPickerIntent, 0);
             } catch (Exception e) {
@@ -81,7 +82,7 @@ public class ReceiveShareActivity extends Activity {
         }
 
         // display uris, usually that should not be visible
-        ListView listView = (ListView) findViewById(android.R.id.list);
+        ListView listView = findViewById(android.R.id.list);
         if (uris != null) {
             listView.setAdapter(new ArrayAdapter<>(
                     this,
@@ -105,19 +106,19 @@ public class ReceiveShareActivity extends Activity {
 
         if (resultCode == Activity.RESULT_OK) {
             Uri targetUri = data.getData();
-            File targetDir = com.nononsenseapps.filepicker.Utils.getFileForUri(targetUri);
-            logger.debug("targetDir: {}", targetDir);
+            File targetPath = com.nononsenseapps.filepicker.Utils.getFileForUri(targetUri);
+            logger.debug("targetDir: {}", targetPath);
 
             if (uris != null) {
-                saveUris(targetDir);
+                saveUris(targetPath);
             } else {
-                saveContents(targetDir);
+                saveContents(targetPath);
             }
         }
         finish();
     }
 
-    protected void saveUris(File targetDir) {
+    protected void saveUris(File targetPath) {
         if (uris == null) {
             return;
         }
@@ -133,8 +134,7 @@ public class ReceiveShareActivity extends Activity {
             FileOutputStream fos = null;
             InputStream is = null;
             try {
-                String filename = filename(uri, content, this.type, targetDir);
-                File targetFile = new File(targetDir, filename);
+                File targetFile = targetFile(uri, content, this.type, targetPath);
                 logger.debug("saving under: {}", targetFile);
                 fos = new FileOutputStream(targetFile);
                 is = getContentResolver().openInputStream(uri);
@@ -152,7 +152,7 @@ public class ReceiveShareActivity extends Activity {
         }
     }
 
-    protected void saveContents(File targetDir) {
+    protected void saveContents(File targetPath) {
         if (contents == null) {
             return;
         }
@@ -162,8 +162,7 @@ public class ReceiveShareActivity extends Activity {
             }
             FileOutputStream fos = null;
             try {
-                String filename = filename(null, null, "txt", targetDir);
-                File targetFile = new File(targetDir, filename);
+                File targetFile = targetFile(null, null, "txt", targetPath);
                 logger.debug("saving under: {}", targetFile);
                 fos = new FileOutputStream(targetFile);
                 PrintStream ps = new PrintStream(fos);
@@ -180,6 +179,15 @@ public class ReceiveShareActivity extends Activity {
         }
     }
 
+    protected File targetFile(Uri uri, String content, String type, File targetPath) {
+        if (!targetPath.isFile()) {
+            String filename = filename(uri, content, type, targetPath);
+            return new File(targetPath, filename);
+        } else {
+            return targetPath;
+        }
+    }
+
     protected static DateFormat FILENAME_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS");
     protected String filename(Uri uri, String content, String type, File targetDir) {
         String filename = null;
@@ -190,8 +198,19 @@ public class ReceiveShareActivity extends Activity {
             addExtension = true;
         }
         if (filename == null && uri != null) {
-            // if we don't got content use last fragment of url as filename
-            filename = uri.getLastPathSegment();
+            // if we don't got content derive filename from url
+
+            // 1st: try to resolve content url
+            try {
+                DocumentFile documentFile = DocumentFile.fromSingleUri(this, uri);
+                filename = documentFile.getName();
+            } catch (Exception e) {
+                logger.error("could not resolve content url: " + uri, e);
+
+                // 2nd: use last segment of url
+                filename = uri.getLastPathSegment();
+            }
+
             addExtension = !filename.contains(".");
         }
         if (filename == null || (content == null && addExtension)) {
@@ -200,7 +219,8 @@ public class ReceiveShareActivity extends Activity {
             filename = FILENAME_DATEFORMAT.format(new Date());
             addExtension = true;
         }
-        String fileExt = null;
+        String fileExt;
+        String basename;
         if (addExtension) {
             // try to add extension base on given mime type
             if (type != null) {
@@ -209,8 +229,17 @@ public class ReceiveShareActivity extends Activity {
                         : type;
                 if ("plain".equals(fileExt)) {
                     fileExt = "txt";
+                } else if ("jpeg".equals(fileExt)) {
+                    fileExt = "jpg";
                 }
+            } else {
+                fileExt = "";
             }
+            basename = filename;
+            filename = basename + "." + fileExt;
+        } else {
+            fileExt = filename.substring(filename.lastIndexOf('.') +1, filename.length());
+            basename = filename.substring(0, filename.lastIndexOf('.'));
         }
 
         // check if file exists
@@ -218,7 +247,7 @@ public class ReceiveShareActivity extends Activity {
         int counter = 0;
         do {
             String uniquePart = counter == 0 ? "" : "_" + counter;
-            String tmpName = fileExt != null ? filename + uniquePart + "." + fileExt : filename + uniquePart;
+            String tmpName = basename + uniquePart + "." + fileExt;
             File targetFile = new File(targetDir, tmpName);
             exists = targetFile.exists();
             if (exists) {
@@ -229,16 +258,9 @@ public class ReceiveShareActivity extends Activity {
 
         // make unique if was existing
         if (counter > 0) {
-            filename += "_" + counter;
+            filename = basename + "_" + counter + "." + fileExt;
         }
 
-        // add extension if present
-        if (fileExt != null) {
-            filename += "." + fileExt;
-        }
-
-        logger.debug("generated filename '{}' for uri '{}', content '{}', type '{}'",
-                new Object[]{filename, uri, content, type});
         return filename;
     }
 
@@ -246,7 +268,7 @@ public class ReceiveShareActivity extends Activity {
 
     private void copyStream(InputStream is, OutputStream os) {
         try {
-            byte[] bytes = new byte[4096];
+            byte[] bytes = new byte[BUFFER_SIZE];
             for (;;) {
                 int count = is.read(bytes, 0, BUFFER_SIZE);
                 if (count == -1) {

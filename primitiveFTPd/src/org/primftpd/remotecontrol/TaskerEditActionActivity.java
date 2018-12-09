@@ -35,7 +35,7 @@ public class TaskerEditActionActivity extends ListActivity {
             data[i] = getText(actions[i].getStringId()).toString();
         }
 
-        ListView listView = (ListView) findViewById(android.R.id.list);
+        ListView listView = findViewById(android.R.id.list);
         listView.setAdapter(new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
@@ -53,7 +53,10 @@ public class TaskerEditActionActivity extends ListActivity {
     @Override
     public void finish() {
         logger.debug("finish()");
-        Intent resultIntent = TaskerReceiver.buildResultIntent(this, selectedAction.getBlurb());
+        String blurb = selectedAction != null
+                ? selectedAction.getBlurb()
+                : TaskerAction.START.getBlurb();
+        Intent resultIntent = TaskerReceiver.buildResultIntent(this, blurb);
         setResult(RESULT_OK, resultIntent);
 
         super.finish();

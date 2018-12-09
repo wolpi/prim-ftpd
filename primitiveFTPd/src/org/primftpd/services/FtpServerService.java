@@ -66,6 +66,10 @@ public class FtpServerService extends AbstractServerService
 		ListenerFactory listenerFactory = new ListenerFactory();
 		listenerFactory.setPort(prefsBean.getPort());
 
+		if (prefsBean.getIdleTimeout() != null) {
+			listenerFactory.setIdleTimeout(prefsBean.getIdleTimeout());
+		}
+
 		DataConnectionConfigurationFactory dataConConfigFactory = new DataConnectionConfigurationFactory();
 		String passivePorts = prefsBean.getFtpPassivePorts();
 		if (StringUtils.isNotBlank(passivePorts)){

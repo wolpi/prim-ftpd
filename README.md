@@ -26,3 +26,6 @@ FTP server app for android.
 * Android 7 Quicksettings Tile
 * Optional root access
 * Optional support for Android Storage Access Framework to access external sd-card the official way
+
+
+Want to help translating it? See our shiny [weblate instance](https://pftpd.rocks/projects/pftpd/pftpd/)!

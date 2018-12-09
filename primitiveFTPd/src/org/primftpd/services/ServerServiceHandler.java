@@ -7,8 +7,6 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
-import eu.chainfire.libsuperuser.Shell;
-
 import org.primftpd.prefs.StorageType;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.ServicesStartStopUtil;
@@ -16,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
+
+import eu.chainfire.libsuperuser.Shell;
 
 /**
  * Handles starting and stopping of Servers, including {@link WakeLock}.
@@ -87,11 +87,14 @@ public class ServerServiceHandler extends Handler
 				if (service.prefsBean.isAnnounce()) {
 					service.announceService();
 				}
-				Notification notification = ServicesStartStopUtil.updateNonActivityUI(service, true);
-				if (service.prefsBean.isForegroundService()) {
-					logger.debug("setting server to foreground ({})", logName);
-					service.startForeground(NotificationUtil.NOTIFICATION_ID, notification);
-				}
+
+				// make service high priority
+				Notification notification = ServicesStartStopUtil.updateNonActivityUI(
+						service,
+						true,
+						service.prefsBean,
+						service.keyFingerprintProvider);
+				service.startForeground(NotificationUtil.NOTIFICATION_ID, notification);
 			} else {
 				service.stopSelf();
 			}
@@ -112,7 +115,11 @@ public class ServerServiceHandler extends Handler
 		shellClose();
 		logger.debug("stopSelf ({})", logName);
 		service.stopSelf();
-		ServicesStartStopUtil.updateNonActivityUI(service, false);
+		ServicesStartStopUtil.updateNonActivityUI(
+				service,
+				false,
+				service.prefsBean,
+				null);
 	}
 
 	private synchronized void obtainWakeLock(
@@ -125,7 +132,7 @@ public class ServerServiceHandler extends Handler
 			logger.debug("acquiring wake lock ({})", logName);
 			wakeLock = powerMgr.newWakeLock(
 				PowerManager.SCREEN_DIM_WAKE_LOCK,
-				APP_NAME);
+				APP_NAME + ":wakelock");
 			wakeLock.acquire();
 		} else {
 			if (takeWakeLock) {
@@ -140,7 +147,11 @@ public class ServerServiceHandler extends Handler
 		if (wakeLock != null) {
 			if (wakeLock.isHeld()) {
 				logger.debug("releasing wake lock ({})", logName);
-				wakeLock.release();
+				try {
+					wakeLock.release();
+				} catch (Exception e) {
+					logger.warn("error while releasing wake lock", e);
+				}
 			} else {
 				logger.debug("wake lock not held, not releasing it ({})", logName);
 			}
@@ -153,6 +164,7 @@ public class ServerServiceHandler extends Handler
 	private synchronized void shellOpen() {
 		if (shell == null) {
 			logger.debug("opening root shell ({})", logName);
+			// TODO test .setShell()
 			shell = (new Shell.Builder()).useSU().open();
 		} else {
 			logger.debug("root shell already open ({})", logName);

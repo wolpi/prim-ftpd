@@ -22,12 +22,11 @@ import org.apache.sshd.server.command.ScpCommandFactory;
 import org.apache.sshd.server.session.ServerSession;
 import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.AndroidPrefsUserManager;
-import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
+import org.primftpd.filesystem.FsSshFileSystemView;
 import org.primftpd.filesystem.RoSafSshFileSystemView;
 import org.primftpd.filesystem.RootSshFileSystemView;
 import org.primftpd.filesystem.SafSshFileSystemView;
-import org.primftpd.filesystem.FsSshFileSystemView;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.StringUtils;
@@ -209,11 +208,11 @@ public class SshServerService extends AbstractServerService
 			// read pub key
 			KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
 
-			pubkeyFis = openFileInput(PrimitiveFtpdActivity.PUBLICKEY_FILENAME);
+			pubkeyFis = openFileInput(Defaults.PUBLICKEY_FILENAME);
 			PublicKey publicKey = keyInfoProvider.readPublicKey(pubkeyFis);
 
 			// read priv key from it's own file
-			privkeyFis = openFileInput(PrimitiveFtpdActivity.PRIVATEKEY_FILENAME);
+			privkeyFis = openFileInput(Defaults.PRIVATEKEY_FILENAME);
 			PrivateKey privateKey = keyInfoProvider.readPrivatekey(privkeyFis);
 
 			// return key pair

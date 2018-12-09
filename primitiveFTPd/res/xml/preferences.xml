@@ -1,86 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<PreferenceCategory android:title="@string/prefCategoryTitle" android:key="ftpPrefCat">
+	<PreferenceCategory android:title="@string/prefsCategoryTitleAuth" android:key="ftpPrefCatAuth">
 		<SwitchPreference
 			android:name="anonymousLogin"
 			android:key="anonymousLoginPref"
 			android:defaultValue="false"
 			android:title="@string/prefTitleAnonymousLogin"
 			android:summary="@string/prefSummaryAnonymousLogin"
-		/>
+			/>
 		<EditTextPreference
 			android:name="user_name"
 			android:key="userNamePref"
 			android:defaultValue="user"
 			android:title="@string/prefTitleUser"
 			android:summary="@string/prefSummaryUser"
-		/>
+			/>
 		<org.primftpd.prefs.EncryptingEditTextPreference
 			android:name="password"
 			android:key="passwordPref"
 			android:title="@string/prefTitlePassword"
 			android:summary="@string/prefSummaryPassword"
 			android:password="true"
-		/>
-		<ListPreference
-			android:name="whichServerToStart"
-			android:key="whichServerToStartPref"
-			android:title="@string/prefTitleWhichServerToStart"
-			android:summary="@string/prefSummaryWhichServerToStart"
-			android:defaultValue="0"
-			android:entries="@array/prefWhichServerToStartNames"
-			android:entryValues="@array/prefWhichServerToStartValues" />
-		<org.primftpd.prefs.PortEditTextPreference
-			android:name="port"
-			android:key="portPref"
-			android:defaultValue="12345"
-			android:title="@string/prefTitlePort"
-			android:summary="@string/prefSummaryPort"
-			android:numeric="integer"
-		/>
-		<org.primftpd.prefs.PortEditTextPreference
-			android:name="sslPort"
-			android:key="securePortPref"
-			android:defaultValue="1234"
-			android:title="@string/prefTitlePortSecure"
-			android:summary="@string/prefSummaryPortSecure"
-			android:numeric="integer"
-		/>
-		<org.primftpd.prefs.StartDirEditTextPreference
-			android:name="startDir"
-			android:key="startDirPref"
-			android:title="@string/prefTitleStartDir"
-			android:summary="@string/prefSummaryStartDir"
-
-		/>
-		<SwitchPreference
-			android:name="wakelock"
-			android:key="wakelockPref"
-			android:defaultValue="true"
-			android:title="@string/prefTitleWakelock"
-			android:summary="@string/prefSummaryWakelock"
-		/>
-		<SwitchPreference
-			android:name="announce"
-			android:key="announcePref"
-			android:defaultValue="false"
-			android:title="@string/prefTitleAnnounce"
-			android:summary="@string/prefSummaryAnnounce"
-		/>
-		<EditTextPreference
-			android:name="announce_name"
-			android:key="announceNamePref"
-			android:defaultValue="primitive ftpd"
-			android:title="@string/prefTitleAnnounceName"
-			android:summary="@string/prefSummaryAnnounceName"
-		/>
-		<SwitchPreference
-			android:name="startOnBoot"
-			android:key="startOnBootPref"
-			android:defaultValue="false"
-			android:title="@string/prefTitleStartOnBoot"
-			android:summary="@string/prefSummaryStartOnBoot"
 			/>
 		<SwitchPreference
 			android:name="pubKeyAuth"
@@ -89,18 +30,70 @@
 			android:title="@string/prefTitlePubKeyAuth"
 			android:summary="@string/prefSummaryPubKeyAuth"
 			/>
-		<SwitchPreference
-			android:name="foregroundService"
-			android:key="foregroundServicePref"
-			android:defaultValue="false"
-			android:title="@string/prefForegroundService"
-			android:summary="@string/prefSummaryForegroundService"
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/prefsCategoryTitleConnectivity" android:key="ftpPrefCatConnectivity">
+		<ListPreference
+			android:name="whichServerToStart"
+			android:key="whichServerToStartPref"
+			android:title="@string/prefTitleWhichServerToStart"
+			android:summary="@string/prefSummaryWhichServerToStart"
+			android:defaultValue="0"
+			android:entries="@array/prefWhichServerToStartNames"
+			android:entryValues="@array/prefWhichServerToStartValues"
 			/>
-		<EditTextPreference
+		<org.primftpd.prefs.PortEditTextPreference
+			android:name="port"
+			android:key="portPref"
+			android:defaultValue="12345"
+			android:title="@string/prefTitlePort"
+			android:summary="@string/prefSummaryPort"
+			android:numeric="integer"
+			/>
+		<org.primftpd.prefs.PortEditTextPreference
+			android:name="sslPort"
+			android:key="securePortPref"
+			android:defaultValue="1234"
+			android:title="@string/prefTitlePortSecure"
+			android:summary="@string/prefSummaryPortSecure"
+			android:numeric="integer"
+			/>
+		<org.primftpd.prefs.FtpPassivePortsEditTextPreference
 			android:name="ftpPassivePorts"
 			android:key="ftpPassivePortsPref"
 			android:title="@string/prefTitleFtpPassivePorts"
 			android:summary="@string/prefSummaryFtpPassivePorts"
+			/>
+		<EditTextPreference
+			android:name="idleTimeout"
+			android:key="idleTimeoutPref"
+			android:title="@string/prefTitleIdleTimeout"
+			android:summary="@string/prefSummaryIdleTimeout"
+			android:numeric="integer"
+			/>
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/prefsCategoryTitleUi" android:key="ftpPrefCatUi">
+		<SwitchPreference
+			android:name="startOnOpen"
+			android:key="startOnOpenPref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleStartOnOpen"
+			android:summary="@string/prefSummaryStartOnOpen"
+			/>
+		<SwitchPreference
+			android:name="showConnectionInfoInNotification"
+			android:key="showConnectionInfoInNotificationPref"
+			android:defaultValue="true"
+			android:title="@string/prefTitleShowConnectionInfoInNotification"
+			android:summary="@string/prefSummaryShowConnectionInfoInNotification"
+			/>
+		<SwitchPreference
+			android:name="showStartStopNotification"
+			android:key="showStartStopNotificationPref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleShowStartStopNotification"
+			android:summary="@string/prefSummaryShowStartStopNotification"
 			/>
 		<ListPreference
 			android:name="theme"
@@ -109,7 +102,45 @@
 			android:summary="@string/prefSummaryTheme"
 			android:defaultValue="0"
 			android:entries="@array/prefThemeNames"
-			android:entryValues="@array/prefThemeValues" />
+			android:entryValues="@array/prefThemeValues"
+			/>
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/prefsCategoryTitleSystem" android:key="ftpPrefCatSystem">
+		<org.primftpd.prefs.StartDirEditTextPreference
+			android:name="startDir"
+			android:key="startDirPref"
+			android:title="@string/prefTitleStartDir"
+			android:summary="@string/prefSummaryStartDir"
+			/>
+		<SwitchPreference
+			android:name="wakelock"
+			android:key="wakelockPref"
+			android:defaultValue="true"
+			android:title="@string/prefTitleWakelock"
+			android:summary="@string/prefSummaryWakelock"
+			/>
+		<SwitchPreference
+			android:name="announce"
+			android:key="announcePref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleAnnounce"
+			android:summary="@string/prefSummaryAnnounce"
+			/>
+		<EditTextPreference
+			android:name="announce_name"
+			android:key="announceNamePref"
+			android:defaultValue="primitive ftpd"
+			android:title="@string/prefTitleAnnounceName"
+			android:summary="@string/prefSummaryAnnounceName"
+			/>
+		<SwitchPreference
+			android:name="startOnBoot"
+			android:key="startOnBootPref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleStartOnBoot"
+			android:summary="@string/prefSummaryStartOnBoot"
+			/>
 		<ListPreference
 			android:name="logging"
 			android:key="loggingPref"
@@ -117,7 +148,8 @@
 			android:summary="@string/prefSummaryLogging"
 			android:defaultValue="0"
 			android:entries="@array/prefLoggingNames"
-			android:entryValues="@array/prefLoggingValues" />
-
+			android:entryValues="@array/prefLoggingValues"
+			/>
 	</PreferenceCategory>
+
 </PreferenceScreen>

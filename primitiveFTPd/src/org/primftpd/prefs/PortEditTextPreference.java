@@ -28,7 +28,12 @@ public class PortEditTextPreference extends EditTextPreference implements Prefer
 
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
-		int port = Integer.parseInt((String)newValue);
+		int port = 0;
+		try {
+			port = Integer.parseInt((String) newValue);
+		} catch (Exception e) {
+			// never mind
+		}
 		boolean valid = LoadPrefsUtil.validatePort(port);
 		if (!valid) {
 			Toast.makeText(

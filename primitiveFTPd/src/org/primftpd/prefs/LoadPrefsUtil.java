@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import org.apache.ftpserver.impl.PassivePorts;
 import org.primftpd.PrefsBean;
 import org.primftpd.util.Defaults;
 import org.slf4j.Logger;
@@ -23,11 +24,14 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_WAKELOCK = "wakelockPref";
 	public static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
 	public static final String PREF_KEY_START_ON_BOOT = "startOnBootPref";
+	public static final String PREF_KEY_START_ON_OPEN = "startOnOpenPref";
+	public static final String PREF_KEY_SHOW_CONN_INFO = "showConnectionInfoInNotificationPref";
+	public static final String PREF_KEY_SHOW_START_STOP_NOTIFICATION = "showStartStopNotificationPref";
 	public static final String PREF_KEY_PUB_KEY_AUTH = "pubKeyAuthPref";
-	public static final String PREF_KEY_FOREGROUND_SERVICE = "foregroundServicePref";
 	public static final String PREF_KEY_THEME = "themePref";
 	public static final String PREF_KEY_LOGGING = "loggingPref";
 	public static final String PREF_KEY_FTP_PASSIVE_PORTS = "ftpPassivePortsPref";
+	public static final String PREF_KEY_IDLE_TIMEOUT = "idleTimeoutPref";
 	public static final String PREF_KEY_STORAGE_TYPE = "storageTypePref";
 	public static final String PREF_KEY_SAF_URL = "safUrlPref";
 
@@ -94,16 +98,28 @@ public class LoadPrefsUtil
 			Boolean.FALSE);
 	}
 
+	public static Boolean startOnOpen(SharedPreferences prefs) {
+		return prefs.getBoolean(
+			LoadPrefsUtil.PREF_KEY_START_ON_OPEN,
+			Boolean.FALSE);
+	}
+
+	public static Boolean showStartStopNotification(SharedPreferences prefs) {
+		return prefs.getBoolean(
+				LoadPrefsUtil.PREF_KEY_SHOW_START_STOP_NOTIFICATION,
+				Boolean.FALSE);
+	}
+
+	public static Boolean showConnectionInfoInNotification(SharedPreferences prefs) {
+		return prefs.getBoolean(
+				LoadPrefsUtil.PREF_KEY_SHOW_CONN_INFO,
+				Boolean.TRUE);
+	}
+
 	public static Boolean pubKeyAuth(SharedPreferences prefs) {
 		return prefs.getBoolean(
 			LoadPrefsUtil.PREF_KEY_PUB_KEY_AUTH,
 			Boolean.FALSE);
-	}
-
-	public static Boolean foregroundService(SharedPreferences prefs) {
-		return prefs.getBoolean(
-				LoadPrefsUtil.PREF_KEY_FOREGROUND_SERVICE,
-				Boolean.FALSE);
 	}
 
 	public static ServerToStart serverToStart(SharedPreferences prefs) {
@@ -120,10 +136,32 @@ public class LoadPrefsUtil
 		return Theme.byXmlVal(themeStr);
 	}
 
+	public static void storeLogging(SharedPreferences prefs, Logging value) {
+		prefs.edit().putString(PREF_KEY_LOGGING, value.xmlValue()).commit();
+	}
+
 	public static String ftpPassivePorts(SharedPreferences prefs) {
-		return prefs.getString(
+		String passivePorts = null;
+		String prefVal = prefs.getString(
 				LoadPrefsUtil.PREF_KEY_FTP_PASSIVE_PORTS,
 				null);
+		if (prefVal != null && validateFtpPassivePorts(prefVal)) {
+			passivePorts = prefVal;
+		}
+		return passivePorts;
+	}
+
+	public static Integer idleTimeout(SharedPreferences prefs) {
+		String str = prefs.getString(PREF_KEY_IDLE_TIMEOUT, "");
+		Integer val = null;
+		if (str != null && str.length() > 0) {
+			try {
+				val = Integer.valueOf(str);
+			} catch (NumberFormatException e) {
+				// never mind
+			}
+		}
+		return val;
 	}
 
 	public static StorageType storageType(SharedPreferences prefs) {
@@ -200,6 +238,15 @@ public class LoadPrefsUtil
 		return port > 1024 && port <= 64000;
 	}
 
+	static boolean validateFtpPassivePorts(String ports) {
+		try {
+			new PassivePorts(ports, false);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
 	public static PrefsBean loadPrefs(Logger logger, SharedPreferences prefs) {
 		boolean anonymousLogin = anonymousLogin(prefs);
 		logger.debug("got anonymousLogin: {}", Boolean.valueOf(anonymousLogin));
@@ -225,20 +272,23 @@ public class LoadPrefsUtil
 		boolean pubKeyAuth = pubKeyAuth(prefs);
 		logger.debug("got pubKeyAuth: {}", Boolean.valueOf(pubKeyAuth));
 
-		boolean foregroundService = foregroundService(prefs);
-		logger.debug("got foregroundService: {}", Boolean.valueOf(foregroundService));
-
 		ServerToStart serverToStart = serverToStart(prefs);
 		logger.debug("got 'which server': {}", serverToStart);
 
 		String ftpPassivePorts = ftpPassivePorts(prefs);
 		logger.debug("got ftpPassivePorts: {}", ftpPassivePorts);
 
+		Integer idleTimeout = idleTimeout(prefs);
+		logger.debug("got idleTimeout: {}", idleTimeout);
+
 		int port = loadPortInsecure(logger, prefs);
 		logger.debug("got 'port': {}", Integer.valueOf(port));
 
 		int securePort = loadPortSecure(logger, prefs);
 		logger.debug("got 'secure port': {}", Integer.valueOf(securePort));
+
+		boolean showConnectionInfo = showConnectionInfoInNotification(prefs);
+		logger.debug("got showConnectionInfo: {}", Boolean.valueOf(showConnectionInfo));
 
 		StorageType storageType = storageType(prefs);
 		logger.debug("got 'StorageType': {}", storageType);
@@ -258,9 +308,10 @@ public class LoadPrefsUtil
 				announceName,
 				wakelock,
 				pubKeyAuth,
-				foregroundService,
 				serverToStart,
 				ftpPassivePorts,
+				idleTimeout,
+				showConnectionInfo,
 				storageType,
 				safUrl);
 	}

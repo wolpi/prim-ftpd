@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="app_name">prymitywny ftpd</string>
+    <string name="ifacesLabel">Interfejs sieciowy</string>
+    <string name="ipAddrLabel">Adres IP</string>
+    <string name="ifacesError">Błąd:</string>
+    <string name="protocolLabel">Protokół</string>
+    <string name="portLabel">Port</string>
+    <string name="generateKeysMessage">Wygenerować klucze?</string>
+    <string name="generatingKeysMessage">Generowanie kluczy …</string>
+    <string name="generate">Generowanie</string>
+    <string name="cancel">Anuluj</string>
+    <string name="serverStopped">Zatrzymaj</string>
+    <string name="permissionRequired">\"%1$s\" wymagane jest zezwolenie na działanie tej aplikacji!</string>
+    <string name="permissionNameStorage">Pamięć masowa</string>
+    <string name="quickSettingsServerStarted">pFTPd uruchomiona…</string>
+    <string name="saveAs">Zapisz jako</string>
+    <string name="translate">Przetłumacz</string>
+
+    <string name="startService">Uruchom serwer</string>
+    <string name="stopService">Zatrzymaj serwer</string>
+    <string name="toggleService">Przełącz uruchamianie/zatrzymywanie serwera</string>
+    <string name="notificationTitle">Serwer FTP</string>
+
+    <string name="haveToSetPassword">Najpierw musisz ustawić hasło</string>
+    <string name="serverRunning">Serwer FTP uruchomiony</string>
+    <string name="serverCouldNotBeStarted">Serwer nie mógł zostać uruchomiony! Komunikat o błędzie:</string>
+    <string name="portInvalid_v2">Wartość portu jest nieprawidłowa. Musi wynosić od 1024 do 64000.</string>
+    <string name="portsEqual_v2">Porty są takie same. To nie działa.</string>
+    <string name="restartServer">Musisz ponownie uruchomić serwer, aby zmiany zaczęły obowiązywać.</string>
+    <string name="invalidDir">Katalog jest nieprawidłowy.</string>
+    <string name="couldNotReadKeyAuthKey">Nie można odczytać klucza publicznego do uwierzytelniania klucza. Sprawdź dzienniki.</string>
+    <string name="ftpPassivePortsInvalid">Wartość pasywnych portów FTP jest nieprawidłowa.</string>
+
+    <string name="prefs">Preferencje</string>
+    <string name="prefsCategoryTitleConnectivity">Łączność</string>
+    <string name="prefsCategoryTitleUi">UI</string>
+    <string name="prefsCategoryTitleSystem">System</string>
+    <string name="prefTitleUser">Nazwa Użytkownika</string>
+    <string name="prefSummaryUser">Nazwa użytkownika serwera FTP</string>
+    <string name="prefTitlePassword">Hasło</string>
+    <string name="prefSummaryPassword">Hasło do serwera FTP</string>
+    <string name="prefTitlePort">Port</string>
+    <string name="prefSummaryPort">Port serwera FTP</string>
+    <string name="prefTitlePortSecure">Bezpieczny Port</string>
+    <string name="prefSummaryPortSecure">Port serwera FTP (zaszyfrowany)</string>
+    <string name="prefTitleStartDir">Katalog startowy serwera</string>
+    <string name="prefSummaryStartDir">Pierwszy katalog po zalogowaniu</string>
+    <string name="prefTitleAnnounce">Ogłoś serwer w sieci LAN</string>
+    <string name="prefSummaryAnnounce">Ogłasza serwer FTP w sieci LAN za pośrednictwem DNS-SD (Bonjour). Może powodować awarie na niektórych urządzeniach.</string>
+    <string name="prefTitleAnnounceName">Nazwa serwera</string>
+    <string name="prefSummaryAnnounceName">Nazwa, aby ogłosić serwer za pomocą.</string>
+    <string name="prefTitleWakelock">Zapobiegaj gotowości</string>
+    <string name="prefSummaryWakelock">Zapobiega trybowi wstrzymania, gdy serwer jest uruchomiony. Tryb gotowości może spowodować przerwanie wysyłania/pobierania.</string>
+    <string name="prefTitleWhichServerToStart">Serwer(y) do uruchomienia</string>
+    <string name="prefSummaryWhichServerToStart">Wybierz, czy chcesz uruchomić tylko serwer FTP, tylko serwer SFTP lub oba.</string>
+    <string name="prefTitleStartOnBoot">Rozpocznij przy starcie</string>
+    <string name="prefSummaryStartOnBoot">Uruchom serwer podczas startu systemu.</string>
+    <string name="prefSummaryStartOnOpen">Uruchom serwer po otwarciu aplikacji.</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">Wyświetla w powiadomieniu informacje o połączeniu, takie jak adres IP.</string>
+    <string name="prefTitleShowStartStopNotification">Pokaż powiadomienie, aby uruchomić/zatrzymać serwer(y)</string>
+    <string name="prefSummaryShowStartStopNotification">Wyświetla powiadomienie przez cały czas, aby mieć kolejną szybką drogę do uruchomienia/zatrzymania serwera(ów).</string>
+    <string name="prefTitlePubKeyAuth">Uwierzytelnianie klucza publicznego</string>
+    <string name="prefSummaryPubKeyAuth">Po włączeniu umieść publiczny klucz ssh2 w %s. Tylko SFTP.</string>
+    <string name="prefTitleAnonymousLogin">Logowanie anonimowe</string>
+    <string name="prefSummaryAnonymousLogin">Ustaw, jeśli logowanie anonimowe jest dozwolone na serwerze.</string>
+    <string name="prefTitleFtpPassivePorts">FTP Pasywne porty</string>
+    <string name="prefSummaryFtpPassivePorts">Porty do pasywnego połączenia danych FTP. Może być pojedynczym portem, listą lub zakresem portów. Na przykład. 5678,5700-5710,5800,5900.</string>
+    <string name="prefTitleIdleTimeout">Limit czasu bezczynności serwera</string>
+    <string name="prefSummaryIdleTimeout">Serwer zakończy połączenia bezczynne po tym czasie (tylko FTP)</string>
+    <string name="prefTheme">Motyw</string>
+    <string name="prefSummaryTheme">Zmiana motywu może wymagać ponownego uruchomienia aplikacji.</string>
+    <string name="prefTitleLogging">Dziennik</string>
+    <string name="prefSummaryLogging">Dziennik służy do analizy błędów. Jeśli aplikacja nie działa poprawnie na Twoim urządzeniu, możesz wysłać dziennik do programistów. Może wymagać ponownego uruchomienia aplikacji.</string>
+
+    <string name="licence">Licencja</string>
+    <string name="reset">Uruchom ponownie</string>
+
+    <string name="widgetTextStart">uruchom (s)ftpd</string>
+    <string name="widgetTextStop">zatrzymaj (s)ftpd</string>
+    <string name="isAnonymous">Logowanie anonimowe: %1$b</string>
+    <string name="selectServerAction">Wybierz działanie serwera</string>
+    <string name="isServerRunning">Czy serwer działa?</string>
+
+    <string name="storageType">Typ Pamięci</string>
+    <string name="storageTypePlain">Zwykły stary system plików</string>
+    <string name="storageTypeRoot">Super użytkownik (urządzenie musi być zrootowane)</string>
+    <string name="storageTypeSaf">Platforma Android Storage Access Framework (SAF)
+\n(np. dla karty SD)</string>
+    <string name="storageTypeRoSaf">Odczytuj tylko SAF (szybciej!)</string>
+    <string name="safExplainHeading">Jak działa SAF</string>
+    <string name="safExplain">Android poprosi cię o wybranie katalogu. Będzie to dostępne przez serwer(y). Od czasu do czasu uprawnienia mogą zostać odwołane i trzeba ponownie wybrać.</string>
+    <string name="selectedSafUri">Wybrany identyfikator SAF URI:</string>
+
+    <string name="startServerAndExit">tylko serwer startowy</string>
+    <string name="fingerprintsLabel">Klucz Linii Papilarnych</string>
+    <string name="state">Stan</string>
+    <string name="serverStarted">Uruchamianie …</string>
+    <string name="quickSettingsServerStopped">Zatrzymaj pFTPd</string>
+    <string name="prefsCategoryTitleAuth">Autoryzacja</string>
+    <string name="prefTitleStartOnOpen">Uruchom otwarte</string>
+    <string name="prefTitleShowConnectionInfoInNotification">Pokaż informacje o połączeniu w powiadomieniu</string>
+    <string name="startServerAndUi">zacznij od serwera</string>
+
+    </resources>

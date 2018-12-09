@@ -2,10 +2,8 @@ package org.primftpd.filesystem;
 
 import android.content.ContentResolver;
 import android.net.Uri;
-import android.os.ParcelFileDescriptor;
 import android.support.v4.provider.DocumentFile;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -144,8 +142,7 @@ public abstract class SafFile<T> extends AbstractFile {
         }
 
         logger.trace("   createOutputStream() uri: {}", uri);
-        ParcelFileDescriptor pfd = contentResolver.openFileDescriptor(uri, "w");
-        return new FileOutputStream(pfd.getFileDescriptor());
+        return contentResolver.openOutputStream(uri);
     }
 
     public InputStream createInputStream(long offset) throws IOException {

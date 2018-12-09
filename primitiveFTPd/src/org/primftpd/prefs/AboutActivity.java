@@ -1,9 +1,5 @@
 package org.primftpd.prefs;
 
-import org.primftpd.R;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -12,6 +8,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import org.primftpd.R;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AboutActivity extends Activity
 {
@@ -26,7 +26,14 @@ public class AboutActivity extends Activity
     public static final String URL_AMAZON =
 		"http://www.amazon.com/wolpi-primitive-FTPd/dp/B00KERCPNY/ref=sr_1_1";
 
-	protected final Logger logger = LoggerFactory.getLogger(getClass());
+    public static final String URL_MINA = "https://mina.apache.org";
+    public static final String URL_BC = "https://bouncycastle.org/";
+    public static final String URL_SLF4J = "https://www.slf4j.org/";
+    public static final String URL_FILEPICKER = "https://github.com/spacecowboy/NoNonsense-FilePicker";
+    public static final String URL_LIBSUPERUSER = "https://su.chainfire.eu/";
+    public static final String URL_EVENTBUS = "https://github.com/greenrobot/EventBus";
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -88,6 +95,13 @@ public class AboutActivity extends Activity
 
         ((TextView)findViewById(R.id.amazonLabel)).setText("Amazon");
         ((TextView)findViewById(R.id.amazonTextView)).setText(URL_AMAZON);
+
+        ((TextView)findViewById(R.id.minaTextView)).setText(URL_MINA);
+        ((TextView)findViewById(R.id.bouncyCastleTextView)).setText(URL_BC);
+        ((TextView)findViewById(R.id.slf4jTextView)).setText(URL_SLF4J);
+        ((TextView)findViewById(R.id.filepickerTextView)).setText(URL_FILEPICKER);
+        ((TextView)findViewById(R.id.libsuperuserTextView)).setText(URL_LIBSUPERUSER);
+        ((TextView)findViewById(R.id.eventbusTextView)).setText(URL_EVENTBUS);
 	}
 
     @Override

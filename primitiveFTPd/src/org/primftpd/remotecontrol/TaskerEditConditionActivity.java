@@ -46,7 +46,10 @@ public class TaskerEditConditionActivity extends ListActivity {
 
     @Override
     public void finish() {
-        Intent resultIntent = TaskerReceiver.buildResultIntent(this, selectedCondition.getBlurb());
+        String blurb = selectedCondition != null
+                ? selectedCondition.getBlurb()
+                : TaskerCondition.IS_SERVER_RUNNING.getBlurb();
+        Intent resultIntent = TaskerReceiver.buildResultIntent(this, blurb);
         setResult(RESULT_OK, resultIntent);
 
         super.finish();

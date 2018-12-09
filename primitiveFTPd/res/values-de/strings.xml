@@ -2,13 +2,13 @@
 <resources>
 
     <string name="app_name">primitive ftpd</string>
-    <string name="ifacesLabel">Netzwerk Schnittstelle</string>
-    <string name="ipAddrLabel">IP Adresse</string>
+    <string name="ifacesLabel">Netzwerkschnittstelle</string>
+    <string name="ipAddrLabel">IP-Adresse</string>
     <string name="ifacesError">Fehler: </string>
     <string name="protocolLabel">Protokoll</string>
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Schlüssel-Fingerabdrücke</string>
-    <string name="generateKeysMessage">Schlüssel erzeugen ?</string>
+    <string name="generateKeysMessage">Schlüssel erzeugen?</string>
     <string name="generatingKeysMessage">Schlüssel werden erzeugt &#8230;</string>
     <string name="generate">Erzeugen</string>
     <string name="cancel">Abbrechen</string>
@@ -20,50 +20,62 @@
     <string name="quickSettingsServerStarted">pFTPd läuft &#8230;</string>
     <string name="quickSettingsServerStopped">pFTPd gestoppt</string>
     <string name="saveAs">Speichern unter</string>
+    <string name="translate">Übersetzen</string>
 
-    <string name="startService">Server Starten</string>
-    <string name="stopService">Server Stoppen</string>
-    <string name="toggleService">Server zwischen start/stop umschalten</string>
-    <string name="notificationTitle">FTP Server</string>
+    <string name="startService">Server starten</string>
+    <string name="stopService">Server stoppen</string>
+    <string name="toggleService">Server zwischen Start/Stop umschalten</string>
+    <string name="notificationTitle">FTP-Server</string>
 
     <string name="haveToSetPassword">Sie müssen erst ein Passwort setzen</string>
-    <string name="serverRunning">FTP Server läuft</string>
-    <string name="serverCouldNotBeStarted">Server konnte nicht gestartet werden! Fehler Meldung: </string>
+    <string name="haveToSetAuthMechanism">Sie müssen erst einen Authentifizierungs-Mechanismus festlegen</string>
+    <string name="serverRunning">FTP-Server läuft</string>
+    <string name="serverCouldNotBeStarted">Server konnte nicht gestartet werden! Fehlermeldung: </string>
     <string name="portInvalid_v2">Port ist ungültig. Er muss zwischen 1024 und 64000 liegen.</string>
     <string name="portsEqual_v2">Ports sind gleich. Das kann nicht funktionieren.</string>
     <string name="restartServer">Sie müssen den Server neu starten damit die Änderungen wirksam werden.</string>
     <string name="invalidDir">Verzeichnis ist ungültig.</string>
-    <string name="couldNotReadKeyAuthKey">Öffentlicher Schlüssel für key authentication konnte nicht gelesen werden. Prüfen sie die logs.</string>
+    <string name="couldNotReadKeyAuthKey">Öffentlicher Schlüssel für key authentication konnte nicht gelesen werden. Prüfen sie die Logs.</string>
+    <string name="ftpPassivePortsInvalid">Wert für FTP Passive Ports ist ungültig.</string>
 
     <string name="prefs">Einstellungen</string>
-    <string name="prefCategoryTitle">FTP Server Einstellungen</string>
-    <string name="prefTitleUser">Benutzer Name</string>
-    <string name="prefSummaryUser">FTP Server Benutzer Name</string>
+    <string name="prefsCategoryTitleAuth">Auth</string>
+    <string name="prefsCategoryTitleConnectivity">Konnektivität</string>
+    <string name="prefsCategoryTitleUi">UI</string>
+    <string name="prefsCategoryTitleSystem">System</string>
+    <string name="prefTitleUser">Benutzername</string>
+    <string name="prefSummaryUser">FTP-Server Benutzername</string>
     <string name="prefTitlePassword">Passwort</string>
-    <string name="prefSummaryPassword">FTP Server Passwort</string>
+    <string name="prefSummaryPassword">FTP-Server Passwort</string>
     <string name="prefTitlePort">Port</string>
-    <string name="prefSummaryPort">FTP Server Port</string>
+    <string name="prefSummaryPort">FTP-Server Port</string>
     <string name="prefTitlePortSecure">Sicherer Port</string>
-    <string name="prefSummaryPortSecure">FTP Server port (verschlüsselt)</string>
-    <string name="prefTitleStartDir">Server Start Verzeichnis</string>
+    <string name="prefSummaryPortSecure">FTP-Server Port (verschlüsselt)</string>
+    <string name="prefTitleStartDir">Server Startverzeichnis</string>
     <string name="prefSummaryStartDir">Erstes Verzeichnis nach login</string>
     <string name="prefTitleAnnounce">Server im LAN bekanntmachen</string>
-    <string name="prefSummaryAnnounce">Announciert den FTP Server im LAN via DNS-SD (Bonjour). Kann auf manchen Geräten Abstürze verursachen.</string>
+    <string name="prefSummaryAnnounce">Annonciert den FTP-Server im LAN via DNS-SD (Bonjour). Kann auf manchen Geräten Abstürze verursachen.</string>
     <string name="prefTitleAnnounceName">Servername</string>
-    <string name="prefSummaryAnnounceName">Name unter der der Server im LAN announciert wird.</string>
-    <string name="prefTitleWakelock">Standby Verhindern</string>
-    <string name="prefSummaryWakelock">Verhindert Standby während der Server läuft. Standby kann dazu führen dass uplodas/downloads abgebrochen werden.</string>
+    <string name="prefSummaryAnnounceName">Name unter dem der Server im LAN annonciert wird.</string>
+    <string name="prefTitleWakelock">Standby verhindern</string>
+    <string name="prefSummaryWakelock">Verhindert Standby während der Server läuft. Standby kann dazu führen, dass Up-/Downloads abgebrochen werden.</string>
     <string name="prefTitleWhichServerToStart">Zu startende Server</string>
-    <string name="prefSummaryWhichServerToStart">Welche Server sollen gestartet werden: nur FTP Server, nur SFTP Server oder beide.</string>
+    <string name="prefSummaryWhichServerToStart">Welche Server sollen gestartet werden: nur FTP-Server, nur SFTP-Server oder beide.</string>
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Server beim System-Boot starten.</string>
+    <string name="prefTitleStartOnOpen">Start beim Öffnen</string>
+    <string name="prefSummaryStartOnOpen">Starte Server beim öffnen der App.</string>
+    <string name="prefTitleShowConnectionInfoInNotification">Zeige Konnektivitätsinfo in Benachrichtigung</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">Zeige Konnektivitätsinfo wie IP-Adresse in Benachrichtigung.</string>
+    <string name="prefTitleShowStartStopNotification">Zeige Benachrichtigung um Server zu starten/stopen</string>
+    <string name="prefSummaryShowStartStopNotification">Zeige dauerhafte Benachrichtigung um eine weitere Möglichkeit zu haben Server schnell zu starten/stopen.</string>
     <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 public key in %s ab. Nur SFTP.</string>
     <string name="prefSummaryAnonymousLogin">Anonymous Login erlauben.</string>
-    <string name="prefForegroundService">Vordergrund Dienst(e)</string>
-    <string name="prefSummaryForegroundService">Markiert Dienst(e) um im Vordergrund zu laufen. Auf manchen Geräten notwendig, um zu vermeiden, dass Dienst(e) abgebrochen werden.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
     <string name="prefSummaryFtpPassivePorts">Ports für FTP Passive-Daten-Verbindung. Kann ein einzelner Port, eine Liste oder Bereich von Ports sein. Z.B. 5678,5700-5710,5800,5900.</string>
-    <string name="prefSummaryTheme">Den Theme zu ändern kann einen App Neustart erfordern.</string>
+    <string name="prefTitleIdleTimeout">Server Idle-Timeout</string>
+    <string name="prefSummaryIdleTimeout">Server wird ungenutzte Verbindungen nach dieser Zeit beenden (nur FTP)</string>
+    <string name="prefSummaryTheme">Das Theme zu ändern kann einen Neustart der App erfordern.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>
 
@@ -71,16 +83,19 @@
     <string name="reset">Zurücksetzen</string>
 
     <string name="isAnonymous">Anonymous Login: %1$b</string>
-    <string name="selectServerAction">Server Aktion wählen</string>
+    <string name="selectServerAction">Serveraktion wählen</string>
 
     <string name="storageType">Art des Speichers</string>
     <string name="storageTypePlain">Gutes, altes Dateisystem</string>
     <string name="storageTypeRoot">Super user (Gerät muss gerooted sein)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(z.B. für SD-Karte)</string>
-    <string name="storageTypeRoSaf">Nur-Lesen SAF (schneller !)</string>
+    <string name="storageTypeRoSaf">Nur-Lesen SAF (schneller!)</string>
     <string name="safExplainHeading">Wie SAF funktioniert</string>
     <string name="safExplain">Android wird sie darum bitten ein Verzeichnis auszuwählen. Dieses wird über die Server verfügbar gemacht. Von Zeit zu Zeit kann die Berechtigung zurückgezogen werden und das Verzeichnis muss erneut ausgewählt werden.</string>
-    <string name="selectedSafUri">Ausgewählte SAF URI:</string>
+    <string name="selectedSafUri">Ausgewählte SAF-URI:</string>
+
+    <string name="startServerAndExit">Starte nur Server</string>
+    <string name="startServerAndUi">Starte mit Server</string>
 
     <string-array name="prefWhichServerToStartNames">
         <item>FTP und SFTP</item>

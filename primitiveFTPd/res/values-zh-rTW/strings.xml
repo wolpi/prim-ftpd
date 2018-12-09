@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="app_name">primitive ftpd</string>
+    <string name="ifacesLabel">網路介面</string>
+    <string name="ipAddrLabel">IP 位置</string>
+    <string name="ifacesError">錯誤：</string>
+    <string name="protocolLabel">協定</string>
+    <string name="portLabel">連接埠</string>
+    <string name="fingerprintsLabel">金鑰指紋</string>
+    <string name="generateKeysMessage">產生金鑰嗎？</string>
+    <string name="generatingKeysMessage">正在產生金鑰…</string>
+    <string name="generate">產生</string>
+    <string name="cancel">取消</string>
+    <string name="state">狀態</string>
+    <string name="serverStarted">執行中…</string>
+    <string name="serverStopped">已停止</string>
+    <string name="permissionRequired">這個應用程式需要「%1$s」權限才能運作！</string>
+    <string name="permissionNameStorage">儲存</string>
+    <string name="quickSettingsServerStarted">pFTPd 執行中…</string>
+    <string name="quickSettingsServerStopped">pFTPd 已停止</string>
+    <string name="saveAs">另存新檔</string>
+
+    <string name="startService">啟動伺服器</string>
+    <string name="stopService">停止伺服器</string>
+    <string name="toggleService">切換伺服器啟動/停止</string>
+    <string name="notificationTitle">FTP 伺服器</string>
+
+    <string name="haveToSetPassword">你必須先設定密碼</string>
+    <string name="serverRunning">FTP 伺服器正在執行</string>
+    <string name="serverCouldNotBeStarted">伺服器無法啟動！錯誤訊息：</string>
+    <string name="portInvalid_v2">連接埠的值無效。必須介於 1024 和 64000。</string>
+    <string name="portsEqual_v2">連接埠相同。這樣無法運作。</string>
+    <string name="restartServer">你必須重新啟動伺服器，變更才能生效。</string>
+    <string name="invalidDir">目錄無效。</string>
+    <string name="couldNotReadKeyAuthKey">無法讀取用來金鑰驗證的公開金鑰。請檢查記錄。</string>
+
+    <string name="prefs">偏好設定</string>
+    <string name="prefCategoryTitle">FTP 伺服器偏好設定</string>
+    <string name="prefTitleUser">使用者名稱</string>
+    <string name="prefSummaryUser">FTP 伺服器使用者名稱</string>
+    <string name="prefTitlePassword">密碼</string>
+    <string name="prefSummaryPassword">FTP 伺服器密碼</string>
+    <string name="prefTitlePort">連接埠</string>
+    <string name="prefSummaryPort">FTP 伺服器連接埠</string>
+    <string name="prefTitlePortSecure">安全連接埠</string>
+    <string name="prefSummaryPortSecure">FTP 伺服器連接埠（已加密）</string>
+    <string name="prefTitleStartDir">伺服器啟動目錄</string>
+    <string name="prefSummaryStartDir">登入後的第一個目錄</string>
+    <string name="prefTitleAnnounce">在區域網路公佈伺服器</string>
+    <string name="prefSummaryAnnounce">使用 DNS-SD (Bonjour) 來公佈 FTP 伺服器。可能在一些裝置上造成當機。</string>
+    <string name="prefTitleAnnounceName">伺服器名稱</string>
+    <string name="prefSummaryAnnounceName">要公佈伺服器的名稱。</string>
+    <string name="prefTitleWakelock">避免待命</string>
+    <string name="prefSummaryWakelock">伺服器執行時避免待命。待命可能是上傳/下載停止。</string>
+    <string name="prefTitleWhichServerToStart">要啟動的伺服器</string>
+    <string name="prefSummaryWhichServerToStart">選擇要只啟動 FTP 伺服器、只啟動 SFTP 伺服器或是兩者都啟動。</string>
+    <string name="prefTitleStartOnBoot">開機時啟動</string>
+    <string name="prefSummaryStartOnBoot">系統開機時啟動伺服器。</string>
+    <string name="prefTitleStartOnOpen">開啟時啟動</string>
+    <string name="prefSummaryStartOnOpen">當應用程式開啟時啟動應用程式。</string>
+    <string name="prefTitlePubKeyAuth">公開金鑰驗證</string>
+    <string name="prefSummaryPubKeyAuth">啟用時，請將你的 ssh2 公開金鑰放在 %s。只適用於 SFTP。</string>
+    <string name="prefTitleAnonymousLogin">匿名登入</string>
+    <string name="prefSummaryAnonymousLogin">設定伺服器是否允許匿名登入</string>
+    <string name="prefTitleFtpPassivePorts">FTP 被動連接埠</string>
+    <string name="prefSummaryFtpPassivePorts">FTP 被動資料連接的連接埠。可以是單一的連接埠，或是連接埠清單或範圍。例如 5678,5700-5710,5800,5900。</string>
+    <string name="prefTitleIdleTimeout">伺服器閒置逾時</string>
+    <string name="prefSummaryIdleTimeout">伺服器將會在一段時間後結束閒置的連線（只適用於 FTP）</string>
+    <string name="prefTheme">主題</string>
+    <string name="prefSummaryTheme">可能需要重新啟動應用程式才能改變主題。</string>
+    <string name="prefTitleLogging">記錄</string>
+    <string name="prefSummaryLogging">記錄用於分析錯誤。如果應用程式在您的裝置上無法正常執行，您可以向開發人員傳送日誌。可能需要重新啟動應用程式。</string>
+
+    <string name="licence">許可證</string>
+    <string name="reset">重設</string>
+
+    <string name="widgetTextStart">啟動 (s)ftpd</string>
+    <string name="widgetTextStop">停止 (s)ftpd</string>
+    <string name="isAnonymous">匿名登入：%1$b</string>
+    <string name="selectServerAction">選擇伺服器動作</string>
+    <string name="isServerRunning">伺服器正在執行嗎？</string>
+
+    <string name="storageType">儲存類型</string>
+    <string name="storageTypePlain">普通的舊檔案系統</string>
+    <string name="storageTypeRoot">超級使用者（裝置必須 root）</string>
+    <string name="storageTypeSaf">Android 儲存空間存取架構(SAF)
+\n（例如用於 SD 卡）</string>
+    <string name="storageTypeRoSaf">唯讀 SAF（比較快！）</string>
+    <string name="safExplainHeading">SAF 如何運作</string>
+    <string name="safExplain">Android 會要您選擇一個目錄。那個目錄會在伺服器中可用。權限偶爾可能會被撤回，您必須重新選擇。</string>
+    <string name="selectedSafUri">選擇的 SAF URI：</string>
+
+    <string name="startServerAndExit">只啟動伺服器</string>
+    </resources>
