@@ -95,10 +95,16 @@
         <item>Только SFTP</item>
     </string-array>
 
-<string name="prefsCategoryTitleConnectivity">Connectivity</string>
+    <string-array name="prefLoggingNames">
+        <item>Без журнала</item>
+        <item>Журнал текстовом файле</item>
+        <item>Журнал в системе андроид</item>
+    </string-array>
+
+    <string name="prefsCategoryTitleConnectivity">Connectivity</string>
     <string name="prefsCategoryTitleUi">UI</string>
     <string name="prefsCategoryTitleSystem">System</string>
     <string name="prefTitleShowConnectionInfoInNotification">Show connection info in notification</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Shows connection info like IP address in notification.</string>
     <string name="prefTitleShowStartStopNotification">Show notification to start/stop server(s)</string>
-    </resources>
+</resources>
