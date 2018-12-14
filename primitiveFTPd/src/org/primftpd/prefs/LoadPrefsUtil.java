@@ -34,6 +34,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_IDLE_TIMEOUT = "idleTimeoutPref";
 	public static final String PREF_KEY_STORAGE_TYPE = "storageTypePref";
 	public static final String PREF_KEY_SAF_URL = "safUrlPref";
+	public static final String PREF_KEY_ALLOWED_IPS_PATTERN = "allowedIpsPatternPref";
 
 	public static final int PORT_DEFAULT_VAL = 12345;
 	static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
@@ -185,6 +186,12 @@ public class LoadPrefsUtil
 		prefs.edit().putString(PREF_KEY_SAF_URL, value).commit();
 	}
 
+	public static String allowedIpsPattern(SharedPreferences prefs) {
+		return prefs.getString(
+				LoadPrefsUtil.PREF_KEY_ALLOWED_IPS_PATTERN,
+				"");
+	}
+
 	public static int loadPortInsecure(
 		Logger logger,
 		SharedPreferences prefs)
@@ -296,6 +303,9 @@ public class LoadPrefsUtil
 		String safUrl = safUrl(prefs);
 		logger.debug("got safUrl: {}", safUrl);
 
+		String allowedIpsPattern = allowedIpsPattern(prefs);
+		logger.debug("got allowedIpsPattern: {}", allowedIpsPattern);
+
 		// create prefsBean
 		return new PrefsBean(
 				userName,
@@ -313,6 +323,7 @@ public class LoadPrefsUtil
 				idleTimeout,
 				showConnectionInfo,
 				storageType,
-				safUrl);
+				safUrl,
+				allowedIpsPattern);
 	}
 }

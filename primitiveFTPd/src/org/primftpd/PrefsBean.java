@@ -28,6 +28,7 @@ public class PrefsBean implements Serializable
 	private final boolean showConnectionInfoInNotification;
 	private final StorageType storageType;
 	private final String safUrl;
+	private final String allowedIpsPattern;
 
 	public PrefsBean(
 		String userName,
@@ -45,7 +46,8 @@ public class PrefsBean implements Serializable
 		Integer idleTimeout,
 		boolean showConnectionInfoInNotification,
 		StorageType storageType,
-		String safUrl)
+		String safUrl,
+		String allowedIpsPattern)
 	{
 		super();
 		this.userName = userName;
@@ -66,7 +68,7 @@ public class PrefsBean implements Serializable
 		this.showConnectionInfoInNotification = showConnectionInfoInNotification;
 		this.storageType = storageType;
 		this.safUrl = safUrl;
-
+		this.allowedIpsPattern = allowedIpsPattern;
 	}
 
 	public String getUserName() {
@@ -140,5 +142,9 @@ public class PrefsBean implements Serializable
 
 	public String getSafUrl() {
 		return safUrl;
+	}
+
+	public String getAllowedIpsPattern() {
+		return allowedIpsPattern;
 	}
 }

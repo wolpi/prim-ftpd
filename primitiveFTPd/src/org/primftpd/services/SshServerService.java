@@ -14,12 +14,15 @@ import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemFactory;
 import org.apache.sshd.common.file.FileSystemView;
+import org.apache.sshd.common.io.IoSession;
 import org.apache.sshd.common.io.mina.MinaServiceFactoryFactory;
 import org.apache.sshd.common.keyprovider.AbstractKeyPairProvider;
+import org.apache.sshd.common.session.AbstractSession;
 import org.apache.sshd.server.Command;
 import org.apache.sshd.server.PasswordAuthenticator;
 import org.apache.sshd.server.command.ScpCommandFactory;
 import org.apache.sshd.server.session.ServerSession;
+import org.apache.sshd.server.session.SessionFactory;
 import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.R;
@@ -29,10 +32,12 @@ import org.primftpd.filesystem.RootSshFileSystemView;
 import org.primftpd.filesystem.SafSshFileSystemView;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.KeyInfoProvider;
+import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.SocketAddress;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -93,6 +98,15 @@ public class SshServerService extends AbstractServerService
 
 		// causes exception when not set
 		sshServer.setIoServiceFactoryFactory(new MinaServiceFactoryFactory());
+
+		sshServer.setSessionFactory(new SessionFactory() {
+			@Override
+			protected AbstractSession createSession(IoSession ioSession) throws Exception {
+				SocketAddress remoteAddress = ioSession.getRemoteAddress();
+				boolean ipAllowed = RemoteIpChecker.ipAllowed(remoteAddress, prefsBean, logger);
+				return ipAllowed ? super.createSession(ioSession) : null;
+			}
+		});
 
 		// enable scp and sftp
 		sshServer.setCommandFactory(new ScpCommandFactory());

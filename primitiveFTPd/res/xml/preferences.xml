@@ -71,6 +71,12 @@
 			android:summary="@string/prefSummaryIdleTimeout"
 			android:numeric="integer"
 			/>
+		<EditTextPreference
+			android:name="allowedIpsPattern"
+			android:key="allowedIpsPatternPref"
+			android:title="@string/prefAllowedIpsPattern"
+			android:summary="@string/prefSummaryAllowedIpsPattern"
+			/>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/prefsCategoryTitleUi" android:key="ftpPrefCatUi">

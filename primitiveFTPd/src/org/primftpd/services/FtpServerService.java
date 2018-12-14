@@ -11,13 +11,18 @@ import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.ipfilter.SessionFilter;
 import org.apache.ftpserver.listener.ListenerFactory;
+import org.apache.mina.core.session.IoSession;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.filesystem.FsFtpFileSystemView;
 import org.primftpd.filesystem.RoSafFtpFileSystemView;
 import org.primftpd.filesystem.RootFtpFileSystemView;
 import org.primftpd.filesystem.SafFtpFileSystemView;
+import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
+
+import java.net.SocketAddress;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -66,15 +71,23 @@ public class FtpServerService extends AbstractServerService
 		ListenerFactory listenerFactory = new ListenerFactory();
 		listenerFactory.setPort(prefsBean.getPort());
 
-		if (prefsBean.getIdleTimeout() != null) {
-			listenerFactory.setIdleTimeout(prefsBean.getIdleTimeout());
-		}
-
 		DataConnectionConfigurationFactory dataConConfigFactory = new DataConnectionConfigurationFactory();
 		String passivePorts = prefsBean.getFtpPassivePorts();
 		if (StringUtils.isNotBlank(passivePorts)){
 			dataConConfigFactory.setPassivePorts(passivePorts);
 		}
+		if (prefsBean.getIdleTimeout() != null) {
+			listenerFactory.setIdleTimeout(prefsBean.getIdleTimeout());
+			dataConConfigFactory.setIdleTime(prefsBean.getIdleTimeout());
+		}
+
+		listenerFactory.setSessionFilter(new SessionFilter() {
+			@Override
+			public boolean accept(IoSession session) {
+				SocketAddress remoteAddress = session.getRemoteAddress();
+				return RemoteIpChecker.ipAllowed(remoteAddress, prefsBean, logger);
+			}
+		});
 		listenerFactory.setDataConnectionConfiguration(dataConConfigFactory.createDataConnectionConfiguration());
 
 		FtpServerFactory serverFactory = new FtpServerFactory();
