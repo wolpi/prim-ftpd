@@ -12,6 +12,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 
 import org.primftpd.R;
+import org.primftpd.log.CsvLoggerFactory;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.NotificationUtil;
 import org.slf4j.Logger;
@@ -51,6 +52,15 @@ public class FtpPrefsFragment extends PreferenceFragment
 		String text = String.format(res.getString(R.string.prefSummaryPubKeyAuth), Defaults.PUB_KEY_AUTH_KEY_PATH);
 		Preference pubKeyAuthPref = findPreference(LoadPrefsUtil.PREF_KEY_PUB_KEY_AUTH);
 		pubKeyAuthPref.setSummary(text);
+
+		// text parameter for logging pref
+		String textLogsPath = Defaults.HOME_DIR + "/" + CsvLoggerFactory.LOGFILE_BASENAME + "*";
+		if (textLogsPath.contains("//")) {
+			textLogsPath = textLogsPath.replaceAll("//", "/");
+		}
+		String loggingText = String.format(res.getString(R.string.prefSummaryLoggingV2), textLogsPath);
+		Preference loggingPref = findPreference(LoadPrefsUtil.PREF_KEY_LOGGING);
+		loggingPref.setSummary(loggingText);
 
 		// create / remove notification when pref is toggled
 		Preference startStopNotificationPref = findPreference(LoadPrefsUtil.PREF_KEY_SHOW_START_STOP_NOTIFICATION);

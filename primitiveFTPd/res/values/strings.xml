@@ -81,6 +81,7 @@
     <string name="prefSummaryTheme">Changing Theme may require to restart the app.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log serves analyzing of errors. If the app does not work properly on your device you can send a log to developers. May require to restart the app.</string>
+    <string name="prefSummaryLoggingV2">Log serves analyzing of errors. If the app does not work properly on your device you can send a log to developers. May require to restart the app. Text Logs are stored in %s.</string>
     <string name="prefAllowedIpsPattern">Allowed IPs pattern</string>
     <string name="prefSummaryAllowedIpsPattern">Pattern of allowed IP Addresses. Just one Wildcard (*) may be used, as last character only.</string>
 

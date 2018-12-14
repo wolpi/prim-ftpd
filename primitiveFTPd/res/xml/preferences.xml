@@ -151,7 +151,7 @@
 			android:name="logging"
 			android:key="loggingPref"
 			android:title="@string/prefTitleLogging"
-			android:summary="@string/prefSummaryLogging"
+			android:summary="@string/prefSummaryLoggingV2"
 			android:defaultValue="0"
 			android:entries="@array/prefLoggingNames"
 			android:entryValues="@array/prefLoggingValues"

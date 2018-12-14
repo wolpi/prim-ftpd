@@ -78,6 +78,7 @@
     <string name="prefSummaryTheme">Das Theme zu ändern kann einen Neustart der App erfordern.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>
+    <string name="prefSummaryLoggingV2">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten. Text Logs werden abgelegt in %s.</string>
     <string name="prefAllowedIpsPattern">Erlaubte IPs Pattern</string>
     <string name="prefSummaryAllowedIpsPattern">Pattern der erlaubten IP Adressen. Nur eine Wildcard (*) kann genutzt werden, nur als letztes Zeichen.</string>
 
