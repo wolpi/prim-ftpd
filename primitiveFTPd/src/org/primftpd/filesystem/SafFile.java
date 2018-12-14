@@ -46,6 +46,9 @@ public abstract class SafFile<T> extends AbstractFile {
         name = documentFile.getName();
         if (name == null && SafFileSystemView.ROOT_PATH.equals(absPath)) {
             name = SafFileSystemView.ROOT_PATH;
+        } else {
+            logger.error("SAF file without name !!!");
+            name = "<unknown>";
         }
         writable = documentFile.canWrite();
     }
