@@ -78,4 +78,18 @@
     <string name="isServerRunning">服务器正在运行吗？</string>
 
     <string name="storageType">存储类型</string>
+    <string name="translate">翻译</string>
+
+    <string name="haveToSetAuthMechanism">你需要首先设置一个认证机制</string>
+    <string name="ftpPassivePortsInvalid">FTP被动端口数值无效。</string>
+
+    <string name="prefsCategoryTitleAuth">认证</string>
+    <string name="prefsCategoryTitleConnectivity">连接</string>
+    <string name="prefsCategoryTitleUi">用户界面</string>
+    <string name="prefsCategoryTitleSystem">系统</string>
+    <string name="prefTitleShowConnectionInfoInNotification">在通知中显示连接信息</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">在通知内显示连接信息，如IP地址。</string>
+    <string name="prefTitleShowStartStopNotification">显示通知以打开 / 关闭服务器</string>
+    <string name="prefSummaryShowStartStopNotification">推送一个持久通知以通过另外一种便捷的方式开启/关闭服务器。</string>
+    <string name="prefAllowedIpsPattern">允许的IP</string>
     </resources>
