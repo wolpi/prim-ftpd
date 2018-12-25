@@ -26,7 +26,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 39
-        versionName "5.13-SNAPSHOT"
+        versionName "5.13"
     }
 
     buildTypes {
