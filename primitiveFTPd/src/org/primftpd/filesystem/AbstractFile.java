@@ -38,7 +38,7 @@ public abstract class AbstractFile {
 
     public String getName() {
         logger.trace("[{}] getName()", name);
-        return name;
+        return name != null ? name : "<unknown>";
     }
 
     public boolean isDirectory() {
