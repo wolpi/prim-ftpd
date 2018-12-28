@@ -102,4 +102,8 @@
     <string name="startServerAndUi">zacznij od serwera</string>
 
     <string name="haveToSetAuthMechanism">Najpierw musisz ustawić mechanizm uwierzytelniania</string>
+    <string name="prefSummaryLoggingV2">Dziennik służy do analizy błędów. Jeśli aplikacja nie działa poprawnie na Twoim urządzeniu, możesz wysłać dziennik do programistów. Może wymagać ponownego uruchomienia aplikacji. Logi tekstowe są przechowywane w %s.</string>
+    <string name="prefAllowedIpsPattern">Dozwolony wzorzec IP</string>
+    <string name="prefSummaryAllowedIpsPattern">Wzór dozwolonych adresów IP. Tylko jeden symbol wieloznaczny (*) może być użyty jako ostatni.</string>
+
     </resources>
