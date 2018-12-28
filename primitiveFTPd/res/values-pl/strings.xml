@@ -53,7 +53,7 @@
     <string name="prefSummaryWakelock">Zapobiega trybowi wstrzymania, gdy serwer jest uruchomiony. Tryb gotowości może spowodować przerwanie wysyłania/pobierania.</string>
     <string name="prefTitleWhichServerToStart">Serwer(y) do uruchomienia</string>
     <string name="prefSummaryWhichServerToStart">Wybierz, czy chcesz uruchomić tylko serwer FTP, tylko serwer SFTP lub oba.</string>
-    <string name="prefTitleStartOnBoot">Rozpocznij przy starcie</string>
+    <string name="prefTitleStartOnBoot">Uruchom wraz ze startem systemu</string>
     <string name="prefSummaryStartOnBoot">Uruchom serwer podczas startu systemu.</string>
     <string name="prefSummaryStartOnOpen">Uruchom serwer po otwarciu aplikacji.</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Wyświetla w powiadomieniu informacje o połączeniu, takie jak adres IP.</string>
