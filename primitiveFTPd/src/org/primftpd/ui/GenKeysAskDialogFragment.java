@@ -8,9 +8,13 @@ import android.support.v4.app.DialogFragment;
 
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GenKeysAskDialogFragment extends DialogFragment {
     public static final String KEY_START_SERVER = "START_SERVER";
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private boolean startServerOnFinish;
 
@@ -22,6 +26,7 @@ public class GenKeysAskDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        logger.debug("showing gen key dialog");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.generateKeysMessage);
         builder.setPositiveButton(R.string.generate, new DialogInterface.OnClickListener() {

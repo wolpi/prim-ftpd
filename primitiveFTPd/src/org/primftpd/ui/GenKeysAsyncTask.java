@@ -32,6 +32,7 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
+        logger.debug("generating key");
         try {
             FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream(activity);
             FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream(activity);
