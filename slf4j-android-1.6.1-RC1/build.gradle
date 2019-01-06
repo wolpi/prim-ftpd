@@ -1,13 +1,11 @@
 apply plugin: 'java'
 
-targetCompatibility = '1.7'
-sourceCompatibility = '1.7'
+targetCompatibility = '1.8'
+sourceCompatibility = '1.8'
 
 sourceSets {
     main {
-        java {
-            srcDir 'src'
-        }
+        java { srcDir 'src' }
     }
 }
 
@@ -17,7 +15,7 @@ jar {
 }
 
 repositories {
-    jcenter();
+    jcenter()
 }
 
 dependencies {

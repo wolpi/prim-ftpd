@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.primftpd">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,8 +9,12 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-feature android:name="android.hardware.wifi" />
-    <uses-feature android:name="android.software.leanback" android:required="false" />
-    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
 
 
     <!--
@@ -19,13 +22,15 @@
     android:icon="@mipmap/ic_launcher"
     -->
     <application
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
         android:allowBackup="false"
-        android:banner="@drawable/ic_launcher">
+        android:banner="@drawable/ic_launcher"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name">
 
-        <receiver android:enabled="true" android:name=".BootUpReceiver"
-                android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+        <receiver
+            android:name=".BootUpReceiver"
+            android:enabled="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -33,9 +38,8 @@
         </receiver>
 
         <receiver android:name="StartStopWidgetProvider">
-            <intent-filter >
-                <action
-                    android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
@@ -44,19 +48,19 @@
         </receiver>
 
         <receiver
-                android:name=".remotecontrol.PftpdPowerTogglesPlugin"
-                android:enabled="true"
-                android:permission="com.painless.pc.permission.CONTROL_PLUGIN"
-                android:icon="@drawable/ic_notification">
+            android:name=".remotecontrol.PftpdPowerTogglesPlugin"
+            android:enabled="true"
+            android:icon="@drawable/ic_notification"
+            android:permission="com.painless.pc.permission.CONTROL_PLUGIN">
             <intent-filter>
                 <action android:name="com.painless.pc.ACTION_SET_STATE" />
             </intent-filter>
         </receiver>
 
         <receiver
-                android:name=".remotecontrol.TaskerReceiver"
-                android:exported="true"
-                android:process=":background">
+            android:name=".remotecontrol.TaskerReceiver"
+            android:exported="true"
+            android:process=":background">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
                 <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
@@ -81,7 +85,8 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
+            <meta-data
+                android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
 
@@ -98,19 +103,16 @@
         <activity
             android:name="org.primftpd.prefs.FtpPrefsActivityThemeDark"
             android:label="@string/prefs"
-            android:theme="@style/PrimFtpdDarkTheme">
-        </activity>
+            android:theme="@style/PrimFtpdDarkTheme"></activity>
 
         <activity
             android:name="org.primftpd.prefs.FtpPrefsActivityThemeLight"
             android:label="@string/prefs"
-            android:theme="@style/PrimFtpdLightTheme">
-        </activity>
+            android:theme="@style/PrimFtpdLightTheme"></activity>
 
         <activity
             android:name="org.primftpd.prefs.AboutActivity"
-            android:label="About">
-        </activity>
+            android:label="About"></activity>
 
         <activity
             android:name="org.primftpd.remotecontrol.TaskerEditActionActivity"
@@ -194,8 +196,7 @@
 
         <activity
             android:name="org.primftpd.StartServerAndExitActivity"
-            android:label="@string/startService">
-        </activity>
+            android:label="@string/startService"></activity>
 
         <service android:name="org.primftpd.services.FtpServerService" />
         <service android:name="org.primftpd.services.SshServerService" />
@@ -209,6 +210,6 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-	</application>
+    </application>
 
 </manifest>

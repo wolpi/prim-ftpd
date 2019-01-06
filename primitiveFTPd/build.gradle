@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'com.github.nrudenko:gradle-android-cq-plugin:0.1.7'
     }
 }
@@ -38,16 +38,9 @@ android {
 
     sourceSets {
         main {
-            manifest {
-                srcFile 'AndroidManifest.xml'
-            }
-
-            java {
-                srcDir 'src'
-            }
-            res {
-                srcDir 'res'
-            }
+            manifest { srcFile 'AndroidManifest.xml' }
+            java { srcDir 'src' }
+            res { srcDir 'res' }
         }
     }
 
@@ -77,7 +70,7 @@ dependencies {
     implementation project(':slf4j-android-1.6.1-RC1')
     implementation 'org.apache.ftpserver:ftpserver-core:1.1.1'
     implementation 'org.apache.sshd:sshd-core:0.14.0'
-    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.nononsenseapps:filepicker:4.2.1'
-    implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
+    implementation 'eu.chainfire:libsuperuser:1.0.0.201811281328'
 }

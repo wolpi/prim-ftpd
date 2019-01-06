@@ -1,18 +1,18 @@
 apply plugin: 'java'
 
-targetCompatibility = '1.7'
-sourceCompatibility = '1.7'
+targetCompatibility = '1.8'
+sourceCompatibility = '1.8'
 
 repositories {
     jcenter()
 }
 
 dependencies {
-    compile 'org.bouncycastle:bcpg-jdk15on:1.60'
-    compile 'org.bouncycastle:bcpkix-jdk15on:1.60'
+    implementation 'org.bouncycastle:bcpg-jdk15on:1.60'
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.60'
 
-    compile 'org.slf4j:slf4j-api:1.6.1'
+    implementation 'org.slf4j:slf4j-api:1.6.1'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'commons-codec:commons-codec:1.10'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'commons-codec:commons-codec:1.11'
 }
