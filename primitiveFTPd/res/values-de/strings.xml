@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <string name="app_name">primitive ftpd</string>
@@ -9,15 +9,15 @@
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Schlüssel-Fingerabdrücke</string>
     <string name="generateKeysMessage">Schlüssel erzeugen?</string>
-    <string name="generatingKeysMessage">Schlüssel werden erzeugt &#8230;</string>
+    <string name="generatingKeysMessage">Schlüssel werden erzeugt …</string>
     <string name="generate">Erzeugen</string>
     <string name="cancel">Abbrechen</string>
     <string name="state">Status</string>
-    <string name="serverStarted">Gestartet &#8230;</string>
+    <string name="serverStarted">Gestartet …</string>
     <string name="serverStopped">Gestoppt</string>
     <string name="permissionRequired">Berechtigung \"%1$s\" ist notwendig damit diese App funktioniert!</string>
     <string name="permissionNameStorage">Speicher</string>
-    <string name="quickSettingsServerStarted">pFTPd läuft &#8230;</string>
+    <string name="quickSettingsServerStarted">pFTPd läuft …</string>
     <string name="quickSettingsServerStopped">pFTPd gestoppt</string>
     <string name="saveAs">Speichern unter</string>
     <string name="translate">Übersetzen</string>
@@ -117,4 +117,6 @@
         <item>In Android Log schreiben</item>
     </string-array>
 
-</resources>
+<string name="prefTitleAnonymousLogin">Anonymer Login</string>
+    <string name="prefTheme">Design</string>
+    </resources>
