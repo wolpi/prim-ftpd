@@ -42,7 +42,7 @@
     <string name="prefTitlePort">連接埠</string>
     <string name="prefSummaryPort">FTP 伺服器連接埠</string>
     <string name="prefTitlePortSecure">安全連接埠</string>
-    <string name="prefSummaryPortSecure">FTP 伺服器連接埠（已加密）</string>
+    <string name="prefSummaryPortSecure">FTP 伺服器連接埠（加密）</string>
     <string name="prefTitleStartDir">伺服器啟動目錄</string>
     <string name="prefSummaryStartDir">登入後的第一個目錄</string>
     <string name="prefTitleAnnounce">在區域網路公佈伺服器</string>
@@ -60,15 +60,15 @@
     <string name="prefTitlePubKeyAuth">公開金鑰驗證</string>
     <string name="prefSummaryPubKeyAuth">啟用時，請將你的 ssh2 公開金鑰放在 %s。只適用於 SFTP。</string>
     <string name="prefTitleAnonymousLogin">匿名登入</string>
-    <string name="prefSummaryAnonymousLogin">設定伺服器是否允許匿名登入</string>
+    <string name="prefSummaryAnonymousLogin">設定伺服器是否允許匿名登入。</string>
     <string name="prefTitleFtpPassivePorts">FTP 被動連接埠</string>
     <string name="prefSummaryFtpPassivePorts">FTP 被動資料連接的連接埠。可以是單一的連接埠，或是連接埠清單或範圍。例如 5678,5700-5710,5800,5900。</string>
     <string name="prefTitleIdleTimeout">伺服器閒置逾時</string>
-    <string name="prefSummaryIdleTimeout">伺服器將會在一段時間後結束閒置的連線（只適用於 FTP）</string>
+    <string name="prefSummaryIdleTimeout">伺服器將會在一段時間後中止閒置的連線（只適用於 FTP）</string>
     <string name="prefTheme">主題</string>
     <string name="prefSummaryTheme">可能需要重新啟動應用程式才能改變主題。</string>
     <string name="prefTitleLogging">記錄</string>
-    <string name="prefSummaryLogging">記錄用於分析錯誤。如果應用程式在您的裝置上無法正常執行，您可以向開發人員傳送日誌。可能需要重新啟動應用程式。</string>
+    <string name="prefSummaryLogging">記錄用於分析錯誤。如果應用程式在您的裝置上無法正常執行，您可以向開發人員傳送記錄。可能需要重新啟動應用程式。</string>
 
     <string name="licence">許可證</string>
     <string name="reset">重設</string>
@@ -90,4 +90,19 @@
     <string name="selectedSafUri">選擇的 SAF URI：</string>
 
     <string name="startServerAndExit">只啟動伺服器</string>
+    <string name="translate">翻譯</string>
+
+    <string name="haveToSetAuthMechanism">您必須先設定驗證機制</string>
+    <string name="ftpPassivePortsInvalid">FTP 被動連接埠的值無效。</string>
+
+    <string name="prefsCategoryTitleAuth">驗證</string>
+    <string name="prefsCategoryTitleConnectivity">連線</string>
+    <string name="prefsCategoryTitleUi">使用者介面</string>
+    <string name="prefsCategoryTitleSystem">系統</string>
+    <string name="prefTitleShowConnectionInfoInNotification">在通知中顯示連線資訊</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">在通知中顯示連線資訊，例如 IP 位置。</string>
+    <string name="prefTitleShowStartStopNotification">顯示通知來啟動/停止伺服器</string>
+    <string name="prefSummaryShowStartStopNotification">總是顯示通知來快速啟動/停止伺服器。</string>
+    <string name="prefSummaryLoggingV2">記錄用於分析錯誤。如果應用程式在您的裝置上無法正常執行，您可以向開發人員傳送記錄。可能需要重新啟動應用程式。文字記錄儲存在 %s。</string>
+    <string name="prefAllowedIpsPattern">允許的 IP 樣式</string>
     </resources>
