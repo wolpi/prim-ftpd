@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.0'
         classpath 'com.github.nrudenko:gradle-android-cq-plugin:0.1.7'
     }
 }
@@ -56,6 +56,12 @@ android {
     lintOptions {
         // we cannot be sure that all translations are present
         abortOnError false
+    }
+
+    compileOptions {
+        encoding = 'UTF-8'
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
