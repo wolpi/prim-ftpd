@@ -56,7 +56,7 @@
     <string name="prefTitleStartOnBoot">開機時啟動</string>
     <string name="prefSummaryStartOnBoot">系統開機時啟動伺服器。</string>
     <string name="prefTitleStartOnOpen">開啟時啟動</string>
-    <string name="prefSummaryStartOnOpen">當應用程式開啟時啟動應用程式。</string>
+    <string name="prefSummaryStartOnOpen">當應用程式開啟時啟動伺服器。</string>
     <string name="prefTitlePubKeyAuth">公開金鑰驗證</string>
     <string name="prefSummaryPubKeyAuth">啟用時，請將你的 ssh2 公開金鑰放在 %s。只適用於 SFTP。</string>
     <string name="prefTitleAnonymousLogin">匿名登入</string>
@@ -82,7 +82,7 @@
     <string name="storageType">儲存類型</string>
     <string name="storageTypePlain">普通的舊檔案系統</string>
     <string name="storageTypeRoot">超級使用者（裝置必須 root）</string>
-    <string name="storageTypeSaf">Android 儲存空間存取架構(SAF)
+    <string name="storageTypeSaf">Android 儲存空間存取架構 (SAF)
 \n（例如用於 SD 卡）</string>
     <string name="storageTypeRoSaf">唯讀 SAF（比較快！）</string>
     <string name="safExplainHeading">SAF 如何運作</string>
@@ -105,4 +105,6 @@
     <string name="prefSummaryShowStartStopNotification">總是顯示通知來快速啟動/停止伺服器。</string>
     <string name="prefSummaryLoggingV2">記錄用於分析錯誤。如果應用程式在您的裝置上無法正常執行，您可以向開發人員傳送記錄。可能需要重新啟動應用程式。文字記錄儲存在 %s。</string>
     <string name="prefAllowedIpsPattern">允許的 IP 樣式</string>
+    <string name="prefSummaryAllowedIpsPattern">允許的 IP 位置的樣式。只能使用一個萬用字元 (*)，它只用於最後一個字元。</string>
+
     </resources>
