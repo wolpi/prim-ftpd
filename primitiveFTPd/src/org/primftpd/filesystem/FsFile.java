@@ -98,8 +98,9 @@ public abstract class FsFile<T> extends AbstractFile {
 	}
 
 	public boolean isRemovable() {
-		logger.trace("[{}] isRemovable()", name);
-		return file.canWrite();
+		boolean result = file.canWrite();
+		logger.trace("[{}] isRemovable() -> {}", name, result);
+		return result;
 	}
 
 	public boolean setLastModified(long time) {
