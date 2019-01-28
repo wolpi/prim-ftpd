@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name">Primitive ftpd</string>
     <string name="ifacesLabel">Network Interface</string>
     <string name="ipAddrLabel">IP Address</string>
     <string name="ifacesError">Error: </string>
     <string name="protocolLabel">Protocol</string>
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Key Fingerprints</string>
-    <string name="generateKeysMessage">Generate Keys ?</string>
-    <string name="generatingKeysMessage">Generating Keys &#8230;</string>
+    <string name="generateKeysMessage">Generate keys?</string>
+    <string name="generatingKeysMessage">Generating keys…</string>
     <string name="generate">Generate</string>
     <string name="cancel">Cancel</string>
     <string name="state">State</string>
-    <string name="serverStarted">Running &#8230;</string>
+    <string name="serverStarted">Running…</string>
     <string name="serverStopped">Stopped</string>
     <string name="permissionRequired">\"%1$s\" permission is required for this app to work!</string>
     <string name="permissionNameStorage">Storage</string>
-    <string name="quickSettingsServerStarted">pFTPd Running &#8230;</string>
-    <string name="quickSettingsServerStopped">pFTPd Stopped</string>
+    <string name="quickSettingsServerStarted">pFTPd running…</string>
+    <string name="quickSettingsServerStopped">pFTPd stopped</string>
     <string name="saveAs">Save as</string>
     <string name="translate">Translate</string>
 
     <string name="startService">Start Server</string>
     <string name="stopService">Stop Server</string>
-    <string name="toggleService">Toggle Server start/stop</string>
+    <string name="toggleService">Toggle server start/stop</string>
     <string name="notificationTitle">FTP Server</string>
 
     <string name="haveToSetPassword">You have to set a password first</string>
     <string name="haveToSetAuthMechanism">You have to set an authentication mechanism first</string>
-    <string name="serverRunning">FTP Server is running</string>
+    <string name="serverRunning">FTP server is running…</string>
     <string name="serverCouldNotBeStarted">Server could not be started! Error message: </string>
     <string name="portInvalid_v2">Port value is invalid. Must be between 1024 and 64000.</string>
     <string name="portsEqual_v2">Ports are equal. This cannot work.</string>
-    <string name="restartServer">You have to restart Server for changes to take effect.</string>
-    <string name="invalidDir">Directory is not valid.</string>
+    <string name="restartServer">You have to restart the server for changes to take effect.</string>
+    <string name="invalidDir">Directory is invalid.</string>
     <string name="couldNotReadKeyAuthKey">Public key for key authentication could not be read. Check logs.</string>
     <string name="ftpPassivePortsInvalid">Value of FTP Passive Ports is invalid.</string>
 
@@ -49,62 +49,62 @@
     <string name="prefSummaryPassword">FTP server password</string>
     <string name="prefTitlePort">Port</string>
     <string name="prefSummaryPort">FTP server port</string>
-    <string name="prefTitlePortSecure">Secure Port</string>
+    <string name="prefTitlePortSecure">Secure port</string>
     <string name="prefSummaryPortSecure">FTP server port (encrypted)</string>
-    <string name="prefTitleStartDir">Server Start Directory</string>
+    <string name="prefTitleStartDir">Server start directory</string>
     <string name="prefSummaryStartDir">First directory after login</string>
     <string name="prefTitleAnnounce">Announce server in LAN</string>
     <string name="prefSummaryAnnounce">Announces FTP server in LAN via DNS-SD (Bonjour). May cause crashes on some devices.</string>
-    <string name="prefTitleAnnounceName">Servername</string>
+    <string name="prefTitleAnnounceName">Server name</string>
     <string name="prefSummaryAnnounceName">Name to announce server with.</string>
-    <string name="prefTitleWakelock">Prevent Standby</string>
-    <string name="prefSummaryWakelock">Prevents Standby while server is running. Standby can cause uploads/downloads to abort.</string>
+    <string name="prefTitleWakelock">Prevent standby</string>
+    <string name="prefSummaryWakelock">Prevents standby while server is running. Standby can cause uploads/downloads to abort.</string>
     <string name="prefTitleWhichServerToStart">Server(s) to be started</string>
-    <string name="prefSummaryWhichServerToStart">Choose whether to start FTP server only, SFTP server only or both.</string>
+    <string name="prefSummaryWhichServerToStart">Choose whether to start FTP server only, SFTP server only, or both.</string>
     <string name="prefTitleStartOnBoot">Start on boot</string>
-    <string name="prefSummaryStartOnBoot">Start server on system boot.</string>
+    <string name="prefSummaryStartOnBoot">Start server on system boot</string>
     <string name="prefTitleStartOnOpen">Start on open</string>
-    <string name="prefSummaryStartOnOpen">Start server when app is opened.</string>
+    <string name="prefSummaryStartOnOpen">Start server when app is opened</string>
     <string name="prefTitleShowConnectionInfoInNotification">Show connection info in notification</string>
-    <string name="prefSummaryShowConnectionInfoInNotification">Shows connection info like IP address in notification.</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">Shows connection info like IP address in notification</string>
     <string name="prefTitleShowStartStopNotification">Show notification to start/stop server(s)</string>
-    <string name="prefSummaryShowStartStopNotification">Shows a notification at all time to have another qick way to start/stop server(s).</string>
+    <string name="prefSummaryShowStartStopNotification">Shows a notification at all times to have another quick way to start/stop server(s).</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>
-    <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 public key in %s. SFTP only.</string>
+    <string name="prefSummaryPubKeyAuth">When enabled, place your SSH2 public key in %s. SFTP only.</string>
     <string name="prefTitleAnonymousLogin">Anonymous Login</string>
     <string name="prefSummaryAnonymousLogin">Set if anonymous login is allowed on the server.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
-    <string name="prefSummaryFtpPassivePorts">Ports for FTP passive data connection. May be a single port, a list or range of ports. E.g. 5678,5700-5710,5800,5900.</string>
+    <string name="prefSummaryFtpPassivePorts">Ports for FTP passive data connection. May be a single port, a list, or a range of ports. E.g. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Server Idle Timeout</string>
     <string name="prefSummaryIdleTimeout">Server will terminate idle connections after this time (FTP only)</string>
     <string name="prefTheme">Theme</string>
-    <string name="prefSummaryTheme">Changing Theme may require to restart the app.</string>
+    <string name="prefSummaryTheme">Changing the theme may require app restart</string>
     <string name="prefTitleLogging">Log</string>
-    <string name="prefSummaryLogging">Log serves analyzing of errors. If the app does not work properly on your device you can send a log to developers. May require to restart the app.</string>
-    <string name="prefSummaryLoggingV2">Log serves analyzing of errors. If the app does not work properly on your device you can send a log to developers. May require to restart the app. Text Logs are stored in %s.</string>
+    <string name="prefSummaryLogging">Log serves analyzing of errors. If the app does not work properly on your device, you can send a log to developers. May require app restart.</string>
+    <string name="prefSummaryLoggingV2">Log serves analyzing of errors. If the app does not work properly on your device, you can send a log to developers. May require app restart. Text logs are stored in %s.</string>
     <string name="prefAllowedIpsPattern">Allowed IPs pattern</string>
-    <string name="prefSummaryAllowedIpsPattern">Pattern of allowed IP Addresses. Just one Wildcard (*) may be used, as last character only.</string>
+    <string name="prefSummaryAllowedIpsPattern">Pattern of allowed IP addresses. Just one wildcard (*) may be used, as last character only.</string>
 
     <string name="licence">Licence</string>
     <string name="reset">Reset</string>
 
-    <string name="widgetTextStart">start (s)ftpd</string>
-    <string name="widgetTextStop">stop (s)ftpd</string>
+    <string name="widgetTextStart">Start (s)ftpd</string>
+    <string name="widgetTextStop">Stop (s)ftpd</string>
     <string name="isAnonymous">Anonymous Login: %1$b</string>
-    <string name="selectServerAction">Select Server Action</string>
+    <string name="selectServerAction">Select server action</string>
     <string name="isServerRunning">Is server running?</string>
 
     <string name="storageType">Storage Type</string>
     <string name="storageTypePlain">Plain old filesystem</string>
-    <string name="storageTypeRoot">Super user (device must be rooted)</string>
+    <string name="storageTypeRoot">Superuser (device must be rooted)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(e.g. for sd card)</string>
-    <string name="storageTypeRoSaf">Read only SAF (faster !)</string>
-    <string name="safExplainHeading">How SAF works</string>
-    <string name="safExplain">Android will ask you to choose a directory. That will be available via server(s). From time to time permission might be revoked and you have to re-select.</string>
+    <string name="storageTypeRoSaf">Read only SAF (faster!)</string>
+    <string name="safExplainHeading">How does SAF work?</string>
+    <string name="safExplain">Android will ask you to choose a directory. That will be available via server(s). From time to time the permission could be revoked, so you\'ll have to re-select if that happens.</string>
     <string name="selectedSafUri">Selected SAF URI:</string>
 
-    <string name="startServerAndExit">start server only</string>
-    <string name="startServerAndUi">start with server</string>
+    <string name="startServerAndExit">Start server only</string>
+    <string name="startServerAndUi">Start with server</string>
 
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
@@ -129,8 +129,8 @@
     </string-array>
 
     <string-array name="prefLoggingNames">
-        <item>No Log</item>
-        <item>Log to Textfile</item>
+        <item>No log</item>
+        <item>Log to text file</item>
         <item>Log to Android</item>
     </string-array>
 
