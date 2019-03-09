@@ -1,10 +1,12 @@
 package org.primftpd.filesystem;
 
+import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -14,6 +16,8 @@ import java.util.List;
 import eu.chainfire.libsuperuser.Shell;
 
 public abstract class RootFile<T> extends AbstractFile {
+
+    private static final int BUF_SIZE_DD_ERR_STREAM = 4096;
 
     private final Shell.Interactive shell;
 
@@ -113,9 +117,15 @@ public abstract class RootFile<T> extends AbstractFile {
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "\"dd of=" + escapePathForDD(absPath) + "\"");
-        Process proc = processBuilder.start();
+        final Process proc = processBuilder.start();
 
-        return new BufferedOutputStream(proc.getOutputStream());
+        return new BufferedOutputStream(proc.getOutputStream()) {
+            @Override
+            public void close() throws IOException {
+                super.close();
+                logDdErrorStream(proc);
+            }
+        };
     }
 
     public InputStream createInputStream(long offset) throws IOException {
@@ -123,7 +133,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "\"dd if=" + escapePathForDD(absPath) + "\"");
-        Process proc = processBuilder.start();
+        final Process proc = processBuilder.start();
 
         try {
             // workaround for weird errors
@@ -132,7 +142,23 @@ public abstract class RootFile<T> extends AbstractFile {
             throw new IOException(e);
         }
 
-        return new BufferedInputStream(proc.getInputStream());
+        return new BufferedInputStream(proc.getInputStream()) {
+            @Override
+            public void close() throws IOException {
+                super.close();
+                logDdErrorStream(proc);
+            }
+        };
+    }
+
+    private void logDdErrorStream(Process proc) throws IOException {
+        int exitCode = proc.exitValue();
+        if (exitCode != 0) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            IoUtils.copy(proc.getErrorStream(), baos, BUF_SIZE_DD_ERR_STREAM);
+            String ddErr = baos.toString();
+            logger.debug("dd exit code: '{}', error stream: '{}'", exitCode, ddErr);
+        }
     }
 
     protected boolean runCommand(String cmd) {
