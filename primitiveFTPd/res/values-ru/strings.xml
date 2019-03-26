@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">primitive ftpd</string>
-    <string name="cancel">Отменить</string>
+    <string name="cancel">Отмена</string>
     <string name="couldNotReadKeyAuthKey">Невозможно прочитать открытый ключ аутентификации. Подробности в журнале.</string>
-    <string name="fingerprintsLabel">Key Fingerprints</string>
+    <string name="fingerprintsLabel">Ключи авторизации</string>
     <string name="generate">Сгенерировать</string>
     <string name="generateKeysMessage">Сгенерировать ключи?</string>
     <string name="generatingKeysMessage">Генерируем ключи …</string>
     <string name="haveToSetPassword">Сперва необходимо указать пароль</string>
-    <string name="ifacesError">Ошибка</string>
+    <string name="ifacesError">Ошибка:</string>
     <string name="ifacesLabel">Сетевой интерфейс</string>
     <string name="invalidDir">Директория недействительна.</string>
     <string name="ipAddrLabel">IP адрес</string>
@@ -16,7 +16,7 @@
     <string name="isServerRunning">Сервер запущен?</string>
     <string name="licence">Лицензия</string>
     <string name="notificationTitle">FTP сервер</string>
-    <string name="permissionNameStorage">Память хранилища</string>
+    <string name="permissionNameStorage">Объём хранилища</string>
     <string name="permissionRequired">Разрешение \"%1$s\" необходимо для работы приложения!</string>
     <string name="portInvalid_v2">Недействительный номер порта: должно быть значение из диапазона 1024–64000.</string>
     <string name="portLabel">Порт</string>
@@ -55,7 +55,7 @@
     <string name="prefTitleWhichServerToStart">Запускаемые серверы</string>
     <string name="prefs">Настройки</string>
     <string name="protocolLabel">Протокол</string>
-    <string name="quickSettingsServerStarted">pFTPd работает …</string>
+    <string name="quickSettingsServerStarted">pFTPd запущен …</string>
     <string name="quickSettingsServerStopped">pFTPd остановлен</string>
     <string name="reset">Сбросить</string>
     <string name="restartServer">Изменения применятся после перезапуска сервера.</string>
@@ -66,7 +66,7 @@
     <string name="selectedSafUri">Выбранный SAF URI:</string>
     <string name="serverCouldNotBeStarted">Невозможно запустить сервер! Ошибка:</string>
     <string name="serverRunning">FTP сервер работает</string>
-    <string name="serverStarted">Работает …</string>
+    <string name="serverStarted">Запущен …</string>
     <string name="serverStopped">Остановлен</string>
     <string name="startService">Запустить сервер</string>
     <string name="state">Состояние</string>
@@ -107,4 +107,7 @@
     <string name="prefTitleShowConnectionInfoInNotification">Show connection info in notification</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Shows connection info like IP address in notification.</string>
     <string name="prefTitleShowStartStopNotification">Show notification to start/stop server(s)</string>
-</resources>
+<string name="translate">Перевести</string>
+
+    <string name="haveToSetAuthMechanism">Сначала необходимо выбрать механизм авторизации</string>
+    </resources>
