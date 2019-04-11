@@ -50,7 +50,7 @@
     <string name="prefTitleAnnounceName">伺服器名稱</string>
     <string name="prefSummaryAnnounceName">要公佈伺服器的名稱。</string>
     <string name="prefTitleWakelock">避免待命</string>
-    <string name="prefSummaryWakelock">伺服器執行時避免待命。待命可能是上傳/下載停止。</string>
+    <string name="prefSummaryWakelock">伺服器執行時避免待命。待命可能使上傳/下載停止。</string>
     <string name="prefTitleWhichServerToStart">要啟動的伺服器</string>
     <string name="prefSummaryWhichServerToStart">選擇要只啟動 FTP 伺服器、只啟動 SFTP 伺服器或是兩者都啟動。</string>
     <string name="prefTitleStartOnBoot">開機時啟動</string>
