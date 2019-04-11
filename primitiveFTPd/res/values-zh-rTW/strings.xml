@@ -107,4 +107,6 @@
     <string name="prefAllowedIpsPattern">允許的 IP 樣式</string>
     <string name="prefSummaryAllowedIpsPattern">允許的 IP 位置的樣式。只能使用一個萬用字元 (*)，它只用於最後一個字元。</string>
 
+    <string name="startServerAndUi">與伺服器啟動</string>
+
     </resources>
