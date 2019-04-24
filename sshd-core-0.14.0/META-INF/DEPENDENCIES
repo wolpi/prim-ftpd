@@ -1,0 +1,31 @@
+// ------------------------------------------------------------------
+// Transitive dependencies of this project determined from the
+// maven pom organized by organization.
+// ------------------------------------------------------------------
+
+Apache MINA SSHD
+
+
+From: 'an unknown organization'
+  - Bouncy Castle OpenPGP API (http://www.bouncycastle.org/java.html) org.bouncycastle:bcpg-jdk15on:jar:1.51
+    License: Bouncy Castle Licence  (http://www.bouncycastle.org/licence.html)    License: Apache Software License, Version 1.1  (http://www.apache.org/licenses/LICENSE-1.1)
+  - Bouncy Castle PKIX, CMS, EAC, TSP, PKCS, OCSP, CMP, and CRMF APIs (http://www.bouncycastle.org/java.html) org.bouncycastle:bcpkix-jdk15on:jar:1.51
+    License: Bouncy Castle Licence  (http://www.bouncycastle.org/licence.html)
+  - Bouncy Castle Provider (http://www.bouncycastle.org/java.html) org.bouncycastle:bcprov-jdk15on:jar:1.51
+    License: Bouncy Castle Licence  (http://www.bouncycastle.org/licence.html)
+
+From: 'Apache MINA Project' (http://mina.apache.org/)
+  - Apache MINA Core (http://mina.apache.org/mina-core/) org.apache.mina:mina-core:bundle:2.0.8
+    License: Apache 2.0 License  (http://www.apache.org/licenses/LICENSE-2.0)
+
+From: 'QOS.ch' (http://www.qos.ch)
+  - SLF4J API Module (http://www.slf4j.org/slf4j-api) org.slf4j:slf4j-api:jar:1.6.4:compile
+    License: MIT style  (http://www.slf4j.org/license.html)
+
+From: 'The Apache Software Foundation' (http://www.apache.org/)
+  - tomcat-apr (http://tomcat.apache.org/tomcat-apr) tomcat:tomcat-apr:jar:5.5.23
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+
+
+
