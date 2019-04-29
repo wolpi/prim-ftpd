@@ -12,6 +12,7 @@ public class PftpdPowerTogglesPlugin extends PowerTogglesPlugin {
 
     @Override
     protected void changeState(Context context, boolean newState) {
+        logger.trace("changeState()");
         if (newState) {
             ServicesStartStopUtil.startServers(context);
         } else {

@@ -26,6 +26,8 @@ public class BootUpReceiver extends BroadcastReceiver
 		// am broadcast -a android.intent.action.BOOT_COMPLETED -p org.primftpd
 
 		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+			logger.trace("onReceive()");
+
 			SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
 			Boolean startOnBoot = LoadPrefsUtil.startOnBoot(prefs);
 			if (startOnBoot != null && startOnBoot.booleanValue()) {

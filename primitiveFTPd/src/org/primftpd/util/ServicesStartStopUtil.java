@@ -45,6 +45,8 @@ public class ServicesStartStopUtil {
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider,
             PrimitiveFtpdActivity activity) {
+        LOGGER.trace("startServers()");
+
         if (!isPasswordOk(prefsBean)) {
             Toast.makeText(
                 context,
@@ -103,6 +105,7 @@ public class ServicesStartStopUtil {
     }
 
     public static void stopServers(Context context) {
+        LOGGER.trace("stopServers()");
         context.stopService(createFtpServiceIntent(context, null, null));
         context.stopService(createSshServiceIntent(context, null, null));
     }
@@ -204,6 +207,7 @@ public class ServicesStartStopUtil {
             boolean serverRunning,
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider) {
+        LOGGER.trace("updateNonActivityUI()");
         Notification notification = null;
         updateWidget(ctxt, serverRunning);
         if (serverRunning) {

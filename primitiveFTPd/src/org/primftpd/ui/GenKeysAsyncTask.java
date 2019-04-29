@@ -24,6 +24,7 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
             PrimitiveFtpdActivity activity,
             ProgressDialog progressDiag,
             boolean startServerOnFinish) {
+        logger.trace("GenKeysAsyncTask()");
         this.keyFingerprintProvider = keyFingerprintProvider;
         this.activity = activity;
         this.progressDiag = progressDiag;
@@ -34,6 +35,15 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         logger.debug("generating key");
         try {
+            String[] fileList = activity.fileList();
+            if (fileList != null) {
+                for (String file : fileList) {
+                    logger.trace("existing file: '{}'", file);
+                }
+            } else {
+                logger.trace("no existing files");
+            }
+
             FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream(activity);
             FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream(activity);
             try {
@@ -51,6 +61,7 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
+        logger.trace("onPostExecute()");
         keyFingerprintProvider.calcPubkeyFingerprints(activity);
         progressDiag.dismiss();
         activity.showKeyFingerprints();

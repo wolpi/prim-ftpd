@@ -446,6 +446,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		refreshButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				logger.trace("refreshButton OnClickListener");
 				GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
 				askDiag.show(activity.getSupportFragmentManager(), DIALOG_TAG);
 			}
@@ -453,6 +454,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	}
 
 	public void genKeysAndShowProgressDiag(boolean startServerOnFinish) {
+		logger.trace("genKeysAndShowProgressDiag()");
 		// critical: do not pass getApplicationContext() to dialog
 		final ProgressDialog progressDiag = new ProgressDialog(this);
 		progressDiag.setCancelable(false);
@@ -573,6 +575,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		logger.debug("onOptionsItemSelected()");
 		switch (item.getItemId()) {
 		case R.id.menu_start:
 			handleStart();
@@ -653,6 +656,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	}
 
 	public void showGenKeyDialog() {
+		logger.trace("showGenKeyDialog()");
 		GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
 		Bundle diagArgs = new Bundle();
 		diagArgs.putBoolean(GenKeysAskDialogFragment.KEY_START_SERVER, true);

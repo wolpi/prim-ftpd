@@ -188,6 +188,7 @@ public class NotificationUtil
 			Context ctxt,
 			PrefsBean prefsBean,
 			KeyFingerprintProvider keyFingerprintProvider) {
+		LOGGER.trace("buildLongText()");
 		StringBuilder str = new StringBuilder();
 		IpAddressProvider ipAddressProvider = new IpAddressProvider();
 		List<String> ipAddressTexts = ipAddressProvider.ipAddressTexts(ctxt, false);
