@@ -50,7 +50,7 @@
     <string name="prefTitleAnnounceName">伺服器名稱</string>
     <string name="prefSummaryAnnounceName">要公佈伺服器的名稱。</string>
     <string name="prefTitleWakelock">避免待命</string>
-    <string name="prefSummaryWakelock">伺服器執行時避免待命。待命可能是上傳/下載停止。</string>
+    <string name="prefSummaryWakelock">伺服器執行時避免待命。待命可能使上傳/下載停止。</string>
     <string name="prefTitleWhichServerToStart">要啟動的伺服器</string>
     <string name="prefSummaryWhichServerToStart">選擇要只啟動 FTP 伺服器、只啟動 SFTP 伺服器或是兩者都啟動。</string>
     <string name="prefTitleStartOnBoot">開機時啟動</string>
@@ -106,5 +106,7 @@
     <string name="prefSummaryLoggingV2">記錄用於分析錯誤。如果應用程式在您的裝置上無法正常執行，您可以向開發人員傳送記錄。可能需要重新啟動應用程式。文字記錄儲存在 %s。</string>
     <string name="prefAllowedIpsPattern">允許的 IP 樣式</string>
     <string name="prefSummaryAllowedIpsPattern">允許的 IP 位置的樣式。只能使用一個萬用字元 (*)，它只用於最後一個字元。</string>
+
+    <string name="startServerAndUi">與伺服器啟動</string>
 
     </resources>
