@@ -37,6 +37,7 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
         try {
             String[] fileList = activity.fileList();
             if (fileList != null) {
+                logger.trace("num of existing files: '{}'", fileList.length);
                 for (String file : fileList) {
                     logger.trace("existing file: '{}'", file);
                 }

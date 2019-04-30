@@ -602,6 +602,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	}
 
 	public void handleStart() {
+		logger.trace("handleStart()");
 		if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)) {
 			ServicesStartStopUtil.startServers(this, prefsBean, keyFingerprintProvider, this);
 		}
@@ -615,6 +616,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	 */
 	protected boolean hasPermission(String permission, int requestCode) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			logger.trace("hasPermission()");
 			if (prefsBean.getStorageType() == StorageType.PLAIN) {
 				if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
 					requestPermissions(new String[]{permission}, requestCode);
@@ -627,6 +629,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		logger.trace("onRequestPermissionsResult()");
 		boolean granted = grantResults.length > 0
 				&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
 		switch (requestCode) {
@@ -652,7 +655,13 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	}
 
 	public boolean isKeyPresent() {
-		return keyFingerprintProvider.isKeyPresent();
+		if (!keyFingerprintProvider.areFingerprintsGenerated()) {
+			logger.debug("checking if key is present, but fingerprints have not been generated yet");
+			keyFingerprintProvider.calcPubkeyFingerprints(this);
+		}
+		boolean keyPresent = keyFingerprintProvider.isKeyPresent();
+		logger.trace("isKeyPresent() -> {}", keyPresent);
+		return keyPresent;
 	}
 
 	public void showGenKeyDialog() {
@@ -665,10 +674,12 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	}
 
 	protected void handleStop() {
+		logger.trace("handleStop()");
 		ServicesStartStopUtil.stopServers(this);
 	}
 
 	protected void handlePrefs() {
+		logger.trace("handlePrefs()");
 		Class<?> prefsActivityClass = theme == Theme.DARK
 			? FtpPrefsActivityThemeDark.class
 			: FtpPrefsActivityThemeLight.class;
@@ -677,6 +688,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	}
 
 	protected void handleAbout() {
+		logger.trace("handleAbout()");
 		Intent intent = new Intent(this, AboutActivity.class);
 		startActivity(intent);
 	}
