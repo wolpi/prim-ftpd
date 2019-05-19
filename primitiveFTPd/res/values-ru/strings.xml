@@ -24,9 +24,9 @@
     <string name="prefForegroundService">Сервис(ы) на переднем плане</string>
     <string name="prefSummaryAnnounce">Публикует FTP сервер в локальной сети через DNS-SD (Bonjour). На некоторых устройствах может приводить к закрытию приложения.</string>
     <string name="prefSummaryAnnounceName">Имя, под которым публикуется сервер.</string>
-    <string name="prefSummaryAnonymousLogin">Set if anonymous login is allowed on the server.</string>
+    <string name="prefSummaryAnonymousLogin">Установите, если на сервер разрешен анонимный вход.</string>
     <string name="prefSummaryForegroundService">Сервис(ы) будут выполняться на переднем плане. Предотвращает остановку сервисов на некоторых устройствах.</string>
-    <string name="prefSummaryFtpPassivePorts">Ports for FTP passive data connection. May be a single port, a list or range of ports. E.g. 5678,5700-5710,5800,5900.</string>
+    <string name="prefSummaryFtpPassivePorts">Порты для пассивной передачи данных по FTP. Может быть один порт, список или диапазон портов. Например: 5678,5700-5710,5800,5900.</string>
     <string name="prefSummaryLogging">Журнал помогает анализировать ошибки. Если приложение работает некорректно на вашем устройстве, вы можете отправить журнал разработчикам.\nМожет потребоваться перезапуск приложения.</string>
     <string name="prefSummaryPassword">Пароль FTP сервера</string>
     <string name="prefSummaryPort">Порт FTP сервера</string>
@@ -81,8 +81,8 @@
     <string name="widgetTextStop">Отключить ftpd</string>
     <string name="prefTitleIdleTimeout">Время бездействия</string>
     <string name="prefSummaryIdleTimeout">Сервер остановится после указанного времени бездействия (только для FTP)</string>
-    <string name="prefTitleStartOnOpen">Start on open</string>
-    <string name="prefSummaryStartOnOpen">Запуск сервера при открытии приложения</string>
+    <string name="prefTitleStartOnOpen">Запуск при открытии</string>
+    <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
 
     <string-array name="prefThemeNames">
         <item>Темная</item>
@@ -101,13 +101,24 @@
         <item>Журнал в системе андроид</item>
     </string-array>
 
-    <string name="prefsCategoryTitleConnectivity">Connectivity</string>
-    <string name="prefsCategoryTitleUi">UI</string>
-    <string name="prefsCategoryTitleSystem">System</string>
-    <string name="prefTitleShowConnectionInfoInNotification">Show connection info in notification</string>
-    <string name="prefSummaryShowConnectionInfoInNotification">Shows connection info like IP address in notification.</string>
-    <string name="prefTitleShowStartStopNotification">Show notification to start/stop server(s)</string>
+    <string name="prefsCategoryTitleConnectivity">Связь</string>
+    <string name="prefsCategoryTitleUi">Интерфейс</string>
+    <string name="prefsCategoryTitleSystem">Система</string>
+    <string name="prefTitleShowConnectionInfoInNotification">Отображение информации о соединении в уведомлении</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">Отображает информацию о подключении, такую как IP-адрес.</string>
+    <string name="prefTitleShowStartStopNotification">Отображение уведомления о запуске/остановке сервера</string>
 <string name="translate">Перевести</string>
 
     <string name="haveToSetAuthMechanism">Сначала необходимо выбрать механизм авторизации</string>
+    <string name="ftpPassivePortsInvalid">Значение пассивных портов FTP неверно.</string>
+
+    <string name="prefsCategoryTitleAuth">Авторизация</string>
+    <string name="prefSummaryShowStartStopNotification">Постоянно отображает уведомление для быстрого запуска/остановки сервера.</string>
+    <string name="prefSummaryLoggingV2">Журнал предназначен для анализа ошибок. Если приложение не работает должным образом на вашем устройстве, вы можете отправить журнал разработчикам. Может потребоваться перезапустить приложение. Текстовые журналы хранятся в %s.</string>
+    <string name="prefAllowedIpsPattern">Разрешенный шаблон IP</string>
+    <string name="prefSummaryAllowedIpsPattern">Шаблон разрешенных IP-адресов. Только один подстановочный знак (*) может использоваться последним.</string>
+
+    <string name="startServerAndExit">только запустить сервер</string>
+    <string name="startServerAndUi">запускать с сервером</string>
+
     </resources>
