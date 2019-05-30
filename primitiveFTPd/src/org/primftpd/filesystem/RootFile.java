@@ -23,6 +23,8 @@ public abstract class RootFile<T> extends AbstractFile {
 
     protected final LsOutputBean bean;
 
+    private Process ddProcess;
+
     public RootFile(Shell.Interactive shell, LsOutputBean bean, String absPath) {
         super(
                 absPath,
@@ -117,15 +119,9 @@ public abstract class RootFile<T> extends AbstractFile {
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "\"dd of=" + escapePathForDD(absPath) + "\"");
-        final Process proc = processBuilder.start();
+        ddProcess = processBuilder.start();
 
-        return new BufferedOutputStream(proc.getOutputStream()) {
-            @Override
-            public void close() throws IOException {
-                super.close();
-                logDdErrorStream(proc);
-            }
-        };
+        return new BufferedOutputStream(ddProcess.getOutputStream());
     }
 
     public InputStream createInputStream(long offset) throws IOException {
@@ -133,7 +129,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "\"dd if=" + escapePathForDD(absPath) + "\"");
-        final Process proc = processBuilder.start();
+        ddProcess = processBuilder.start();
 
         try {
             // workaround for weird errors
@@ -142,22 +138,34 @@ public abstract class RootFile<T> extends AbstractFile {
             throw new IOException(e);
         }
 
-        return new BufferedInputStream(proc.getInputStream()) {
-            @Override
-            public void close() throws IOException {
-                super.close();
-                logDdErrorStream(proc);
-            }
-        };
+        return new BufferedInputStream(ddProcess.getInputStream());
+    }
+
+    @Override
+    public void handleClose() throws IOException {
+        super.handleClose();
+        if (ddProcess != null) {
+            logDdErrorStream(ddProcess);
+            ddProcess = null;
+        } else {
+            logger.trace("no dd process");
+        }
     }
 
     private void logDdErrorStream(Process proc) throws IOException {
-        int exitCode = proc.exitValue();
-        if (exitCode != 0) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            IoUtils.copy(proc.getErrorStream(), baos, BUF_SIZE_DD_ERR_STREAM);
-            String ddErr = baos.toString();
-            logger.debug("dd exit code: '{}', error stream: '{}'", exitCode, ddErr);
+        try {
+            proc.waitFor();
+            int exitCode = proc.exitValue();
+            if (exitCode != 0) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                IoUtils.copy(proc.getErrorStream(), baos, BUF_SIZE_DD_ERR_STREAM);
+                String ddErr = baos.toString();
+                logger.debug("dd exit code: '{}', error stream: '{}'", exitCode, ddErr);
+            } else {
+                logger.trace("dd exited with 0");
+            }
+        } catch (InterruptedException e) {
+            logger.error("interrupted while waiting for dd process to exit", e);
         }
     }
 
