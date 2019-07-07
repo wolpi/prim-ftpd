@@ -124,4 +124,8 @@
     <string name="startServerAndUi">iniciar con el servidor</string>
 
     <string name="haveToSetAuthMechanism">Primero debes configurar un método de autenticación</string>
+    <string name="prefSummaryLoggingV2">El registro provee análisis de errores. Si la aplicación no funciona correctamente en su dispositivo usted puede enviar información de registro a los desarrolladores. Puede requerir el reinicio de la aplicación. Registros en formato texto se almacenan en %s.</string>
+    <string name="prefAllowedIpsPattern">Patrón de IPs permitidas</string>
+    <string name="prefSummaryAllowedIpsPattern">Patrón de direcciones IP permitidas. Sólo puede usarse un asterisco (*) y como último caracter.</string>
+
     </resources>
