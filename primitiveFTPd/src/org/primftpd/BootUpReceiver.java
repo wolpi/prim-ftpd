@@ -25,17 +25,6 @@ public class BootUpReceiver extends BroadcastReceiver
 		// adb shell
 		// am broadcast -a android.intent.action.BOOT_COMPLETED -p org.primftpd
 
-		try {
-			logger.trace("initialising widget");
-			ServicesStartStopUtil.updateNonActivityUI(
-					context,
-					false,
-					null,
-					null);
-		} catch (Exception e) {
-			logger.error("error while initialising widget", e);
-		}
-
 		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
 			logger.trace("onReceive()");
 
