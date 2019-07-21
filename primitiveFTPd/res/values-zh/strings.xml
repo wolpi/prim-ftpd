@@ -5,9 +5,9 @@
     <string name="protocolLabel">协议</string>
     <string name="portLabel">端口</string>
     <string name="fingerprintsLabel">密钥指纹</string>
-    <string name="generateKeysMessage">新建密钥？</string>
-    <string name="generatingKeysMessage">正在创建密钥…</string>
-    <string name="generate">创建</string>
+    <string name="generateKeysMessage">生成新密钥？</string>
+    <string name="generatingKeysMessage">正在生成密钥…</string>
+    <string name="generate">生成</string>
     <string name="cancel">取消</string>
     <string name="state">状态</string>
     <string name="serverStarted">运行中…</string>
@@ -20,17 +20,17 @@
 
     <string name="startService">启动服务器</string>
     <string name="stopService">停止服务器</string>
-    <string name="toggleService">调整服务器启动/停止</string>
+    <string name="toggleService">服务器启动/停止切换</string>
     <string name="notificationTitle">FTP 服务器</string>
 
     <string name="haveToSetPassword">首先您需要设置密码</string>
     <string name="serverRunning">FTP 服务器正在运行</string>
     <string name="serverCouldNotBeStarted">无法启动服务器！错误信息：</string>
-    <string name="portInvalid_v2">端口号无效。值必须在1024到64000之间。</string>
-    <string name="portsEqual_v2">端口号是一样的。这不行。</string>
-    <string name="restartServer">你需要重启服务器以使更改生效。</string>
+    <string name="portInvalid_v2">端口号无效。值必须在 1024 到 64000 之间。</string>
+    <string name="portsEqual_v2">端口号重复。请选择不同的端口。</string>
+    <string name="restartServer">请重启服务器以使更改生效。</string>
     <string name="invalidDir">文件夹无效。</string>
-    <string name="couldNotReadKeyAuthKey">用于密钥验证的公钥不能被读取。 检查日志。</string>
+    <string name="couldNotReadKeyAuthKey">用于密钥验证的公钥不能被读取。请检查日志。</string>
 
     <string name="prefs">设置</string>
     <string name="prefCategoryTitle">FTP 服务器设置</string>
@@ -40,56 +40,70 @@
     <string name="prefSummaryPassword">FTP 服务器密码</string>
     <string name="prefTitlePort">端口</string>
     <string name="prefSummaryPort">FTP 服务器端口号</string>
-    <string name="prefTitlePortSecure">安全端口号</string>
-    <string name="prefSummaryPortSecure">FTP 服务器端口 (加密的)</string>
+    <string name="prefTitlePortSecure">SFTP 端口号</string>
+    <string name="prefSummaryPortSecure">FTP 服务器端口（加密协议）</string>
     <string name="prefTitleStartDir">服务器开始目录</string>
     <string name="prefSummaryStartDir">登录之后所在的文件夹</string>
-    <string name="prefTitleAnnounce">在局域网广播服务器</string>
-    <string name="prefSummaryAnnounce">通过DNS-SD(Bonjour)广播FTP服务器。 可能在一些设备上导致崩溃。</string>
+    <string name="prefTitleAnnounce">在局域网中广播服务器</string>
+    <string name="prefSummaryAnnounce">通过 DNS-SD (Bonjour) 广播 FTP 服务器。在某些设备上可能导致崩溃。</string>
     <string name="prefTitleAnnounceName">服务名</string>
     <string name="prefSummaryAnnounceName">广播的服务器名称。</string>
     <string name="prefTitleWakelock">防止挂起</string>
-    <string name="prefSummaryWakelock">当服务器正在运行时防止挂起。挂起会导致上传/下载中断。</string>
-    <string name="prefTitleWhichServerToStart">要启动的服务器</string>
-    <string name="prefSummaryWhichServerToStart">选择使用仅FTP，还是仅SFTP，还是都启用。</string>
+    <string name="prefSummaryWakelock">当服务器正在运行时禁止本设备睡眠，以免上传或下载中断。</string>
+    <string name="prefTitleWhichServerToStart">服务类型</string>
+    <string name="prefSummaryWhichServerToStart">选择只启动 FTP 服务，还是只启动 SFTP，还是都启用。</string>
     <string name="prefTitleStartOnBoot">开机时启动</string>
     <string name="prefSummaryStartOnBoot">系统启动时打开服务器。</string>
     <string name="prefTitleStartOnOpen">打开应用时启动服务器</string>
-    <string name="prefSummaryStartOnOpen">当打开应用时开始服务器。</string>
+    <string name="prefSummaryStartOnOpen">当打开应用时，自动开始 FTP 服务。</string>
     <string name="prefTitlePubKeyAuth">公钥验证</string>
-    <string name="prefSummaryPubKeyAuth">当启用时放置您的ssh2公钥于 %s。 仅用于SFTP。</string>
+    <string name="prefSummaryPubKeyAuth">若您启用了此选项，请将您的 ssh2 公钥置于 %s 目录。仅用于 SFTP。</string>
     <string name="prefTitleAnonymousLogin">匿名登录</string>
     <string name="prefSummaryAnonymousLogin">打开以允许匿名登录。</string>
     <string name="prefTitleFtpPassivePorts">FTP 被动端口</string>
-    <string name="prefSummaryFtpPassivePorts">用于被动模式的数据端口。可以是单个端口，一个范围的或一些随机端口。E.g. 5678,5700-5710,5800,5900.</string>
+    <string name="prefSummaryFtpPassivePorts">用于被动模式的数据端口。可以是单个端口，一系列端口或供随机选择的一个范围。例如 5678,5700-5710,5800,5900。</string>
     <string name="prefTitleIdleTimeout">服务器空闲超时</string>
-    <string name="prefSummaryIdleTimeout">服务器将会在这段时间后终止空闲的连接(仅限于FTP)</string>
+    <string name="prefSummaryIdleTimeout">当连接空闲时间超过这一秒数后，服务器将会关闭连接（仅限 FTP）</string>
     <string name="prefTheme">主题</string>
     <string name="prefSummaryTheme">改变主题需要重启应用。</string>
     <string name="prefTitleLogging">日志</string>
-    <string name="prefSummaryLogging">日志是为了分析错误。如果应用在你的设备上运行不正确，你可以发送日志到开发者。需要重启应用。</string>
+    <string name="prefSummaryLogging">日志可以用于分析错误。如果应用在你的设备上运行不正确，你可以将日志反馈给开发者。重启应用后生效。</string>
 
     <string name="licence">许可</string>
     <string name="reset">重置</string>
 
-    <string name="widgetTextStart">启动 ftpd</string>
-    <string name="widgetTextStop">停止 ftpd</string>
-    <string name="isAnonymous">匿名登录 ： %1$b</string>
+    <string name="widgetTextStart">启动 (S)FTP 服务</string>
+    <string name="widgetTextStop">停止 (S)FTP 服务</string>
+    <string name="isAnonymous">匿名登录：%1$b</string>
     <string name="isServerRunning">服务器正在运行吗？</string>
 
-    <string name="storageType">存储类型</string>
+    <string name="storageType">存储器访问方式</string>
     <string name="translate">翻译</string>
 
-    <string name="haveToSetAuthMechanism">你需要首先设置一个认证机制</string>
-    <string name="ftpPassivePortsInvalid">FTP被动端口数值无效。</string>
+    <string name="haveToSetAuthMechanism">您首先需要选择一种认证方式</string>
+    <string name="ftpPassivePortsInvalid">FTP 被动模式端口号无效。</string>
 
     <string name="prefsCategoryTitleAuth">认证</string>
     <string name="prefsCategoryTitleConnectivity">连接</string>
     <string name="prefsCategoryTitleUi">用户界面</string>
     <string name="prefsCategoryTitleSystem">系统</string>
-    <string name="prefTitleShowConnectionInfoInNotification">在通知中显示连接信息</string>
-    <string name="prefSummaryShowConnectionInfoInNotification">在通知内显示连接信息，如IP地址。</string>
+    <string name="prefTitleShowConnectionInfoInNotification">在通知栏中显示连接信息</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">在通知栏内显示连接信息，如 IP 地址。</string>
     <string name="prefTitleShowStartStopNotification">显示通知以打开 / 关闭服务器</string>
-    <string name="prefSummaryShowStartStopNotification">推送一个持久通知以通过另外一种便捷的方式开启/关闭服务器。</string>
-    <string name="prefAllowedIpsPattern">允许的IP</string>
+    <string name="prefSummaryShowStartStopNotification">推送一个持久通知，以便通过通知栏快速开启 / 关闭服务器。</string>
+    <string name="prefAllowedIpsPattern">IP 白名单</string>
+    <string name="prefSummaryLoggingV2">日志可以用于分析错误。如果应用在您的设备上不能正常运行，您可以将日志反馈给开发者。重启应用后生效。日志文本将被保存在 %s。</string>
+    <string name="prefSummaryAllowedIpsPattern">仅允许此处指定的客户端 IP 连接服务器。允许在末尾使用单个 * 作为通配符。</string>
+
+    <string name="selectServerAction">选择服务器动作</string>
+    <string name="storageTypeRoot">超级用户（需要 root 权限）</string>
+    <string name="storageTypeSaf">Android 存储访问框架（SAF），例如访问 SD 卡</string>
+    <string name="storageTypeRoSaf">SAF 只读模式（速度更快！）</string>
+    <string name="safExplainHeading">如何使用 SAF 模式</string>
+    <string name="safExplain">在此模式下，Android 将让您选择一个希望访问的路径，服务器只能浏览此路径下的内容。若您重启了设备，应用对这一路径的访问权可能被吊销，您需要重新选择。</string>
+    <string name="selectedSafUri">所选的 SAF URI：</string>
+
+    <string name="startServerAndExit">只启动服务</string>
+    <string name="startServerAndUi">启动服务并显示界面</string>
+
     </resources>
