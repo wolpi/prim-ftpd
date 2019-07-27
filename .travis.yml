@@ -1,3 +1,4 @@
+dist: trusty
 language: android
 android:
   components:
@@ -6,4 +7,4 @@ android:
     - android-28
     - extra-android-m2repository
 jdk:
-  - openjdk8
+  - oraclejdk8
