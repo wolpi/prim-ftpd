@@ -2,6 +2,7 @@ package org.primftpd.log;
 
 import org.primftpd.prefs.Logging;
 import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
 import org.slf4j.helpers.NOPLoggerFactory;
 import org.slf4j.impl.AndroidLoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
@@ -14,16 +15,21 @@ public class PrimFtpdLoggerBinder implements LoggerFactoryBinder
 	private final ILoggerFactory loggerFactoryAndroid;
 	private final ILoggerFactory loggerFactoryText;
 
+	private final Logger logger;
+
 	protected PrimFtpdLoggerBinder()
 	{
 		loggerFactoryNone = new NOPLoggerFactory();
 		loggerFactoryAndroid = new AndroidLoggerFactory();
 		loggerFactoryText = new CsvLoggerFactory(loggerFactoryNone);
+
+		logger = loggerFactoryAndroid.getLogger(getClass().getName());
 	}
 
 	@Override
 	public ILoggerFactory getLoggerFactory()
 	{
+		logger.debug("getLoggerFactory() type -> {}", loggingPref);
 		switch (loggingPref)
 		{
 		case NONE:
