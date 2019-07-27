@@ -4,7 +4,7 @@
     <string name="app_name">primitive ftpd</string>
     <string name="ifacesLabel">Interface réseau</string>
     <string name="ipAddrLabel">Adresse IP</string>
-    <string name="ifacesError">Erreur: </string>
+    <string name="ifacesError">Erreur :</string>
     <string name="protocolLabel">Protocole</string>
     <string name="portLabel">Port</string>
         
@@ -39,7 +39,7 @@
     <string name="serverStarted">En marche…</string>
     <string name="prefTitleWakelock">Empêcher la mise en veille</string>
     <string name="prefTitleWhichServerToStart">Serveur(s) à démarrer</string>
-    <string name="prefSummaryWhichServerToStart">Choisissez de lancer le serveur FTP, le serveur SFTP, ou les deux</string>
+    <string name="prefSummaryWhichServerToStart">Choisissez de lancer soit le serveur FTP uniquement ou SFTP, ou les deux à l fois.</string>
 
 <string name="permissionNameStorage">Stockage</string>
     <string name="quickSettingsServerStarted">pFTPd est en cours d’exécution …</string>
@@ -62,4 +62,24 @@
 
     <string name="isAnonymous">Connexion anonyme : %1$b</string>
     <string name="storageType">Type du stockage</string>
+    <string name="permissionRequired">La permission \"%1$s\" est requise afin que l\'app puisse fonctionner !</string>
+    <string name="quickSettingsServerStopped">pFTPd arrêté</string>
+    <string name="translate">Traduire</string>
+
+    <string name="haveToSetAuthMechanism">Vous devez configurer au préalable un mécanisme d\'authentification</string>
+    <string name="ftpPassivePortsInvalid">La valeur des ports passifs FTP est invalide.</string>
+
+    <string name="prefsCategoryTitleAuth">Auth</string>
+    <string name="prefsCategoryTitleConnectivity">Connectivité</string>
+    <string name="prefsCategoryTitleUi">IU</string>
+    <string name="prefsCategoryTitleSystem">Système</string>
+    <string name="prefTitleStartOnOpen">Lancer au démarrage</string>
+    <string name="prefTitleShowConnectionInfoInNotification">Afficher les informations de connexion dans les notifications</string>
+    <string name="prefSummaryTheme">Le changement de thème requiert le redémarrage de l\'app.</string>
+    <string name="isServerRunning">Est-ce que le serveur fonctionne ?</string>
+
+    <string name="storageTypeRoot">Super utilisateur (l\'appareil doit être rooté)</string>
+    <string name="startServerAndExit">démarrer uniquement le serveur</string>
+    <string name="startServerAndUi">Lancer avec le serveur</string>
+
     </resources>
