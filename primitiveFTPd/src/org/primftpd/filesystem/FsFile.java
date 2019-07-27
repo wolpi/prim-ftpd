@@ -1,7 +1,6 @@
 package org.primftpd.filesystem;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -137,8 +136,6 @@ public abstract class FsFile<T> extends AbstractFile {
 		return new ArrayList<>(0);
 	}
 
-	public static final int BUFFER_SIZE = 1024 * 1024;
-
 	public OutputStream createOutputStream(long offset) throws IOException {
 		logger.trace("[{}] createOutputStream({})", name, offset);
 
@@ -170,7 +167,7 @@ public abstract class FsFile<T> extends AbstractFile {
 			};
 		}
 
-		return new BufferedOutputStream(os, BUFFER_SIZE);
+		return new TracingBufferedOutputStream(os, logger);
 	}
 
 	public InputStream createInputStream(long offset) throws IOException {
@@ -182,6 +179,6 @@ public abstract class FsFile<T> extends AbstractFile {
 		});
 		FileInputStream fis = new FileInputStream(file);
 		fis.skip(offset);
-		return new BufferedInputStream(fis, BUFFER_SIZE);
+		return new BufferedInputStream(fis, TracingBufferedOutputStream.BUFFER_SIZE);
 	}
 }

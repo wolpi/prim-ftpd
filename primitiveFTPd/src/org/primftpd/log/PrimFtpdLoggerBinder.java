@@ -29,7 +29,7 @@ public class PrimFtpdLoggerBinder implements LoggerFactoryBinder
 	@Override
 	public ILoggerFactory getLoggerFactory()
 	{
-		logger.debug("getLoggerFactory() type -> {}", loggingPref);
+		//logger.debug("getLoggerFactory() type -> {}", loggingPref);
 		switch (loggingPref)
 		{
 		case NONE:

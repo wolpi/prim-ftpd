@@ -247,7 +247,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             Uri uri = DocumentsContract.buildDocumentUriUsingTree(
                     startUrl,
                     documentId);
-            return contentResolver.openOutputStream(uri);
+            return new TracingBufferedOutputStream(contentResolver.openOutputStream(uri), logger);
         }
         return null;
     }

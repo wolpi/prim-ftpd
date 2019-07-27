@@ -5,7 +5,6 @@ import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,7 +120,7 @@ public abstract class RootFile<T> extends AbstractFile {
         processBuilder.command("su", "-c", "\"dd of=" + escapePathForDD(absPath) + "\"");
         ddProcess = processBuilder.start();
 
-        return new BufferedOutputStream(ddProcess.getOutputStream());
+        return new TracingBufferedOutputStream(ddProcess.getOutputStream(), logger);
     }
 
     public InputStream createInputStream(long offset) throws IOException {

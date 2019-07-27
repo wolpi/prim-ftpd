@@ -158,7 +158,7 @@ public abstract class SafFile<T> extends AbstractFile {
         }
 
         logger.trace("   createOutputStream() uri: {}", uri);
-        return contentResolver.openOutputStream(uri);
+        return new TracingBufferedOutputStream(contentResolver.openOutputStream(uri), logger);
     }
 
     public InputStream createInputStream(long offset) throws IOException {
