@@ -3,7 +3,7 @@
  */
 
 dependencies {
-    compile project(':ftplet-api')
+    compile project(':apache-ftpserver-1.1.1:ftplet-api')
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'org.apache.mina:mina-core:2.0.16'
     compile 'org.springframework:spring-context:2.5.5'

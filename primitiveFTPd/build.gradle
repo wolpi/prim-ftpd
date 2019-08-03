@@ -68,6 +68,8 @@ android {
 
 configurations {
     implementation.exclude group: 'org.slf4j', module: 'slf4j-api'
+    implementation.exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+    implementation.exclude group: 'org.springframework'
 }
 
 dependencies {
@@ -75,8 +77,10 @@ dependencies {
     // ./gradlew primitiveFTPd:dependencies --configuration releaseCompileClasspath
     implementation project(':pftpd-pojo-lib')
     implementation project(':slf4j-android-1.6.1-RC1')
-    implementation 'org.apache.ftpserver:ftpserver-core:1.1.1'
+    implementation project(':apache-ftpserver-1.1.1:core')
+    implementation project(':apache-ftpserver-1.1.1:ftplet-api')
     implementation 'org.apache.sshd:sshd-core:0.14.0'
+    implementation 'org.apache.mina:mina-core:2.0.21'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.nononsenseapps:filepicker:4.2.1'
     implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
