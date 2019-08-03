@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		Licensed to the Apache Software Foundation (ASF) under one or more
+		contributor license agreements. See the NOTICE file distributed with
+		this work for additional information regarding copyright ownership.
+		The ASF licenses this file to you under the Apache License, Version
+		2.0 (the "License"); you may not use this file except in compliance
+		with the License. You may obtain a copy of the License at
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+<server xmlns="http://mina.apache.org/ftpserver/spring/v1"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+	   http://mina.apache.org/ftpserver/spring/v1 http://mina.apache.org/ftpserver/ftpserver-1.0.xsd	
+	   "
+	id="myServer">
+	<!--
+		Use this section to define custom listeners, or to redefine the
+		default listener, aptly named "default"
+	-->
+	<listeners>
+		<nio-listener name="default" port="2222" implicit-ssl="true"
+			idle-timeout="60" local-address="1.2.3.4">
+			<ssl>
+				<keystore file="mykeystore.jks" password="secret"
+					key-password="otherSecret" />
+				<truststore file="mytruststore.jks" password="secret" />
+			</ssl>
+			<data-connection idle-timeout="60">
+				<active enabled="true" local-address="1.2.3.4" local-port="2323"
+					ip-check="true" />
+				<passive ports="123-125" address="1.2.3.4" external-address="1.2.3.4" />
+			</data-connection>
+			<blacklist>1.2.3.0/16, 1.2.4.0/16, 1.2.3.4</blacklist>
+		</nio-listener>
+	</listeners>
+	<!--
+		Use this section to define your Ftplets, they are configured like
+		regular Spring beans
+	-->
+	<ftplets>
+		<ftplet name="ftplet1">
+			<beans:bean class="org.apache.ftpserver.examples.MyFtplet">
+				<beans:property name="foo" value="123" />
+			</beans:bean>
+		</ftplet>
+	</ftplets>
+	<!-- The user manager, choose one -->
+	<file-user-manager file="users.properties"
+		encrypt-passwords="true" />
+	<!--<db-user-manager>
+		<data-source>
+			<beans:bean class="some.datasoure.class" />
+		</data-source>
+		<insert-user>INSERT INTO FTP_USER (userid, userpassword,
+			homedirectory, enableflag, writepermission, idletime, uploadrate,
+			downloadrate) VALUES ('{userid}', '{userpassword}',
+			'{homedirectory}',
+			{enableflag}, {writepermission}, {idletime},
+			{uploadrate},
+			{downloadrate})
+		</insert-user>
+			<update-user>UPDATE FTP_USER SET
+				userpassword='{userpassword}',homedirectory='{homedirectory}',enableflag={enableflag},writepermission={writepermission},idletime={idletime},uploadrate={uploadrate},downloadrate={downloadrate}
+				WHERE userid='{userid}'
+		</update-user>
+			<delete-user>DELETE FROM FTP_USER WHERE userid = '{userid}'
+		</delete-user>
+			<select-user>SELECT userid, userpassword, homedirectory,
+				enableflag, writepermission, idletime, uploadrate, downloadrate,
+				maxloginnumber, maxloginperip FROM
+				FTP_USER WHERE userid = '{userid}'
+		</select-user>
+			<select-all-users>SELECT userid FROM FTP_USER ORDER BY userid
+		</select-all-users>
+			<is-admin>SELECT userid FROM FTP_USER WHERE userid='{userid}'
+				AND
+				userid='admin'
+		</is-admin>
+			<authenticate>SELECT userpassword from FTP_USER WHERE
+				userid='{userid}'</authenticate>
+	</db-user-manager> -->
+	<!-- The file system -->
+	<native-filesystem case-insensitive="false"
+		create-home="true" />
+	<!--
+		Use this section to define custom commands. Custom commands can also
+		override already existing commands
+	-->
+	<commands use-default="false">
+		<command name="MYHELP">
+			<beans:bean class="org.apache.ftpserver.examples.MYHELP" />
+		</command>
+	</commands>
+	<!-- Define the available languages -->
+	<messages languages="se, no ,da" />
+</server>

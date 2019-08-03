@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		Licensed to the Apache Software Foundation (ASF) under one or more
+		contributor license agreements. See the NOTICE file distributed with
+		this work for additional information regarding copyright ownership.
+		The ASF licenses this file to you under the Apache License, Version
+		2.0 (the "License"); you may not use this file except in compliance
+		with the License. You may obtain a copy of the License at
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" targetNamespace="http://mina.apache.org/ftpserver/spring/v1"
+	xmlns="http://mina.apache.org/ftpserver/spring/v1" xmlns:beans="http://www.springframework.org/schema/beans">
+
+	<!-- Import the Spring beans XML schema -->
+	<xs:import namespace="http://www.springframework.org/schema/beans"
+		schemaLocation="http://www.springframework.org/schema/beans/spring-beans-2.5.xsd" />
+
+	<!-- The main entry point, used for setting up an entire FTP server -->
+	<xs:element name="server">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" name="listeners">
+					<xs:complexType>
+						<xs:choice minOccurs="1" maxOccurs="unbounded">
+							<xs:element ref="nio-listener" />
+							<xs:element ref="listener" />
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element minOccurs="0" ref="ftplets" />
+				<xs:choice minOccurs="0" maxOccurs="1">
+					<xs:element minOccurs="0" ref="file-user-manager" />
+					<xs:element minOccurs="0" ref="db-user-manager" />
+					<xs:element minOccurs="0" ref="user-manager" />
+				</xs:choice>
+				<xs:choice minOccurs="0" maxOccurs="1">
+					<xs:element minOccurs="0" ref="native-filesystem" />
+					<xs:element minOccurs="0" ref="filesystem" />
+				</xs:choice>
+				<xs:element minOccurs="0" ref="commands" />
+				<xs:element minOccurs="0" ref="messages" />
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID" />
+			<xs:attribute name="max-logins" type="xs:int" />
+			<xs:attribute name="max-anon-logins" type="xs:int" />
+			<xs:attribute name="anon-enabled" type="xs:boolean" />
+			<xs:attribute name="max-login-failures" type="xs:int" />
+			<xs:attribute name="login-failure-delay" type="xs:int" />
+			<xs:attribute name="max-threads" type="xs:int" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Reusable element for defining SSL properties -->
+	<xs:element name="ssl">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="keystore">
+					<xs:complexType>
+						<xs:attribute name="file" use="required" />
+						<xs:attribute name="password" use="required" />
+						<xs:attribute name="type" />
+						<xs:attribute name="algorithm" />
+						<xs:attribute name="key-alias" />
+						<xs:attribute name="key-password" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element minOccurs="0" name="truststore">
+					<xs:complexType>
+						<xs:attribute name="file" use="required" />
+						<xs:attribute name="password" />
+						<xs:attribute name="type" />
+						<xs:attribute name="algorithm" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="client-authentication">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="NEED" />
+						<xs:enumeration value="WANT" />
+						<xs:enumeration value="NONE" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="enabled-ciphersuites" type="xs:string" />
+			<xs:attribute name="protocol">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="SSL" />
+						<xs:enumeration value="TLS" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Element used to configure the remote IP Filtering -->
+	<xs:element name="remote-ip-filter">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="type">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="allow" />
+								<xs:enumeration value="deny" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Element used to define the default, NIO based listener -->
+	<xs:element name="nio-listener">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element minOccurs="0" ref="ssl" />
+				<xs:element minOccurs="0" name="data-connection">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element minOccurs="0" ref="ssl" />
+							<xs:element minOccurs="0" name="active">
+								<xs:complexType>
+									<xs:attribute name="enabled" type="xs:boolean" />
+									<xs:attribute name="local-address" />
+									<xs:attribute name="local-port" type="xs:int" />
+									<xs:attribute name="ip-check" type="xs:boolean" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element minOccurs="0" name="passive">
+								<xs:complexType>
+									<xs:attribute name="address" />
+									<xs:attribute name="external-address" />
+									<xs:attribute name="ip-check" type="xs:boolean" />
+									<xs:attribute name="ports" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="idle-timeout" type="xs:int" />
+                        <xs:attribute name="implicit-ssl" type="xs:boolean" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element minOccurs="0" name="blacklist" type="xs:string" />
+				<xs:element ref="remote-ip-filter" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+			<xs:attribute name="name" use="required" type="xs:string" />
+			<xs:attribute name="local-address" />
+			<xs:attribute name="port" type="xs:int" />
+			<xs:attribute name="idle-timeout" type="xs:int" />
+			<xs:attribute name="implicit-ssl" type="xs:boolean" />
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Extension element used for defining a custom listener -->
+	<xs:element name="listener" type="spring-bean-or-ref-with-name" />
+
+	<!-- Element used to configure Ftplets for used with the server -->
+	<xs:element name="ftplets">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element name="ftplet" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:choice>
+								<xs:element ref="beans:bean" />
+								<xs:element ref="beans:ref" />
+							</xs:choice>
+						</xs:sequence>
+						<xs:attribute name="name" use="required" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="beans:map" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Element used to configure a file based user manager -->
+	<xs:element name="file-user-manager">
+		<xs:complexType>
+			<xs:attribute name="file" type="xs:string" />
+			<xs:attribute name="url" type="xs:string" />
+			<xs:attribute name="encrypt-passwords">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="clear"></xs:enumeration>
+						<!-- Deprecated, use "clear" -->
+						<xs:enumeration value="false"></xs:enumeration>
+						<xs:enumeration value="md5"></xs:enumeration>
+   						<!-- Deprecated, use "md5" -->
+   						<xs:enumeration value="true"></xs:enumeration>
+						<xs:enumeration value="salted"></xs:enumeration>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Element used to configure a database based user manager -->
+	<xs:element name="db-user-manager">
+		<xs:complexType>
+    		<xs:sequence>
+				<xs:element name="data-source" type="spring-bean-or-ref" />
+				<xs:element name="insert-user" type="xs:string" />
+				<xs:element name="update-user" type="xs:string" />
+				<xs:element name="delete-user" type="xs:string" />
+				<xs:element name="select-user" type="xs:string" />
+				<xs:element name="select-all-users" type="xs:string" />
+				<xs:element name="is-admin" type="xs:string" />
+				<xs:element name="authenticate" type="xs:string" />
+			</xs:sequence>
+            <xs:attribute name="encrypt-passwords">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="clear"></xs:enumeration>
+                        <xs:enumeration value="md5"></xs:enumeration>
+                        <xs:enumeration value="salted"></xs:enumeration>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Extension element used for defining a custom user manager -->
+	<xs:element name="user-manager" type="spring-bean-or-ref" />
+
+	<!-- Element used to configure the default file system -->
+	<xs:element name="native-filesystem">
+		<xs:complexType>
+			<xs:attribute name="case-insensitive" type="xs:boolean" />
+			<xs:attribute name="create-home" type="xs:boolean" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Extension element used for defining a custom file system -->
+	<xs:element name="filesystem" type="spring-bean-or-ref" />
+
+	<!-- Element used to provide custom command implementations -->
+	<xs:element name="commands">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="command" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:choice maxOccurs="unbounded">
+								<xs:element ref="beans:bean" />
+								<xs:element ref="beans:ref" />
+							</xs:choice>
+						</xs:sequence>
+						<xs:attribute name="name" use="required" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="use-default" type="xs:boolean" />
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Element used to configure and localize messages -->
+	<xs:element name="messages">
+		<xs:complexType>
+			<xs:attribute name="languages" />
+			<xs:attribute name="directory" />
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Reusable type used for extension elements -->
+	<xs:complexType name="spring-bean-or-ref">
+		<xs:choice>
+			<xs:element ref="beans:bean" />
+			<xs:element ref="beans:ref" />
+		</xs:choice>
+	</xs:complexType>
+	
+	<!-- Reusable type used for named extension elements -->
+	<xs:complexType name="spring-bean-or-ref-with-name">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element ref="beans:bean" />
+				<xs:element ref="beans:ref" />
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="name" use="required" type="xs:string" />
+	</xs:complexType>
+</xs:schema>
