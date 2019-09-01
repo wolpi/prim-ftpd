@@ -68,7 +68,7 @@
     <string name="prefTitleShowConnectionInfoInNotification">Show connection info in notification</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Shows connection info like IP address in notification.</string>
     <string name="prefTitleShowStartStopNotification">Show notification to start/stop server(s)</string>
-    <string name="prefSummaryShowStartStopNotification">Shows a notification at all time to have another qick way to start/stop server(s).</string>
+    <string name="prefSummaryShowStartStopNotification">Shows a notification at all time to have another quick way to start/stop server(s).</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>
     <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 public key in %s. SFTP only.</string>
     <string name="prefTitleAnonymousLogin">Anonymous Login</string>
