@@ -24,7 +24,7 @@ android {
     defaultConfig {
         applicationId "org.primftpd"
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 44
         versionName "5.18-SNAPSHOT"
     }
@@ -75,8 +75,8 @@ dependencies {
     // ./gradlew primitiveFTPd:dependencies --configuration releaseCompileClasspath
     implementation project(':pftpd-pojo-lib')
     implementation project(':slf4j-android-1.6.1-RC1')
+    implementation project(':sshd-core-0.14.0')
     implementation 'org.apache.ftpserver:ftpserver-core:1.1.1'
-    implementation 'org.apache.sshd:sshd-core:0.14.0'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.nononsenseapps:filepicker:4.2.1'
     implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
