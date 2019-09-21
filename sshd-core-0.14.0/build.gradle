@@ -1,0 +1,31 @@
+apply plugin: 'java'
+
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+        }
+    }
+}
+
+jar {
+    exclude('org/apache/sshd/common/util/SecurityUtils*')
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compileOnly 'org.apache.mina:mina-core:2.0.8'
+    compileOnly 'org.slf4j:slf4j-api:1.6.4'
+    compileOnly 'tomcat:tomcat-apr:5.5.23'
+    compileOnly 'org.bouncycastle:bcpg-jdk15on:1.51'
+    compileOnly 'org.bouncycastle:bcpkix-jdk15on:1.51'
+}
