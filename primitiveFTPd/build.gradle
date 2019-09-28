@@ -79,5 +79,11 @@ dependencies {
     implementation 'org.apache.ftpserver:ftpserver-core:1.1.1'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.nononsenseapps:filepicker:4.2.1'
+    implementation 'com.android.support:support-compat:28.0.0'
+    implementation 'com.android.support:documentfile:28.0.0'
+    implementation 'com.android.support:loader:28.0.0'
+    implementation 'com.android.support:support-fragment:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
 }
