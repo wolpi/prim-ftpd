@@ -170,6 +170,9 @@ public class KeyParser {
     public static PublicKey createPubKeyEcdsa(String name, BigInteger x, BigInteger y)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         final String curveName = EC_NAME_TO_CURVE_NAME.get(name);
+        // note: this bouncy castle helper class is awesome!
+        // it justifies the additional dependency even though api-level 28 comes with conscrypt
+        // see org.primftpd.services.PubKeyAuthenticator
         ECNamedCurveParameterSpec curveParaSpecBc = ECNamedCurveTable.getParameterSpec(curveName);
         ECPoint point = curveParaSpecBc.getCurve().createPoint(x, y);
         ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(point, curveParaSpecBc);

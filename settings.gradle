@@ -1,3 +1,6 @@
-include ':primitiveFTPd', ':pftpd-pojo-lib', 'slf4j-android-1.6.1-RC1'
+include ':primitiveFTPd'
+include ':pftpd-pojo-lib'
+include 'slf4j-android-1.6.1-RC1'
+include 'sshd-core-0.14.0'
 include ':apache-ftpserver-1.1.1:core'
 include ':apache-ftpserver-1.1.1:ftplet-api'

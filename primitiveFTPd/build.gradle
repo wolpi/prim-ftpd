@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath 'com.github.nrudenko:gradle-android-cq-plugin:0.1.7'
     }
 }
@@ -24,9 +24,9 @@ android {
     defaultConfig {
         applicationId "org.primftpd"
         minSdkVersion 15
-        targetSdkVersion 27
-        versionCode 43
-        versionName "5.17-SNAPSHOT"
+        targetSdkVersion 28
+        versionCode 44
+        versionName "5.18-SNAPSHOT"
     }
 
     buildTypes {
@@ -79,9 +79,15 @@ dependencies {
     implementation project(':slf4j-android-1.6.1-RC1')
     implementation project(':apache-ftpserver-1.1.1:core')
     implementation project(':apache-ftpserver-1.1.1:ftplet-api')
-    implementation 'org.apache.sshd:sshd-core:0.14.0'
+    implementation project(':sshd-core-0.14.0')
     implementation 'org.apache.mina:mina-core:2.0.21'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.nononsenseapps:filepicker:4.2.1'
+    implementation 'com.android.support:support-compat:28.0.0'
+    implementation 'com.android.support:documentfile:28.0.0'
+    implementation 'com.android.support:loader:28.0.0'
+    implementation 'com.android.support:support-fragment:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
 }
