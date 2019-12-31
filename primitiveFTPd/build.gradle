@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         classpath 'com.github.nrudenko:gradle-android-cq-plugin:0.1.7'
     }
 }
@@ -83,9 +83,7 @@ dependencies {
     implementation 'org.apache.mina:mina-core:2.0.21'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.nononsenseapps:filepicker:4.2.1'
-    implementation 'com.android.support:support-compat:28.0.0'
     implementation 'com.android.support:documentfile:28.0.0'
-    implementation 'com.android.support:loader:28.0.0'
     implementation 'com.android.support:support-fragment:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
