@@ -94,7 +94,7 @@
     <string name="startServerAndExit">tylko serwer startowy</string>
     <string name="fingerprintsLabel">Klucz Linii Papilarnych</string>
     <string name="state">Stan</string>
-    <string name="serverStarted">Uruchamianie …</string>
+    <string name="serverStarted">Uruchomiony…</string>
     <string name="quickSettingsServerStopped">Zatrzymaj pFTPd</string>
     <string name="prefsCategoryTitleAuth">Autoryzacja</string>
     <string name="prefTitleStartOnOpen">Uruchom otwarte</string>

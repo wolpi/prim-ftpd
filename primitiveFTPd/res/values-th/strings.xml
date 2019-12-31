@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="app_name">primiti 
+\nve ftpd</string>
+    <string name="ipAddrLabel">ที่อยู่ IP</string>
+    <string name="ifacesError">127.0.0.1:443</string>
+    <string name="protocolLabel">8080</string>
+    <string name="portLabel">2222</string>
+    <string name="fingerprintsLabel">Key Fingerprints</string>
+    <string name="generateKeysMessage">Generate Keys ?</string>
+    <string name="generatingKeysMessage">Generating Keys …</string>
+    <string name="generate">Generate</string>
+    <string name="cancel">Cancel</string>
+    <string name="state">State</string>
+    <string name="serverStarted">Running …</string>
+    <string name="serverStopped">Stopped</string>
+    <string name="permissionRequired">\"%1$s\" permission is required for this app to work!</string>
+    <string name="permissionNameStorage">Storage</string>
+    <string name="quickSettingsServerStarted">pFTPd Running …</string>
+    <string name="quickSettingsServerStopped">pFTPd Stopped</string>
+    <string name="saveAs">Save as</string>
+    <string name="translate">Translate</string>
+
+    <string name="startService">Start Server</string>
+    <string name="stopService">Stop Server</string>
+    <string name="toggleService">Toggle Server start/stop</string>
+    <string name="notificationTitle">FTP Server</string>
+
+    <string name="haveToSetPassword">You have to set a password first</string>
+    <string name="haveToSetAuthMechanism">You have to set an authentication mechanism first</string>
+    <string name="serverRunning">FTP Server is running</string>
+    <string name="serverCouldNotBeStarted">Server could not be started! Error message:</string>
+    <string name="portInvalid_v2">Port value is invalid. Must be between 1024 and 64000.</string>
+    <string name="portsEqual_v2">Ports are equal. This cannot work.</string>
+    <string name="restartServer">You have to restart Server for changes to take effect.</string>
+    <string name="invalidDir">Directory is not valid.</string>
+    <string name="couldNotReadKeyAuthKey">Public key for key authentication could not be read. Check logs.</string>
+    <string name="ftpPassivePortsInvalid">Value of FTP Passive Ports is invalid.</string>
+
+    <string name="prefs">Preferences</string>
+    <string name="prefsCategoryTitleAuth">Auth</string>
+    <string name="prefsCategoryTitleConnectivity">Connectivity</string>
+    <string name="prefsCategoryTitleUi">UI</string>
+    <string name="prefsCategoryTitleSystem">System</string>
+    <string name="prefSummaryUser">FTP server user name</string>
+    <string name="prefTitlePassword">Password</string>
+    <string name="prefSummaryPassword">FTP server password</string>
+    <string name="prefTitlePort">Port</string>
+    <string name="prefSummaryPort">FTP server port</string>
+    <string name="prefTitlePortSecure">Secure Port</string>
+    <string name="prefSummaryPortSecure">FTP server port (encrypted)</string>
+    </resources>
