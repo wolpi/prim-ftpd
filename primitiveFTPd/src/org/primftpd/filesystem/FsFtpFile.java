@@ -37,6 +37,7 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 
 	@Override
 	public Object getPhysicalFile() {
+		logger.trace("[{}] getPhysicalFile()", name);
 		return file;
 	}
 
