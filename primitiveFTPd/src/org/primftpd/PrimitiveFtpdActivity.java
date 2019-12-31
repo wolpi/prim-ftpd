@@ -644,7 +644,8 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 			}
 			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING: {
 				if (granted) {
-					PrimFtpdLoggerBinder.setLoggingPref(Logging.TEXT);
+					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+					handleLoggingPref(prefs, true);
 					this.logger = LoggerFactory.getLogger(getClass());
 				} else {
 					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
@@ -721,6 +722,9 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	}
 
 	protected void handleLoggingPref(SharedPreferences prefs) {
+		handleLoggingPref(prefs, false);
+	}
+	protected void handleLoggingPref(SharedPreferences prefs, boolean permissionJustGranted) {
 		String loggingStr = prefs.getString(
 			LoadPrefsUtil.PREF_KEY_LOGGING,
 			Logging.NONE.xmlValue());
@@ -730,7 +734,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 		boolean recreateLogger = true;
 		// request storage permission if necessary for logging
-		if (logging == Logging.TEXT) {
+		if (!permissionJustGranted && logging == Logging.TEXT) {
 			recreateLogger = hasPermission(
 					Manifest.permission.WRITE_EXTERNAL_STORAGE,
 					PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING);
