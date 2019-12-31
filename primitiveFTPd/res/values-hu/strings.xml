@@ -21,7 +21,7 @@
 
     <string name="startService">Szerver indítása</string>
     <string name="stopService">Szerver leállítása</string>
-    <string name="notificationTitle">FTP Szerver</string>
+    <string name="notificationTitle">FTP szerver</string>
 
     <string name="haveToSetPassword">Először jelszót kell beállítani</string>
     <string name="serverRunning">FTP Szerver működik</string>
@@ -29,4 +29,14 @@
     <string name="prefTitleUser">Felhasználónév</string>
     <string name="prefTitlePort">Port</string>
     <string name="safExplainHeading">Hogyan működik a SAF</string>
+    <string name="toggleService">Szerver indítása/leállítása</string>
+    <string name="haveToSetAuthMechanism">Először a hitelesítési módot kell beállítani</string>
+    <string name="portInvalid_v2">A port száma érvénytelen. 1024 és 64000 között kell legyen.</string>
+    <string name="restartServer">Újra kell indítani a szervert a változások érvényesítéséhez.</string>
+    <string name="prefSummaryUser">FTP szerver felhasználói név</string>
+    <string name="prefTitlePassword">Jelszó</string>
+    <string name="prefSummaryPassword">Az FTP szerver jelszava</string>
+    <string name="prefTitleAnnounceName">A szerver neve</string>
+    <string name="prefSummaryWakelock">Megakadályozza az alvó módba lépést, amíg a szerver fut. Az alvó mód miatt megszakadhatnak a fel- és letöltések.</string>
+    <string name="prefTitleAnonymousLogin">Névtelen (anonymous) bejelentkezés</string>
     </resources>
