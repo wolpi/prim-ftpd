@@ -187,8 +187,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		logger.debug("onStart()");
 
 		loadPrefs();
-		showUsername();
-		showAnonymousLogin();
+		showLogindata();
 
         // init storage type radio
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -407,14 +406,19 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 								: R.string.serverStopped));
 	}
 
-	protected void showUsername() {
+	protected void showLogindata() {
 		TextView usernameView = (TextView)findViewById(R.id.usernameTextView);
 		usernameView.setText(prefsBean.getUserName());
-	}
 
-	protected void showAnonymousLogin() {
 		TextView anonymousView = (TextView)findViewById(R.id.anonymousLoginTextView);
 		anonymousView.setText(getString(R.string.isAnonymous, prefsBean.isAnonymousLogin()));
+
+		TextView passwordPresentView = (TextView)findViewById(R.id.passwordPresentTextView);
+		passwordPresentView.setText(getString(R.string.passwordPresent,
+				StringUtils.isNotEmpty(prefsBean.getPassword())));
+
+		TextView pubKeyAuthView = (TextView)findViewById(R.id.pubKeyAuthTextView);
+		pubKeyAuthView.setText(getString(R.string.pubKeyAuth, prefsBean.isPubKeyAuth()));
 	}
 
 	protected void showSafUrl(String url) {

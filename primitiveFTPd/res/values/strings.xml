@@ -91,6 +91,8 @@
     <string name="widgetTextStart">start (s)ftpd</string>
     <string name="widgetTextStop">stop (s)ftpd</string>
     <string name="isAnonymous">Anonymous Login: %1$b</string>
+    <string name="passwordPresent">Password present: %1$b</string>
+    <string name="pubKeyAuth">Public key auth: %1$b</string>
     <string name="selectServerAction">Select Server Action</string>
     <string name="isServerRunning">Is server running?</string>
 

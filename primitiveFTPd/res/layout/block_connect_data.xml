@@ -65,4 +65,18 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
     />
+
+    <TextView
+        android:id="@+id/passwordPresentTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/pubKeyAuthTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        />
 </merge>

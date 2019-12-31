@@ -86,6 +86,8 @@
     <string name="reset">Zurücksetzen</string>
 
     <string name="isAnonymous">Anonymous Login: %1$b</string>
+    <string name="passwordPresent">Passwort gesetzt: %1$b</string>
+    <string name="pubKeyAuth">Public key auth: %1$b</string>
     <string name="selectServerAction">Serveraktion wählen</string>
 
     <string name="storageType">Art des Speichers</string>
