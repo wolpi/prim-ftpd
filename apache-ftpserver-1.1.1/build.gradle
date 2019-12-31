@@ -48,4 +48,8 @@ subprojects {
     jar {
         exclude('org/apache/ftpserver/listener/nio/FtpHandlerAdapter*')
     }
+
+    test {
+        exclude 'org/apache/ftpserver/ssl/**'
+    }
 }
