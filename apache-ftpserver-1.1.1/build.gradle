@@ -51,5 +51,6 @@ subprojects {
 
     test {
         exclude 'org/apache/ftpserver/ssl/**'
+        exclude 'org/apache/ftpserver/clienttests/PasvTest**'
     }
 }
