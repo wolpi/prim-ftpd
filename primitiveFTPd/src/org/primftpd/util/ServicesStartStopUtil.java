@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -76,7 +77,7 @@ public class ServicesStartStopUtil {
                     LOGGER.debug("going to start sshd");
                     try {
                         Intent intent = createSshServiceIntent(context, prefsBean, keyFingerprintProvider);
-                        context.startService(intent);
+                        startServerByIntent(intent, context);
                     } catch (Exception e) {
                         LOGGER.error("could not start sftp server", e);
                         Toast.makeText(
@@ -91,7 +92,7 @@ public class ServicesStartStopUtil {
                     LOGGER.debug("going to start ftpd");
                     try {
                         Intent intent = createFtpServiceIntent(context, prefsBean, keyFingerprintProvider);
-                        context.startService(intent);
+                        startServerByIntent(intent, context);
                     } catch (Exception e) {
                         LOGGER.error("could not start ftp server", e);
                         Toast.makeText(
@@ -101,6 +102,14 @@ public class ServicesStartStopUtil {
                     }
                 }
             }
+        }
+    }
+
+    private static void startServerByIntent(Intent intent, Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
         }
     }
 
