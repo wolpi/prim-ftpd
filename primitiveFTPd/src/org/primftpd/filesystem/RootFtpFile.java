@@ -4,6 +4,10 @@ import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.primftpd.pojo.LsOutputBean;
 
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
 import eu.chainfire.libsuperuser.Shell;
 
 public class RootFtpFile extends RootFile<FtpFile> implements FtpFile {
@@ -17,6 +21,19 @@ public class RootFtpFile extends RootFile<FtpFile> implements FtpFile {
 
     protected RootFtpFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath) {
         return new RootFtpFile(shell, bean, absPath, user);
+    }
+
+    @Override
+    public OutputStream createOutputStream(long offset) throws IOException {
+        OutputStream superStream = super.createOutputStream(offset);
+        return new BufferedOutputStream(superStream) {
+            @Override
+            public void close() throws IOException {
+                super.close();
+                logger.trace("calling sftp handleClose() for ftp file");
+                handleClose();
+            }
+        };
     }
 
     @Override
