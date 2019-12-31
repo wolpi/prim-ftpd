@@ -216,10 +216,10 @@ public class NotificationUtil
 			str.append("\n");
 			str.append("Key Fingerprints");
 			str.append("\n");
+			// show md5-bytes and sha256-base64 (no sha1) as that is what clients usually show
 			str.append("MD5: ");
-			str.append(keyFingerprintProvider.getBase64Md5());
-			str.append("SHA1: ");
-			str.append(keyFingerprintProvider.getBase64Sha1());
+			str.append(keyFingerprintProvider.getBytesMd5());
+			str.append("\n");
 			str.append("SHA256: ");
 			str.append(keyFingerprintProvider.getBase64Sha256());
 		}

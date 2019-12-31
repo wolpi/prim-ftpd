@@ -25,6 +25,9 @@ public class KeyFingerprintProvider implements Serializable {
     private String base64Md5 = "";
     private String base64Sha1 = "";
     private String base64Sha256 = "";
+    private String bytesMd5 = "";
+    private String bytesSha1 = "";
+    private String bytesSha256 = "";
 
     public FileInputStream buildPublickeyInStream(Context ctxt) throws IOException {
         FileInputStream fis = ctxt.openFileInput(Defaults.PUBLICKEY_FILENAME);
@@ -73,18 +76,21 @@ public class KeyFingerprintProvider implements Serializable {
             if (bean != null) {
                 fingerprintMd5 = bean.fingerprint();
                 base64Md5 = bean.base64;
+                bytesMd5 = bean.bytes;
             }
 
             bean = keyInfoprovider.fingerprint(encodedKey, "SHA-1");
             if (bean != null) {
                 fingerprintSha1 = bean.fingerprint();
                 base64Sha1 = bean.base64;
+                bytesSha1 = bean.bytes;
             }
 
             bean = keyInfoprovider.fingerprint(encodedKey, "SHA-256");
             if (bean != null) {
                 fingerprintSha256 = bean.fingerprint();
                 base64Sha256 = bean.base64;
+                bytesSha256 = bean.bytes;
             }
 
             keyPresent = true;
@@ -128,5 +134,17 @@ public class KeyFingerprintProvider implements Serializable {
 
     public String getBase64Sha256() {
         return base64Sha256;
+    }
+
+    public String getBytesMd5() {
+        return bytesMd5;
+    }
+
+    public String getBytesSha1() {
+        return bytesSha1;
+    }
+
+    public String getBytesSha256() {
+        return bytesSha256;
     }
 }
