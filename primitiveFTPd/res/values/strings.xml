@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name">primiti
+\nve ftpd</string>
     <string name="ifacesLabel">Network Interface</string>
     <string name="ipAddrLabel">IP Address</string>
     <string name="ifacesError">Error: </string>
@@ -9,15 +10,15 @@
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Key Fingerprints</string>
     <string name="generateKeysMessage">Generate Keys ?</string>
-    <string name="generatingKeysMessage">Generating Keys &#8230;</string>
+    <string name="generatingKeysMessage">Generating Keys …</string>
     <string name="generate">Generate</string>
     <string name="cancel">Cancel</string>
     <string name="state">State</string>
-    <string name="serverStarted">Running &#8230;</string>
+    <string name="serverStarted">Running …</string>
     <string name="serverStopped">Stopped</string>
     <string name="permissionRequired">\"%1$s\" permission is required for this app to work!</string>
     <string name="permissionNameStorage">Storage</string>
-    <string name="quickSettingsServerStarted">pFTPd Running &#8230;</string>
+    <string name="quickSettingsServerStarted">pFTPd Running …</string>
     <string name="quickSettingsServerStopped">pFTPd Stopped</string>
     <string name="saveAs">Save as</string>
     <string name="translate">Translate</string>

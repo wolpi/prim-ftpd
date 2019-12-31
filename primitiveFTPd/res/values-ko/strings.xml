@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="ifacesError">오류:</string>
+    <string name="protocolLabel">프로토콜</string>
+    <string name="portLabel">포트</string>
+    <string name="cancel">취소</string>
+    <string name="permissionRequired">본 앱을 실행하기 위하여선 \"%1$s\" 권한이 필요합니다!</string>
+    <string name="permissionNameStorage">저장공간</string>
+    <string name="quickSettingsServerStarted">pFTPd가 작동 중입니다…</string>
+    <string name="saveAs">다음으로 저장</string>
+    <string name="translate">번역</string>
+
+    <string name="startService">서버 시작</string>
+    <string name="stopService">서버 중지</string>
+    </resources>
