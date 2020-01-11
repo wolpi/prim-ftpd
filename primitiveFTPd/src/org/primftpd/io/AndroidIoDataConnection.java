@@ -22,15 +22,8 @@ public class AndroidIoDataConnection implements DataConnection {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
-
-    private static final byte[] EOL = System.getProperty("line.separator").getBytes();
-    private static final char CR_CHAR = '\r';
-    private static final byte[] CR_BYTES = new String(new char[]{CR_CHAR}).getBytes(Charset.forName("UTF-8"));
-
     private final FtpIoSession session;
-
     private final ServerDataConnectionFactory factory;
-
     private SocketChannel dataSocketChannel;
 
     public AndroidIoDataConnection(final SocketChannel dataSocketChannel, final FtpIoSession session,
