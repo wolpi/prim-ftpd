@@ -21,7 +21,7 @@
 			android:key="passwordPref"
 			android:title="@string/prefTitlePassword"
 			android:summary="@string/prefSummaryPassword"
-			android:password="true"
+			android:inputType="textPassword"
 			/>
 		<SwitchPreference
 			android:name="pubKeyAuth"
@@ -48,7 +48,7 @@
 			android:defaultValue="12345"
 			android:title="@string/prefTitlePort"
 			android:summary="@string/prefSummaryPort"
-			android:numeric="integer"
+			android:inputType="number"
 			/>
 		<org.primftpd.prefs.PortEditTextPreference
 			android:name="sslPort"
@@ -56,7 +56,7 @@
 			android:defaultValue="1234"
 			android:title="@string/prefTitlePortSecure"
 			android:summary="@string/prefSummaryPortSecure"
-			android:numeric="integer"
+			android:inputType="number"
 			/>
 		<org.primftpd.prefs.FtpPassivePortsEditTextPreference
 			android:name="ftpPassivePorts"
