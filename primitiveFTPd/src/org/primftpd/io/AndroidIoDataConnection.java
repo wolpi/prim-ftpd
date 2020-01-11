@@ -190,7 +190,7 @@ public class AndroidIoDataConnection implements DataConnection {
                 if (count < buff.length) {
                     LOG.trace("read less than buffer size in loop '{}', read: {}, diff: {}",
                             new Object[]{loopcnt, count, (buff.length - count)});
-                    LOG.trace("buffer stats, position: {}, limit: {}, capacity: {}, remaining: {}",
+                    LOG.trace("    buffer stats, position: {}, limit: {}, capacity: {}, remaining: {}",
                             new Object[]{buffer.position(), buffer.limit(), buffer.capacity(), buffer.remaining()});
                 }
 
@@ -210,7 +210,7 @@ public class AndroidIoDataConnection implements DataConnection {
 
                 notifyObserver();
 
-                buffer.compact();
+                buffer.clear();
 
                 long read = inCounting.getCount();
                 long written = outCounting.getCount();
