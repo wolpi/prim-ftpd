@@ -63,6 +63,7 @@
 			android:key="ftpPassivePortsPref"
 			android:title="@string/prefTitleFtpPassivePorts"
 			android:summary="@string/prefSummaryFtpPassivePorts"
+			android:defaultValue="5678"
 			/>
 		<EditTextPreference
 			android:name="idleTimeout"

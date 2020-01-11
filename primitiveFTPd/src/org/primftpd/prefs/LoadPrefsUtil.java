@@ -41,6 +41,8 @@ public class LoadPrefsUtil
 	public static final int SECURE_PORT_DEFAULT_VAL = 1234;
 	static final String SECURE_PORT_DEFAULT_VAL_STR =
 		String.valueOf(SECURE_PORT_DEFAULT_VAL);
+	public static final int PORT_PASSIVE_DEFAULT_VAL = 5678;
+	static final String PORT_PASSIVE_DEFAULT_VAL_STR = String.valueOf(PORT_PASSIVE_DEFAULT_VAL);
 
 	/**
 	 * @return Android {@link SharedPreferences} object.
@@ -145,7 +147,7 @@ public class LoadPrefsUtil
 		String passivePorts = null;
 		String prefVal = prefs.getString(
 				LoadPrefsUtil.PREF_KEY_FTP_PASSIVE_PORTS,
-				null);
+				PORT_PASSIVE_DEFAULT_VAL_STR);
 		if (prefVal != null && validateFtpPassivePorts(prefVal)) {
 			passivePorts = prefVal;
 		}
