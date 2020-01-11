@@ -193,16 +193,29 @@ public class NotificationUtil
 		IpAddressProvider ipAddressProvider = new IpAddressProvider();
 		List<String> ipAddressTexts = ipAddressProvider.ipAddressTexts(ctxt, false);
 		for (String ipAddressText : ipAddressTexts) {
+			boolean ipv6 = ipAddressProvider.isIpv6(ipAddressText);
 			if (prefsBean.getServerToStart().startFtp()) {
 				str.append("ftp://");
+				if (ipv6) {
+					str.append("[");
+				}
 				str.append(ipAddressText);
+				if (ipv6) {
+					str.append("]");
+				}
 				str.append(":");
 				str.append(prefsBean.getPortStr());
 				str.append("\n");
 			}
 			if (prefsBean.getServerToStart().startSftp()) {
 				str.append("sftp://");
+				if (ipv6) {
+					str.append("[");
+				}
 				str.append(ipAddressText);
+				if (ipv6) {
+					str.append("]");
+				}
 				str.append(":");
 				str.append(prefsBean.getSecurePortStr());
 				str.append("\n");

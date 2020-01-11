@@ -42,6 +42,9 @@ public class IpAddressProvider {
                     if (inetAddr.isLoopbackAddress()) {
                         continue;
                     }
+                    if (inetAddr.isAnyLocalAddress()) {
+                        continue;
+                    }
 
                     if (hostAddr.contains("::")) {
                         // Don't include the raw encoded names. Just the raw IP addresses.
@@ -68,5 +71,9 @@ public class IpAddressProvider {
             Toast.makeText(ctxt, msg, Toast.LENGTH_SHORT).show();
         }
         return result;
+    }
+
+    public boolean isIpv6(String address) {
+        return address.contains(":");
     }
 }
