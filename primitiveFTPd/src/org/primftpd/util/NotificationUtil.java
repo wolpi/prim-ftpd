@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
@@ -14,6 +15,7 @@ import android.os.Build;
 import org.primftpd.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
+import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.services.ServicesStartingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,8 +194,20 @@ public class NotificationUtil
 		StringBuilder str = new StringBuilder();
 		IpAddressProvider ipAddressProvider = new IpAddressProvider();
 		List<String> ipAddressTexts = ipAddressProvider.ipAddressTexts(ctxt, false);
+
+		SharedPreferences prefs = LoadPrefsUtil.getPrefs(ctxt);
+		Boolean showIpv4 = LoadPrefsUtil.showIpv4InNotification(prefs);
+		Boolean showIpv6 = LoadPrefsUtil.showIpv6InNotification(prefs);
+
 		for (String ipAddressText : ipAddressTexts) {
 			boolean ipv6 = ipAddressProvider.isIpv6(ipAddressText);
+			if (!ipv6 && !showIpv4) {
+				continue;
+			}
+			if (ipv6 && !showIpv6) {
+				continue;
+			}
+
 			if (prefsBean.getServerToStart().startFtp()) {
 				str.append("ftp://");
 				if (ipv6) {

@@ -96,6 +96,20 @@
 			android:summary="@string/prefSummaryShowConnectionInfoInNotification"
 			/>
 		<SwitchPreference
+			android:name="showIpv4InNotification"
+			android:key="showIpv4InNotificationPref"
+			android:defaultValue="true"
+			android:title="@string/prefTitleSshowIpv4InNotification"
+			android:summary="@string/prefSummaryShowIpv4InNotification"
+			/>
+		<SwitchPreference
+			android:name="showIpv6InNotification"
+			android:key="showIpv6InNotificationPref"
+			android:defaultValue="true"
+			android:title="@string/prefTitleSshowIpv6InNotification"
+			android:summary="@string/prefSummaryShowIpv6InNotification"
+			/>
+		<SwitchPreference
 			android:name="showStartStopNotification"
 			android:key="showStartStopNotificationPref"
 			android:defaultValue="false"

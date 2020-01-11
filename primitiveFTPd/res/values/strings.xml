@@ -68,6 +68,10 @@
     <string name="prefSummaryStartOnOpen">Start server when app is opened.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Show connection info in notification</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Shows connection info like IP address in notification.</string>
+    <string name="prefTitleSshowIpv4InNotification">Show IPv4 Addresses in notification</string>
+    <string name="prefSummaryShowIpv4InNotification">Shows IPv4 Addresses in notification if connection info is turned on.</string>
+    <string name="prefTitleSshowIpv6InNotification">Show IPv6 Addresses in notification</string>
+    <string name="prefSummaryShowIpv6InNotification">Shows IPv6 Addresses in notification if connection info is turned on.</string>
     <string name="prefTitleShowStartStopNotification">Show notification to start/stop server(s)</string>
     <string name="prefSummaryShowStartStopNotification">Shows a notification at all time to have another quick way to start/stop server(s).</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>

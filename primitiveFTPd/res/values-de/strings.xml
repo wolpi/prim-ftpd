@@ -67,6 +67,10 @@
     <string name="prefSummaryStartOnOpen">Starte Server beim öffnen der App.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Zeige Konnektivitätsinfo in Benachrichtigung</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Zeige Konnektivitätsinfo wie IP-Adresse in Benachrichtigung.</string>
+    <string name="prefTitleSshowIpv4InNotification">Zeige IPv4 Adressen in Benachrichtigung</string>
+    <string name="prefSummaryShowIpv4InNotification">Zeige IPv4 Adressen in Benachrichtigung falls Konnektivitätsinfo eingeschaltet ist.</string>
+    <string name="prefTitleSshowIpv6InNotification">Zeige IPv6 Adressen in Benachrichtigung</string>
+    <string name="prefSummaryShowIpv6InNotification">Zeige IPv6 Adressen in Benachrichtigung falls Konnektivitätsinfo eingeschaltet ist.</string>
     <string name="prefTitleShowStartStopNotification">Zeige Benachrichtigung um Server zu starten/stopen</string>
     <string name="prefSummaryShowStartStopNotification">Zeige dauerhafte Benachrichtigung um eine weitere Möglichkeit zu haben Server schnell zu starten/stopen.</string>
     <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 public key in %s ab. Nur SFTP.</string>
