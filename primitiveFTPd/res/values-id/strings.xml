@@ -106,4 +106,5 @@
     <string name="startServerAndExit">hanya mulai server</string>
     <string name="startServerAndUi">mulai dengan server</string>
 
+    <string name="pubKeyAuth">Otentikasi kunci publik: %1$b</string>
     </resources>
