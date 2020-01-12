@@ -125,10 +125,10 @@ public class SshServerService extends AbstractServerService
 					String username,
 					String password,
 					ServerSession session) {
-				logger.debug("password auth for user: {}", username);
-				Authentication authentication = AndroidPrefsUserManager.ANONYMOUS_USER_NAME.equals(username)
+				Authentication authentication = prefsBean.isAnonymousLogin()
 					? new AnonymousAuthentication()
 					: new UsernamePasswordAuthentication(username, password);
+				logger.debug("auth type '{}' for user: {}", authentication.getClass().getName(), username);
 				try {
 					userManager.authenticate(authentication);
 				} catch (AuthenticationFailedException e) {
