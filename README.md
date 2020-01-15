@@ -2,7 +2,9 @@
 
 FTP server app for android.
 
+<!--
 [![Build Status](https://travis-ci.org/wolpi/prim-ftpd.png)](https://travis-ci.org/wolpi/prim-ftpd)
+-->
 ![Code Size](https://img.shields.io/github/languages/code-size/wolpi/prim-ftpd.svg?style=popout)
 
 [<img alt="Get it on F-Droid" height="60" src="https://f-droid.org/badge/get-it-on.png" />](https://f-droid.org/app/org.primftpd)
