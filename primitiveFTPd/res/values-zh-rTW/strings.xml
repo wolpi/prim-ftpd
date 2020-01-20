@@ -109,4 +109,10 @@
 
     <string name="startServerAndUi">與伺服器啟動</string>
 
+    <string name="prefTitleSshowIpv4InNotification">在通知中顯示 IPv4 位置</string>
+    <string name="prefSummaryShowIpv4InNotification">如果開啟連線資訊，在通知中顯示 IPv4 位置。</string>
+    <string name="prefTitleSshowIpv6InNotification">在通知中顯示 IPv6 位置</string>
+    <string name="prefSummaryShowIpv6InNotification">如果開啟連線資訊，在通知中顯示 IPv6 位置。</string>
+    <string name="passwordPresent">密碼存在：%1$b</string>
+    <string name="pubKeyAuth">公開金鑰驗證：%1$b</string>
     </resources>
