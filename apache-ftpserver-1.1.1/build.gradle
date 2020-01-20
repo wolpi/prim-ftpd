@@ -12,6 +12,8 @@ subprojects {
     apply plugin: 'maven-publish'
 
     repositories {
+	jcenter()
+/*
         mavenLocal()
         maven {
             url = 'https://repository.apache.org/snapshots'
@@ -20,6 +22,7 @@ subprojects {
         maven {
             url = 'http://repo.maven.apache.org/maven2'
         }
+*/
     }
 
     sourceCompatibility = '1.7'
