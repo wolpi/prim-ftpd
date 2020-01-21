@@ -13,16 +13,6 @@ subprojects {
 
     repositories {
 	jcenter()
-/*
-        mavenLocal()
-        maven {
-            url = 'https://repository.apache.org/snapshots'
-        }
-
-        maven {
-            url = 'http://repo.maven.apache.org/maven2'
-        }
-*/
     }
 
     sourceCompatibility = '1.7'
