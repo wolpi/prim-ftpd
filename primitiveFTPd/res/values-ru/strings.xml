@@ -6,7 +6,7 @@
     <string name="fingerprintsLabel">Ключи авторизации</string>
     <string name="generate">Сгенерировать</string>
     <string name="generateKeysMessage">Сгенерировать ключи?</string>
-    <string name="generatingKeysMessage">Генерация ключей …</string>
+    <string name="generatingKeysMessage">Генерация ключей…</string>
     <string name="haveToSetPassword">Сначала вы должны установить пароль</string>
     <string name="ifacesError">Ошибка:</string>
     <string name="ifacesLabel">Сетевой интерфейс</string>
@@ -114,7 +114,7 @@
     <string name="ftpPassivePortsInvalid">Значение пассивных портов FTP неверно.</string>
 
     <string name="prefsCategoryTitleAuth">Авторизация</string>
-    <string name="prefSummaryShowStartStopNotification">Постоянно отображает уведомление для быстрого запуска/остановки сервера.</string>
+    <string name="prefSummaryShowStartStopNotification">Постоянно отображать уведомление для быстрого запуска/остановки сервера.</string>
     <string name="prefSummaryLoggingV2">Журнал предназначен для анализа ошибок. Если приложение не работает должным образом на вашем устройстве, вы можете отправить журнал разработчикам. Может потребоваться перезапустить приложение. Текстовые журналы хранятся в %s.</string>
     <string name="prefAllowedIpsPattern">Разрешенный шаблон IP</string>
     <string name="prefSummaryAllowedIpsPattern">Шаблон разрешенных IP-адресов. Только один подстановочный знак (*) может использоваться последним.</string>
@@ -122,4 +122,10 @@
     <string name="startServerAndExit">запускать только сервер</string>
     <string name="startServerAndUi">запуск с сервером</string>
 
+    <string name="prefTitleSshowIpv4InNotification">Показывать IPv4 адреса в уведомлении</string>
+    <string name="prefSummaryShowIpv4InNotification">Показывать IPv4-адреса в уведомлении, если включена информация о подключении.</string>
+    <string name="prefTitleSshowIpv6InNotification">Показывать IPv6 адреса в уведомлении</string>
+    <string name="prefSummaryShowIpv6InNotification">Показывать IPv6-адреса в уведомлении, если включена информация о подключении.</string>
+    <string name="passwordPresent">Текущий пароль: %1$b</string>
+    <string name="pubKeyAuth">Открытый ключ аутентификации: %1$b</string>
     </resources>
