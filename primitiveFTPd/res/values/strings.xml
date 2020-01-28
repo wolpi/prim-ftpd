@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Network Interface</string>
     <string name="ipAddrLabel">IP Address</string>
     <string name="ifacesError">Error: </string>
