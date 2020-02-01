@@ -106,6 +106,8 @@ public abstract class RoSafFile<T> extends AbstractFile {
         lastModified = cursor.getLong(2);
         size = cursor.getLong(3);
 
+        logger.trace("    initByCursor, doc id: {}, name: {}", documentId, name);
+
         readable = true;
         exists = true;
 
@@ -217,9 +219,10 @@ public abstract class RoSafFile<T> extends AbstractFile {
                 parentId = DocumentsContract.getTreeDocumentId(startUrl);
             }
 
+            logger.trace("  building children uri for doc: {}, parent: {}", documentId, parentId);
             Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
                     startUrl,
-                    parentId);
+                    documentId);
             Cursor childCursor = contentResolver.query(
                     childrenUri,
                     SAF_QUERY_COLUMNS,
@@ -237,6 +240,18 @@ public abstract class RoSafFile<T> extends AbstractFile {
                 closeQuietly(childCursor);
             }
         }
+        // log result
+        for (T obj : result) {
+            if (obj instanceof AbstractFile) {
+                logger.trace("  returning child '{}'", ((AbstractFile)obj).getName());
+            } else {
+                logger.trace("  returning child of class '{}'", obj.getClass().getName());
+            }
+        }
+        if (result.isEmpty()) {
+            logger.trace("  no children");
+        }
+        // return result
         return result;
     }
 

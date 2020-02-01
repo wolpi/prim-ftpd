@@ -49,6 +49,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             for (int i=0; i<parts.size(); i++) {
                 String currentPart = parts.get(i);
 
+                logger.trace("    building children uri for parent: {}", parentId);
                 Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
                         startUrl,
                         parentId);
@@ -65,8 +66,10 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                     while (childCursor.moveToNext()) {
                         String docId = childCursor.getString(0);
                         String docName = childCursor.getString(1);
+                        logger.trace("    checking current part: {} for doc name: {}", currentPart, docName);
                         if (currentPart.equals(docName)) {
                             if (i == parts.size() - 1) {
+                                logger.trace("    calling createFile() for doc: {}, parent: {}", docName, parentId);
                                 return createFile(contentResolver, startUrl, docId, Utils.toPath(parts));
                             } else {
                                 parentId = docId;
@@ -75,12 +78,15 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                         }
                     }
                     // not found -> probably upload -> create object just with name
-                    return createFileNonExistant(contentResolver, startUrl, currentPart, Utils.toPath(parts));
+                    // -> this breaks navigation for level 2 -> we are read only -> there is no upload anyway
+                    //logger.trace("    calling createFile() for not found doc: {}", currentPart);
+                    //return createFileNonExistant(contentResolver, startUrl, currentPart, Utils.toPath(parts));
                 } finally {
                     closeQuietly(childCursor);
                 }
             }
         }
+        logger.trace("    calling createFile() for root doc: {}", startUrl);
         return createFile(contentResolver, startUrl, ROOT_PATH);
     }
 
