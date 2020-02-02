@@ -51,11 +51,12 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
         shell.waitForIdle();
         LsOutputBean bean = wrapper[0];
         if (bean != null) {
-            if (bean.isLink()) {
-                bean = findFinalLinkTarget(bean, parser);
-                // TODO make sym link target absolute
-                file = bean.getName();
-            }
+            // don't deal with links on your own -> just causes errors, let the OS deal with it
+            //if (bean.isLink()) {
+            //    bean = findFinalLinkTarget(bean, parser);
+            //    // TODO make sym link target absolute
+            //    file = bean.getName();
+            //}
             return createFile(bean, file);
         } else {
             // probably new
