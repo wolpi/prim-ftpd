@@ -6,7 +6,7 @@
     <string name="portLabel">端口</string>
     <string name="fingerprintsLabel">密钥指纹</string>
     <string name="generateKeysMessage">生成新密钥？</string>
-    <string name="generatingKeysMessage">正在生成密钥…</string>
+    <string name="generatingKeysMessage">正在生成密钥 …</string>
     <string name="generate">生成</string>
     <string name="cancel">取消</string>
     <string name="state">状态</string>
@@ -90,7 +90,7 @@
     <string name="prefTitleShowConnectionInfoInNotification">在通知栏中显示连接信息</string>
     <string name="prefSummaryShowConnectionInfoInNotification">在通知栏内显示连接信息，如 IP 地址。</string>
     <string name="prefTitleShowStartStopNotification">显示通知以打开 / 关闭服务器</string>
-    <string name="prefSummaryShowStartStopNotification">推送一个持久通知，以便通过通知栏快速开启 / 关闭服务器。</string>
+    <string name="prefSummaryShowStartStopNotification">推送一个持久通知，以便通过通知栏快速开启或关闭服务器。</string>
     <string name="prefAllowedIpsPattern">IP 白名单</string>
     <string name="prefSummaryLoggingV2">日志可以用于分析错误。如果应用在您的设备上不能正常运行，您可以将日志反馈给开发者。重启应用后生效。日志文本将被保存在 %s。</string>
     <string name="prefSummaryAllowedIpsPattern">仅允许此处指定的客户端 IP 连接服务器。允许在末尾使用单个 * 作为通配符。</string>
@@ -106,4 +106,11 @@
     <string name="startServerAndExit">只启动服务</string>
     <string name="startServerAndUi">启动服务并显示界面</string>
 
+    <string name="prefTitleSshowIpv4InNotification">在通知中显示 IPv4 地址</string>
+    <string name="prefSummaryShowIpv4InNotification">如果启用显示连接信息选项则在通知中显示 IPv4 地址。</string>
+    <string name="prefTitleSshowIpv6InNotification">在通知中显示 IPv6 地址</string>
+    <string name="prefSummaryShowIpv6InNotification">如果启用显示连接信息选项则在通知中显示 IPv6 地址。</string>
+    <string name="passwordPresent">启用密码： %1$b</string>
+    <string name="pubKeyAuth">公钥认证： $1$b</string>
+    <string name="storageTypePlain">旧式文件系统</string>
     </resources>
