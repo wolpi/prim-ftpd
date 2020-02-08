@@ -92,7 +92,7 @@
     <string name="prefTitleShowStartStopNotification">显示通知以打开 / 关闭服务器</string>
     <string name="prefSummaryShowStartStopNotification">推送一个持久通知，以便通过通知栏快速开启或关闭服务器。</string>
     <string name="prefAllowedIpsPattern">IP 白名单</string>
-    <string name="prefSummaryLoggingV2">日志可以用于分析错误。如果应用在您的设备上不能正常运行，您可以将日志反馈给开发者。重启应用后生效。日志文本将被保存在 %s。</string>
+    <string name="prefSummaryLoggingV2">记录错误的分析服务。如果软件在您的设备上不能正常工作，可以向作者发送软件运行记录。可能需要重启软件。文本记录保存在%s。</string>
     <string name="prefSummaryAllowedIpsPattern">仅允许此处指定的客户端 IP 连接服务器。允许在末尾使用单个 * 作为通配符。</string>
 
     <string name="selectServerAction">选择服务器动作</string>
