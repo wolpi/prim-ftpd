@@ -12,6 +12,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 
 import org.primftpd.R;
+import org.primftpd.filepicker.nononsenseapps.Utils;
 import org.primftpd.log.CsvLoggerFactory;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.NotificationUtil;
@@ -101,7 +102,7 @@ public class FtpPrefsFragment extends PreferenceFragment
 
 		if(resultCode == Activity.RESULT_OK) {
 			Uri uri = data.getData();
-			File file = com.nononsenseapps.filepicker.Utils.getFileForUri(uri);
+			File file = Utils.getFileForUri(uri);
 			String path = file.getAbsolutePath();
 			logger.debug("got start dir path: {}", path);
 			startDirPref.setText(path);

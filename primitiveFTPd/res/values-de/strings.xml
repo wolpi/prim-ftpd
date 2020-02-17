@@ -106,6 +106,17 @@
     <string name="startServerAndExit">Starte nur Server</string>
     <string name="startServerAndUi">Starte mit Server</string>
 
+    <string name="filepickerCreateFolderError">Fehler beim Erstellen des Ordners</string>
+    <string name="filepickerNewFolder">Neuer Ordner</string>
+    <string name="filepickerNewFolderOk">@android:string/ok</string>
+    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
+    <string name="filepickerListOk">@android:string/ok</string>
+    <string name="filepickerListCancel">@android:string/cancel</string>
+    <string name="filepickerName">Name</string>
+    <string name="filepickerFilename">Dateiname</string>
+    <string name="filepickerSelectSomethingFirst">Bitte erst etwas ausählen</string>
+    <string name="filepickerNeedValidFilename">Bitte gültigen Dateinamen eingeben oder auswählen</string>
+
     <string-array name="prefWhichServerToStartNames">
         <item>FTP und SFTP</item>
         <item>nur FTP</item>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Specifies theme to apply to the toolbar -->
+    <attr name="filepickerToolbarTheme" format="reference"/>
+    <!-- Color to apply to separator for OK/Cancel buttons -->
+    <attr name="filepickerSeparatorColor" format="color"/>
+    <!-- Color to apply to the save icon -->
+    <attr name="filepickerSaveIconColor" format="color"/>
+    <!-- Color to apply to the directory icons in list -->
+    <attr name="filepickerDirIconColor" format="color"/>
+    <!-- Drawable to use as a divider between list items (optional) -->
+    <attr name="filepickerListItemDivider" format="reference"/>
+</resources>

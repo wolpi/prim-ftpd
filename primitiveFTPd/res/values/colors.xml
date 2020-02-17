@@ -11,4 +11,9 @@
     <color name="widgetBackgroundDisabled">#999b9b9b</color>
     <color name="widgetBackgroundEnabled">#991dcc1c</color>
     <color name="widgetTextColorEnabled">#000000</color>
+
+    <!-- 12% black in LIGHT THEME -->
+    <color name="filepickerLightSeparatorColor">#1e000000</color>
+    <!-- 12% white in BLACK THEME -->
+    <color name="filepickerDarkSeparatorColor">#1effffff</color>
 </resources>

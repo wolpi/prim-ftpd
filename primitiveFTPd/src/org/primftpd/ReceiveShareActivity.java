@@ -9,6 +9,7 @@ import android.support.v4.provider.DocumentFile;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import org.primftpd.filepicker.nononsenseapps.Utils;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Theme;
 import org.primftpd.util.Defaults;
@@ -106,7 +107,7 @@ public class ReceiveShareActivity extends Activity {
 
         if (resultCode == Activity.RESULT_OK) {
             Uri targetUri = data.getData();
-            File targetPath = com.nononsenseapps.filepicker.Utils.getFileForUri(targetUri);
+            File targetPath = Utils.getFileForUri(targetUri);
             logger.debug("targetDir: {}", targetPath);
 
             if (uris != null) {

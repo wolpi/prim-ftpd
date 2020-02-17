@@ -27,6 +27,7 @@ android {
         targetSdkVersion 28
         versionCode 47
         versionName "6.1-SNAPSHOT"
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -82,7 +83,6 @@ dependencies {
     implementation project(':sshd-core-0.14.0')
     implementation 'org.apache.mina:mina-core:2.0.21'
     implementation 'org.greenrobot:eventbus:3.0.0'
-    implementation 'com.nononsenseapps:filepicker:4.2.1'
     implementation 'com.android.support:documentfile:28.0.0'
     implementation 'com.android.support:support-fragment:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'

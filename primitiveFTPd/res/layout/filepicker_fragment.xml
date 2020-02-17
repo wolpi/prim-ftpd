@@ -11,7 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="org.primftpd.filepicker.ResettingFilePickerActivity">
+    tools:context=".filepicker.nononsenseapps.FilePickerActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/filepicker_toolbar"
@@ -59,15 +59,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="@android:string/cancel"/>
-
-            <Button
-                android:id="@+id/button_reset"
-                style="?attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:text="@string/reset"/>
+                android:text="@string/filepickerListCancel"/>
 
             <Button
                 android:id="@+id/filepicker_button_ok"
@@ -75,7 +67,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="@android:string/ok"/>
+                android:text="@string/filepickerListOk"/>
 
         </LinearLayout>
 
@@ -100,7 +92,7 @@
                 style="?attr/borderlessButtonStyle"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:hint="@android:string/ok"
+                android:hint="@string/filepickerListOk"
                 app:srcCompat="@drawable/filepicker_ic_save_black_24dp"
                 android:tint="?attr/filepickerSaveIconColor"/>
 

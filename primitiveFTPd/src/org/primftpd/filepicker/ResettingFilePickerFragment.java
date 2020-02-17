@@ -6,9 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nononsenseapps.filepicker.FilePickerFragment;
-
 import org.primftpd.R;
+import org.primftpd.filepicker.nononsenseapps.FilePickerFragment;
 import org.primftpd.util.Defaults;
 
 public class ResettingFilePickerFragment extends FilePickerFragment {
