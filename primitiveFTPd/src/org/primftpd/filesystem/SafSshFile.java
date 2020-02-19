@@ -1,7 +1,7 @@
 package org.primftpd.filesystem;
 
 import android.content.ContentResolver;
-import android.support.v4.provider.DocumentFile;
+import androidx.documentfile.provider.DocumentFile;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;

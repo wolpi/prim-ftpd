@@ -42,7 +42,7 @@ public class StartStopWidgetProvider extends AppWidgetProvider
 		// set as enabled to make sure we are enabled as broadcast receiver
 		PackageManager pm = context.getPackageManager();
 		pm.setComponentEnabledSetting(
-				new ComponentName("com.example.android.apis", ".StartStopWidgetProvider"),
+				new ComponentName("com.example.android.apis", "org.primftpd.StartStopWidgetProvider"),
 				PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
 				PackageManager.DONT_KILL_APP);
 	}
@@ -56,7 +56,7 @@ public class StartStopWidgetProvider extends AppWidgetProvider
 		// looks weird ...
 		PackageManager pm = context.getPackageManager();
 		pm.setComponentEnabledSetting(
-				new ComponentName("com.example.android.apis", ".StartStopWidgetProvider"),
+				new ComponentName("com.example.android.apis", "org.primftpd.StartStopWidgetProvider"),
 				PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
 				PackageManager.DONT_KILL_APP);
 	}

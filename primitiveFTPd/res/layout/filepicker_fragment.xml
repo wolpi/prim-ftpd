@@ -13,7 +13,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".filepicker.nononsenseapps.FilePickerActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/filepicker_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,9 +29,9 @@
             android:ellipsize="start"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
