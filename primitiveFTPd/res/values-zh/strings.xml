@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="ifacesLabel">网络接口</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ifacesLabel">网络接口</string>
     <string name="ipAddrLabel">IP 地址</string>
     <string name="ifacesError">错误：</string>
     <string name="protocolLabel">协议</string>
@@ -17,12 +18,10 @@
     <string name="quickSettingsServerStarted">pFTPd 运行中…</string>
     <string name="quickSettingsServerStopped">pFTPd 已停止</string>
     <string name="saveAs">另存为</string>
-
     <string name="startService">启动服务器</string>
     <string name="stopService">停止服务器</string>
     <string name="toggleService">服务器启动/停止切换</string>
     <string name="notificationTitle">FTP 服务器</string>
-
     <string name="haveToSetPassword">首先您需要设置密码</string>
     <string name="serverRunning">FTP 服务器正在运行</string>
     <string name="serverCouldNotBeStarted">无法启动服务器！错误信息：</string>
@@ -31,7 +30,6 @@
     <string name="restartServer">请重启服务器以使更改生效。</string>
     <string name="invalidDir">文件夹无效。</string>
     <string name="couldNotReadKeyAuthKey">用于密钥验证的公钥不能被读取。请检查日志。</string>
-
     <string name="prefs">设置</string>
     <string name="prefCategoryTitle">FTP 服务器设置</string>
     <string name="prefTitleUser">用户名</string>
@@ -68,21 +66,16 @@
     <string name="prefSummaryTheme">改变主题需要重启应用。</string>
     <string name="prefTitleLogging">日志</string>
     <string name="prefSummaryLogging">日志可以用于分析错误。如果应用在你的设备上运行不正确，你可以将日志反馈给开发者。重启应用后生效。</string>
-
     <string name="licence">许可</string>
     <string name="reset">重置</string>
-
     <string name="widgetTextStart">启动 (S)FTP 服务</string>
     <string name="widgetTextStop">停止 (S)FTP 服务</string>
     <string name="isAnonymous">匿名登录：%1$b</string>
     <string name="isServerRunning">服务器正在运行吗？</string>
-
     <string name="storageType">存储器访问方式</string>
     <string name="translate">翻译</string>
-
     <string name="haveToSetAuthMechanism">您首先需要选择一种认证方式</string>
     <string name="ftpPassivePortsInvalid">FTP 被动模式端口号无效。</string>
-
     <string name="prefsCategoryTitleAuth">认证</string>
     <string name="prefsCategoryTitleConnectivity">连接</string>
     <string name="prefsCategoryTitleUi">用户界面</string>
@@ -94,7 +87,6 @@
     <string name="prefAllowedIpsPattern">IP 白名单</string>
     <string name="prefSummaryLoggingV2">记录错误的分析服务。如果软件在您的设备上不能正常工作，可以向作者发送软件运行记录。可能需要重启软件。文本记录保存在%s。</string>
     <string name="prefSummaryAllowedIpsPattern">仅允许此处指定的客户端 IP 连接服务器。允许在末尾使用单个 * 作为通配符。</string>
-
     <string name="selectServerAction">选择服务器动作</string>
     <string name="storageTypeRoot">超级用户（需要 root 权限）</string>
     <string name="storageTypeSaf">Android 存储访问框架（SAF），例如访问 SD 卡</string>
@@ -102,10 +94,8 @@
     <string name="safExplainHeading">如何使用 SAF 模式</string>
     <string name="safExplain">在此模式下，Android 将让您选择一个希望访问的路径，服务器只能浏览此路径下的内容。若您重启了设备，应用对这一路径的访问权可能被吊销，您需要重新选择。</string>
     <string name="selectedSafUri">所选的 SAF URI：</string>
-
     <string name="startServerAndExit">只启动服务</string>
     <string name="startServerAndUi">启动服务并显示界面</string>
-
     <string name="prefTitleSshowIpv4InNotification">在通知中显示 IPv4 地址</string>
     <string name="prefSummaryShowIpv4InNotification">如果启用显示连接信息选项则在通知中显示 IPv4 地址。</string>
     <string name="prefTitleSshowIpv6InNotification">在通知中显示 IPv6 地址</string>
@@ -113,4 +103,11 @@
     <string name="passwordPresent">启用密码： %1$b</string>
     <string name="pubKeyAuth">公钥认证： $1$b</string>
     <string name="storageTypePlain">旧式文件系统</string>
-    </resources>
+    <string name="filepickerNeedValidFilename">请输入或选择一个有效的文件名
+\n</string>
+    <string name="filepickerSelectSomethingFirst">请选择</string>
+    <string name="filepickerFilename">文件名</string>
+    <string name="filepickerName">名字</string>
+    <string name="filepickerNewFolder">新建文件夹</string>
+    <string name="filepickerCreateFolderError">创建文件夹失败</string>
+</resources>
