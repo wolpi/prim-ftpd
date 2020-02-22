@@ -4,7 +4,7 @@ android:
   components:
     - tools
     - build-tools-28.0.3
-    - android-28
+    - android-29
     - extra-android-m2repository
   # accepting licenses like this seems not to work
   #licenses:
