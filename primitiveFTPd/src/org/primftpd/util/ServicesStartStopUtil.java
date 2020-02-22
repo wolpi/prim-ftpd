@@ -14,6 +14,7 @@ import android.widget.Toast;
 import org.primftpd.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
+import org.primftpd.StartServerAndExitActivity;
 import org.primftpd.StartStopWidgetProvider;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.remotecontrol.PftpdPowerTogglesPlugin;
@@ -106,10 +107,17 @@ public class ServicesStartStopUtil {
     }
 
     private static void startServerByIntent(Intent intent, Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            context.startForegroundService(intent);
-        } else {
-            context.startService(intent);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                context.startForegroundService(intent);
+            } else {
+                context.startService(intent);
+            }
+        } catch (Exception e) {
+            LOGGER.error("could not start server, using workaround with activity", e);
+            Intent activityIntent = new Intent(context, StartServerAndExitActivity.class);
+            activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(activityIntent);
         }
     }
 

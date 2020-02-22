@@ -214,7 +214,6 @@
 
         <service android:name="org.primftpd.services.FtpServerService" />
         <service android:name="org.primftpd.services.SshServerService" />
-        <service android:name="org.primftpd.services.ServicesStartingService" />
         <service
             android:name=".services.QuickSettingsService"
             android:icon="@drawable/ic_notification"

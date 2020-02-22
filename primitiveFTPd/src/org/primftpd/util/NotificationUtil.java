@@ -15,8 +15,8 @@ import android.os.Build;
 import org.primftpd.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
+import org.primftpd.StartStopWidgetProvider;
 import org.primftpd.prefs.LoadPrefsUtil;
-import org.primftpd.services.ServicesStartingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,8 +63,8 @@ public class NotificationUtil
 		Intent notificationIntent = new Intent(ctxt, PrimitiveFtpdActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(ctxt, 0, notificationIntent, 0);
 
-		Intent stopIntent = new Intent(ctxt, ServicesStartingService.class);
-		PendingIntent pendingStopIntent = PendingIntent.getService(ctxt, 0, stopIntent, 0);
+		Intent stopIntent = StartStopWidgetProvider.buildServerStartStopIntent(ctxt);
+		PendingIntent pendingStopIntent = PendingIntent.getBroadcast(ctxt, 0, stopIntent, 0);
 
 		// create channel
 		createChannel(ctxt, channelId);
