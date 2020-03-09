@@ -891,7 +891,7 @@ public abstract class AbstractFilePickerFragment<T> extends Fragment
             super(v);
             boolean nf = mode == MODE_NEW_FILE;
 
-            checkbox = (CheckBox) v.findViewById(R.id.checkbox);
+            checkbox = (CheckBox) v.findViewById(R.id.filepicker_checkbox);
             checkbox.setVisibility((nf || singleClick) ? View.GONE : View.VISIBLE);
             checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
