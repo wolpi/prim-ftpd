@@ -111,5 +111,7 @@
     <string name="filepickerNewFolder">新建文件夹</string>
     <string name="filepickerCreateFolderError">创建文件夹失败</string>
     <string name="filepickerNewFolderCancel">\@android:string/取消</string>
-    <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="filepickerNewFolderOk">\@android:string/好的</string>
+    <string name="filepickerListCancel">\@android:string/取消</string>
+    <string name="filepickerListOk">\@android:string/好的</string>
 </resources>
