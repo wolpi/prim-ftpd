@@ -1,22 +1,18 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">primitive ftpd</string>
     <string name="ifacesLabel">Interface réseau</string>
     <string name="ipAddrLabel">Adresse IP</string>
     <string name="ifacesError">Erreur :</string>
     <string name="protocolLabel">Protocole</string>
     <string name="portLabel">Port</string>
-        
     <string name="startService">Démarrer le serveur</string>
     <string name="stopService">Arrêter le serveur</string>
     <string name="notificationTitle">Serveur FTP</string>
-
     <string name="haveToSetPassword">Vous devez d\'abord définir un mot de passe</string>
     <string name="serverRunning">Serveur FTP en cours d’exécution</string>
     <string name="serverCouldNotBeStarted">Impossible de démarrer le serveur ! Erreur : </string>
     <string name="restartServer">Vous devez redémarrer le serveur pour que les changements soient pris en compte.</string>
-
     <string name="prefs">Préférences</string>
     <string name="prefTitleUser">Nom d\'utilisateur</string>
     <string name="prefSummaryUser">Nom d\'utilisateur sur le serveur FTP</string>
@@ -40,8 +36,7 @@
     <string name="prefTitleWakelock">Empêcher la mise en veille</string>
     <string name="prefTitleWhichServerToStart">Serveur(s) à démarrer</string>
     <string name="prefSummaryWhichServerToStart">Choisissez de lancer soit le serveur FTP uniquement ou SFTP, ou les deux à la fois.</string>
-
-<string name="permissionNameStorage">Stockage</string>
+    <string name="permissionNameStorage">Stockage</string>
     <string name="quickSettingsServerStarted">pFTPd est en cours d’exécution …</string>
     <string name="saveAs">Sauvegarder comme</string>
     <string name="portInvalid_v2">La valeur du port est invalide. Elle devrait être entre 1024 et 64000.</string>
@@ -59,16 +54,13 @@
     <string name="prefTitleLogging">Journal</string>
     <string name="licence">Licence</string>
     <string name="reset">Réinitialiser</string>
-
     <string name="isAnonymous">Connexion anonyme : %1$b</string>
     <string name="storageType">Type du stockage</string>
     <string name="permissionRequired">La permission \"%1$s\" est requise afin que l\'app puisse fonctionner !</string>
     <string name="quickSettingsServerStopped">pFTPd arrêté</string>
     <string name="translate">Traduire</string>
-
     <string name="haveToSetAuthMechanism">Vous devez configurer au préalable un mécanisme d\'authentification</string>
     <string name="ftpPassivePortsInvalid">La valeur des ports passifs FTP est invalide.</string>
-
     <string name="prefsCategoryTitleAuth">Auth</string>
     <string name="prefsCategoryTitleConnectivity">Connectivité</string>
     <string name="prefsCategoryTitleUi">IU</string>
@@ -77,12 +69,20 @@
     <string name="prefTitleShowConnectionInfoInNotification">Afficher les informations de connexion dans les notifications</string>
     <string name="prefSummaryTheme">Le changement de thème requiert le redémarrage de l\'app.</string>
     <string name="isServerRunning">Est-ce que le serveur fonctionne ?</string>
-
     <string name="storageTypeRoot">Super utilisateur (l\'appareil doit être rooté)</string>
     <string name="startServerAndExit">démarrer uniquement le serveur</string>
     <string name="startServerAndUi">Lancer avec le serveur</string>
-
     <string name="prefSummaryStartDir">Premier dossier après connexion</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Afficher les infos de connexion telles que l\'adresse IP dans les notifications.</string>
     <string name="safExplainHeading">Comment fonctionne SAF</string>
-    </resources>
+    <string name="prefTitleSshowIpv6InNotification">Afficher l\'adresse IPv6 dans la notification</string>
+    <string name="prefSummaryShowIpv4InNotification">Afficher l\'adresse IPv4 dans la notification si les informations de connection sont activées.</string>
+    <string name="prefTitleSshowIpv4InNotification">Afficher l\'adresse IPv4 dans la notification</string>
+    <string name="prefSummaryAnnounceName">Nom du serveur à annoncer</string>
+    <string name="prefTitleStartDir">Dossier de démarrage du serveur</string>
+    <string name="couldNotReadKeyAuthKey">Les clés publiques pour l\'authentification ne peuvent être lue. Vérifiez les logs.</string>
+    <string name="toggleService">Démarrer/Arrêter le serveur</string>
+    <string name="prefSummaryShowStartStopNotification">Montrer la notification permanente pour démarrer/arrêter rapidement le serveur</string>
+    <string name="prefTitleShowStartStopNotification">Afficher la notification pour démarrer/arrêter le serveur</string>
+    <string name="prefSummaryShowIpv6InNotification">Afficher l\'adresse IPv6 dans la notification si les informations de connexion sont activées.</string>
+</resources>
