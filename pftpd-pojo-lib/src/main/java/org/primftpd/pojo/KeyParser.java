@@ -1,5 +1,9 @@
 package org.primftpd.pojo;
 
+import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.jcajce.provider.asymmetric.edec.KeyFactorySpi;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.JCEECPublicKey;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
@@ -20,6 +24,7 @@ import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +40,7 @@ public class KeyParser {
     public static final String NAME_ECDSA_256 = "ecdsa-sha2-nistp256";
     public static final String NAME_ECDSA_384 = "ecdsa-sha2-nistp384";
     public static final String NAME_ECDSA_521 = "ecdsa-sha2-nistp521";
+    public static final String NAME_ED25519 = "ssh-ed25519";
     public static final int LENGTH_LENGTH = 4;
 
     public static final Map<String, Integer> EC_NAME_TO_COORD_SIZE;
@@ -87,6 +93,8 @@ public class KeyParser {
                     key = parsePublicKeyEcdsa(name, keyBytes);
                 } else if (NAME_ECDSA_521.equals(name)) {
                     key = parsePublicKeyEcdsa(name, keyBytes);
+                } else if (NAME_ED25519.equals(name)) {
+                    key = parsePublicKeyEd25519(keyBytes);
                 }
                 if (key != null) {
                     keys.add(key);
@@ -177,5 +185,24 @@ public class KeyParser {
         ECPoint point = curveParaSpecBc.getCurve().createPoint(x, y);
         ECPublicKeySpec pubKeySpec = new ECPublicKeySpec(point, curveParaSpecBc);
         return new JCEECPublicKey("EC", pubKeySpec);
+    }
+
+    private static final int KEY_SIZE_ED25519 = 32;
+    public static PublicKey parsePublicKeyEd25519(byte[] keyBytes)
+            throws IOException {
+
+        if (keyBytes.length > KEY_SIZE_ED25519) {
+            int startIndex = keyBytes.length-KEY_SIZE_ED25519;
+            int endIndex = keyBytes.length;
+            byte[] copy = Arrays.copyOfRange(keyBytes, startIndex, endIndex);
+            keyBytes = copy;
+        }
+
+        KeyFactorySpi factory = new KeyFactorySpi.Ed25519();
+
+        AlgorithmIdentifier algorithmIdentifier = new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519);
+        SubjectPublicKeyInfo pubKeyInfo = new SubjectPublicKeyInfo(algorithmIdentifier, keyBytes);
+
+        return factory.generatePublic(pubKeyInfo);
     }
 }

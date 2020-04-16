@@ -1,6 +1,7 @@
 package org.primftpd.pojo;
 
 import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -71,17 +72,30 @@ public class KeyParserTests {
     }
 
     @Test
+    public void parsePubKeyEd25519() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/keys/ed25519.key.pub");
+
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+
+        for (PublicKey key : keys) {
+            System.out.println("key type: " + key.getClass().getName());
+        }
+        assertsEd25519((BCEdDSAPublicKey)keys.get(0));
+    }
+
+    @Test
     public void parseAuthorizedKeys() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/authorized_keys");
 
         List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
 
-        Assert.assertEquals(5, keys.size());
+        Assert.assertEquals(6, keys.size());
         assertsRsaKey((RSAPublicKey)keys.get(0));
         assertsDsaKey((DSAPublicKey)keys.get(1));
         assertsEcdsaKey((ECPublicKey)keys.get(2));
         assertsEcdsaKey384((ECPublicKey)keys.get(3));
         assertsEcdsaKey521((ECPublicKey)keys.get(4));
+        assertsEd25519((BCEdDSAPublicKey)keys.get(5));
     }
 
     protected void assertsRsaKey(RSAPublicKey pubKey) {
@@ -148,6 +162,18 @@ public class KeyParserTests {
 
         Assert.assertEquals(new BigInteger(x), pubKey.getParams().getGenerator().getAffineX());
         Assert.assertEquals(new BigInteger(y), pubKey.getParams().getGenerator().getAffineY());
+    }
+
+    protected void assertsEd25519(BCEdDSAPublicKey pubKey) {
+        final byte[] expectedKey = new byte[] {
+                48, 42, 48, 5, 6, 3, 43, 101, 112, 3, 33, 0, -32, -9, -50, -49, -58, -103, -34, -12,
+                -45, 16, -112, -11, -12, 122, -48, 77, 113, -56, -128, 63, -17, -94, -56, -49, -104,
+                77, -29, 64, -12, -78, -113, 4,
+        };
+
+        byte[] encoded = pubKey.getEncoded();
+
+        Assert.assertArrayEquals(expectedKey, encoded);
     }
 
     public static class CommonsBase64Decoder implements Base64Decoder {

@@ -12,6 +12,7 @@ import org.apache.ftpserver.util.IoUtils;
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.Session;
+import org.apache.sshd.common.Signature;
 import org.apache.sshd.common.file.FileSystemFactory;
 import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.io.IoSession;
@@ -26,6 +27,7 @@ import org.apache.sshd.server.session.SessionFactory;
 import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.R;
+import org.primftpd.crypto.SignatureEd25519;
 import org.primftpd.filesystem.FsSshFileSystemView;
 import org.primftpd.filesystem.RoSafSshFileSystemView;
 import org.primftpd.filesystem.RootSshFileSystemView;
@@ -182,6 +184,13 @@ public class SshServerService extends AbstractServerService
 				return null;
 			}
 		});
+
+		// ed25519
+		List<NamedFactory<Signature>> origSigFactories = sshServer.getSignatureFactories();
+		List<NamedFactory<Signature>> sigFactories = new ArrayList<>(origSigFactories.size() + 1);
+		sigFactories.addAll(origSigFactories);
+		sigFactories.add(new SignatureEd25519.Factory());
+		sshServer.setSignatureFactories(sigFactories);
 
 		try {
 			// XXX preference to enable shell? seems to need root to access /dev/tty
