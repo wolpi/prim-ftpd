@@ -16,6 +16,8 @@ sourceSets {
 
 jar {
     exclude('org/apache/sshd/common/util/SecurityUtils*')
+    exclude('org/apache/sshd/common/util/Buffer.class')
+    exclude('org/apache/sshd/common/util/Buffer$BufferException.class')
 }
 
 repositories {
