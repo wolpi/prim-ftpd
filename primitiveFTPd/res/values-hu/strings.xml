@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="app_name">primitív ftpd</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">primitív ftpd</string>
     <string name="ifacesLabel">Hálózati felület</string>
     <string name="ipAddrLabel">IP cím</string>
     <string name="ifacesError">Hiba:</string>
@@ -16,13 +17,11 @@
     <string name="permissionRequired">"\"%1$s\"  engedély szükséges ehhez az alkalmazáshoz!"</string>
     <string name="permissionNameStorage">Tárhely</string>
     <string name="quickSettingsServerStarted">pFTPd működik …</string>
-    <string name="quickSettingsServerStopped">pFTPd leállt</string>
+    <string name="quickSettingsServerStopped">pFTPd leálltva</string>
     <string name="saveAs">Mentés másként</string>
-
     <string name="startService">Szerver indítása</string>
     <string name="stopService">Szerver leállítása</string>
     <string name="notificationTitle">FTP szerver</string>
-
     <string name="haveToSetPassword">Először jelszót kell beállítani</string>
     <string name="serverRunning">FTP Szerver működik</string>
     <string name="invalidDir">A könyvtár nem érvényes.</string>
@@ -39,4 +38,80 @@
     <string name="prefTitleAnnounceName">A szerver neve</string>
     <string name="prefSummaryWakelock">Megakadályozza az alvó módba lépést, amíg a szerver fut. Az alvó mód miatt megszakadhatnak a fel- és letöltések.</string>
     <string name="prefTitleAnonymousLogin">Névtelen (anonymous) bejelentkezés</string>
-    </resources>
+    <string name="prefSummaryFtpPassivePorts">FTP passzív adatkapcsolat portjai. Lehet egyetlen port, portok listája vagy sorozata. Például. 5678,5700-5710,5800,5900.</string>
+    <string name="prefSummaryShowStartStopNotification">Minden alkalommal értesítést jelenítsen meg a szerver(ek) indításának / leállításának gyors módjánál.</string>
+    <string name="prefSummaryShowIpv6InNotification">IPv6 címek megjelenítése értesítésként, ha a kapcsolattartási információk be vannak kapcsolva.</string>
+    <string name="prefSummaryShowIpv4InNotification">IPv4 címek megjelenítése értesítésként, ha a kapcsolattartási információk be vannak kapcsolva.</string>
+    <string name="filepickerListCancel">Mégsem</string>
+    <string name="filepickerListOk">OK</string>
+    <string name="filepickerNewFolderCancel">Mégsem</string>
+    <string name="filepickerNewFolderOk">Új mappa OK</string>
+    <string name="prefSummaryAllowedIpsPattern">Az engedélyezett IP-címek alakja. Csak egy helyettesítő karakter (*) használható, és csak utolsó karakterként.</string>
+    <string name="prefAllowedIpsPattern">Engedélyezett IP-mód</string>
+    <string name="prefSummaryLoggingV2">"A napló a hibák elemzését szolgálja. Ha az alkalmazás nem működik megfelelően az eszközén, akkor a naplót elküldheti a fejlesztőknek. Szükség lehet az app újraindítására. A szövegnaplókat  %s tárolja."</string>
+    <string name="prefSummaryLogging">A napló a hibák elemzését szolgálja. Ha az alkalmazás nem működik megfelelően az eszközén, a naplót elküldhei a fejlesztőknek. Ehhez az alkalmazás újraindítására is szükség lehet .</string>
+    <string name="prefSummaryIdleTimeout">A kiszolgáló ezen idő után megszünteti a kapcsolatokat (csak FTP)</string>
+    <string name="prefTitleIdleTimeout">Szerver alap(értelmezett) időtúllépés</string>
+    <string name="prefSummaryAnonymousLogin">Névtelen bejelentkezés engedélyezett-e a szerveren.</string>
+    <string name="prefSummaryPubKeyAuth">Ha engedélyezve van, illessze be %s SSH2 nyilvános kulcsát. Csak SFTP-nél.</string>
+    <string name="prefTitlePubKeyAuth">Nyilvános kulcsos hitelesítés</string>
+    <string name="prefTitleShowStartStopNotification">Értesítés megjelenítése a kiszolgáló(k) indításakor / leállításakor</string>
+    <string name="prefTitleSshowIpv6InNotification">IPv6 cím legyen látható az értesítésben</string>
+    <string name="prefSummaryAnnounce">FTP-kiszolgáló megjelenítése a LAN-on DNS-SD (Bonjour) segítségével. Egyes eszközökön összeomlást okozhat.</string>
+    <string name="prefTitleAnnounce">A szerver legyen látható a LAN-on</string>
+    <string name="filepickerName">Név</string>
+    <string name="isServerRunning">Fut a szerver\?</string>
+    <string name="selectServerAction">Szerver viselkedés kiválasztása</string>
+    <string name="pubKeyAuth">Nyilvános kulcs: %1$b</string>
+    <string name="passwordPresent">Jelenlegi jelszó: %1$b</string>
+    <string name="prefTitleLogging">Log</string>
+    <string name="prefSummaryTheme">A téma megváltoztatásához szükség lehet az alkalmazás újraindítására.</string>
+    <string name="prefTheme">Téma</string>
+    <string name="prefTitleFtpPassivePorts">FTP passzív portok</string>
+    <string name="prefTitleSshowIpv4InNotification">IPv4 cím legyen látható az értesítésben</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">Csatlakozási információk, pl. IP-cím megjelenítésa az értesítésben.</string>
+    <string name="prefTitleShowConnectionInfoInNotification">A kapcsolódási információk megjelenítése az értesítésben</string>
+    <string name="prefSummaryStartOnOpen">Szerver indítása az app menyitásakor</string>
+    <string name="prefTitleStartOnOpen">Szerver indítása az alkalmazás megnyitásakor</string>
+    <string name="prefSummaryStartOnBoot">Szerver indítása a készülékkel együtt.</string>
+    <string name="prefTitleStartOnBoot">Indítás a készülék bekapcsolásakor</string>
+    <string name="prefSummaryWhichServerToStart">az FTP vagy az SFTP szerver vagy mindkettő elindítása</string>
+    <string name="prefTitleWhichServerToStart">Elindítandó szerver(ek)</string>
+    <string name="prefSummaryAnnounceName">A szerver megjelenített neve</string>
+    <string name="prefSummaryPortSecure">FTP szerver port (titkosított)</string>
+    <string name="prefTitlePortSecure">Secure FTP port</string>
+    <string name="prefSummaryPort">FTP szerver port</string>
+    <string name="prefsCategoryTitleAuth">Hitelesítés</string>
+    <string name="translate">Lefordítás</string>
+    <string name="prefsCategoryTitleSystem">Rendszer</string>
+    <string name="prefsCategoryTitleUi">UI - Felhasználói felület</string>
+    <string name="prefsCategoryTitleConnectivity">Elérhetőség</string>
+    <string name="prefs">Tulajdonságok</string>
+    <string name="ftpPassivePortsInvalid">Érvénytelen FTP Passzív port érték</string>
+    <string name="couldNotReadKeyAuthKey">A kulcshitelesítés nyilvános kulcsa nem olvasható. Ellenőrizze a naplókat!</string>
+    <string name="portsEqual_v2">A portok azonosak. Így nem működhet.</string>
+    <string name="serverCouldNotBeStarted">A szerver nem indítható el! Hibaüzenet:</string>
+    <string name="safExplain">Az Android kéri, hogy válassza ki a könyvtárat. Ez a szerver(ek)en keresztül elérhető lesz. Időnként visszavonódhatnak az engedélyek, és újra meg kell őket adnia!</string>
+    <string name="filepickerNeedValidFilename">Kérem írjon be vagy válasszon érvényes fájlnevet!</string>
+    <string name="filepickerSelectSomethingFirst">Kérem először válasszon ki valamit</string>
+    <string name="filepickerFilename">Fájlnév</string>
+    <string name="filepickerNewFolder">Új mappa</string>
+    <string name="filepickerCreateFolderError">Hiba a mappa létrehozásakor</string>
+    <string name="startServerAndUi">Szerver indítása felhasználói felülettel (UI)</string>
+    <string name="startServerAndExit">Csak szerverindítás és kilépés</string>
+    <string name="selectedSafUri">Kiválasztott SAF URI:</string>
+    <string name="storageTypeRoSaf">Csak olvasható SAF (gyorsabb!)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
+\n(pl. SD kártyához)</string>
+    <string name="storageTypeRoot">Super user (root)</string>
+    <string name="storageTypePlain">Egyszerű régi fájlrendszer</string>
+    <string name="storageType">Tároló típus</string>
+    <string name="isAnonymous">belépés Anonymousként</string>
+    <string name="widgetTextStop">(s)ftpd leállítása</string>
+    <string name="widgetTextStart">(s)ftpd indítása</string>
+    <string name="reset">Újraindítás / Reset</string>
+    <string name="licence">Licensz</string>
+    <string name="prefTitleWakelock">Az alvó mód megakadályozása</string>
+    <string name="prefSummaryStartDir">A bejelentkezés utáni első mappa</string>
+    <string name="prefTitleStartDir">A szerver kezdőmappája</string>
+</resources>
