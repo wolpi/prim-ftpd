@@ -28,6 +28,7 @@ android {
         versionCode 50
         versionName "6.4-SNAPSHOT"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -88,4 +89,5 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.0'
 }

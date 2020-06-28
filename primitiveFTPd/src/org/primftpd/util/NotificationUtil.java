@@ -17,6 +17,7 @@ import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.StartStopWidgetProvider;
 import org.primftpd.prefs.LoadPrefsUtil;
+import org.primftpd.services.DownloadsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +27,13 @@ public class NotificationUtil
 {
 	public static final String NOTIFICATION_CHANNEL_ID = "pftpd running";
 	public static final String START_STOP_CHANNEL_ID = "pftpd start/stop";
+	public static final String DOWNLOAD_CHANNEL_ID = "pftpd download";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationUtil.class);
 
 	public static final int NOTIFICATION_ID = 1;
 	public static final int START_STOP_ID = 2;
+	public static final int DOWNLOAD_ID = 3;
 
 	public static void createStatusbarNotification(
 			Context ctxt,
@@ -52,6 +55,12 @@ public class NotificationUtil
 		NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
 				Context.NOTIFICATION_SERVICE);
 		notiMgr.cancel(START_STOP_ID);
+	}
+
+	public static void removeDownloadNotification(Context ctxt) {
+		NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
+				Context.NOTIFICATION_SERVICE);
+		notiMgr.cancel(DOWNLOAD_ID);
 	}
 
 	private static Notification.Builder createStubNotification(
@@ -252,5 +261,92 @@ public class NotificationUtil
 		}
 
 		return str.toString();
+	}
+
+	public static Notification createDownloadNotification(
+			Context ctxt,
+			String filename,
+			String path,
+			boolean canceled,
+			boolean finished,
+			long currentBytes,
+			long size) {
+
+		// create channel
+		createChannel(ctxt, DOWNLOAD_CHANNEL_ID);
+
+		// create notification
+		int iconId = R.drawable.outline_cloud_download_black_18;
+		int stopIconId = R.drawable.ic_stop_white_24dp;
+		CharSequence tickerText;
+		if (canceled) {
+			tickerText = "canceled";
+		} else if (finished) {
+			tickerText = "finished";
+		} else {
+			String sizeStr = size != 0 ? String.valueOf(size) : "unknown";
+			StringBuilder builder = new StringBuilder();
+			builder.append("downloading ... (");
+			builder.append(currentBytes);
+			builder.append(" / ");
+			builder.append(sizeStr);
+			builder.append(")");
+			builder.append("\n");
+			builder.append("to ");
+			builder.append("path");
+			tickerText =  builder.toString();
+		}
+		CharSequence contentTitle = filename;
+		CharSequence contentText = tickerText;
+
+		// use main icon as large one
+		Bitmap largeIcon = BitmapFactory.decodeResource(
+				ctxt.getResources(),
+				R.drawable.outline_cloud_download_black_48);
+
+		long when = System.currentTimeMillis();
+
+		Notification.Builder builder = new Notification.Builder(ctxt)
+				.setTicker(tickerText)
+				.setContentTitle(contentTitle)
+				.setContentText(contentText)
+				.setSmallIcon(iconId)
+				.setLargeIcon(largeIcon)
+				.setWhen(when)
+				.setProgress((int)size, (int)currentBytes, false);
+		addChannel(builder, DOWNLOAD_CHANNEL_ID);
+
+		// intent to open file
+		// -> security exception
+//		Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
+//		openFileIntent.setData(Uri.fromFile(new File(path)));
+//		openFileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		Intent chooserIntent = Intent.createChooser(openFileIntent, "");
+//		PendingIntent pendingChooserIntent = PendingIntent.getBroadcast(ctxt, 0, chooserIntent, 0);
+
+		// intent to stop download
+		if (!canceled && !finished) {
+			// note: need to route stop intent through WidgetProvider to avoid creating another service instance
+			//Intent stopIntent = new Intent(ctxt, DownloadsService.class);
+			Intent stopIntent = new Intent(ctxt, StartStopWidgetProvider.class);
+			stopIntent.setAction(DownloadsService.ACTION_STOP);
+			PendingIntent pendingStopIntent = PendingIntent.getBroadcast(ctxt, 0, stopIntent, 0);
+
+			// notification action
+			//addAction(ctxt, builder, pendingChooserIntent, R.string.open, stopIconId);
+			addAction(ctxt, builder, pendingStopIntent, R.string.cancel, stopIconId);
+		}
+
+		Notification notification;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			notification = builder.build();
+		} else {
+			notification = builder.getNotification();
+		}
+
+		NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
+				Context.NOTIFICATION_SERVICE);
+		notiMgr.notify(DOWNLOAD_ID, notification);
+		return notification;
 	}
 }

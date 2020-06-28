@@ -112,6 +112,11 @@
     <string name="startServerAndExit">start server only</string>
     <string name="startServerAndUi">start with server</string>
 
+    <string name="downloadOrSaveUrlToFile">Download or save URL to text file ?</string>
+    <string name="download">Download</string>
+    <string name="saveToTextFile">Save to text file</string>
+    <string name="open">Open</string>
+
     <string name="filepickerCreateFolderError">Failed to create folder</string>
     <string name="filepickerNewFolder">New folder</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>

@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.documentfile.provider.DocumentFile;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.primftpd.filepicker.nononsenseapps.Utils;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Theme;
+import org.primftpd.ui.DownloadOrSaveDialogFragment;
 import org.primftpd.util.Defaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +24,21 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class ReceiveShareActivity extends Activity {
+import androidx.documentfile.provider.DocumentFile;
+import androidx.fragment.app.FragmentActivity;
+
+public class ReceiveShareActivity extends FragmentActivity {
+
+    public static final String DIALOG_TAG = "dialogs";
+
+    public static final String PREFIX_HTTP = "http://";
+    public static final String PREFIX_HTTPS = "https://";
+
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     private List<Uri> uris;
@@ -71,18 +81,36 @@ public class ReceiveShareActivity extends Activity {
 
         logger.debug("got uris: '{}', contents: '{}'", uris, contents);
 
-        if (uris != null || contents != null) {
-            logger.debug("trying to create intent");
-            try {
-                Intent dirPickerIntent = Defaults.createDirAndFilePicker(getBaseContext());
-                logger.debug("got intent: {}", dirPickerIntent);
-                startActivityForResult(dirPickerIntent, 0);
-            } catch (Exception e) {
-                logger.debug("could not create intent", e);
+        // check for save to file or use download intent
+        List<String> strings = new ArrayList<>();
+        if (contents != null) {
+            strings.addAll(contents);
+        }
+        if (uris != null) {
+            for (Uri uri : uris) {
+                strings.add(uri.toString());
+            }
+        }
+        boolean showDownloadDialog = false;
+        String singleString = null;
+        if (strings.size() == 1) {
+            singleString = strings.get(0);
+            if (singleString.startsWith(PREFIX_HTTP) || singleString.startsWith(PREFIX_HTTPS)) {
+                showDownloadDialog = true;
             }
         }
 
-        // display uris, usually that should not be visible
+        if (showDownloadDialog) {
+            DownloadOrSaveDialogFragment dialog = new DownloadOrSaveDialogFragment();
+            dialog.show(getSupportFragmentManager(), DIALOG_TAG);
+            Bundle diagArgs = new Bundle();
+            diagArgs.putString(DownloadOrSaveDialogFragment.KEY_URL, singleString);
+            dialog.setArguments(diagArgs);
+        } else {
+            prepareSaveToIntent();
+        }
+
+        // display uris, visible for download dialog
         ListView listView = findViewById(android.R.id.list);
         if (uris != null) {
             listView.setAdapter(new ArrayAdapter<>(
@@ -96,6 +124,19 @@ public class ReceiveShareActivity extends Activity {
                     android.R.layout.simple_list_item_1,
                     contents
             ));
+        }
+    }
+
+    public void prepareSaveToIntent() {
+        if (uris != null || contents != null) {
+            logger.debug("trying to create intent");
+            try {
+                Intent dirPickerIntent = Defaults.createDirAndFilePicker(getBaseContext());
+                logger.debug("got intent: {}", dirPickerIntent);
+                startActivityForResult(dirPickerIntent, 0);
+            } catch (Exception e) {
+                logger.debug("could not create intent", e);
+            }
         }
     }
 

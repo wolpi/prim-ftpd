@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import org.primftpd.services.DownloadsService;
 import org.primftpd.util.ServersRunningBean;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
@@ -73,6 +74,8 @@ public class StartStopWidgetProvider extends AppWidgetProvider
 			} else {
 				ServicesStartStopUtil.stopServers(context);
 			}
+		} else if (DownloadsService.ACTION_STOP.equals(action)) {
+			context.stopService(new Intent(context, DownloadsService.class));
 		}
 	}
 
