@@ -7,7 +7,7 @@
     <string name="portLabel">端口</string>
     <string name="fingerprintsLabel">密钥指纹</string>
     <string name="generateKeysMessage">生成新密钥？</string>
-    <string name="generatingKeysMessage">正在生成密钥 …</string>
+    <string name="generatingKeysMessage">生成密钥中 …</string>
     <string name="generate">生成</string>
     <string name="cancel">取消</string>
     <string name="state">状态</string>

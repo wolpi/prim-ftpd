@@ -1,6 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">primitive ftpd</string>
     <string name="ifacesLabel">Netzwerkschnittstelle</string>
     <string name="ipAddrLabel">IP-Adresse</string>
@@ -9,7 +8,7 @@
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Schlüssel-Fingerabdrücke</string>
     <string name="generateKeysMessage">Schlüssel erzeugen?</string>
-    <string name="generatingKeysMessage">Schlüssel werden erzeugt …</string>
+    <string name="generatingKeysMessage">Erzeuge Schlüssel …</string>
     <string name="generate">Erzeugen</string>
     <string name="cancel">Abbrechen</string>
     <string name="state">Status</string>
@@ -21,23 +20,20 @@
     <string name="quickSettingsServerStopped">pFTPd gestoppt</string>
     <string name="saveAs">Speichern unter</string>
     <string name="translate">Übersetzen</string>
-
     <string name="startService">Server starten</string>
     <string name="stopService">Server stoppen</string>
     <string name="toggleService">Server zwischen Start/Stop umschalten</string>
     <string name="notificationTitle">FTP-Server</string>
-
     <string name="haveToSetPassword">Sie müssen erst ein Passwort setzen</string>
     <string name="haveToSetAuthMechanism">Sie müssen erst einen Authentifizierungs-Mechanismus festlegen</string>
     <string name="serverRunning">FTP-Server läuft</string>
     <string name="serverCouldNotBeStarted">Server konnte nicht gestartet werden! Fehlermeldung: </string>
     <string name="portInvalid_v2">Port ist ungültig. Er muss zwischen 1024 und 64000 liegen.</string>
     <string name="portsEqual_v2">Ports sind gleich. Das kann nicht funktionieren.</string>
-    <string name="restartServer">Sie müssen den Server neu starten damit die Änderungen wirksam werden.</string>
+    <string name="restartServer">Sie müssen den Server neu starten, damit die Änderungen wirksam werden.</string>
     <string name="invalidDir">Verzeichnis ist ungültig.</string>
-    <string name="couldNotReadKeyAuthKey">Öffentlicher Schlüssel für key authentication konnte nicht gelesen werden. Prüfen sie die Logs.</string>
+    <string name="couldNotReadKeyAuthKey">Öffentlicher Schlüssel für Authentifizierung konnte nicht gelesen werden. Prüfen Sie die Logs.</string>
     <string name="ftpPassivePortsInvalid">Wert für FTP Passive Ports ist ungültig.</string>
-
     <string name="prefs">Einstellungen</string>
     <string name="prefsCategoryTitleAuth">Auth</string>
     <string name="prefsCategoryTitleConnectivity">Konnektivität</string>
@@ -61,20 +57,20 @@
     <string name="prefSummaryWakelock">Verhindert Standby während der Server läuft. Standby kann dazu führen, dass Up-/Downloads abgebrochen werden.</string>
     <string name="prefTitleWhichServerToStart">Zu startende Server</string>
     <string name="prefSummaryWhichServerToStart">Welche Server sollen gestartet werden: nur FTP-Server, nur SFTP-Server oder beide.</string>
-    <string name="prefTitleStartOnBoot">Start on boot</string>
-    <string name="prefSummaryStartOnBoot">Server beim System-Boot starten.</string>
+    <string name="prefTitleStartOnBoot">Beim Hochfahren starten</string>
+    <string name="prefSummaryStartOnBoot">Server beim Hochfahren des Systems starten.</string>
     <string name="prefTitleStartOnOpen">Start beim Öffnen</string>
-    <string name="prefSummaryStartOnOpen">Starte Server beim öffnen der App.</string>
+    <string name="prefSummaryStartOnOpen">Starte Server beim Öffnen der App.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Zeige Konnektivitätsinfo in Benachrichtigung</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Zeige Konnektivitätsinfo wie IP-Adresse in Benachrichtigung.</string>
     <string name="prefTitleSshowIpv4InNotification">Zeige IPv4 Adressen in Benachrichtigung</string>
     <string name="prefSummaryShowIpv4InNotification">Zeige IPv4 Adressen in Benachrichtigung falls Konnektivitätsinfo eingeschaltet ist.</string>
     <string name="prefTitleSshowIpv6InNotification">Zeige IPv6 Adressen in Benachrichtigung</string>
     <string name="prefSummaryShowIpv6InNotification">Zeige IPv6 Adressen in Benachrichtigung falls Konnektivitätsinfo eingeschaltet ist.</string>
-    <string name="prefTitleShowStartStopNotification">Zeige Benachrichtigung um Server zu starten/stopen</string>
-    <string name="prefSummaryShowStartStopNotification">Zeige dauerhafte Benachrichtigung um eine weitere Möglichkeit zu haben Server schnell zu starten/stopen.</string>
-    <string name="prefSummaryPubKeyAuth">Wenn aktiviert legen sie ihren ssh2 public key in %s ab. Nur SFTP.</string>
-    <string name="prefSummaryAnonymousLogin">Anonymous Login erlauben.</string>
+    <string name="prefTitleShowStartStopNotification">Zeige Benachrichtigung, um Server zu starten/stoppen</string>
+    <string name="prefSummaryShowStartStopNotification">Zeige dauerhafte Benachrichtigung um den Server einfach zu starten/stoppen.</string>
+    <string name="prefSummaryPubKeyAuth">Wenn aktiviert, legen Sie Ihren öffentlichen ssh2 Schlüssel in %s ab. Nur SFTP.</string>
+    <string name="prefSummaryAnonymousLogin">Anonymen Login erlauben.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
     <string name="prefSummaryFtpPassivePorts">Ports für FTP Passive-Daten-Verbindung. Kann ein einzelner Port, eine Liste oder Bereich von Ports sein. Z.B. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Server Idle-Timeout</string>
@@ -85,15 +81,12 @@
     <string name="prefSummaryLoggingV2">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten. Text Logs werden abgelegt in %s.</string>
     <string name="prefAllowedIpsPattern">Erlaubte IPs Pattern</string>
     <string name="prefSummaryAllowedIpsPattern">Pattern der erlaubten IP Adressen. Nur eine Wildcard (*) kann genutzt werden, nur als letztes Zeichen.</string>
-
     <string name="licence">Lizenz</string>
     <string name="reset">Zurücksetzen</string>
-
-    <string name="isAnonymous">Anonymous Login: %1$b</string>
+    <string name="isAnonymous">Anonymer Login: %1$b</string>
     <string name="passwordPresent">Passwort gesetzt: %1$b</string>
     <string name="pubKeyAuth">Public key auth: %1$b</string>
     <string name="selectServerAction">Serveraktion wählen</string>
-
     <string name="storageType">Art des Speichers</string>
     <string name="storageTypePlain">Gutes, altes Dateisystem</string>
     <string name="storageTypeRoot">Super user (Gerät muss gerooted sein)</string>
@@ -102,7 +95,6 @@
     <string name="safExplainHeading">Wie SAF funktioniert</string>
     <string name="safExplain">Android wird sie darum bitten ein Verzeichnis auszuwählen. Dieses wird über die Server verfügbar gemacht. Von Zeit zu Zeit kann die Berechtigung zurückgezogen werden und das Verzeichnis muss erneut ausgewählt werden.</string>
     <string name="selectedSafUri">Ausgewählte SAF-URI:</string>
-
     <string name="startServerAndExit">Starte nur Server</string>
     <string name="startServerAndUi">Starte mit Server</string>
 
@@ -121,24 +113,24 @@
     <string name="filepickerFilename">Dateiname</string>
     <string name="filepickerSelectSomethingFirst">Bitte erst etwas ausählen</string>
     <string name="filepickerNeedValidFilename">Bitte gültigen Dateinamen eingeben oder auswählen</string>
-
     <string-array name="prefWhichServerToStartNames">
         <item>FTP und SFTP</item>
         <item>nur FTP</item>
         <item>nur SFTP</item>
     </string-array>
-
     <string-array name="prefThemeNames">
         <item>Dunkel</item>
         <item>Hell</item>
     </string-array>
-
     <string-array name="prefLoggingNames">
         <item>Kein Log</item>
         <item>In Textdatei loggen</item>
         <item>In Android Log schreiben</item>
     </string-array>
-
-<string name="prefTitleAnonymousLogin">Anonymer Login</string>
+    <string name="prefTitleAnonymousLogin">anonymer Login</string>
     <string name="prefTheme">Design</string>
-    </resources>
+    <string name="prefTitlePubKeyAuth">Public Key Authentifizierung</string>
+    <string name="isServerRunning">Läuft der Server\?</string>
+    <string name="widgetTextStop">Stoppe (s)ftpd</string>
+    <string name="widgetTextStart">Starte (s)ftp</string>
+</resources>
