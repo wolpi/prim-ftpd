@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.UriPermission;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -310,15 +311,19 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 							getContentResolver().releasePersistableUriPermission(Uri.parse(oldUrl), modeFlags);
 						} catch (SecurityException e) {
 							logger.info("SecurityException while calling releasePersistableUriPermission()");
+							logger.trace("", e);
 						}
 					}
 
 					// persist permissions
 					try {
+						grantUriPermission(getPackageName(), uri, modeFlags);
 						getContentResolver().takePersistableUriPermission(uri, modeFlags);
 					} catch (SecurityException e) {
 						logger.info("SecurityException while calling takePersistableUriPermission()");
+						logger.trace("", e);
 					}
+
 					// store uri
 					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
 					LoadPrefsUtil.storeSafUrl(prefs, uriStr);
@@ -340,6 +345,15 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 			boolean hideWarning = true;
 			RadioButton safRadio = findViewById(R.id.radioStorageSaf);
 			if (prefsBean.getStorageType() == StorageType.SAF || prefsBean.getStorageType() == StorageType.RO_SAF) {
+				// let's see if the OS has persisted something for us
+				List<UriPermission> persistedUriPermissions = getContentResolver().getPersistedUriPermissions();
+				for (UriPermission uriPerm : persistedUriPermissions) {
+					logger.debug("persisted uri perm: '{}', pref uri: '{}'", uriPerm.getUri(), prefsBean.getSafUrl());
+				}
+				if (persistedUriPermissions.isEmpty()) {
+					logger.debug("no persisted uri perm");
+				}
+
 				Cursor cursor = null;
 				try {
 					String url = prefsBean.getSafUrl();
@@ -357,6 +371,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 					// this seems to be the normal case for directory uris
 				} catch (SecurityException | NullPointerException e) {
 					logger.debug("checkSafAccess failed: {}", e.toString());
+					logger.trace("", e);
 					hideWarning = false;
 				} finally {
 					if (cursor != null) {
