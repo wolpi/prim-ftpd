@@ -178,8 +178,8 @@ public abstract class FsFile<T> extends AbstractFile {
 						offset,
 						file.getAbsolutePath()
 		});
-		FileInputStream fis = new FileInputStream(file);
-		fis.skip(offset);
-		return new BufferedInputStream(fis, TracingBufferedOutputStream.BUFFER_SIZE);
+		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file), TracingBufferedOutputStream.BUFFER_SIZE);
+		bis.skip(offset);
+		return bis;
 	}
 }

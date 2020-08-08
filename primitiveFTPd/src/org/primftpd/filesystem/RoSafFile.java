@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 
+import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -274,7 +275,9 @@ public abstract class RoSafFile<T> extends AbstractFile {
             Uri uri = DocumentsContract.buildDocumentUriUsingTree(
                     startUrl,
                     documentId);
-            return contentResolver.openInputStream(uri);
+            BufferedInputStream bis = new BufferedInputStream(contentResolver.openInputStream(uri));
+            bis.skip(offset);
+            return bis;
         }
         return null;
     }

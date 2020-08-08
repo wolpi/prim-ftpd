@@ -137,7 +137,9 @@ public abstract class RootFile<T> extends AbstractFile {
             throw new IOException(e);
         }
 
-        return new BufferedInputStream(ddProcess.getInputStream());
+        BufferedInputStream bis = new BufferedInputStream(ddProcess.getInputStream());
+        bis.skip(offset);
+        return bis;
     }
 
     @Override

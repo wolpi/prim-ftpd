@@ -7,6 +7,7 @@ import android.os.Build;
 import android.provider.DocumentsContract;
 import androidx.documentfile.provider.DocumentFile;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -165,7 +166,9 @@ public abstract class SafFile<T> extends AbstractFile {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
 
         if (documentFile != null) {
-            return contentResolver.openInputStream(documentFile.getUri());
+            BufferedInputStream bis = new BufferedInputStream(contentResolver.openInputStream(documentFile.getUri()));
+            bis.skip(offset);
+            return bis;
         }
 
         return null;
