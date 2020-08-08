@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.primftpd.R;
-import org.primftpd.share.ReceiveShareActivity;
+import org.primftpd.share.ReceiveSaveAsActivity;
 import org.primftpd.services.DownloadsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +68,7 @@ public class DownloadOrSaveDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 logger.debug("negative button");
-                ((ReceiveShareActivity) activity).prepareSaveToIntent();
+                ((ReceiveSaveAsActivity) activity).prepareSaveToIntent();
             }
         });
         return builder.create();

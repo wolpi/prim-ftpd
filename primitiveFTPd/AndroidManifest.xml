@@ -132,7 +132,7 @@
         </activity>
 
         <activity
-            android:name="org.primftpd.share.ReceiveShareActivity"
+            android:name="org.primftpd.share.ReceiveSaveAsActivity"
             android:label="@string/saveAs">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

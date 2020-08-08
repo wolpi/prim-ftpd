@@ -33,7 +33,7 @@ import java.util.List;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.FragmentActivity;
 
-public class ReceiveShareActivity extends FragmentActivity {
+public class ReceiveSaveAsActivity extends FragmentActivity {
 
     public static final String DIALOG_TAG = "dialogs";
 
