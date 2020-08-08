@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">простейший ftpd</string>
     <string name="cancel">Отмена</string>
@@ -6,7 +6,7 @@
     <string name="fingerprintsLabel">Ключи авторизации</string>
     <string name="generate">Сгенерировать</string>
     <string name="generateKeysMessage">Сгенерировать ключи?</string>
-    <string name="generatingKeysMessage">Генерация ключей…</string>
+    <string name="generatingKeysMessage">Сгенерировать ключи …</string>
     <string name="haveToSetPassword">Сначала вы должны установить пароль</string>
     <string name="ifacesError">Ошибка:</string>
     <string name="ifacesLabel">Сетевой интерфейс</string>
@@ -24,7 +24,7 @@
     <string name="prefForegroundService">Сервис(ы) на переднем плане</string>
     <string name="prefSummaryAnnounce">Анонсирует FTP-сервер в LAN через DNS-SD (Bonjour). На некоторых устройствах может приводить к закрытию приложения.</string>
     <string name="prefSummaryAnnounceName">Имя, под которым анонсируется сервер.</string>
-    <string name="prefSummaryAnonymousLogin">Установите, если на сервер разрешен анонимный вход.</string>
+    <string name="prefSummaryAnonymousLogin">Отметьте, если на сервер разрешен анонимный вход.</string>
     <string name="prefSummaryForegroundService">Сервис(ы) будут выполняться на переднем плане. Предотвращает остановку сервисов на некоторых устройствах.</string>
     <string name="prefSummaryFtpPassivePorts">Порты для пассивной передачи данных по FTP. Может быть один порт, список или диапазон портов. Например: 5678,5700-5710,5800,5900.</string>
     <string name="prefSummaryLogging">Журнал помогает анализировать ошибки. Если приложение работает на вашем устройстве некорректно, вы можете отправить журнал разработчикам. Может потребоваться перезапуск приложения.</string>
@@ -84,48 +84,54 @@
     <string name="prefSummaryIdleTimeout">Сервер остановится после указанного времени бездействия (только для FTP)</string>
     <string name="prefTitleStartOnOpen">Запуск при открытии</string>
     <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
-
     <string-array name="prefThemeNames">
         <item>Темная</item>
         <item>Светлая</item>
     </string-array>
-
     <string-array name="prefWhichServerToStartNames">
         <item>FTP и SFTP</item>
         <item>Только FTP</item>
         <item>Только SFTP</item>
     </string-array>
-
     <string-array name="prefLoggingNames">
         <item>Без журнала</item>
         <item>Журнал текстовом файле</item>
         <item>Журнал в системе андроид</item>
     </string-array>
-
     <string name="prefsCategoryTitleConnectivity">Связь</string>
     <string name="prefsCategoryTitleUi">Интерфейс</string>
     <string name="prefsCategoryTitleSystem">Система</string>
     <string name="prefTitleShowConnectionInfoInNotification">Показывать информацию о соединении в уведомлении</string>
-    <string name="prefSummaryShowConnectionInfoInNotification">Отображает информацию о подключении, такую как IP-адрес.</string>
-    <string name="prefTitleShowStartStopNotification">Отображение уведомления о запуске/остановке сервера</string>
-<string name="translate">Перевести</string>
-
+    <string name="prefSummaryShowConnectionInfoInNotification">Отображение информации о подключении (напр. IP-адрес).</string>
+    <string name="prefTitleShowStartStopNotification">Показывать уведомление о запуске/остановке сервера(ов)</string>
+    <string name="translate">Перевести</string>
     <string name="haveToSetAuthMechanism">Сначала необходимо выбрать механизм авторизации</string>
     <string name="ftpPassivePortsInvalid">Значение пассивных портов FTP неверно.</string>
-
     <string name="prefsCategoryTitleAuth">Авторизация</string>
     <string name="prefSummaryShowStartStopNotification">Постоянно отображать уведомление для быстрого запуска/остановки сервера.</string>
     <string name="prefSummaryLoggingV2">Журнал предназначен для анализа ошибок. Если приложение не работает должным образом на вашем устройстве, вы можете отправить журнал разработчикам. Может потребоваться перезапустить приложение. Текстовые журналы хранятся в %s.</string>
     <string name="prefAllowedIpsPattern">Разрешенный шаблон IP</string>
     <string name="prefSummaryAllowedIpsPattern">Шаблон разрешенных IP-адресов. Только один подстановочный знак (*) может использоваться последним.</string>
-
     <string name="startServerAndExit">запускать только сервер</string>
     <string name="startServerAndUi">запуск с сервером</string>
-
-    <string name="prefTitleSshowIpv4InNotification">Показывать IPv4 адреса в уведомлении</string>
+    <string name="prefTitleSshowIpv4InNotification">Показывать IPv4-адреса в уведомлении</string>
     <string name="prefSummaryShowIpv4InNotification">Показывать IPv4-адреса в уведомлении, если включена информация о подключении.</string>
-    <string name="prefTitleSshowIpv6InNotification">Показывать IPv6 адреса в уведомлении</string>
+    <string name="prefTitleSshowIpv6InNotification">Показывать IPv6-адреса в уведомлении</string>
     <string name="prefSummaryShowIpv6InNotification">Показывать IPv6-адреса в уведомлении, если включена информация о подключении.</string>
     <string name="passwordPresent">Текущий пароль: %1$b</string>
     <string name="pubKeyAuth">Открытый ключ аутентификации: %1$b</string>
-    </resources>
+    <string name="filepickerNewFolderCancel">\@android:string/отмена</string>
+    <string name="filepickerCreateFolderError">Не удалось создать папку</string>
+    <string name="filepickerNeedValidFilename">Пожалуйста, введите или выберите допустимое имя файла</string>
+    <string name="filepickerSelectSomethingFirst">Пожалуйста, сначала выберите что-нибудь</string>
+    <string name="filepickerFilename">Имя файла</string>
+    <string name="filepickerName">Название</string>
+    <string name="filepickerListCancel">\@android:string/отмена</string>
+    <string name="filepickerListOk">\@android:string/ok</string>
+    <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="filepickerNewFolder">Новая папка</string>
+    <string name="open">Открыть</string>
+    <string name="saveToTextFile">Сохранить в текстовый файл</string>
+    <string name="download">Скачать</string>
+    <string name="downloadOrSaveUrlToFile">Скачать или сохранить URL в текстовый файл \?</string>
+</resources>
