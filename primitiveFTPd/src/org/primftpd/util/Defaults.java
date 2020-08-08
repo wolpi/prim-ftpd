@@ -19,10 +19,17 @@ public final class Defaults {
 	public static final File HOME_DIR = Environment.getExternalStorageDirectory();
 	public static final File DOWNLOADS_DIR = Environment.getExternalStoragePublicDirectory(
 			Environment.DIRECTORY_DOWNLOADS);
-	public static final String PUB_KEY_AUTH_KEY_PATH =
-		HOME_DIR.getAbsolutePath() + "/.ssh/authorized_keys";
 	public static final String PUB_KEY_AUTH_KEY_PATH_OLD =
+		HOME_DIR.getAbsolutePath() + "/.ssh/authorized_keys";
+	public static final String PUB_KEY_AUTH_KEY_PATH_OLDER =
 			HOME_DIR.getAbsolutePath() + "/.ssh/authorized_key.pub";
+
+	public static File homeDirScoped(Context ctxt) {
+		return ctxt.getExternalFilesDir(null);
+	}
+	public static String pubKeyAuthKeyPath(Context ctxt) {
+		return homeDirScoped(ctxt).getAbsolutePath() + "/.ssh/authorized_keys";
+	}
 
 	public static Intent createDefaultDirPicker(Context ctxt) {
 		return createDefaultDirPicker(ctxt, HOME_DIR);

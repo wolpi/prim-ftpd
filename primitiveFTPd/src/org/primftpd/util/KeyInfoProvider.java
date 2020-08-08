@@ -21,7 +21,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -150,8 +150,6 @@ public class KeyInfoProvider
 				}
 			}
 		}
-		// there might be more keys added to this list, so don't use emptyList()
-		// see GH issue #68
-		return keys != null ? keys : new ArrayList<PublicKey>();
+		return keys != null ? keys : Collections.<PublicKey>emptyList();
 	}
 }

@@ -620,7 +620,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 			handleAbout();
 			break;
 		case R.id.menu_exit:
-			finish();
+			handleExit();
 			break;
 		}
 
@@ -720,6 +720,11 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		startActivity(intent);
 	}
 
+	protected void handleExit() {
+		logger.trace("handleExit()");
+		android.os.Process.killProcess(android.os.Process.myPid());
+		System.exit(1);
+	}
 	/**
 	 * Loads and parses preferences.
 	 *

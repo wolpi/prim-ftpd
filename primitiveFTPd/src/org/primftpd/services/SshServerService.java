@@ -143,11 +143,16 @@ public class SshServerService extends AbstractServerService
 		}
 
 		if (prefsBean.isPubKeyAuth()) {
-			String pubKeyPath = Defaults.PUB_KEY_AUTH_KEY_PATH;
-			String pubKeyPathOld = Defaults.PUB_KEY_AUTH_KEY_PATH_OLD;
+			String[] keyPaths = new String[] {
+					Defaults.pubKeyAuthKeyPath(getApplicationContext()),
+					Defaults.PUB_KEY_AUTH_KEY_PATH_OLD,
+					Defaults.PUB_KEY_AUTH_KEY_PATH_OLDER,
+			};
 			KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
-			final List<PublicKey> pubKeys = keyInfoProvider.readKeyAuthKeys(pubKeyPath, false);
-			pubKeys.addAll(keyInfoProvider.readKeyAuthKeys(pubKeyPathOld, true));
+			final List<PublicKey> pubKeys = new ArrayList<>();
+			for (String keyPath : keyPaths) {
+				pubKeys.addAll(keyInfoProvider.readKeyAuthKeys(keyPath, true));
+			}
 			logger.info("loaded {} keys for public key auth", pubKeys.size());
 			if (!pubKeys.isEmpty()) {
 				sshServer.setPublickeyAuthenticator(new PubKeyAuthenticator(pubKeys));

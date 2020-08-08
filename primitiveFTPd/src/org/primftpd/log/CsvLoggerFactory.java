@@ -15,13 +15,16 @@ import java.util.TreeSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import org.primftpd.util.Defaults;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 
-import android.os.Environment;
+import android.content.Context;
 
 public class CsvLoggerFactory implements ILoggerFactory
 {
+	public static Context CONTEXT;
+
 	public static final String LOGFILE_BASENAME = "prim-ftpd-log-";
 	private static final int NUM_LOGFILES_TO_KEEP = 3;
 	private static DateFormat FILENAME_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -62,7 +65,9 @@ public class CsvLoggerFactory implements ILoggerFactory
 	}
 
 	private PrintStream findFile() throws FileNotFoundException {
-		File dir = Environment.getExternalStorageDirectory();
+		File dir = CONTEXT != null
+				? Defaults.homeDirScoped(CONTEXT)
+				: Defaults.HOME_DIR;
 		cleanOldFiles(dir);
 
 		String filename = LOGFILE_BASENAME + FILENAME_DATEFORMAT.format(new Date()) + ".csv";

@@ -1,6 +1,7 @@
 package org.primftpd.prefs;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -48,14 +49,17 @@ public class FtpPrefsFragment extends PreferenceFragment
 			prefCat.removePreference(showConnInfoPref);
 		}
 
+		// context
+		final Context context = getActivity().getApplicationContext();
+
 		// text parameter for pub key auth pref
 		Resources res = getResources();
-		String text = String.format(res.getString(R.string.prefSummaryPubKeyAuth), Defaults.PUB_KEY_AUTH_KEY_PATH);
+		String text = String.format(res.getString(R.string.prefSummaryPubKeyAuth), Defaults.pubKeyAuthKeyPath(context));
 		Preference pubKeyAuthPref = findPreference(LoadPrefsUtil.PREF_KEY_PUB_KEY_AUTH);
 		pubKeyAuthPref.setSummary(text);
 
 		// text parameter for logging pref
-		String textLogsPath = Defaults.HOME_DIR + "/" + CsvLoggerFactory.LOGFILE_BASENAME + "*";
+		String textLogsPath = Defaults.homeDirScoped(context) + "/" + CsvLoggerFactory.LOGFILE_BASENAME + "*";
 		if (textLogsPath.contains("//")) {
 			textLogsPath = textLogsPath.replaceAll("//", "/");
 		}
@@ -87,7 +91,7 @@ public class FtpPrefsFragment extends PreferenceFragment
 
 				File startDirVal = LoadPrefsUtil.startDir(startDirPref.getSharedPreferences());
 				logger.debug("using initial start dir val: {}", startDirVal);
-				Intent dirPickerIntent = Defaults.createDefaultDirPicker(getActivity().getApplicationContext(), startDirVal);
+				Intent dirPickerIntent = Defaults.createDefaultDirPicker(context, startDirVal);
 				startActivityForResult(dirPickerIntent, 0);
 
 				return false;
