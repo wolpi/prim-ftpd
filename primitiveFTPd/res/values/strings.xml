@@ -81,6 +81,7 @@
     <string name="prefSummaryFtpPassivePorts">Ports for FTP passive data connection. May be a single port, a list or range of ports. E.g. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Server Idle Timeout</string>
     <string name="prefSummaryIdleTimeout">Server will terminate idle connections after this time (FTP only)</string>
+    <string name="prefSummaryIdleTimeoutV2">Server will terminate idle connections after this time. Set to 0 to disable.</string>
     <string name="prefTheme">Theme</string>
     <string name="prefSummaryTheme">Changing Theme may require to restart the app.</string>
     <string name="prefTitleLogging">Log</string>

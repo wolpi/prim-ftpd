@@ -69,7 +69,8 @@
 			android:name="idleTimeout"
 			android:key="idleTimeoutPref"
 			android:title="@string/prefTitleIdleTimeout"
-			android:summary="@string/prefSummaryIdleTimeout"
+			android:summary="@string/prefSummaryIdleTimeoutV2"
+			android:defaultValue="0"
 			android:numeric="integer"
 			/>
 		<EditTextPreference

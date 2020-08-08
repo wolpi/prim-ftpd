@@ -197,6 +197,9 @@ public class SshServerService extends AbstractServerService
 		sigFactories.add(new SignatureEd25519.Factory());
 		sshServer.setSignatureFactories(sigFactories);
 
+		// idle timeout
+		sshServer.getProperties().put(SshServer.IDLE_TIMEOUT, String.valueOf(prefsBean.getIdleTimeout()));
+
 		try {
 			// XXX preference to enable shell? seems to need root to access /dev/tty
 //			sshServer.setShellFactory(new ProcessShellFactory(new String[] {

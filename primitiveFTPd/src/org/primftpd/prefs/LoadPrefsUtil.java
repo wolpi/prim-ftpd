@@ -45,6 +45,8 @@ public class LoadPrefsUtil
 		String.valueOf(SECURE_PORT_DEFAULT_VAL);
 	public static final int PORT_PASSIVE_DEFAULT_VAL = 5678;
 	static final String PORT_PASSIVE_DEFAULT_VAL_STR = String.valueOf(PORT_PASSIVE_DEFAULT_VAL);
+	public static final int IDLE_TIMEOUT_DEFAULT_VAL = 0;
+	static final String IDLE_TIMEOUT_DEFAULT_VAL_STR = String.valueOf(IDLE_TIMEOUT_DEFAULT_VAL);
 
 	/**
 	 * @return Android {@link SharedPreferences} object.
@@ -169,8 +171,8 @@ public class LoadPrefsUtil
 	}
 
 	public static Integer idleTimeout(SharedPreferences prefs) {
-		String str = prefs.getString(PREF_KEY_IDLE_TIMEOUT, "");
-		Integer val = null;
+		String str = prefs.getString(PREF_KEY_IDLE_TIMEOUT, IDLE_TIMEOUT_DEFAULT_VAL_STR);
+		Integer val = IDLE_TIMEOUT_DEFAULT_VAL;
 		if (str != null && str.length() > 0) {
 			try {
 				val = Integer.valueOf(str);
