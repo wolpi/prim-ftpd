@@ -80,8 +80,10 @@ public abstract class AbstractFile {
     }
 
     public boolean isHidden() {
-        logger.trace("[{}] isHidden()", name);
-        return name.charAt(0) == '.';
+        //boolean result = name.charAt(0) == '.';
+        boolean result = false;
+        logger.trace("[{}] isHidden() -> {}", name, result);
+        return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////

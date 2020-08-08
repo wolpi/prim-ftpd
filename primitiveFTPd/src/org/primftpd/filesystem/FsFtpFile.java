@@ -43,7 +43,9 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 
 	@Override
 	public boolean isHidden() {
-		logger.trace("[{}] isHidden()", name);
-		return file.isHidden();
+		//boolean result = file.isHidden();
+		//logger.trace("[{}] isHidden() -> {}", name, result);
+		//return result;
+		return super.isHidden();
 	}
 }
