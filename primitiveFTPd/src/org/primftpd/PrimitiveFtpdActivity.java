@@ -87,6 +87,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0xBEEF;
 	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING = 0xCAFE;
+	private static final int REQUEST_CODE_SAF_PERM = 1234;
 
 	public static final String DIALOG_TAG = "dialogs";
 
@@ -270,11 +271,11 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 					break;
 				case R.id.radioStorageSaf:
 					storageType = StorageType.SAF;
-					startActivityForResult(intent, 0);
+					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
 					break;
 				case R.id.radioStorageRoSaf:
 					storageType = StorageType.RO_SAF;
-					startActivityForResult(intent, 0);
+					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
 					break;
 			}
 		} catch (ActivityNotFoundException e) {
@@ -293,8 +294,9 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	    super.onActivityResult(requestCode, resultCode, intent);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+			if (requestCode == REQUEST_CODE_SAF_PERM && resultCode == Activity.RESULT_OK) {
 				if (intent != null) {
 					Uri uri = intent.getData();
 					String uriStr = uri.toString();
