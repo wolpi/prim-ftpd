@@ -132,7 +132,7 @@
         </activity>
 
         <activity
-            android:name="org.primftpd.ReceiveShareActivity"
+            android:name="org.primftpd.share.ReceiveShareActivity"
             android:label="@string/saveAs">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -197,7 +197,7 @@
         </activity>
 
         <activity
-            android:name="org.primftpd.StartServerAndExitActivity"
+            android:name="org.primftpd.ui.StartServerAndExitActivity"
             android:label="@string/startService">
             <intent-filter>
                 <!-- be invokable by other apps (e.g. Automate) but not listed in main menu -->
@@ -206,7 +206,7 @@
         </activity>
 
         <activity
-            android:name="org.primftpd.StopServerAndExitActivity"
+            android:name="org.primftpd.ui.StopServerAndExitActivity"
             android:label="@string/stopService">
             <intent-filter>
                 <!-- be invokable by other apps (e.g. Automate) but not listed in main menu -->

@@ -1,6 +1,6 @@
 package org.primftpd.util;
 
-import org.primftpd.PrefsBean;
+import org.primftpd.prefs.PrefsBean;
 import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;

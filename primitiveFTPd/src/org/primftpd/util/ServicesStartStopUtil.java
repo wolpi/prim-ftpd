@@ -11,10 +11,10 @@ import android.os.Build;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import org.primftpd.PrefsBean;
+import org.primftpd.prefs.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
-import org.primftpd.StartServerAndExitActivity;
+import org.primftpd.ui.StartServerAndExitActivity;
 import org.primftpd.StartStopWidgetProvider;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.remotecontrol.PftpdPowerTogglesPlugin;

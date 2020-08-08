@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import org.apache.ftpserver.impl.PassivePorts;
-import org.primftpd.PrefsBean;
 import org.primftpd.util.Defaults;
 import org.slf4j.Logger;
 

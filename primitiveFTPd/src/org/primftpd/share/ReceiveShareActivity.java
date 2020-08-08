@@ -1,4 +1,4 @@
-package org.primftpd;
+package org.primftpd.share;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import org.primftpd.R;
 import org.primftpd.filepicker.nononsenseapps.Utils;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Theme;

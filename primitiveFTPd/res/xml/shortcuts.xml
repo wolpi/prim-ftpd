@@ -22,6 +22,6 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="org.primftpd"
-            android:targetClass="org.primftpd.StartServerAndExitActivity" />
+            android:targetClass="org.primftpd.ui.StartServerAndExitActivity" />
     </shortcut>
 </shortcuts>

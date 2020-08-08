@@ -1,7 +1,4 @@
-package org.primftpd;
-
-import org.primftpd.prefs.ServerToStart;
-import org.primftpd.prefs.StorageType;
+package org.primftpd.prefs;
 
 import java.io.File;
 import java.io.Serializable;

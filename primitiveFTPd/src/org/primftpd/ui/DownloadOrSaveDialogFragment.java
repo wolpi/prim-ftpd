@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.primftpd.R;
-import org.primftpd.ReceiveShareActivity;
+import org.primftpd.share.ReceiveShareActivity;
 import org.primftpd.services.DownloadsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

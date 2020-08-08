@@ -1,4 +1,4 @@
-package org.primftpd;
+package org.primftpd.services;
 
 import android.os.Environment;
 
@@ -14,6 +14,7 @@ import org.apache.ftpserver.usermanager.impl.BaseUser;
 import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
+import org.primftpd.prefs.PrefsBean;
 import org.primftpd.util.EncryptionUtil;
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;

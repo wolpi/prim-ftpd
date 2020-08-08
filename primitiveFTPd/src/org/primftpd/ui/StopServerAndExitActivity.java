@@ -1,4 +1,4 @@
-package org.primftpd;
+package org.primftpd.ui;
 
 import android.app.Activity;
 import android.content.Context;

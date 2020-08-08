@@ -25,7 +25,6 @@ import org.apache.sshd.server.command.ScpCommandFactory;
 import org.apache.sshd.server.session.ServerSession;
 import org.apache.sshd.server.session.SessionFactory;
 import org.apache.sshd.server.sftp.SftpSubsystem;
-import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.R;
 import org.primftpd.crypto.SignatureEd25519;
 import org.primftpd.filesystem.FsSshFileSystemView;

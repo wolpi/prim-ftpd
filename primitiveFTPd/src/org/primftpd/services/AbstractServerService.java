@@ -16,9 +16,8 @@ import android.os.Process;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
-import org.primftpd.PrefsBean;
+import org.primftpd.prefs.PrefsBean;
 import org.primftpd.R;
-import org.primftpd.ServerStateChangedEvent;
 import org.primftpd.util.KeyFingerprintProvider;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;

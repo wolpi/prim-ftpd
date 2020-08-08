@@ -14,7 +14,6 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ipfilter.SessionFilter;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.mina.core.session.IoSession;
-import org.primftpd.AndroidPrefsUserManager;
 import org.primftpd.filesystem.FsFtpFileSystemView;
 import org.primftpd.filesystem.RoSafFtpFileSystemView;
 import org.primftpd.filesystem.RootFtpFileSystemView;
