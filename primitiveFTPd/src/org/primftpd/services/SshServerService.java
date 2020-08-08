@@ -85,7 +85,7 @@ public class SshServerService extends AbstractServerService
 	protected void stopServer()
 	{
 		try {
-			sshServer.stop();
+			sshServer.stop(true);
 		} catch (InterruptedException e) {
 			logger.error("could not stop ssh server", e);
 		}
