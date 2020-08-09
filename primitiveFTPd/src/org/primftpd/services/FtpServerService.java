@@ -9,18 +9,19 @@ import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ipfilter.SessionFilter;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.mina.core.session.IoSession;
 import org.primftpd.filesystem.FsFtpFileSystemView;
+import org.primftpd.filesystem.QuickShareFtpFileSystemView;
 import org.primftpd.filesystem.RoSafFtpFileSystemView;
 import org.primftpd.filesystem.RootFtpFileSystemView;
 import org.primftpd.filesystem.SafFtpFileSystemView;
 import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
 
+import java.io.File;
 import java.net.SocketAddress;
 
 import eu.chainfire.libsuperuser.Shell;
@@ -96,23 +97,30 @@ public class FtpServerService extends AbstractServerService
 		serverFactory.setUserManager(new AndroidPrefsUserManager(prefsBean));
 		serverFactory.setFileSystem(new FileSystemFactory() {
 			@Override
-			public FileSystemView createFileSystemView(User user) throws FtpException {
-				switch (prefsBean.getStorageType()) {
-					case PLAIN:
-						return new FsFtpFileSystemView(prefsBean.getStartDir(), user);
-					case ROOT:
-						return new RootFtpFileSystemView(shell, prefsBean.getStartDir(), user);
-					case SAF:
-						return new SafFtpFileSystemView(
-								getApplicationContext(),
-								Uri.parse(prefsBean.getSafUrl()),
-								getContentResolver(),
-								user);
-					case RO_SAF:
-						return new RoSafFtpFileSystemView(
-								Uri.parse(prefsBean.getSafUrl()),
-								getContentResolver(),
-								user);
+			public FileSystemView createFileSystemView(User user) {
+				if (quickShareBean != null) {
+					logger.debug("launching server in quick share mode");
+					return new QuickShareFtpFileSystemView(
+							new File(quickShareBean.getPathToFile()),
+							user);
+				} else {
+					switch (prefsBean.getStorageType()) {
+						case PLAIN:
+							return new FsFtpFileSystemView(prefsBean.getStartDir(), user);
+						case ROOT:
+							return new RootFtpFileSystemView(shell, prefsBean.getStartDir(), user);
+						case SAF:
+							return new SafFtpFileSystemView(
+									getApplicationContext(),
+									Uri.parse(prefsBean.getSafUrl()),
+									getContentResolver(),
+									user);
+						case RO_SAF:
+							return new RoSafFtpFileSystemView(
+									Uri.parse(prefsBean.getSafUrl()),
+									getContentResolver(),
+									user);
+					}
 				}
 				return null;
 			}

@@ -129,6 +129,10 @@
     <string name="filepickerSelectSomethingFirst">Please select something first</string>
     <string name="filepickerNeedValidFilename">Please enter or select a valid filename</string>
 
+    <string name="quickShare">Quick Share</string>
+    <string name="quickShareServerStarted">Server has been started sharing single file</string>
+    <string name="quickShareCouldNotStartServer">Server could not be started</string>
+
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
         <item>FTP only</item>

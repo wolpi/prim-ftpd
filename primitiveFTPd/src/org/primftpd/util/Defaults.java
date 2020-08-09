@@ -30,6 +30,9 @@ public final class Defaults {
 	public static String pubKeyAuthKeyPath(Context ctxt) {
 		return homeDirScoped(ctxt).getAbsolutePath() + "/.ssh/authorized_keys";
 	}
+	public static File quickShareTmpDir(Context ctxt) {
+		return new File(homeDirScoped(ctxt), "quick-share");
+	}
 
 	public static Intent createDefaultDirPicker(Context ctxt) {
 		return createDefaultDirPicker(ctxt, HOME_DIR);

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
+import org.primftpd.share.QuickShareBean;
 import org.primftpd.ui.StartServerAndExitActivity;
 import org.primftpd.StartStopWidgetProvider;
 import org.primftpd.prefs.LoadPrefsUtil;
@@ -33,13 +34,18 @@ public class ServicesStartStopUtil {
 
     public static final String EXTRA_PREFS_BEAN = "prefs.bean";
     public static final String EXTRA_FINGERPRINT_PROVIDER = "fingerprint.provider";
+    public static final String EXTRA_QUICK_SHARE_BEAN = "quick.share.bean";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServicesStartStopUtil.class);
 
     public static void startServers(Context context) {
+        startServers(context, null);
+    }
+
+    public static void startServers(Context context, QuickShareBean quickShareBean) {
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
         PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(LOGGER, prefs);
-        startServers(context, prefsBean, new KeyFingerprintProvider(), null);
+        startServers(context, prefsBean, new KeyFingerprintProvider(), null, quickShareBean);
     }
 
     public static void startServers(
@@ -47,6 +53,14 @@ public class ServicesStartStopUtil {
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider,
             PrimitiveFtpdActivity activity) {
+        startServers(context, prefsBean, keyFingerprintProvider, activity, null);
+    }
+    public static void startServers(
+            Context context,
+            PrefsBean prefsBean,
+            KeyFingerprintProvider keyFingerprintProvider,
+            PrimitiveFtpdActivity activity,
+            QuickShareBean quickShareBean) {
         LOGGER.trace("startServers()");
 
         if (!isPasswordOk(prefsBean)) {
@@ -77,7 +91,7 @@ public class ServicesStartStopUtil {
                 if (keyPresent) {
                     LOGGER.debug("going to start sshd");
                     try {
-                        Intent intent = createSshServiceIntent(context, prefsBean, keyFingerprintProvider);
+                        Intent intent = createSshServiceIntent(context, prefsBean, keyFingerprintProvider, quickShareBean);
                         startServerByIntent(intent, context);
                     } catch (Exception e) {
                         LOGGER.error("could not start sftp server", e);
@@ -92,7 +106,7 @@ public class ServicesStartStopUtil {
                 if (prefsBean.getServerToStart().startFtp()) {
                     LOGGER.debug("going to start ftpd");
                     try {
-                        Intent intent = createFtpServiceIntent(context, prefsBean, keyFingerprintProvider);
+                        Intent intent = createFtpServiceIntent(context, prefsBean, keyFingerprintProvider, quickShareBean);
                         startServerByIntent(intent, context);
                     } catch (Exception e) {
                         LOGGER.error("could not start ftp server", e);
@@ -123,27 +137,31 @@ public class ServicesStartStopUtil {
 
     public static void stopServers(Context context) {
         LOGGER.trace("stopServers()");
-        context.stopService(createFtpServiceIntent(context, null, null));
-        context.stopService(createSshServiceIntent(context, null, null));
+        context.stopService(createFtpServiceIntent(context, null, null, null));
+        context.stopService(createSshServiceIntent(context, null, null, null));
     }
 
     protected static Intent createFtpServiceIntent(
             Context context,
             PrefsBean prefsBean,
-            KeyFingerprintProvider keyFingerprintProvider) {
+            KeyFingerprintProvider keyFingerprintProvider,
+            QuickShareBean quickShareBean) {
         Intent intent = new Intent(context, FtpServerService.class);
         putPrefsInIntent(intent, prefsBean);
         putKeyFingerprintProviderInIntent(intent, keyFingerprintProvider);
+        putQuickShareBeanInIntent(intent, quickShareBean);
         return intent;
     }
 
     protected static Intent createSshServiceIntent(
             Context context,
             PrefsBean prefsBean,
-            KeyFingerprintProvider keyFingerprintProvider) {
+            KeyFingerprintProvider keyFingerprintProvider,
+            QuickShareBean quickShareBean) {
         Intent intent = new Intent(context, SshServerService.class);
         putPrefsInIntent(intent, prefsBean);
         putKeyFingerprintProviderInIntent(intent, keyFingerprintProvider);
+        putQuickShareBeanInIntent(intent, quickShareBean);
         return intent;
     }
 
@@ -156,6 +174,12 @@ public class ServicesStartStopUtil {
     protected static void putKeyFingerprintProviderInIntent(Intent intent, KeyFingerprintProvider keyFingerprintProvider) {
         if (keyFingerprintProvider != null) {
             intent.putExtra(EXTRA_FINGERPRINT_PROVIDER, keyFingerprintProvider);
+        }
+    }
+
+    protected static void putQuickShareBeanInIntent(Intent intent, QuickShareBean quickShareBean) {
+        if (quickShareBean != null) {
+            intent.putExtra(EXTRA_QUICK_SHARE_BEAN, quickShareBean);
         }
     }
 

@@ -18,10 +18,13 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.R;
+import org.primftpd.share.QuickShareBean;
 import org.primftpd.util.KeyFingerprintProvider;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -49,6 +52,7 @@ public abstract class AbstractServerService
 	private ServerServiceHandler serviceHandler;
 	PrefsBean prefsBean;
 	KeyFingerprintProvider keyFingerprintProvider;
+	QuickShareBean quickShareBean;
 	private NsdManager.RegistrationListener nsdRegistrationListener;
 
 	protected abstract ServerServiceHandler createServiceHandler(
@@ -101,6 +105,7 @@ public abstract class AbstractServerService
 		prefsBean = (PrefsBean)extras.get(ServicesStartStopUtil.EXTRA_PREFS_BEAN);
 		keyFingerprintProvider = (KeyFingerprintProvider)extras.get(
 				ServicesStartStopUtil.EXTRA_FINGERPRINT_PROVIDER);
+		quickShareBean = (QuickShareBean)extras.get(ServicesStartStopUtil.EXTRA_QUICK_SHARE_BEAN);
 
 		// send start message (to handler)
 		Message msg = serviceHandler.obtainMessage();
@@ -181,6 +186,21 @@ public abstract class AbstractServerService
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
 			nsdManager.unregisterService(nsdRegistrationListener);
+		}
+	}
+
+	protected void cleanQuickShareTmpDir() {
+		if (quickShareBean != null) {
+			String pathToFile = quickShareBean.getPathToFile();
+			logger.debug("cleaning quick share dir: {}", pathToFile);
+			File file = new File(pathToFile);
+			if (file.exists()) {
+				file.delete();
+			}
+			File tmpDir = file.getParentFile();
+			if (tmpDir.exists()) {
+				tmpDir.delete();
+			}
 		}
 	}
 }

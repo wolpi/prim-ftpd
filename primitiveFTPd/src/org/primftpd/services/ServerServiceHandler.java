@@ -110,6 +110,8 @@ public class ServerServiceHandler extends Handler
 			if (service.prefsBean.isAnnounce()) {
 				service.unannounceService();
 			}
+
+			service.cleanQuickShareTmpDir();
 		}
 		releaseWakeLock();
 		shellClose();

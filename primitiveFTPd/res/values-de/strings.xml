@@ -104,6 +104,10 @@
     <string name="saveToTextFile">In Textdatei speichern</string>
     <string name="open">Öffnen</string>
 
+    <string name="quickShare">Quick Share</string>
+    <string name="quickShareServerStarted">Server wurde gestartet, stellt eine Datei bereit</string>
+    <string name="quickShareCouldNotStartServer">Server konnte nicht gestartet werden</string>
+
     <string name="filepickerCreateFolderError">Fehler beim Erstellen des Ordners</string>
     <string name="filepickerNewFolder">Neuer Ordner</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>

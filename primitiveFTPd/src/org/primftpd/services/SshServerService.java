@@ -28,6 +28,7 @@ import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.R;
 import org.primftpd.crypto.SignatureEd25519;
 import org.primftpd.filesystem.FsSshFileSystemView;
+import org.primftpd.filesystem.QuickShareSshFileSystemView;
 import org.primftpd.filesystem.RoSafSshFileSystemView;
 import org.primftpd.filesystem.RootSshFileSystemView;
 import org.primftpd.filesystem.SafSshFileSystemView;
@@ -36,8 +37,8 @@ import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.SocketAddress;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -166,24 +167,31 @@ public class SshServerService extends AbstractServerService
 		// android filesystem view
 		sshServer.setFileSystemFactory(new FileSystemFactory() {
 			@Override
-			public FileSystemView createFileSystemView(Session session) throws IOException
+			public FileSystemView createFileSystemView(Session session)
 			{
-				switch (prefsBean.getStorageType()) {
-					case PLAIN:
-						return new FsSshFileSystemView(prefsBean.getStartDir(), session);
-					case ROOT:
-						return new RootSshFileSystemView(shell, prefsBean.getStartDir(), session);
-					case SAF:
-						return new SafSshFileSystemView(
-								getApplicationContext(),
-								Uri.parse(prefsBean.getSafUrl()),
-								getContentResolver(),
-								session);
-					case RO_SAF:
-						return new RoSafSshFileSystemView(
-								Uri.parse(prefsBean.getSafUrl()),
-								getContentResolver(),
-								session);
+				if (quickShareBean != null) {
+					logger.debug("launching server in quick share mode");
+					return new QuickShareSshFileSystemView(
+							new File(quickShareBean.getPathToFile()),
+							session);
+				} else {
+					switch (prefsBean.getStorageType()) {
+						case PLAIN:
+							return new FsSshFileSystemView(prefsBean.getStartDir(), session);
+						case ROOT:
+							return new RootSshFileSystemView(shell, prefsBean.getStartDir(), session);
+						case SAF:
+							return new SafSshFileSystemView(
+									getApplicationContext(),
+									Uri.parse(prefsBean.getSafUrl()),
+									getContentResolver(),
+									session);
+						case RO_SAF:
+							return new RoSafSshFileSystemView(
+									Uri.parse(prefsBean.getSafUrl()),
+									getContentResolver(),
+									session);
+					}
 				}
 				return null;
 			}
