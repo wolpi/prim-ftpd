@@ -17,13 +17,13 @@
     <string name="startService">Iniciar servidor</string>
     <string name="stopService">Detener servidor</string>
     <string name="notificationTitle">Servidor FTP</string>
-    <string name="haveToSetPassword">Debes establecer una contraseña primero</string>
+    <string name="haveToSetPassword">Antes hay que establecer una contraseña</string>
     <string name="serverRunning">El servidor FTP está funcionando</string>
     <string name="serverCouldNotBeStarted">¡El servidor no pudo arrancar! Mensaje de error: </string>
-    <string name="portInvalid_v2">Puerto inválido. Debe estar entre 1024 y 64000.</string>
-    <string name="portsEqual_v2">Los puertos son iguales. Esto no puede funcionar.</string>
+    <string name="portInvalid_v2">La dirección de puerto no es correcta. Debe estar entre 1024 y 64000.</string>
+    <string name="portsEqual_v2">Los números de puerto son iguales. Así no puede funcionar.</string>
     <string name="restartServer">Tienes que reiniciar el servidor para que los cambios surtan efecto.</string>
-    <string name="invalidDir">Directorio inválido.</string>
+    <string name="invalidDir">La carpeta elegida no es correcta.</string>
     <string name="couldNotReadKeyAuthKey">La clave pública de autenticación no puede leerse. Comprueba los registros.</string>
     <string name="prefs">Preferencias</string>
     <string name="prefTitleUser">Usuario</string>
@@ -108,7 +108,7 @@
     <string name="selectedSafUri">Seleccionar SAF URI:</string>
     <string name="startServerAndExit">Iniciar sólo el servidor</string>
     <string name="startServerAndUi">iniciar con el servidor</string>
-    <string name="haveToSetAuthMechanism">Primero debes configurar un método de autenticación</string>
+    <string name="haveToSetAuthMechanism">Antes hay que configurar un método de autenticación</string>
     <string name="prefSummaryLoggingV2">Registra posibles fallos a la hora de servir archivos. Si la aplicación no funciona bien en tu dispositivo puedes enviárselo a los desarrolladores. Puede que haya que reiniciar la aplicación. Los registros de texto plano se guardan en %s.</string>
     <string name="prefAllowedIpsPattern">Patrón de IPs permitidas</string>
     <string name="prefSummaryAllowedIpsPattern">Patrón de direcciones IP permitidas. Sólo puede usarse un asterisco (*) y como último caracter.</string>
