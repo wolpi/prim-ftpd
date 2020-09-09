@@ -19,7 +19,7 @@
     <string name="notificationTitle">Servidor FTP</string>
     <string name="haveToSetPassword">Antes hay que establecer una contraseña</string>
     <string name="serverRunning">El servidor FTP está funcionando</string>
-    <string name="serverCouldNotBeStarted">¡El servidor no pudo arrancar! Mensaje de error: </string>
+    <string name="serverCouldNotBeStarted">¡El servidor no pudo arrancar! El error es el siguiente:</string>
     <string name="portInvalid_v2">La dirección de puerto no es correcta. Debe estar entre 1024 y 64000.</string>
     <string name="portsEqual_v2">Los números de puerto son iguales. Así no puede funcionar.</string>
     <string name="restartServer">Tienes que reiniciar el servidor para que los cambios surtan efecto.</string>
@@ -35,12 +35,12 @@
     <string name="prefTitlePortSecure">Puerto seguro</string>
     <string name="prefSummaryPortSecure">Puerto del servidor FTP (cifrado)</string>
     <string name="prefTitleStartDir">Directorio de inicio</string>
-    <string name="prefSummaryStartDir">Primer directorio en el servidor después de iniciar sesión</string>
+    <string name="prefSummaryStartDir">Primer directorio en el servidor tras iniciar sesión</string>
     <string name="prefTitleAnnounce">Divulgar servidor en LAN</string>
     <string name="prefSummaryAnnounce">Divulga el servidor FTP en LAN a través de DNS-SD (Bonjour). Puede causar fallos en algunos dispositivos.</string>
     <string name="prefTitleWakelock">Evitar modo espera</string>
     <string name="prefSummaryWakelock">Evita el modo espera mientras el servidor está encendido. El modo espera puede provocar que las transferencias se interrumpan.</string>
-    <string name="prefTitleWhichServerToStart">Servidor/es a iniciar</string>
+    <string name="prefTitleWhichServerToStart">Servidores a iniciar</string>
     <string name="prefSummaryWhichServerToStart">Elige si deseas iniciar FTP, SFTP o ambos.</string>
     <string name="prefTitleStartOnBoot">Iniciar en arranque</string>
     <string name="prefSummaryStartOnBoot">Iniciar el servidor al arrancar el sistema.</string>
@@ -85,11 +85,11 @@
     <string name="prefTitleStartOnOpen">Iniciar al abrir</string>
     <string name="prefSummaryStartOnOpen">Iniciar servidor cuando se abre la aplicación.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Mostrar información en notificaciones</string>
-    <string name="prefSummaryShowConnectionInfoInNotification">Mostrar información de la conexión en notificación.</string>
-    <string name="prefTitleShowStartStopNotification">Mostrar notificación en inicio/parada de servidor(es)</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">Ver información de la conexión en la notificación.</string>
+    <string name="prefTitleShowStartStopNotification">Mostrar notificación de control</string>
     <string name="prefSummaryShowStartStopNotification">Muestra una notificación permanente con botones para arrancar o detener el servidor.</string>
     <string name="prefTitleAnonymousLogin">Inicio de sesión anónimo</string>
-    <string name="prefSummaryAnonymousLogin">Selecciona si permites inicio de sesión anónimo.</string>
+    <string name="prefSummaryAnonymousLogin">Permite que los clientes accedan sin usuario ni contraseña.</string>
     <string name="prefTitleFtpPassivePorts">Puertos pasivos FTP</string>
     <string name="prefSummaryFtpPassivePorts">Puertos para conexión FTP de datos pasivos. Puede ser un único puerto o una lista. Ej.: 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Tiempo de espera de inactividad del servidor</string>
@@ -134,6 +134,6 @@
     <string name="filepickerSelectSomethingFirst">Hay que elegir un archivo</string>
     <string name="filepickerFilename">Nombre de archivo</string>
     <string name="prefTitleSshowIpv6InNotification">Ver direciones IPv6 en notificación</string>
-    <string name="prefSummaryShowIpv4InNotification">Muestra las direcciones IPv4 en la notificación si la información de notificación está activa</string>
-    <string name="prefTitleSshowIpv4InNotification">Mostrar direcciones IPv4 en la notificación</string>
+    <string name="prefSummaryShowIpv4InNotification">Muestra direcciones IPv4 en la notificación si esta está visible.</string>
+    <string name="prefTitleSshowIpv4InNotification">Ver direcciones IPv4 en notificación</string>
 </resources>
