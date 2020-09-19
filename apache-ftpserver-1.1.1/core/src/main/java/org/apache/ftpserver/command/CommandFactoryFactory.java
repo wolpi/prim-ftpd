@@ -54,6 +54,7 @@ import org.apache.ftpserver.command.impl.PORT;
 import org.apache.ftpserver.command.impl.PROT;
 import org.apache.ftpserver.command.impl.PWD;
 import org.apache.ftpserver.command.impl.QUIT;
+import org.apache.ftpserver.command.impl.QUOT;
 import org.apache.ftpserver.command.impl.REIN;
 import org.apache.ftpserver.command.impl.REST;
 import org.apache.ftpserver.command.impl.RETR;
@@ -117,6 +118,7 @@ public class CommandFactoryFactory {
         DEFAULT_COMMAND_MAP.put("PROT", new PROT());
         DEFAULT_COMMAND_MAP.put("PWD", new PWD());
         DEFAULT_COMMAND_MAP.put("QUIT", new QUIT());
+        DEFAULT_COMMAND_MAP.put("QUOT", new QUOT());
         DEFAULT_COMMAND_MAP.put("REIN", new REIN());
         DEFAULT_COMMAND_MAP.put("REST", new REST());
         DEFAULT_COMMAND_MAP.put("RETR", new RETR());
