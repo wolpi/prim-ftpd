@@ -29,6 +29,30 @@ public class QuickSettingsService extends TileService {
     public void onClick() {
         logger.debug("onClick");
         super.onClick();
+        boolean unlockedOnly = false; // Grab value from somewhere
+
+        if(unlockedOnly) {
+            // Check whether the device is locked or not.
+            if(isLocked()){
+                unlockAndRun(
+                    new Runnable(){
+                        @Override
+                        public void run() {
+                            toggle();
+                        }
+                    }
+                );
+            } else {
+                toggle();
+            }
+        } else {
+            toggle();
+        }
+
+        updateTile();
+    }
+
+    private void toggle(){
         boolean isActive = isActive();
         if(isActive) {
             // Stop service if it is already running.
@@ -37,7 +61,6 @@ public class QuickSettingsService extends TileService {
             // Start FTP service.
             ServicesStartStopUtil.startServers(this);
         }
-        updateTile();
     }
 
     /**
