@@ -2,10 +2,12 @@ package org.primftpd.services;
 
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.content.Context;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
 import org.primftpd.R;
+import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.util.ServersRunningBean;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
@@ -29,7 +31,8 @@ public class QuickSettingsService extends TileService {
     public void onClick() {
         logger.debug("onClick");
         super.onClick();
-        boolean unlockedOnly = false; // Grab value from somewhere
+        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+        boolean unlockedOnly = LoadPrefsUtil.quickSettingsRequiresUnlock(prefs);
 
         if(unlockedOnly) {
             // Check whether the device is locked or not.
