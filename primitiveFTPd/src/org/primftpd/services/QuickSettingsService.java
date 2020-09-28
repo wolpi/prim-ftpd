@@ -1,8 +1,8 @@
 package org.primftpd.services;
 
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
 import android.os.Build;
-import android.content.Context;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
@@ -34,7 +34,7 @@ public class QuickSettingsService extends TileService {
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
         boolean unlockedOnly = LoadPrefsUtil.quickSettingsRequiresUnlock(prefs);
 
-        if(unlockedOnly && isLocked()) {
+        if (unlockedOnly && isLocked()) {
             // Check whether the device is locked or not.
             if(isLocked()){
                 unlockAndRun(
@@ -42,20 +42,20 @@ public class QuickSettingsService extends TileService {
                         @Override
                         public void run() {
                             toggle();
+                            updateTile();
                         }
                     }
                 );
             }
         } else {
             toggle();
+            updateTile();
         }
-
-        updateTile();
     }
 
     private void toggle(){
         boolean isActive = isActive();
-        if(isActive) {
+        if (isActive) {
             // Stop service if it is already running.
             ServicesStartStopUtil.stopServers(this);
         } else {

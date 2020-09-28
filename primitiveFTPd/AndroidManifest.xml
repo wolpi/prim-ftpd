@@ -84,8 +84,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.VIEW" /><!-- to avoid missing app link warning -->
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES"/>
             </intent-filter>
             <meta-data android:name="android.app.shortcuts"
