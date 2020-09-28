@@ -275,7 +275,7 @@ public class LoadPrefsUtil
 	public static Boolean quickSettingsRequiresUnlock(SharedPreferences prefs) {
 		return prefs.getBoolean(
 			LoadPrefsUtil.PREF_QUICK_SETTINGS_REQUIRES_UNLOCK,
-			Boolean.FALSE);
+			Boolean.TRUE);
 	}
 
 	public static PrefsBean loadPrefs(Logger logger, SharedPreferences prefs) {
@@ -330,9 +330,6 @@ public class LoadPrefsUtil
 		String allowedIpsPattern = allowedIpsPattern(prefs);
 		logger.debug("got allowedIpsPattern: {}", allowedIpsPattern);
 
-		boolean quickSettingsRequiresUnlock = quickSettingsRequiresUnlock(prefs);
-		logger.debug("got quickSettingsRequiresUnlock: {}", Boolean.valueOf(quickSettingsRequiresUnlock));
-
 		// create prefsBean
 		return new PrefsBean(
 				userName,
@@ -351,7 +348,6 @@ public class LoadPrefsUtil
 				showConnectionInfo,
 				storageType,
 				safUrl,
-				allowedIpsPattern,
-				quickSettingsRequiresUnlock);
+				allowedIpsPattern);
 	}
 }

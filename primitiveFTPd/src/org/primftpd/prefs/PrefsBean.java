@@ -26,7 +26,6 @@ public class PrefsBean implements Serializable
 	private final StorageType storageType;
 	private final String safUrl;
 	private final String allowedIpsPattern;
-	private final boolean quickSettingsRequiresUnlock;
 
 	public PrefsBean(
 		String userName,
@@ -45,8 +44,7 @@ public class PrefsBean implements Serializable
 		boolean showConnectionInfoInNotification,
 		StorageType storageType,
 		String safUrl,
-		String allowedIpsPattern,
-		boolean quickSettingsRequiresUnlock)
+		String allowedIpsPattern)
 	{
 		super();
 		this.userName = userName;
@@ -68,7 +66,6 @@ public class PrefsBean implements Serializable
 		this.storageType = storageType;
 		this.safUrl = safUrl;
 		this.allowedIpsPattern = allowedIpsPattern;
-		this.quickSettingsRequiresUnlock = quickSettingsRequiresUnlock;
 	}
 
 	public String getUserName() {
@@ -146,9 +143,5 @@ public class PrefsBean implements Serializable
 
 	public String getAllowedIpsPattern() {
 		return allowedIpsPattern;
-	}
-
-	public boolean quickSettingsRequiresUnlock() {
-		return quickSettingsRequiresUnlock;
 	}
 }

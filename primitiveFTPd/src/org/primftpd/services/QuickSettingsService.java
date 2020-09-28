@@ -34,7 +34,7 @@ public class QuickSettingsService extends TileService {
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
         boolean unlockedOnly = LoadPrefsUtil.quickSettingsRequiresUnlock(prefs);
 
-        if(unlockedOnly) {
+        if(unlockedOnly && isLocked()) {
             // Check whether the device is locked or not.
             if(isLocked()){
                 unlockAndRun(
@@ -45,8 +45,6 @@ public class QuickSettingsService extends TileService {
                         }
                     }
                 );
-            } else {
-                toggle();
             }
         } else {
             toggle();

@@ -120,7 +120,7 @@
     <SwitchPreference
 			android:name="quickSettingsRequiresUnlock"
 			android:key="quickSettingsRequiresUnlockPref"
-			android:defaultValue="false"
+			android:defaultValue="true"
 			android:title="@string/prefTitleQuickSettingsRequiresUnlock"
 			android:summary="@string/prefSummaryQuickSettingsRequiresUnlock"
 			/>
