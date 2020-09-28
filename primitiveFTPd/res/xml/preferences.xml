@@ -117,6 +117,13 @@
 			android:title="@string/prefTitleShowStartStopNotification"
 			android:summary="@string/prefSummaryShowStartStopNotification"
 			/>
+    <SwitchPreference
+			android:name="quickSettingsRequiresUnlock"
+			android:key="quickSettingsRequiresUnlockPref"
+			android:defaultValue="true"
+			android:title="@string/prefTitleQuickSettingsRequiresUnlock"
+			android:summary="@string/prefSummaryQuickSettingsRequiresUnlock"
+			/>
 		<ListPreference
 			android:name="theme"
 			android:key="themePref"

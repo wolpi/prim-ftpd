@@ -89,7 +89,9 @@
     <string name="prefSummaryLoggingV2">Log serves analyzing of errors. If the app does not work properly on your device you can send a log to developers. May require to restart the app. Text Logs are stored in %s.</string>
     <string name="prefAllowedIpsPattern">Allowed IPs pattern</string>
     <string name="prefSummaryAllowedIpsPattern">Pattern of allowed IP Addresses. Just one Wildcard (*) may be used, as last character only.</string>
-
+    <string name="prefTitleQuickSettingsRequiresUnlock">Quick Settings Tile unlock requirement</string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock">Clicking the quick settings tile requires the device to be unlocked to start/stop the server(s). When enabled, will prompted to unlock the device if it's locked.</string>
+  
     <string name="licence">Licence</string>
     <string name="reset">Reset</string>
 

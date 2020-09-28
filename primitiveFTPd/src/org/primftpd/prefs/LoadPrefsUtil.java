@@ -36,6 +36,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_STORAGE_TYPE = "storageTypePref";
 	public static final String PREF_KEY_SAF_URL = "safUrlPref";
 	public static final String PREF_KEY_ALLOWED_IPS_PATTERN = "allowedIpsPatternPref";
+	public static final String PREF_QUICK_SETTINGS_REQUIRES_UNLOCK = "quickSettingsRequiresUnlockPref";
 
 	public static final int PORT_DEFAULT_VAL = 12345;
 	static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
@@ -269,6 +270,12 @@ public class LoadPrefsUtil
 			return false;
 		}
 		return true;
+	}
+
+	public static Boolean quickSettingsRequiresUnlock(SharedPreferences prefs) {
+		return prefs.getBoolean(
+			LoadPrefsUtil.PREF_QUICK_SETTINGS_REQUIRES_UNLOCK,
+			Boolean.TRUE);
 	}
 
 	public static PrefsBean loadPrefs(Logger logger, SharedPreferences prefs) {
