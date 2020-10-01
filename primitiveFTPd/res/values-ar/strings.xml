@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <string name="app_name" translatable="false">primitive ftpd</string>
+    <string name="ifacesLabel">واجهة الشبكة</string>
+    <string name="ipAddrLabel">عنوان IP</string>
+    <string name="ifacesError">خطأ: </string>
+    <string name="protocolLabel">البروتوكول</string>
+    <string name="portLabel">المنفذ</string>
+    <string name="fingerprintsLabel">بصمات المفاتيح</string>
+    <string name="generateKeysMessage">أترغب بإنشاء مفاتيح جديدة ؟</string>
+    <string name="generatingKeysMessage">جاري إنشاء مفاتيح جديدة …</string>
+    <string name="generate">أنشئ</string>
+    <string name="cancel">إلغاء</string>
+    <string name="state">الحالة</string>
+    <string name="serverStarted">قيد التشغيل …</string>
+    <string name="serverStopped">متوقّف</string>
+    <string name="permissionRequired">إذن \"%1$s\" مطلوب لكي يعمل هذا التطبيق!</string>
+    <string name="permissionNameStorage">التخزين</string>
+    <string name="quickSettingsServerStarted">pFTPd قيد التشغيل …</string>
+    <string name="quickSettingsServerStopped">pFTPd متوقّف</string>
+    <string name="saveAs">حفظ كـ</string>
+    <string name="translate">تَرجِم</string>
+
+    <string name="startService">ابدأ الخادم</string>
+    <string name="stopService">أوقف الخادم</string>
+    <string name="toggleService">بدّل حالة بدء/إيقاف الخادم</string>
+    <string name="notificationTitle">خادم FTP</string>
+
+    <string name="haveToSetPassword">يجب عليك تحديد كلمة سر أوّلاً</string>
+    <string name="haveToSetAuthMechanism">يجب عليك تحديد آلية المصادقة أولاً</string>
+    <string name="serverRunning">خادم FTP قيد التشغيل</string>
+    <string name="serverCouldNotBeStarted">لا يمكن بدء الخادم! رسالة الخطأ: </string>
+    <string name="portInvalid_v2">قيمة المنفذ غير صحيحة. يجب أن تكون بين 1024 و 64000.</string>
+    <string name="portsEqual_v2">المنافذ متساوية. لن يعمل ذلك.</string>
+    <string name="restartServer">يجب عليك إعادة بدء الخادم لكي يظهر أثر التغييرات.</string>
+    <string name="invalidDir">المسار غير صالح.</string>
+    <string name="couldNotReadKeyAuthKey">لا يمكن قراءة المفتاح العام المطلوب للمصادقة. تفقّد السجل.</string>
+    <string name="ftpPassivePortsInvalid">قيمة منافذ FTP الخاملة غير صالحة.</string>
+
+    <string name="prefs">الإعدادت</string>
+    <string name="prefsCategoryTitleAuth">المصادقة</string>
+    <string name="prefsCategoryTitleConnectivity">الاتّصال</string>
+    <string name="prefsCategoryTitleUi">واجهة المستخدم</string>
+    <string name="prefsCategoryTitleSystem">النظام</string>
+    <string name="prefTitleUser">اسم المستخدم</string>
+    <string name="prefSummaryUser">اسم المستخدم لخادم FTP</string>
+    <string name="prefTitlePassword">كلمة السر</string>
+    <string name="prefSummaryPassword">كلمة السر لخادم FTP</string>
+    <string name="prefTitlePort">المنفذ</string>
+    <string name="prefSummaryPort">المنفذ المستخدم لخادم FTP</string>
+    <string name="prefTitlePortSecure">المنفذ الآمن</string>
+    <string name="prefSummaryPortSecure">المنفذ المستخدم لخادم FTP (مشفّر)</string>
+    <string name="prefTitleStartDir">مسار بدء الخادم</string>
+    <string name="prefSummaryStartDir">المسار المستخدم بعد تسجيل الدخول</string>
+    <string name="prefTitleAnnounce">أعلن عن الخادم في الشبكة المحلية LAN</string>
+    <string name="prefSummaryAnnounce">يتم الإعلان عن خادم FTP في الشبكة المحلية LAN عبر DNS-SD (Bonjour). قد يتسبّب بالأعطال في بعض الأجهزة.</string>
+    <string name="prefTitleAnnounceName">اسم الخادم</string>
+    <string name="prefSummaryAnnounceName">الاسم الذي سيتم الإعلان عن الخادم به.</string>
+    <string name="prefTitleWakelock">امنع وضع الاستعداد</string>
+    <string name="prefSummaryWakelock">سيتم منع وضع الاستعداد عندما يكون الخادم قيد التشغيل. وضع الاستعداد قد يؤدّي إلى فشل عمليّات التحميل/التنزيل.</string>
+    <string name="prefTitleWhichServerToStart">الخوادم التي سيتم تشغيلها</string>
+    <string name="prefSummaryWhichServerToStart">اختر ما إذا كنت تريد بدء خادم FTP، خادم SFTP، أو كليهما.</string>
+    <string name="prefTitleStartOnBoot">البدء عند التشغيل</string>
+    <string name="prefSummaryStartOnBoot">سيتم بدء الخادم عند تشغيل النظام.</string>
+    <string name="prefTitleStartOnOpen">البدء مع الفتح</string>
+    <string name="prefSummaryStartOnOpen">سيتم بدء الخادم عند فتح التطبيق.</string>
+    <string name="prefTitleShowConnectionInfoInNotification">أظهر معلومات الاتصال في إشعار</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">سيتم إظهار معلومات الاتّصال مثل عنوان IP في إشعار.</string>
+    <string name="prefTitleSshowIpv4InNotification">أظهر عناوين IPv4 في إشعار</string>
+    <string name="prefSummaryShowIpv4InNotification">سيتم إظهار عناوين IPv4 في إشعار إذا كان خيار معلومات الاتّصال مفعّلاً.</string>
+    <string name="prefTitleSshowIpv6InNotification">أظهر عناوين IPv6 في إشعار</string>
+    <string name="prefSummaryShowIpv6InNotification">سيتم إظهار عناوين IPv6 في إشعار إذا كان خيار معلومات الاتّصال مفعّلاً.</string>
+    <string name="prefTitleShowStartStopNotification">أظهر إشعار لبدء/إيقاف الخادم</string>
+    <string name="prefSummaryShowStartStopNotification">سيتم إظهار إشعار دائم ليتوفّر لك طريقة أخرى سريعة لبدء/إيقاف الخادم.</string>
+    <string name="prefTitlePubKeyAuth">المصادقة باستخدام مفتاح عام</string>
+    <string name="prefSummaryPubKeyAuth">عند التفعيل، ضع مفتاح ssh2 العام الخاص بك في %s.\nSFTP فقط.</string>
+    <string name="prefTitleAnonymousLogin">تسجيل الدخول المجهول</string>
+    <string name="prefSummaryAnonymousLogin">حدّد إذا ما كان تسجيل الدخول المجهول إلى الخادم مسموحاً.</string>
+    <string name="prefTitleFtpPassivePorts">منافذ FTP الخاملة</string>
+    <string name="prefSummaryFtpPassivePorts">المنافذ المستخدمة للاتّصالات الخاملة لنقل البيانات عن طريق FTP. يمكن أن يكون منفذاً وحيداً، أو قائمة أو نطاق من المنافذ. مثل: 5678,5700-5710,5800,5900.</string>
+    <string name="prefTitleIdleTimeout">مهلة عدم نشاط الخادم</string>
+    <string name="prefSummaryIdleTimeout">سينهي الخادم العلاقات غير النشطة بعد هذه المهلة (FTP فقط).</string>
+    <string name="prefSummaryIdleTimeoutV2">سينهي الخادم العلاقات غير النشطة بعد هذه المهلة. ضع 0 للإلغاء.</string>
+    <string name="prefTheme">السمة</string>
+    <string name="prefSummaryTheme">تغيير السمة سيتطلّب إعادة تشغيل التطبيق.</string>
+    <string name="prefTitleLogging">السجل</string>
+    <string name="prefSummaryLogging">يفيد السجل في تحليل الأخطاء. إذا لم يعمل التطبيق بالشكل الصحيح على جهازك يمكنك إرسال السجل إلى المطوّرين. سيتطلّب إعادة تشغيل البرنامج.</string>
+    <string name="prefSummaryLoggingV2">يفيد السجل في تحليل الأخطاء. إذا لم يعمل التطبيق بالشكل الصحيح على جهازك يمكنك إرسال السجل إلى المطوّرين. سيتطلّب إعادة تشغيل البرنامج. يتم حفظ السجلّات النصّيّة في %s.</string>
+    <string name="prefAllowedIpsPattern">نمط عناوين IP المقبولة</string>
+    <string name="prefSummaryAllowedIpsPattern">نمط عناوين IP المسموح لها الاتّصال. يمكن استخدام رمز بدل (*) واحد فقط، مكان الحرف الأخير.</string>
+    <string name="prefTitleQuickSettingsRequiresUnlock">متطلّب فك قفل الجهاز لزر الإعدادات السريعة</string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock">الضغط على زر الإعدادات السريعة سيتطلّب أن يكون قفل الجهاز مفتوحاً ليتم بدء/إيقاف الخادم. عند التفعيل، سيُطلب فك القفل إذا كان الجهاز مقفلاً.</string>
+  
+    <string name="licence">الرخصة</string>
+    <string name="reset">إعادة تعيين</string>
+
+    <string name="widgetTextStart">ابدأ (s)ftpd</string>
+    <string name="widgetTextStop">أوقف (s)ftpd</string>
+    <string name="isAnonymous">تسجيل الدخول المجهول: %1$b</string>
+    <string name="passwordPresent">كلمة السر موجودة: %1$b</string>
+    <string name="pubKeyAuth">المصادقة عن طريق مفتاح عام: %1$b</string>
+    <string name="selectServerAction">اختر إجراء الخادم</string>
+    <string name="isServerRunning">هل الخادم قيد التشغيل؟</string>
+
+    <string name="storageType">نوع التخزين</string>
+    <string name="storageTypePlain">نظام الملفّات القديم العادي</string>
+    <string name="storageTypeRoot">المستخدم العالي (يجب أن يمتلك الجهاز صلاحيّات الـroot)</string>
+    <string name="storageTypeSaf">إطار أندرويد للوصول إلى التخزين (SAF)\n(مثلاً: بطاقة SD)</string>
+    <string name="storageTypeRoSaf">SAF للقراءة فقط (أسرع !)</string>
+    <string name="safExplainHeading">طريقة عمل SAF</string>
+    <string name="safExplain">سيطلب منك لأندرويد أن تختار المسار الذي سيكون متوفّراً من خلال الخادم. من وقت لآخر قد يتم إلغاء الإذن وسيتوجّب عليك إعادة الاختيار.</string>
+    <string name="selectedSafUri">اختر عنوان URI لـSAF:</string>
+
+    <string name="startServerAndExit">ابدأ الخادم فقط</string>
+    <string name="startServerAndUi">ابدأ مع الخادم</string>
+
+    <string name="downloadOrSaveUrlToFile">تنزيل أو حفظ عنوان URL إلى ملف نصّي؟</string>
+    <string name="download">تنزيل</string>
+    <string name="saveToTextFile">حفظ إلى ملف نصّي</string>
+    <string name="open">فتح</string>
+
+    <string name="filepickerCreateFolderError">خطأ في إنشاء المجلد</string>
+    <string name="filepickerNewFolder">مجلّد جديد</string>
+    <string name="filepickerNewFolderOk">@android:string/ok</string>
+    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
+    <string name="filepickerListOk">@android:string/ok</string>
+    <string name="filepickerListCancel">@android:string/cancel</string>
+    <string name="filepickerName">الاسم</string>
+    <string name="filepickerFilename">اسم الملف</string>
+    <string name="filepickerSelectSomethingFirst">يرجى اختيار شيء أوّلاً</string>
+    <string name="filepickerNeedValidFilename">يرجى إدخال أو اختيار اسم ملف صالح</string>
+
+    <string name="quickShare">المشاركة السريعة</string>
+    <string name="quickShareServerStarted">تم بدء الخادم لمشاركة ملف واحد</string>
+    <string name="quickShareCouldNotStartServer">لا يمكن بدء الخادم</string>
+
+    <string-array name="prefWhichServerToStartNames">
+        <item>FTP و SFTP</item>
+        <item>FTP فقط</item>
+        <item>SFTP فقط</item>
+    </string-array>
+
+    <string-array name="prefWhichServerToStartValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="prefThemeNames">
+        <item>داكن</item>
+        <item>فاتح</item>
+    </string-array>
+
+    <string-array name="prefThemeValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="prefLoggingNames">
+        <item>بدون تسجيل</item>
+        <item>التسجيل في ملف نصّي</item>
+        <item>التسجيل في النظام</item>
+    </string-array>
+
+    <string-array name="prefLoggingValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+</resources>
