@@ -165,6 +165,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		Boolean startOnOpen = LoadPrefsUtil.startOnOpen(prefs);
 		if (startOnOpen) {
 			PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
+			keyFingerprintProvider.calcPubkeyFingerprints(this); // see GH issue #204
 			ServicesStartStopUtil.startServers(
 					getBaseContext(),
 					prefsBean,
