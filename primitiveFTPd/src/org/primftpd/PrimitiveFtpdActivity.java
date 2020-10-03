@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.UriPermission;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -20,7 +21,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
-import androidx.fragment.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +58,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * Activity to display network info and to start FTP service.
@@ -395,6 +397,15 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		}
 	}
 
+	protected boolean isLeftToRight() {
+		boolean isLeftToRight = true;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+			Configuration config = getResources().getConfiguration();
+			isLeftToRight = config.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR;
+		}
+		return isLeftToRight;
+	}
+
 	/**
 	 * Creates table containing network interfaces.
 	 */
@@ -404,7 +415,8 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		// clear old entries
 		container.removeAllViews();
 
-		List<String> displayTexts = ipAddressProvider.ipAddressTexts(this, true);
+		boolean isLeftToRight = isLeftToRight();
+		List<String> displayTexts = ipAddressProvider.ipAddressTexts(this, true, isLeftToRight);
 		for (String displayText : displayTexts) {
 			TextView textView = new TextView(container.getContext());
 			container.addView(textView);
@@ -417,17 +429,35 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	@SuppressLint("SetTextI18n")
 	protected void showPortsAndServerState() {
-		((TextView)findViewById(R.id.ftpTextView))
-			.setText("ftp / " + prefsBean.getPortStr() + " / " +
-			getText(serversRunning.ftp
-				? R.string.serverStarted
-				: R.string.serverStopped));
+		boolean isLeftToRight = isLeftToRight();
 
-		((TextView)findViewById(R.id.sftpTextView))
-				.setText("sftp / " + prefsBean.getSecurePortStr() + " / " +
-						getText(serversRunning.ssh
-								? R.string.serverStarted
-								: R.string.serverStopped));
+		if (isLeftToRight) {
+			((TextView) findViewById(R.id.ftpTextView))
+					.setText("ftp / " + prefsBean.getPortStr() + " / " +
+							getText(serversRunning.ftp
+									? R.string.serverStarted
+									: R.string.serverStopped));
+
+			((TextView) findViewById(R.id.sftpTextView))
+					.setText("sftp / " + prefsBean.getSecurePortStr() + " / " +
+							getText(serversRunning.ssh
+									? R.string.serverStarted
+									: R.string.serverStopped));
+		} else {
+			((TextView) findViewById(R.id.ftpTextView))
+					.setText(prefsBean.getPortStr() + " / " +
+							getText(serversRunning.ftp
+									? R.string.serverStarted
+									: R.string.serverStopped)
+					+ " / " + "ftp");
+
+			((TextView) findViewById(R.id.sftpTextView))
+					.setText(prefsBean.getSecurePortStr() + " / " +
+							getText(serversRunning.ssh
+									? R.string.serverStarted
+									: R.string.serverStopped)
+					+ " / " + "sftp");
+		}
 	}
 
 	protected void showLogindata() {

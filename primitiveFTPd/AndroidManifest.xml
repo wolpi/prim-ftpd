@@ -25,7 +25,8 @@
         android:allowBackup="false"
         android:banner="@drawable/ic_launcher"
         android:requestLegacyExternalStorage="true"
-        android:name=".PftpdApp">
+        android:name=".PftpdApp"
+        android:supportsRtl="true">
 
         <receiver android:enabled="true" android:name=".BootUpReceiver"
                 android:permission="android.permission.RECEIVE_BOOT_COMPLETED">

@@ -7,16 +7,18 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
 import android.os.Build;
+import android.view.View;
 
-import org.primftpd.prefs.PrefsBean;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.StartStopWidgetProvider;
 import org.primftpd.prefs.LoadPrefsUtil;
+import org.primftpd.prefs.PrefsBean;
 import org.primftpd.services.DownloadsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -200,9 +202,16 @@ public class NotificationUtil
 			PrefsBean prefsBean,
 			KeyFingerprintProvider keyFingerprintProvider) {
 		LOGGER.trace("buildLongText()");
+
+		boolean isLeftToRight = true;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+			Configuration config = ctxt.getResources().getConfiguration();
+			isLeftToRight = config.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR;
+		}
+
 		StringBuilder str = new StringBuilder();
 		IpAddressProvider ipAddressProvider = new IpAddressProvider();
-		List<String> ipAddressTexts = ipAddressProvider.ipAddressTexts(ctxt, false);
+		List<String> ipAddressTexts = ipAddressProvider.ipAddressTexts(ctxt, false, isLeftToRight);
 
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(ctxt);
 		Boolean showIpv4 = LoadPrefsUtil.showIpv4InNotification(prefs);

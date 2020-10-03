@@ -18,7 +18,7 @@ public class IpAddressProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public List<String> ipAddressTexts(Context ctxt, boolean verbose) {
+    public List<String> ipAddressTexts(Context ctxt, boolean verbose, boolean isLeftToRight) {
         List<String> result = new ArrayList<>();
         try {
             Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
@@ -58,7 +58,12 @@ public class IpAddressProvider {
 
                     String displayText = hostAddr;
                     if (verbose) {
-                        displayText += " (" + ifaceDispName + ")";
+                        String verboseText =  "(" + ifaceDispName + ")";
+                        if (isLeftToRight) {
+                            displayText += " " + verboseText;
+                        } else {
+                            displayText = verboseText + " " + displayText;
+                        }
                     }
 
                     result.add(displayText);
