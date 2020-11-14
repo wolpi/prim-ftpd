@@ -122,4 +122,6 @@
     <string name="quickShareServerStarted">Serwer został uruchomiony, udostępniając pojedynczy plik</string>
     <string name="quickShare">Szybkie udostępnianie</string>
     <string name="prefSummaryIdleTimeoutV2">Po tym czasie serwer zakończy bezczynne połączenia. Ustaw na 0, aby wyłączyć.</string>
+    <string name="prefTitleQuickSettingsRequiresUnlock">Wymaganie odblokowania Kafelka Szybkich Ustawień</string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock">Kliknięcie kafelka szybkich ustawień wymaga odblokowania urządzenia w celu uruchomienia/zatrzymania serwerów. Po włączeniu wyświetli monit o odblokowanie urządzenia, jeśli jest zablokowane.</string>
 </resources>
