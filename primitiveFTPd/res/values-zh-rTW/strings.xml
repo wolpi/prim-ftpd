@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="app_name">primitive ftpd</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">primitive ftpd</string>
     <string name="ifacesLabel">網路介面</string>
     <string name="ipAddrLabel">IP 位置</string>
     <string name="ifacesError">錯誤：</string>
@@ -18,12 +19,10 @@
     <string name="quickSettingsServerStarted">pFTPd 執行中…</string>
     <string name="quickSettingsServerStopped">pFTPd 已停止</string>
     <string name="saveAs">另存新檔</string>
-
     <string name="startService">啟動伺服器</string>
     <string name="stopService">停止伺服器</string>
     <string name="toggleService">切換伺服器啟動/停止</string>
     <string name="notificationTitle">FTP 伺服器</string>
-
     <string name="haveToSetPassword">你必須先設定密碼</string>
     <string name="serverRunning">FTP 伺服器正在執行</string>
     <string name="serverCouldNotBeStarted">伺服器無法啟動！錯誤訊息：</string>
@@ -32,7 +31,6 @@
     <string name="restartServer">你必須重新啟動伺服器，變更才能生效。</string>
     <string name="invalidDir">目錄無效。</string>
     <string name="couldNotReadKeyAuthKey">無法讀取用來金鑰驗證的公開金鑰。請檢查記錄。</string>
-
     <string name="prefs">偏好設定</string>
     <string name="prefCategoryTitle">FTP 伺服器偏好設定</string>
     <string name="prefTitleUser">使用者名稱</string>
@@ -69,16 +67,13 @@
     <string name="prefSummaryTheme">可能需要重新啟動應用程式才能改變主題。</string>
     <string name="prefTitleLogging">記錄</string>
     <string name="prefSummaryLogging">記錄用於分析錯誤。如果應用程式在您的裝置上無法正常執行，您可以向開發人員傳送記錄。可能需要重新啟動應用程式。</string>
-
     <string name="licence">許可證</string>
     <string name="reset">重設</string>
-
     <string name="widgetTextStart">啟動 (s)ftpd</string>
     <string name="widgetTextStop">停止 (s)ftpd</string>
     <string name="isAnonymous">匿名登入：%1$b</string>
     <string name="selectServerAction">選擇伺服器動作</string>
     <string name="isServerRunning">伺服器正在執行嗎？</string>
-
     <string name="storageType">儲存類型</string>
     <string name="storageTypePlain">普通的舊檔案系統</string>
     <string name="storageTypeRoot">超級使用者（裝置必須 root）</string>
@@ -88,13 +83,10 @@
     <string name="safExplainHeading">SAF 如何運作</string>
     <string name="safExplain">Android 會要您選擇一個目錄。那個目錄會在伺服器中可用。權限偶爾可能會被撤回，您必須重新選擇。</string>
     <string name="selectedSafUri">選擇的 SAF URI：</string>
-
     <string name="startServerAndExit">只啟動伺服器</string>
     <string name="translate">翻譯</string>
-
     <string name="haveToSetAuthMechanism">您必須先設定驗證機制</string>
     <string name="ftpPassivePortsInvalid">FTP 被動連接埠的值無效。</string>
-
     <string name="prefsCategoryTitleAuth">驗證</string>
     <string name="prefsCategoryTitleConnectivity">連線</string>
     <string name="prefsCategoryTitleUi">使用者介面</string>
@@ -106,13 +98,18 @@
     <string name="prefSummaryLoggingV2">記錄用於分析錯誤。如果應用程式在您的裝置上無法正常執行，您可以向開發人員傳送記錄。可能需要重新啟動應用程式。文字記錄儲存在 %s。</string>
     <string name="prefAllowedIpsPattern">允許的 IP 樣式</string>
     <string name="prefSummaryAllowedIpsPattern">允許的 IP 位置的樣式。只能使用一個萬用字元 (*)，它只用於最後一個字元。</string>
-
     <string name="startServerAndUi">與伺服器啟動</string>
-
     <string name="prefTitleSshowIpv4InNotification">在通知中顯示 IPv4 位置</string>
     <string name="prefSummaryShowIpv4InNotification">如果開啟連線資訊，在通知中顯示 IPv4 位置。</string>
     <string name="prefTitleSshowIpv6InNotification">在通知中顯示 IPv6 位置</string>
     <string name="prefSummaryShowIpv6InNotification">如果開啟連線資訊，在通知中顯示 IPv6 位置。</string>
     <string name="passwordPresent">密碼存在：%1$b</string>
     <string name="pubKeyAuth">公開金鑰驗證：%1$b</string>
-    </resources>
+    <string name="filepickerNewFolder">新增資料夾</string>
+    <string name="filepickerCreateFolderError">建立資料夾失敗</string>
+    <string name="open">開啟</string>
+    <string name="saveToTextFile">儲存到文字檔</string>
+    <string name="download">下載</string>
+    <string name="downloadOrSaveUrlToFile">下載或儲存網址到文字檔？</string>
+    <string name="prefSummaryIdleTimeoutV2">伺服器會在這個時間後中止閒置的連線。設為 0 以停用。</string>
+</resources>
