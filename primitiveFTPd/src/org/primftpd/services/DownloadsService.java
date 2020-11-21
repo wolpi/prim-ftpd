@@ -2,6 +2,7 @@ package org.primftpd.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -16,6 +17,7 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.Header;
 import org.primftpd.util.Defaults;
+import org.primftpd.util.FilenameUnique;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
@@ -174,6 +176,7 @@ public class DownloadsService extends Service {
 
             // log headers
             long filesize = 0;
+            String contentType = null;
             logger.debug("headers of {}", urlStr);
             logger.debug("status code {}", response.getCode());
             Header[] headers = response.getHeaders();
@@ -186,6 +189,8 @@ public class DownloadsService extends Service {
                     } catch (Exception e) {
                         logger.info("could not parse download size: {}", val);
                     }
+                } else if ("Content-Type".equals(headerName)) {
+                    contentType = val;
                 }
                 logger.debug("header: {} = {}", headerName, val);
             }
@@ -198,20 +203,15 @@ public class DownloadsService extends Service {
             } else {
 
                 // build local path
-                URL url = new URL(urlStr);
-                String urlPath = url.getPath();
-                filename = "download";
-                if (urlPath != null) {
-                    String[] split = urlPath.split("/");
-                    filename = split[split.length - 1];
-                }
-                localPath = Defaults.DOWNLOADS_DIR + "/" + filename;
+                Uri uri = Uri.parse(urlStr);
+                filename = FilenameUnique.filename(uri, null, contentType, Defaults.DOWNLOADS_DIR, this);
+                localPath = Defaults.DOWNLOADS_DIR + "/" + this.filename;
 
                 // open streams
                 InputStream inputStream = new BufferedInputStream(response.getEntity().getContent());
                 FileOutputStream fos = new FileOutputStream(localPath);
 
-                logger.info("downloading {} to file {}", url, localPath);
+                logger.info("downloading {} to file {}", urlStr, localPath);
 
                 // copy
                 byte[] buf = new byte[BUF_SIZE];
@@ -227,7 +227,7 @@ public class DownloadsService extends Service {
                     //logger.trace("download: transferring num bytes: {}", r);
                     NotificationUtil.createDownloadNotification(
                             this,
-                            filename,
+                            this.filename,
                             localPath,
                             false,
                             false,
@@ -241,7 +241,7 @@ public class DownloadsService extends Service {
                     NotificationUtil.removeDownloadNotification(this);
                     NotificationUtil.createDownloadNotification(
                             this,
-                            filename,
+                            this.filename,
                             localPath,
                             false,
                             true,
