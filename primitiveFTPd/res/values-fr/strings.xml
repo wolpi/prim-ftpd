@@ -114,4 +114,14 @@
     <string name="prefSummaryIdleTimeout">Le serveur terminera les connexions inactive après ce délais (FTP seulement)</string>
     <string name="prefSummaryFtpPassivePorts">Ports pour les connexions FTP passive. Peut être un seul port, une liste ou une plage de ports. Ex. 5678,5700-5710,5800,5900.</string>
     <string name="prefSummaryPubKeyAuth">Si activé, placer vos clés publique ssh2 dans %s. SFTP seulement.</string>
+    <string name="quickShareCouldNotStartServer">Le serveur ne peut pas démarrer</string>
+    <string name="quickShareServerStarted">Le serveur a démarré avec partage fichier seul</string>
+    <string name="quickShare">Partage rapide</string>
+    <string name="open">Ouvert</string>
+    <string name="saveToTextFile">Sauvegarder dans un fichier texte</string>
+    <string name="download">Télécharger</string>
+    <string name="downloadOrSaveUrlToFile">Télécharger ou sauvegarder l\'URL vers un fichier texte \?</string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock">"Le clic sur Vignettes rapides nécessite de déverrouillage de  équipement pour démarrer / arrêter le serveur. Quand actif, une demande de déverrouillage sera affiché si l\'équipement est verrouillé. "</string>
+    <string name="prefTitleQuickSettingsRequiresUnlock">Déverrouillage nécessaire pour Vignettes Rapides</string>
+    <string name="prefSummaryIdleTimeoutV2">"Le serveur va couper les connexions inactifs passé ce délai. Régler sur 0 pour désactiver. "</string>
 </resources>
