@@ -120,7 +120,9 @@ public class DownloadsService extends Service {
                 filename = "download";
                 if (urlPath != null) {
                     String[] split = urlPath.split("/");
-                    filename = split[split.length - 1];
+                    if (split.length > 0) {
+                        filename = split[split.length - 1];
+                    }
                 }
                 localPath = Defaults.DOWNLOADS_DIR + "/" + filename;
             } catch (Exception e) {
