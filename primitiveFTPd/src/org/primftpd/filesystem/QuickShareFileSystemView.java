@@ -8,6 +8,8 @@ import java.io.File;
 public abstract class QuickShareFileSystemView<T extends QuickShareFile<X>, X> {
 
     protected final static String ROOT_PATH = "/";
+    protected final static String CURRENT_PATH = ".";
+    protected final static String CURRENT_ROOT_PATH = "/.";
 
     final Logger logger = LoggerFactory.getLogger(getClass());
     final File quickShareFile;
@@ -23,7 +25,7 @@ public abstract class QuickShareFileSystemView<T extends QuickShareFile<X>, X> {
         logger.trace("getFile({})", file);
 
         T result;
-        if (ROOT_PATH.equals(file)) {
+        if (ROOT_PATH.equals(file) || CURRENT_PATH.equals(file) || CURRENT_ROOT_PATH.equals(file)) {
             result = createFile(quickShareFile, ROOT_PATH);
         } else {
             result = createFile(quickShareFile);
