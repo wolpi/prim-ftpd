@@ -145,4 +145,10 @@
     <string name="saveToTextFile">Simpan ke berkas teks</string>
     <string name="download">Unduh</string>
     <string name="downloadOrSaveUrlToFile">Unduh atau simpan URL ke berkas teks \?</string>
+    <string name="quickShareCouldNotStartServer">Server tidak bisa dimulai</string>
+    <string name="quickShareServerStarted">Server telah mulai membagikan berkas tunggal</string>
+    <string name="quickShare">Berbagi Cepat</string>
+    <string name="prefSummaryIdleTimeoutV2">Server akan mematikan koneksi mengangur setelah rentang waktu berikut. Atur ke 0 untuk menonaktifkan.</string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock">Klik pada ikon pengaturan cepat membutuhkan perangkat tidak terkunci untuk memulai/meyetop server. Ketika diaktifkan, akan meminta konfirmasi untuk membuka perangkat jika terkunci.</string>
+    <string name="prefTitleQuickSettingsRequiresUnlock">Syarat buka kunci Ikon Pengaturan Cepat</string>
 </resources>
