@@ -247,7 +247,8 @@ public class ServicesStartStopUtil {
             Context ctxt,
             boolean serverRunning,
             PrefsBean prefsBean,
-            KeyFingerprintProvider keyFingerprintProvider) {
+            KeyFingerprintProvider keyFingerprintProvider,
+            QuickShareBean quickShareBean) {
         LOGGER.trace("updateNonActivityUI()");
         Notification notification = null;
         updateWidget(ctxt, serverRunning);
@@ -255,7 +256,8 @@ public class ServicesStartStopUtil {
             notification = NotificationUtil.createStatusbarNotification(
                     ctxt,
                     prefsBean,
-                    keyFingerprintProvider);
+                    keyFingerprintProvider,
+                    quickShareBean);
         } else {
             LOGGER.debug("removeStatusbarNotification()");
             NotificationUtil.removeStatusbarNotification(ctxt);

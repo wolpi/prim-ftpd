@@ -93,7 +93,8 @@ public class ServerServiceHandler extends Handler
 						service,
 						true,
 						service.prefsBean,
-						service.keyFingerprintProvider);
+						service.keyFingerprintProvider,
+						service.quickShareBean);
 				service.startForeground(NotificationUtil.NOTIFICATION_ID, notification);
 			} else {
 				service.stopSelf();
@@ -121,6 +122,7 @@ public class ServerServiceHandler extends Handler
 				service,
 				false,
 				service.prefsBean,
+				null,
 				null);
 	}
 

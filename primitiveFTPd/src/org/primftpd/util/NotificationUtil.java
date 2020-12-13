@@ -20,6 +20,7 @@ import org.primftpd.StartStopWidgetProvider;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.services.DownloadsService;
+import org.primftpd.share.QuickShareBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +70,8 @@ public class NotificationUtil
 			Context ctxt,
 			int text,
 			int actionText,
-			String channelId) {
+			String channelId,
+			QuickShareBean quickShareBean) {
 		// create pending intent
 		Intent notificationIntent = new Intent(ctxt, PrimitiveFtpdActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(ctxt, 0, notificationIntent, 0);
@@ -84,7 +86,9 @@ public class NotificationUtil
 		int iconId = R.drawable.ic_notification;
 		int stopIconId = R.drawable.ic_stop_white_24dp;
 		CharSequence tickerText = ctxt.getText(text);
-		CharSequence contentTitle = ctxt.getText(R.string.notificationTitle);
+		CharSequence contentTitle = quickShareBean != null
+			? "QuickShare of: " + quickShareBean.filename()
+			: ctxt.getText(R.string.notificationTitle);
 		CharSequence contentText = tickerText;
 
 		// use main icon as large one
@@ -155,7 +159,8 @@ public class NotificationUtil
 				ctxt,
 				R.string.toggleService,
 				R.string.toggleService,
-				START_STOP_CHANNEL_ID);
+				START_STOP_CHANNEL_ID,
+				null);
 
 		Notification notification = null;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -169,16 +174,18 @@ public class NotificationUtil
 	}
 
 	public static Notification createStatusbarNotification(
-			Context ctxt,
-			PrefsBean prefsBean,
-			KeyFingerprintProvider keyFingerprintProvider) {
+            Context ctxt,
+            PrefsBean prefsBean,
+            KeyFingerprintProvider keyFingerprintProvider,
+			QuickShareBean quickShareBean) {
 		LOGGER.debug("createStatusbarNotification()");
 
 		Notification.Builder builder = createStubNotification(
 				ctxt,
 				R.string.serverRunning,
 				R.string.stopService,
-				NOTIFICATION_CHANNEL_ID);
+				NOTIFICATION_CHANNEL_ID,
+				quickShareBean);
 
 		Notification notification = null;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

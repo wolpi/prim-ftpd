@@ -1,5 +1,6 @@
 package org.primftpd.share;
 
+import java.io.File;
 import java.io.Serializable;
 
 public class QuickShareBean implements Serializable {
@@ -11,5 +12,9 @@ public class QuickShareBean implements Serializable {
 
     public String getPathToFile() {
         return pathToFile;
+    }
+
+    public String filename() {
+        return new File(pathToFile).getName();
     }
 }
