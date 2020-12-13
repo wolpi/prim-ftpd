@@ -1,5 +1,15 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- QuickShare Info -->
+    <TextView
+        android:id="@+id/quickShareInfo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+    />
+
     <!-- addresses / interfaces -->
     <TextView
         android:id="@+id/addressesLabel"

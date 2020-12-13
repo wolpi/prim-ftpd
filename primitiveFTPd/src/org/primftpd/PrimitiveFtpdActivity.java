@@ -43,7 +43,9 @@ import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.prefs.StorageType;
 import org.primftpd.prefs.Theme;
-import org.primftpd.services.ServerStateChangedEvent;
+import org.primftpd.events.ServerInfoRequestEvent;
+import org.primftpd.events.ServerInfoResponseEvent;
+import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.ui.CalcPubkeyFinterprintsTask;
 import org.primftpd.ui.GenKeysAskDialogFragment;
 import org.primftpd.ui.GenKeysAsyncTask;
@@ -529,16 +531,36 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		progressDiag.show();
 	}
 
-	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-	public void onEvent(ServerStateChangedEvent event) {
+	private boolean isEventInTime(Object event) {
 		long currentTime = System.currentTimeMillis();
 		long offset = currentTime - timestampOfLastEvent;
-		if (offset > 300) {
-			logger.debug("handling event, offset: {} ms", Long.valueOf(offset));
+		boolean inTime = offset > 20;
+		if (inTime) {
+			logger.debug("handling event '{}', offset: {} ms", event.getClass().getName(), Long.valueOf(offset));
 			timestampOfLastEvent = currentTime;
-			displayServersState();
 		} else {
-			logger.debug("ignoring event, offset: {} ms", Long.valueOf(offset));
+			logger.debug("ignoring event '{}', offset: {} ms", event.getClass().getName(), Long.valueOf(offset));
+		}
+		return inTime;
+	}
+	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+	public void onEvent(ServerStateChangedEvent event) {
+		logger.debug("got ServerStateChangedEvent");
+		if (isEventInTime(event)) {
+			displayServersState();
+		}
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+	public void onEvent(ServerInfoResponseEvent event) {
+		String quickShareFilename = event.getQuickShareFilename();
+		logger.debug("got ServerInfoResponseEvent, quickShareFilename: {}", quickShareFilename);
+		if (isEventInTime(event)) {
+			if (quickShareFilename != null) {
+				TextView quickShareInfo = findViewById(R.id.quickShareInfo);
+				quickShareInfo.setVisibility(View.VISIBLE);
+				quickShareInfo.setText(String.format(getString(R.string.quickShareInfoActivity), quickShareFilename));
+			}
 		}
 	}
 
@@ -568,6 +590,14 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		// we don't get serversRunning, yet
 		if (serversRunning != null) {
 			showPortsAndServerState();
+		}
+
+		// if running, query server info
+		if (Boolean.TRUE.equals(running)) {
+			logger.debug("posting ServerInfoRequestEvent");
+			EventBus.getDefault().post(new ServerInfoRequestEvent());
+		} else {
+			findViewById(R.id.quickShareInfo).setVisibility(View.GONE);
 		}
 	}
 

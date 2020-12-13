@@ -134,6 +134,9 @@
     <string name="quickShare">Quick Share</string>
     <string name="quickShareServerStarted">Server has been started sharing single file</string>
     <string name="quickShareCouldNotStartServer">Server could not be started</string>
+    <string name="quickShareInfoNotification">QuickShare of: %1s</string>
+    <string name="quickShareInfoActivity">Running in QuickShare Mode for file: %1s</string>
+
 
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>

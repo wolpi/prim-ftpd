@@ -16,6 +16,11 @@ import android.os.Process;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.primftpd.events.ServerInfoRequestEvent;
+import org.primftpd.events.ServerInfoResponseEvent;
+import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.R;
 import org.primftpd.share.QuickShareBean;
@@ -86,6 +91,9 @@ public abstract class AbstractServerService
 			Process.THREAD_PRIORITY_BACKGROUND);
 		thread.start();
 
+		// listen for events
+		EventBus.getDefault().register(this);
+
 		serviceLooper = thread.getLooper();
 		serviceHandler = createServiceHandler(serviceLooper, this);
 	}
@@ -131,6 +139,16 @@ public abstract class AbstractServerService
 
 		// post event
 		EventBus.getDefault().post(new ServerStateChangedEvent());
+
+		// don't listen anymore
+		EventBus.getDefault().unregister(this);
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+	public void onEvent(ServerInfoRequestEvent event) {
+		logger.debug("got ServerInfoRequestEvent");
+		String quickShareFilename = quickShareBean != null ? quickShareBean.filename() : null;
+		EventBus.getDefault().post(new ServerInfoResponseEvent(quickShareFilename));
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package org.primftpd.services;
+package org.primftpd.events;
 
 /**
  * Eventbus event to indicate server state changed.

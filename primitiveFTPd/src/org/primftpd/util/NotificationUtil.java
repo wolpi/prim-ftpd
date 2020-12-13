@@ -87,7 +87,7 @@ public class NotificationUtil
 		int stopIconId = R.drawable.ic_stop_white_24dp;
 		CharSequence tickerText = ctxt.getText(text);
 		CharSequence contentTitle = quickShareBean != null
-			? "QuickShare of: " + quickShareBean.filename()
+			? String.format(ctxt.getResources().getString(R.string.quickShareInfoNotification), quickShareBean.filename())
 			: ctxt.getText(R.string.notificationTitle);
 		CharSequence contentText = tickerText;
 
