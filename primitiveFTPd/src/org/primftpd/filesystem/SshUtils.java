@@ -1,5 +1,6 @@
 package org.primftpd.filesystem;
 
+import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
 
 import java.io.IOException;
@@ -100,5 +101,9 @@ class SshUtils {
             case NLink:
                 break;
         }
+    }
+
+    static String getClientIp(Session session) {
+        return session.getIoSession().getRemoteAddress().toString();
     }
 }

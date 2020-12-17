@@ -1,5 +1,8 @@
 package org.primftpd.filesystem;
 
+import org.primftpd.events.ClientActionEvent;
+import org.primftpd.events.ClientActionPoster;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -16,7 +19,7 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	protected final File file;
 
-	public FsFile(File file) {
+	public FsFile(File file, ClientActionPoster clientActionPoster) {
 		super(
 				file.getAbsolutePath(),
 				file.getName(),
@@ -24,12 +27,18 @@ public abstract class FsFile<T> extends AbstractFile {
 				file.length(),
 				file.canRead(),
 				file.exists(),
-				file.isDirectory());
+				file.isDirectory(),
+				clientActionPoster);
 		this.file = file;
 		this.name = file.getName();
 	}
 
-	protected abstract T createFile(File file);
+	protected abstract T createFile(File file, ClientActionPoster clientActionPoster);
+
+	@Override
+	public ClientActionEvent.Storage getClientActionStorage() {
+		return ClientActionEvent.Storage.FS;
+	}
 
 	public boolean isFile() {
 		boolean isFile = file.isFile();
@@ -110,26 +119,30 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	public boolean mkdir() {
 		logger.trace("[{}] mkdir()", name);
+		postClientAction(ClientActionEvent.ClientAction.CREATE_DIR);
 		return file.mkdir();
 	}
 
 	public boolean delete() {
 		logger.trace("[{}] delete()", name);
+		postClientAction(ClientActionEvent.ClientAction.DELETE);
 		return file.delete();
 	}
 
 	public boolean move(FsFile<T> destination) {
 		logger.trace("[{}] move({})", name, destination.getAbsolutePath());
+		postClientAction(ClientActionEvent.ClientAction.RENAME);
 		return file.renameTo(new File(destination.getAbsolutePath()));
 	}
 
 	public List<T> listFiles() {
 		logger.trace("[{}] listFiles()", name);
+		postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 		File[] filesArray = file.listFiles();
 		if (filesArray != null) {
 			List<T> files = new ArrayList<>(filesArray.length);
 			for (File file : filesArray) {
-				files.add(createFile(file));
+				files.add(createFile(file, clientActionPoster));
 			}
 			return files;
 		}
@@ -139,6 +152,7 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	public OutputStream createOutputStream(long offset) throws IOException {
 		logger.trace("[{}] createOutputStream({})", name, offset);
+		postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
 		// may be necessary to create dirs
 		// see isWritable()
@@ -178,6 +192,8 @@ public abstract class FsFile<T> extends AbstractFile {
 						offset,
 						file.getAbsolutePath()
 		});
+		postClientAction(ClientActionEvent.ClientAction.UPLOAD);
+
 		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file), TracingBufferedOutputStream.BUFFER_SIZE);
 		bis.skip(offset);
 		return bis;

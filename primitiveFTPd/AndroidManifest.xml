@@ -114,6 +114,11 @@
         </activity>
 
         <activity
+            android:name="org.primftpd.ui.ClientActionActivity"
+            android:label="@string/clientActionsLabel">
+        </activity>
+
+        <activity
             android:name="org.primftpd.prefs.AboutActivity"
             android:label="About">
         </activity>

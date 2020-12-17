@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
+import org.primftpd.events.ClientActionPoster;
 
 import java.util.List;
 
@@ -17,8 +18,9 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             ContentResolver contentResolver,
             Uri startUrl,
             String absPath,
+            ClientActionPoster clientActionPoster,
             Session session) {
-        super(contentResolver, startUrl, absPath);
+        super(contentResolver, startUrl, absPath, clientActionPoster);
         this.session = session;
     }
 
@@ -28,8 +30,9 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             String docId,
             String absPath,
             boolean exists,
+            ClientActionPoster clientActionPoster,
             Session session) {
-        super(contentResolver, startUrl, docId, absPath, exists);
+        super(contentResolver, startUrl, docId, absPath, exists, clientActionPoster);
         this.session = session;
     }
 
@@ -38,8 +41,9 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             Uri startUrl,
             Cursor cursor,
             String absPath,
+            ClientActionPoster clientActionPoster,
             Session session) {
-        super(contentResolver, startUrl, cursor, absPath);
+        super(contentResolver, startUrl, cursor, absPath, clientActionPoster);
         this.session = session;
     }
 
@@ -48,8 +52,14 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             ContentResolver contentResolver,
             Uri startUrl,
             Cursor cursor,
-            String absPath) {
-        return new RoSafSshFile(contentResolver, startUrl, cursor, absPath, session);
+            String absPath,
+            ClientActionPoster clientActionPoster) {
+        return new RoSafSshFile(contentResolver, startUrl, cursor, absPath, clientActionPoster, session);
+    }
+
+    @Override
+    public String getClientIp() {
+        return SshUtils.getClientIp(session);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
+import org.primftpd.events.ClientActionPoster;
 
 public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
 
@@ -15,8 +16,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             ContentResolver contentResolver,
             Uri startUrl,
             String absPath,
+            ClientActionPoster clientActionPoster,
             User user) {
-        super(contentResolver, startUrl, absPath);
+        super(contentResolver, startUrl, absPath, clientActionPoster);
         this.user = user;
     }
 
@@ -26,8 +28,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             String docId,
             String absPath,
             boolean exists,
+            ClientActionPoster clientActionPoster,
             User user) {
-        super(contentResolver, startUrl, docId, absPath, exists);
+        super(contentResolver, startUrl, docId, absPath, exists, clientActionPoster);
         this.user = user;
     }
 
@@ -36,8 +39,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             Uri startUrl,
             Cursor cursor,
             String absPath,
+            ClientActionPoster clientActionPoster,
             User user) {
-        super(contentResolver, startUrl, cursor, absPath);
+        super(contentResolver, startUrl, cursor, absPath, clientActionPoster);
         this.user = user;
     }
 
@@ -46,8 +50,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             ContentResolver contentResolver,
             Uri startUrl,
             Cursor cursor,
-            String absPath) {
-        return new RoSafFtpFile(contentResolver, startUrl, cursor, absPath, user);
+            String absPath,
+            ClientActionPoster clientActionPoster) {
+        return new RoSafFtpFile(contentResolver, startUrl, cursor, absPath, clientActionPoster, user);
     }
 
     @Override

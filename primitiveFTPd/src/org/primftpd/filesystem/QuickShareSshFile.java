@@ -2,6 +2,7 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
+import org.primftpd.events.ClientActionPoster;
 
 import java.io.File;
 import java.util.List;
@@ -9,24 +10,29 @@ import java.util.List;
 public class QuickShareSshFile extends QuickShareFile<SshFile> implements SshFile {
     private final Session session;
 
-    QuickShareSshFile(File quickShareFile, String dir, Session session) {
-        super(quickShareFile, dir);
+    QuickShareSshFile(File quickShareFile, String dir, ClientActionPoster clientActionPoster, Session session) {
+        super(quickShareFile, dir, clientActionPoster);
         this.session = session;
     }
 
-    QuickShareSshFile(File quickShareFile, Session session) {
-        super(quickShareFile);
+    QuickShareSshFile(File quickShareFile, ClientActionPoster clientActionPoster, Session session) {
+        super(quickShareFile, clientActionPoster);
         this.session = session;
     }
 
     @Override
-    protected SshFile createFile(File quickShareFile, String dir) {
-        return new QuickShareSshFile(quickShareFile, dir, session);
+    protected SshFile createFile(File quickShareFile, String dir, ClientActionPoster clientActionPoster) {
+        return new QuickShareSshFile(quickShareFile, dir, clientActionPoster, session);
     }
 
     @Override
-    protected SshFile createFile(File quickShareFile) {
-        return new QuickShareSshFile(quickShareFile, session);
+    protected SshFile createFile(File quickShareFile, ClientActionPoster clientActionPoster) {
+        return new QuickShareSshFile(quickShareFile, clientActionPoster, session);
+    }
+
+    @Override
+    public String getClientIp() {
+        return SshUtils.getClientIp(session);
     }
 
     @Override
@@ -49,7 +55,7 @@ public class QuickShareSshFile extends QuickShareFile<SshFile> implements SshFil
     @Override
     public SshFile getParentFile() {
         logger.trace("[{}] getParentFile()", name);
-        return new QuickShareSshFile(quickShareFile, QuickShareFileSystemView.ROOT_PATH, session);
+        return new QuickShareSshFile(quickShareFile, QuickShareFileSystemView.ROOT_PATH, clientActionPoster, session);
     }
 
     @Override

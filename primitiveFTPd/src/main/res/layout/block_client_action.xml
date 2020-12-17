@@ -1,0 +1,35 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- label -->
+    <TextView
+        android:id="@+id/clientActionsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:text="@string/clientActionsLabel"
+        />
+
+    <!-- content -->
+    <TextView
+        android:id="@+id/clientActionsLine1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        />
+    <TextView
+        android:id="@+id/clientActionsLine2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/clientActionsLine3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        />
+</merge>

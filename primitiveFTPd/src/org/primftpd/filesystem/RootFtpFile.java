@@ -2,6 +2,7 @@ package org.primftpd.filesystem;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
+import org.primftpd.events.ClientActionPoster;
 import org.primftpd.pojo.LsOutputBean;
 
 import java.io.BufferedInputStream;
@@ -16,13 +17,13 @@ public class RootFtpFile extends RootFile<FtpFile> implements FtpFile {
 
     private final User user;
 
-    public RootFtpFile(Shell.Interactive shell, LsOutputBean bean, String absPath, User user) {
-        super(shell, bean, absPath);
+    public RootFtpFile(Shell.Interactive shell, LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster, User user) {
+        super(shell, bean, absPath, clientActionPoster);
         this.user = user;
     }
 
-    protected RootFtpFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath) {
-        return new RootFtpFile(shell, bean, absPath, user);
+    protected RootFtpFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster) {
+        return new RootFtpFile(shell, bean, absPath, clientActionPoster, user);
     }
 
     @Override

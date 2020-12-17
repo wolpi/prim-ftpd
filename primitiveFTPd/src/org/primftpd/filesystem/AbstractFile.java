@@ -1,6 +1,8 @@
 package org.primftpd.filesystem;
 
 import org.apache.sshd.common.file.SshFile;
+import org.primftpd.events.ClientActionEvent;
+import org.primftpd.events.ClientActionPoster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +23,17 @@ public abstract class AbstractFile {
     protected boolean readable;
     protected boolean exists;
 
-    public AbstractFile(String absPath, String name, long lastModified, long size, boolean readable, boolean exists, boolean isDirectory) {
+    protected final ClientActionPoster clientActionPoster;
+
+    public AbstractFile(
+            String absPath,
+            String name,
+            long lastModified,
+            long size,
+            boolean readable,
+            boolean exists,
+            boolean isDirectory,
+            ClientActionPoster clientActionPoster) {
         this.absPath = absPath;
         this.name = name;
         this.lastModified = lastModified;
@@ -29,6 +41,22 @@ public abstract class AbstractFile {
         this.readable = readable;
         this.exists = exists;
         this.isDirectory = isDirectory;
+        this.clientActionPoster = clientActionPoster;
+    }
+
+    public String getClientIp() {
+        return "unknown ip";
+    }
+
+    public abstract ClientActionEvent.Storage getClientActionStorage();
+
+    public void postClientAction(ClientActionEvent.ClientAction clientAction) {
+        clientActionPoster.postClientAction(
+                getClientActionStorage(),
+                clientAction,
+                getClientIp(),
+                getAbsolutePath());
+
     }
 
     public String getAbsolutePath() {

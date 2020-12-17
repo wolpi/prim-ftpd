@@ -7,6 +7,7 @@ import android.os.Handler;
 import androidx.documentfile.provider.DocumentFile;
 import android.widget.Toast;
 
+import org.primftpd.events.ClientActionPoster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,23 +21,27 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
     protected final Context context;
     protected final Uri startUrl;
     protected final ContentResolver contentResolver;
+    protected final  ClientActionPoster clientActionPoster;
 
-    public SafFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver) {
+    public SafFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, ClientActionPoster clientActionPoster) {
         this.context = context;
         this.startUrl = startUrl;
         this.contentResolver = contentResolver;
+        this.clientActionPoster = clientActionPoster;
     }
 
     protected abstract T createFile(
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
-            String absPath);
+            String absPath,
+            ClientActionPoster clientActionPoster);
     protected abstract T createFile(
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             String name,
-            String absPath);
+            String absPath,
+            ClientActionPoster clientActionPoster);
 
     protected abstract String absolute(String file);
 
@@ -60,18 +65,18 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
                 if (docFile != null) {
                     boolean found = i == parts.size() - 1;
                     String absPath = Utils.toPath(parts);
-                    T child = createFile(contentResolver, parentDocFile, docFile, absPath);
+                    T child = createFile(contentResolver, parentDocFile, docFile, absPath, clientActionPoster);
                     if (found) {
                         return child;
                     }
                 } else {
                     // probably upload -> create object just with name
                     String absPath = Utils.toPath(parts);
-                    return createFile(contentResolver, parentDocFile, currentPart, absPath);
+                    return createFile(contentResolver, parentDocFile, currentPart, absPath, clientActionPoster);
                 }
             }
 
-            return createFile(contentResolver, rootDocFile, rootDocFile, ROOT_PATH);
+            return createFile(contentResolver, rootDocFile, rootDocFile, ROOT_PATH, clientActionPoster);
         } catch (Exception e) {
             final String msg = "[(s)ftpd] Error getting data from SAF: " + e.toString();
             logger.error(msg);

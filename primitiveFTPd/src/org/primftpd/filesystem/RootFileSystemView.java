@@ -1,5 +1,6 @@
 package org.primftpd.filesystem;
 
+import org.primftpd.events.ClientActionPoster;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
 import org.slf4j.Logger;
@@ -14,12 +15,14 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     protected final Shell.Interactive shell;
+    protected final ClientActionPoster clientActionPoster;
 
-    public RootFileSystemView(Shell.Interactive shell) {
+    public RootFileSystemView(Shell.Interactive shell, ClientActionPoster clientActionPoster) {
         this.shell = shell;
+        this.clientActionPoster = clientActionPoster;
     }
 
-    protected abstract T createFile(LsOutputBean bean, String absPath);
+    protected abstract T createFile(LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster);
 
     protected abstract String absolute(String file);
 
@@ -57,7 +60,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
             //    // TODO make sym link target absolute
             //    file = bean.getName();
             //}
-            return createFile(bean, file);
+            return createFile(bean, file, clientActionPoster);
         } else {
             // probably new
             String name;
@@ -67,7 +70,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
                 name = file;
             }
             bean = new LsOutputBean(name);
-            return createFile(bean, file);
+            return createFile(bean, file, clientActionPoster);
         }
     }
 

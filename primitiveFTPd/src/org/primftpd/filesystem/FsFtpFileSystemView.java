@@ -6,6 +6,7 @@ import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.User;
+import org.primftpd.events.ClientActionPoster;
 
 public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> implements FileSystemView {
 
@@ -13,15 +14,16 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 	private final File homeDir;
 	private FsFtpFile workingDir;
 
-	public FsFtpFileSystemView(File homeDir, User user) {
+	public FsFtpFileSystemView(ClientActionPoster clientActionPoster, File homeDir, User user) {
+		super(clientActionPoster);
 		this.homeDir = homeDir;
 		workingDir = getHomeDirectory();
 		this.user = user;
 	}
 
 	@Override
-	protected FsFtpFile createFile(File file) {
-		return new FsFtpFile(file, user);
+	protected FsFtpFile createFile(File file, ClientActionPoster clientActionPoster) {
+		return new FsFtpFile(file, clientActionPoster, user);
 	}
 
 	@Override
@@ -33,7 +35,7 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 	public FsFtpFile getHomeDirectory() {
 		logger.trace("getHomeDirectory() -> {}", (homeDir != null ? homeDir.getAbsolutePath() : "null"));
 
-		return createFile(homeDir);
+		return createFile(homeDir, clientActionPoster);
 	}
 
 	public FsFtpFile getWorkingDirectory() {
@@ -80,7 +82,7 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 		logger.trace("current WD '{}', new path '{}'",
 				currentAbsPath,
 				path);
-		workingDir = createFile(new File(path));
+		workingDir = createFile(new File(path), clientActionPoster);
 
 		return true;
 	}

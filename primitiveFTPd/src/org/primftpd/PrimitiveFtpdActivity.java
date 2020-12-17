@@ -34,6 +34,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.primftpd.events.ClientActionEvent;
 import org.primftpd.log.PrimFtpdLoggerBinder;
 import org.primftpd.prefs.AboutActivity;
 import org.primftpd.prefs.FtpPrefsActivityThemeDark;
@@ -47,6 +48,7 @@ import org.primftpd.events.ServerInfoRequestEvent;
 import org.primftpd.events.ServerInfoResponseEvent;
 import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.ui.CalcPubkeyFinterprintsTask;
+import org.primftpd.ui.ClientActionActivity;
 import org.primftpd.ui.GenKeysAskDialogFragment;
 import org.primftpd.ui.GenKeysAsyncTask;
 import org.primftpd.util.IpAddressProvider;
@@ -105,6 +107,10 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	private Theme theme;
 	private ServersRunningBean serversRunning;
 	private long timestampOfLastEvent = 0;
+
+	private TextView clientActionView1;
+	private TextView clientActionView2;
+	private TextView clientActionView3;
 
 	protected int getLayoutId() {
 		return R.layout.main;
@@ -174,6 +180,11 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 					keyFingerprintProvider,
 					this);
 		}
+
+		// init client action views
+		clientActionView1 = findViewById(R.id.clientActionsLine1);
+		clientActionView2 = findViewById(R.id.clientActionsLine2);
+		clientActionView3 = findViewById(R.id.clientActionsLine3);
 	}
 
 	@Override
@@ -564,6 +575,18 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		}
 	}
 
+	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+	public void onEvent(ClientActionEvent event) {
+		String clientAction = ClientActionActivity.format(event);
+
+		clientActionView2.setVisibility(View.VISIBLE);
+		clientActionView3.setVisibility(View.VISIBLE);
+
+		clientActionView1.setText(clientActionView2.getText());
+		clientActionView2.setText(clientActionView3.getText());
+		clientActionView3.setText(clientAction);
+	}
+
 	/**
 	 * Displays UI-elements showing if servers are running. That includes
 	 * Actionbar Icon and Ports-Table. When Activity is shown the first time
@@ -675,6 +698,9 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		case R.id.menu_prefs:
 			handlePrefs();
 			break;
+		case R.id.menu_client_action:
+			handleClientAction();
+			break;
 		case R.id.menu_translate:
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://pftpd.rocks/projects/pftpd/pftpd/"));
 			startActivity(intent);
@@ -774,6 +800,12 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 			? FtpPrefsActivityThemeDark.class
 			: FtpPrefsActivityThemeLight.class;
 		Intent intent = new Intent(this, prefsActivityClass);
+		startActivity(intent);
+	}
+
+	protected void handleClientAction() {
+		logger.trace("handleClientAction()");
+		Intent intent = new Intent(this, ClientActionActivity.class);
 		startActivity(intent);
 	}
 

@@ -5,6 +5,7 @@ import androidx.documentfile.provider.DocumentFile;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
+import org.primftpd.events.ClientActionPoster;
 
 import java.util.List;
 
@@ -18,9 +19,10 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
+            ClientActionPoster clientActionPoster,
             Session session,
             SafSshFileSystemView fileSystemView) {
-        super(contentResolver, parentDocumentFile, documentFile, absPath);
+        super(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster);
         this.session = session;
         this.fileSystemView = fileSystemView;
     }
@@ -30,9 +32,10 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
+            ClientActionPoster clientActionPoster,
             Session session,
             SafSshFileSystemView fileSystemView) {
-        super(contentResolver, parentDocumentFile, name, absPath);
+        super(contentResolver, parentDocumentFile, name, absPath, clientActionPoster);
         this.session = session;
         this.fileSystemView = fileSystemView;
     }
@@ -42,8 +45,14 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
-            String absPath) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, session, fileSystemView);
+            String absPath,
+            ClientActionPoster clientActionPoster) {
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster, session, fileSystemView);
+    }
+
+    @Override
+    public String getClientIp() {
+        return SshUtils.getClientIp(session);
     }
 
     @Override

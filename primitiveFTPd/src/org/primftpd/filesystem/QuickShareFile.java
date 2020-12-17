@@ -1,5 +1,8 @@
 package org.primftpd.filesystem;
 
+import org.primftpd.events.ClientActionEvent;
+import org.primftpd.events.ClientActionPoster;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -12,9 +15,9 @@ import java.util.List;
 
 public abstract class QuickShareFile<T> extends AbstractFile {
 
-    File quickShareFile;
+    protected File quickShareFile;
 
-    QuickShareFile(File quickShareFile, String dir) {
+    QuickShareFile(File quickShareFile, String dir, ClientActionPoster clientActionPoster) {
         // this c-tor is to be used to access fake directory
         super(
                 dir,
@@ -23,11 +26,12 @@ public abstract class QuickShareFile<T> extends AbstractFile {
                 0,
                 true,
                 true,
-                true);
+                true,
+                clientActionPoster);
         this.quickShareFile = quickShareFile;
     }
 
-    QuickShareFile(File quickShareFile) {
+    QuickShareFile(File quickShareFile, ClientActionPoster clientActionPoster) {
         // this c-tor is to be used to access actual file
         super(
                 QuickShareFileSystemView.ROOT_PATH + quickShareFile.getName(),
@@ -36,12 +40,18 @@ public abstract class QuickShareFile<T> extends AbstractFile {
                 quickShareFile.length(),
                 quickShareFile.canRead(),
                 quickShareFile.exists(),
-                false);
+                false,
+                clientActionPoster);
         this.quickShareFile = quickShareFile;
     }
 
-    abstract protected T createFile(File quickShareFile, String dir);
-    abstract protected T createFile(File quickShareFile);
+    abstract protected T createFile(File quickShareFile, String dir, ClientActionPoster clientActionPoster);
+    abstract protected T createFile(File quickShareFile, ClientActionPoster clientActionPoster);
+
+    @Override
+    public ClientActionEvent.Storage getClientActionStorage() {
+        return ClientActionEvent.Storage.QUICKSHARE;
+    }
 
     public boolean isFile() {
         boolean result = !isDirectory;
@@ -81,13 +91,15 @@ public abstract class QuickShareFile<T> extends AbstractFile {
 
     public List<T> listFiles() {
         logger.trace("[{}] listFiles()", name);
+        postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 
-        T result = createFile(quickShareFile);
+        T result = createFile(quickShareFile, clientActionPoster);
         return Collections.singletonList(result);
     }
 
     public OutputStream createOutputStream(long offset) {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
+        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
         return new ByteArrayOutputStream();
     }
 

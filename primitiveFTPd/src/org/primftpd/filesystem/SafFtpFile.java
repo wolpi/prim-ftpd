@@ -5,6 +5,7 @@ import androidx.documentfile.provider.DocumentFile;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
+import org.primftpd.events.ClientActionPoster;
 
 public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
 
@@ -15,8 +16,9 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
+            ClientActionPoster clientActionPoster,
             User user) {
-        super(contentResolver, parentDocumentFile, documentFile, absPath);
+        super(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster);
         this.user = user;
     }
 
@@ -25,8 +27,9 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
+            ClientActionPoster clientActionPoster,
             User user) {
-        super(contentResolver, parentDocumentFile, name, absPath);
+        super(contentResolver, parentDocumentFile, name, absPath, clientActionPoster);
         this.user = user;
     }
 
@@ -35,8 +38,9 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
-            String absPath) {
-        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, user);
+            String absPath,
+            ClientActionPoster clientActionPoster) {
+        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster, user);
     }
 
     @Override

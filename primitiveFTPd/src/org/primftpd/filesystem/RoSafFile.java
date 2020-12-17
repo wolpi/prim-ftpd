@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 
+import org.primftpd.events.ClientActionEvent;
+import org.primftpd.events.ClientActionPoster;
+
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,9 +38,21 @@ public abstract class RoSafFile<T> extends AbstractFile {
             DocumentsContract.Document.COLUMN_FLAGS,
     };
 
-    public RoSafFile(ContentResolver contentResolver, Uri startUrl, String absPath) {
+    public RoSafFile(
+            ContentResolver contentResolver,
+            Uri startUrl,
+            String absPath,
+            ClientActionPoster clientActionPoster) {
         // this c-tor is to be used for start directory
-        super(absPath, null, 0, 0, false, false, false);
+        super(
+                absPath,
+                null,
+                0,
+                0,
+                false,
+                false,
+                false,
+                clientActionPoster);
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
 
@@ -62,9 +77,23 @@ public abstract class RoSafFile<T> extends AbstractFile {
         }
     }
 
-    public RoSafFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath, boolean exists) {
+    public RoSafFile(
+            ContentResolver contentResolver,
+            Uri startUrl,
+            String docId,
+            String absPath,
+            boolean exists,
+            ClientActionPoster clientActionPoster) {
         // this c-tor is to be used for FileSystemView.getFile()
-        super(absPath, null, 0, 0, false, exists, false);
+        super(
+                absPath,
+                null,
+                0,
+                0,
+                false,
+                exists,
+                false,
+                clientActionPoster);
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
 
@@ -93,9 +122,22 @@ public abstract class RoSafFile<T> extends AbstractFile {
         }
     }
 
-    public RoSafFile(ContentResolver contentResolver, Uri startUrl, Cursor cursor, String absPath) {
+    public RoSafFile(
+            ContentResolver contentResolver,
+            Uri startUrl,
+            Cursor cursor,
+            String absPath,
+            ClientActionPoster clientActionPoster) {
         // this c-tor is to be used by listFiles()
-        super(absPath, null, 0, 0, false, false, false);
+        super(
+                absPath,
+                null,
+                0,
+                0,
+                false,
+                false,
+                false,
+                clientActionPoster);
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
         initByCursor(cursor);
@@ -128,7 +170,13 @@ public abstract class RoSafFile<T> extends AbstractFile {
             ContentResolver contentResolver,
             Uri startUrl,
             Cursor cursor,
-            String absPath);
+            String absPath,
+            ClientActionPoster clientActionPoster);
+
+    @Override
+    public ClientActionEvent.Storage getClientActionStorage() {
+        return ClientActionEvent.Storage.ROSAF;
+    }
 
     public boolean isFile() {
         boolean result = !isDirectory;
@@ -210,6 +258,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
 
     public List<T> listFiles() {
         logger.trace("[{}] listFiles()", name);
+        postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 
         List<T> result = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -235,7 +284,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
                     String absPath = this.absPath.endsWith("/")
                             ? this.absPath + childCursor.getString(CURSOR_INDEX_NAME)
                             : this.absPath + "/" + childCursor.getString(CURSOR_INDEX_NAME);
-                    result.add(createFile(contentResolver, startUrl, childCursor, absPath));
+                    result.add(createFile(contentResolver, startUrl, childCursor, absPath, clientActionPoster));
                 }
             } finally {
                 closeQuietly(childCursor);
@@ -258,6 +307,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
 
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
+        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Uri uri = DocumentsContract.buildDocumentUriUsingTree(
@@ -270,6 +320,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
+        postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Uri uri = DocumentsContract.buildDocumentUriUsingTree(

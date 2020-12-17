@@ -9,14 +9,15 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
+import org.primftpd.events.ClientActionPoster;
 
 public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile> implements FileSystemView {
 
     private final User user;
     private SafFtpFile workingDir;
 
-    public SafFtpFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, User user) {
-        super(context, startUrl, contentResolver);
+    public SafFtpFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, ClientActionPoster clientActionPoster, User user) {
+        super(context, startUrl, contentResolver, clientActionPoster);
         this.user = user;
         this.workingDir = getHomeDirectory();
     }
@@ -26,9 +27,10 @@ public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile>
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
-            String absPath) {
+            String absPath,
+            ClientActionPoster clientActionPoster) {
         logger.trace("createFile(DocumentFile)");
-        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, user);
+        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster, user);
     }
 
     @Override
@@ -36,9 +38,10 @@ public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile>
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             String name,
-            String absPath) {
+            String absPath,
+            ClientActionPoster clientActionPoster) {
         logger.trace("createFile(String)");
-        return new SafFtpFile(contentResolver, parentDocumentFile, name, absPath, user);
+        return new SafFtpFile(contentResolver, parentDocumentFile, name, absPath, clientActionPoster, user);
     }
 
     @Override

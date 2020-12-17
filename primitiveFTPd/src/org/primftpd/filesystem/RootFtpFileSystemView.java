@@ -4,6 +4,7 @@ import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.User;
+import org.primftpd.events.ClientActionPoster;
 import org.primftpd.pojo.LsOutputBean;
 
 import java.io.File;
@@ -16,15 +17,15 @@ public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFi
     private final RootFtpFile homeDir;
     private RootFtpFile workingDir;
 
-    public RootFtpFileSystemView(Shell.Interactive shell, File homeDir, User user) {
-        super(shell);
+    public RootFtpFileSystemView(Shell.Interactive shell, ClientActionPoster clientActionPoster, File homeDir, User user) {
+        super(shell, clientActionPoster);
         this.user = user;
         this.workingDir = this.homeDir = getFile(homeDir.getAbsolutePath());
     }
 
     @Override
-    protected RootFtpFile createFile(LsOutputBean bean, String absPath) {
-        return new RootFtpFile(shell, bean, absPath, user);
+    protected RootFtpFile createFile(LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster) {
+        return new RootFtpFile(shell, bean, absPath, clientActionPoster, user);
     }
 
     @Override

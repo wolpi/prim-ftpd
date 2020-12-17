@@ -8,13 +8,14 @@ import androidx.documentfile.provider.DocumentFile;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.file.SshFile;
+import org.primftpd.events.ClientActionPoster;
 
 public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile> implements FileSystemView {
 
     private final Session session;
 
-    public SafSshFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, Session session) {
-        super(context, startUrl, contentResolver);
+    public SafSshFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, ClientActionPoster clientActionPoster, Session session) {
+        super(context, startUrl, contentResolver, clientActionPoster);
         this.session = session;
     }
 
@@ -23,8 +24,9 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
-            String absPath) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, session, this);
+            String absPath,
+            ClientActionPoster clientActionPoster) {
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster, session, this);
     }
 
     @Override
@@ -32,8 +34,9 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             String name,
-            String absPath) {
-        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, session, this);
+            String absPath,
+            ClientActionPoster clientActionPoster) {
+        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, clientActionPoster, session, this);
     }
 
     @Override

@@ -27,6 +27,7 @@ import org.apache.sshd.server.session.SessionFactory;
 import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.R;
 import org.primftpd.crypto.SignatureEd25519;
+import org.primftpd.events.ClientActionEvent;
 import org.primftpd.filesystem.FsSshFileSystemView;
 import org.primftpd.filesystem.QuickShareSshFileSystemView;
 import org.primftpd.filesystem.RoSafSshFileSystemView;
@@ -79,6 +80,11 @@ public class SshServerService extends AbstractServerService
 	protected String getServiceName()
 	{
 		return "sftp-ssh";
+	}
+
+	@Override
+	protected ClientActionEvent.Protocol getProtocol() {
+		return ClientActionEvent.Protocol.SFTP;
 	}
 
 	@Override
@@ -173,23 +179,26 @@ public class SshServerService extends AbstractServerService
 					logger.debug("launching server in quick share mode");
 					return new QuickShareSshFileSystemView(
 							new File(quickShareBean.getPathToFile()),
+							SshServerService.this,
 							session);
 				} else {
 					switch (prefsBean.getStorageType()) {
 						case PLAIN:
-							return new FsSshFileSystemView(prefsBean.getStartDir(), session);
+							return new FsSshFileSystemView(SshServerService.this, prefsBean.getStartDir(), session);
 						case ROOT:
-							return new RootSshFileSystemView(shell, prefsBean.getStartDir(), session);
+							return new RootSshFileSystemView(shell, SshServerService.this, prefsBean.getStartDir(), session);
 						case SAF:
 							return new SafSshFileSystemView(
 									getApplicationContext(),
 									Uri.parse(prefsBean.getSafUrl()),
 									getContentResolver(),
+									SshServerService.this,
 									session);
 						case RO_SAF:
 							return new RoSafSshFileSystemView(
 									Uri.parse(prefsBean.getSafUrl()),
 									getContentResolver(),
+									SshServerService.this,
 									session);
 					}
 				}

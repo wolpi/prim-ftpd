@@ -18,6 +18,8 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.primftpd.events.ClientActionEvent;
+import org.primftpd.events.ClientActionPoster;
 import org.primftpd.events.ServerInfoRequestEvent;
 import org.primftpd.events.ServerInfoResponseEvent;
 import org.primftpd.events.ServerStateChangedEvent;
@@ -30,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Date;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -46,7 +49,7 @@ import eu.chainfire.libsuperuser.Shell;
  *
  */
 public abstract class AbstractServerService
-	extends Service
+	extends Service implements ClientActionPoster
 {
 	protected static final int MSG_START = 1;
 	protected static final int MSG_STOP = 2;
@@ -69,6 +72,7 @@ public abstract class AbstractServerService
 	protected abstract void stopServer();
 	protected abstract int getPort();
 	protected abstract String getServiceName();
+	protected abstract ClientActionEvent.Protocol getProtocol();
 
 	protected void handleServerStartError(Exception e)
 	{
@@ -149,6 +153,23 @@ public abstract class AbstractServerService
 		logger.debug("got ServerInfoRequestEvent");
 		String quickShareFilename = quickShareBean != null ? quickShareBean.filename() : null;
 		EventBus.getDefault().post(new ServerInfoResponseEvent(quickShareFilename));
+	}
+
+	@Override
+	public void postClientAction(
+			ClientActionEvent.Storage storage,
+			ClientActionEvent.ClientAction clientAction,
+			String clientIp,
+			String path) {
+		ClientActionEvent event = new ClientActionEvent(
+				storage,
+				getProtocol(),
+				clientAction,
+				new Date(),
+				clientIp,
+				path);
+		logger.info("posting ClientActionEvent: {}", event);
+		EventBus.getDefault().post(event);
 	}
 
 	/**

@@ -137,6 +137,7 @@
     <string name="quickShareInfoNotification">QuickShare of: %1s</string>
     <string name="quickShareInfoActivity">Running in QuickShare Mode for file: %1s</string>
 
+    <string name="clientActionsLabel">Client Action Log</string>
 
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>

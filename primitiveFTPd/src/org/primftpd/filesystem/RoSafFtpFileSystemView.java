@@ -7,30 +7,31 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
+import org.primftpd.events.ClientActionPoster;
 
 public class RoSafFtpFileSystemView extends RoSafFileSystemView<RoSafFtpFile, FtpFile> implements FileSystemView {
 
     private final User user;
     private RoSafFtpFile workingDir;
 
-    public RoSafFtpFileSystemView(Uri startUrl, ContentResolver contentResolver, User user) {
-        super(startUrl, contentResolver);
+    public RoSafFtpFileSystemView(Uri startUrl, ContentResolver contentResolver, ClientActionPoster clientActionPoster, User user) {
+        super(startUrl, contentResolver, clientActionPoster);
         this.user = user;
         this.workingDir = getHomeDirectory();
     }
 
     @Override
-    protected RoSafFtpFile createFile(ContentResolver contentResolver, Uri startUrl, String absPath) {
-        return new RoSafFtpFile(contentResolver, startUrl, absPath, user);
+    protected RoSafFtpFile createFile(ContentResolver contentResolver, Uri startUrl, String absPath, ClientActionPoster clientActionPoster) {
+        return new RoSafFtpFile(contentResolver, startUrl, absPath, clientActionPoster, user);
     }
 
     @Override
-    protected RoSafFtpFile createFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath) {
-        return new RoSafFtpFile(contentResolver, startUrl, docId, absPath, true, user);
+    protected RoSafFtpFile createFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath, ClientActionPoster clientActionPoster) {
+        return new RoSafFtpFile(contentResolver, startUrl, docId, absPath, true, clientActionPoster, user);
     }
 
-    protected RoSafFtpFile createFileNonExistant(ContentResolver contentResolver, Uri startUrl, String name, String absPath) {
-        return new RoSafFtpFile(contentResolver, startUrl, name, absPath, false, user);
+    protected RoSafFtpFile createFileNonExistant(ContentResolver contentResolver, Uri startUrl, String name, String absPath, ClientActionPoster clientActionPoster) {
+        return new RoSafFtpFile(contentResolver, startUrl, name, absPath, false, clientActionPoster, user);
     }
 
     @Override

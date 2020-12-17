@@ -2,6 +2,7 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
+import org.primftpd.events.ClientActionPoster;
 import org.primftpd.pojo.LsOutputBean;
 
 import java.io.IOException;
@@ -19,14 +20,25 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     private final Session session;
     private final RootSshFileSystemView fileSystemView;
 
-    public RootSshFile(Shell.Interactive shell, LsOutputBean bean, String absPath, Session session, RootSshFileSystemView fileSystemView) {
-        super(shell, bean, absPath);
+    public RootSshFile(
+            Shell.Interactive shell,
+            LsOutputBean bean,
+            String absPath,
+            ClientActionPoster clientActionPoster,
+            Session session,
+            RootSshFileSystemView fileSystemView) {
+        super(shell, bean, absPath, clientActionPoster);
         this.session = session;
         this.fileSystemView = fileSystemView;
     }
 
-    protected RootSshFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath) {
-        return new RootSshFile(shell, bean, absPath, session, fileSystemView);
+    protected RootSshFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster) {
+        return new RootSshFile(shell, bean, absPath, clientActionPoster, session, fileSystemView);
+    }
+
+    @Override
+    public String getClientIp() {
+        return SshUtils.getClientIp(session);
     }
 
     @Override

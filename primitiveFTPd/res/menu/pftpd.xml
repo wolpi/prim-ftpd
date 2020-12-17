@@ -21,6 +21,12 @@
         android:icon="?attr/iconSettings" />
 
     <item
+        android:id="@+id/menu_client_action"
+        android:orderInCategory="100"
+        android:showAsAction="collapseActionView|withText"
+        android:title="@string/clientActionsLabel" />
+
+    <item
         android:id="@+id/menu_translate"
         android:orderInCategory="100"
         android:showAsAction="collapseActionView|withText"

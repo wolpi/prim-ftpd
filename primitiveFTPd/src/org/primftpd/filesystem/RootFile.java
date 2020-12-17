@@ -1,6 +1,8 @@
 package org.primftpd.filesystem;
 
 import org.apache.ftpserver.util.IoUtils;
+import org.primftpd.events.ClientActionEvent;
+import org.primftpd.events.ClientActionPoster;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
 
@@ -24,7 +26,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
     private Process ddProcess;
 
-    public RootFile(Shell.Interactive shell, LsOutputBean bean, String absPath) {
+    public RootFile(Shell.Interactive shell, LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster) {
         super(
                 absPath,
                 bean.getName(),
@@ -32,12 +34,18 @@ public abstract class RootFile<T> extends AbstractFile {
                 bean.getSize(),
                 true,
                 bean.isExists(),
-                bean.isDir());
+                bean.isDir(),
+                clientActionPoster);
         this.shell = shell;
         this.bean = bean;
     }
 
-    protected abstract T createFile(Shell.Interactive shell, LsOutputBean bean, String absPath);
+    protected abstract T createFile(Shell.Interactive shell, LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster);
+
+    @Override
+    public ClientActionEvent.Storage getClientActionStorage() {
+        return ClientActionEvent.Storage.ROOT;
+    }
 
     public boolean isFile() {
         logger.trace("[{}] isFile() -> {}", name, bean.isFile());
@@ -63,21 +71,25 @@ public abstract class RootFile<T> extends AbstractFile {
 
     public boolean mkdir() {
         logger.trace("[{}] mkdir()", name);
+        postClientAction(ClientActionEvent.ClientAction.CREATE_DIR);
         return runCommand("mkdir \"" + absPath + "\"");
     }
 
     public boolean delete() {
         logger.trace("[{}] delete()", name);
+        postClientAction(ClientActionEvent.ClientAction.DELETE);
         return runCommand("rm -rf \"" + absPath + "\"");
     }
 
     public boolean move(RootFile<T> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
+        postClientAction(ClientActionEvent.ClientAction.RENAME);
         return runCommand("mv \"" + absPath + "\" \"" + destination.getAbsolutePath() + "\"");
     }
 
     public List<T> listFiles() {
         logger.trace("[{}] listFiles()", name);
+        postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 
         List<T> result = new ArrayList<>();
         final LsOutputParser parser = new LsOutputParser();
@@ -98,7 +110,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
         for (LsOutputBean bean : beans) {
             String path = absPath + "/" + bean.getName();
-            result.add(createFile(shell, bean, path));
+            result.add(createFile(shell, bean, path, clientActionPoster));
         }
 
         return result;
@@ -110,6 +122,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
+        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
         if (!bean.isExists()) {
             // if file does not exist, explicitly create it as root, see GH issue #117
@@ -125,6 +138,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
+        postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "\"dd if=" + escapePathForDD(absPath) + "\"");
