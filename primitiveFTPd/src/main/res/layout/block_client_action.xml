@@ -17,6 +17,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:textIsSelectable="true"
         />
     <TextView
         android:id="@+id/clientActionsLine2"
@@ -24,6 +25,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:visibility="gone"
+        android:textIsSelectable="true"
         />
     <TextView
         android:id="@+id/clientActionsLine3"
@@ -31,5 +33,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:visibility="gone"
+        android:textIsSelectable="true"
         />
 </merge>

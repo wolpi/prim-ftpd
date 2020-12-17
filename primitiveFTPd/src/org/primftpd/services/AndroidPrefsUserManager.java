@@ -10,9 +10,9 @@ import org.apache.ftpserver.ftplet.User;
 import org.apache.ftpserver.ftplet.UserManager;
 import org.apache.ftpserver.usermanager.AnonymousAuthentication;
 import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
-import org.apache.ftpserver.usermanager.impl.BaseUser;
 import org.apache.ftpserver.usermanager.impl.ConcurrentLoginPermission;
 import org.apache.ftpserver.usermanager.impl.TransferRatePermission;
+import org.apache.ftpserver.usermanager.impl.UserMetadata;
 import org.apache.ftpserver.usermanager.impl.WritePermission;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.util.EncryptionUtil;
@@ -21,7 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AndroidPrefsUserManager implements UserManager {
 
@@ -30,6 +32,8 @@ public class AndroidPrefsUserManager implements UserManager {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final PrefsBean prefsBean;
+
+	private Map<String, User> nameToUser = new HashMap<>();
 
 	public AndroidPrefsUserManager(PrefsBean prefsBean) {
 		this.prefsBean = prefsBean;
@@ -51,16 +55,16 @@ public class AndroidPrefsUserManager implements UserManager {
 		return authorities;
 	}
 
-	protected User buildUser() {
-		return createUser(prefsBean.getUserName(), prefsBean.getPassword());
+	protected User buildUser(String remoteIp) {
+		return createUser(prefsBean.getUserName(), prefsBean.getPassword(), remoteIp);
 	}
 
-	protected User anonymousUser() {
-		return createUser(ANONYMOUS_USER_NAME, null);
+	protected User anonymousUser(String remoteIp) {
+		return createUser(ANONYMOUS_USER_NAME, null, remoteIp);
 	}
 
-	private User createUser(String username, String password) {
-		BaseUser user = new BaseUser();
+	private User createUser(String username, String password, String remoteIp) {
+		FtpUserWithIp user = new FtpUserWithIp(remoteIp);
 		user.setEnabled(true);
 
 		String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -73,15 +77,15 @@ public class AndroidPrefsUserManager implements UserManager {
 			user.setPassword(prefsBean.getPassword());
 		}
 		user.setAuthorities(buildAuthorities());
+
+		nameToUser.put(username, user);
+
 		return user;
 	}
 
 	@Override
 	public User getUserByName(String username) throws FtpException {
-		if (doesExist(username)) {
-			return buildUser();
-		}
-		return null;
+		return nameToUser.get(username);
 	}
 
 	@Override
@@ -115,16 +119,20 @@ public class AndroidPrefsUserManager implements UserManager {
 					String encryptedPW = EncryptionUtil.encrypt(pw);
 					String storedPW = prefsBean.getPassword();
 					if (storedPW.equals(encryptedPW)) {
-						return buildUser();
+						return buildUser(getRemoteIp(((UsernamePasswordAuthentication) authentication).getUserMetadata()));
 					}
 				}
 			}
 		} else if(authentication instanceof AnonymousAuthentication) {
 			if(prefsBean.isAnonymousLogin()) {
-				return anonymousUser();
+				return anonymousUser(getRemoteIp(((AnonymousAuthentication) authentication).getUserMetadata()));
 			}
 		}
 		throw new AuthenticationFailedException();
+	}
+
+	private String getRemoteIp(UserMetadata userMetadata) {
+		return userMetadata.getInetAddress().getHostAddress();
 	}
 
 	@Override

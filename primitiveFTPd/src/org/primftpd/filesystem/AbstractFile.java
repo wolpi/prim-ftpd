@@ -44,10 +44,7 @@ public abstract class AbstractFile {
         this.clientActionPoster = clientActionPoster;
     }
 
-    public String getClientIp() {
-        return "unknown ip";
-    }
-
+    public abstract String getClientIp();
     public abstract ClientActionEvent.Storage getClientActionStorage();
 
     public void postClientAction(ClientActionEvent.ClientAction clientAction) {

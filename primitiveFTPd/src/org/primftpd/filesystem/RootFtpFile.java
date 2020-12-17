@@ -27,6 +27,11 @@ public class RootFtpFile extends RootFile<FtpFile> implements FtpFile {
     }
 
     @Override
+    public String getClientIp() {
+        return FtpUtils.getClientIp(user);
+    }
+
+    @Override
     public OutputStream createOutputStream(long offset) throws IOException {
         OutputStream superStream = super.createOutputStream(offset);
         return new BufferedOutputStream(superStream) {

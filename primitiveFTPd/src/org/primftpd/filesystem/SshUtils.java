@@ -2,6 +2,7 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
+import org.primftpd.util.IpAddressProvider;
 
 import java.io.IOException;
 import java.util.EnumSet;
@@ -104,6 +105,6 @@ class SshUtils {
     }
 
     static String getClientIp(Session session) {
-        return session.getIoSession().getRemoteAddress().toString();
+        return IpAddressProvider.extractIp(session.getIoSession().getRemoteAddress().toString());
     }
 }

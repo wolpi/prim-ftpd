@@ -20,6 +20,11 @@ public class QuickShareFtpFile extends QuickShareFile<FtpFile> implements FtpFil
     }
 
     @Override
+    public String getClientIp() {
+        return FtpUtils.getClientIp(user);
+    }
+
+    @Override
     protected FtpFile createFile(File quickShareFile, String dir, ClientActionPoster clientActionPoster) {
         return new QuickShareFtpFile(quickShareFile, dir, clientActionPoster, user);
     }

@@ -14,9 +14,7 @@ public class RemoteIpChecker {
             if (remoteAddress instanceof InetSocketAddress) {
                 InetSocketAddress inetSock = (InetSocketAddress) remoteAddress;
                 String ip = inetSock.getAddress().toString();
-                if (ip.charAt(0) == '/') {
-                    ip = ip.substring(1, ip.length());
-                }
+                ip = IpAddressProvider.extractIp(ip);
                 boolean allowed = doCheck(ip, pattern);
                 logger.info("[checking whether remote ip is allowed] remote ip: '{}', pattern: '{}', allowed? '{}'",
                         new Object[]{ip, pattern, allowed});

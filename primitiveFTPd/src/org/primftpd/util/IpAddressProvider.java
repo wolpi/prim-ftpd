@@ -18,6 +18,18 @@ public class IpAddressProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    public static String extractIp(String remoteAddress) {
+        String ip = remoteAddress;
+        if (remoteAddress.charAt(0) == '/') {
+            ip = remoteAddress.substring(1);
+        }
+        int indexOfColon = ip.indexOf(':');
+        if (indexOfColon > 0) {
+            ip = ip.substring(0, indexOfColon);
+        }
+        return ip;
+    }
+
     public List<String> ipAddressTexts(Context ctxt, boolean verbose, boolean isLeftToRight) {
         List<String> result = new ArrayList<>();
         try {

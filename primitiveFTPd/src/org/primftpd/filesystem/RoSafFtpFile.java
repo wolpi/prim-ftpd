@@ -56,6 +56,11 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
     }
 
     @Override
+    public String getClientIp() {
+        return FtpUtils.getClientIp(user);
+    }
+
+    @Override
     public boolean move(FtpFile target) {
         logger.trace("move()");
         return super.move((RoSafFile)target);

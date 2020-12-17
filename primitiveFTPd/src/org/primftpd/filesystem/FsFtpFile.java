@@ -15,6 +15,11 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 	}
 
 	@Override
+	public String getClientIp() {
+		return FtpUtils.getClientIp(user);
+	}
+
+	@Override
 	protected FtpFile createFile(File file, ClientActionPoster clientActionPoster) {
 		return new FsFtpFile(file, clientActionPoster, user);
 	}
