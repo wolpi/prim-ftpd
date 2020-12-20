@@ -6,6 +6,8 @@ import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.impl.DefaultFtpSession;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.ServerDataConnectionFactory;
+import org.greenrobot.eventbus.EventBus;
+import org.primftpd.events.DataTransferredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +18,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.WritableByteChannel;
-import java.nio.charset.Charset;
 
 public class AndroidIoDataConnection implements DataConnection {
 
@@ -218,6 +219,9 @@ public class AndroidIoDataConnection implements DataConnection {
                     LOG.trace("difference of read/written in loop '{}', bytes: {}", loopcnt, (written - read));
                 }
                 loopcnt++;
+
+                // post event
+                //EventBus.getDefault().post(new DataTransferredEvent(System.currentTimeMillis(), transferredSize, isWrite));
             }
 
             LOG.trace("bytes read: {}", inCounting.getCount());
