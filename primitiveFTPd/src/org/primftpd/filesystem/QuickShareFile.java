@@ -99,12 +99,13 @@ public abstract class QuickShareFile<T> extends AbstractFile {
 
     public OutputStream createOutputStream(long offset) {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
-        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
+        postClientAction(ClientActionEvent.ClientAction.UPLOAD);
         return new ByteArrayOutputStream();
     }
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
+        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
         if (quickShareFile != null) {
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(quickShareFile));

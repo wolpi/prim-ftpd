@@ -152,7 +152,7 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	public OutputStream createOutputStream(long offset) throws IOException {
 		logger.trace("[{}] createOutputStream({})", name, offset);
-		postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
+		postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
 		// may be necessary to create dirs
 		// see isWritable()
@@ -192,7 +192,7 @@ public abstract class FsFile<T> extends AbstractFile {
 						offset,
 						file.getAbsolutePath()
 		});
-		postClientAction(ClientActionEvent.ClientAction.UPLOAD);
+		postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
 		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file), TracingBufferedOutputStream.BUFFER_SIZE);
 		bis.skip(offset);

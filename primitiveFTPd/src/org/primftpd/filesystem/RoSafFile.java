@@ -307,7 +307,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
 
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
-        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
+        postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Uri uri = DocumentsContract.buildDocumentUriUsingTree(
@@ -320,7 +320,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
-        postClientAction(ClientActionEvent.ClientAction.UPLOAD);
+        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Uri uri = DocumentsContract.buildDocumentUriUsingTree(

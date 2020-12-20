@@ -122,7 +122,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
-        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
+        postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
         if (!bean.isExists()) {
             // if file does not exist, explicitly create it as root, see GH issue #117
@@ -138,7 +138,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
-        postClientAction(ClientActionEvent.ClientAction.UPLOAD);
+        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "\"dd if=" + escapePathForDD(absPath) + "\"");

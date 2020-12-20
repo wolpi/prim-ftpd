@@ -164,7 +164,7 @@ public abstract class SafFile<T> extends AbstractFile {
 
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
-        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
+        postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
         Uri uri;
         if (documentFile != null) {
@@ -182,7 +182,7 @@ public abstract class SafFile<T> extends AbstractFile {
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
-        postClientAction(ClientActionEvent.ClientAction.UPLOAD);
+        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
         if (documentFile != null) {
             BufferedInputStream bis = new BufferedInputStream(contentResolver.openInputStream(documentFile.getUri()));
