@@ -132,7 +132,7 @@ public class AndroidPrefsUserManager implements UserManager {
 	}
 
 	private String getRemoteIp(UserMetadata userMetadata) {
-		return userMetadata.getInetAddress().getHostAddress();
+		return userMetadata != null ? userMetadata.getInetAddress().getHostAddress() : null;
 	}
 
 	@Override

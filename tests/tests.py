@@ -52,9 +52,11 @@ KEY_PATH_ECDSA_521 = KEY_DIR + "/" + KEY_FILE_ECDSA_521
 KEY_PATH_RSA_BAD = KEY_DIR + "/" + KEY_FILE_RSA_BAD
 KEY_PATH_ED25519_BAD = KEY_DIR + "/" + KEY_FILE_ED25519_BAD
 
-OPTS_SFTP_NO_KEY = "-vk --key "
+OPTS_SFTP_BASE = "-vk"
+OPTS_SFTP_NO_KEY = OPTS_SFTP_BASE + " --key "
 DEFAULT_OPTS_SFTP = OPTS_SFTP_NO_KEY + KEY_PATH
-DEFAULT_OPTS_FTP = "-v --user user:test"
+OPTS_USER_PASS = "--user user:test"
+DEFAULT_OPTS_FTP = "-v " + OPTS_USER_PASS
 DEFAULT_OPTS_SCP = "-i " + KEY_PATH + " -P " + PORT_SFTP + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PreferredAuthentications=publickey"
 
 NEW_DIR = "test-dir-auto"
@@ -205,6 +207,12 @@ def checkDownloadedFile(errors, filename, errorTag):
 def downloadListing(url, protocol, key = KEY_PATH, check = True):
     log("downloading url: " + url)
     opts = (OPTS_SFTP_NO_KEY + key) if (protocol == Protocol.SFTP) else DEFAULT_OPTS_FTP
+    cmd = "curl " + opts + " " + url
+    return runCommand(cmd, check)
+
+def downloadListingSftpPassword(url, check = True):
+    log("downloading url (with username & password): " + url)
+    opts = OPTS_SFTP_BASE + " " + OPTS_USER_PASS
     cmd = "curl " + opts + " " + url
     return runCommand(cmd, check)
 
@@ -437,6 +445,9 @@ def testKeys(baseUrl, errors):
     checkEmpty(errors, output, "[key bad rsa]")
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_ED25519_BAD, check = False)
     checkEmpty(errors, output, "[key bad ed25519]")
+    # check username & password for sftp
+    output = downloadListingSftpPassword(baseUrl)
+    checkHomeListing(errors, output, "[sftp password]")
 
 
 ############################################################################
