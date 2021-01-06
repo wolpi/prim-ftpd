@@ -123,9 +123,9 @@
     <string name="filepickerCreateFolderError">Falha na criação da pasta</string>
     <string name="filepickerNewFolder">Nova pasta</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>
-    <string name="filepickerNewFolderCancel">@android:string/cancelar</string>
+    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
     <string name="filepickerListOk">@android:string/ok</string>
-    <string name="filepickerListCancel">@android:string/cancelar</string>
+    <string name="filepickerListCancel">@android:string/cancel</string>
     <string name="filepickerName">Nome</string>
     <string name="filepickerFilename">Nome do arquivo</string>
     <string name="filepickerSelectSomethingFirst">Por favor, selecione algo primeiro</string>
