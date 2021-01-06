@@ -175,7 +175,8 @@ public abstract class RootFile<T> extends AbstractFile {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 IoUtils.copy(proc.getErrorStream(), baos, BUF_SIZE_DD_ERR_STREAM);
                 String ddErr = baos.toString();
-                logger.debug("dd exit code: '{}', error stream: '{}'", exitCode, ddErr);
+                logger.error("dd exit code: '{}', error stream: '{}'", exitCode, ddErr);
+                logger.error("{}", ddErr);
             } else {
                 logger.trace("dd exited with 0");
             }
