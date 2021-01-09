@@ -130,7 +130,7 @@ public abstract class RootFile<T> extends AbstractFile {
         }
 
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("su", "-c", "\"dd of=" + escapePathForDD(absPath) + "\"");
+        processBuilder.command("su", "-c", "dd", "of=" + escapePathForDD(absPath));
         ddProcess = processBuilder.start();
 
         return new TracingBufferedOutputStream(ddProcess.getOutputStream(), logger);
@@ -141,7 +141,7 @@ public abstract class RootFile<T> extends AbstractFile {
         postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("su", "-c", "\"dd if=" + escapePathForDD(absPath) + "\"");
+        processBuilder.command("su", "-c", "dd", "if=" + escapePathForDD(absPath));
         ddProcess = processBuilder.start();
 
         try {
