@@ -135,4 +135,8 @@
     <string name="saveToTextFile">Сохранить в текстовый файл</string>
     <string name="download">Скачать</string>
     <string name="downloadOrSaveUrlToFile">Скачать или сохранить URL в текстовый файл \?</string>
+    <string name="quickShare">Быстро поделиться</string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock">Для доступа к быстрым настройкам устройство должно быть разблокировано, чтоб запускать/останавливать сервер(ы). Когда включено, будет предложено разблокировать устройство, если оно заблокировано.</string>
+    <string name="prefTitleQuickSettingsRequiresUnlock">Требовать разблокировку для Быстрых Настроек</string>
+    <string name="prefSummaryIdleTimeoutV2">Авторазрыв неактивных соединений через указанное время. Для отключения поставить 0.</string>
 </resources>
