@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -110,7 +111,8 @@ public class KeyParser {
         // name is also included in bytes
         ByteBuffer byteBuffer = ByteBuffer.wrap(keyBytes);
         int nameLength = byteBuffer.getInt();
-        byteBuffer.position(nameLength + LENGTH_LENGTH);
+        // cast to Buffer to avoid issue with java 8, see GH #226
+        ((Buffer)byteBuffer).position(nameLength + LENGTH_LENGTH);
 
         BigInteger exponent = readNext(byteBuffer);
         BigInteger modulus = readNext(byteBuffer);
@@ -123,7 +125,8 @@ public class KeyParser {
         // name is also included in bytes
         ByteBuffer byteBuffer = ByteBuffer.wrap(keyBytes);
         int nameLength = byteBuffer.getInt();
-        byteBuffer.position(nameLength + LENGTH_LENGTH);
+        // cast to Buffer to avoid issue with java 8, see GH #226
+        ((Buffer)byteBuffer).position(nameLength + LENGTH_LENGTH);
 
         BigInteger p = readNext(byteBuffer);
         BigInteger q = readNext(byteBuffer);
@@ -158,18 +161,19 @@ public class KeyParser {
     protected static PublicKey parsePublicKeyEcdsa(String name, byte[] keyBytes)
             throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, NoSuchProviderException {
 
-        ByteBuffer byteBuffer = ByteBuffer.wrap(keyBytes);
+        // use as Buffer to avoid issue with java 8, see GH #226
+        Buffer byteBuffer = ByteBuffer.wrap(keyBytes);
 
         // https://security.stackexchange.com/questions/129910/ecdsa-why-do-ssh-keygen-and-java-generated-public-keys-have-different-sizes
         final int coordLength = EC_NAME_TO_COORD_SIZE.get(name);
         byteBuffer.position(keyBytes.length - 2*coordLength);
         byte[] xBytes = new byte[coordLength];
-        byteBuffer.get(xBytes);
+        ((ByteBuffer)byteBuffer).get(xBytes);
         BigInteger x = new BigInteger(1, xBytes);
 
         byteBuffer.position(keyBytes.length - coordLength);
         byte[] yBytes = new byte[coordLength];
-        byteBuffer.get(yBytes);
+        ((ByteBuffer)byteBuffer).get(yBytes);
         BigInteger y = new BigInteger(1, yBytes);
 
         return createPubKeyEcdsa(name, x, y);
