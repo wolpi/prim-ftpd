@@ -156,4 +156,6 @@
     <string name="statsTotalReceived">Total Diterima</string>
     <string name="statsTotalSent">Total Terkirim</string>
     <string name="statsLabel">Stat</string>
+    <string name="quickShareInfoNotification">Berbagi Cepat: %1s</string>
+    <string name="quickShareInfoActivity">Berjalan dalam Mode Berbagi Cepat untuk berkas: %1s</string>
 </resources>
