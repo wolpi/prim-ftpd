@@ -70,7 +70,7 @@
     <string name="prefTitleShowStartStopNotification">Tampilkan notifikasi untuk mulai/setop server</string>
     <string name="prefSummaryShowStartStopNotification">Selalu menampilkan notifikasi untuk mempercepat proses mulai/setop server.</string>
     <string name="prefTitlePubKeyAuth">Otentikasi Kunci Publik</string>
-    <string name="prefSummaryPubKeyAuth">Ketika diaktifkan simpan kunci publik ssh2 anda di %s. Hanya SFTP.</string>
+    <string name="prefSummaryPubKeyAuth">Ketika diaktifkan simpan kunci publik ssh2 Anda di %s. Hanya SFTP.</string>
     <string name="prefTitleAnonymousLogin">Masuk Anonim</string>
     <string name="prefSummaryAnonymousLogin">Mengatur apakah proses masuk secara anonim diizinkan pada server.</string>
     <string name="prefTitleFtpPassivePorts">Porta FTP Pasif</string>
@@ -80,8 +80,8 @@
     <string name="prefTheme">Tema</string>
     <string name="prefSummaryTheme">Mengubah Tema mungkin membutuhkan aplikasi untuk dimulai ulang.</string>
     <string name="prefTitleLogging">Log</string>
-    <string name="prefSummaryLogging">Log disediakan untuk analisa galat. Jika apl tidak bekerja sebagaimana mestinya pada perangkat anda, anda bisa mengirim log ke pengembang. Mungkin membutuhkan apl untuk dimulai ulang.</string>
-    <string name="prefSummaryLoggingV2">Log disediakan untuk analisa galat. Jika apl tidak bekerja sebagaimana mestinya pada perangkat anda, anda bisa mengirim log ke pengembang. Mungkin membutuhkan apl untuk dimulai ulang. Text Logs are stored in %s.</string>
+    <string name="prefSummaryLogging">Log disediakan untuk analisa galat. Jika apl tidak bekerja sebagaimana mestinya pada perangkat Anda, Anda bisa mengirim log ke pengembang. Mungkin membutuhkan apl untuk dimulai ulang.</string>
+    <string name="prefSummaryLoggingV2">Log disediakan untuk analisa galat. Jika apl tidak bekerja sebagaimana mestinya pada perangkat Anda, Anda bisa mengirim log ke pengembang. Mungkin membutuhkan apl untuk dimulai ulang. Teks Log disimpan di %s.</string>
     <string name="prefAllowedIpsPattern">&gt;Pola IP yang diizinkan</string>
     <string name="prefSummaryAllowedIpsPattern">Pola alamat IP yang diizinkan. Hanya satu Wildcard (*) yang boleh digunakan, hanya sebagai karakter terakhir.</string>
     <string name="licence">Lisensi</string>
@@ -99,7 +99,7 @@
     <string name="storageTypeSaf">Storage Access Framework (SAF) Android\n(mis. untuk kartu sd)</string>
     <string name="storageTypeRoSaf">SAF baca saja (lebih cepat !)</string>
     <string name="safExplainHeading">Bagaimana SAF bekerja</string>
-    <string name="safExplain">Android akan bertanya pada anda untuk memilih direktori. Direktori tersebut akan tersedia untuk diakses via server. Seiring berjalannya waktu izin mungkin akan dicabut dan anda harus memilihnya kembali.</string>
+    <string name="safExplain">Android akan bertanya pada Anda untuk memilih direktori. Direktori tersebut akan tersedia untuk diakses via server. Seiring berjalannya waktu, izin mungkin akan dicabut dan Anda harus memilihnya kembali.</string>
     <string name="selectedSafUri">URI SAF yang dipilih:</string>
     <string name="startServerAndExit">hanya mulai server</string>
     <string name="startServerAndUi">mulai dengan server</string>
