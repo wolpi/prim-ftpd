@@ -9,6 +9,8 @@ import org.primftpd.util.Defaults;
 import org.slf4j.Logger;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LoadPrefsUtil
 {
@@ -37,6 +39,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_SAF_URL = "safUrlPref";
 	public static final String PREF_KEY_ALLOWED_IPS_PATTERN = "allowedIpsPatternPref";
 	public static final String PREF_QUICK_SETTINGS_REQUIRES_UNLOCK = "quickSettingsRequiresUnlockPref";
+	public static final String PREF_ALLOWED_PERMISSIONS = "permissionsPref";
 
 	public static final int PORT_DEFAULT_VAL = 12345;
 	static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
@@ -277,6 +280,33 @@ public class LoadPrefsUtil
 			LoadPrefsUtil.PREF_QUICK_SETTINGS_REQUIRES_UNLOCK,
 			Boolean.TRUE);
 	}
+	
+	private static Boolean allowedPermission(SharedPreferences prefs,String perm) {
+        HashSet<String> defaultVal = new HashSet<>();
+        defaultVal.add("dowloading");
+        defaultVal.add("uploading");
+        defaultVal.add("renaming");
+		defaultVal.add("deleting");
+		
+        Set<String> allowed = prefs.getStringSet(LoadPrefsUtil.PREF_ALLOWED_PERMISSIONS, defaultVal);
+        return allowed.contains(perm);
+    }
+
+    public static boolean allowDownload(SharedPreferences prefs) {
+        return allowedPermission(prefs, "downloading");
+    }
+
+    public static boolean allowUpload(SharedPreferences prefs) {
+        return allowedPermission(prefs, "uploading");
+    }
+
+    public static boolean allowRename(SharedPreferences prefs) {
+        return allowedPermission(prefs, "renaming");
+    }
+
+    public static boolean alloweDelete(SharedPreferences prefs) {
+        return allowedPermission(prefs, "deleting");
+    }
 
 	public static PrefsBean loadPrefs(Logger logger, SharedPreferences prefs) {
 		boolean anonymousLogin = anonymousLogin(prefs);

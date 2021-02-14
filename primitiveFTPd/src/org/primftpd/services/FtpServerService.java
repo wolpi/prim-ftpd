@@ -10,6 +10,7 @@ import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.FileSystemFactory;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.User;
+import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.ipfilter.SessionFilter;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.mina.core.session.IoSession;
@@ -21,9 +22,12 @@ import org.primftpd.filesystem.RootFtpFileSystemView;
 import org.primftpd.filesystem.SafFtpFileSystemView;
 import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
+import org.primftpd.prefs.UserFtplet;
 
 import java.io.File;
 import java.net.SocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -141,6 +145,13 @@ public class FtpServerService extends AbstractServerService
 		conCfg.setMaxLoginFailures(5);
 		conCfg.setLoginFailureDelay(2000);
 		serverFactory.setConnectionConfig(conCfg.createConnectionConfig());
+
+		// Apply the customised permissions to the server
+		UserFtplet user_ftplet = new UserFtplet(getApplicationContext());
+        Map<String,Ftplet> map = new HashMap<>();
+		map.put("User-defined", user_ftplet);
+		serverFactory.setFtplets(map);
+		serverFactory.setFtplets(map);
 
 		// do start server
 		ftpServer = serverFactory.createServer();
