@@ -112,4 +112,12 @@
     <string name="download">下載</string>
     <string name="downloadOrSaveUrlToFile">下載或儲存網址到文字檔？</string>
     <string name="prefSummaryIdleTimeoutV2">伺服器會在這個時間後中止閒置的連線。設為 0 以停用。</string>
+    <string name="quickShareInfoNotification">快速分享：%1s</string>
+    <string name="quickShareCouldNotStartServer">無法啟動伺服器</string>
+    <string name="quickShareServerStarted">伺服器已開始分享單一檔案</string>
+    <string name="quickShare">快速分享</string>
+    <string name="filepickerFilename">檔案名稱</string>
+    <string name="filepickerName">名稱</string>
+    <string name="filepickerNewFolderCancel">\@android:string/cancel</string>
+    <string name="filepickerNewFolderOk">\@android:string/ok</string>
 </resources>
