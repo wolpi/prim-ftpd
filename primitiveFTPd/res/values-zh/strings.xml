@@ -104,8 +104,7 @@
     <string name="passwordPresent">启用密码： %1$b</string>
     <string name="pubKeyAuth">公钥认证： $1$b</string>
     <string name="storageTypePlain">旧式文件系统</string>
-    <string name="filepickerNeedValidFilename">请输入或选择一个有效的文件名
-\n</string>
+    <string name="filepickerNeedValidFilename">请输入或选择一个有效的文件名</string>
     <string name="filepickerSelectSomethingFirst">请选择</string>
     <string name="filepickerFilename">文件名</string>
     <string name="filepickerName">名字</string>
@@ -115,4 +114,22 @@
     <string name="filepickerNewFolderOk">\@android:string/好的</string>
     <string name="filepickerListCancel">\@android:string/取消</string>
     <string name="filepickerListOk">\@android:string/好的</string>
+    <string name="quickShareInfoActivity">运行于快速分享模式中的文件：%s</string>
+    <string name="statsReceivedPerSec">每秒接收</string>
+    <string name="statsSentPerSec">每秒发送</string>
+    <string name="statsTotalReceived">总计接收</string>
+    <string name="statsTotalSent">总计发送</string>
+    <string name="statsLabel">统计数据</string>
+    <string name="clientActionsLabel">客户端操作日志</string>
+    <string name="quickShareInfoNotification">快速分享目标：%1s</string>
+    <string name="quickShareCouldNotStartServer">无法启动服务器</string>
+    <string name="quickShareServerStarted">服务器已开始分享单个文件</string>
+    <string name="quickShare">快速分享</string>
+    <string name="open">打开</string>
+    <string name="saveToTextFile">保存到文本文件</string>
+    <string name="download">下载</string>
+    <string name="downloadOrSaveUrlToFile">下载或保存 URL 到文本文件吗？</string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock">单击快速设置磁贴需要解锁设备以启动/停止服务器。启用后，将提示您解锁设备（如果已锁定）。</string>
+    <string name="prefTitleQuickSettingsRequiresUnlock">快速设置磁贴解锁要求</string>
+    <string name="prefSummaryIdleTimeoutV2">服务器将在此时间之后终止空闲连接。 设置为0禁用。</string>
 </resources>
