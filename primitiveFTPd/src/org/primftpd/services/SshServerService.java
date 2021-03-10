@@ -37,6 +37,7 @@ import org.primftpd.util.Defaults;
 import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
+import org.primftpd.prefs.UserSftpSubsystem;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -119,7 +120,12 @@ public class SshServerService extends AbstractServerService
 		// enable scp and sftp
 		sshServer.setCommandFactory(new ScpCommandFactory());
 		List<NamedFactory<Command>> factoryList = new ArrayList<>(1);
-		factoryList.add(new SftpSubsystem.Factory());
+		factoryList.add(new SftpSubsystem.Factory() {
+			@Override
+			public Command create() {
+				return new UserSftpSubsystem(getApplicationContext());
+			}
+		});
 		sshServer.setSubsystemFactories(factoryList);
 
 		// PasswordAuthenticator based on android preferences
@@ -191,9 +197,7 @@ public class SshServerService extends AbstractServerService
 							return new SafSshFileSystemView(
 									getApplicationContext(),
 									Uri.parse(prefsBean.getSafUrl()),
-									getContentResolver(),
-									SshServerService.this,
-									session);
+									getContentResolver(), SshServerService.this, session);
 						case RO_SAF:
 							return new RoSafSshFileSystemView(
 									Uri.parse(prefsBean.getSafUrl()),

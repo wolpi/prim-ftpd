@@ -304,7 +304,7 @@ public class LoadPrefsUtil
         return allowedPermission(prefs, "renaming");
     }
 
-    public static boolean alloweDelete(SharedPreferences prefs) {
+    public static boolean allowDelete(SharedPreferences prefs) {
         return allowedPermission(prefs, "deleting");
     }
 
