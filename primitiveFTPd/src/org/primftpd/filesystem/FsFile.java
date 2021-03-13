@@ -1,7 +1,7 @@
 package org.primftpd.filesystem;
 
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -19,7 +19,7 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	protected final File file;
 
-	public FsFile(File file, ClientActionPoster clientActionPoster) {
+	public FsFile(File file, PftpdService pftpdService) {
 		super(
 				file.getAbsolutePath(),
 				file.getName(),
@@ -28,12 +28,12 @@ public abstract class FsFile<T> extends AbstractFile {
 				file.canRead(),
 				file.exists(),
 				file.isDirectory(),
-				clientActionPoster);
+				pftpdService);
 		this.file = file;
 		this.name = file.getName();
 	}
 
-	protected abstract T createFile(File file, ClientActionPoster clientActionPoster);
+	protected abstract T createFile(File file, PftpdService pftpdService);
 
 	@Override
 	public ClientActionEvent.Storage getClientActionStorage() {
@@ -142,7 +142,7 @@ public abstract class FsFile<T> extends AbstractFile {
 		if (filesArray != null) {
 			List<T> files = new ArrayList<>(filesArray.length);
 			for (File file : filesArray) {
-				files.add(createFile(file, clientActionPoster));
+				files.add(createFile(file, pftpdService));
 			}
 			return files;
 		}

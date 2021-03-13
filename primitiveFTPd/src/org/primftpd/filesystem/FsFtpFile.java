@@ -4,13 +4,13 @@ import java.io.File;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 	private final User user;
 
-	public FsFtpFile(File file, ClientActionPoster clientActionPoster, User user) {
-		super(file, clientActionPoster);
+	public FsFtpFile(File file, PftpdService pftpdService, User user) {
+		super(file, pftpdService);
 		this.user = user;
 	}
 
@@ -20,8 +20,8 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 	}
 
 	@Override
-	protected FtpFile createFile(File file, ClientActionPoster clientActionPoster) {
-		return new FsFtpFile(file, clientActionPoster, user);
+	protected FtpFile createFile(File file, PftpdService pftpdService) {
+		return new FsFtpFile(file, pftpdService, user);
 	}
 
 	@Override

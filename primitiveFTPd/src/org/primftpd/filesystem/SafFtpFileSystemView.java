@@ -9,15 +9,15 @@ import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile> implements FileSystemView {
 
     private final User user;
     private SafFtpFile workingDir;
 
-    public SafFtpFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, ClientActionPoster clientActionPoster, User user) {
-        super(context, startUrl, contentResolver, clientActionPoster);
+    public SafFtpFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService, User user) {
+        super(context, startUrl, contentResolver, pftpdService);
         this.user = user;
         this.workingDir = getHomeDirectory();
     }
@@ -28,9 +28,9 @@ public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile>
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            ClientActionPoster clientActionPoster) {
+            PftpdService pftpdService) {
         logger.trace("createFile(DocumentFile)");
-        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster, user);
+        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, user);
     }
 
     @Override
@@ -39,9 +39,9 @@ public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile>
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
-            ClientActionPoster clientActionPoster) {
+            PftpdService pftpdService) {
         logger.trace("createFile(String)");
-        return new SafFtpFile(contentResolver, parentDocumentFile, name, absPath, clientActionPoster, user);
+        return new SafFtpFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, user);
     }
 
     @Override

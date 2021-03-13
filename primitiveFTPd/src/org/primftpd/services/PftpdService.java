@@ -1,6 +1,8 @@
-package org.primftpd.events;
+package org.primftpd.services;
 
-public interface ClientActionPoster {
+import org.primftpd.events.ClientActionEvent;
+
+public interface PftpdService {
 
     public void postClientAction(
             ClientActionEvent.Storage storage,

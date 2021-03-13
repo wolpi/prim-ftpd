@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,12 +19,12 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final Uri startUrl;
     protected final ContentResolver contentResolver;
-    protected final ClientActionPoster clientActionPoster;
+    protected final PftpdService pftpdService;
 
-    public RoSafFileSystemView(Uri startUrl, ContentResolver contentResolver, ClientActionPoster clientActionPoster) {
+    public RoSafFileSystemView(Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService) {
         this.startUrl = startUrl;
         this.contentResolver = contentResolver;
-        this.clientActionPoster = clientActionPoster;
+        this.pftpdService = pftpdService;
     }
 
     protected abstract String absolute(String file);
@@ -33,19 +33,19 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             ContentResolver contentResolver,
             Uri startUrl,
             String absPath,
-            ClientActionPoster clientActionPoster);
+            PftpdService pftpdService);
     protected abstract T createFile(
             ContentResolver contentResolver,
             Uri startUrl,
             String docId,
             String absPath,
-            ClientActionPoster clientActionPoster);
+            PftpdService pftpdService);
     protected abstract T createFileNonExistant(
             ContentResolver contentResolver,
             Uri startUrl,
             String name,
             String absPath,
-            ClientActionPoster clientActionPoster);
+            PftpdService pftpdService);
 
     public T getFile(String file) {
         logger.trace("getFile({})", file);
@@ -54,7 +54,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
         logger.trace("  getFile(abs: {})", file);
 
         if (ROOT_PATH.equals(file)) {
-            return createFile(contentResolver, startUrl, ROOT_PATH, clientActionPoster);
+            return createFile(contentResolver, startUrl, ROOT_PATH, pftpdService);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -87,7 +87,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                         if (currentPart.equals(docName)) {
                             if (i == parts.size() - 1) {
                                 logger.trace("    calling createFile() for doc: {}, parent: {}", docName, parentId);
-                                return createFile(contentResolver, startUrl, docId, Utils.toPath(parts), clientActionPoster);
+                                return createFile(contentResolver, startUrl, docId, Utils.toPath(parts), pftpdService);
                             } else {
                                 parentId = docId;
                                 break;
@@ -104,7 +104,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             }
         }
         logger.trace("    calling createFile() for root doc: {}", startUrl);
-        return createFile(contentResolver, startUrl, ROOT_PATH, clientActionPoster);
+        return createFile(contentResolver, startUrl, ROOT_PATH, pftpdService);
     }
 
     private void closeQuietly(Cursor cursor) {

@@ -6,30 +6,30 @@ import android.net.Uri;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 public class RoSafSshFileSystemView extends RoSafFileSystemView<RoSafSshFile, SshFile> implements FileSystemView {
 
     private final Session session;
 
-    public RoSafSshFileSystemView(Uri startUrl, ContentResolver contentResolver, ClientActionPoster clientActionPoster, Session session) {
-        super(startUrl, contentResolver, clientActionPoster);
+    public RoSafSshFileSystemView(Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService, Session session) {
+        super(startUrl, contentResolver, pftpdService);
         this.session = session;
     }
 
     @Override
-    protected RoSafSshFile createFile(ContentResolver contentResolver, Uri startUrl, String absPath, ClientActionPoster clientActionPoster) {
-        return new RoSafSshFile(contentResolver, startUrl, absPath, clientActionPoster, session);
+    protected RoSafSshFile createFile(ContentResolver contentResolver, Uri startUrl, String absPath, PftpdService pftpdService) {
+        return new RoSafSshFile(contentResolver, startUrl, absPath, pftpdService, session);
     }
 
     @Override
-    protected RoSafSshFile createFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath, ClientActionPoster clientActionPoster) {
-        return new RoSafSshFile(contentResolver, startUrl, docId, absPath, true, clientActionPoster, session);
+    protected RoSafSshFile createFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath, PftpdService pftpdService) {
+        return new RoSafSshFile(contentResolver, startUrl, docId, absPath, true, pftpdService, session);
     }
 
     @Override
-    protected RoSafSshFile createFileNonExistant(ContentResolver contentResolver, Uri startUrl, String name, String absPath, ClientActionPoster clientActionPoster) {
-        return new RoSafSshFile(contentResolver, startUrl, name, absPath, false, clientActionPoster, session);
+    protected RoSafSshFile createFileNonExistant(ContentResolver contentResolver, Uri startUrl, String name, String absPath, PftpdService pftpdService) {
+        return new RoSafSshFile(contentResolver, startUrl, name, absPath, false, pftpdService, session);
     }
 
     @Override

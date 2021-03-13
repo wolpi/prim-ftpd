@@ -3,7 +3,7 @@ package org.primftpd.filesystem;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 import org.primftpd.pojo.LsOutputBean;
 
 import java.io.File;
@@ -15,15 +15,15 @@ public class RootSshFileSystemView extends RootFileSystemView<RootSshFile, SshFi
     private final File homeDir;
     private final Session session;
 
-    public RootSshFileSystemView(Shell.Interactive shell, ClientActionPoster clientActionPoster, File homeDir, Session session) {
-        super(shell, clientActionPoster);
+    public RootSshFileSystemView(Shell.Interactive shell, PftpdService pftpdService, File homeDir, Session session) {
+        super(shell, pftpdService);
         this.homeDir = homeDir;
         this.session = session;
     }
 
     @Override
-    protected RootSshFile createFile(LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster) {
-        return new RootSshFile(shell, bean, absPath, clientActionPoster, session, this);
+    protected RootSshFile createFile(LsOutputBean bean, String absPath, PftpdService pftpdService) {
+        return new RootSshFile(shell, bean, absPath, pftpdService, session, this);
     }
 
     @Override

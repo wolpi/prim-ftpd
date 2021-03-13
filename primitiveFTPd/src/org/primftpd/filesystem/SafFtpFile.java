@@ -5,7 +5,7 @@ import androidx.documentfile.provider.DocumentFile;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
 
@@ -16,9 +16,9 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             User user) {
-        super(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster);
+        super(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService);
         this.user = user;
     }
 
@@ -27,9 +27,9 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             User user) {
-        super(contentResolver, parentDocumentFile, name, absPath, clientActionPoster);
+        super(contentResolver, parentDocumentFile, name, absPath, pftpdService);
         this.user = user;
     }
 
@@ -39,8 +39,8 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            ClientActionPoster clientActionPoster) {
-        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster, user);
+            PftpdService pftpdService) {
+        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, user);
     }
 
     @Override

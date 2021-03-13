@@ -6,7 +6,7 @@ import android.net.Uri;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
 
@@ -16,9 +16,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             ContentResolver contentResolver,
             Uri startUrl,
             String absPath,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             User user) {
-        super(contentResolver, startUrl, absPath, clientActionPoster);
+        super(contentResolver, startUrl, absPath, pftpdService);
         this.user = user;
     }
 
@@ -28,9 +28,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             String docId,
             String absPath,
             boolean exists,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             User user) {
-        super(contentResolver, startUrl, docId, absPath, exists, clientActionPoster);
+        super(contentResolver, startUrl, docId, absPath, exists, pftpdService);
         this.user = user;
     }
 
@@ -39,9 +39,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             Uri startUrl,
             Cursor cursor,
             String absPath,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             User user) {
-        super(contentResolver, startUrl, cursor, absPath, clientActionPoster);
+        super(contentResolver, startUrl, cursor, absPath, pftpdService);
         this.user = user;
     }
 
@@ -51,8 +51,8 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             Uri startUrl,
             Cursor cursor,
             String absPath,
-            ClientActionPoster clientActionPoster) {
-        return new RoSafFtpFile(contentResolver, startUrl, cursor, absPath, clientActionPoster, user);
+            PftpdService pftpdService) {
+        return new RoSafFtpFile(contentResolver, startUrl, cursor, absPath, pftpdService, user);
     }
 
     @Override

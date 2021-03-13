@@ -3,7 +3,7 @@ package org.primftpd.filesystem;
 import org.apache.ftpserver.ftplet.FileSystemView;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 import java.io.File;
 
@@ -11,28 +11,28 @@ public class QuickShareFtpFileSystemView extends QuickShareFileSystemView<QuickS
 
     private final User user;
 
-    public QuickShareFtpFileSystemView(File quickShareFile, User user, ClientActionPoster clientActionPoster) {
-        super(quickShareFile, clientActionPoster);
+    public QuickShareFtpFileSystemView(File quickShareFile, User user, PftpdService pftpdService) {
+        super(quickShareFile, pftpdService);
         this.user = user;
     }
 
-    protected QuickShareFtpFile createFile(File quickShareFile, String dir, ClientActionPoster clientActionPoster) {
-        return new QuickShareFtpFile(quickShareFile, dir, clientActionPoster, user);
+    protected QuickShareFtpFile createFile(File quickShareFile, String dir, PftpdService pftpdService) {
+        return new QuickShareFtpFile(quickShareFile, dir, pftpdService, user);
     }
-    protected QuickShareFtpFile createFile(File quickShareFile, ClientActionPoster clientActionPoster) {
-        return new QuickShareFtpFile(quickShareFile, clientActionPoster, user);
+    protected QuickShareFtpFile createFile(File quickShareFile, PftpdService pftpdService) {
+        return new QuickShareFtpFile(quickShareFile, pftpdService, user);
     }
 
     public QuickShareFtpFile getHomeDirectory() {
         logger.trace("getHomeDirectory()");
 
-        return createFile(quickShareFile, QuickShareFileSystemView.ROOT_PATH, clientActionPoster);
+        return createFile(quickShareFile, QuickShareFileSystemView.ROOT_PATH, pftpdService);
     }
 
     public QuickShareFtpFile getWorkingDirectory() {
         logger.trace("getWorkingDirectory()");
 
-        return createFile(quickShareFile, QuickShareFileSystemView.ROOT_PATH, clientActionPoster);
+        return createFile(quickShareFile, QuickShareFileSystemView.ROOT_PATH, pftpdService);
     }
 
     public boolean changeWorkingDirectory(String dir) {

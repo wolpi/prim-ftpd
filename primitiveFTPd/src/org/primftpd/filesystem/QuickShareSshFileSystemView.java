@@ -3,7 +3,7 @@ package org.primftpd.filesystem;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 import java.io.File;
 
@@ -11,16 +11,16 @@ public class QuickShareSshFileSystemView extends QuickShareFileSystemView<QuickS
 
     private final Session session;
 
-    public QuickShareSshFileSystemView(File quickShareFile, ClientActionPoster clientActionPoster, Session session) {
-        super(quickShareFile, clientActionPoster);
+    public QuickShareSshFileSystemView(File quickShareFile, PftpdService pftpdService, Session session) {
+        super(quickShareFile, pftpdService);
         this.session = session;
     }
 
-    protected QuickShareSshFile createFile(File quickShareFile, String dir, ClientActionPoster clientActionPoster) {
-        return new QuickShareSshFile(quickShareFile, dir, clientActionPoster, session);
+    protected QuickShareSshFile createFile(File quickShareFile, String dir, PftpdService pftpdService) {
+        return new QuickShareSshFile(quickShareFile, dir, pftpdService, session);
     }
-    protected QuickShareSshFile createFile(File quickShareFile, ClientActionPoster clientActionPoster) {
-        return new QuickShareSshFile(quickShareFile, clientActionPoster, session);
+    protected QuickShareSshFile createFile(File quickShareFile, PftpdService pftpdService) {
+        return new QuickShareSshFile(quickShareFile, pftpdService, session);
     }
 
     @Override

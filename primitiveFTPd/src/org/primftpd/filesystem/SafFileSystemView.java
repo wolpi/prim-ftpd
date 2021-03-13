@@ -7,7 +7,7 @@ import android.os.Handler;
 import androidx.documentfile.provider.DocumentFile;
 import android.widget.Toast;
 
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,13 +21,13 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
     protected final Context context;
     protected final Uri startUrl;
     protected final ContentResolver contentResolver;
-    protected final  ClientActionPoster clientActionPoster;
+    protected final PftpdService pftpdService;
 
-    public SafFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, ClientActionPoster clientActionPoster) {
+    public SafFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService) {
         this.context = context;
         this.startUrl = startUrl;
         this.contentResolver = contentResolver;
-        this.clientActionPoster = clientActionPoster;
+        this.pftpdService = pftpdService;
     }
 
     protected abstract T createFile(
@@ -35,13 +35,13 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            ClientActionPoster clientActionPoster);
+            PftpdService pftpdService);
     protected abstract T createFile(
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
-            ClientActionPoster clientActionPoster);
+            PftpdService pftpdService);
 
     protected abstract String absolute(String file);
 
@@ -65,18 +65,18 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
                 if (docFile != null) {
                     boolean found = i == parts.size() - 1;
                     String absPath = Utils.toPath(parts);
-                    T child = createFile(contentResolver, parentDocFile, docFile, absPath, clientActionPoster);
+                    T child = createFile(contentResolver, parentDocFile, docFile, absPath, pftpdService);
                     if (found) {
                         return child;
                     }
                 } else {
                     // probably upload -> create object just with name
                     String absPath = Utils.toPath(parts);
-                    return createFile(contentResolver, parentDocFile, currentPart, absPath, clientActionPoster);
+                    return createFile(contentResolver, parentDocFile, currentPart, absPath, pftpdService);
                 }
             }
 
-            return createFile(contentResolver, rootDocFile, rootDocFile, ROOT_PATH, clientActionPoster);
+            return createFile(contentResolver, rootDocFile, rootDocFile, ROOT_PATH, pftpdService);
         } catch (Exception e) {
             final String msg = "[(s)ftpd] Error getting data from SAF: " + e.toString();
             logger.error(msg);

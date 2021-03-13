@@ -1,6 +1,6 @@
 package org.primftpd.filesystem;
 
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
 import org.slf4j.Logger;
@@ -15,14 +15,14 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     protected final Shell.Interactive shell;
-    protected final ClientActionPoster clientActionPoster;
+    protected final PftpdService pftpdService;
 
-    public RootFileSystemView(Shell.Interactive shell, ClientActionPoster clientActionPoster) {
+    public RootFileSystemView(Shell.Interactive shell, PftpdService pftpdService) {
         this.shell = shell;
-        this.clientActionPoster = clientActionPoster;
+        this.pftpdService = pftpdService;
     }
 
-    protected abstract T createFile(LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster);
+    protected abstract T createFile(LsOutputBean bean, String absPath, PftpdService pftpdService);
 
     protected abstract String absolute(String file);
 
@@ -60,7 +60,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
             //    // TODO make sym link target absolute
             //    file = bean.getName();
             //}
-            return createFile(bean, file, clientActionPoster);
+            return createFile(bean, file, pftpdService);
         } else {
             // probably new
             String name;
@@ -70,7 +70,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
                 name = file;
             }
             bean = new LsOutputBean(name);
-            return createFile(bean, file, clientActionPoster);
+            return createFile(bean, file, pftpdService);
         }
     }
 

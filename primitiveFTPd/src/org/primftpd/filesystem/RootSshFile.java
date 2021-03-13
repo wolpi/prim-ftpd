@@ -2,7 +2,7 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 import org.primftpd.pojo.LsOutputBean;
 
 import java.io.IOException;
@@ -24,16 +24,16 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
             Shell.Interactive shell,
             LsOutputBean bean,
             String absPath,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             Session session,
             RootSshFileSystemView fileSystemView) {
-        super(shell, bean, absPath, clientActionPoster);
+        super(shell, bean, absPath, pftpdService);
         this.session = session;
         this.fileSystemView = fileSystemView;
     }
 
-    protected RootSshFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster) {
-        return new RootSshFile(shell, bean, absPath, clientActionPoster, session, fileSystemView);
+    protected RootSshFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath, PftpdService pftpdService) {
+        return new RootSshFile(shell, bean, absPath, pftpdService, session, fileSystemView);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package org.primftpd.filesystem;
 
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,7 +17,7 @@ public abstract class QuickShareFile<T> extends AbstractFile {
 
     protected File quickShareFile;
 
-    QuickShareFile(File quickShareFile, String dir, ClientActionPoster clientActionPoster) {
+    QuickShareFile(File quickShareFile, String dir, PftpdService pftpdService) {
         // this c-tor is to be used to access fake directory
         super(
                 dir,
@@ -27,11 +27,11 @@ public abstract class QuickShareFile<T> extends AbstractFile {
                 true,
                 true,
                 true,
-                clientActionPoster);
+                pftpdService);
         this.quickShareFile = quickShareFile;
     }
 
-    QuickShareFile(File quickShareFile, ClientActionPoster clientActionPoster) {
+    QuickShareFile(File quickShareFile, PftpdService pftpdService) {
         // this c-tor is to be used to access actual file
         super(
                 QuickShareFileSystemView.ROOT_PATH + quickShareFile.getName(),
@@ -41,12 +41,12 @@ public abstract class QuickShareFile<T> extends AbstractFile {
                 quickShareFile.canRead(),
                 quickShareFile.exists(),
                 false,
-                clientActionPoster);
+                pftpdService);
         this.quickShareFile = quickShareFile;
     }
 
-    abstract protected T createFile(File quickShareFile, String dir, ClientActionPoster clientActionPoster);
-    abstract protected T createFile(File quickShareFile, ClientActionPoster clientActionPoster);
+    abstract protected T createFile(File quickShareFile, String dir, PftpdService pftpdService);
+    abstract protected T createFile(File quickShareFile, PftpdService pftpdService);
 
     @Override
     public ClientActionEvent.Storage getClientActionStorage() {
@@ -93,7 +93,7 @@ public abstract class QuickShareFile<T> extends AbstractFile {
         logger.trace("[{}] listFiles()", name);
         postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 
-        T result = createFile(quickShareFile, clientActionPoster);
+        T result = createFile(quickShareFile, pftpdService);
         return Collections.singletonList(result);
     }
 

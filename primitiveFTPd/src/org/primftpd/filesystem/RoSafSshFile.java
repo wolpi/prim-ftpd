@@ -6,7 +6,7 @@ import android.net.Uri;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 import java.util.List;
 
@@ -18,9 +18,9 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             ContentResolver contentResolver,
             Uri startUrl,
             String absPath,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             Session session) {
-        super(contentResolver, startUrl, absPath, clientActionPoster);
+        super(contentResolver, startUrl, absPath, pftpdService);
         this.session = session;
     }
 
@@ -30,9 +30,9 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             String docId,
             String absPath,
             boolean exists,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             Session session) {
-        super(contentResolver, startUrl, docId, absPath, exists, clientActionPoster);
+        super(contentResolver, startUrl, docId, absPath, exists, pftpdService);
         this.session = session;
     }
 
@@ -41,9 +41,9 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             Uri startUrl,
             Cursor cursor,
             String absPath,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             Session session) {
-        super(contentResolver, startUrl, cursor, absPath, clientActionPoster);
+        super(contentResolver, startUrl, cursor, absPath, pftpdService);
         this.session = session;
     }
 
@@ -53,8 +53,8 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             Uri startUrl,
             Cursor cursor,
             String absPath,
-            ClientActionPoster clientActionPoster) {
-        return new RoSafSshFile(contentResolver, startUrl, cursor, absPath, clientActionPoster, session);
+            PftpdService pftpdService) {
+        return new RoSafSshFile(contentResolver, startUrl, cursor, absPath, pftpdService, session);
     }
 
     @Override
