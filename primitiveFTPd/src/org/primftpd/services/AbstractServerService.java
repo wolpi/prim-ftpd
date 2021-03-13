@@ -171,6 +171,11 @@ public abstract class AbstractServerService
 		EventBus.getDefault().post(event);
 	}
 
+	@Override
+	public PrefsBean getPrefsBean() {
+		return prefsBean;
+	}
+
 	/**
 	 * Register a DNS-SD service (to be discoverable through Bonjour/Avahi).
 	 */

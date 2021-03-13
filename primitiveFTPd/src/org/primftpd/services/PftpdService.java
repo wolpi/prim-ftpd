@@ -1,6 +1,7 @@
 package org.primftpd.services;
 
 import org.primftpd.events.ClientActionEvent;
+import org.primftpd.prefs.PrefsBean;
 
 public interface PftpdService {
 
@@ -9,4 +10,6 @@ public interface PftpdService {
             ClientActionEvent.ClientAction clientAction,
             String clientIp,
             String path);
+
+    public PrefsBean getPrefsBean();
 }
