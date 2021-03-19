@@ -76,7 +76,7 @@
     <string name="prefTitleFtpPassivePorts">Porta FTP Pasif</string>
     <string name="prefSummaryFtpPassivePorts">Porta untuk koneksi data FTP Pasif. Boleh porta tunggal, beberapa atau rentang porta. Mis. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Batas Waktu Menganggur Server</string>
-    <string name="prefSummaryIdleTimeout">Server akan mematikan koneksi menganggur setelah waktu tersebut habis (hanya FTP)</string>
+    <string name="prefSummaryIdleTimeout">Server akan menghentikan koneksi yang tidak aktif setelah batas waktu ini dalam hitungan detik (hanya FTP).</string>
     <string name="prefTheme">Tema</string>
     <string name="prefSummaryTheme">Mengubah Tema mungkin membutuhkan aplikasi untuk dimulai ulang.</string>
     <string name="prefTitleLogging">Log</string>
@@ -148,7 +148,7 @@
     <string name="quickShareCouldNotStartServer">Server tidak bisa dimulai</string>
     <string name="quickShareServerStarted">Server telah mulai membagikan berkas tunggal</string>
     <string name="quickShare">Berbagi Cepat</string>
-    <string name="prefSummaryIdleTimeoutV2">Server akan mematikan koneksi mengangur setelah rentang waktu berikut. Atur ke 0 untuk menonaktifkan.</string>
+    <string name="prefSummaryIdleTimeoutV2">Server akan menghentikan koneksi yang tidak aktif setelah ini dalam hitungan detik. Setel ke 0 untuk menonaktifkan.</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Klik pada ikon pengaturan cepat membutuhkan perangkat tidak terkunci untuk memulai/meyetop server. Ketika diaktifkan, akan meminta konfirmasi untuk membuka perangkat jika terkunci.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Syarat buka kunci Ikon Pengaturan Cepat</string>
     <string name="statsReceivedPerSec">Diterima per detik</string>
