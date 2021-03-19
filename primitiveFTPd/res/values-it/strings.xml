@@ -65,6 +65,7 @@
     <string name="prefSummaryFtpPassivePorts">Porte per la connessione FTP passiva. Può essere una singola porta, una lista o un intervallo di porte. Es. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Timeout inattività Server</string>
     <string name="prefSummaryIdleTimeout">Il server terminerà le connessioni inattive dopo questo tempo in secondi (solo FTP)</string>
+    <string name="prefSummaryIdleTimeoutV2">Il server terminerà le connessioni inattive dopo questo tempo in secondi. Impostare a 0 per disabilitare.</string>
     <string name="prefTheme">Tema</string>
     <string name="prefSummaryTheme">La modifica del Tema richiede il riavvio dell\'app.</string>
     <string name="prefTitleLogging">Log</string>
