@@ -35,7 +35,7 @@
     <string name="couldNotReadKeyAuthKey">Öffentlicher Schlüssel für Authentifizierung konnte nicht gelesen werden. Prüfen Sie die Logs.</string>
     <string name="ftpPassivePortsInvalid">Wert für FTP Passive Ports ist ungültig.</string>
     <string name="prefs">Einstellungen</string>
-    <string name="prefsCategoryTitleAuth">Auth</string>
+    <string name="prefsCategoryTitleAuth">Authentifizierung</string>
     <string name="prefsCategoryTitleConnectivity">Konnektivität</string>
     <string name="prefsCategoryTitleUi">UI</string>
     <string name="prefsCategoryTitleSystem">System</string>
@@ -52,7 +52,7 @@
     <string name="prefTitleAnnounce">Server im LAN bekanntmachen</string>
     <string name="prefSummaryAnnounce">Annonciert den FTP-Server im LAN via DNS-SD (Bonjour). Kann auf manchen Geräten Abstürze verursachen.</string>
     <string name="prefTitleAnnounceName">Servername</string>
-    <string name="prefSummaryAnnounceName">Name unter dem der Server im LAN annonciert wird.</string>
+    <string name="prefSummaryAnnounceName">Name unter dem der Server im LAN angekündigt wird.</string>
     <string name="prefTitleWakelock">Standby verhindern</string>
     <string name="prefSummaryWakelock">Verhindert Standby während der Server läuft. Standby kann dazu führen, dass Up-/Downloads abgebrochen werden.</string>
     <string name="prefTitleWhichServerToStart">Zu startende Server</string>
@@ -84,12 +84,11 @@
     <string name="prefSummaryAllowedIpsPattern">Pattern der erlaubten IP Adressen. Nur eine Wildcard (*) kann genutzt werden, nur als letztes Zeichen.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Quick Settings Tile erfordert entsperren des Geräts</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Klicken auf Quick Settings Tile erfordert entsperren des Geräts um Server starten/stoppen zu können.</string>
-
     <string name="licence">Lizenz</string>
     <string name="reset">Zurücksetzen</string>
     <string name="isAnonymous">Anonymer Login: %1$b</string>
     <string name="passwordPresent">Passwort gesetzt: %1$b</string>
-    <string name="pubKeyAuth">Public key auth: %1$b</string>
+    <string name="pubKeyAuth">Public-Key-Authentifizierung: %1$b</string>
     <string name="selectServerAction">Serveraktion wählen</string>
     <string name="storageType">Art des Speichers</string>
     <string name="storageTypePlain">Gutes, altes Dateisystem</string>
@@ -101,16 +100,13 @@
     <string name="selectedSafUri">Ausgewählte SAF-URI:</string>
     <string name="startServerAndExit">Starte nur Server</string>
     <string name="startServerAndUi">Starte mit Server</string>
-
     <string name="downloadOrSaveUrlToFile">Download oder URL in Textdatei speichern ?</string>
     <string name="download">Download</string>
     <string name="saveToTextFile">In Textdatei speichern</string>
     <string name="open">Öffnen</string>
-
     <string name="quickShare">Quick Share</string>
     <string name="quickShareServerStarted">Server wurde gestartet, stellt eine Datei bereit</string>
     <string name="quickShareCouldNotStartServer">Server konnte nicht gestartet werden</string>
-
     <string name="filepickerCreateFolderError">Fehler beim Erstellen des Ordners</string>
     <string name="filepickerNewFolder">Neuer Ordner</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>
@@ -137,8 +133,16 @@
     </string-array>
     <string name="prefTitleAnonymousLogin">anonymer Login</string>
     <string name="prefTheme">Design</string>
-    <string name="prefTitlePubKeyAuth">Public Key Authentifizierung</string>
+    <string name="prefTitlePubKeyAuth">Public-Key-Authentifizierung</string>
     <string name="isServerRunning">Läuft der Server\?</string>
-    <string name="widgetTextStop">Stoppe (s)ftpd</string>
-    <string name="widgetTextStart">Starte (s)ftp</string>
+    <string name="widgetTextStop">stoppe (s)ftpd</string>
+    <string name="widgetTextStart">starte (s)ftpd</string>
+    <string name="clientActionsLabel">Client Action Log</string>
+    <string name="quickShareInfoActivity">Ausführung im QuickShare-Modus für Datei: %1s</string>
+    <string name="statsReceivedPerSec">Empfangen pro Sekunde</string>
+    <string name="statsSentPerSec">Gesendet pro Sekunde</string>
+    <string name="statsTotalReceived">Insgesamt empfangen</string>
+    <string name="statsTotalSent">Insgesamt gesendet</string>
+    <string name="statsLabel">Statistiken</string>
+    <string name="quickShareInfoNotification">QuickShare von: %1s</string>
 </resources>
