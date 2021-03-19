@@ -93,7 +93,7 @@
     <string name="prefTitleFtpPassivePorts">Puertos pasivos FTP</string>
     <string name="prefSummaryFtpPassivePorts">Puertos para conexión FTP de datos pasivos. Puede ser un único puerto o una lista. Ej.: 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Tiempo de espera de inactividad del servidor</string>
-    <string name="prefSummaryIdleTimeout">El servidor terminará las conexiones inactivas después de este tiempo (sólo para FTP).</string>
+    <string name="prefSummaryIdleTimeout">El servidor terminará las conexiones inactivas después de este tiempo en segundos (sólo FTP)</string>
     <string name="isAnonymous">Inicio de sesión anónimo: %1$b</string>
     <string name="selectServerAction">Selecciona acción del servidor</string>
     <string name="isServerRunning">¿Está funcionando el servidor?</string>
@@ -113,7 +113,7 @@
     <string name="prefAllowedIpsPattern">Patrón de IPs permitidas</string>
     <string name="prefSummaryAllowedIpsPattern">Patrón de direcciones IP permitidas. Sólo puede usarse un único asterisco (*) y debe de estar al final.</string>
     <string name="prefSummaryShowIpv6InNotification">Muestra direcciones IPv6 en la notificación si esta está visible.</string>
-    <string name="prefSummaryIdleTimeoutV2">El servidor cerrará la sesión de los clientes inactivos una vez pase este tiempo. Ponlo a cero para desactivarlo.</string>
+    <string name="prefSummaryIdleTimeoutV2">El servidor terminará las conexiones inactivas después de este tiempo en segundos. Establecer a 0 para desactivar.</string>
     <string name="filepickerNeedValidFilename">Elige o introduce un nombre de archivo válido</string>
     <string name="passwordPresent">Con contraseña: %1$b</string>
     <string name="pubKeyAuth">Acceso con clave pública: %1$b</string>
