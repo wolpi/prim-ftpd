@@ -77,6 +77,7 @@
     <string name="prefSummaryFtpPassivePorts">Portas para ligações FTP passivas. Pode ser apenas uma porta, uma lista ou entre dois valores. Ex. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Tempo de servidor inactivo para expirar</string>
     <string name="prefSummaryIdleTimeout">O servidor irá terminar as ligações inactivas após este tempo em segundos (apenas FTP)</string>
+    <string name="prefSummaryIdleTimeoutV2">O servidor irá terminar as ligações inactivas após este tempo, em segundos. Definir para 0 para desactivar.</string>
     <string name="prefTheme">Tema</string>
     <string name="prefSummaryTheme">A mudança de tema poderá obrigar a um reinicio a aplicação.</string>
     <string name="prefTitleLogging">Registo</string>
