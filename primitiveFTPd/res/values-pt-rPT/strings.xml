@@ -76,7 +76,7 @@
     <string name="prefSummaryShowStartStopNotification">Mostra uma notificação a todo o tempo para ter mais uma forma rápida de arrancar/parar o(s) servidor(es).</string>
     <string name="prefSummaryFtpPassivePorts">Portas para ligações FTP passivas. Pode ser apenas uma porta, uma lista ou entre dois valores. Ex. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Tempo de servidor inactivo para expirar</string>
-    <string name="prefSummaryIdleTimeout">O servidor irá terminar ligações inactivas após este tempo (apenas FTP)</string>
+    <string name="prefSummaryIdleTimeout">O servidor irá terminar as ligações inactivas após este tempo em segundos (apenas FTP)</string>
     <string name="prefTheme">Tema</string>
     <string name="prefSummaryTheme">A mudança de tema poderá obrigar a um reinicio a aplicação.</string>
     <string name="prefTitleLogging">Registo</string>
