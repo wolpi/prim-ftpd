@@ -64,7 +64,7 @@
     <string name="prefTitleFtpPassivePorts">Pasywne porty FTP</string>
     <string name="prefSummaryFtpPassivePorts">Porty do pasywnego połączenia danych FTP. Może być pojedynczym portem, listą lub zakresem portów. Na przykład 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Limit czasu bezczynności serwera</string>
-    <string name="prefSummaryIdleTimeout">Serwer zakończy połączenia bezczynne po tym czasie (tylko FTP)</string>
+    <string name="prefSummaryIdleTimeout">Serwer będzie kończył bezczynne połączenia po upływie tego czasu w sekundach (tylko FTP)</string>
     <string name="prefTheme">Motyw</string>
     <string name="prefSummaryTheme">Zmiana motywu może wymagać ponownego uruchomienia aplikacji.</string>
     <string name="prefTitleLogging">Dziennik</string>
@@ -121,7 +121,7 @@
     <string name="quickShareCouldNotStartServer">Nie można uruchomić serwera</string>
     <string name="quickShareServerStarted">Serwer został uruchomiony udostępniając pojedynczy plik</string>
     <string name="quickShare">Szybkie udostępnianie</string>
-    <string name="prefSummaryIdleTimeoutV2">Po tym czasie serwer zakończy bezczynne połączenia. Ustaw na 0, aby wyłączyć.</string>
+    <string name="prefSummaryIdleTimeoutV2">Serwer będzie kończył bezczynne połączenia po upływie tego czasu w sekundach. Ustaw na 0 aby wyłączyć.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Kafelek szybkich ustawień</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Kliknięcie kafelka szybkich ustawień wymaga odblokowania urządzenia w celu uruchomienia/zatrzymania serwerów. Po włączeniu wyświetli monit o odblokowanie urządzenia, jeśli jest zablokowane.</string>
     <string name="statsReceivedPerSec">Odebrane w ciągu sekundy</string>

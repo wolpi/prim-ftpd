@@ -65,7 +65,8 @@
     <string name="prefTitleFtpPassivePorts">Παθητικές Πόρτες FTP</string>
     <string name="prefSummaryFtpPassivePorts">Πόρτες για παθητική σύνδεση δεδομένων FTP. Μπορεί να είναι μία πόρτα ή μία λίστα από πόρτες. Π.χ. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Χρονικό όριο Αδράνειας Εξυπηρετητή</string>
-    <string name="prefSummaryIdleTimeout">Ο εξυπηρετητής θα τερματίζει ανενεργές συνδέσεις ύστερα από χρονικό όριο (Μόνο για FTP)</string>
+    <string name="prefSummaryIdleTimeout">Ο διακομιστής θα τερματίσει τις αδρανείς συνδέσεις μετά από αυτό το χρονικό διάστημα σε δευτερόλεπτα (μόνο FTP)</string>
+    <string name="prefSummaryIdleTimeoutV2">Ο διακομιστής θα τερματίσει τις αδρανείς συνδέσεις μετά από αυτό το χρονικό διάστημα σε δευτερόλεπτα. Ορίστε το 0 για απενεργοποίηση.</string>
     <string name="prefTheme">Θέμα</string>
     <string name="prefSummaryTheme">Η αλλαγή θέματος ίσως απαιτήσει την επανεκκίνηση της εφαρμογής.</string>
     <string name="prefTitleLogging">Αρχείο καταγραφής</string>

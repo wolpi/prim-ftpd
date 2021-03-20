@@ -111,7 +111,7 @@
     <string name="prefAllowedIpsPattern">Modèle d\'adresses IP autorisés</string>
     <string name="prefSummaryLoggingV2">Les log servent à l\'analyse des erreurs. Si l\'application ne fonctionne pas correctement sur votre appareil, vous pouvez l\'envoyer aux développeurs. Peut nécessiter de redémarrer l\'application. Les logs textuel sont stocké dans %s.</string>
     <string name="prefSummaryLogging">Les log servent à l\'analyse des erreurs. Si l\'application ne fonctionne pas correctement sur votre appareil, vous pouvez l\'envoyer aux développeurs. Peut nécessiter de redémarrer l\'application.</string>
-    <string name="prefSummaryIdleTimeout">Le serveur terminera les connexions inactive après ce délais (FTP seulement)</string>
+    <string name="prefSummaryIdleTimeout">Le serveur terminera les connexions inactives après ce délais en secondes (FTP seulement).</string>
     <string name="prefSummaryFtpPassivePorts">Ports pour les connexions FTP passive. Peut être un seul port, une liste ou une plage de ports. Ex. 5678,5700-5710,5800,5900.</string>
     <string name="prefSummaryPubKeyAuth">Si activé, placer vos clés publique ssh2 dans %s. SFTP seulement.</string>
     <string name="quickShareCouldNotStartServer">Le serveur ne peut pas démarrer</string>
@@ -123,5 +123,5 @@
     <string name="downloadOrSaveUrlToFile">Télécharger ou sauvegarder l\'URL vers un fichier texte \?</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">"Le clic sur Vignettes rapides nécessite de déverrouillage de  équipement pour démarrer / arrêter le serveur. Quand actif, une demande de déverrouillage sera affiché si l\'équipement est verrouillé. "</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Déverrouillage nécessaire pour Vignettes Rapides</string>
-    <string name="prefSummaryIdleTimeoutV2">"Le serveur va couper les connexions inactifs passé ce délai. Régler sur 0 pour désactiver. "</string>
+    <string name="prefSummaryIdleTimeoutV2">Le serveur va couper les connexions inactives après ce délai en secondes. Réglez-le sur 0 pour désactiver.</string>
 </resources>

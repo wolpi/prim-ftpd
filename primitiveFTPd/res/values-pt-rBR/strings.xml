@@ -80,8 +80,8 @@
     <string name="prefTitleFtpPassivePorts">Portas Passivas de FTP</string>
     <string name="prefSummaryFtpPassivePorts">Portas para conexão passiva FTP de dados. Pode ser uma única porta, uma lista ou um conjunto de portas. P.ex. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Tempo de inatividade do servidor</string>
-    <string name="prefSummaryIdleTimeout">O servidor encerrará as conexões inativas após este tempo (apenas FTP)</string>
-    <string name="prefSummaryIdleTimeoutV2">O servidor encerrará as conexões inativas após este tempo. Digitar 0 para desativar.</string>
+    <string name="prefSummaryIdleTimeout">O servidor encerrará as conexões inativas após este tempo em segundos (apenas FTP)</string>
+    <string name="prefSummaryIdleTimeoutV2">O servidor encerrará as conexões inativas após este tempo, em segundos. Ajuste para 0 para desativar.</string>
     <string name="prefTheme">Tema</string>
     <string name="prefSummaryTheme">A mudança do tema pode exigir o reinício do aplicativo.</string>
     <string name="prefTitleLogging">Log</string>
