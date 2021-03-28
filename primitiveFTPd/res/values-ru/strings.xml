@@ -126,7 +126,7 @@
     <string name="filepickerNeedValidFilename">Пожалуйста, введите или выберите допустимое имя файла</string>
     <string name="filepickerSelectSomethingFirst">Пожалуйста, сначала выберите что-нибудь</string>
     <string name="filepickerFilename">Имя файла</string>
-    <string name="filepickerName">Название</string>
+    <string name="filepickerName">Имя</string>
     <string name="filepickerListCancel">Отмена</string>
     <string name="filepickerListOk">OK</string>
     <string name="filepickerNewFolderOk">OK</string>
@@ -136,9 +136,9 @@
     <string name="download">Скачать</string>
     <string name="downloadOrSaveUrlToFile">Скачать или сохранить URL в текстовый файл \?</string>
     <string name="quickShare">Быстро поделиться</string>
-    <string name="prefSummaryQuickSettingsRequiresUnlock">Для доступа к быстрым настройкам устройство должно быть разблокировано, чтоб запускать/останавливать сервер(ы). Когда включено, будет предложено разблокировать устройство, если оно заблокировано.</string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock">Для доступа к быстрым настройкам устройство должно быть разблокировано, чтобы запускать/останавливать сервер. Когда включено, будет предложено разблокировать устройство, если оно заблокировано.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Требовать разблокировку для Быстрых Настроек</string>
-    <string name="prefSummaryIdleTimeoutV2">Авторазрыв неактивных соединений через указанное время. Для отключения поставить 0.</string>
+    <string name="prefSummaryIdleTimeoutV2">Авторазрыв неактивных соединений через указанное время (в секундах). Задайте 0 для отключения.</string>
     <string name="statsLabel">Статистика</string>
     <string name="statsSentPerSec">Отправлено в секунду</string>
     <string name="quickShareCouldNotStartServer">Невозможно запустить сервер</string>
