@@ -5,7 +5,7 @@ import androidx.documentfile.provider.DocumentFile;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 import java.util.List;
 
@@ -19,10 +19,10 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             Session session,
             SafSshFileSystemView fileSystemView) {
-        super(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster);
+        super(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService);
         this.session = session;
         this.fileSystemView = fileSystemView;
     }
@@ -32,10 +32,10 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
-            ClientActionPoster clientActionPoster,
+            PftpdService pftpdService,
             Session session,
             SafSshFileSystemView fileSystemView) {
-        super(contentResolver, parentDocumentFile, name, absPath, clientActionPoster);
+        super(contentResolver, parentDocumentFile, name, absPath, pftpdService);
         this.session = session;
         this.fileSystemView = fileSystemView;
     }
@@ -46,8 +46,8 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            ClientActionPoster clientActionPoster) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster, session, fileSystemView);
+            PftpdService pftpdService) {
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, session, fileSystemView);
     }
 
     @Override

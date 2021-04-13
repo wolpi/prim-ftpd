@@ -7,7 +7,7 @@ import android.os.Build;
 import android.provider.DocumentsContract;
 
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
@@ -42,7 +42,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             ContentResolver contentResolver,
             Uri startUrl,
             String absPath,
-            ClientActionPoster clientActionPoster) {
+            PftpdService pftpdService) {
         // this c-tor is to be used for start directory
         super(
                 absPath,
@@ -52,7 +52,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
                 false,
                 false,
                 false,
-                clientActionPoster);
+                pftpdService);
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
 
@@ -83,7 +83,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             String docId,
             String absPath,
             boolean exists,
-            ClientActionPoster clientActionPoster) {
+            PftpdService pftpdService) {
         // this c-tor is to be used for FileSystemView.getFile()
         super(
                 absPath,
@@ -93,7 +93,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
                 false,
                 exists,
                 false,
-                clientActionPoster);
+                pftpdService);
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
 
@@ -127,7 +127,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             Uri startUrl,
             Cursor cursor,
             String absPath,
-            ClientActionPoster clientActionPoster) {
+            PftpdService pftpdService) {
         // this c-tor is to be used by listFiles()
         super(
                 absPath,
@@ -137,7 +137,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
                 false,
                 false,
                 false,
-                clientActionPoster);
+                pftpdService);
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
         initByCursor(cursor);
@@ -171,7 +171,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             Uri startUrl,
             Cursor cursor,
             String absPath,
-            ClientActionPoster clientActionPoster);
+            PftpdService pftpdService);
 
     @Override
     public ClientActionEvent.Storage getClientActionStorage() {
@@ -284,7 +284,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
                     String absPath = this.absPath.endsWith("/")
                             ? this.absPath + childCursor.getString(CURSOR_INDEX_NAME)
                             : this.absPath + "/" + childCursor.getString(CURSOR_INDEX_NAME);
-                    result.add(createFile(contentResolver, startUrl, childCursor, absPath, clientActionPoster));
+                    result.add(createFile(contentResolver, startUrl, childCursor, absPath, pftpdService));
                 }
             } finally {
                 closeQuietly(childCursor);

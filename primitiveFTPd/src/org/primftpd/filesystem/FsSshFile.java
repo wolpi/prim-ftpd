@@ -2,7 +2,7 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +11,8 @@ import java.util.List;
 public class FsSshFile extends FsFile<SshFile> implements SshFile {
 	private final Session session;
 
-	public FsSshFile(File file, ClientActionPoster clientActionPoster, Session session) {
-		super(file, clientActionPoster);
+	public FsSshFile(File file, PftpdService pftpdService, Session session) {
+		super(file, pftpdService);
 		this.session = session;
 	}
 
@@ -22,8 +22,8 @@ public class FsSshFile extends FsFile<SshFile> implements SshFile {
 	}
 
 	@Override
-	protected SshFile createFile(File file, ClientActionPoster clientActionPoster) {
-		return new FsSshFile(file, clientActionPoster, session);
+	protected SshFile createFile(File file, PftpdService pftpdService) {
+		return new FsSshFile(file, pftpdService, session);
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class FsSshFile extends FsFile<SshFile> implements SshFile {
 	@Override
 	public SshFile getParentFile() {
 		logger.trace("[{}] getParentFile()", name);
-		return new FsSshFile(file.getParentFile(), clientActionPoster, session);
+		return new FsSshFile(file.getParentFile(), pftpdService, session);
 	}
 
 	@Override

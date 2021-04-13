@@ -2,7 +2,7 @@ package org.primftpd.filesystem;
 
 import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
 
@@ -26,7 +26,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
     private Process ddProcess;
 
-    public RootFile(Shell.Interactive shell, LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster) {
+    public RootFile(Shell.Interactive shell, LsOutputBean bean, String absPath, PftpdService pftpdService) {
         super(
                 absPath,
                 bean.getName(),
@@ -35,12 +35,12 @@ public abstract class RootFile<T> extends AbstractFile {
                 true,
                 bean.isExists(),
                 bean.isDir(),
-                clientActionPoster);
+                pftpdService);
         this.shell = shell;
         this.bean = bean;
     }
 
-    protected abstract T createFile(Shell.Interactive shell, LsOutputBean bean, String absPath, ClientActionPoster clientActionPoster);
+    protected abstract T createFile(Shell.Interactive shell, LsOutputBean bean, String absPath, PftpdService pftpdService);
 
     @Override
     public ClientActionEvent.Storage getClientActionStorage() {
@@ -110,7 +110,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
         for (LsOutputBean bean : beans) {
             String path = absPath + "/" + bean.getName();
-            result.add(createFile(shell, bean, path, clientActionPoster));
+            result.add(createFile(shell, bean, path, pftpdService));
         }
 
         return result;

@@ -230,7 +230,8 @@
 
         <activity
             android:name="org.primftpd.ui.StartServerAndExitActivity"
-            android:label="@string/startService">
+            android:label="@string/startService"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <!-- be invokable by other apps (e.g. Automate) but not listed in main menu -->
                 <action android:name="android.intent.action.MAIN" />
@@ -239,7 +240,8 @@
 
         <activity
             android:name="org.primftpd.ui.StopServerAndExitActivity"
-            android:label="@string/stopService">
+            android:label="@string/stopService"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <!-- be invokable by other apps (e.g. Automate) but not listed in main menu -->
                 <action android:name="android.intent.action.MAIN" />

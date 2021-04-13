@@ -2,7 +2,7 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.file.SshFile;
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public abstract class AbstractFile {
     protected boolean readable;
     protected boolean exists;
 
-    protected final ClientActionPoster clientActionPoster;
+    protected final PftpdService pftpdService;
 
     public AbstractFile(
             String absPath,
@@ -33,7 +33,7 @@ public abstract class AbstractFile {
             boolean readable,
             boolean exists,
             boolean isDirectory,
-            ClientActionPoster clientActionPoster) {
+            PftpdService pftpdService) {
         this.absPath = absPath;
         this.name = name;
         this.lastModified = lastModified;
@@ -41,14 +41,14 @@ public abstract class AbstractFile {
         this.readable = readable;
         this.exists = exists;
         this.isDirectory = isDirectory;
-        this.clientActionPoster = clientActionPoster;
+        this.pftpdService = pftpdService;
     }
 
     public abstract String getClientIp();
     public abstract ClientActionEvent.Storage getClientActionStorage();
 
     public void postClientAction(ClientActionEvent.ClientAction clientAction) {
-        clientActionPoster.postClientAction(
+        pftpdService.postClientAction(
                 getClientActionStorage(),
                 clientAction,
                 getClientIp(),

@@ -50,7 +50,8 @@
     <string name="prefAllowedIpsPattern">Engedélyezett IP-mód</string>
     <string name="prefSummaryLoggingV2">"A napló a hibák elemzését szolgálja. Ha az alkalmazás nem működik megfelelően az eszközén, akkor a naplót elküldheti a fejlesztőknek. Szükség lehet az app újraindítására. A szövegnaplókat  %s tárolja."</string>
     <string name="prefSummaryLogging">A napló a hibák elemzését szolgálja. Ha az alkalmazás nem működik megfelelően az eszközén, a naplót elküldhei a fejlesztőknek. Ehhez az alkalmazás újraindítására is szükség lehet .</string>
-    <string name="prefSummaryIdleTimeout">A kiszolgáló ezen idő után megszünteti a kapcsolatokat (csak FTP)</string>
+    <string name="prefSummaryIdleTimeout">A kiszolgáló az üresjárati kapcsolatokat másodpercben megadott idő után megszakítja (csak FTP).</string>
+    <string name="prefSummaryIdleTimeoutV2">A kiszolgáló az üresjárati kapcsolatokat a másodpercben megadott idő után megszakítja. A letiltáshoz állítsa 0-ra.</string>
     <string name="prefTitleIdleTimeout">Szerver alap(értelmezett) időtúllépés</string>
     <string name="prefSummaryAnonymousLogin">Névtelen bejelentkezés engedélyezett-e a szerveren.</string>
     <string name="prefSummaryPubKeyAuth">Ha engedélyezve van, illessze be %s SSH2 nyilvános kulcsát. Csak SFTP-nél.</string>

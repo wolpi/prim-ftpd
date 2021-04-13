@@ -80,8 +80,8 @@
     <string name="prefTitleFtpPassivePorts">منافذ FTP الخاملة</string>
     <string name="prefSummaryFtpPassivePorts">المنافذ المستخدمة للاتّصالات الخاملة لنقل البيانات عن طريق FTP. يمكن أن يكون منفذاً وحيداً، أو قائمة أو نطاق من المنافذ. مثل: 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">مهلة عدم نشاط الخادم</string>
-    <string name="prefSummaryIdleTimeout">سينهي الخادم العلاقات غير النشطة بعد هذه المهلة (FTP فقط).</string>
-    <string name="prefSummaryIdleTimeoutV2">سينهي الخادم العلاقات غير النشطة بعد هذه المهلة. ضع 0 للإلغاء.</string>
+    <string name="prefSummaryIdleTimeout">سينهي الخادم الاتصالات الخاملة بعد هذا الوقت بالثواني. اضبط على 0 للتعطيل.</string>
+    <string name="prefSummaryIdleTimeoutV2">سينهي الخادم الاتصالات الخاملة بعد هذا الوقت بالثواني. اضبط على 0 للتعطيل.</string>
     <string name="prefTheme">السمة</string>
     <string name="prefSummaryTheme">تغيير السمة سيتطلّب إعادة تشغيل التطبيق.</string>
     <string name="prefTitleLogging">السجل</string>

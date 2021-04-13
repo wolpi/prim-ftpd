@@ -40,6 +40,7 @@ import org.primftpd.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.SocketAddress;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -91,7 +92,16 @@ public class SshServerService extends AbstractServerService
 	protected void stopServer()
 	{
 		try {
+			List<AbstractSession> activeSessions = sshServer.getActiveSessions();
+			for (AbstractSession session : activeSessions) {
+				try {
+					session.disconnect(-1, "server close");
+				} catch (IOException e) {
+					logger.error("could not end active session", e);
+				}
+			}
 			sshServer.stop(true);
+			sshServer.close(true);
 		} catch (InterruptedException e) {
 			logger.error("could not stop ssh server", e);
 		}

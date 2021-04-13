@@ -62,6 +62,7 @@
     <string name="prefSummaryFtpPassivePorts">用于被动模式的数据端口。可以是单个端口，一系列端口或供随机选择的一个范围。例如 5678,5700-5710,5800,5900。</string>
     <string name="prefTitleIdleTimeout">服务器空闲超时</string>
     <string name="prefSummaryIdleTimeout">当连接空闲时间超过这一秒数后，服务器将会关闭连接（仅限 FTP）</string>
+    <string name="prefSummaryIdleTimeoutV2">当连接空闲超过此秒数时，服务器将关闭连接。 设置为0禁用。</string>
     <string name="prefTheme">主题</string>
     <string name="prefSummaryTheme">改变主题需要重启应用。</string>
     <string name="prefTitleLogging">日志</string>

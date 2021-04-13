@@ -5,22 +5,22 @@ import java.io.File;
 import org.apache.sshd.common.file.SshFile;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 public class FsSshFileSystemView extends FsFileSystemView<FsSshFile, SshFile> implements FileSystemView {
 
 	private final File homeDir;
 	private final Session session;
 
-	public FsSshFileSystemView(ClientActionPoster clientActionPoster, File homeDir, Session session) {
-		super(clientActionPoster);
+	public FsSshFileSystemView(PftpdService pftpdService, File homeDir, Session session) {
+		super(pftpdService);
 		this.homeDir = homeDir;
 		this.session = session;
 	}
 
 	@Override
-	protected FsSshFile createFile(File file, ClientActionPoster clientActionPoster) {
-		return new FsSshFile(file, clientActionPoster, session);
+	protected FsSshFile createFile(File file, PftpdService pftpdService) {
+		return new FsSshFile(file, pftpdService, session);
 	}
 
 	@Override

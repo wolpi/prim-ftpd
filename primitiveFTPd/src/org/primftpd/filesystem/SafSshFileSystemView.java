@@ -8,14 +8,14 @@ import androidx.documentfile.provider.DocumentFile;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.events.ClientActionPoster;
+import org.primftpd.services.PftpdService;
 
 public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile> implements FileSystemView {
 
     private final Session session;
 
-    public SafSshFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, ClientActionPoster clientActionPoster, Session session) {
-        super(context, startUrl, contentResolver, clientActionPoster);
+    public SafSshFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService, Session session) {
+        super(context, startUrl, contentResolver, pftpdService);
         this.session = session;
     }
 
@@ -25,8 +25,8 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            ClientActionPoster clientActionPoster) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, clientActionPoster, session, this);
+            PftpdService pftpdService) {
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, session, this);
     }
 
     @Override
@@ -35,8 +35,8 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
-            ClientActionPoster clientActionPoster) {
-        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, clientActionPoster, session, this);
+            PftpdService pftpdService) {
+        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, session, this);
     }
 
     @Override

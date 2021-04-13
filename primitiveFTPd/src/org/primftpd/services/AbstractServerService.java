@@ -19,7 +19,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.events.ClientActionPoster;
 import org.primftpd.events.ServerInfoRequestEvent;
 import org.primftpd.events.ServerInfoResponseEvent;
 import org.primftpd.events.ServerStateChangedEvent;
@@ -49,7 +48,7 @@ import eu.chainfire.libsuperuser.Shell;
  *
  */
 public abstract class AbstractServerService
-	extends Service implements ClientActionPoster
+	extends Service implements PftpdService
 {
 	protected static final int MSG_START = 1;
 	protected static final int MSG_STOP = 2;
@@ -170,6 +169,11 @@ public abstract class AbstractServerService
 				path);
 		logger.info("posting ClientActionEvent: {}", event);
 		EventBus.getDefault().post(event);
+	}
+
+	@Override
+	public PrefsBean getPrefsBean() {
+		return prefsBean;
 	}
 
 	/**
