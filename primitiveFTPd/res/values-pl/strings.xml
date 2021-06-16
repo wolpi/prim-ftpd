@@ -90,7 +90,7 @@
     <string name="state">Stan</string>
     <string name="serverStarted">Uruchomiony…</string>
     <string name="quickSettingsServerStopped">pFTPd zatrzymany</string>
-    <string name="prefsCategoryTitleAuth">Autentykacja</string>
+    <string name="prefsCategoryTitleAuth">Uwierzytelnianie</string>
     <string name="prefTitleStartOnOpen">Uruchom przy otwieraniu</string>
     <string name="prefTitleShowConnectionInfoInNotification">Pokaż informacje o połączeniu</string>
     <string name="startServerAndUi">uruchom razem z serwerem</string>
@@ -123,7 +123,7 @@
     <string name="quickShare">Szybkie udostępnianie</string>
     <string name="prefSummaryIdleTimeoutV2">Serwer będzie kończył bezczynne połączenia po upływie tego czasu w sekundach. Ustaw na 0 aby wyłączyć.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Kafelek szybkich ustawień</string>
-    <string name="prefSummaryQuickSettingsRequiresUnlock">Kliknięcie kafelka szybkich ustawień wymaga odblokowania urządzenia w celu uruchomienia/zatrzymania serwerów. Po włączeniu wyświetli monit o odblokowanie urządzenia, jeśli jest zablokowane.</string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock">Kliknięcie kafelka szybkich ustawień wymaga odblokowania urządzenia w celu uruchomienia/zatrzymania serwera. Po włączeniu wyświetli monit o odblokowanie urządzenia, jeśli jest zablokowane.</string>
     <string name="statsReceivedPerSec">Odebrane w ciągu sekundy</string>
     <string name="statsSentPerSec">Wysłane w ciągu sekundy</string>
     <string name="statsTotalReceived">Otrzymano łącznie</string>
