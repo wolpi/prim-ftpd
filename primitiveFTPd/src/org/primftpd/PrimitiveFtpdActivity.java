@@ -268,6 +268,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	}
 
 	public void onRadioButtonClicked(View view) {
+		logger.debug("onRadioButtonClicked()");
 		findViewById(R.id.safUriLabel).setVisibility(View.GONE);
 		findViewById(R.id.safUri).setVisibility(View.GONE);
 
@@ -312,7 +313,8 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-	    super.onActivityResult(requestCode, resultCode, intent);
+		super.onActivityResult(requestCode, resultCode, intent);
+		logger.debug("onActivityResult()");
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			if (requestCode == REQUEST_CODE_SAF_PERM && resultCode == Activity.RESULT_OK) {
 				if (intent != null) {
