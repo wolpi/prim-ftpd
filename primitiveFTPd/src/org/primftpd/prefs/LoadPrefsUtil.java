@@ -286,7 +286,7 @@ public class LoadPrefsUtil
 		logger.debug("got userName: {}", userName);
 
 		String password = password(prefs);
-		logger.debug("got password: {}", password);
+		logger.debug("got password length: {}", (password != null ? password.length() : "null"));
 
 		File startDir = startDir(prefs);
 		logger.debug("got startDir: {}", startDir);
