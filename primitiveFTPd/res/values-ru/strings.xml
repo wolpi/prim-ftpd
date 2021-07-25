@@ -31,7 +31,7 @@
     <string name="prefSummaryPassword">Пароль FTP-сервера</string>
     <string name="prefSummaryPort">Порт FTP-сервера</string>
     <string name="prefSummaryPortSecure">Порт FTP-сервера (защищённый)</string>
-    <string name="prefSummaryPubKeyAuth">Если включено, разместите ваши открытые ключи ssh2 в %s. Только для SFTP.</string>
+    <string name="prefSummaryPubKeyAuth">Если включено, разместите ваши открытые ключи SSH2 в %s. Только для SFTP.</string>
     <string name="prefSummaryStartDir">Каталог, отображаемый после авторизации</string>
     <string name="prefSummaryStartOnBoot">Запускать сервер после загрузки системы.</string>
     <string name="prefSummaryTheme">Смена темы оформления, может потребоваться перезапуск приложения.</string>
@@ -81,7 +81,7 @@
     <string name="widgetTextStart">Запустить ftpd</string>
     <string name="widgetTextStop">Остановить ftpd</string>
     <string name="prefTitleIdleTimeout">Время бездействия</string>
-    <string name="prefSummaryIdleTimeout">Сервер прервет простаивающие соединения через это время в секундах (только FTP).</string>
+    <string name="prefSummaryIdleTimeout">Сервер прервёт простаивающие соединения через это время в секундах (только FTP).</string>
     <string name="prefSummaryIdleTimeoutV2">Сервер прервет простаивающие соединения через это время в секундах. Установите 0 для отключения.</string>
     <string name="prefTitleStartOnOpen">Запуск при открытии</string>
     <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
@@ -104,10 +104,10 @@
     <string name="prefsCategoryTitleSystem">Система</string>
     <string name="prefTitleShowConnectionInfoInNotification">Показывать информацию о соединении в уведомлении</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Отображение информации о подключении (например, IP-адрес).</string>
-    <string name="prefTitleShowStartStopNotification">Показывать уведомление о запуске/остановке сервера(ов)</string>
+    <string name="prefTitleShowStartStopNotification">Показывать уведомление о запуске/остановке серверов</string>
     <string name="translate">Перевести</string>
     <string name="haveToSetAuthMechanism">Сначала необходимо выбрать механизм авторизации</string>
-    <string name="ftpPassivePortsInvalid">Значение пассивных портов FTP неверно.</string>
+    <string name="ftpPassivePortsInvalid">Значение пассивных портов FTP указано неправильно.</string>
     <string name="prefsCategoryTitleAuth">Авторизация</string>
     <string name="prefSummaryShowStartStopNotification">Постоянно отображать уведомление для быстрого запуска/остановки сервера.</string>
     <string name="prefSummaryLoggingV2">Журнал предназначен для анализа ошибок. Если приложение не работает должным образом на вашем устройстве, вы можете отправить журнал разработчикам. Может потребоваться перезапустить приложение. Текстовые журналы хранятся в %s.</string>
@@ -134,10 +134,10 @@
     <string name="open">Открыть</string>
     <string name="saveToTextFile">Сохранить в текстовый файл</string>
     <string name="download">Скачать</string>
-    <string name="downloadOrSaveUrlToFile">Скачать или сохранить URL в текстовый файл \?</string>
+    <string name="downloadOrSaveUrlToFile">Скачать или сохранить URL в текстовый файл\?</string>
     <string name="quickShare">Быстро поделиться</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Для доступа к быстрым настройкам устройство должно быть разблокировано, чтобы запускать/останавливать сервер. Когда включено, будет предложено разблокировать устройство, если оно заблокировано.</string>
-    <string name="prefTitleQuickSettingsRequiresUnlock">Требовать разблокировку для Быстрых Настроек</string>
+    <string name="prefTitleQuickSettingsRequiresUnlock">Требовать разблокировку для быстрых настроек</string>
     <string name="prefSummaryIdleTimeoutV2">Авторазрыв неактивных соединений через указанное время (в секундах). Задайте 0 для отключения.</string>
     <string name="statsLabel">Статистика</string>
     <string name="statsSentPerSec">Отправлено в секунду</string>
