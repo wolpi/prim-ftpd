@@ -1,10 +1,13 @@
 package org.primftpd.filesystem;
 
+import android.os.Build;
+
 import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.services.PftpdService;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
+import org.primftpd.util.StringUtils;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
@@ -131,6 +135,13 @@ public abstract class RootFile<T> extends AbstractFile {
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "dd", "of=" + escapePathForDD(absPath));
+        String ddCommand;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ddCommand = String.join(" ", processBuilder.command());
+        } else {
+            ddCommand = StringUtils.join(processBuilder.command(), ' ');
+        }
+        logger.trace("dd command: {}", ddCommand);
         ddProcess = processBuilder.start();
 
         return new TracingBufferedOutputStream(ddProcess.getOutputStream(), logger);
@@ -142,6 +153,13 @@ public abstract class RootFile<T> extends AbstractFile {
 
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "dd", "if=" + escapePathForDD(absPath));
+        String ddCommand;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ddCommand = String.join(" ", processBuilder.command());
+        } else {
+            ddCommand = StringUtils.join(processBuilder.command(), ' ');
+        }
+        logger.trace("dd command: {}", ddCommand);
         ddProcess = processBuilder.start();
 
         try {
