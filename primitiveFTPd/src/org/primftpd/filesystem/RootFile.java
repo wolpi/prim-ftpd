@@ -4,9 +4,9 @@ import android.os.Build;
 
 import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.services.PftpdService;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
+import org.primftpd.services.PftpdService;
 import org.primftpd.util.StringUtils;
 
 import java.io.BufferedInputStream;
@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
