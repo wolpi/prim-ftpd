@@ -142,6 +142,16 @@
 			android:title="@string/prefTitleStartDir"
 			android:summary="@string/prefSummaryStartDir"
 			/>
+		<MultiSelectListPreference
+			android:name="permissions"
+			android:key="permissionsPref"
+			android:title="@string/prefPermissions"
+			android:dialogTitle="@string/prefPermissions"
+			android:summary="@string/prefSummaryPermissions"
+			android:defaultValue="@array/prefPermissionsValues"
+			android:entries="@array/prefPermissionsNames"
+			android:entryValues="@array/prefPermissionsValues"
+			/>
 		<SwitchPreference
 			android:name="wakelock"
 			android:key="wakelockPref"
