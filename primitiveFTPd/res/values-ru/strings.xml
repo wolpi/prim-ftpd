@@ -6,7 +6,7 @@
     <string name="fingerprintsLabel">Ключи авторизации</string>
     <string name="generate">Сгенерировать</string>
     <string name="generateKeysMessage">Сгенерировать ключи?</string>
-    <string name="generatingKeysMessage">Генерация ключей…</string>
+    <string name="generatingKeysMessage">Сгенерировать ключи…</string>
     <string name="haveToSetPassword">Сначала необходимо установить пароль</string>
     <string name="ifacesError">Ошибка:</string>
     <string name="ifacesLabel">Сетевой интерфейс</string>
@@ -26,7 +26,6 @@
     <string name="prefSummaryAnonymousLogin">Отметьте, если на сервер разрешён анонимный вход.</string>
     <string name="prefSummaryForegroundService">Сервис(ы) будут выполняться на переднем плане. Предотвращает остановку сервисов на некоторых устройствах.</string>
     <string name="prefForegroundService">Сервис(ы) на переднем плане</string>
-    <string name="prefSummaryIdleTimeout">По истечении этого времени в секундах сервер прервёт простаивающие соединения (только FTP)</string>
     <string name="prefSummaryFtpPassivePorts">Порты для пассивной передачи данных по FTP. Может быть один порт, список или диапазон портов. Например: 5678,5700-5710,5800,5900.</string>
     <string name="prefSummaryLogging">Журнал помогает анализировать ошибки. Если приложение работает на вашем устройстве некорректно, вы можете отправить журнал разработчикам. Может потребоваться перезапуск приложения.</string>
     <string name="prefSummaryPassword">Пароль FTP-сервера</string>
@@ -83,6 +82,7 @@
     <string name="widgetTextStop">Остановить ftpd</string>
     <string name="prefTitleIdleTimeout">Время бездействия</string>
     <string name="prefSummaryIdleTimeoutV2">Сервер прервет простаивающие соединения через это время в секундах. Установите 0 для отключения.</string>
+    <string name="prefSummaryIdleTimeout">Сервер прервёт простаивающие соединения через это время в секундах (только FTP).</string>
     <string name="prefTitleStartOnOpen">Запуск при открытии</string>
     <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
     <string-array name="prefThemeNames">
