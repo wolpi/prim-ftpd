@@ -21,11 +21,9 @@
     <string name="portInvalid_v2">Недопустимый номер порта: должно быть значение из диапазона 1024–64000.</string>
     <string name="portLabel">Порт</string>
     <string name="portsEqual_v2">Номера портов должны быть разными.</string>
-    <string name="prefForegroundService">Сервис(ы) на переднем плане</string>
     <string name="prefSummaryAnnounce">Анонсирует FTP-сервер в LAN через DNS-SD (Bonjour). На некоторых устройствах может приводить к закрытию приложения.</string>
     <string name="prefSummaryAnnounceName">Имя, под которым анонсируется сервер.</string>
     <string name="prefSummaryAnonymousLogin">Отметьте, если на сервер разрешён анонимный вход.</string>
-    <string name="prefSummaryForegroundService">Сервис(ы) будут выполняться на переднем плане. Предотвращает остановку сервисов на некоторых устройствах.</string>
     <string name="prefSummaryFtpPassivePorts">Порты для пассивной передачи данных по FTP. Может быть один порт, список или диапазон портов. Например: 5678,5700-5710,5800,5900.</string>
     <string name="prefSummaryLogging">Журнал помогает анализировать ошибки. Если приложение работает на вашем устройстве некорректно, вы можете отправить журнал разработчикам. Может потребоваться перезапуск приложения.</string>
     <string name="prefSummaryPassword">Пароль FTP-сервера</string>
@@ -82,7 +80,6 @@
     <string name="widgetTextStop">Остановить ftpd</string>
     <string name="prefTitleIdleTimeout">Время бездействия</string>
     <string name="prefSummaryIdleTimeout">Сервер прервёт простаивающие соединения через это время в секундах (только FTP).</string>
-    <string name="prefSummaryIdleTimeoutV2">Сервер прервет простаивающие соединения через это время в секундах. Установите 0 для отключения.</string>
     <string name="prefTitleStartOnOpen">Запуск при открытии</string>
     <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
     <string-array name="prefThemeNames">
