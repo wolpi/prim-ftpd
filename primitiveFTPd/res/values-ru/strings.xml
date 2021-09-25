@@ -92,6 +92,7 @@
     <string name="prefSummaryForegroundService">Сервис(ы) будут выполняться на переднем плане. Предотвращает остановку сервисов на некоторых устройствах.</string>
     <string name="prefSummaryIdleTimeout">Сервер прервёт простаивающие соединения через это время в секундах (только FTP).</string>
     <string name="prefSummaryIdleTimeoutV2">Сервер прервет простаивающие соединения через это время в секундах. Установите 0 для отключения.</string>
+    <string name="prefSummaryIdleTimeout">Сервер прервёт простаивающие соединения через это время в секундах (только FTP).</string>
     <string name="prefTitleStartOnOpen">Запуск при открытии</string>
     <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
     <string-array name="prefThemeNames">
