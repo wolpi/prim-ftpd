@@ -6,7 +6,7 @@
     <string name="fingerprintsLabel">Ключи авторизации</string>
     <string name="generate">Сгенерировать</string>
     <string name="generateKeysMessage">Сгенерировать ключи?</string>
-    <string name="generatingKeysMessage">Сгенерировать ключи…</string>
+    <string name="generatingKeysMessage">Генерация ключей…</string>
     <string name="haveToSetPassword">Сначала необходимо установить пароль</string>
     <string name="ifacesError">Ошибка:</string>
     <string name="ifacesLabel">Сетевой интерфейс</string>
