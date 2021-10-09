@@ -224,7 +224,8 @@ public class SshServerService extends AbstractServerService
 		sshServer.setSignatureFactories(sigFactories);
 
 		// idle timeout
-		sshServer.getProperties().put(SshServer.IDLE_TIMEOUT, String.valueOf(prefsBean.getIdleTimeout()));
+		// sec -> ms
+		sshServer.getProperties().put(SshServer.IDLE_TIMEOUT, String.valueOf(prefsBean.getIdleTimeout() * 1000));
 
 		try {
 			// XXX preference to enable shell? seems to need root to access /dev/tty
