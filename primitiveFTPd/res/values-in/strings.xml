@@ -76,7 +76,7 @@
     <string name="prefTitleFtpPassivePorts">Porta FTP Pasif</string>
     <string name="prefSummaryFtpPassivePorts">Porta untuk koneksi data FTP Pasif. Boleh porta tunggal, beberapa atau rentang porta. Mis. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Batas Waktu Menganggur Server</string>
-    <string name="prefSummaryIdleTimeout">Server akan menghentikan koneksi yang tidak aktif setelah batas waktu ini dalam hitungan detik (hanya FTP).</string>
+    <string name="prefSummaryIdleTimeout">Server akan menghentikan koneksi yang tidak aktif setelah batas waktu ini dalam hitungan detik (hanya FTP)</string>
     <string name="prefTheme">Tema</string>
     <string name="prefSummaryTheme">Mengubah Tema mungkin membutuhkan aplikasi untuk dimulai ulang.</string>
     <string name="prefTitleLogging">Log</string>
