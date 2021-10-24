@@ -21,13 +21,14 @@ jar {
 }
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
 dependencies {
-    compileOnly 'org.apache.mina:mina-core:2.0.8'
-    compileOnly 'org.slf4j:slf4j-api:1.6.4'
+    compileOnly 'org.apache.mina:mina-core:2.0.21'
+    compileOnly 'org.slf4j:slf4j-api:1.7.26'
     compileOnly 'tomcat:tomcat-apr:5.5.23'
-    compileOnly 'org.bouncycastle:bcpg-jdk15on:1.51'
-    compileOnly 'org.bouncycastle:bcpkix-jdk15on:1.51'
+    compileOnly 'org.bouncycastle:bcpg-jdk15on:1.67'
+    compileOnly 'org.bouncycastle:bcpkix-jdk15on:1.67'
 }
