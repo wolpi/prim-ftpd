@@ -3,7 +3,8 @@
  */
 
 dependencies {
-    implementation project(':apache-ftpserver-1.1.1:ftplet-api')
+    //implementation project(':apache-ftpserver-1.1.1:ftplet-api')
+    implementation project(':ftplet-api')
     implementation 'org.slf4j:slf4j-api:1.7.26'
     implementation 'org.apache.mina:mina-core:2.0.21'
     implementation 'org.springframework:spring-context:2.5.5'
