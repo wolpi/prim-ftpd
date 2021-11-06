@@ -29,7 +29,6 @@ jar.dependsOn('removeClassesBadForAndroid')
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
