@@ -12,7 +12,8 @@ subprojects {
     apply plugin: 'maven-publish'
 
     repositories {
-	jcenter()
+        mavenCentral()
+	    jcenter()
     }
 
     sourceCompatibility = '1.7'
