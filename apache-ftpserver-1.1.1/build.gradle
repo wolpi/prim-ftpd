@@ -39,10 +39,6 @@ subprojects {
         options.encoding = 'UTF-8'
     }
 
-    jar {
-        exclude('org/apache/ftpserver/listener/nio/FtpHandlerAdapter*')
-    }
-
     test {
         exclude 'org/apache/ftpserver/ssl/**'
         exclude 'org/apache/ftpserver/clienttests/PasvTest**'

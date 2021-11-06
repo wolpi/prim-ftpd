@@ -14,11 +14,18 @@ sourceSets {
     }
 }
 
-jar {
-    exclude('org/apache/sshd/common/util/SecurityUtils*')
-    exclude('org/apache/sshd/common/util/Buffer.class')
-    exclude('org/apache/sshd/common/util/Buffer$BufferException.class')
+task removeClassesBadForAndroid(type: Delete) {
+    delete fileTree("$buildDir/classes/java/main/") {
+        include 'org/apache/sshd/common/util/SecurityUtils*'
+        include 'org/apache/sshd/common/util/Buffer.class'
+        include 'org/apache/sshd/common/util/Buffer\$BufferException.class'
+    }
+    doFirst {
+        println "removing classes which are bad for android"
+    }
 }
+removeClassesBadForAndroid.dependsOn('classes')
+jar.dependsOn('removeClassesBadForAndroid')
 
 repositories {
     mavenCentral()
