@@ -13,6 +13,7 @@ buildscript {
 repositories {
     google()
     mavenCentral()
+    jcenter()
 }
 
 apply plugin: 'com.android.application'
@@ -79,8 +80,8 @@ dependencies {
     // ./gradlew primitiveFTPd:dependencies --configuration releaseCompileClasspath
     implementation project(':pftpd-pojo-lib')
     implementation project(':slf4j-android-1.6.1-RC1')
-    implementation project(':apache-ftpserver-1.1.1:core')
-    implementation project(':apache-ftpserver-1.1.1:ftplet-api')
+    implementation project(':apache-ftpserver-1.1.1-core')
+    implementation project(':apache-ftpserver-1.1.1-ftplet-api')
     implementation project(':sshd-core-0.14.0')
     implementation 'org.apache.mina:mina-core:2.0.21'
     implementation 'org.greenrobot:eventbus:3.2.0'

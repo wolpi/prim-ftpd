@@ -1,1 +1,0 @@
-project(':ftplet-api').projectDir = file('../ftplet-api')

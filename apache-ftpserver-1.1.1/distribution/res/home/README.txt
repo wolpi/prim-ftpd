@@ -1,1 +1,0 @@
-Default user root directory.
