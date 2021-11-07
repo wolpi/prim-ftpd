@@ -21,5 +21,5 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.google.android:android:2.1.2'
+    compileOnly 'com.google.android:android:4.1.1.4'
 }

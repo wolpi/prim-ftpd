@@ -24,10 +24,10 @@ jar.dependsOn('removeClassesBadForAndroid')
 dependencies {
     implementation project(':apache-ftpserver-1.1.1-ftplet-api')
     implementation 'org.slf4j:slf4j-api:1.7.26'
-    implementation 'org.apache.mina:mina-core:2.0.21'
+    implementation 'org.apache.mina:mina-core:2.1.5'
     implementation 'org.springframework:spring-context:2.5.5'
     implementation 'org.slf4j:jcl-over-slf4j:1.7.21'
-    implementation 'commons-net:commons-net:3.5'
+    implementation 'commons-net:commons-net:20030805.205232'
     // remove log4j from test-classpath to avoid github vulnerability warning
     //testCompile 'org.slf4j:slf4j-log4j12:1.7.21'
     //testCompile 'log4j:log4j:1.2.17'
