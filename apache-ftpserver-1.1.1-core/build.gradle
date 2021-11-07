@@ -38,6 +38,9 @@ dependencies {
 
 description = 'Apache FtpServer Core'
 
+compileTestJava {
+    exclude 'org/apache/ftpserver/**'
+}
 test {
     exclude 'org/apache/ftpserver/**'
 }
