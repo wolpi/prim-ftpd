@@ -9,6 +9,7 @@ import org.primftpd.filepicker.ResettingFilePickerActivity;
 import org.primftpd.filepicker.nononsenseapps.FilePickerActivity;
 
 import java.io.File;
+import java.util.UUID;
 
 public final class Defaults {
 	private Defaults(){}
@@ -32,6 +33,26 @@ public final class Defaults {
 	}
 	public static File quickShareTmpDir(Context ctxt) {
 		return new File(homeDirScoped(ctxt), "quick-share");
+	}
+	public static File rootCopyTmpDir(Context ctxt) {
+		return new File(homeDirScoped(ctxt), "root-copy");
+	}
+
+	public static File buildTmpDir(Context ctxt, TmpDirType type) {
+		File tmpDir = null;
+		switch (type) {
+			case QUICK_SHARE:
+				tmpDir = Defaults.quickShareTmpDir(ctxt);
+				break;
+			case ROOT_COPY:
+				tmpDir = Defaults.rootCopyTmpDir(ctxt);
+				break;
+		}
+		tmpDir.mkdir();
+		UUID uuid = UUID.randomUUID();
+		File targetPath = new File(tmpDir, uuid.toString());
+		targetPath.mkdir();
+		return targetPath;
 	}
 
 	public static Intent createDefaultDirPicker(Context ctxt) {

@@ -8,6 +8,7 @@ import android.widget.Toast;
 import org.primftpd.R;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.ServicesStartStopUtil;
+import org.primftpd.util.TmpDirType;
 
 import java.io.File;
 import java.util.UUID;
@@ -54,11 +55,7 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
     }
 
     protected String copyToTmpFile(Uri uri, String content, String type) {
-        File quickShareTmpDir = Defaults.quickShareTmpDir(this);
-        quickShareTmpDir.mkdir();
-        UUID uuid = UUID.randomUUID();
-        File targetPath = new File(quickShareTmpDir, uuid.toString());
-        targetPath.mkdir();
+        File targetPath = Defaults.buildTmpDir(this, TmpDirType.QUICK_SHARE);
         logger.debug("quick share tmp path: {}", targetPath);
         return saveUri(targetPath, uri, content, type);
     }

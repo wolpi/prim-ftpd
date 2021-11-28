@@ -37,6 +37,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_SAF_URL = "safUrlPref";
 	public static final String PREF_KEY_ALLOWED_IPS_PATTERN = "allowedIpsPatternPref";
 	public static final String PREF_QUICK_SETTINGS_REQUIRES_UNLOCK = "quickSettingsRequiresUnlockPref";
+	public static final String PREF_ROOT_COPY_FILES = "rootCopyFilesPref";
 
 	public static final int PORT_DEFAULT_VAL = 12345;
 	static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
@@ -210,6 +211,12 @@ public class LoadPrefsUtil
 				"");
 	}
 
+	public static Boolean rootCopyFiles(SharedPreferences prefs) {
+		return prefs.getBoolean(
+				LoadPrefsUtil.PREF_ROOT_COPY_FILES,
+				Boolean.TRUE);
+	}
+
 	public static int loadPortInsecure(
 		Logger logger,
 		SharedPreferences prefs)
@@ -330,6 +337,9 @@ public class LoadPrefsUtil
 		String allowedIpsPattern = allowedIpsPattern(prefs);
 		logger.debug("got allowedIpsPattern: {}", allowedIpsPattern);
 
+		boolean rootCopyFiles = rootCopyFiles(prefs);
+		logger.debug("got rootCopyFiles: {}", rootCopyFiles);
+
 		// create prefsBean
 		return new PrefsBean(
 				userName,
@@ -348,6 +358,7 @@ public class LoadPrefsUtil
 				showConnectionInfo,
 				storageType,
 				safUrl,
-				allowedIpsPattern);
+				allowedIpsPattern,
+				rootCopyFiles);
 	}
 }

@@ -480,7 +480,7 @@ if storageType == STORAGE_TYPE_ROOT:
     testCycle(BASE_URL_SFTP_HOME_ROOT, "[root sftp]", errors, Protocol.SFTP)
     testCycle(BASE_URL_FTP_HOME_ROOT,  "[root  ftp]", errors, Protocol.FTP)
     scpUpload(BASE_URL_SFTP_HOME_ROOT, "[root  scp]", errors)
-    # scp download with root causes EOFException in ScpHelper.readAck
+    # scp download with root causes EOFException in ScpHelper.readAck, even with copy-to-tmp
     #scpDownload("[root  scp]", errors)
     testKeys(BASE_URL_SFTP_HOME_ROOT, errors)
 if storageType == STORAGE_TYPE_SAF:

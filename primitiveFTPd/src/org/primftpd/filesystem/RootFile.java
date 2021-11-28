@@ -7,10 +7,15 @@ import org.primftpd.events.ClientActionEvent;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
 import org.primftpd.services.PftpdService;
+import org.primftpd.util.Defaults;
 import org.primftpd.util.StringUtils;
+import org.primftpd.util.TmpDirType;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,6 +33,8 @@ public abstract class RootFile<T> extends AbstractFile {
     protected final LsOutputBean bean;
 
     private Process ddProcess;
+    private File tmpDir;
+    private boolean moveFileOnClose;
 
     public RootFile(Shell.Interactive shell, LsOutputBean bean, String absPath, PftpdService pftpdService) {
         super(
@@ -132,8 +139,37 @@ public abstract class RootFile<T> extends AbstractFile {
             runCommand("touch" + " \"" + absPath + "\"");
         }
 
+        if (pftpdService.getPrefsBean().isRootCopyFiles()) {
+            return createOutputStreamCopy(offset);
+        } else {
+            return createOutputStreamDd(offset);
+        }
+    }
+
+    public InputStream createInputStream(long offset) throws IOException {
+        logger.trace("[{}] createInputStream(offset: {})", name, offset);
+        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
+
+        if (pftpdService.getPrefsBean().isRootCopyFiles()) {
+            return createInputStreamCopy(offset);
+        } else {
+            return createInputStreamDd(offset);
+        }
+    }
+
+    @Override
+    public void handleClose() throws IOException {
+        if (pftpdService.getPrefsBean().isRootCopyFiles()) {
+            handleCloseCopy();
+        } else {
+            handleCloseDd();
+        }
+    }
+
+    private OutputStream createOutputStreamDd(long offset) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "dd", "of=" + escapePathForDD(absPath));
+
         String ddCommand;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ddCommand = String.join(" ", processBuilder.command());
@@ -146,12 +182,10 @@ public abstract class RootFile<T> extends AbstractFile {
         return new TracingBufferedOutputStream(ddProcess.getOutputStream(), logger);
     }
 
-    public InputStream createInputStream(long offset) throws IOException {
-        logger.trace("[{}] createInputStream(offset: {})", name, offset);
-        postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
-
+    public InputStream createInputStreamDd(long offset) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "dd", "if=" + escapePathForDD(absPath));
+
         String ddCommand;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ddCommand = String.join(" ", processBuilder.command());
@@ -163,7 +197,11 @@ public abstract class RootFile<T> extends AbstractFile {
 
         try {
             // workaround for weird errors
-            Thread.sleep(250);
+            long sleep = 250;
+            if (size < 100) {
+                sleep = 1000;
+            }
+            Thread.sleep(sleep);
         } catch (InterruptedException e) {
             throw new IOException(e);
         }
@@ -173,14 +211,52 @@ public abstract class RootFile<T> extends AbstractFile {
         return bis;
     }
 
-    @Override
-    public void handleClose() throws IOException {
+    public void handleCloseDd() throws IOException {
+        try {
+            // workaround for weird errors
+            long sleep = 250;
+            if (size < 100) {
+                sleep = 1000;
+            }
+            Thread.sleep(sleep);
+        } catch (InterruptedException e) {
+            throw new IOException(e);
+        }
         super.handleClose();
         if (ddProcess != null) {
             logDdErrorStream(ddProcess);
             ddProcess = null;
         } else {
             logger.trace("no dd process");
+        }
+    }
+
+    private OutputStream createOutputStreamCopy(long offset) throws IOException {
+        tmpDir = Defaults.buildTmpDir(this.pftpdService.getContext(), TmpDirType.ROOT_COPY);
+        moveFileOnClose = true;
+        File tmpFile = new File(tmpDir, getName());
+        return new FileOutputStream(tmpFile);
+    }
+
+    public InputStream createInputStreamCopy(long offset) throws IOException {
+        if (offset == 0) {
+            tmpDir = Defaults.buildTmpDir(this.pftpdService.getContext(), TmpDirType.ROOT_COPY);
+            runCommand("cp" + " \"" + absPath + "\"" + " \"" + tmpDir.getAbsolutePath() + "\"");
+        }
+        File tmpFile = tmpDir.listFiles()[0];
+        FileInputStream fis = new FileInputStream(tmpFile);
+        fis.skip(offset);
+        return fis;
+    }
+
+    public void handleCloseCopy() throws IOException {
+        if (moveFileOnClose) {
+            runCommand("mv" + " \"" + new File(tmpDir.getAbsolutePath(), getName()) + "\"" + " \"" + absPath + "\"");
+            moveFileOnClose = false;
+        }
+        if (tmpDir != null) {
+            runCommand("rm -rf " + " \"" + tmpDir.getAbsolutePath() + "\"");
+            tmpDir = null;
         }
     }
 

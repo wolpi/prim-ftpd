@@ -176,6 +176,11 @@ public abstract class AbstractServerService
 		return prefsBean;
 	}
 
+	@Override
+	public Context getContext() {
+		return this;
+	}
+
 	/**
 	 * Register a DNS-SD service (to be discoverable through Bonjour/Avahi).
 	 */

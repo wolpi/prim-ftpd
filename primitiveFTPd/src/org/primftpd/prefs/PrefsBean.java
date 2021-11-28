@@ -26,6 +26,7 @@ public class PrefsBean implements Serializable
 	private final StorageType storageType;
 	private final String safUrl;
 	private final String allowedIpsPattern;
+	private final boolean rootCopyFiles;
 
 	public PrefsBean(
 		String userName,
@@ -44,7 +45,8 @@ public class PrefsBean implements Serializable
 		boolean showConnectionInfoInNotification,
 		StorageType storageType,
 		String safUrl,
-		String allowedIpsPattern)
+		String allowedIpsPattern,
+		boolean rootCopyFiles)
 	{
 		super();
 		this.userName = userName;
@@ -66,6 +68,7 @@ public class PrefsBean implements Serializable
 		this.storageType = storageType;
 		this.safUrl = safUrl;
 		this.allowedIpsPattern = allowedIpsPattern;
+		this.rootCopyFiles = rootCopyFiles;
 	}
 
 	public String getUserName() {
@@ -143,5 +146,9 @@ public class PrefsBean implements Serializable
 
 	public String getAllowedIpsPattern() {
 		return allowedIpsPattern;
+	}
+
+	public boolean isRootCopyFiles() {
+		return rootCopyFiles;
 	}
 }

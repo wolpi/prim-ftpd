@@ -84,6 +84,8 @@
     <string name="prefSummaryAllowedIpsPattern">Pattern der erlaubten IP Adressen. Nur eine Wildcard (*) kann genutzt werden, nur als letztes Zeichen.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Quick Settings Tile erfordert entsperren des Geräts</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Klicken auf Quick Settings Tile erfordert entsperren des Geräts um Server starten/stoppen zu können.</string>
+    <string name="prefRootCopyFiles">Root: Dateien in tmp Verzeichnis kopieren für up-/download</string>
+    <string name="prefSummaryRootCopyFiles">Auf manchen Geräten gibt es Probleme auf Dateien mit dd zuzugreifen. Mit dieser Einstellung werden Dateien in ein tmp Verzeichnis kopiert und mit Dateisystem-Mechanismen auf diese zugegriffen. Für große Dateien sollte dies abgeschaltet werden.</string>
     <string name="licence">Lizenz</string>
     <string name="reset">Zurücksetzen</string>
     <string name="isAnonymous">Anonymer Login: %1$b</string>

@@ -170,6 +170,13 @@
 			android:title="@string/prefTitleStartOnBoot"
 			android:summary="@string/prefSummaryStartOnBoot"
 			/>
+		<SwitchPreference
+			android:name="rootCopyFiles"
+			android:key="rootCopyFilesPref"
+			android:defaultValue="true"
+			android:title="@string/prefRootCopyFiles"
+			android:summary="@string/prefSummaryRootCopyFiles"
+			/>
 		<ListPreference
 			android:name="logging"
 			android:key="loggingPref"
