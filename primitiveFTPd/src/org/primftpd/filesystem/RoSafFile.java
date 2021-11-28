@@ -53,6 +53,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
                 false,
                 false,
                 pftpdService);
+        logger.trace("  c-tor 1");
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
 
@@ -65,10 +66,13 @@ public abstract class RoSafFile<T> extends AbstractFile {
                     null);
             try {
                 initByCursor(cursor);
+            } catch (Exception e) {
+                logger.warn("  exception opening cursor", e);
             } finally {
                 closeQuietly(cursor);
             }
         } catch (UnsupportedOperationException e) {
+            logger.warn("  UnsupportedOperationException opening cursor, creating fallback object", e);
             // this is probably a directory
             isDirectory = true;
             readable = true;
@@ -94,6 +98,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
                 exists,
                 false,
                 pftpdService);
+        logger.trace("  c-tor 2");
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
 
@@ -138,6 +143,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
                 false,
                 false,
                 pftpdService);
+        logger.trace("  c-tor 3");
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
         initByCursor(cursor);
@@ -267,6 +273,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
                 parentId = documentId;
             } else {
                 parentId = DocumentsContract.getTreeDocumentId(startUrl);
+                logger.trace("  got parentId: {}, for startURL: {}", parentId, startUrl);
             }
 
             logger.trace("  building children uri for doc: {}, parent: {}", documentId, parentId);
@@ -334,6 +341,8 @@ public abstract class RoSafFile<T> extends AbstractFile {
     }
 
     private void closeQuietly(Cursor cursor) {
-        cursor.close();
+        if (cursor != null) {
+            cursor.close();
+        }
     }
 }

@@ -48,7 +48,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             PftpdService pftpdService);
 
     public T getFile(String file) {
-        logger.trace("getFile({})", file);
+        logger.trace("getFile({}), startUrl: {}", file, startUrl);
 
         file = absolute(file);
         logger.trace("  getFile(abs: {})", file);
@@ -108,6 +108,8 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
     }
 
     private void closeQuietly(Cursor cursor) {
-        cursor.close();
+        if (cursor != null) {
+            cursor.close();
+        }
     }
 }
