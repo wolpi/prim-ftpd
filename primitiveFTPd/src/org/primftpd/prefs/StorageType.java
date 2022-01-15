@@ -9,7 +9,8 @@ public enum StorageType {
     PLAIN("1"),
     ROOT("2"),
     SAF("3"),
-    RO_SAF("4");
+    RO_SAF("4"),
+    VIRTUAL("5");
 
     private final String xmlValue;
     private StorageType(String xmlValue) {

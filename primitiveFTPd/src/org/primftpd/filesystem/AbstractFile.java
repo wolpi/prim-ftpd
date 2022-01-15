@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,6 +92,22 @@ public abstract class AbstractFile {
         logger.trace("[{}] getSize() -> {}", name, size);
         return size;
     }
+
+    public abstract boolean isFile();
+
+    public abstract boolean isWritable();
+
+    public abstract boolean isRemovable();
+
+    public abstract boolean setLastModified(long time);
+
+    public abstract boolean mkdir();
+
+    public abstract boolean delete();
+
+    public abstract OutputStream createOutputStream(long offset) throws IOException;
+
+    public abstract InputStream createInputStream(long offset) throws IOException;
 
     ///////////////////////////////////////////////////////////////////////////
     // ftp

@@ -33,6 +33,7 @@ import org.primftpd.filesystem.QuickShareSshFileSystemView;
 import org.primftpd.filesystem.RoSafSshFileSystemView;
 import org.primftpd.filesystem.RootSshFileSystemView;
 import org.primftpd.filesystem.SafSshFileSystemView;
+import org.primftpd.filesystem.VirtualSshFileSystemView;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.RemoteIpChecker;
@@ -210,6 +211,24 @@ public class SshServerService extends AbstractServerService
 									getContentResolver(),
 									SshServerService.this,
 									session);
+						case VIRTUAL:
+							return new VirtualSshFileSystemView(
+									new FsSshFileSystemView(SshServerService.this, prefsBean.getStartDir(), session),
+									new RootSshFileSystemView(shell, SshServerService.this, prefsBean.getStartDir(), session),
+									new SafSshFileSystemView(
+											getApplicationContext(),
+											Uri.parse(prefsBean.getSafUrl()),
+											getContentResolver(),
+											SshServerService.this,
+											session),
+									new RoSafSshFileSystemView(
+											Uri.parse(prefsBean.getSafUrl()),
+											getContentResolver(),
+											SshServerService.this,
+											session),
+									SshServerService.this,
+									session
+							);
 					}
 				}
 				return null;

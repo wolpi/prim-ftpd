@@ -226,6 +226,10 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
                     ((RadioButton) findViewById(R.id.radioStorageRoSaf)).setChecked(true);
                     showSafUrl(prefsBean.getSafUrl());
                     break;
+                case VIRTUAL:
+                    ((RadioButton) findViewById(R.id.radioStorageVirtual)).setChecked(true);
+                    showSafUrl(prefsBean.getSafUrl());
+                    break;
             }
         } else {
             switch (prefsBean.getStorageType()) {
@@ -292,6 +296,10 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 					break;
 				case R.id.radioStorageRoSaf:
 					storageType = StorageType.RO_SAF;
+					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+					break;
+				case R.id.radioStorageVirtual:
+					storageType = StorageType.VIRTUAL;
 					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
 					break;
 			}

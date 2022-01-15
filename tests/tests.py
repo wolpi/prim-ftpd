@@ -13,8 +13,9 @@ STORAGE_TYPE_FS = "fs"
 STORAGE_TYPE_ROOT = "root"
 STORAGE_TYPE_SAF = "saf"
 STORAGE_TYPE_SAFRO = "safro"
+STORAGE_TYPE_VIRTUAL = "virtual"
 
-VALID_STORAGE_TYPES = [STORAGE_TYPE_FS, STORAGE_TYPE_ROOT, STORAGE_TYPE_SAF, STORAGE_TYPE_SAFRO]
+VALID_STORAGE_TYPES = [STORAGE_TYPE_FS, STORAGE_TYPE_ROOT, STORAGE_TYPE_SAF, STORAGE_TYPE_SAFRO, STORAGE_TYPE_VIRTUAL]
 
 HOSTNAME = "localhost"
 PORT_SFTP = "1234"
@@ -25,12 +26,18 @@ CMD_ADB_PORT_SFTP = "adb forward tcp:" + PORT_SFTP + " tcp:" + PORT_SFTP
 CMD_ADB_PORT_FTP = "adb forward tcp:" + PORT_FTP + " tcp:" + PORT_FTP
 CMD_ADB_PORT_FTP_PASSIVE = "adb forward tcp:" + PORT_FTP_PASSIVE + " tcp:" + PORT_FTP_PASSIVE
 
-BASE_URL_SFTP_HOME_FS =   "sftp://" + HOSTNAME + ":" + PORT_SFTP + "/storage/emulated/0/"
-BASE_URL_SFTP_HOME_ROOT = "sftp://" + HOSTNAME + ":" + PORT_SFTP + "/storage/emulated/0/"
-BASE_URL_SFTP_HOME_SAF =  "sftp://" + HOSTNAME + ":" + PORT_SFTP + "/"
-BASE_URL_FTP_HOME_FS =    "ftp://" + HOSTNAME + ":" + PORT_FTP + "/"
-BASE_URL_FTP_HOME_ROOT =  "ftp://" + HOSTNAME + ":" + PORT_FTP + "/"
-BASE_URL_FTP_HOME_SAF =   "ftp://" + HOSTNAME + ":" + PORT_FTP + "/"
+BASE_URL_SFTP =   "sftp://" + HOSTNAME + ":" + PORT_SFTP
+BASE_URL_FTP =    "ftp://" + HOSTNAME + ":" + PORT_FTP
+
+DEFAULT_PATH_FS = "/storage/emulated/0/"
+DEFAULT_PATH_ROOT = "/storage/emulated/0/"
+DEFAULT_PATH_SAF = "/"
+DEFAULT_PATH_ROSAF = "/"
+
+DEFAULT_PATH_VIRTUAL_FS = "/fs" + DEFAULT_PATH_FS
+DEFAULT_PATH_VIRTUAL_ROOT = "/superuser" + DEFAULT_PATH_ROOT
+DEFAULT_PATH_VIRTUAL_SAF = "/saf" + DEFAULT_PATH_SAF
+DEFAULT_PATH_VIRTUAL_ROSAF = "/rosaf" + DEFAULT_PATH_ROSAF
 
 KEY_FILE_RSA = "rsa.key"
 KEY_FILE_DSA = "dsa.key"
@@ -233,46 +240,46 @@ def sendCommand(baseUrl, remoteCmd, protocol):
     cmd = "curl " + opts + " " + baseUrl + " " + remoteCmd
     return runCommand(cmd)
 
-def createDir(baseUrl, newDir, protocol):
-    log("creating dir: " + baseUrl + " " + newDir)
+def createDir(baseUrl, remoteBasePath, newDir, protocol):
+    log("creating dir: " + baseUrl + remoteBasePath + " " + newDir)
     remoteCmd = ""
     if protocol == Protocol.SFTP:
         remoteCmd = "-Q \"MKDIR " + newDir + "\""
     else:
         remoteCmd = "-Q \"MKD " + newDir + "\""
-    return sendCommand(baseUrl, remoteCmd, protocol)
+    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
 
-def createSubDir(baseUrl, dirs, protocol):
-    log("creating sub dir: " + baseUrl + " " + str(dirs))
+def createSubDir(baseUrl, remoteBasePath, dirs, protocol):
+    log("creating sub dir: " + baseUrl + remoteBasePath + " " + str(dirs))
     remoteCmd = ""
     path = buildSubPath(dirs)
     if protocol == Protocol.SFTP:
         remoteCmd = "-Q \"MKDIR " + path + "\""
     else:
         remoteCmd = "-Q \"MKD " + path + "\""
-    return sendCommand(baseUrl, remoteCmd, protocol)
+    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
 
-def removeDir(baseUrl, dir, protocol):
-    log("removing dir: " + baseUrl + " " + dir)
+def removeDir(baseUrl, remoteBasePath, dir, protocol):
+    log("removing dir: " + baseUrl + remoteBasePath + " " + dir)
     remoteCmd = ""
     if protocol == Protocol.SFTP:
         remoteCmd = "-Q \"RMDIR " + dir + "\""
     else:
         remoteCmd = "-Q \"RMD " + dir + "\""
-    return sendCommand(baseUrl, remoteCmd, protocol)
+    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
 
-def removeSubDir(baseUrl, dirs, protocol):
-    log("removing sub dir: " + baseUrl + " " + str(dirs))
+def removeSubDir(baseUrl, remoteBasePath, dirs, protocol):
+    log("removing sub dir: " + baseUrl + remoteBasePath + " " + str(dirs))
     remoteCmd = ""
     path = buildSubPath(dirs)
     if protocol == Protocol.SFTP:
         remoteCmd = "-Q \"RMDIR " + path + "\""
     else:
         remoteCmd = "-Q \"RMD " + path + "\""
-    return sendCommand(baseUrl, remoteCmd, protocol)
+    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
 
-def removeFile(baseUrl, dirs, filename, protocol):
-    log("removing file: " + baseUrl + " " + str(dirs) + " " + filename)
+def removeFile(baseUrl, remoteBasePath, dirs, filename, protocol):
+    log("removing file: " + baseUrl + remoteBasePath + " " + str(dirs) + " " + filename)
     remoteCmd = ""
     path = buildSubPath(dirs)
     path += "/" + filename
@@ -280,10 +287,10 @@ def removeFile(baseUrl, dirs, filename, protocol):
         remoteCmd = "-Q \"RM " + path + "\""
     else:
         remoteCmd = "-Q \"DELE " + path + "\""
-    return sendCommand(baseUrl, remoteCmd, protocol)
+    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
 
-def rename(baseUrl, dirs, oldName, newName, protocol):
-    log("renaming file: " + baseUrl + " " + str(dirs) + " " + oldName + " to " + newName)
+def rename(baseUrl, remoteBasePath, dirs, oldName, newName, protocol):
+    log("renaming file: " + baseUrl + remoteBasePath + " " + str(dirs) + " " + oldName + " to " + newName)
     remoteCmd = ""
     path = buildSubPath(dirs)
     print("  path: " + path + ", len: " + str(len(path)))
@@ -296,7 +303,7 @@ def rename(baseUrl, dirs, oldName, newName, protocol):
     else:
         remoteCmd = "-Q \"RNFR " + oldPath + "\""
         remoteCmd += " -Q \"RNTO " + newPath + "\""
-    return sendCommand(baseUrl, remoteCmd, protocol)
+    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
 
 def buildSubPath(dirs):
     path = ""
@@ -318,27 +325,28 @@ def downloadScp(remotePath, tmpPath):
     return runCommand(cmd)
 
 
-def testCycle(baseUrl, errorTag, errors, protocol):
+def testCycle(baseUrl, remoteBasePath, errorTag, errors, protocol):
     setupTmpDir()
 
     # check listing of home dir
-    output = downloadListing(baseUrl, protocol)
+    output = downloadListing(baseUrl + remoteBasePath, protocol)
     checkHomeListing(errors, output, errorTag)
     # if we have errors that early it is not worth continuing
     if len(errors) > 0:
+        print("abort due to errors\n")
         return
 
     # create dir
-    output = createDir(baseUrl, NEW_DIR, protocol)
+    output = createDir(baseUrl, remoteBasePath, NEW_DIR, protocol)
     checkHomeListing(errors, output, errorTag, newDirPresent = True)
 
     # create sub-dir
-    createSubDir(baseUrl, [NEW_DIR, SUB_DIR], protocol)
-    output = downloadListing(baseUrl + NEW_DIR + "/", protocol)
+    createSubDir(baseUrl, remoteBasePath, [NEW_DIR, SUB_DIR], protocol)
+    output = downloadListing(baseUrl + remoteBasePath + NEW_DIR + "/", protocol)
     checkListingLevel1(errors, output, errorTag)
 
     # upload file
-    url = baseUrl + NEW_DIR + "/" + SUB_DIR + "/"
+    url = baseUrl + remoteBasePath + NEW_DIR + "/" + SUB_DIR + "/"
     upload(url, protocol)
     output = downloadListing(url, protocol)
     checkListingLevel2(errors, output, errorTag)
@@ -348,7 +356,7 @@ def testCycle(baseUrl, errorTag, errors, protocol):
     checkDownloadedFile(errors, TEST_FILE_NAME, errorTag)
 
     # rename file
-    rename(baseUrl, [NEW_DIR, SUB_DIR], TEST_FILE_NAME, TEST_FILE_NAME_RENAMED, protocol)
+    rename(baseUrl, remoteBasePath, [NEW_DIR, SUB_DIR], TEST_FILE_NAME, TEST_FILE_NAME_RENAMED, protocol)
     output = downloadListing(url, protocol)
     checkListingLevel2(errors, output, errorTag, filePresent = True, afterRename = True)
 
@@ -357,49 +365,49 @@ def testCycle(baseUrl, errorTag, errors, protocol):
     checkDownloadedFile(errors, TEST_FILE_NAME_RENAMED, errorTag)
 
     # rename sub-dir
-    rename(baseUrl, [NEW_DIR], SUB_DIR, SUB_DIR_RENAMED, protocol)
-    output = downloadListing(baseUrl + NEW_DIR + "/", protocol)
+    rename(baseUrl, remoteBasePath, [NEW_DIR], SUB_DIR, SUB_DIR_RENAMED, protocol)
+    output = downloadListing(baseUrl + remoteBasePath + NEW_DIR + "/", protocol)
     checkListingLevel1(errors, output, errorTag, subDirPresent = True, subDirRenamed = True)
 
     # rename dir
-    rename(baseUrl, [], NEW_DIR, NEW_DIR_RENAMED, protocol)
-    output = downloadListing(baseUrl, protocol)
+    rename(baseUrl, remoteBasePath, [], NEW_DIR, NEW_DIR_RENAMED, protocol)
+    output = downloadListing(baseUrl + remoteBasePath, protocol)
     checkHomeListing(errors, output, errorTag, newDirPresent = True, dirRenamed = True)
-    url = baseUrl + NEW_DIR_RENAMED + "/" + SUB_DIR_RENAMED + "/"
+    url = baseUrl + remoteBasePath + NEW_DIR_RENAMED + "/" + SUB_DIR_RENAMED + "/"
 
     # delete file
-    removeFile(baseUrl, [NEW_DIR_RENAMED, SUB_DIR_RENAMED], TEST_FILE_NAME_RENAMED, protocol)
+    removeFile(baseUrl, remoteBasePath, [NEW_DIR_RENAMED, SUB_DIR_RENAMED], TEST_FILE_NAME_RENAMED, protocol)
     output = downloadListing(url, protocol)
     checkListingLevel2(errors, output, errorTag, filePresent = False)
 
     # delete sub-dir
-    removeSubDir(baseUrl, [NEW_DIR_RENAMED, SUB_DIR_RENAMED], protocol)
-    output = downloadListing(baseUrl + NEW_DIR_RENAMED + "/", protocol)
+    removeSubDir(baseUrl, remoteBasePath, [NEW_DIR_RENAMED, SUB_DIR_RENAMED], protocol)
+    output = downloadListing(baseUrl + remoteBasePath + NEW_DIR_RENAMED + "/", protocol)
     checkListingLevel1(errors, output, errorTag, subDirPresent = False)
 
     # delete dir
-    output = removeDir(baseUrl, NEW_DIR_RENAMED, protocol)
+    output = removeDir(baseUrl, remoteBasePath, NEW_DIR_RENAMED, protocol)
     checkHomeListing(errors, output, errorTag)
 
 
-def testCycleReadOnly(baseUrl, errorTag, errors, protocol):
+def testCycleReadOnly(baseUrl, remoteBasePath, errorTag, errors, protocol):
     setupTmpDir()
 
     # check listing of home dir
-    output = downloadListing(baseUrl, protocol)
+    output = downloadListing(baseUrl + remoteBasePath, protocol)
     checkHomeListing(errors, output, errorTag)
     # if we have errors that early it is not worth continuing
     if len(errors) > 0:
         return
 
     # check listing of first dir
-    url = baseUrl + PRE_EXISTING_TEST_DIR + "/"
+    url = baseUrl + remoteBasePath + PRE_EXISTING_TEST_DIR + "/"
     output = downloadListing(url, protocol)
     checkListingLevel1(errors, output, errorTag)
 
     # check listing of first dir
     url += SUB_DIR + "/"
-    output = downloadListing(baseUrl + PRE_EXISTING_TEST_DIR + "/", protocol)
+    output = downloadListing(baseUrl + remoteBasePath + PRE_EXISTING_TEST_DIR + "/", protocol)
     checkListingLevel2(errors, output, errorTag)
 
     # download file
@@ -407,25 +415,25 @@ def testCycleReadOnly(baseUrl, errorTag, errors, protocol):
     checkDownloadedFile(errors, TEST_FILE_NAME, errorTag)
 
 
-def scpUpload(baseUrl, errorTag, errors):
+def scpUpload(baseUrl, remoteBasePath, errorTag, errors):
     protocol = Protocol.SFTP
-    createDir(baseUrl, NEW_DIR, protocol)
-    createSubDir(baseUrl, [NEW_DIR, SUB_DIR], protocol)
+    createDir(baseUrl, remoteBasePath, NEW_DIR, protocol)
+    createSubDir(baseUrl, remoteBasePath, [NEW_DIR, SUB_DIR], protocol)
 
     uploadScp(NEW_DIR + "/" + SUB_DIR)
-    url = baseUrl + NEW_DIR + "/" + SUB_DIR + "/"
+    url = baseUrl + remoteBasePath + NEW_DIR + "/" + SUB_DIR + "/"
     output = downloadListing(url, protocol)
     checkListingLevel2(errors, output, errorTag)
 
-    removeFile(baseUrl, [NEW_DIR, SUB_DIR], TEST_FILE_NAME, protocol)
-    removeSubDir(baseUrl, [NEW_DIR, SUB_DIR], protocol)
-    removeDir(baseUrl, NEW_DIR, protocol)
+    removeFile(baseUrl, remoteBasePath, [NEW_DIR, SUB_DIR], TEST_FILE_NAME, protocol)
+    removeSubDir(baseUrl, remoteBasePath, [NEW_DIR, SUB_DIR], protocol)
+    removeDir(baseUrl, remoteBasePath, NEW_DIR, protocol)
 
 
-def scpDownload(errorTag, errors):
+def scpDownload(remoteBasePath, errorTag, errors):
     setupTmpDir()
     tmpPath = TMP_DIR + "/" + TEST_FILE_NAME
-    remotePath = PRE_EXISTING_TEST_DIR + "/" + SUB_DIR + "/" + TEST_FILE_NAME
+    remotePath = remoteBasePath + PRE_EXISTING_TEST_DIR + "/" + SUB_DIR + "/" + TEST_FILE_NAME
     downloadScp(remotePath, tmpPath)
     checkDownloadedFile(errors, TEST_FILE_NAME, errorTag)
 
@@ -471,29 +479,61 @@ setupAdbForwards()
 
 errors = []
 if storageType == STORAGE_TYPE_FS:
-    testCycle(BASE_URL_SFTP_HOME_FS, "[fs sftp]", errors, Protocol.SFTP)
-    testCycle(BASE_URL_FTP_HOME_FS,  "[fs  ftp]", errors, Protocol.FTP)
-    scpUpload(BASE_URL_SFTP_HOME_FS, "[fs  scp]", errors)
-    scpDownload("[fs  scp]", errors)
-    testKeys(BASE_URL_SFTP_HOME_FS, errors)
+    testCycle(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs sftp]", errors, Protocol.SFTP)
+    testCycle(BASE_URL_FTP, DEFAULT_PATH_FS,  "[fs  ftp]", errors, Protocol.FTP)
+    scpUpload(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs  scp]", errors)
+    scpDownload(DEFAULT_PATH_FS, "[fs  scp]", errors)
+    testKeys(BASE_URL_SFTP + DEFAULT_PATH_FS, errors)
+
 if storageType == STORAGE_TYPE_ROOT:
-    testCycle(BASE_URL_SFTP_HOME_ROOT, "[root sftp]", errors, Protocol.SFTP)
-    testCycle(BASE_URL_FTP_HOME_ROOT,  "[root  ftp]", errors, Protocol.FTP)
-    scpUpload(BASE_URL_SFTP_HOME_ROOT, "[root  scp]", errors)
+    testCycle(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root sftp]", errors, Protocol.SFTP)
+    testCycle(BASE_URL_FTP, DEFAULT_PATH_ROOT,  "[root  ftp]", errors, Protocol.FTP)
+    # note: scp upload with root causes known error: filesize is 0
+    scpUpload(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root  scp]", errors)
     # scp download with root causes EOFException in ScpHelper.readAck, even with copy-to-tmp
-    #scpDownload("[root  scp]", errors)
-    testKeys(BASE_URL_SFTP_HOME_ROOT, errors)
+    #scpDownload(DEFAULT_PATH_ROOT, "[root  scp]", errors)
+    testKeys(BASE_URL_SFTP + DEFAULT_PATH_ROOT, errors)
+
 if storageType == STORAGE_TYPE_SAF:
-    testCycle(BASE_URL_SFTP_HOME_SAF, "[SAF sftp]", errors, Protocol.SFTP)
-    testCycle(BASE_URL_FTP_HOME_SAF,  "[SAF  ftp]", errors, Protocol.FTP)
-    scpUpload(BASE_URL_SFTP_HOME_SAF, "[SAF  scp]", errors)
-    scpDownload("[SAF  scp]", errors)
-    testKeys(BASE_URL_SFTP_HOME_SAF, errors)
+    testCycle(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF sftp]", errors, Protocol.SFTP)
+    testCycle(BASE_URL_FTP, DEFAULT_PATH_SAF,  "[SAF  ftp]", errors, Protocol.FTP)
+    scpUpload(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF  scp]", errors)
+    scpDownload(DEFAULT_PATH_SAF, "[SAF  scp]", errors)
+    testKeys(BASE_URL_SFTP + DEFAULT_PATH_SAF, errors)
+
 if storageType == STORAGE_TYPE_SAFRO:
-    testCycleReadOnly(BASE_URL_SFTP_HOME_SAF, "[SAFRO sftp]", errors, Protocol.SFTP)
-    testCycleReadOnly(BASE_URL_FTP_HOME_SAF,  "[SAFRO  ftp]", errors, Protocol.FTP)
-    scpDownload("[SAFRO  scp]", errors)
-    testKeys(BASE_URL_SFTP_HOME_SAF, errors)
+    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_ROSAF, "[SAFRO sftp]", errors, Protocol.SFTP)
+    testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_ROSAF,  "[SAFRO  ftp]", errors, Protocol.FTP)
+    scpDownload(DEFAULT_PATH_ROSAF, "[SAFRO  scp]", errors)
+    testKeys(BASE_URL_SFTP + DEFAULT_PATH_ROSAF, errors)
+
+if storageType == STORAGE_TYPE_VIRTUAL:
+    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_FS, "[virtual fs sftp]", errors, Protocol.SFTP)
+    # no tests vor virtual FS with FTP because of issues with change-dir with curl
+    #testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_FS,  "[virtual fs  ftp]", errors, Protocol.FTP)
+    # same curl issue prevents creation of dirs -> read only tests, no scp upload
+    #scpUpload(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_FS, "[virtual fs  scp]", errors)
+    scpDownload(DEFAULT_PATH_VIRTUAL_FS, "[virtual fs  scp]", errors)
+
+    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root sftp]", errors, Protocol.SFTP)
+    testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_ROOT,  "[virtual root  ftp]", errors, Protocol.FTP)
+    # no scp for root, see above
+    #scpUpload(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root  scp]", errors)
+    #scpDownload(DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root  scp]", errors)
+
+    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_SAF, "[virtual saf sftp]", errors, Protocol.SFTP)
+    testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_SAF,  "[virtual saf  ftp]", errors, Protocol.FTP)
+    # no scp upload for virtual with curl, see above
+    #scpUpload(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_SAF, "[virtual saf  scp]", errors)
+    scpDownload(DEFAULT_PATH_VIRTUAL_SAF, "[virtual saf  scp]", errors)
+
+    # no RoSAF due to issues with SAF-API
+    #testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROSAF, "[virtual SAFRO sftp]", errors, Protocol.SFTP)
+    #testCycleReadOnly(BASE_URL__FTP, DEFAULT_PATH_VIRTUAL_ROSAF,  "[virtual SAFRO  ftp]", errors, Protocol.FTP)
+    #scpDownload(DEFAULT_PATH_VIRTUAL_ROSAF, "[virtual SAFRO  scp]", errors)
+
+    testKeys(BASE_URL_SFTP + DEFAULT_PATH_VIRTUAL_FS, errors)
+
 
 # print result
 print("\n")

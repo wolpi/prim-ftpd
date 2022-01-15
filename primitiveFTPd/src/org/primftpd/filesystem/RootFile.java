@@ -159,6 +159,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
     @Override
     public void handleClose() throws IOException {
+        logger.trace("[{}] handleClose()", name);
         if (pftpdService.getPrefsBean().isRootCopyFiles()) {
             handleCloseCopy();
         } else {
@@ -234,8 +235,20 @@ public abstract class RootFile<T> extends AbstractFile {
     private OutputStream createOutputStreamCopy(long offset) throws IOException {
         tmpDir = Defaults.buildTmpDir(this.pftpdService.getContext(), TmpDirType.ROOT_COPY);
         moveFileOnClose = true;
-        File tmpFile = new File(tmpDir, getName());
-        return new FileOutputStream(tmpFile);
+        String name = getName();
+        if (name.contains("/")) {
+            name = name.substring(name.lastIndexOf("/") + 1);
+        }
+        File tmpFile = new File(tmpDir, name);
+        logger.trace("  using output stream tmp: {}", tmpFile.getAbsolutePath());
+        return new FileOutputStream(tmpFile) {
+            @Override
+            public void close() throws IOException {
+                super.close();
+                logger.trace("tmp out file stream close()");
+                handleCloseCopy();
+            }
+        };
     }
 
     public InputStream createInputStreamCopy(long offset) throws IOException {

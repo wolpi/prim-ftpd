@@ -48,7 +48,7 @@ public final class Defaults {
 				tmpDir = Defaults.rootCopyTmpDir(ctxt);
 				break;
 		}
-		tmpDir.mkdir();
+		tmpDir.mkdirs();
 		UUID uuid = UUID.randomUUID();
 		File targetPath = new File(tmpDir, uuid.toString());
 		targetPath.mkdir();

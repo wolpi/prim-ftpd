@@ -51,7 +51,24 @@ public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFi
 
     public boolean changeWorkingDirectory(String dir) {
         logger.trace("changeWorkingDirectory({})", dir);
-        RootFtpFile newWorkingDir = getFile(dir);
+
+        String newPath;
+        RootFtpFile newWorkingDir;
+        File fileObj = new File(dir);
+        if (!fileObj.isAbsolute()) {
+            // curl ignores current WD and tries to switch to WD from root dir by dir
+            File topLevelDir = new File("/" + dir);
+            if (topLevelDir.exists()) {
+                newPath = topLevelDir.getAbsolutePath();
+            } else {
+                newPath = workingDir.getAbsolutePath() + File.separator + dir;
+                logger.trace("  using path for cwd operation: {}", newPath);
+            }
+        } else {
+            newPath = dir;
+        }
+
+        newWorkingDir = getFile(newPath);
         if (newWorkingDir.doesExist() && newWorkingDir.isDirectory()) {
             workingDir = newWorkingDir;
             return true;

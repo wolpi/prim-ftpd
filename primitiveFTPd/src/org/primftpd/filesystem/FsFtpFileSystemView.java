@@ -51,7 +51,13 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 		String currentAbsPath = workingDir.getAbsolutePath();
 		String path = dir;
 		if (!dirObj.isAbsolute()) {
-			path = currentAbsPath + File.separator + dir;
+			// curl ignores current WD and tries to switch to WD from root dir by dir
+			File topLevelDir = new File("/" + dir);
+			if (topLevelDir.exists()) {
+				path = topLevelDir.getAbsolutePath();
+			} else {
+				path = currentAbsPath + File.separator + dir;
+			}
 		}
 		logger.trace("using path for cwd operation: {}", path);
 		dirObj = new File(path);

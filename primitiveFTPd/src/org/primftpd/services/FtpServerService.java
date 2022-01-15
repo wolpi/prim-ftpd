@@ -19,6 +19,7 @@ import org.primftpd.filesystem.QuickShareFtpFileSystemView;
 import org.primftpd.filesystem.RoSafFtpFileSystemView;
 import org.primftpd.filesystem.RootFtpFileSystemView;
 import org.primftpd.filesystem.SafFtpFileSystemView;
+import org.primftpd.filesystem.VirtualFtpFileSystemView;
 import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
 
@@ -129,6 +130,24 @@ public class FtpServerService extends AbstractServerService
 									getContentResolver(),
 									FtpServerService.this,
 									user);
+						case VIRTUAL:
+							return new VirtualFtpFileSystemView(
+									new FsFtpFileSystemView(FtpServerService.this, prefsBean.getStartDir(), user),
+									new RootFtpFileSystemView(shell, FtpServerService.this, prefsBean.getStartDir(), user),
+									new SafFtpFileSystemView(
+											getApplicationContext(),
+											Uri.parse(prefsBean.getSafUrl()),
+											getContentResolver(),
+											FtpServerService.this,
+											user),
+									new RoSafFtpFileSystemView(
+											Uri.parse(prefsBean.getSafUrl()),
+											getContentResolver(),
+											FtpServerService.this,
+											user),
+									FtpServerService.this,
+									user
+							);
 					}
 				}
 				return null;

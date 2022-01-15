@@ -22,7 +22,8 @@ class Utils {
         if (".".equals(path) || "/.".equals(path)) {
             return homeDir;
         }
-        if (path.charAt(0) != '/') {
+        // if homeDir == / -> stay relative (needed for virtual folders)
+        if (path.charAt(0) != '/' && !"/".equals(homeDir)) {
             // assume it is relative to home dir, see GH issue #111
             return homeDir + "/" + path;
         }

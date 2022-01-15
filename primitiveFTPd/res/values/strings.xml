@@ -103,6 +103,7 @@
     <string name="storageTypeRoot">Super user (device must be rooted)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(e.g. for sd card)</string>
     <string name="storageTypeRoSaf">Read only SAF (faster !)</string>
+    <string name="storageTypeVirtual">Virtual Folders (provides all Storage Types)</string>
     <string name="safExplainHeading">How SAF works</string>
     <string name="safExplain">Android will ask you to choose a directory. That will be available via server(s). From time to time permission might be revoked and you have to re-select.</string>
     <string name="selectedSafUri">Selected SAF URI:</string>

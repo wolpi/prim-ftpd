@@ -72,7 +72,8 @@ public class ServerServiceHandler extends Handler
 			System.setProperty("java.net.preferIPv4Stack", "true");
 			System.setProperty("java.net.preferIPv6Addresses", "false");
 
-			if (service.prefsBean.getStorageType() == StorageType.ROOT) {
+			StorageType storageType = service.prefsBean.getStorageType();
+			if (storageType == StorageType.ROOT || storageType == StorageType.VIRTUAL) {
 				shellOpen();
 			}
 
