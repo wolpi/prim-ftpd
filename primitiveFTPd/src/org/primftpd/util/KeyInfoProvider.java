@@ -125,6 +125,7 @@ public class KeyInfoProvider
 		List<PublicKey> keys = null;
 		FileInputStream fis = null;
 		try {
+			logger.debug("trying authorized keys file {}", path);
 			fis = new FileInputStream(path);
 			keys = KeyParser.parsePublicKeys(
 					fis,
@@ -136,6 +137,7 @@ public class KeyInfoProvider
 					});
 
 		} catch (Exception e) {
+			logger.debug("could not read keys {}, {}", e.getClass().getSimpleName(), e.getMessage());
 			if (!ignoreErrors) {
 				logger.error("could not read key auth keys", e);
 			}
