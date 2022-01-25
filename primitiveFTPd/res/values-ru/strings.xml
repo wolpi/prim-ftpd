@@ -79,7 +79,10 @@
     <string name="widgetTextStart">Запустить ftpd</string>
     <string name="widgetTextStop">Остановить ftpd</string>
     <string name="prefTitleIdleTimeout">Время бездействия</string>
+    <string name="prefForegroundService">Сервис(ы) на переднем плане</string>
+    <string name="prefSummaryForegroundService">Сервис(ы) будут выполняться на переднем плане. Предотвращает остановку сервисов на некоторых устройствах.</string>
     <string name="prefSummaryIdleTimeout">Сервер прервёт простаивающие соединения через это время в секундах (только FTP).</string>
+    <string name="prefSummaryIdleTimeoutV2">Сервер прервет простаивающие соединения через это время в секундах. Установите 0 для отключения.</string>
     <string name="prefTitleStartOnOpen">Запуск при открытии</string>
     <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
     <string-array name="prefThemeNames">
@@ -135,7 +138,6 @@
     <string name="quickShare">Быстро поделиться</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Для доступа к быстрым настройкам устройство должно быть разблокировано, чтобы запускать/останавливать сервер. Когда включено, будет предложено разблокировать устройство, если оно заблокировано.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Требовать разблокировку для быстрых настроек</string>
-    <string name="prefSummaryIdleTimeoutV2">Авторазрыв неактивных соединений через указанное время (в секундах). Задайте 0 для отключения.</string>
     <string name="statsLabel">Статистика</string>
     <string name="statsSentPerSec">Отправлено в секунду</string>
     <string name="quickShareCouldNotStartServer">Невозможно запустить сервер</string>
