@@ -32,7 +32,11 @@
     <string name="prefSummaryLogging">Журнал помогает анализировать ошибки. Если приложение работает на вашем устройстве некорректно, вы можете отправить журнал разработчикам. Может потребоваться перезапуск приложения.</string>
     <string name="prefSummaryPassword">Пароль FTP-сервера</string>
     <string name="prefSummaryPort">Порт FTP-сервера</string>
+<<<<<<< HEAD
     <string name="prefSummaryPortSecure">Порт SFTP-сервера (защищенный)</string>
+=======
+    <string name="prefSummaryPortSecure">Порт FTP-сервера (защищенный)</string>
+>>>>>>> 6433874 (Translated using Weblate (Russian))
     <string name="prefSummaryPubKeyAuth">Если включено, разместите ваши открытые ключи SSH2 в %s. Только для SFTP.</string>
     <string name="prefSummaryPubKeyAuth_v2">Если включено, поместите свой открытый ключ ssh2 в %s. Это должен быть файл, содержащий по одному ключу на строку. Только SFTP.</string>
     <string name="prefSummaryRootCopyFiles">На некоторых устройствах возникают проблемы с доступом к файлам с помощью dd. С помощью этой настройки файлы сначала копируются в каталог tmp и получают доступ с помощью механизмов файловой системы. Должен быть отключен для больших файлов.</string>
@@ -88,7 +92,7 @@
     <string name="widgetTextStart">Запустить ftpd</string>
     <string name="widgetTextStop">Остановить ftpd</string>
     <string name="prefTitleIdleTimeout">Время бездействия</string>
-    <string name="prefSummaryIdleTimeout">По истечении этого времени в секундах сервер прервёт простаивающие соединения (только FTP)</string>
+    <string name="prefSummaryIdleTimeout">По истечении этого времени в секундах сервер прервет простаивающие соединения (только FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">Сервер прервет простаивающие соединения через это время в секундах. Установите 0 для отключения.</string>
     <string name="prefTitleStartOnOpen">Запуск при открытии</string>
     <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
