@@ -53,6 +53,7 @@ import org.primftpd.ui.GenKeysAskDialogFragment;
 import org.primftpd.ui.GenKeysAsyncTask;
 import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.KeyFingerprintProvider;
+import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.PrngFixes;
 import org.primftpd.util.ServersRunningBean;
@@ -185,6 +186,9 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		clientActionView1 = findViewById(R.id.clientActionsLine1);
 		clientActionView2 = findViewById(R.id.clientActionsLine2);
 		clientActionView3 = findViewById(R.id.clientActionsLine3);
+
+		// create sample authorized_keys files
+		new KeyInfoProvider().createSampleAuthorizedKeysFiles(this);
 	}
 
 	@Override
