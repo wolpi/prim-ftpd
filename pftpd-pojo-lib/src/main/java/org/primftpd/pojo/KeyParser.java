@@ -62,44 +62,50 @@ public class KeyParser {
         EC_NAME_TO_CURVE_NAME = Collections.unmodifiableMap(tmpCurveName);
     }
 
-    public static List<PublicKey> parsePublicKeys(InputStream is, Base64Decoder base64Decoder)
-            throws IOException, InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
+    public static List<PublicKey> parsePublicKeys(InputStream is, Base64Decoder base64Decoder, List<String> errors)
+            throws IOException {
         if (is == null) {
             throw new IllegalArgumentException("input stream cannot be null");
         }
         List<PublicKey> keys = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        int lineCounter = 0;
         while (reader.ready()) {
-            String keyLine = reader.readLine();
-            String[] parts = keyLine.split(" ");
+            try {
+                String keyLine = reader.readLine();
+                lineCounter++;
+                String[] parts = keyLine.split(" ");
 
-            String name = null;
-            String keyEncoded = null;
-            if (parts.length >= 2) {
-                name = parts[0];
-                keyEncoded = parts[1];
-            }
-
-            if (keyEncoded != null) {
-                byte[] keyBytes = base64Decoder.decode(keyEncoded);
-
-                PublicKey key = null;
-                if (NAME_RSA.equals(name)) {
-                    key = parsePublicKeyRsa(keyBytes);
-                } else if (NAME_DSA.equals(name)) {
-                    key = parsePublicKeyDsa(keyBytes);
-                } else if (NAME_ECDSA_256.equals(name)) {
-                    key = parsePublicKeyEcdsa(name, keyBytes);
-                } else if (NAME_ECDSA_384.equals(name)) {
-                    key = parsePublicKeyEcdsa(name, keyBytes);
-                } else if (NAME_ECDSA_521.equals(name)) {
-                    key = parsePublicKeyEcdsa(name, keyBytes);
-                } else if (NAME_ED25519.equals(name)) {
-                    key = parsePublicKeyEd25519(keyBytes);
+                String name = null;
+                String keyEncoded = null;
+                if (parts.length >= 2) {
+                    name = parts[0];
+                    keyEncoded = parts[1];
                 }
-                if (key != null) {
-                    keys.add(key);
+
+                if (keyEncoded != null) {
+                    byte[] keyBytes = base64Decoder.decode(keyEncoded);
+
+                    PublicKey key = null;
+                    if (NAME_RSA.equals(name)) {
+                        key = parsePublicKeyRsa(keyBytes);
+                    } else if (NAME_DSA.equals(name)) {
+                        key = parsePublicKeyDsa(keyBytes);
+                    } else if (NAME_ECDSA_256.equals(name)) {
+                        key = parsePublicKeyEcdsa(name, keyBytes);
+                    } else if (NAME_ECDSA_384.equals(name)) {
+                        key = parsePublicKeyEcdsa(name, keyBytes);
+                    } else if (NAME_ECDSA_521.equals(name)) {
+                        key = parsePublicKeyEcdsa(name, keyBytes);
+                    } else if (NAME_ED25519.equals(name)) {
+                        key = parsePublicKeyEd25519(keyBytes);
+                    }
+                    if (key != null) {
+                        keys.add(key);
+                    }
                 }
+            } catch (Exception e) {
+                errors.add("could not read key at line " + lineCounter + ": " + e.getClass().getName() + ", " + e.getMessage());
             }
         }
 

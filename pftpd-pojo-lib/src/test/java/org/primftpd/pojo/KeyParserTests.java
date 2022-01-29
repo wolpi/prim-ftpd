@@ -12,6 +12,7 @@ import java.security.PublicKey;
 import java.security.interfaces.DSAPublicKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.ArrayList;
 import java.util.List;
 
 public class KeyParserTests {
@@ -21,73 +22,88 @@ public class KeyParserTests {
         String key = "no-space";
         InputStream is = new ByteArrayInputStream(key.getBytes("UTF8"));
 
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+        List<String> errors = new ArrayList<>();
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
 
         Assert.assertTrue(keys.isEmpty());
+        Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void parsePubKeyRsa() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/rsa.key.pub");
 
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+        List<String> errors = new ArrayList<>();
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
 
         assertsRsaKey((RSAPublicKey)keys.get(0));
+        Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void parsePubKeyDsa() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/dsa.key.pub");
 
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+        List<String> errors = new ArrayList<>();
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
 
         assertsDsaKey((DSAPublicKey)keys.get(0));
+        Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void parsePubKeyEcdsa() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/ecdsa.key.pub");
 
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+        List<String> errors = new ArrayList<>();
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
 
         assertsEcdsaKey((ECPublicKey)keys.get(0));
+        Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void parsePubKeyEcdsa384() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/ecdsa.key.pub.384");
 
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+        List<String> errors = new ArrayList<>();
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
 
         assertsEcdsaKey384((ECPublicKey)keys.get(0));
+        Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void parsePubKeyEcdsa521() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/ecdsa.key.pub.521");
 
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+        List<String> errors = new ArrayList<>();
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
 
         assertsEcdsaKey521((ECPublicKey)keys.get(0));
+        Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void parsePubKeyEd25519() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/ed25519.key.pub");
 
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+        List<String> errors = new ArrayList<>();
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
 
         for (PublicKey key : keys) {
             System.out.println("key type: " + key.getClass().getName());
         }
         assertsEd25519((BCEdDSAPublicKey)keys.get(0));
+        Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void parseAuthorizedKeys() throws Exception {
         InputStream is = getClass().getResourceAsStream("/keys/authorized_keys");
 
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder());
+        List<String> errors = new ArrayList<>();
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
 
         Assert.assertEquals(6, keys.size());
         assertsRsaKey((RSAPublicKey)keys.get(0));
@@ -96,6 +112,9 @@ public class KeyParserTests {
         assertsEcdsaKey384((ECPublicKey)keys.get(3));
         assertsEcdsaKey521((ECPublicKey)keys.get(4));
         assertsEd25519((BCEdDSAPublicKey)keys.get(5));
+
+        Assert.assertEquals(1, errors.size());
+        System.out.println(errors.get(0));
     }
 
     protected void assertsRsaKey(RSAPublicKey pubKey) {

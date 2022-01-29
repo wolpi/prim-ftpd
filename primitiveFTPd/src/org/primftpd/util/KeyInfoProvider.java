@@ -21,6 +21,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -127,6 +128,7 @@ public class KeyInfoProvider
 		try {
 			logger.debug("trying authorized keys file {}", path);
 			fis = new FileInputStream(path);
+			List<String> parserErrors = new ArrayList<>();
 			keys = KeyParser.parsePublicKeys(
 					fis,
 					new Base64Decoder() {
@@ -134,7 +136,12 @@ public class KeyInfoProvider
 						public byte[] decode(String str) {
 							return Base64.decode(str, Base64.DEFAULT);
 						}
-					});
+					},
+					parserErrors);
+
+			for (String parserError : parserErrors) {
+				logger.debug("{}", parserError);
+			}
 
 		} catch (Exception e) {
 			logger.debug("could not read keys {}, {}", e.getClass().getSimpleName(), e.getMessage());
