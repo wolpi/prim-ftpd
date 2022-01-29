@@ -71,6 +71,7 @@
     <string name="prefSummaryShowStartStopNotification">Shows a notification at all time to have another quick way to start/stop server(s).</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>
     <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 public key in %s. SFTP only.</string>
+    <string name="prefSummaryPubKeyAuth_v2">When enabled place your ssh2 public key in %s. It must be a file containing one key per line. SFTP only.</string>
     <string name="prefTitleAnonymousLogin">Anonymous Login</string>
     <string name="prefSummaryAnonymousLogin">Set if anonymous login is allowed on the server.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>

@@ -28,7 +28,7 @@
 			android:key="pubKeyAuthPref"
 			android:defaultValue="false"
 			android:title="@string/prefTitlePubKeyAuth"
-			android:summary="@string/prefSummaryPubKeyAuth"
+			android:summary="@string/prefSummaryPubKeyAuth_v2"
 			/>
 	</PreferenceCategory>
 

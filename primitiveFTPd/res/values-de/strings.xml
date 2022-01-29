@@ -70,6 +70,7 @@
     <string name="prefTitleShowStartStopNotification">Zeige Benachrichtigung, um Server zu starten/stoppen</string>
     <string name="prefSummaryShowStartStopNotification">Zeige dauerhafte Benachrichtigung um den Server einfach zu starten/stoppen.</string>
     <string name="prefSummaryPubKeyAuth">Wenn aktiviert, legen Sie Ihren öffentlichen ssh2 Schlüssel in %s ab. Nur SFTP.</string>
+    <string name="prefSummaryPubKeyAuth_v2">Wenn aktiviert, legen Sie Ihre öffentlichen ssh2 Schlüssel in %s ab. Dies muss eine Datei sein, welche einen Schlüssel pro Zeile enthält. Nur SFTP.</string>
     <string name="prefSummaryAnonymousLogin">Anonymen Login erlauben.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
     <string name="prefSummaryFtpPassivePorts">Ports für FTP Passive-Daten-Verbindung. Kann ein einzelner Port, eine Liste oder Bereich von Ports sein. Z.B. 5678,5700-5710,5800,5900.</string>

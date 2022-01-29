@@ -54,7 +54,7 @@ public class FtpPrefsFragment extends PreferenceFragment
 
 		// text parameter for pub key auth pref
 		Resources res = getResources();
-		String text = String.format(res.getString(R.string.prefSummaryPubKeyAuth), Defaults.pubKeyAuthKeyPath(context));
+		String text = String.format(res.getString(R.string.prefSummaryPubKeyAuth_v2), Defaults.pubKeyAuthKeyPath(context));
 		Preference pubKeyAuthPref = findPreference(LoadPrefsUtil.PREF_KEY_PUB_KEY_AUTH);
 		pubKeyAuthPref.setSummary(text);
 
