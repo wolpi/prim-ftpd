@@ -92,7 +92,7 @@
     <string name="widgetTextStart">Запустить ftpd</string>
     <string name="widgetTextStop">Остановить ftpd</string>
     <string name="prefTitleIdleTimeout">Время бездействия</string>
-    <string name="prefSummaryIdleTimeout">По истечении этого времени в секундах сервер прервет простаивающие соединения (только FTP)</string>
+    <string name="prefSummaryIdleTimeout">По истечении этого времени в секундах сервер прервёт простаивающие соединения (только FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">Сервер прервет простаивающие соединения через это время в секундах. Установите 0 для отключения.</string>
     <string name="prefTitleStartOnOpen">Запуск при открытии</string>
     <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
