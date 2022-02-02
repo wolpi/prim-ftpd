@@ -26,7 +26,7 @@
     <string name="prefSummaryAnonymousLogin">Отметьте, если на сервер разрешен анонимный вход.</string>
     <string name="prefSummaryForegroundService">Сервис(ы) будут выполняться на переднем плане. Предотвращает остановку сервисов на некоторых устройствах.</string>
     <string name="prefForegroundService">Сервис(ы) на переднем плане</string>
-    <string name="prefSummaryIdleTimeout">Сервер прервёт простаивающие соединения через это время в секундах (только FTP).</string>
+    <string name="prefSummaryIdleTimeout">По истечении этого времени в секундах сервер прервёт простаивающие соединения (только FTP)</string>
     <string name="prefSummaryFtpPassivePorts">Порты для пассивной передачи данных по FTP. Может быть один порт, список или диапазон портов. Например: 5678,5700-5710,5800,5900.</string>
     <string name="prefSummaryLogging">Журнал помогает анализировать ошибки. Если приложение работает на вашем устройстве некорректно, вы можете отправить журнал разработчикам. Может потребоваться перезапуск приложения.</string>
     <string name="prefSummaryPassword">Пароль FTP-сервера</string>
