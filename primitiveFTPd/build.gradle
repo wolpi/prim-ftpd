@@ -25,7 +25,7 @@ android {
     defaultConfig {
         applicationId "org.primftpd"
         minSdkVersion 15
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 56
         versionName "6.10-SNAPSHOT"
         vectorDrawables.useSupportLibrary = true
