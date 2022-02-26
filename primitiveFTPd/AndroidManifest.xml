@@ -119,6 +119,11 @@
         </activity>
 
         <activity
+            android:name="org.primftpd.ui.KeysFingerprintsActivity"
+            android:label="Keys Fingerprints">
+        </activity>
+
+        <activity
             android:name="org.primftpd.prefs.AboutActivity"
             android:label="About">
         </activity>

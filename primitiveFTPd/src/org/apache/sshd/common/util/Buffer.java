@@ -21,7 +21,11 @@ package org.apache.sshd.common.util;
 import org.apache.sshd.common.KeyPairProvider;
 import org.apache.sshd.common.SshException;
 import org.apache.sshd.common.cipher.ECCurves;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.util.PublicKeyFactory;
 import org.primftpd.pojo.KeyParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -506,7 +510,20 @@ public final class Buffer implements Readable {
             putString(curveName);
             putBytes(ECCurves.encodeECPoint(ecKey.getW(), ecParams.getCurve()));
         } else {
-            throw new IllegalStateException("Unsupported algorithm: " + key.getAlgorithm());
+            if ("Ed25519".equals(key.getAlgorithm())) {
+                try {
+                    Ed25519PublicKeyParameters publicKeyParameters =
+                            (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(key.getEncoded());
+                    byte[] contentPub = publicKeyParameters.getEncoded();
+                    //logger.debug("sending encoded key (length: {}): {}", contentPub.length, new String(contentPub));
+                    putString("ssh-ed25519");
+                    putBytes(contentPub);
+                } catch (Exception e) {
+                    throw new IllegalStateException(e);
+                }
+            } else {
+                throw new IllegalStateException("Unsupported algorithm: " + key.getAlgorithm());
+            }
         }
     }
 

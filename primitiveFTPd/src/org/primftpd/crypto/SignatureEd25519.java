@@ -4,8 +4,10 @@ import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.Signature;
 import org.apache.sshd.common.signature.AbstractSignature;
 import org.bouncycastle.crypto.Signer;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.primftpd.pojo.KeyParser;
 import org.slf4j.Logger;
@@ -49,14 +51,39 @@ public class SignatureEd25519 extends AbstractSignature {
         return (Ed25519PublicKeyParameters)eddsaPublicKey;
     }
 
-    public void init(PublicKey pubkey, PrivateKey prvkey) {
-        Ed25519PublicKeyParameters chipherParasPub = null;
-        try {
-            chipherParasPub = extractPubKeyParas(pubkey);
-        } catch (Exception e) {
-            logger.error("could not transform ed25519 public key", e);
+    private Ed25519PrivateKeyParameters extractPrvKeyParas(PrivateKey prvkey)
+            throws NoSuchFieldException, IllegalAccessException {
+        if (!(prvkey instanceof BCEdDSAPrivateKey)) {
+            throw new RuntimeException("can not extract prv key paras from key of type: " + prvkey.getClass().getName());
         }
-        signer.init(false, chipherParasPub);
+        Class<? extends PrivateKey> prvkeyClass = prvkey.getClass();
+        Field eddsaPrivateKeyFiled = prvkeyClass.getDeclaredField("eddsaPrivateKey");
+        eddsaPrivateKeyFiled.setAccessible(true);
+        Object eddsaPrivateKey = eddsaPrivateKeyFiled.get(prvkey);
+        return (Ed25519PrivateKeyParameters)eddsaPrivateKey;
+    }
+
+    public void init(PublicKey pubkey, PrivateKey prvkey) {
+        logger.trace("SignatureEd25519.init({}, {})",
+                (pubkey != null ? pubkey.getClass().getName() : null),
+                (prvkey != null ? prvkey.getClass().getName() : null));
+        Ed25519PublicKeyParameters chipherParasPub = null;
+        Ed25519PrivateKeyParameters chipherParasPrv = null;
+        try {
+            if (pubkey != null) {
+                chipherParasPub = extractPubKeyParas(pubkey);
+            }
+            if (prvkey != null) {
+                chipherParasPrv = extractPrvKeyParas(prvkey);
+            }
+        } catch (Exception e) {
+            logger.error("could not transform ed25519 key", e);
+        }
+        if (chipherParasPrv != null) {
+            signer.init(true, chipherParasPrv);
+        } else {
+            signer.init(false, chipherParasPub);
+        }
     }
 
     public void update(byte[] H, int off, int len) {

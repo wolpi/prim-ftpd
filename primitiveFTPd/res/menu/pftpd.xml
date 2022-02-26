@@ -27,6 +27,12 @@
         android:title="@string/clientActionsLabel" />
 
     <item
+        android:id="@+id/menu_keys_fingerprints"
+        android:orderInCategory="100"
+        android:showAsAction="collapseActionView|withText"
+        android:title="Keys Fingerprints" />
+
+    <item
         android:id="@+id/menu_translate"
         android:orderInCategory="100"
         android:showAsAction="collapseActionView|withText"

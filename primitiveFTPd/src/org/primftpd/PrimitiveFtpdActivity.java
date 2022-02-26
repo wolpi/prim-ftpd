@@ -21,6 +21,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.log.PrimFtpdLoggerBinder;
 import org.primftpd.prefs.AboutActivity;
@@ -51,9 +54,12 @@ import org.primftpd.ui.CalcPubkeyFinterprintsTask;
 import org.primftpd.ui.ClientActionActivity;
 import org.primftpd.ui.GenKeysAskDialogFragment;
 import org.primftpd.ui.GenKeysAsyncTask;
+import org.primftpd.ui.KeysFingerprintsActivity;
+import org.primftpd.util.Defaults;
 import org.primftpd.util.IpAddressProvider;
+import org.primftpd.util.KeyFingerprintBean;
 import org.primftpd.util.KeyFingerprintProvider;
-import org.primftpd.util.KeyInfoProvider;
+import org.primftpd.util.SampleAuthKeysFileCreator;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.PrngFixes;
 import org.primftpd.util.ServersRunningBean;
@@ -188,7 +194,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		clientActionView3 = findViewById(R.id.clientActionsLine3);
 
 		// create sample authorized_keys files
-		new KeyInfoProvider().createSampleAuthorizedKeysFiles(this);
+		new SampleAuthKeysFileCreator().createSampleAuthorizedKeysFiles(this);
 	}
 
 	@Override
@@ -510,19 +516,25 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	@SuppressLint("SetTextI18n")
 	public void showKeyFingerprints() {
-		((TextView)findViewById(R.id.keyFingerprintMd5Label))
-				.setText("MD5");
-		((TextView)findViewById(R.id.keyFingerprintSha1Label))
-				.setText("SHA1");
-		((TextView)findViewById(R.id.keyFingerprintSha256Label))
-				.setText("SHA256");
+		HostKeyAlgorithm chosenAlgo = Defaults.DEFAULT_HOST_KEY_ALGO;
 
-		((TextView)findViewById(R.id.keyFingerprintMd5TextView))
-			.setText(keyFingerprintProvider.getFingerprintMd5());
-		((TextView)findViewById(R.id.keyFingerprintSha1TextView))
-			.setText(keyFingerprintProvider.getFingerprintSha1());
-		((TextView)findViewById(R.id.keyFingerprintSha256TextView))
-			.setText(keyFingerprintProvider.getFingerprintSha256());
+		((TextView)findViewById(R.id.keyFingerprintMd5Label))
+				.setText("MD5 (" + chosenAlgo.getAlgorithmName() + ")");
+		((TextView)findViewById(R.id.keyFingerprintSha1Label))
+				.setText("SHA1 (" + chosenAlgo.getAlgorithmName() + ")");
+		((TextView)findViewById(R.id.keyFingerprintSha256Label))
+				.setText("SHA256 (" + chosenAlgo.getAlgorithmName() + ")");
+
+		KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(chosenAlgo);
+
+		if (keyFingerprintBean != null) {
+			((TextView) findViewById(R.id.keyFingerprintMd5TextView))
+					.setText(keyFingerprintBean.getFingerprintMd5());
+			((TextView) findViewById(R.id.keyFingerprintSha1TextView))
+					.setText(keyFingerprintBean.getFingerprintSha1());
+			((TextView) findViewById(R.id.keyFingerprintSha256TextView))
+					.setText(keyFingerprintBean.getFingerprintSha256());
+		}
 
 		// create onRefreshListener
 		final PrimitiveFtpdActivity activity = this;
@@ -533,6 +545,19 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 				logger.trace("refreshButton OnClickListener");
 				GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
 				askDiag.show(activity.getSupportFragmentManager(), DIALOG_TAG);
+			}
+		});
+
+		// link to keys fingerprints activity
+		TextView showAllKeysFingerprints = findViewById(R.id.allKeysFingerprintsLabel);
+		CharSequence text = showAllKeysFingerprints.getText();
+		SpannableString spannable = new SpannableString(text);
+		spannable.setSpan(new UnderlineSpan(), 0, text.length(), 0);
+		showAllKeysFingerprints.setText(spannable);
+		showAllKeysFingerprints.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				activity.handleKeysFingerprints();
 			}
 		});
 	}
@@ -713,6 +738,9 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		case R.id.menu_client_action:
 			handleClientAction();
 			break;
+		case R.id.menu_keys_fingerprints:
+			handleKeysFingerprints();
+			break;
 		case R.id.menu_translate:
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://pftpd.rocks/projects/pftpd/pftpd/"));
 			startActivity(intent);
@@ -818,6 +846,12 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	protected void handleClientAction() {
 		logger.trace("handleClientAction()");
 		Intent intent = new Intent(this, ClientActionActivity.class);
+		startActivity(intent);
+	}
+
+	protected void handleKeysFingerprints() {
+		logger.trace("handleKeysFingerprints()");
+		Intent intent = new Intent(this, KeysFingerprintsActivity.class);
 		startActivity(intent);
 	}
 

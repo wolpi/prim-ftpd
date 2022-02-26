@@ -2,6 +2,7 @@ package org.primftpd.services;
 
 import android.net.Uri;
 import android.os.Looper;
+import android.util.Base64;
 import android.widget.Toast;
 
 import org.apache.ftpserver.ftplet.Authentication;
@@ -19,6 +20,7 @@ import org.apache.sshd.common.io.IoSession;
 import org.apache.sshd.common.io.mina.MinaServiceFactoryFactory;
 import org.apache.sshd.common.keyprovider.AbstractKeyPairProvider;
 import org.apache.sshd.common.session.AbstractSession;
+import org.apache.sshd.common.util.KeyUtils;
 import org.apache.sshd.server.Command;
 import org.apache.sshd.server.PasswordAuthenticator;
 import org.apache.sshd.server.command.ScpCommandFactory;
@@ -26,6 +28,7 @@ import org.apache.sshd.server.session.ServerSession;
 import org.apache.sshd.server.session.SessionFactory;
 import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.R;
+import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.crypto.SignatureEd25519;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.filesystem.FsSshFileSystemView;
@@ -34,8 +37,9 @@ import org.primftpd.filesystem.RoSafSshFileSystemView;
 import org.primftpd.filesystem.RootSshFileSystemView;
 import org.primftpd.filesystem.SafSshFileSystemView;
 import org.primftpd.filesystem.VirtualSshFileSystemView;
+import org.primftpd.pojo.Base64Decoder;
+import org.primftpd.pojo.KeyParser;
 import org.primftpd.util.Defaults;
-import org.primftpd.util.KeyInfoProvider;
 import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
 
@@ -47,6 +51,7 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
@@ -165,10 +170,9 @@ public class SshServerService extends AbstractServerService
 					Defaults.PUB_KEY_AUTH_KEY_PATH_OLD,
 					Defaults.PUB_KEY_AUTH_KEY_PATH_OLDER,
 			};
-			KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
 			final List<PublicKey> pubKeys = new ArrayList<>();
 			for (String keyPath : keyPaths) {
-				pubKeys.addAll(keyInfoProvider.readKeyAuthKeys(keyPath, true));
+				pubKeys.addAll(readKeyAuthKeys(keyPath, true));
 			}
 			logger.info("loaded {} keys for public key auth", pubKeys.size());
 			if (!pubKeys.isEmpty()) {
@@ -261,10 +265,45 @@ public class SshServerService extends AbstractServerService
 			if (!keys.isEmpty()) {
 				// setKeyPairProvider
 				sshServer.setKeyPairProvider(new AbstractKeyPairProvider() {
+					private KeyPair ed25519KeyPair = null;
+
 					@Override
 					public Iterable<KeyPair> loadKeys() {
 						// just return keys that have been loaded before
 						return keys;
+					}
+
+					@Override
+					public KeyPair loadKey(String type) {
+						if ("ssh-ed25519".equals(type)) {
+							return ed25519KeyPair;
+						}
+						return super.loadKey(type);
+					}
+
+					@Override
+					public String getKeyTypes() {
+						List<String> types = new ArrayList<>();
+						for (KeyPair keyPair : keys) {
+							String keyType = KeyUtils.getKeyType(keyPair);
+							if (keyType == null) {
+								String algo = keyPair.getPrivate().getAlgorithm();
+								if ("Ed25519".equals(algo)) {
+									keyType = "ssh-ed25519";
+									ed25519KeyPair = keyPair;
+								}
+							}
+							types.add(keyType);
+						}
+
+						StringBuilder sb = new StringBuilder();
+						String delimiter = "";
+						for (String type : types) {
+							sb.append(delimiter);
+							sb.append(type);
+							delimiter = ",";
+						}
+						return sb.toString();
 					}
 				});
 				sshServer.start();
@@ -279,31 +318,70 @@ public class SshServerService extends AbstractServerService
 
 	protected List<KeyPair> loadKeys() {
 		List<KeyPair> keyPairList = new ArrayList<>(1);
-		FileInputStream pubkeyFis = null;
-		FileInputStream privkeyFis = null;
-		try {
-			// read pub key
-			KeyInfoProvider keyInfoProvider = new KeyInfoProvider();
+		for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
+			FileInputStream pubkeyFis = null;
+			FileInputStream privkeyFis = null;
+			try {
+				pubkeyFis = openFileInput(hka.getFilenamePublicKey());
+				PublicKey publicKey = hka.readPublicKey(pubkeyFis);
 
-			pubkeyFis = openFileInput(Defaults.PUBLICKEY_FILENAME);
-			PublicKey publicKey = keyInfoProvider.readPublicKey(pubkeyFis);
+				privkeyFis = openFileInput(hka.getFilenamePrivateKey());
+				PrivateKey privateKey = hka.readPrivateKey(privkeyFis);
 
-			// read priv key from it's own file
-			privkeyFis = openFileInput(Defaults.PRIVATEKEY_FILENAME);
-			PrivateKey privateKey = keyInfoProvider.readPrivatekey(privkeyFis);
-
-			// return key pair
-			keyPairList.add(new KeyPair(publicKey, privateKey));
-		} catch (Exception e) {
-			logger.debug("could not read key: " + e.getMessage(), e);
-		} finally {
-			if (pubkeyFis != null) {
-				IoUtils.close(pubkeyFis);
-			}
-			if (privkeyFis != null) {
-				IoUtils.close(privkeyFis);
+				// return key pair
+				keyPairList.add(new KeyPair(publicKey, privateKey));
+			} catch (Exception e) {
+				logger.debug("could not read key: " + e.getMessage(), e);
+			} finally {
+				if (pubkeyFis != null) {
+					IoUtils.close(pubkeyFis);
+				}
+				if (privkeyFis != null) {
+					IoUtils.close(privkeyFis);
+				}
 			}
 		}
 		return keyPairList;
+	}
+
+	protected List<PublicKey> readKeyAuthKeys(String path, boolean ignoreErrors)
+	{
+		List<PublicKey> keys = null;
+		FileInputStream fis = null;
+		try {
+			logger.debug("trying authorized keys file {}", path);
+			fis = new FileInputStream(path);
+			List<String> parserErrors = new ArrayList<>();
+			keys = KeyParser.parsePublicKeys(
+					fis,
+					new Base64Decoder() {
+						@Override
+						public byte[] decode(String str) {
+							return Base64.decode(str, Base64.DEFAULT);
+						}
+					},
+					parserErrors);
+
+			for (String parserError : parserErrors) {
+				logger.debug("{}", parserError);
+			}
+
+		} catch (Exception e) {
+			logger.debug("could not read keys {}, {}", e.getClass().getSimpleName(), e.getMessage());
+			if (!ignoreErrors) {
+				logger.error("could not read key auth keys", e);
+			}
+		} finally {
+			try {
+				if (fis != null) {
+					fis.close();
+				}
+			} catch (IOException e) {
+				if (!ignoreErrors) {
+					logger.error("could not close key auth keys file", e);
+				}
+			}
+		}
+		return keys != null ? keys : Collections.<PublicKey>emptyList();
 	}
 }

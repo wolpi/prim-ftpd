@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <!-- key fingerprints -->
+        <TextView
+            android:id="@+id/keyFingerprintsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:text="@string/fingerprintsLabel"
+            android:drawablePadding="4dp"
+            />
+
+        <!-- ed25519 MD 5 -->
+        <TextView
+            android:id="@+id/keyFingerprintEd25519Md5Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintEd25519Md5TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+        <!-- ed25519 SHA 1 -->
+        <TextView
+            android:id="@+id/keyFingerprintEd25519Sha1Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintEd25519Sha1TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+        <!-- ed25519 SHA 256 -->
+        <TextView
+            android:id="@+id/keyFingerprintEd25519Sha256Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintEd25519Sha256TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+
+        <!-- rsa4096 MD 5 -->
+        <TextView
+            android:id="@+id/keyFingerprintRsa4096Md5Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintRsa4096Md5TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+        <!-- rsa4096 SHA 1 -->
+        <TextView
+            android:id="@+id/keyFingerprintRsa4096Sha1Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintRsa4096Sha1TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+        <!-- rsa4096 SHA 256 -->
+        <TextView
+            android:id="@+id/keyFingerprintRsa4096Sha256Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintRsa4096Sha256TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+
+        <!-- rsa2048 MD 5 -->
+        <TextView
+            android:id="@+id/keyFingerprintRsa2048Md5Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintRsa2048Md5TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+        <!-- rsa2048 SHA 1 -->
+        <TextView
+            android:id="@+id/keyFingerprintRsa2048Sha1Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintRsa2048Sha1TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+        <!-- rsa2048 SHA 256 -->
+        <TextView
+            android:id="@+id/keyFingerprintRsa2048Sha256Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintRsa2048Sha256TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+
+    </LinearLayout>
+
+</ScrollView>

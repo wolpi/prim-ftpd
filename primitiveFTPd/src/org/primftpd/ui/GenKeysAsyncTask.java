@@ -4,8 +4,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import org.primftpd.PrimitiveFtpdActivity;
+import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.util.KeyFingerprintProvider;
-import org.primftpd.util.KeyGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,7 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        logger.debug("generating key");
+        logger.debug("generating keys");
         try {
             String[] fileList = activity.fileList();
             if (fileList != null) {
@@ -45,13 +45,17 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
                 logger.trace("no existing files");
             }
 
-            FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream(activity);
-            FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream(activity);
-            try {
-                new KeyGenerator().generate(publickeyFos, privatekeyFos);
-            } finally {
-                publickeyFos.close();
-                privatekeyFos.close();
+            for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
+                FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream(activity, hka);
+                FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream(activity, hka);
+                try {
+                    hka.generateKey(publickeyFos, privatekeyFos);
+                } catch (Exception e) {
+                    logger.error("could not generate key " + hka.getAlgorithmName(), e);
+                } finally {
+                    publickeyFos.close();
+                    privatekeyFos.close();
+                }
             }
         } catch (Exception e) {
             logger.error("could not generate keys", e);

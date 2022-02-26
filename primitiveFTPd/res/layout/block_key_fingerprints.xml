@@ -13,6 +13,19 @@
         android:drawablePadding="4dp"
         />
 
+    <!-- all keys fingerprints -->
+    <TextView
+        android:id="@+id/allKeysFingerprintsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/allKeysFingerprintsLabel"
+        android:drawablePadding="4dp"
+        android:textColor="@color/blueIcon"
+        />
+
     <!-- MD 5 -->
     <TextView
         android:id="@+id/keyFingerprintMd5Label"

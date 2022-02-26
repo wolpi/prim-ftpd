@@ -7,6 +7,7 @@
     <string name="protocolLabel">Protokoll</string>
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Schlüssel-Fingerabdrücke</string>
+    <string name="allKeysFingerprintsLabel">Zeige Fingerabdrücke aller Schlüssel</string>
     <string name="generateKeysMessage">Schlüssel erzeugen?</string>
     <string name="generatingKeysMessage">Erzeuge Schlüssel …</string>
     <string name="generate">Erzeugen</string>

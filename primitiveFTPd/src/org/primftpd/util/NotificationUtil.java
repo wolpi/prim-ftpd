@@ -17,6 +17,7 @@ import android.view.View;
 import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.StartStopWidgetProvider;
+import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.services.DownloadsService;
@@ -265,15 +266,22 @@ public class NotificationUtil
 			if (!keyFingerprintProvider.areFingerprintsGenerated()) {
 				keyFingerprintProvider.calcPubkeyFingerprints(ctxt);
 			}
-			str.append("\n");
-			str.append("Key Fingerprints");
-			str.append("\n");
-			// show md5-bytes and sha256-base64 (no sha1) as that is what clients usually show
-			str.append("SHA256: ");
-			str.append(keyFingerprintProvider.getBase64Sha256());
-			str.append("\n");
-			str.append("MD5: ");
-			str.append(keyFingerprintProvider.getBytesMd5());
+			HostKeyAlgorithm chosenAlgo = Defaults.DEFAULT_HOST_KEY_ALGO;
+			KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(chosenAlgo);
+
+			if (keyFingerprintBean != null) {
+				str.append("\n");
+				str.append("Key Fingerprints (");
+				str.append(chosenAlgo.getAlgorithmName());
+				str.append(")");
+				str.append("\n");
+				// show md5-bytes and sha256-base64 (no sha1) as that is what clients usually show
+				str.append("SHA256: ");
+				str.append(keyFingerprintBean.getBase64Sha256());
+				str.append("\n");
+				str.append("MD5: ");
+				str.append(keyFingerprintBean.getBytesMd5());
+			}
 		}
 
 		return str.toString();
