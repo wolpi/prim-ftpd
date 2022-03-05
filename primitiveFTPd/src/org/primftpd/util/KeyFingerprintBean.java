@@ -1,6 +1,8 @@
 package org.primftpd.util;
 
-public class KeyFingerprintBean {
+import java.io.Serializable;
+
+public class KeyFingerprintBean implements Serializable {
     private final String fingerprintMd5;
     private final String fingerprintSha1;
     private final String fingerprintSha256;
