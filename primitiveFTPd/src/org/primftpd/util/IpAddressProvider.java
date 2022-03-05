@@ -90,6 +90,30 @@ public class IpAddressProvider {
         return result;
     }
 
+    public boolean isIpAvail(String ip) {
+        if (ip == null) {
+            return true;
+        }
+        try {
+            Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
+            while (ifaces.hasMoreElements()) {
+                NetworkInterface iface = ifaces.nextElement();
+                Enumeration<InetAddress> inetAddrs = iface.getInetAddresses();
+
+                while (inetAddrs.hasMoreElements()) {
+                    InetAddress inetAddr = inetAddrs.nextElement();
+                    String hostAddr = inetAddr.getHostAddress();
+                    if (ip.equals(hostAddr)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.info("could not check ip", e);
+        }
+        return false;
+    }
+
     public boolean isIpv6(String address) {
         return address.contains(":");
     }

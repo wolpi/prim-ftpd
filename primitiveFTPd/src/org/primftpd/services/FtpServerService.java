@@ -77,6 +77,10 @@ public class FtpServerService extends AbstractServerService
 	protected boolean launchServer(final Shell.Interactive shell) {
 		ListenerFactory listenerFactory = new ListenerFactory();
 		listenerFactory.setPort(prefsBean.getPort());
+		String bindIp = prefsBean.getBindIp();
+		if (bindIp != null) {
+			listenerFactory.setServerAddress(bindIp);
+		}
 
 		DataConnectionConfigurationFactory dataConConfigFactory = new DataConnectionConfigurationFactory();
 		String passivePorts = prefsBean.getFtpPassivePorts();
@@ -166,7 +170,7 @@ public class FtpServerService extends AbstractServerService
 		try {
 			ftpServer.start();
 			return true;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			// note: createServer() throws RuntimeExceptions, too
 			ftpServer = null;
 			handleServerStartError(e);

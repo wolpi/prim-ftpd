@@ -79,6 +79,13 @@
 			android:title="@string/prefAllowedIpsPattern"
 			android:summary="@string/prefSummaryAllowedIpsPattern"
 			/>
+		<EditTextPreference
+			android:name="bindIp"
+			android:key="bindIpPref"
+			android:title="@string/prefBindIp"
+			android:summary="@string/prefSummaryBindIp"
+			android:inputType="number|text"
+			/>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/prefsCategoryTitleUi" android:key="ftpPrefCatUi">

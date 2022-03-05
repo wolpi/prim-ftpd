@@ -73,7 +73,7 @@ public abstract class AbstractServerService
 	protected abstract String getServiceName();
 	protected abstract ClientActionEvent.Protocol getProtocol();
 
-	protected void handleServerStartError(Exception e)
+	protected void handleServerStartError(Throwable e)
 	{
 		logger.error("could not start server", e);
 

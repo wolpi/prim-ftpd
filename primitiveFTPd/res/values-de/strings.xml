@@ -48,6 +48,8 @@
     <string name="prefSummaryPort">FTP-Server Port</string>
     <string name="prefTitlePortSecure">Sicherer Port</string>
     <string name="prefSummaryPortSecure">FTP-Server Port (verschlüsselt)</string>
+    <string name="prefBindIp">IP um daran zu binden</string>
+    <string name="prefSummaryBindIp">Falls Server nur an einer Netzwerkschnittstelle lauschen sollen.</string>
     <string name="prefTitleStartDir">Server Startverzeichnis</string>
     <string name="prefSummaryStartDir">Erstes Verzeichnis nach login</string>
     <string name="prefTitleAnnounce">Server im LAN bekanntmachen</string>

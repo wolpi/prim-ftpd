@@ -119,6 +119,10 @@ public class SshServerService extends AbstractServerService
 	{
 		sshServer = SshServer.setUpDefaultServer();
 		sshServer.setPort(prefsBean.getSecurePort());
+		String bindIp = prefsBean.getBindIp();
+		if (bindIp != null) {
+			sshServer.setHost(bindIp);
+		}
 
 		// causes exception when not set
 		sshServer.setIoServiceFactoryFactory(new MinaServiceFactoryFactory());
@@ -309,7 +313,7 @@ public class SshServerService extends AbstractServerService
 				sshServer.start();
 				return true;
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			sshServer = null;
 			handleServerStartError(e);
 		}

@@ -21,6 +21,7 @@ public class PrefsBean implements Serializable
 	private final boolean pubKeyAuth;
 	private final ServerToStart serverToStart;
 	private final String ftpPassivePorts;
+	private final String bindIp;
 	private final Integer idleTimeout;
 	private final boolean showConnectionInfoInNotification;
 	private final StorageType storageType;
@@ -41,6 +42,7 @@ public class PrefsBean implements Serializable
 		boolean pubKeyAuth,
 		ServerToStart serverToStart,
 		String ftpPassivePorts,
+		String bindIp,
 		Integer idleTimeout,
 		boolean showConnectionInfoInNotification,
 		StorageType storageType,
@@ -63,6 +65,7 @@ public class PrefsBean implements Serializable
 		this.pubKeyAuth = pubKeyAuth;
 		this.serverToStart = serverToStart;
 		this.ftpPassivePorts = ftpPassivePorts;
+		this.bindIp = bindIp;
 		this.idleTimeout = idleTimeout;
 		this.showConnectionInfoInNotification = showConnectionInfoInNotification;
 		this.storageType = storageType;
@@ -126,6 +129,10 @@ public class PrefsBean implements Serializable
 
 	public String getFtpPassivePorts() {
 		return ftpPassivePorts;
+	}
+
+	public String getBindIp() {
+		return bindIp;
 	}
 
 	public Integer getIdleTimeout() {

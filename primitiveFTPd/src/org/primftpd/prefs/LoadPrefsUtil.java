@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import org.apache.ftpserver.impl.PassivePorts;
 import org.primftpd.util.Defaults;
+import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -32,6 +33,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_THEME = "themePref";
 	public static final String PREF_KEY_LOGGING = "loggingPref";
 	public static final String PREF_KEY_FTP_PASSIVE_PORTS = "ftpPassivePortsPref";
+	public static final String PREF_KEY_BIND_IP = "bindIpPref";
 	public static final String PREF_KEY_IDLE_TIMEOUT = "idleTimeoutPref";
 	public static final String PREF_KEY_STORAGE_TYPE = "storageTypePref";
 	public static final String PREF_KEY_SAF_URL = "safUrlPref";
@@ -169,6 +171,12 @@ public class LoadPrefsUtil
 			passivePorts = prefVal;
 		}
 		return passivePorts;
+	}
+
+	public static String bindIp(SharedPreferences prefs) {
+		return StringUtils.trimToNull(prefs.getString(
+				LoadPrefsUtil.PREF_KEY_BIND_IP,
+				null));
 	}
 
 	public static Integer idleTimeout(SharedPreferences prefs) {
@@ -316,6 +324,9 @@ public class LoadPrefsUtil
 		String ftpPassivePorts = ftpPassivePorts(prefs);
 		logger.debug("got ftpPassivePorts: {}", ftpPassivePorts);
 
+		String bindIp = bindIp(prefs);
+		logger.debug("got bindIp: {}", bindIp);
+
 		Integer idleTimeout = idleTimeout(prefs);
 		logger.debug("got idleTimeout: {}", idleTimeout);
 
@@ -354,6 +365,7 @@ public class LoadPrefsUtil
 				pubKeyAuth,
 				serverToStart,
 				ftpPassivePorts,
+				bindIp,
 				idleTimeout,
 				showConnectionInfo,
 				storageType,

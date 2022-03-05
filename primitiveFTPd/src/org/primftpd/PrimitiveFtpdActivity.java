@@ -269,6 +269,13 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 		// check if chosen SAF directory can be accessed
 		checkSafAccess();
+
+		// validate bind IP
+		if (!ipAddressProvider.isIpAvail(prefsBean.getBindIp())) {
+			String msg = "IP " + prefsBean.getBindIp() +
+					" is currently not assigned to an interface. May lead to a crash.";
+			Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+		}
 	}
 
 	@Override
