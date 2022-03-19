@@ -8,6 +8,7 @@ import re
 import shutil
 
 ARG_STORAGE_TYPE = "storage"
+ARG_READ_ONLY = "ro"
 
 STORAGE_TYPE_FS = "fs"
 STORAGE_TYPE_ROOT = "root"
@@ -463,12 +464,15 @@ def testKeys(baseUrl, errors):
 
 # parse commandline
 storageType = ""
+readOnly = False
 for i in range(len(sys.argv)):
     arg = sys.argv[i]
     if arg == ARG_STORAGE_TYPE or arg == "--" + ARG_STORAGE_TYPE:
         if i < len(sys.argv) - 1:
             storageType = sys.argv[i + 1]
             i = i+1
+    elif arg == ARG_READ_ONLY or arg == "--" + ARG_READ_ONLY:
+        readOnly = True
 
 if not storageType in VALID_STORAGE_TYPES:
     print("no valid storage type (got: " + storageType + ")")
@@ -479,25 +483,37 @@ setupAdbForwards()
 
 errors = []
 if storageType == STORAGE_TYPE_FS:
-    testCycle(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs sftp]", errors, Protocol.SFTP)
-    testCycle(BASE_URL_FTP, DEFAULT_PATH_FS,  "[fs  ftp]", errors, Protocol.FTP)
-    scpUpload(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs  scp]", errors)
+    if readOnly:
+        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs sftp]", errors, Protocol.SFTP)
+        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_FS,  "[fs  ftp]", errors, Protocol.FTP)
+    else:
+        testCycle(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs sftp]", errors, Protocol.SFTP)
+        testCycle(BASE_URL_FTP, DEFAULT_PATH_FS,  "[fs  ftp]", errors, Protocol.FTP)
+        scpUpload(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs  scp]", errors)
     scpDownload(DEFAULT_PATH_FS, "[fs  scp]", errors)
     testKeys(BASE_URL_SFTP + DEFAULT_PATH_FS, errors)
 
 if storageType == STORAGE_TYPE_ROOT:
-    testCycle(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root sftp]", errors, Protocol.SFTP)
-    testCycle(BASE_URL_FTP, DEFAULT_PATH_ROOT,  "[root  ftp]", errors, Protocol.FTP)
-    # note: scp upload with root causes known error: filesize is 0
-    scpUpload(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root  scp]", errors)
+    if readOnly:
+        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root sftp]", errors, Protocol.SFTP)
+        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_ROOT,  "[root  ftp]", errors, Protocol.FTP)
+    else:
+        testCycle(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root sftp]", errors, Protocol.SFTP)
+        testCycle(BASE_URL_FTP, DEFAULT_PATH_ROOT,  "[root  ftp]", errors, Protocol.FTP)
+        # note: scp upload with root causes known error: filesize is 0
+        scpUpload(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root  scp]", errors)
     # scp download with root causes EOFException in ScpHelper.readAck, even with copy-to-tmp
     #scpDownload(DEFAULT_PATH_ROOT, "[root  scp]", errors)
     testKeys(BASE_URL_SFTP + DEFAULT_PATH_ROOT, errors)
 
 if storageType == STORAGE_TYPE_SAF:
-    testCycle(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF sftp]", errors, Protocol.SFTP)
-    testCycle(BASE_URL_FTP, DEFAULT_PATH_SAF,  "[SAF  ftp]", errors, Protocol.FTP)
-    scpUpload(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF  scp]", errors)
+    if readOnly:
+        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF sftp]", errors, Protocol.SFTP)
+        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_SAF,  "[SAF  ftp]", errors, Protocol.FTP)
+    else:
+        testCycle(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF sftp]", errors, Protocol.SFTP)
+        testCycle(BASE_URL_FTP, DEFAULT_PATH_SAF,  "[SAF  ftp]", errors, Protocol.FTP)
+        scpUpload(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF  scp]", errors)
     scpDownload(DEFAULT_PATH_SAF, "[SAF  scp]", errors)
     testKeys(BASE_URL_SFTP + DEFAULT_PATH_SAF, errors)
 
@@ -508,15 +524,27 @@ if storageType == STORAGE_TYPE_SAFRO:
     testKeys(BASE_URL_SFTP + DEFAULT_PATH_ROSAF, errors)
 
 if storageType == STORAGE_TYPE_VIRTUAL:
-    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_FS, "[virtual fs sftp]", errors, Protocol.SFTP)
+    try:
+        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_FS, "[virtual fs sftp]", errors, Protocol.SFTP)
+    except:
+        errors.append("error in fs sftp")
     # no tests vor virtual FS with FTP because of issues with change-dir with curl
     #testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_FS,  "[virtual fs  ftp]", errors, Protocol.FTP)
     # same curl issue prevents creation of dirs -> read only tests, no scp upload
     #scpUpload(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_FS, "[virtual fs  scp]", errors)
-    scpDownload(DEFAULT_PATH_VIRTUAL_FS, "[virtual fs  scp]", errors)
+    try:
+        scpDownload(DEFAULT_PATH_VIRTUAL_FS, "[virtual fs  scp]", errors)
+    except:
+        errors.append("error in fs scp")
 
-    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root sftp]", errors, Protocol.SFTP)
-    testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_ROOT,  "[virtual root  ftp]", errors, Protocol.FTP)
+    try:
+        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root sftp]", errors, Protocol.SFTP)
+    except:
+        errors.append("error in root sftp")
+    try:
+        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_ROOT,  "[virtual root  ftp]", errors, Protocol.FTP)
+    except:
+        errors.append("error in root ftp")
     # no scp for root, see above
     #scpUpload(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root  scp]", errors)
     #scpDownload(DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root  scp]", errors)

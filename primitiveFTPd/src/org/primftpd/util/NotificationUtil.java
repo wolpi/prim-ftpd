@@ -75,10 +75,18 @@ public class NotificationUtil
 			QuickShareBean quickShareBean) {
 		// create pending intent
 		Intent notificationIntent = new Intent(ctxt, PrimitiveFtpdActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(ctxt, 0, notificationIntent, 0);
+		PendingIntent contentIntent = PendingIntent.getActivity(
+				ctxt,
+				0,
+				notificationIntent,
+				PendingIntent.FLAG_IMMUTABLE);
 
 		Intent stopIntent = StartStopWidgetProvider.buildServerStartStopIntent(ctxt);
-		PendingIntent pendingStopIntent = PendingIntent.getBroadcast(ctxt, 0, stopIntent, 0);
+		PendingIntent pendingStopIntent = PendingIntent.getBroadcast(
+				ctxt,
+				0,
+				stopIntent,
+				PendingIntent.FLAG_IMMUTABLE);
 
 		// create channel
 		createChannel(ctxt, channelId);
@@ -354,7 +362,11 @@ public class NotificationUtil
 			//Intent stopIntent = new Intent(ctxt, DownloadsService.class);
 			Intent stopIntent = new Intent(ctxt, StartStopWidgetProvider.class);
 			stopIntent.setAction(DownloadsService.ACTION_STOP);
-			PendingIntent pendingStopIntent = PendingIntent.getBroadcast(ctxt, 0, stopIntent, 0);
+			PendingIntent pendingStopIntent = PendingIntent.getBroadcast(
+					ctxt,
+					0,
+					stopIntent,
+					PendingIntent.FLAG_IMMUTABLE);
 
 			// notification action
 			//addAction(ctxt, builder, pendingChooserIntent, R.string.open, stopIconId);

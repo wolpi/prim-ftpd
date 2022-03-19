@@ -29,14 +29,16 @@
         android:supportsRtl="true">
 
         <receiver android:enabled="true" android:name=".BootUpReceiver"
-                android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+                android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+                android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name="org.primftpd.StartStopWidgetProvider">
+        <receiver android:name="org.primftpd.StartStopWidgetProvider"
+                android:exported="true">
             <intent-filter >
                 <action
                     android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -51,7 +53,8 @@
                 android:name=".remotecontrol.PftpdPowerTogglesPlugin"
                 android:enabled="true"
                 android:permission="com.painless.pc.permission.CONTROL_PLUGIN"
-                android:icon="@drawable/ic_notification">
+                android:icon="@drawable/ic_notification"
+                android:exported="true">
             <intent-filter>
                 <action android:name="com.painless.pc.ACTION_SET_STATE" />
             </intent-filter>
@@ -80,7 +83,8 @@
         <activity
             android:name=".PrimitiveFtpdActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -94,7 +98,8 @@
         <activity
             android:name=".ui.LeanbackActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
@@ -130,14 +135,16 @@
 
         <activity
             android:name="org.primftpd.remotecontrol.TaskerEditActionActivity"
-            android:label="@string/selectServerAction">
+            android:label="@string/selectServerAction"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
             </intent-filter>
         </activity>
         <activity
             android:name="org.primftpd.remotecontrol.TaskerEditConditionActivity"
-            android:label="@string/state">
+            android:label="@string/state"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.EDIT_CONDITION" />
             </intent-filter>
@@ -145,7 +152,8 @@
 
         <activity
             android:name="org.primftpd.share.ReceiveSaveAsActivity"
-            android:label="@string/saveAs">
+            android:label="@string/saveAs"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -200,7 +208,8 @@
 
         <activity
             android:name="org.primftpd.share.ReceiveQuickShareActivity"
-            android:label="@string/quickShare">
+            android:label="@string/quickShare"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -226,7 +235,8 @@
         <activity
             android:name="org.primftpd.filepicker.ResettingFilePickerActivity"
             android:label="@string/app_name"
-            android:theme="@style/FilePickerTheme">
+            android:theme="@style/FilePickerTheme"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -236,7 +246,8 @@
         <activity
             android:name="org.primftpd.ui.StartServerAndExitActivity"
             android:label="@string/startService"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true">
             <intent-filter>
                 <!-- be invokable by other apps (e.g. Automate) but not listed in main menu -->
                 <action android:name="android.intent.action.MAIN" />
@@ -246,7 +257,8 @@
         <activity
             android:name="org.primftpd.ui.StopServerAndExitActivity"
             android:label="@string/stopService"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="true">
             <intent-filter>
                 <!-- be invokable by other apps (e.g. Automate) but not listed in main menu -->
                 <action android:name="android.intent.action.MAIN" />
@@ -259,7 +271,8 @@
             android:name=".services.QuickSettingsService"
             android:icon="@drawable/ic_notification"
             android:label="@string/quickSettingsServerStopped"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
