@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">простейший ftpd</string>
+    <string name="allKeysFingerprintsLabel">Показать отпечатки всех ключей</string>
     <string name="cancel">Отмена</string>
     <string name="couldNotReadKeyAuthKey">Невозможно прочитать публичный ключ аутентификации. Подробности в журнале.</string>
     <string name="fingerprintsLabel">Ключи авторизации</string>
@@ -14,6 +15,7 @@
     <string name="ipAddrLabel">IP-адрес</string>
     <string name="isAnonymous">Анонимный вход: %1$b</string>
     <string name="isServerRunning">Сервер запущен?</string>
+    <string name="prefBindIp">IP для привязки</string>
     <string name="licence">Лицензия</string>
     <string name="notificationTitle">FTP-сервер</string>
     <string name="permissionNameStorage">Хранилище</string>
@@ -30,8 +32,10 @@
     <string name="prefSummaryLogging">Журнал помогает анализировать ошибки. Если приложение работает на вашем устройстве некорректно, вы можете отправить журнал разработчикам. Может потребоваться перезапуск приложения.</string>
     <string name="prefSummaryPassword">Пароль FTP-сервера</string>
     <string name="prefSummaryPort">Порт FTP-сервера</string>
-    <string name="prefSummaryPortSecure">Порт FTP-сервера (защищенный)</string>
+    <string name="prefSummaryPortSecure">Порт SFTP-сервера (защищенный)</string>
     <string name="prefSummaryPubKeyAuth">Если включено, разместите ваши открытые ключи SSH2 в %s. Только для SFTP.</string>
+    <string name="prefSummaryPubKeyAuth_v2">Если включено, поместите свой открытый ключ ssh2 в %s. Это должен быть файл, содержащий по одному ключу на строку. Только SFTP.</string>
+    <string name="prefSummaryRootCopyFiles">На некоторых устройствах возникают проблемы с доступом к файлам с помощью dd. С помощью этой настройки файлы сначала копируются в каталог tmp и получают доступ с помощью механизмов файловой системы. Должен быть отключен для больших файлов.</string>
     <string name="prefSummaryStartDir">Каталог, отображаемый после авторизации</string>
     <string name="prefSummaryStartOnBoot">Запускать сервер после загрузки системы.</string>
     <string name="prefSummaryTheme">Смена темы оформления, может потребоваться перезапуск приложения.</string>
@@ -39,6 +43,8 @@
     <string name="prefSummaryWakelock">Предотвращает засыпание устройства, когда сервер запущен. Засыпание может приводить к прекращению передачи файлов.</string>
     <string name="prefSummaryWhichServerToStart">Выберите серверы для запуска: FTP, SFTP или оба одновременно.</string>
     <string name="prefTheme">Тема</string>
+    <string name="prefRootCopyFiles">Root: копировать файлы в каталог tmp для скачки/загрузки</string>
+    <string name="prefSummaryBindIp">Если вы хотите, чтобы серверы прослушивали только один интерфейс.</string>
     <string name="prefTitleAnnounce">Анонсировать сервер в локальной сети</string>
     <string name="prefTitleAnnounceName">Имя сервера</string>
     <string name="prefTitleAnonymousLogin">Анонимный вход</string>
@@ -77,6 +83,7 @@
     <string name="storageTypeRoot">Суперпользователь (необходим root на устройстве)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF) 
 \n(например, для SD-карты)</string>
+    <string name="storageTypeVirtual">Виртуальные папки (предоставляет все типы хранилищ)</string>
     <string name="toggleService">Запуск/остановка сервера</string>
     <string name="widgetTextStart">Запустить ftpd</string>
     <string name="widgetTextStop">Остановить ftpd</string>
