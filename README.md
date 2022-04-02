@@ -34,3 +34,15 @@ FTP server app for android.
 
 
 Want to help translating it? See our shiny [weblate instance](https://pftpd.rocks/projects/pftpd/pftpd/)!
+
+
+## Permission
+Google introduces more and more restrictions to filesystem access to Android. In order to access all
+your files through this server you might have to grant it 'all files access' permission in Anroid settings.
+
+![permission screen 1](fastlane/img/permission1.png)
+![permission screen 2](fastlane/img/permission2.png)
+![permission screen 3](fastlane/img/permission3.png)
+![permission screen 4](fastlane/img/permission4.png)
+![permission screen 5](fastlane/img/permission5.png)
+
