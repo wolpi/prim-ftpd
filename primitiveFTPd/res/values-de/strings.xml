@@ -98,6 +98,7 @@
     <string name="selectServerAction">Serveraktion wählen</string>
     <string name="storageType">Art des Speichers</string>
     <string name="storageTypePlain">Gutes, altes Dateisystem</string>
+    <string name="storageTypePlainV2">Gutes, altes Dateisystem\nNur lesenden Zugriff? Siehe unsere <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub Seite</a>.</string>
     <string name="storageTypeRoot">Super user (Gerät muss gerooted sein)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(z.B. für SD-Karte)</string>
     <string name="storageTypeRoSaf">Nur-Lesen SAF (schneller!)</string>

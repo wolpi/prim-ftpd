@@ -104,6 +104,7 @@
     <string name="isServerRunning">Is server running?</string>
     <string name="storageType">Storage Type</string>
     <string name="storageTypePlain">Plain old filesystem</string>
+    <string name="storageTypePlainV2">Plain old filesystem\nGot read-only access? See our <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub page</a>.</string>
     <string name="storageTypeRoot">Super user (device must be rooted)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(e.g. for sd card)</string>
     <string name="storageTypeRoSaf">Read only SAF (faster !)</string>

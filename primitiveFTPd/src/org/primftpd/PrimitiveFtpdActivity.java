@@ -22,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 import android.view.Menu;
@@ -192,6 +193,9 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		clientActionView1 = findViewById(R.id.clientActionsLine1);
 		clientActionView2 = findViewById(R.id.clientActionsLine2);
 		clientActionView3 = findViewById(R.id.clientActionsLine3);
+
+		// make links clickable
+		((TextView)findViewById(R.id.radioStoragePlain)).setMovementMethod(LinkMovementMethod.getInstance());
 
 		// create sample authorized_keys files
 		new SampleAuthKeysFileCreator().createSampleAuthorizedKeysFiles(this);

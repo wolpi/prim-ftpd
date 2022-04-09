@@ -23,7 +23,7 @@
             <RadioButton android:id="@+id/radioStoragePlain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/storageTypePlain"
+                android:text="@string/storageTypePlainV2"
                 android:onClick="onRadioButtonClicked"
                 android:nextFocusUp="@+id/fallbackButtonPrefs"
                 />
