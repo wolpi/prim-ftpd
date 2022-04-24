@@ -243,29 +243,11 @@ public class NotificationUtil
 			}
 
 			if (prefsBean.getServerToStart().startFtp()) {
-				str.append("ftp://");
-				if (ipv6) {
-					str.append("[");
-				}
-				str.append(ipAddressText);
-				if (ipv6) {
-					str.append("]");
-				}
-				str.append(":");
-				str.append(prefsBean.getPortStr());
+				buildUrl(str, ipv6, "ftp", ipAddressText, prefsBean.getPortStr());
 				str.append("\n");
 			}
 			if (prefsBean.getServerToStart().startSftp()) {
-				str.append("sftp://");
-				if (ipv6) {
-					str.append("[");
-				}
-				str.append(ipAddressText);
-				if (ipv6) {
-					str.append("]");
-				}
-				str.append(":");
-				str.append(prefsBean.getSecurePortStr());
+				buildUrl(str, ipv6, "sftp", ipAddressText, prefsBean.getSecurePortStr());
 				str.append("\n");
 			}
 		}
@@ -293,6 +275,20 @@ public class NotificationUtil
 		}
 
 		return str.toString();
+	}
+
+	public static void buildUrl(StringBuilder str, boolean ipv6, String scheme, String ipAddressText, String port) {
+		str.append(scheme);
+		str.append("://");
+		if (ipv6) {
+			str.append("[");
+		}
+		str.append(ipAddressText);
+		if (ipv6) {
+			str.append("]");
+		}
+		str.append(":");
+		str.append(port);
 	}
 
 	public static Notification createDownloadNotification(

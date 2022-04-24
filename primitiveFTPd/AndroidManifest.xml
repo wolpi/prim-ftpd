@@ -119,6 +119,11 @@
         </activity>
 
         <activity
+            android:name="org.primftpd.ui.QrActivity"
+            android:label="QR Code">
+        </activity>
+
+        <activity
             android:name="org.primftpd.ui.ClientActionActivity"
             android:label="@string/clientActionsLabel">
         </activity>

@@ -21,6 +21,12 @@
         android:icon="?attr/iconSettings" />
 
     <item
+        android:id="@+id/menu_qr"
+        android:orderInCategory="100"
+        android:showAsAction="collapseActionView|withText"
+        android:title="QR Code" />
+
+    <item
         android:id="@+id/menu_client_action"
         android:orderInCategory="100"
         android:showAsAction="collapseActionView|withText"
