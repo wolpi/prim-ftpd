@@ -76,25 +76,25 @@ public abstract class RootFile<T> extends AbstractFile {
         logger.trace("[{}] setLastModified({})", name, time);
 
         String dateStr = Utils.touchDate(time);
-        return runCommand("touch -t " + dateStr + " \"" + absPath + "\"");
+        return runCommand("touch -t " + dateStr + " " + escapePath(absPath));
     }
 
     public boolean mkdir() {
         logger.trace("[{}] mkdir()", name);
         postClientAction(ClientActionEvent.ClientAction.CREATE_DIR);
-        return runCommand("mkdir \"" + absPath + "\"");
+        return runCommand("mkdir " + escapePath(absPath));
     }
 
     public boolean delete() {
         logger.trace("[{}] delete()", name);
         postClientAction(ClientActionEvent.ClientAction.DELETE);
-        return runCommand("rm -rf \"" + absPath + "\"");
+        return runCommand("rm -rf " + escapePath(absPath));
     }
 
     public boolean move(RootFile<T> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
         postClientAction(ClientActionEvent.ClientAction.RENAME);
-        return runCommand("mv \"" + absPath + "\" \"" + destination.getAbsolutePath() + "\"");
+        return runCommand("mv " + escapePath(absPath) + " " + escapePath(destination.getAbsolutePath()));
     }
 
     public List<T> listFiles() {
@@ -104,7 +104,7 @@ public abstract class RootFile<T> extends AbstractFile {
         List<T> result = new ArrayList<>();
         final LsOutputParser parser = new LsOutputParser();
         final List<LsOutputBean> beans = new ArrayList<>();
-        shell.addCommand("ls -la " + absPath, 0, new Shell.OnCommandLineListener() {
+        shell.addCommand("ls -la " + escapePath(absPath), 0, new Shell.OnCommandLineListener() {
             @Override
             public void onLine(String s) {
                 LsOutputBean bean = parser.parseLine(s);
@@ -126,17 +126,13 @@ public abstract class RootFile<T> extends AbstractFile {
         return result;
     }
 
-    private String escapePathForDD(String path) {
-        return path.replaceAll(" ", "\\ ");
-    }
-
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
         postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
         if (!bean.isExists()) {
             // if file does not exist, explicitly create it as root, see GH issue #117
-            runCommand("touch" + " \"" + absPath + "\"");
+            runCommand("touch" + " " + escapePath(absPath));
         }
 
         if (pftpdService.getPrefsBean().isRootCopyFiles()) {
@@ -169,7 +165,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
     private OutputStream createOutputStreamDd(long offset) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("su", "-c", "dd", "of=" + escapePathForDD(absPath));
+        processBuilder.command("su", "-c", "dd", "of=" + escapePath(absPath));
 
         String ddCommand;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -185,7 +181,7 @@ public abstract class RootFile<T> extends AbstractFile {
 
     public InputStream createInputStreamDd(long offset) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("su", "-c", "dd", "if=" + escapePathForDD(absPath));
+        processBuilder.command("su", "-c", "dd", "if=" + escapePath(absPath));
 
         String ddCommand;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -254,7 +250,7 @@ public abstract class RootFile<T> extends AbstractFile {
     public InputStream createInputStreamCopy(long offset) throws IOException {
         if (offset == 0) {
             tmpDir = Defaults.buildTmpDir(this.pftpdService.getContext(), TmpDirType.ROOT_COPY);
-            runCommand("cp" + " \"" + absPath + "\"" + " \"" + tmpDir.getAbsolutePath() + "\"");
+            runCommand("cp" + " " + escapePath(absPath) + " " + escapePath(tmpDir.getAbsolutePath()));
         }
         File tmpFile = tmpDir.listFiles()[0];
         FileInputStream fis = new FileInputStream(tmpFile);
@@ -264,11 +260,12 @@ public abstract class RootFile<T> extends AbstractFile {
 
     public void handleCloseCopy() throws IOException {
         if (moveFileOnClose) {
-            runCommand("mv" + " \"" + new File(tmpDir.getAbsolutePath(), getName()) + "\"" + " \"" + absPath + "\"");
+            runCommand("mv" + " " +
+                    escapePath(new File(tmpDir, getName()).getAbsolutePath()) + " " + escapePath(absPath));
             moveFileOnClose = false;
         }
         if (tmpDir != null) {
-            runCommand("rm -rf " + " \"" + tmpDir.getAbsolutePath() + "\"");
+            runCommand("rm -rf " + " " + escapePath(tmpDir.getAbsolutePath()));
             tmpDir = null;
         }
     }
@@ -289,6 +286,23 @@ public abstract class RootFile<T> extends AbstractFile {
         } catch (InterruptedException e) {
             logger.error("interrupted while waiting for dd process to exit", e);
         }
+    }
+
+    protected static String escapePath(String path) {
+        if (path != null) {
+            if (path.indexOf(' ') >= 0) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i<path.length(); i++) {
+                    if (path.charAt(i) == ' ' && i > 0 && path.charAt(i-1) != '\\') {
+                        sb.append("\\ ");
+                    } else {
+                        sb.append(path.charAt(i));
+                    }
+                }
+                path = sb.toString();
+            }
+        }
+        return path;
     }
 
     protected boolean runCommand(String cmd) {

@@ -34,7 +34,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
 
         final LsOutputParser parser = new LsOutputParser();
         final LsOutputBean[] wrapper = new LsOutputBean[1];
-        final String cmd = "ls -lad \"" + file + "\"";
+        final String cmd = "ls -lad " + RootFile.escapePath(file);
         logger.trace("  running command: {}", cmd);
         shell.addCommand(cmd, 0, new Shell.OnCommandResultListener() {
             @Override
