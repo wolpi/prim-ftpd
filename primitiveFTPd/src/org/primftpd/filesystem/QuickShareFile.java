@@ -10,43 +10,46 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class QuickShareFile<T> extends AbstractFile {
 
-    protected File quickShareFile;
+    protected final File tmpDir;
+    protected final File realFile;
 
-    QuickShareFile(File quickShareFile, String dir, PftpdService pftpdService) {
+    QuickShareFile(File tmpDir, PftpdService pftpdService) {
         // this c-tor is to be used to access fake directory
         super(
-                dir,
-                dir,
+                QuickShareFileSystemView.ROOT_PATH,
+                QuickShareFileSystemView.ROOT_PATH,
                 0,
                 0,
                 true,
                 true,
                 true,
                 pftpdService);
-        this.quickShareFile = quickShareFile;
+        this.tmpDir = tmpDir;
+        this.realFile = null;
     }
 
-    QuickShareFile(File quickShareFile, PftpdService pftpdService) {
+    QuickShareFile(File tmpDir, File realFile, PftpdService pftpdService) {
         // this c-tor is to be used to access actual file
         super(
-                QuickShareFileSystemView.ROOT_PATH + quickShareFile.getName(),
-                quickShareFile.getName(),
-                quickShareFile.lastModified(),
-                quickShareFile.length(),
-                quickShareFile.canRead(),
-                quickShareFile.exists(),
+                QuickShareFileSystemView.ROOT_PATH + realFile.getName(),
+                realFile.getName(),
+                realFile.lastModified(),
+                realFile.length(),
+                realFile.canRead(),
+                realFile.exists(),
                 false,
                 pftpdService);
-        this.quickShareFile = quickShareFile;
+        this.tmpDir = tmpDir;
+        this.realFile = realFile;
     }
 
-    abstract protected T createFile(File quickShareFile, String dir, PftpdService pftpdService);
-    abstract protected T createFile(File quickShareFile, PftpdService pftpdService);
+    abstract protected T createFile(File tmpDir, PftpdService pftpdService);
+    abstract protected T createFile(File tmpDir, File realFile, PftpdService pftpdService);
 
     @Override
     public ClientActionEvent.Storage getClientActionStorage() {
@@ -93,13 +96,19 @@ public abstract class QuickShareFile<T> extends AbstractFile {
         logger.trace("[{}] listFiles()", name);
         postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 
-        T result = createFile(quickShareFile, pftpdService);
-        return Collections.singletonList(result);
+        File[] filesArray = tmpDir.listFiles();
+        if (filesArray != null) {
+            List<T> files = new ArrayList<>(filesArray.length);
+            for (File file : filesArray) {
+                files.add(createFile(tmpDir, file, pftpdService));
+            }
+            return files;
+        }
+        return new ArrayList<>(0);
     }
 
     public OutputStream createOutputStream(long offset) {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
-        postClientAction(ClientActionEvent.ClientAction.UPLOAD);
         return new ByteArrayOutputStream();
     }
 
@@ -107,8 +116,8 @@ public abstract class QuickShareFile<T> extends AbstractFile {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
         postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
-        if (quickShareFile != null) {
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(quickShareFile));
+        if (realFile != null) {
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(realFile));
             bis.skip(offset);
             return bis;
         }

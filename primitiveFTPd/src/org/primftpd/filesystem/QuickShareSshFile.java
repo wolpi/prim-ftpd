@@ -10,24 +10,24 @@ import java.util.List;
 public class QuickShareSshFile extends QuickShareFile<SshFile> implements SshFile {
     private final Session session;
 
-    QuickShareSshFile(File quickShareFile, String dir, PftpdService pftpdService, Session session) {
-        super(quickShareFile, dir, pftpdService);
+    QuickShareSshFile(File tmpDir, PftpdService pftpdService, Session session) {
+        super(tmpDir, pftpdService);
         this.session = session;
     }
 
-    QuickShareSshFile(File quickShareFile, PftpdService pftpdService, Session session) {
-        super(quickShareFile, pftpdService);
+    QuickShareSshFile(File tmpDir, File realFile, PftpdService pftpdService, Session session) {
+        super(tmpDir, realFile, pftpdService);
         this.session = session;
     }
 
     @Override
-    protected SshFile createFile(File quickShareFile, String dir, PftpdService pftpdService) {
-        return new QuickShareSshFile(quickShareFile, dir, pftpdService, session);
+    protected SshFile createFile(File tmpDir, PftpdService pftpdService) {
+        return new QuickShareSshFile(tmpDir, pftpdService, session);
     }
 
     @Override
-    protected SshFile createFile(File quickShareFile, PftpdService pftpdService) {
-        return new QuickShareSshFile(quickShareFile, pftpdService, session);
+    protected SshFile createFile(File tmpDir, File realFile, PftpdService pftpdService) {
+        return new QuickShareSshFile(tmpDir, realFile, pftpdService, session);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class QuickShareSshFile extends QuickShareFile<SshFile> implements SshFil
     @Override
     public SshFile getParentFile() {
         logger.trace("[{}] getParentFile()", name);
-        return new QuickShareSshFile(quickShareFile, QuickShareFileSystemView.ROOT_PATH, pftpdService, session);
+        return new QuickShareSshFile(tmpDir, pftpdService, session);
     }
 
     @Override

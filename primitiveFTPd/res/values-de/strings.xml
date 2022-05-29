@@ -147,10 +147,12 @@
     <string name="widgetTextStart">starte (s)ftpd</string>
     <string name="clientActionsLabel">Client Action Log</string>
     <string name="quickShareInfoActivity">Ausführung im QuickShare-Modus für Datei: %1s</string>
+    <string name="quickShareInfoActivityV2">Ausführung im QuickShare-Modus für %1d Datei(en)</string>
     <string name="statsReceivedPerSec">Empfangen pro Sekunde</string>
     <string name="statsSentPerSec">Gesendet pro Sekunde</string>
     <string name="statsTotalReceived">Insgesamt empfangen</string>
     <string name="statsTotalSent">Insgesamt gesendet</string>
     <string name="statsLabel">Statistiken</string>
     <string name="quickShareInfoNotification">QuickShare von: %1s</string>
+    <string name="quickShareInfoNotificationV2">QuickShare von %1d Datei(en)</string>
 </resources>

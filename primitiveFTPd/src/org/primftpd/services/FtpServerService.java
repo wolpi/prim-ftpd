@@ -23,7 +23,6 @@ import org.primftpd.filesystem.VirtualFtpFileSystemView;
 import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
 
-import java.io.File;
 import java.net.SocketAddress;
 
 import eu.chainfire.libsuperuser.Shell;
@@ -112,7 +111,7 @@ public class FtpServerService extends AbstractServerService
 				if (quickShareBean != null) {
 					logger.debug("launching server in quick share mode");
 					return new QuickShareFtpFileSystemView(
-							new File(quickShareBean.getPathToFile()),
+							quickShareBean.getTmpDir(),
 							user,
 							FtpServerService.this);
 				} else {

@@ -43,7 +43,6 @@ import org.primftpd.util.Defaults;
 import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.SocketAddress;
@@ -197,7 +196,7 @@ public class SshServerService extends AbstractServerService
 				if (quickShareBean != null) {
 					logger.debug("launching server in quick share mode");
 					return new QuickShareSshFileSystemView(
-							new File(quickShareBean.getPathToFile()),
+							quickShareBean.getTmpDir(),
 							SshServerService.this,
 							session);
 				} else {

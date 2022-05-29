@@ -132,7 +132,9 @@
     <string name="quickShareServerStarted">Server has been started sharing single file</string>
     <string name="quickShareCouldNotStartServer">Server could not be started</string>
     <string name="quickShareInfoNotification">QuickShare of: %1s</string>
+    <string name="quickShareInfoNotificationV2">QuickShare with %1d file(s)</string>
     <string name="quickShareInfoActivity">Running in QuickShare Mode for file: %1s</string>
+    <string name="quickShareInfoActivityV2">Running in QuickShare Mode for %1d file(s)</string>
     <string name="clientActionsLabel">Client Action Log</string>
     <string name="statsLabel">Stats</string>
     <string name="statsTotalSent">Total Sent</string>

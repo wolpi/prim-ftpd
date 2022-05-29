@@ -4,13 +4,13 @@ package org.primftpd.events;
  * Eventbus event to respond to {@link ServerInfoRequestEvent}.
  */
 public class ServerInfoResponseEvent {
-    private final String quickShareFilename;
+    private final int quickShareNumberOfFiles;
 
-    public ServerInfoResponseEvent(String quickShareFilename) {
-        this.quickShareFilename = quickShareFilename;
+    public ServerInfoResponseEvent(int quickShareNumberOfFiles) {
+        this.quickShareNumberOfFiles = quickShareNumberOfFiles;
     }
 
-    public String getQuickShareFilename() {
-        return quickShareFilename;
+    public int getQuickShareNumberOfFiles() {
+        return quickShareNumberOfFiles;
     }
 }

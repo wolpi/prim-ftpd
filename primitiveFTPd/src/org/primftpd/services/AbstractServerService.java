@@ -150,8 +150,8 @@ public abstract class AbstractServerService
 	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
 	public void onEvent(ServerInfoRequestEvent event) {
 		logger.debug("got ServerInfoRequestEvent");
-		String quickShareFilename = quickShareBean != null ? quickShareBean.filename() : null;
-		EventBus.getDefault().post(new ServerInfoResponseEvent(quickShareFilename));
+		int quickShareNumberOfFiles = quickShareBean != null ? quickShareBean.numberOfFiles() : -1;
+		EventBus.getDefault().post(new ServerInfoResponseEvent(quickShareNumberOfFiles));
 	}
 
 	@Override
@@ -239,13 +239,7 @@ public abstract class AbstractServerService
 
 	protected void cleanQuickShareTmpDir() {
 		if (quickShareBean != null) {
-			String pathToFile = quickShareBean.getPathToFile();
-			logger.debug("cleaning quick share dir: {}", pathToFile);
-			File file = new File(pathToFile);
-			if (file.exists()) {
-				file.delete();
-			}
-			File tmpDir = file.getParentFile();
+			File tmpDir = quickShareBean.getTmpDir();
 			if (tmpDir.exists()) {
 				tmpDir.delete();
 			}

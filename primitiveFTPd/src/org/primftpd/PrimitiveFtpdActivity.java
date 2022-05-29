@@ -613,13 +613,13 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
 	public void onEvent(ServerInfoResponseEvent event) {
-		String quickShareFilename = event.getQuickShareFilename();
-		logger.debug("got ServerInfoResponseEvent, quickShareFilename: {}", quickShareFilename);
+		int numberOfFiles = event.getQuickShareNumberOfFiles();
+		logger.debug("got ServerInfoResponseEvent, QuickShare numberOfFiles: {}", numberOfFiles);
 		if (isEventInTime(event)) {
-			if (quickShareFilename != null) {
+			if (numberOfFiles >= 0) {
 				TextView quickShareInfo = findViewById(R.id.quickShareInfo);
 				quickShareInfo.setVisibility(View.VISIBLE);
-				quickShareInfo.setText(String.format(getString(R.string.quickShareInfoActivity), quickShareFilename));
+				quickShareInfo.setText(String.format(getString(R.string.quickShareInfoActivityV2), numberOfFiles));
 			}
 		}
 	}

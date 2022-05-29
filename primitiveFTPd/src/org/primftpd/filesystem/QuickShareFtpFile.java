@@ -9,13 +9,13 @@ import java.io.File;
 public class QuickShareFtpFile extends QuickShareFile<FtpFile> implements FtpFile {
     private final User user;
 
-    QuickShareFtpFile(File quickShareFile, String dir, PftpdService pftpdService, User user) {
-        super(quickShareFile, dir, pftpdService);
+    QuickShareFtpFile(File tmpDir, PftpdService pftpdService, User user) {
+        super(tmpDir, pftpdService);
         this.user = user;
     }
 
-    QuickShareFtpFile(File quickShareFile, PftpdService pftpdService, User user) {
-        super(quickShareFile, pftpdService);
+    QuickShareFtpFile(File tmpDir, File realFile, PftpdService pftpdService, User user) {
+        super(tmpDir, realFile, pftpdService);
         this.user = user;
     }
 
@@ -25,13 +25,13 @@ public class QuickShareFtpFile extends QuickShareFile<FtpFile> implements FtpFil
     }
 
     @Override
-    protected FtpFile createFile(File quickShareFile, String dir, PftpdService pftpdService) {
-        return new QuickShareFtpFile(quickShareFile, dir, pftpdService, user);
+    protected FtpFile createFile(File tmpDir, PftpdService pftpdService) {
+        return new QuickShareFtpFile(tmpDir, pftpdService, user);
     }
 
     @Override
-    protected FtpFile createFile(File quickShareFile, PftpdService pftpdService) {
-        return new QuickShareFtpFile(quickShareFile, pftpdService, user);
+    protected FtpFile createFile(File tmpDir, File realFile, PftpdService pftpdService) {
+        return new QuickShareFtpFile(tmpDir, realFile, pftpdService, user);
     }
 
     @Override

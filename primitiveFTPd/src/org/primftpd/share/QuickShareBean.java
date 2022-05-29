@@ -4,17 +4,21 @@ import java.io.File;
 import java.io.Serializable;
 
 public class QuickShareBean implements Serializable {
-    private final String pathToFile;
+    private final File tmpDir;
 
-    QuickShareBean(String pathToFile) {
-        this.pathToFile = pathToFile;
+    QuickShareBean(File tmpDir) {
+        this.tmpDir = tmpDir;
     }
 
-    public String getPathToFile() {
-        return pathToFile;
+    public File getTmpDir() {
+        return tmpDir;
     }
 
-    public String filename() {
-        return new File(pathToFile).getName();
+    public int numberOfFiles() {
+        String[] list = tmpDir.list();
+        if (list != null) {
+            return list.length;
+        }
+        return -1;
     }
 }
