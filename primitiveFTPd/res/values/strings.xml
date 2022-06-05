@@ -141,6 +141,8 @@
     <string name="statsTotalReceived">Total Received</string>
     <string name="statsSentPerSec">Sent per second</string>
     <string name="statsReceivedPerSec">Received per second</string>
+    <string name="isExternalStorageManager">Is external storage manager: %1$b</string>
+    <string name="Request">Request</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
         <item>FTP only</item>

@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -517,6 +518,32 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 		TextView pubKeyAuthView = (TextView)findViewById(R.id.pubKeyAuthTextView);
 		pubKeyAuthView.setText(getString(R.string.pubKeyAuth, prefsBean.isPubKeyAuth()));
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+			TextView isExternalStorageManagerView = (TextView) findViewById(R.id.isExternalStorageManagerTextView);
+			boolean hasStorageAccess = Environment.isExternalStorageManager();
+			String hasStorageAccessStr = getString(R.string.isExternalStorageManager, hasStorageAccess);
+
+			if (!hasStorageAccess) {
+				// intent to request full storage access
+				String request = getString(R.string.Request);
+				String completeText = hasStorageAccessStr + " " + request;
+				SpannableString spannable = new SpannableString(completeText);
+				spannable.setSpan(new UnderlineSpan(), hasStorageAccessStr.length() + 1, completeText.length(), 0);
+				isExternalStorageManagerView.setText(spannable);
+				isExternalStorageManagerView.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+						Uri uri = Uri.fromParts("package", getPackageName(), null);
+						intent.setData(uri);
+						startActivity(intent);
+					}
+				});
+			} else {
+				isExternalStorageManagerView.setText(hasStorageAccessStr);
+			}
+		}
 	}
 
 	protected void showSafUrl(String url) {
