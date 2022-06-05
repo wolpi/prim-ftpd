@@ -83,7 +83,7 @@ dependencies {
     implementation project(':apache-ftpserver-1.1.1-core')
     implementation project(':apache-ftpserver-1.1.1-ftplet-api')
     implementation project(':sshd-core-0.14.0')
-    implementation 'org.apache.mina:mina-core:2.1.5'
+    implementation 'org.apache.mina:mina-core:2.1.6'
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation 'androidx.documentfile:documentfile:1.0.1'
     implementation 'androidx.fragment:fragment:1.3.6'
@@ -95,6 +95,6 @@ dependencies {
         exclude group: 'com.android.support'
     }
 
-    implementation 'org.bouncycastle:bcpg-jdk15on:1.69'
-    implementation 'org.bouncycastle:bcpkix-jdk15on:1.69'
+    implementation 'org.bouncycastle:bcpg-jdk15on:1.70'
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
 }

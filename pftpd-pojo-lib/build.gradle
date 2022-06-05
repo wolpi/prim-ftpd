@@ -8,8 +8,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.bouncycastle:bcpg-jdk15on:1.69'
-    implementation 'org.bouncycastle:bcpkix-jdk15on:1.69'
+    implementation 'org.bouncycastle:bcpg-jdk15on:1.70'
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
 
     implementation 'org.slf4j:slf4j-api:1.7.26'
 
