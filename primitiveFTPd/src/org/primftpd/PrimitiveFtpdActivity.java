@@ -520,9 +520,9 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		pubKeyAuthView.setText(getString(R.string.pubKeyAuth, prefsBean.isPubKeyAuth()));
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-			TextView isExternalStorageManagerView = (TextView) findViewById(R.id.isExternalStorageManagerTextView);
+			TextView hasFullStorageAccessTextView = (TextView) findViewById(R.id.hasFullStorageAccessTextView);
 			boolean hasStorageAccess = Environment.isExternalStorageManager();
-			String hasStorageAccessStr = getString(R.string.isExternalStorageManager, hasStorageAccess);
+			String hasStorageAccessStr = getString(R.string.hasFullAccessToStorage, hasStorageAccess);
 
 			if (!hasStorageAccess) {
 				// intent to request full storage access
@@ -530,8 +530,8 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 				String completeText = hasStorageAccessStr + " " + request;
 				SpannableString spannable = new SpannableString(completeText);
 				spannable.setSpan(new UnderlineSpan(), hasStorageAccessStr.length() + 1, completeText.length(), 0);
-				isExternalStorageManagerView.setText(spannable);
-				isExternalStorageManagerView.setOnClickListener(new View.OnClickListener() {
+				hasFullStorageAccessTextView.setText(spannable);
+				hasFullStorageAccessTextView.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
@@ -541,7 +541,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 					}
 				});
 			} else {
-				isExternalStorageManagerView.setText(hasStorageAccessStr);
+				hasFullStorageAccessTextView.setText(hasStorageAccessStr);
 			}
 		}
 	}
