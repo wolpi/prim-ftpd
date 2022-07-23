@@ -38,7 +38,7 @@ public class StartStopWidgetProvider extends AppWidgetProvider
 		for (int appWidgetId : appWidgetIds) {
 			Intent intent = buildServerStartStopIntent(context);
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(
-					context, 0, intent, 0);
+					context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 			logger.debug("pendingIntent: {}", pendingIntent);
 
 			RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
