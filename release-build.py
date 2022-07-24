@@ -18,7 +18,7 @@ def doGithubUpload(githubToken, uploadUrl, apkPath, name):
               uploadUrl + "?name=" + "primitiveFTPd-" + name + ".apk",
               ], stdout=subprocess.PIPE, check=True)
 
-def doRemoteGithubThings(apkPath, apkPathGoogleplay):
+def doRemoteGithubThings(tagName, tagNameGooglePlay, apkPath, apkPathGoogleplay):
     # check if origin uses ssh url
     proc = subprocess.run([
         "git",
@@ -66,14 +66,23 @@ def doRemoteGithubThings(apkPath, apkPathGoogleplay):
             "master"
         ], stdout=subprocess.PIPE, check=True)
 
-        # push tag
+        # push tags
         print()
         print("pushing tag")
         subprocess.run([
             "git",
             "push",
             "origin",
-            gitTag
+            tagName
+        ], stdout=subprocess.PIPE, check=True)
+
+        print()
+        print("pushing tag google play")
+        subprocess.run([
+            "git",
+            "push",
+            "origin",
+            tagNameGooglePlay
         ], stdout=subprocess.PIPE, check=True)
 
         # close milestone
@@ -212,13 +221,14 @@ def handleGooglePlayVersion(fullBuild, releaseVersion):
 
     runBuild()
 
+    tagNameGooglePlay = "prim-ftpd-" + releaseVersion + "-google-play"
     if fullBuild:
         # commit permission out commenting
         msg = "removing permission to mange external storage for version " + releaseVersion
         commit(msg, manifestPath)
 
         # tag
-        gitTag("prim-ftpd-" + releaseVersion + "-google-play")
+        gitTag(tagNameGooglePlay)
 
     # enable permission again
     content = content.replace(permissionExternalStorageOutcommented, permissionExternalStorageEnabled)
@@ -230,6 +240,8 @@ def handleGooglePlayVersion(fullBuild, releaseVersion):
         # commit
         msg = "re-adding permission to mange external storage for next version after " + releaseVersion
         commit(msg, manifestPath)
+
+    return tagNameGooglePlay
 
 
 # check env vars
@@ -311,11 +323,12 @@ if fullBuild:
     commit(msg, pathBuildFile)
 
     # tag
-    gitTag("prim-ftpd-" + releaseVersion)
+    gitTagName = "prim-ftpd-" + releaseVersion
+    gitTag(gitTagName)
 
     # google play version
     apkPath = copyToReleasesDir(False)
-    handleGooglePlayVersion(fullBuild, releaseVersion)
+    gitTagNameGooglePlay = handleGooglePlayVersion(fullBuild, releaseVersion)
     apkPathGoogleplay = copyToReleasesDir(True)
 
     # write new snapshot version in file
@@ -332,9 +345,9 @@ if fullBuild:
     commit(msg, pathBuildFile)
 else:
     apkPath = copyToReleasesDir(False)
-    handleGooglePlayVersion(False, None)
+    gitTagNameGooglePlay = handleGooglePlayVersion(False, None)
     apkPathGoogleplay= copyToReleasesDir(True)
 
 
 if fullBuild:
-    doRemoteGithubThings(apkPath, apkPathGoogleplay)
+    doRemoteGithubThings(gitTagName, gitTagNameGooglePlay, apkPath, apkPathGoogleplay)
