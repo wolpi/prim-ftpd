@@ -3,11 +3,12 @@
 
     <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Interface da rede</string>
-    <string name="ipAddrLabel">Endereço de IP</string>
+    <string name="ipAddrLabel">Endereço IP</string>
     <string name="ifacesError">Erro: </string>
     <string name="protocolLabel">Protocolo</string>
     <string name="portLabel">Porta</string>
     <string name="fingerprintsLabel">Impressões digitais da chave</string>
+    <string name="allKeysFingerprintsLabel">Mostrar as impressões digitais de todas as chaves</string>
     <string name="generateKeysMessage">Gerar chaves ?</string>
     <string name="generatingKeysMessage">Gerando as chaves …</string>
     <string name="generate">Gerar</string>
