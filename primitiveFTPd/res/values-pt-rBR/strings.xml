@@ -78,7 +78,7 @@
     <string name="prefTitleAnonymousLogin">Login anônimo</string>
     <string name="prefSummaryAnonymousLogin">Definir se o login anônimo é permitido no servidor.</string>
     <string name="prefTitleFtpPassivePorts">Portas passivas de FTP</string>
-    <string name="prefSummaryFtpPassivePorts">Portas para conexão FTP de dados passiva. Pode ser uma única Porta, uma lista ou um conjunto de Portas. P.ex. 5678,5700-5710,5800,5900.</string>
+    <string name="prefSummaryFtpPassivePorts">Portas para conexão FTP de dados passiva. Pode ser uma única Porta, uma lista ou um conjunto de Portas. P.ex. 5678,5700–5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Tempo de inatividade do servidor</string>
     <string name="prefSummaryIdleTimeout">O servidor encerrará as conexões inativas após este tempo em segundos (apenas FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">O servidor encerrará as conexões inativas após este tempo, em segundos. Defina 0 para desativar.</string>
@@ -93,7 +93,6 @@
     <string name="prefSummaryQuickSettingsRequiresUnlock">Para iniciar/parar o(s) servidor(es) via o botão dos ajustes rápidos, o dispositivo precisa ser desbloqueado. Quando estiver bloqueado você será solicitado a desbloquear o dispositivo.</string>
     <string name="prefRootCopyFiles">Root: copiar arquivos à tmp dir para up-/download</string>
     <string name="licence">Licença</string>
-    <string name="reset">Reiniciar</string>
     <string name="reset">Resetar</string>
     <string name="widgetTextStart">iniciar (s)ftpd</string>
     <string name="widgetTextStop">parar (s)ftpd</string>
@@ -121,9 +120,9 @@
     <string name="filepickerCreateFolderError">Falha na criação da pasta</string>
     <string name="filepickerNewFolder">Nova pasta</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>
-    <string name="filepickerNewFolderCancel">@android:string/cancelar</string>
+    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
     <string name="filepickerListOk">@android:string/ok</string>
-    <string name="filepickerListCancel">@android:string/cancelar</string>
+    <string name="filepickerListCancel">@android:string/cancel</string>
     <string name="filepickerName">Nome</string>
     <string name="filepickerFilename">Nome do arquivo</string>
     <string name="filepickerSelectSomethingFirst">Por favor, selecione algo primeiro</string>
