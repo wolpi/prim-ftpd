@@ -607,6 +607,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		final ProgressDialog progressDiag = new ProgressDialog(this);
 		progressDiag.setCancelable(false);
 		progressDiag.setMessage(getText(R.string.generatingKeysMessage));
+		progressDiag.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 
 		AsyncTask<Void, Void, Void> task = new GenKeysAsyncTask(
 			keyFingerprintProvider,

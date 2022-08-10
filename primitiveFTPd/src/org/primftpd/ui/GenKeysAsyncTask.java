@@ -45,6 +45,8 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
                 logger.trace("no existing files");
             }
 
+            progressDiag.setMax(HostKeyAlgorithm.values().length);
+            int i=0;
             for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
                 FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream(activity, hka);
                 FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream(activity, hka);
@@ -56,6 +58,8 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
                     publickeyFos.close();
                     privatekeyFos.close();
                 }
+                i++;
+                progressDiag.setProgress(i);
             }
         } catch (Exception e) {
             logger.error("could not generate keys", e);
