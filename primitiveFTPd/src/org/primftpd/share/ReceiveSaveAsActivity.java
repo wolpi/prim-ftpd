@@ -1,6 +1,7 @@
 package org.primftpd.share;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -80,6 +81,23 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
                 strings.add(uri.toString());
             }
         }
+
+        // display uris
+        ListView listView = findViewById(R.id.list);
+        if (uris != null) {
+            listView.setAdapter(new ArrayAdapter<>(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    uris
+            ));
+        } else if (contents != null) {
+            listView.setAdapter(new ArrayAdapter<>(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    contents
+            ));
+        }
+
         boolean showDownloadDialog = false;
         String singleString = null;
         if (strings.size() == 1) {
@@ -97,22 +115,6 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
             dialog.setArguments(diagArgs);
         } else {
             prepareSaveToIntent();
-        }
-
-        // display uris, visible for download dialog
-        ListView listView = findViewById(android.R.id.list);
-        if (uris != null) {
-            listView.setAdapter(new ArrayAdapter<>(
-                    this,
-                    android.R.layout.simple_list_item_1,
-                    uris
-            ));
-        } else if (contents != null) {
-            listView.setAdapter(new ArrayAdapter<>(
-                    this,
-                    android.R.layout.simple_list_item_1,
-                    contents
-            ));
         }
     }
 
@@ -141,12 +143,15 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
             logger.debug("targetDir: {}", targetPath);
 
             if (uris != null) {
-                saveUris(targetPath, uris, contents, type);
+                ProgressDialog progressDialog = createProgressDialog(uris.size());
+                saveUris(progressDialog, targetPath, uris, contents, type);
             } else {
                 saveContents(targetPath);
             }
         }
-        finish();
+
+        // finish is called by async task
+        //finish();
     }
 
 
