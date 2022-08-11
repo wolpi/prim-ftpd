@@ -221,7 +221,7 @@ def handleGooglePlayVersion(fullBuild, releaseVersion):
 
     runBuild()
 
-    tagNameGooglePlay = "prim-ftpd-" + releaseVersion + "-google-play"
+    tagNameGooglePlay = "google-play-prim-ftpd-" + releaseVersion
     if fullBuild:
         # commit permission out commenting
         msg = "removing permission to mange external storage for version " + releaseVersion
