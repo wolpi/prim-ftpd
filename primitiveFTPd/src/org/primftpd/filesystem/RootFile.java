@@ -290,7 +290,18 @@ public abstract class RootFile<T> extends AbstractFile {
 
     protected static String escapePath(String path) {
         if (path != null) {
-            path = "'" + path + "'";
+            StringBuilder sb = new StringBuilder();
+            sb.append("'");
+            for (int i=0; i<path.length(); i++) {
+                char c = path.charAt(i);
+                if (c == '\'') {
+                    sb.append("'\\''"); // bash escaping is awesome
+                } else {
+                    sb.append(c);
+                }
+            }
+            sb.append("'");
+            path = sb.toString();
         }
         return path;
     }
