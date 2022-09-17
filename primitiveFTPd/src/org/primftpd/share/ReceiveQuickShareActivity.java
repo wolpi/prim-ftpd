@@ -24,7 +24,7 @@ import java.util.List;
 
 public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
 
-    private File targetPath;
+    private TargetDir targetDir;
     private List<Uri> uris = null;
     private String type;
 
@@ -56,8 +56,9 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
         // limited to 1 MB shared by all processes
         // -> create temp file
 
-        this.targetPath = Defaults.buildTmpDir(this, TmpDirType.QUICK_SHARE);
+        File targetPath = Defaults.buildTmpDir(this, TmpDirType.QUICK_SHARE);
         logger.debug("quick share tmp path: {}", targetPath);
+        this.targetDir = new TargetDir(targetPath);
 
         if (Intent.ACTION_SEND_MULTIPLE.equals(action)) {
             ArrayList<Parcelable> parcelables = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
@@ -72,7 +73,8 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
         if (Intent.ACTION_SEND.equals(action)) {
             Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             logger.debug("got uri: '{}'", uri);
-            saveUri(targetPath, uri, content, type);
+            saveUri(targetDir, uri, content, type);
+            onCopyFinished(targetDir);
         }
     }
 
@@ -108,16 +110,16 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
                     logger.trace("on delayed saveUris()");
 
                     // this will show a progress dialog
-                    saveUris(progressDialog, targetPath, uris, null, type);
+                    saveUris(progressDialog, targetDir, uris, null, type);
                 }
             }, 500);
         }
     }
 
-    protected void onCopyFinished(File targetPath) {
+    protected void onCopyFinished(TargetDir targetDir) {
         logger.trace("onCopyFinished()");
 
-        QuickShareBean quickShareBean = new QuickShareBean(targetPath);
+        QuickShareBean quickShareBean = new QuickShareBean(targetDir.getTargetPath());
         ServicesStartStopUtil.stopServers(this);
         ServicesStartStopUtil.startServers(this, quickShareBean);
         Toast.makeText(this, R.string.quickShareServerStarted, Toast.LENGTH_SHORT).show();

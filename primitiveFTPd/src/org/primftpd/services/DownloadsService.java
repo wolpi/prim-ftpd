@@ -16,6 +16,7 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.Header;
+import org.primftpd.share.TargetDir;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.FilenameUnique;
 import org.primftpd.util.NotificationUtil;
@@ -206,7 +207,8 @@ public class DownloadsService extends Service {
 
                 // build local path
                 Uri uri = Uri.parse(urlStr);
-                filename = FilenameUnique.filename(uri, null, contentType, Defaults.DOWNLOADS_DIR, this);
+                TargetDir targetDir = new TargetDir(Defaults.DOWNLOADS_DIR);
+                filename = FilenameUnique.filename(uri, null, contentType, targetDir, this);
                 localPath = Defaults.DOWNLOADS_DIR + "/" + this.filename;
 
                 // open streams

@@ -3,10 +3,10 @@ package org.primftpd.util;
 import android.content.Context;
 import android.net.Uri;
 
+import org.primftpd.share.TargetDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,7 +19,7 @@ public class FilenameUnique {
 
     protected static DateFormat FILENAME_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS");
 
-    public static String filename(Uri uri, String content, String type, File targetDir, Context context) {
+    public static String filename(Uri uri, String content, String type, TargetDir targetDir, Context context) {
         String filename = null;
         boolean addExtension = false;
         if (content != null) {
@@ -84,10 +84,9 @@ public class FilenameUnique {
         do {
             String uniquePart = counter == 0 ? "" : "_" + counter;
             String tmpName = basename + uniquePart + "." + fileExt;
-            File targetFile = new File(targetDir, tmpName);
-            exists = targetFile.exists();
+            exists = targetDir.doesFilenameExist(tmpName);
             if (exists) {
-                logger.debug("file already exists: {}", targetFile.getAbsolutePath());
+                logger.debug("file already exists in target-dir: {}", tmpName);
                 counter++;
             }
         } while (exists);

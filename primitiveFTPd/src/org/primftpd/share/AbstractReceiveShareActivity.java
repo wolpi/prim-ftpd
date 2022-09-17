@@ -9,8 +9,6 @@ import org.primftpd.util.FilenameUnique;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,7 +22,7 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
 
     protected void saveUris(
             ProgressDialog progressDialog,
-            final File targetPath,
+            final TargetDir targetDir,
             final List<Uri> uris,
             final List<String> contents,
             final String type) {
@@ -38,7 +36,7 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
                 this,
                 progressDialog,
                 mainThreadHandler,
-                targetPath,
+                targetDir,
                 uris,
                 contents,
                 type);
@@ -63,7 +61,7 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         private final AbstractReceiveShareActivity activity;
         private final ProgressDialog progressDiag;
         private final Handler mainThreadHandler;
-        private final File targetPath;
+        private final TargetDir targetDir;
         private final List<Uri> uris;
         private final List<String> contents;
         private final String type;
@@ -71,14 +69,14 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         CopyTask(AbstractReceiveShareActivity activity,
                  ProgressDialog progressDiag,
                  Handler mainThreadHandler,
-                 File targetPath,
+                 TargetDir targetDir,
                  List<Uri> uris,
                  List<String> contents,
                  String type) {
             this.activity = activity;
             this.progressDiag = progressDiag;
             this.mainThreadHandler = mainThreadHandler;
-            this.targetPath = targetPath;
+            this.targetDir = targetDir;
             this.uris = uris;
             this.contents = contents;
             this.type = type;
@@ -110,7 +108,7 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
                     public void run() {
                         logger.trace("saving uri in main thread");
 
-                        activity.saveUri(targetPath, uri, finalContent, type);
+                        activity.saveUri(targetDir, uri, finalContent, type);
 
                         logger.trace("setting progressSync to: {}", progress);
                         progressSync[0] = progress;
@@ -140,48 +138,38 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
             mainThreadHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    activity.onCopyFinished(targetPath);
+                    activity.onCopyFinished(targetDir);
                 }
             });
         }
     };
 
-    protected void onCopyFinished(File targetPath) {
+    protected void onCopyFinished(TargetDir targetDir) {
         this.finish();
     }
 
-    protected String saveUri(File targetPath, Uri uri, String content, String type) {
+    protected void saveUri(TargetDir targetDir, Uri uri, String content, String type) {
         if (uri == null) {
-            return "";
+            return;
         }
-        FileOutputStream fos = null;
+        OutputStream os = null;
         InputStream is = null;
         try {
-            File targetFile = targetFile(uri, content, type, targetPath);
-            logger.debug("saving under: {}", targetFile);
-            fos = new FileOutputStream(targetFile);
+            String filename = FilenameUnique.filename(uri, content, type, targetDir, this);
+            logger.debug("saving with filename: {}", filename);
+            os = targetDir.createOutStream(filename);
             is = getContentResolver().openInputStream(uri);
-            copyStream(is, fos);
-            return targetFile.getAbsolutePath();
+            copyStream(is, os);
+
         } catch (Exception e) {
             logger.warn("could not copy shared data", e);
         } finally {
             try {
-                if (fos != null) fos.close();
+                if (os != null) os.close();
                 if (is != null) is.close();
             } catch (IOException e) {
                 logger.warn("could not copy shared data", e);
             }
-        }
-        return "";
-    }
-
-    protected File targetFile(Uri uri, String content, String type, File targetPath) {
-        if (!targetPath.isFile()) {
-            String filename = FilenameUnique.filename(uri, content, type, targetPath, this);
-            return new File(targetPath, filename);
-        } else {
-            return targetPath;
         }
     }
 

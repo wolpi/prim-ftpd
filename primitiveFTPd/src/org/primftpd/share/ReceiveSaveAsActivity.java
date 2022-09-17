@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -15,10 +16,11 @@ import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Theme;
 import org.primftpd.ui.DownloadOrSaveDialogFragment;
 import org.primftpd.util.Defaults;
+import org.primftpd.util.FilenameUnique;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -120,13 +122,22 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
 
     public void prepareSaveToIntent() {
         if (uris != null || contents != null) {
-            logger.debug("trying to create intent");
-            try {
-                Intent dirPickerIntent = Defaults.createDirAndFilePicker(getBaseContext());
-                logger.debug("got intent: {}", dirPickerIntent);
-                startActivityForResult(dirPickerIntent, 0);
-            } catch (Exception e) {
-                logger.debug("could not create intent", e);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                logger.debug("trying to create SAF intent");
+                Intent safIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                safIntent.addFlags(
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                startActivityForResult(safIntent, 1);
+            } else {
+                logger.debug("trying to create custom filepicker intent");
+                try {
+                    Intent dirPickerIntent = Defaults.createDefaultDirPicker(getBaseContext());
+                    logger.debug("got intent: {}", dirPickerIntent);
+                    startActivityForResult(dirPickerIntent, 0);
+                } catch (Exception e) {
+                    logger.debug("could not create intent", e);
+                }
             }
         }
     }
@@ -138,15 +149,26 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
         logger.debug("onActivityResult()");
 
         if (resultCode == Activity.RESULT_OK) {
-            Uri targetUri = data.getData();
-            File targetPath = Utils.getFileForUri(targetUri);
-            logger.debug("targetDir: {}", targetPath);
+            TargetDir targetDir = null;
+            if (requestCode == 0) {
+                Uri targetUri = data.getData();
+                File targetPath = Utils.getFileForUri(targetUri);
+                logger.debug("targetDir: {}", targetPath);
+                targetDir = new TargetDir(targetPath);
+
+            } else if (requestCode == 1) {
+                Uri uri = data.getData();
+                String uriStr = uri.toString();
+                logger.debug("got SAF uri: '{}'", uriStr);
+                targetDir = new TargetDir(this, uriStr);
+
+            }
 
             if (uris != null) {
                 ProgressDialog progressDialog = createProgressDialog(uris.size());
-                saveUris(progressDialog, targetPath, uris, contents, type);
+                saveUris(progressDialog, targetDir, uris, contents, type);
             } else {
-                saveContents(targetPath);
+                saveContents(targetDir);
             }
         }
 
@@ -155,30 +177,32 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
     }
 
 
-    protected void saveContents(File targetPath) {
+    protected void saveContents(TargetDir targetDir) {
         if (contents == null) {
+            finish();
             return;
         }
         for (String content : contents) {
             if (content == null) {
                 continue;
             }
-            FileOutputStream fos = null;
+            OutputStream os = null;
             try {
-                File targetFile = targetFile(null, null, "txt", targetPath);
-                logger.debug("saving under: {}", targetFile);
-                fos = new FileOutputStream(targetFile);
-                PrintStream ps = new PrintStream(fos);
+                String filename = FilenameUnique.filename(null, null, "txt", targetDir, this);
+                logger.debug("saving with filename: {}", filename);
+                os = targetDir.createOutStream(filename);
+                PrintStream ps = new PrintStream(os);
                 ps.println(content);
             } catch (Exception e) {
                 logger.warn("could not copy shared data", e);
             } finally {
                 try {
-                    if (fos != null) fos.close();
+                    if (os != null) os.close();
                 } catch (IOException e) {
                     logger.warn("could not copy shared data", e);
                 }
             }
         }
+        finish();
     }
 }
