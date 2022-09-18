@@ -23,7 +23,7 @@
         android:roundIcon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:allowBackup="false"
-        android:banner="@drawable/ic_launcher"
+        android:banner="@mipmap/ic_banner"
         android:requestLegacyExternalStorage="true"
         android:name=".PftpdApp"
         android:supportsRtl="true">
