@@ -142,6 +142,8 @@
     <string name="statsSentPerSec">Sent per second</string>
     <string name="statsReceivedPerSec">Received per second</string>
     <string name="hasFullAccessToStorage">Has full access to storage: %1$b</string>
+    <string name="hasNormalAccessToStorage">Has (normal) access to storage: %1$b</string>
+    <string name="hasAccessToMediaLocation">Has access to media location (geo data): %1$b</string>
     <string name="Request">Request</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>

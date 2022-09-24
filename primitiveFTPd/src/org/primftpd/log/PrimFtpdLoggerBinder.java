@@ -53,6 +53,11 @@ public class PrimFtpdLoggerBinder implements LoggerFactoryBinder
 		PrimFtpdLoggerBinder.loggingPref = loggingPref;
 	}
 
+	public static Logging getLoggingPref()
+	{
+		return loggingPref;
+	}
+
 	public static String REQUESTED_API_VERSION = "1.6"; // !final, see StaticLoggerBinder
 
 	private static final PrimFtpdLoggerBinder SINGLETON = new PrimFtpdLoggerBinder();

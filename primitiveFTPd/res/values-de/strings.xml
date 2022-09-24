@@ -156,5 +156,7 @@
     <string name="quickShareInfoNotification">QuickShare von: %1s</string>
     <string name="quickShareInfoNotificationV2">QuickShare von %1d Datei(en)</string>
     <string name="hasFullAccessToStorage">Hat vollen Speicherzugriff: %1$b</string>
+    <string name="hasNormalAccessToStorage">Hat (normalen) Speicherzugriff: %1$b</string>
+    <string name="hasAccessToMediaLocation">Hat Zugriff auf Media-Location (Geo-Daten): %1$b</string>
     <string name="Request">Anfragen</string>
 </resources>

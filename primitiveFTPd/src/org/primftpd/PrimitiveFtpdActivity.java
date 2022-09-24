@@ -35,6 +35,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -104,7 +105,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	};
 
 	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0xBEEF;
-	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING = 0xCAFE;
+	private static final int PERMISSIONS_REQUEST_ACCESS_MEDIA_LOCATION = 0xAFFE;
 	private static final int REQUEST_CODE_SAF_PERM = 1234;
 
 	public static final String DIALOG_TAG = "dialogs";
@@ -506,32 +507,54 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	}
 
 	protected void showLogindata() {
-		TextView usernameView = (TextView)findViewById(R.id.usernameTextView);
+		TextView usernameView = findViewById(R.id.usernameTextView);
 		usernameView.setText(prefsBean.getUserName());
 
-		TextView anonymousView = (TextView)findViewById(R.id.anonymousLoginTextView);
+		TextView anonymousView = findViewById(R.id.anonymousLoginTextView);
 		anonymousView.setText(getString(R.string.isAnonymous, prefsBean.isAnonymousLogin()));
 
-		TextView passwordPresentView = (TextView)findViewById(R.id.passwordPresentTextView);
+		TextView passwordPresentView = findViewById(R.id.passwordPresentTextView);
 		passwordPresentView.setText(getString(R.string.passwordPresent,
 				StringUtils.isNotEmpty(prefsBean.getPassword())));
 
-		TextView pubKeyAuthView = (TextView)findViewById(R.id.pubKeyAuthTextView);
+		TextView pubKeyAuthView = findViewById(R.id.pubKeyAuthTextView);
 		pubKeyAuthView.setText(getString(R.string.pubKeyAuth, prefsBean.isPubKeyAuth()));
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-			TextView hasFullStorageAccessTextView = (TextView) findViewById(R.id.hasFullStorageAccessTextView);
-			boolean hasStorageAccess = Environment.isExternalStorageManager();
-			String hasStorageAccessStr = getString(R.string.hasFullAccessToStorage, hasStorageAccess);
+		displayNormalStorageAccess();
+		displayFullStorageAccess();
+		displayMediaLocationAccess();
+	}
 
-			if (!hasStorageAccess) {
-				// intent to request full storage access
-				String request = getString(R.string.Request);
-				String completeText = hasStorageAccessStr + " " + request;
-				SpannableString spannable = new SpannableString(completeText);
-				spannable.setSpan(new UnderlineSpan(), hasStorageAccessStr.length() + 1, completeText.length(), 0);
-				hasFullStorageAccessTextView.setText(spannable);
-				hasFullStorageAccessTextView.setOnClickListener(new View.OnClickListener() {
+	private void displayNormalStorageAccess() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			TextView hasNormalStorageAccessTextView = findViewById(R.id.hasNormalStorageAccessTextView);
+			final String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+			final int requestCode = PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
+			boolean hasNormalStorageAccess = hasPermission(permission, requestCode);
+			String hasNormalStorageAccessStr = getString(R.string.hasNormalAccessToStorage, hasNormalStorageAccess);
+
+			if (!hasNormalStorageAccess) {
+				buildPermissionRequestLink(hasNormalStorageAccessTextView, hasNormalStorageAccessStr, new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						requestPermissions(new String[]{permission}, requestCode);
+					}
+				});
+
+			} else {
+				hasNormalStorageAccessTextView.setText(hasNormalStorageAccessStr);
+			}
+		}
+	}
+
+	private void displayFullStorageAccess() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+			TextView hasFullStorageAccessTextView = findViewById(R.id.hasFullStorageAccessTextView);
+			boolean hasFullStorageAccess = Environment.isExternalStorageManager();
+			String hasStorageAccessStr = getString(R.string.hasFullAccessToStorage, hasFullStorageAccess);
+
+			if (!hasFullStorageAccess) {
+				buildPermissionRequestLink(hasFullStorageAccessTextView, hasStorageAccessStr, new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
@@ -545,6 +568,61 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 			}
 		}
 	}
+	private void displayMediaLocationAccess() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			TextView hasMediaLocationAccessTextView = findViewById(R.id.hasMediaLocationAccessTextView);
+			final String permission = Manifest.permission.ACCESS_MEDIA_LOCATION;
+			final int requestCode = PERMISSIONS_REQUEST_ACCESS_MEDIA_LOCATION;
+			boolean hasMediaLocationAccess = hasPermission(permission, requestCode);
+			String hasMediaLocationStr = getString(R.string.hasAccessToMediaLocation, hasMediaLocationAccess);
+
+			if (!hasMediaLocationAccess) {
+				buildPermissionRequestLink(hasMediaLocationAccessTextView, hasMediaLocationStr, new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						requestPermissions(new String[]{permission}, requestCode);
+					}
+				});
+			} else {
+				hasMediaLocationAccessTextView.setText(hasMediaLocationStr);
+			}
+		}
+	}
+
+	private void buildPermissionRequestLink(
+			TextView textView,
+			String baseText,
+			View.OnClickListener onClickListener) {
+		String request = getString(R.string.Request);
+		String completeText = baseText + " " + request;
+		SpannableString spannable = new SpannableString(completeText);
+		spannable.setSpan(new UnderlineSpan(), baseText.length() + 1, completeText.length(), 0);
+		textView.setText(spannable);
+		textView.setOnClickListener(onClickListener);
+	}
+
+	protected boolean hasPermission(String permission, int requestCode) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			logger.trace("hasPermission({})", permission);
+			return checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED;
+		}
+		return true;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(
+			int requestCode,
+			@NonNull String[] permissions,
+			@NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		logger.trace("onRequestPermissionsResult()");
+		boolean granted = grantResults.length > 0
+				&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
+		if (granted) {
+			showLogindata();
+		}
+	}
+
 
 	protected void showSafUrl(String url) {
 		findViewById(R.id.safUriLabel).setVisibility(View.VISIBLE);
@@ -804,56 +882,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	public void handleStart() {
 		logger.trace("handleStart()");
-		if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)) {
-			ServicesStartStopUtil.startServers(this, prefsBean, keyFingerprintProvider, this);
-		}
-	}
-
-	/**
-	 * Checks whether the app has the following permission.
-	 * @param permission The permission name
-	 * @param requestCode The request code to check against in the {@link #onRequestPermissionsResult} callback.
-	 * @return true if permission has been granted.
-	 */
-	protected boolean hasPermission(String permission, int requestCode) {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			logger.trace("hasPermission()");
-			if (prefsBean.getStorageType() == StorageType.PLAIN) {
-				if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-					requestPermissions(new String[]{permission}, requestCode);
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-		logger.trace("onRequestPermissionsResult()");
-		boolean granted = grantResults.length > 0
-				&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
-		switch (requestCode) {
-			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
-				// If request is cancelled, the result arrays are empty.
-				if (granted) {
-					ServicesStartStopUtil.startServers(this, prefsBean, keyFingerprintProvider, this);
-				} else {
-					String textPara = getString(R.string.permissionNameStorage);
-					Toast.makeText(this, getString(R.string.permissionRequired, textPara), Toast.LENGTH_LONG).show();
-				}
-			}
-			case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING: {
-				if (granted) {
-					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-					handleLoggingPref(prefs, true);
-					this.logger = LoggerFactory.getLogger(getClass());
-				} else {
-					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-					LoadPrefsUtil.storeLogging(prefs, Logging.NONE);
-				}
-			}
-		}
+		ServicesStartStopUtil.startServers(this, prefsBean, keyFingerprintProvider, this);
 	}
 
 	public boolean isKeyPresent() {
@@ -940,23 +969,15 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	}
 
 	protected void handleLoggingPref(SharedPreferences prefs) {
-		handleLoggingPref(prefs, false);
-	}
-	protected void handleLoggingPref(SharedPreferences prefs, boolean permissionJustGranted) {
 		String loggingStr = prefs.getString(
 			LoadPrefsUtil.PREF_KEY_LOGGING,
 			Logging.NONE.xmlValue());
 		Logging logging = Logging.byXmlVal(loggingStr);
-		// one could argue if this makes sense :)
 		logger.debug("got 'logging': {}", logging);
 
-		boolean recreateLogger = true;
-		// request storage permission if necessary for logging
-		if (!permissionJustGranted && logging == Logging.TEXT) {
-			recreateLogger = hasPermission(
-					Manifest.permission.WRITE_EXTERNAL_STORAGE,
-					PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE_LOGGING);
-		}
+		Logging activeLogging = PrimFtpdLoggerBinder.getLoggingPref();
+
+		boolean recreateLogger = activeLogging != logging;
 
 		if (recreateLogger) {
 			// re-create own log, don't care about other classes
