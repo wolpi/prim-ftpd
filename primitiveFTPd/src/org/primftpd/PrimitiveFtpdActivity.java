@@ -569,7 +569,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		}
 	}
 	private void displayMediaLocationAccess() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			TextView hasMediaLocationAccessTextView = findViewById(R.id.hasMediaLocationAccessTextView);
 			final String permission = Manifest.permission.ACCESS_MEDIA_LOCATION;
 			final int requestCode = PERMISSIONS_REQUEST_ACCESS_MEDIA_LOCATION;
