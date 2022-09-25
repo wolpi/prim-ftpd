@@ -1,45 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+    <!-- 2 column container -->
     <LinearLayout
-        android:orientation="vertical"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- 2 column container -->
+        <!-- left column -->
         <LinearLayout
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-            <!-- left column -->
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+            <include layout="@layout/block_connect_data"  />
+            <include layout="@layout/block_storage_type"  />
 
-                <include layout="@layout/block_connect_data"  />
-                <include layout="@layout/block_storage_type"  />
+        </LinearLayout>
 
-            </LinearLayout>
+        <!-- right column -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-            <!-- right column -->
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+            <include layout="@layout/block_client_action"  />
+            <include layout="@layout/block_key_fingerprints"  />
 
-                <include layout="@layout/block_client_action"  />
-                <include layout="@layout/block_key_fingerprints"  />
-
-            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

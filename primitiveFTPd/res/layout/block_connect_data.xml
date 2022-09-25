@@ -10,47 +10,71 @@
         android:layout_marginTop="16dp"
     />
 
-    <!-- addresses / interfaces -->
-    <TextView
-        android:id="@+id/addressesLabel"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-    />
-
+    <!-- interfaces/addresses and ports info in 2 columns -->
     <LinearLayout
-        android:id="@+id/addressesContainer"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-    />
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
-    <!-- ports -->
-    <TextView
-        android:id="@+id/portsLabel"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-    />
-    <TextView
-        android:id="@+id/ftpTextView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textIsSelectable="true"
-    />
-    <TextView
-        android:id="@+id/sftpTextView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textIsSelectable="true"
-    />
+        <!-- left column -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- addresses / interfaces -->
+            <TextView
+                android:id="@+id/addressesLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+            />
+
+            <LinearLayout
+                android:id="@+id/addressesContainer"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+            />
+        </LinearLayout>
+
+        <!-- right column -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- ports -->
+            <TextView
+                android:id="@+id/portsLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+            />
+            <TextView
+                android:id="@+id/ftpTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textIsSelectable="true"
+            />
+            <TextView
+                android:id="@+id/sftpTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textIsSelectable="true"
+            />
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- user name -->
     <TextView
@@ -73,8 +97,11 @@
     <!-- login / auth / permission info in 2 columns -->
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:layout_marginTop="16dp"
+        >
 
         <!-- left column -->
         <LinearLayout
