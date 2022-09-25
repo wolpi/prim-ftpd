@@ -39,6 +39,12 @@
         android:title="Keys Fingerprints" />
 
     <item
+        android:id="@+id/menu_clean"
+        android:orderInCategory="100"
+        android:showAsAction="collapseActionView|withText"
+        android:title="Clean Space" />
+
+    <item
         android:id="@+id/menu_translate"
         android:orderInCategory="100"
         android:showAsAction="collapseActionView|withText"

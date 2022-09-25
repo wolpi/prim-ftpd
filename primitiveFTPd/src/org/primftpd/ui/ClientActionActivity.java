@@ -18,13 +18,12 @@ import org.primftpd.events.ClientActionEvent;
 import org.primftpd.events.DataTransferredEvent;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Theme;
+import org.primftpd.util.FileSizeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.CharacterIterator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,10 +76,10 @@ public class ClientActionActivity extends Activity {
                         bytesRead *= FACTOR_1S;
                         bytesWritten *= FACTOR_1S;
 
-                        sentTotal.setText(humanReadableByteCountSI(TOTAL_BYTES_READ));
-                        receivedTotal.setText(humanReadableByteCountSI(TOTAL_BYTES_WRITTEN));
-                        sentPerSec.setText(humanReadableByteCountSI(bytesRead, "/s"));
-                        receivedPerSec.setText(humanReadableByteCountSI(bytesWritten, "/s"));
+                        sentTotal.setText(FileSizeUtils.humanReadableByteCountSI(TOTAL_BYTES_READ));
+                        receivedTotal.setText(FileSizeUtils.humanReadableByteCountSI(TOTAL_BYTES_WRITTEN));
+                        sentPerSec.setText(FileSizeUtils.humanReadableByteCountSI(bytesRead, "/s"));
+                        receivedPerSec.setText(FileSizeUtils.humanReadableByteCountSI(bytesWritten, "/s"));
                         break;
 
                     default:
@@ -93,21 +92,6 @@ public class ClientActionActivity extends Activity {
     }
 
     private static boolean updateStats;
-
-    public static String humanReadableByteCountSI(long bytes) {
-        return  humanReadableByteCountSI(bytes, "");
-    }
-    public static String humanReadableByteCountSI(long bytes, String suffix) {
-        if (bytes < 1000) {
-            return bytes + " B";
-        }
-        CharacterIterator ci = new StringCharacterIterator("kMGTPE");
-        while (bytes >= 999_950) {
-            bytes /= 1000;
-            ci.next();
-        }
-        return String.format("%.1f %2$cB%3$s", bytes / 1000.0, ci.current(), suffix);
-    }
 
     public static String format(ClientActionEvent event) {
         StringBuilder sb = new StringBuilder();

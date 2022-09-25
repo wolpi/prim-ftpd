@@ -135,6 +135,11 @@
         </activity>
 
         <activity
+            android:name="org.primftpd.ui.CleanSpaceActivity"
+            android:label="Clean Space">
+        </activity>
+
+        <activity
             android:name="org.primftpd.prefs.AboutActivity"
             android:label="About">
         </activity>

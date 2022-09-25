@@ -145,6 +145,10 @@
     <string name="hasNormalAccessToStorage">Has (normal) access to storage: %1$b</string>
     <string name="hasAccessToMediaLocation">Has access to media location (geo data): %1$b</string>
     <string name="Request">Request</string>
+    <string name="quickShareFiles">QuickShare files:</string>
+    <string name="logFiles">Log files:</string>
+    <string name="rootTmpFiles">Temp files of root access:</string>
+    <string name="delete">Delete</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
         <item>FTP only</item>

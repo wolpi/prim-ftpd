@@ -56,6 +56,7 @@ import org.primftpd.prefs.PrefsBean;
 import org.primftpd.prefs.StorageType;
 import org.primftpd.prefs.Theme;
 import org.primftpd.ui.CalcPubkeyFinterprintsTask;
+import org.primftpd.ui.CleanSpaceActivity;
 import org.primftpd.ui.ClientActionActivity;
 import org.primftpd.ui.GenKeysAskDialogFragment;
 import org.primftpd.ui.GenKeysAsyncTask;
@@ -864,6 +865,10 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 			break;
 		case R.id.menu_keys_fingerprints:
 			handleKeysFingerprints();
+			break;
+		case R.id.menu_clean:
+			intent = new Intent(this, CleanSpaceActivity.class);
+			startActivity(intent);
 			break;
 		case R.id.menu_translate:
 			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://pftpd.rocks/projects/pftpd/pftpd/"));
