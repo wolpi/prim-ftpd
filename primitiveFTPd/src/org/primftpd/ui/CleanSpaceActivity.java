@@ -187,7 +187,7 @@ public class CleanSpaceActivity extends Activity {
             return null;
         }
 
-        private void delete(File dir, boolean includeChildren, int counter) {
+        private int delete(File dir, boolean includeChildren, int counter) {
             if (dir != null) {
                 for (File child : dir.listFiles()) {
                     if (child.isFile()) {
@@ -195,11 +195,12 @@ public class CleanSpaceActivity extends Activity {
                         counter ++;
                         progressDiag.setProgress(counter);
                     } else if (child.isDirectory() && includeChildren) {
-                        delete(child, true, counter);
+                        counter = delete(child, true, counter);
                         child.delete();
                     }
                 }
             }
+            return counter;
         }
 
         protected void onPostExecute(Void result) {
