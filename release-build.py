@@ -90,8 +90,8 @@ def doRemoteGithubThings(tagName, tagNameGooglePlay, apkPath, apkPathGoogleplay)
         print("closing github milestone")
         subprocess.run([
             "gh", "api",
-            "-X", "PATCH",
-            "-F", "state=closed",
+            "--method", "PATCH",
+            "-f", "state='closed'",
             "/repos/wolpi/prim-ftpd/milestones/" + str(milestoneNumber),
             ], stdout=subprocess.PIPE, check=True)
 
@@ -100,10 +100,10 @@ def doRemoteGithubThings(tagName, tagNameGooglePlay, apkPath, apkPathGoogleplay)
         print("creating new github milestone")
         subprocess.run([
             "gh", "api",
-            "-X", "POST",
-            "-F", "title=" + str(newVersion),
+            "--method", "POST",
+            "-f", "title='" + str(newVersion) + "'",
             "/repos/wolpi/prim-ftpd/milestones",
-                  ], stdout=subprocess.PIPE, check=True)
+            ], stdout=subprocess.PIPE, check=True)
 
         # create github release
         print()
@@ -112,13 +112,13 @@ def doRemoteGithubThings(tagName, tagNameGooglePlay, apkPath, apkPathGoogleplay)
             "gh", "api",
             "/repos/wolpi/prim-ftpd/releases",
             "--method", "POST",
-            "-F", "tag_name=" + str(tagName),
-            "-F", "name=" + str(tagName),
-            "-F", "body=See [milestone](https://github.com/wolpi/prim-ftpd/milestone/" + str(milestoneNumber) + "?closed=1) for changes.\n",
-            "-F", "target_commitish=master",
-            "-F", "draft=false",
-            "-F", "prerelease=false",
-                  ], stdout=subprocess.PIPE, check=True)
+            "-f", "tag_name='" + str(tagName) + "'",
+            "-f", "name='" + str(tagName) + "'",
+            "-f", "body='See [milestone](https://github.com/wolpi/prim-ftpd/milestone/" + str(milestoneNumber) + "?closed=1) for changes.\n'",
+            "-f", "target_commitish='master'",
+            "-f", "draft=false",
+            "-f", "prerelease=false",
+            ], stdout=subprocess.PIPE, check=True)
         releaseObj = json.loads(proc.stdout)
 
         # upload file
