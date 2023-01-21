@@ -345,7 +345,7 @@ if fullBuild:
     commit(msg, pathBuildFile)
 else:
     apkPath = copyToReleasesDir(False)
-    gitTagNameGooglePlay = handleGooglePlayVersion(False, None)
+    gitTagNameGooglePlay = handleGooglePlayVersion(False, 'SNAPSHOT')
     apkPathGoogleplay= copyToReleasesDir(True)
 
 
