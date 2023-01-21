@@ -21,6 +21,8 @@ import java.io.File;
 
 public class CleanSpaceActivity extends Activity {
 
+    protected Logger logger = LoggerFactory.getLogger(getClass());
+
     private TextView quickShareSpaceTextView;
     private TextView logsSpaceTextView;
     private TextView rootTmpSpaceTextView;
@@ -28,6 +30,8 @@ public class CleanSpaceActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        logger.trace("onCreate()");
 
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
         Theme theme = LoadPrefsUtil.theme(prefs);
@@ -77,6 +81,8 @@ public class CleanSpaceActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
+        logger.trace("onResume()");
+
         updateView();
     }
 
@@ -122,8 +128,9 @@ public class CleanSpaceActivity extends Activity {
     }
 
     private long calcSizeDir(File dir, boolean includeChildren) {
+        logger.trace("calcSizeDir({}, {})", dir, includeChildren);
         long size = 0;
-        if (dir != null) {
+        if (dir != null && dir.exists()) {
             for (File child : dir.listFiles()) {
                 if (child.isFile()) {
                     size += child.length();
@@ -137,7 +144,7 @@ public class CleanSpaceActivity extends Activity {
 
     private int collectNumberOfFiles(File dir, boolean includeChildren) {
         int number = 0;
-        if (dir != null) {
+        if (dir != null && dir.exists()) {
             for (File child : dir.listFiles()) {
                 if (child.isFile()) {
                     number ++;
@@ -188,7 +195,7 @@ public class CleanSpaceActivity extends Activity {
         }
 
         private int delete(File dir, boolean includeChildren, int counter) {
-            if (dir != null) {
+            if (dir != null && dir.exists()) {
                 for (File child : dir.listFiles()) {
                     if (child.isFile()) {
                         child.delete();
