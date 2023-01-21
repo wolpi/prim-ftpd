@@ -29,8 +29,15 @@ public class TaskerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // note: can be tested with:
-        // adb shell
-        // am broadcast -a com.twofortyfouram.locale.intent.action.FIRE_SETTING --es com.twofortyfouram.locale.intent.extra.BLURB "start server(s)"
+        //   adb shell
+        //   am broadcast \
+        //      -a com.twofortyfouram.locale.intent.action.FIRE_SETTING \
+        //      --es com.twofortyfouram.locale.intent.extra.BLURB "start server(s)" \
+        //      -n org.primftpd/.remotecontrol.TaskerReceiver
+        // see related logs with:
+        //   adb logcat | grep -i twofortyfouram
+        // leads to:
+        //   BroadcastQueue: Background execution not allowed: receiving Intent
 
         String blurb = null;
         if (intent.getExtras() != null) {
