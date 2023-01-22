@@ -17,80 +17,36 @@ public class TaskerReceiver extends BroadcastReceiver {
 
     // see
     // https://github.com/twofortyfouram/android-plugin-api-for-locale/blob/master/pluginApiLib/src/main/java/com/twofortyfouram/locale/api/Intent.java
-    private static final String ACTION_FIRE_SETTING = "com.twofortyfouram.locale.intent.action.FIRE_SETTING";
-    private static final String ACTION_QUERY_CONDITION = "com.twofortyfouram.locale.intent.action.QUERY_CONDITION";
-    private static final String ACTION_REQUEST_QUERY = "com.twofortyfouram.locale.intent.action.REQUEST_QUERY";
-    private static final String EXTRA_BUNDLE = "com.twofortyfouram.locale.intent.extra.BUNDLE";
-    private static final String EXTRA_STRING_BLURB = "com.twofortyfouram.locale.intent.extra.BLURB";
-    private static final String EXTRA_STRING_ACTIVITY_CLASS_NAME = "com.twofortyfouram.locale.intent.extra.ACTIVITY_CLASS_NAME";
-    private static final int RESULT_CONDITION_SATISFIED = 16;
-    private static final int RESULT_CONDITION_UNSATISFIED = 17;
+    static final String ACTION_FIRE_SETTING = "com.twofortyfouram.locale.intent.action.FIRE_SETTING";
+    static final String ACTION_QUERY_CONDITION = "com.twofortyfouram.locale.intent.action.QUERY_CONDITION";
+    static final String ACTION_REQUEST_QUERY = "com.twofortyfouram.locale.intent.action.REQUEST_QUERY";
+    static final String EXTRA_BUNDLE = "com.twofortyfouram.locale.intent.extra.BUNDLE";
+    static final String EXTRA_STRING_BLURB = "com.twofortyfouram.locale.intent.extra.BLURB";
+    static final String EXTRA_STRING_ACTIVITY_CLASS_NAME = "com.twofortyfouram.locale.intent.extra.ACTIVITY_CLASS_NAME";
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        // see:
+        // https://github.com/twofortyfouram/android-plugin-api-for-locale
         // note: can be tested with:
         //   adb shell
         //   am broadcast \
         //      -a com.twofortyfouram.locale.intent.action.FIRE_SETTING \
         //      --es com.twofortyfouram.locale.intent.extra.BLURB "start server(s)" \
-        //      -n org.primftpd/.remotecontrol.TaskerReceiver
+        //      -n org.primftpd/.remotecontrol.TaskerReceiverFire
         // see related logs with:
         //   adb logcat | grep -i twofortyfouram
         // leads to:
         //   BroadcastQueue: Background execution not allowed: receiving Intent
 
-        String blurb = null;
-        if (intent.getExtras() != null) {
-            blurb = intent.getExtras().getString(EXTRA_STRING_BLURB);
-        }
-        logger.debug("onReceive() action: '{}', blurb: '{}'", intent.getAction(), blurb);
-        if (ACTION_FIRE_SETTING.equals(intent.getAction())) {
-            TaskerAction action = TaskerAction.byBlurb(blurb);
-            if (action != null) {
-                ServersRunningBean runningBean = ServicesStartStopUtil.checkServicesRunning(context);
-                boolean running = runningBean.atLeastOneRunning();
-                switch (action) {
-                    case START:
-                        if (!running) {
-                            startServer(context);
-                        }
-                        break;
-                    case STOP:
-                        if (running) {
-                            stopServer(context);
-                        }
-                        break;
-                    case TOGGLE:
-                        if (running) {
-                            stopServer(context);
-                        } else {
-                            startServer(context);
-                        }
-                        break;
-                }
-            }
-        } else if (ACTION_QUERY_CONDITION.equals(intent.getAction())) {
-            TaskerCondition condition = TaskerCondition.byBlurb(blurb);
-            if (condition != null) {
-                ServersRunningBean runningBean = ServicesStartStopUtil.checkServicesRunning(context);
-                boolean running = runningBean.atLeastOneRunning();
-                switch (condition) {
-                    case IS_SERVER_RUNNING:
-                        int conditionResult = running ? RESULT_CONDITION_SATISFIED : RESULT_CONDITION_UNSATISFIED;
-                        logger.debug("got query condition with blurb: {}, setting result: {}",
-                                blurb, Boolean.valueOf(running));
-                        setResultCode(conditionResult);
-                        break;
-                }
-            }
-        }
+        // see derived classes
     }
 
-    private void startServer(Context context) {
+    void startServer(Context context) {
         ServicesStartStopUtil.startServers(context);
     }
 
-    private void stopServer(Context context) {
+    void stopServer(Context context) {
         ServicesStartStopUtil.stopServers(context);
     }
 
@@ -100,13 +56,17 @@ public class TaskerReceiver extends BroadcastReceiver {
     public static Intent buildResultIntent(final Context context, String blurb) {
         final Intent resultIntent = new Intent();
         final Bundle resultBundle = generateBundle(context);
+        logger.debug("tasker edit action result intent, blurb: {}, bundle: {}", blurb, resultBundle);
         resultIntent.putExtra(EXTRA_BUNDLE, resultBundle);
         resultIntent.putExtra(EXTRA_STRING_BLURB, blurb);
         return resultIntent;
     }
     private static Bundle generateBundle(final Context context) {
         final Bundle result = new Bundle();
-        result.putInt(BUNDLE_EXTRA_INT_VERSION_CODE, getVersionCode(context));
+        int versionCode = getVersionCode(context);
+        result.putInt(BUNDLE_EXTRA_INT_VERSION_CODE, versionCode);
+        logger.debug("bundle ver key: {}", BUNDLE_EXTRA_INT_VERSION_CODE);
+        logger.debug("bundle ver val: {}", versionCode);
         return result;
     }
     private static int getVersionCode(final Context context) {

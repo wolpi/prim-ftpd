@@ -163,5 +163,9 @@
     <string name="logFiles">Log Dateien:</string>
     <string name="rootTmpFiles">Temp Dateien des root Zugriff:</string>
     <string name="delete">Löschen</string>
+    <string name="permReadLabelServerstatus">herausfinden ob Server läuft</string>
+    <string name="permReadDescServerstatus">Erlaubt herauszufinden ob ftp/sftp Server läuft.</string>
+    <string name="permWriteLabelServerstatus">Server starten und stoppen</string>
+    <string name="permWriteDescServerstatus">Erlaubt ftp/sftp Server zu starten und stoppen.</string>
 
 </resources>

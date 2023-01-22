@@ -149,6 +149,10 @@
     <string name="logFiles">Log files:</string>
     <string name="rootTmpFiles">Temp files of root access:</string>
     <string name="delete">Delete</string>
+    <string name="permReadLabelServerstatus">find out if server runs</string>
+    <string name="permReadDescServerstatus">Allows to find out if ftp/sftp server runs.</string>
+    <string name="permWriteLabelServerstatus">start and stop server</string>
+    <string name="permWriteDescServerstatus">Allows to start and stop ftp/sftp server.</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
         <item>FTP only</item>

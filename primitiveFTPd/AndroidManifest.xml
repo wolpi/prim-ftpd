@@ -14,6 +14,17 @@
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
+    <permission
+        android:name="org.primftpd.permission.WRITE_SERVER_STATUS"
+        android:label="@string/permWriteLabelServerstatus"
+        android:description="@string/permWriteDescServerstatus"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="org.primftpd.permission.READ_SERVER_STATUS"
+        android:label="@string/permReadLabelServerstatus"
+        android:description="@string/permReadDescServerstatus"
+        android:protectionLevel="normal" />
+
 
     <!--
     to enable adaptive icon use:
@@ -62,11 +73,23 @@
         </receiver>
 
         <receiver
-                android:name=".remotecontrol.TaskerReceiver"
+                android:name=".remotecontrol.TaskerReceiverFire"
                 android:exported="true"
-                android:process=":background">
+                android:enabled="true"
+                android:process=":background"
+                android:permission="org.primftpd.permission.WRITE_SERVER_STATUS">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".remotecontrol.TaskerReceiverQuery"
+            android:exported="true"
+            android:enabled="true"
+            android:process=":background"
+            android:permission="org.primftpd.permission.READ_SERVER_STATUS">
+            <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
             </intent-filter>
         </receiver>
