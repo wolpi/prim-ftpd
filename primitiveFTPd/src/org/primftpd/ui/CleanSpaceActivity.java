@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -26,6 +27,12 @@ public class CleanSpaceActivity extends Activity {
     private TextView quickShareSpaceTextView;
     private TextView logsSpaceTextView;
     private TextView rootTmpSpaceTextView;
+
+    private static class DialogHandler extends Handler {
+        DialogHandler() {
+            super();
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,10 +77,11 @@ public class CleanSpaceActivity extends Activity {
     private void onButtonClick(CleanSpaceActivity activity, File dir, boolean includeChildren) {
         int numberOfFiles = collectNumberOfFiles(dir, includeChildren);
         if (numberOfFiles > 0) {
-            createProgressDialog(numberOfFiles);
-            ProgressDialog progressDialog = createProgressDialog(numberOfFiles);
+            final ProgressDialog progressDialog = createProgressDialog(numberOfFiles);
             DeleteTask deleteTask = new DeleteTask(activity, progressDialog, dir, includeChildren);
             deleteTask.execute();
+
+            new DialogHandler();
         }
     }
 
@@ -149,7 +157,7 @@ public class CleanSpaceActivity extends Activity {
                 if (child.isFile()) {
                     number ++;
                 } else if (child.isDirectory() && includeChildren) {
-                    number += calcSizeDir(child, true);
+                    number += collectNumberOfFiles(child, true);
                 }
             }
         }
@@ -178,8 +186,8 @@ public class CleanSpaceActivity extends Activity {
 
         DeleteTask(CleanSpaceActivity activity,
                  ProgressDialog progressDiag,
-                   File dir,
-                   boolean includeChildren) {
+                 File dir,
+                 boolean includeChildren) {
             super();
             this.activity = activity;
             this.progressDiag = progressDiag;
