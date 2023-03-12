@@ -73,6 +73,7 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
                  List<Uri> uris,
                  List<String> contents,
                  String type) {
+            super();
             this.activity = activity;
             this.progressDiag = progressDiag;
             this.mainThreadHandler = mainThreadHandler;
@@ -84,13 +85,6 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
 
         @Override
         protected java.lang.Void doInBackground(java.lang.Void[] objects) {
-            // showing progress dialog must not be done in main thread
-            // accessing shared uris is possible in main thread only
-            // thus we need to post messages between thready and synchronize progress
-
-            final Integer[] progressSync = new Integer[1];
-            progressSync[0] = 0;
-
             for (int i = 0; i < uris.size(); i++) {
                 final Uri uri = uris.get(i);
 
@@ -102,29 +96,23 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
                 logger.trace("handling uri async: {}", uri);
 
                 final String finalContent = content;
-                final int progress = i;
                 mainThreadHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         logger.trace("saving uri in main thread");
-
                         activity.saveUri(targetDir, uri, finalContent, type);
-
-                        logger.trace("setting progressSync to: {}", progress);
-                        progressSync[0] = progress;
+                        logger.trace("incrementing progress");
+                        progressDiag.incrementProgressBy(1);
                     }
                 });
             }
 
-            while (progressSync[0] < uris.size() -1) {
-                if (progressSync[0] != progressDiag.getProgress()) {
-                    logger.trace("setting progress to: {}", progressSync[0]);
-                    progressDiag.setProgress(progressSync[0]);
-                }
+            while (progressDiag.getProgress() < progressDiag.getMax()) {
                 try {
-                    Thread.sleep(500);
+                    logger.trace("waiting in background");
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    logger.error("error while waiting for progress", e);
+                    logger.error("", e);
                 }
             }
 
@@ -142,7 +130,7 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
                 }
             });
         }
-    };
+    }
 
     protected void onCopyFinished(TargetDir targetDir) {
         this.finish();
