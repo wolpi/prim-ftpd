@@ -20,15 +20,30 @@
         android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?filepickerToolbarTheme">
+        android:theme="?filepickerToolbarTheme"
+        >
 
         <TextView
             android:id="@+id/filepicker_current_dir"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:ellipsize="start"
             android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginEnd="2dp"
+            android:layout_marginRight="2dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/filepicker_title_edit"
+            android:src="@android:drawable/ic_menu_edit"
+            />
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView

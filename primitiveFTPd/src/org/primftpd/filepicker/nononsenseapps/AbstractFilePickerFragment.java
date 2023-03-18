@@ -2,12 +2,14 @@ package org.primftpd.filepicker.nononsenseapps;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -31,6 +33,7 @@ import android.widget.Toast;
 
 import org.primftpd.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -225,6 +228,37 @@ public abstract class AbstractFilePickerFragment<T> extends Fragment
         if (mCurrentPath != null && mCurrentDirView != null) {
             mCurrentDirView.setText(getFullPath(mCurrentPath));
         }
+
+        // XXX customization
+        final Context ctxt = this.getContext();
+        toolbar.setTitle("");
+        View editIcon = view.findViewById(R.id.filepicker_title_edit);
+        editIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctxt);
+                builder.setTitle("Directory");
+
+                final EditText input = new EditText(ctxt);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mCurrentPath = (T)new File(input.getText().toString());
+                        goToDir(mCurrentPath);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
         return view;
     }
