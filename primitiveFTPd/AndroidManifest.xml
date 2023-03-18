@@ -123,7 +123,8 @@
             android:name=".ui.LeanbackActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:exported="true">
+            android:exported="true"
+            android:banner="@mipmap/ic_banner">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />

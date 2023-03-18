@@ -39,6 +39,51 @@
             android:text="@string/prefs"
             style="?android:attr/buttonBarButtonStyle"
             android:onClick="handlePrefs"/>
+        <Button
+            android:id="@+id/fallbackButtonQr"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/radioStoragePlain"
+            android:text="QR Code"
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="handleQr"/>
+        <Button
+            android:id="@+id/fallbackButtonClientAction"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/radioStoragePlain"
+            android:text="@string/clientActionsLabel"
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="handleClientAction"/>
+        <Button
+            android:id="@+id/fallbackButtonKeysFingerprints"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/radioStoragePlain"
+            android:text="Keys Fingerprints"
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="handleKeysFingerprints"/>
+        <Button
+            android:id="@+id/fallbackButtonClean"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/radioStoragePlain"
+            android:text="Clean Space"
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="handleClean"/>
+        <Button
+            android:id="@+id/fallbackButtonAbout"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/radioStoragePlain"
+            android:text="About"
+            style="?android:attr/buttonBarButtonStyle"
+            android:onClick="handleAbout"/>
     </LinearLayout>
 
 </merge>

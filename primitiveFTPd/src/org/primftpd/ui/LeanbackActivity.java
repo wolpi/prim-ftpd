@@ -22,4 +22,24 @@ public class LeanbackActivity extends PrimitiveFtpdActivity {
     public void handlePrefs(View view) {
         super.handlePrefs();
     }
+
+    public void handleQr(View view) {
+        super.handleQr();
+    }
+
+    public void handleClientAction(View view) {
+        super.handleClientAction();
+    }
+
+    public void handleKeysFingerprints(View view) {
+        super.handleKeysFingerprints();
+    }
+
+    public void handleClean(View view) {
+        super.handleClean();
+    }
+
+    public void handleAbout(View view) {
+        super.handleAbout();
+    }
 }

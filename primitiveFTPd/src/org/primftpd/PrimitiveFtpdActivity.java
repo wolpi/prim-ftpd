@@ -856,9 +856,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 			handlePrefs();
 			break;
 		case R.id.menu_qr:
-			logger.trace("handle QR");
-			intent = new Intent(this, QrActivity.class);
-			startActivity(intent);
+			handleQr();
 			break;
 		case R.id.menu_client_action:
 			handleClientAction();
@@ -867,8 +865,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 			handleKeysFingerprints();
 			break;
 		case R.id.menu_clean:
-			intent = new Intent(this, CleanSpaceActivity.class);
-			startActivity(intent);
+			handleClean();
 			break;
 		case R.id.menu_translate:
 			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://pftpd.rocks/projects/pftpd/pftpd/"));
@@ -923,6 +920,12 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		startActivity(intent);
 	}
 
+	protected void handleQr() {
+		logger.trace("handle QR");
+		Intent intent = new Intent(this, QrActivity.class);
+		startActivity(intent);
+	}
+
 	protected void handleClientAction() {
 		logger.trace("handleClientAction()");
 		Intent intent = new Intent(this, ClientActionActivity.class);
@@ -932,6 +935,12 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 	protected void handleKeysFingerprints() {
 		logger.trace("handleKeysFingerprints()");
 		Intent intent = new Intent(this, KeysFingerprintsActivity.class);
+		startActivity(intent);
+	}
+
+	protected void handleClean() {
+		logger.trace("handleClean()");
+		Intent intent = new Intent(this, CleanSpaceActivity.class);
 		startActivity(intent);
 	}
 
