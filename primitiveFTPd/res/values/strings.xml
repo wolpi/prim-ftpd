@@ -20,7 +20,6 @@
     <string name="quickSettingsServerStarted">pFTPd Running …</string>
     <string name="quickSettingsServerStopped">pFTPd Stopped</string>
     <string name="saveAs">Save as</string>
-    <string name="translate">Translate</string>
     <string name="startService">Start Server</string>
     <string name="stopService">Stop Server</string>
     <string name="toggleService">Toggle Server start/stop</string>

@@ -33,9 +33,6 @@ FTP server app for android.
 * Optional support for Android Storage Access Framework to access external sd-card the official way (NOTE requires selecting a directory, not the root of the sd-card).
 
 
-Want to help translating it? See our shiny [weblate instance](https://pftpd.rocks/projects/pftpd/pftpd/)!
-
-
 ## Permission
 Google introduces more and more restrictions to filesystem access to Android. In order to access all
 your files through this server you might have to grant it 'all files access' permission in Anroid settings.

@@ -867,15 +867,8 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		case R.id.menu_clean:
 			handleClean();
 			break;
-		case R.id.menu_translate:
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://pftpd.rocks/projects/pftpd/pftpd/"));
-			startActivity(intent);
-			break;
 		case R.id.menu_about:
 			handleAbout();
-			break;
-		case R.id.menu_exit:
-			handleExit();
 			break;
 		}
 
@@ -950,11 +943,6 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		startActivity(intent);
 	}
 
-	protected void handleExit() {
-		logger.trace("handleExit()");
-		android.os.Process.killProcess(android.os.Process.myPid());
-		System.exit(1);
-	}
 	/**
 	 * Loads and parses preferences.
 	 *
