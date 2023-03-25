@@ -24,4 +24,28 @@
             android:targetPackage="org.primftpd"
             android:targetClass="org.primftpd.ui.StartServerAndExitActivity" />
     </shortcut>
+
+    <shortcut
+        android:shortcutId="mobileUi"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher"
+        android:shortcutShortLabel="@string/mobileUiShort"
+        android:shortcutLongLabel="@string/mobileUiLong">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="org.primftpd"
+            android:targetClass="org.primftpd.PrimitiveFtpdActivity" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="LeanbackUi"
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher"
+        android:shortcutShortLabel="@string/tvUiShort"
+        android:shortcutLongLabel="@string/tvUiLong">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="org.primftpd"
+            android:targetClass="org.primftpd.ui.LeanbackActivity" />
+    </shortcut>
 </shortcuts>

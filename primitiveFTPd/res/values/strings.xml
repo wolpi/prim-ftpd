@@ -153,6 +153,10 @@
     <string name="permReadDescServerstatus">Allows to find out if ftp/sftp server runs.</string>
     <string name="permWriteLabelServerstatus">start and stop server</string>
     <string name="permWriteDescServerstatus">Allows to start and stop ftp/sftp server.</string>
+    <string name="mobileUiShort">Mobile Mode</string>
+    <string name="mobileUiLong">Mobile Device Mode</string>
+    <string name="tvUiShort">TV Mode</string>
+    <string name="tvUiLong">Television Mode</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
         <item>FTP only</item>
