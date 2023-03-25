@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
+import java.util.SimpleTimeZone;
 
 class Utils {
 
@@ -68,13 +68,9 @@ class Utils {
 
     private static final DateFormat TOUCH_DATE_FORMAT = new SimpleDateFormat("yyMMddHHmm.ss");
     static {
-        TOUCH_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+        TOUCH_DATE_FORMAT.setTimeZone(new SimpleTimeZone(0, "No-TZ"));
     }
     static String touchDate(long time) {
-        return TOUCH_DATE_FORMAT.format(sshTimeToFileTime(time));
-    }
-
-    static long sshTimeToFileTime(long time) {
-        return time * 1000;
+        return TOUCH_DATE_FORMAT.format(time);
     }
 }

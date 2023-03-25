@@ -32,6 +32,8 @@ class LsOutputBuilder {
     private String name;
     private String linkTarget;
 
+    private String originalLine;
+
     public boolean isFile() {
         return isFile;
     }
@@ -192,6 +194,14 @@ class LsOutputBuilder {
         this.linkTarget = linkTarget;
     }
 
+    public String getOriginalLine() {
+        return originalLine;
+    }
+
+    public void setOriginalLine(String originalLine) {
+        this.originalLine = originalLine;
+    }
+
     LsOutputBean build() {
         return new LsOutputBean(
                 isFile,
@@ -213,7 +223,8 @@ class LsOutputBuilder {
                 user,
                 group,
                 name,
-                linkTarget
+                linkTarget,
+                originalLine
         );
     }
 }

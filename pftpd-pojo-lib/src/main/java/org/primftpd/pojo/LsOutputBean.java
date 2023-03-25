@@ -33,6 +33,8 @@ public class LsOutputBean {
     private final String name;
     private final String linkTarget;
 
+    private final String originalLine;
+
     public LsOutputBean(String name) {
         this.exists = false;
         this.name = name;
@@ -56,6 +58,7 @@ public class LsOutputBean {
         this.user = null;
         this.group = null;
         this.linkTarget = null;
+        this.originalLine = null;
     }
 
     public LsOutputBean(
@@ -78,7 +81,8 @@ public class LsOutputBean {
             String user,
             String group,
             String name,
-            String linkTarget) {
+            String linkTarget,
+            String originalLine) {
         this.exists = true;
         this.isFile = isFile;
         this.isDir = isDir;
@@ -100,6 +104,7 @@ public class LsOutputBean {
         this.group = group;
         this.name = name;
         this.linkTarget = linkTarget;
+        this.originalLine = originalLine;
     }
 
     public boolean isExists() {
@@ -184,5 +189,9 @@ public class LsOutputBean {
 
     public String getLinkTarget() {
         return linkTarget;
+    }
+
+    public String getOriginalLine() {
+        return originalLine;
     }
 }

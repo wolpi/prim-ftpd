@@ -76,7 +76,14 @@ public abstract class RootFile<T> extends AbstractFile {
         logger.trace("[{}] setLastModified({})", name, time);
 
         String dateStr = Utils.touchDate(time);
-        return runCommand("touch -t " + dateStr + " " + escapePath(absPath));
+        return runCommand("touch -m -t " + dateStr + " " + escapePath(absPath));
+    }
+
+    @Override
+    public long getLastModified() {
+        logger.trace("[{}] getLastModified()", name);
+        logger.trace("  original ls-output line: {}", bean.getOriginalLine());
+        return super.getLastModified();
     }
 
     public boolean mkdir() {

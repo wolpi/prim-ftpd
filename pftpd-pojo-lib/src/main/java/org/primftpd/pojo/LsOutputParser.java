@@ -56,6 +56,7 @@ public class LsOutputParser {
         }
 
         LsOutputBuilder builder = new LsOutputBuilder();
+        builder.setOriginalLine(line);
 
         // type
         if (firstPart.charAt(0) == '-') {
