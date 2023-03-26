@@ -159,14 +159,16 @@ public abstract class AbstractServerService
 			ClientActionEvent.Storage storage,
 			ClientActionEvent.ClientAction clientAction,
 			String clientIp,
-			String path) {
+			String path,
+			String error) {
 		ClientActionEvent event = new ClientActionEvent(
 				storage,
 				getProtocol(),
 				clientAction,
 				new Date(),
 				clientIp,
-				path);
+				path,
+				error);
 		logger.info("posting ClientActionEvent: {}", event);
 		EventBus.getDefault().post(event);
 	}

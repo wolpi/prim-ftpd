@@ -106,6 +106,10 @@ public class ClientActionActivity extends Activity {
         sb.append(event.getClientAction());
         sb.append(" ");
         sb.append(event.getPath());
+        if (event.getError() != null) {
+            sb.append(" ");
+            sb.append(event.getError());
+        }
         return sb.toString();
     }
 

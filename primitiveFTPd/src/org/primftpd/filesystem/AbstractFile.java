@@ -50,12 +50,20 @@ public abstract class AbstractFile {
     public abstract ClientActionEvent.Storage getClientActionStorage();
 
     public void postClientAction(ClientActionEvent.ClientAction clientAction) {
+        postClientAction(clientAction, null);
+    }
+
+    public void postClientActionError(String error) {
+        postClientAction(ClientActionEvent.ClientAction.ERROR, error);
+    }
+
+    public void postClientAction(ClientActionEvent.ClientAction clientAction, String error) {
         pftpdService.postClientAction(
                 getClientActionStorage(),
                 clientAction,
                 getClientIp(),
-                getAbsolutePath());
-
+                getAbsolutePath(),
+                error);
     }
 
     public String getAbsolutePath() {

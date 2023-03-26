@@ -11,7 +11,8 @@ public interface PftpdService {
             ClientActionEvent.Storage storage,
             ClientActionEvent.ClientAction clientAction,
             String clientIp,
-            String path);
+            String path,
+            String error);
 
     public PrefsBean getPrefsBean();
 

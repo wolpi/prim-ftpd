@@ -2,8 +2,10 @@ package org.primftpd.events;
 
 import java.util.Date;
 
+import androidx.annotation.NonNull;
+
 public class ClientActionEvent {
-    public static enum Storage {
+    public enum Storage {
         FS,
         ROOT,
         SAF,
@@ -11,18 +13,20 @@ public class ClientActionEvent {
         QUICKSHARE
     }
 
-    public static enum Protocol {
+    public enum Protocol {
         FTP,
         SFTP
     }
 
-    public static enum ClientAction {
+    public enum ClientAction {
         LIST_DIR,
         CREATE_DIR,
         RENAME,
         DELETE,
         DOWNLOAD,
-        UPLOAD
+        UPLOAD,
+
+        ERROR,
     }
 
     private final Storage storage;
@@ -32,25 +36,39 @@ public class ClientActionEvent {
     private final String clientIp;
     private final String path;
 
-    public ClientActionEvent(Storage storage, Protocol protocol, ClientAction clientAction, Date timestamp, String clientIp, String path) {
+    private final String error;
+
+    public ClientActionEvent(
+            Storage storage,
+            Protocol protocol,
+            ClientAction clientAction,
+            Date timestamp,
+            String clientIp,
+            String path,
+            String error) {
         this.storage = storage;
         this.protocol = protocol;
         this.clientAction = clientAction;
         this.timestamp = timestamp;
         this.clientIp = clientIp;
         this.path = path;
+        this.error = error;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return "ClientActionEvent{" +
+        String str = "ClientActionEvent{" +
                 "storage=" + storage +
                 ", protocol=" + protocol +
                 ", timestamp=" + timestamp +
                 ", clientIp='" + clientIp + '\'' +
                 ", clientAction=" + clientAction +
-                ", path='" + path + '\'' +
-                '}';
+                ", path='" + path + '\'';
+        if (error != null) {
+            str = str + ", error=" + error;
+        }
+        return str + '}';
     }
 
     public Storage getStorage() {
@@ -75,5 +93,9 @@ public class ClientActionEvent {
 
     public String getPath() {
         return path;
+    }
+
+    public String getError() {
+        return error;
     }
 }

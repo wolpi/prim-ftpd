@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
+import android.widget.Toast;
 
 import androidx.documentfile.provider.DocumentFile;
 
@@ -23,9 +24,9 @@ public abstract class SafFile<T> extends AbstractFile {
     private final ContentResolver contentResolver;
 
     private DocumentFile documentFile;
-    private DocumentFile parentDocumentFile;
+    private final DocumentFile parentDocumentFile;
 
-    private boolean writable;
+    private final boolean writable;
 
     public SafFile(
             ContentResolver contentResolver,
@@ -113,10 +114,15 @@ public abstract class SafFile<T> extends AbstractFile {
                 //time = Utils.sshTimeToFileTime(time);
                 updateValues.put(DocumentsContract.Document.COLUMN_LAST_MODIFIED, time);
                 Uri docUri = documentFile.getUri();
-                int updated = contentResolver.update(docUri, updateValues, null, null);
+                int updated = contentResolver.update(docUri, updateValues, "name="+name, null);
                 return updated == 1;
             } catch (Exception e) {
-                logger.error("could not set last modified time", e);
+                String baseMsg = "could not set last modified time";
+                logger.error(baseMsg, e);
+                String clientActionMsg = baseMsg + ", error: " + e.getClass().getName();
+                postClientActionError(clientActionMsg);
+                String toastMsg = baseMsg + ", file: " + name + ", error: " + e.getClass().getName();
+                Toast.makeText(pftpdService.getContext(), toastMsg, Toast.LENGTH_SHORT).show();
             }
         }
         return false;
