@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.SimpleTimeZone;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
@@ -123,7 +124,8 @@ public class LsOutputParser {
         // date
         String dateStr;
         DateFormat dateFormat;
-        Date date;
+        Date date = null;
+        long timestamp = 0;
         long offset = 0;
         String firstDateCol = parts.get(4 + linkCountOffset);
         int dateEndIndex;
@@ -143,15 +145,19 @@ public class LsOutputParser {
             dateEndIndex = 6 + linkCountOffset;
         }
         try {
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            SimpleTimeZone timeZone = new SimpleTimeZone(0, "No-TZ");
+            dateFormat.setTimeZone(timeZone);
             date = dateFormat.parse(dateStr);
             if (offset > 0) {
                 date = new Date(date.getTime() + offset);
             }
         } catch (Exception e) {
-            date = new Date(0);
+            // never mind
         }
-        builder.setDate(date);
+        if (date != null) {
+            timestamp = date.getTime();
+        }
+        builder.setTimestamp(timestamp);
 
         // name
         int nameEndIndex = 0;

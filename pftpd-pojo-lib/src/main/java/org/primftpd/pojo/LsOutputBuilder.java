@@ -1,7 +1,5 @@
 package org.primftpd.pojo;
 
-import java.util.Date;
-
 class LsOutputBuilder {
 
     private boolean isFile;
@@ -25,7 +23,7 @@ class LsOutputBuilder {
     private long linkCount;
     private long size;
 
-    private Date date;
+    private long timestamp;
 
     private String user;
     private String group;
@@ -154,12 +152,12 @@ class LsOutputBuilder {
         this.size = size;
     }
 
-    public Date getDate() {
-        return date;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getUser() {
@@ -219,7 +217,7 @@ class LsOutputBuilder {
                 hasAcl,
                 linkCount,
                 size,
-                date,
+                timestamp,
                 user,
                 group,
                 name,

@@ -19,8 +19,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import eu.chainfire.libsuperuser.Shell;
 
@@ -40,7 +42,7 @@ public abstract class RootFile<T> extends AbstractFile {
         super(
                 absPath,
                 bean.getName(),
-                bean.getDate() != null ? bean.getDate().getTime() : 0,
+                bean.getTimestamp(),
                 bean.getSize(),
                 true,
                 bean.isExists(),
@@ -79,10 +81,17 @@ public abstract class RootFile<T> extends AbstractFile {
         return runCommand("touch -m -t " + dateStr + " " + escapePath(absPath));
     }
 
+    private static final SimpleDateFormat DEBUG_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    static {
+        DEBUG_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+
     @Override
     public long getLastModified() {
-        logger.trace("[{}] getLastModified()", name);
-        logger.trace("  original ls-output line: {}", bean.getOriginalLine());
+        logger.trace("[{}] RootFile getLastModified()", name);
+        logger.trace("  returning date '{}', original ls-output line: {}",
+                DEBUG_DATE_FORMAT.format(bean.getTimestamp()),
+                bean.getOriginalLine());
         return super.getLastModified();
     }
 

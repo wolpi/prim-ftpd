@@ -1,7 +1,5 @@
 package org.primftpd.pojo;
 
-import java.util.Date;
-
 public class LsOutputBean {
     private final boolean exists;
 
@@ -26,7 +24,7 @@ public class LsOutputBean {
     private final long linkCount;
     private final long size;
 
-    private final Date date;
+    private final long timestamp;
 
     private final String user;
     private final String group;
@@ -54,7 +52,7 @@ public class LsOutputBean {
         this.hasAcl = false;
         this.linkCount = 0;
         this.size = 0;
-        this.date = null;
+        this.timestamp = 0;
         this.user = null;
         this.group = null;
         this.linkTarget = null;
@@ -77,7 +75,7 @@ public class LsOutputBean {
             boolean hasAcl,
             long linkCount,
             long size,
-            Date date,
+            long timestamp,
             String user,
             String group,
             String name,
@@ -99,7 +97,7 @@ public class LsOutputBean {
         this.hasAcl = hasAcl;
         this.linkCount = linkCount;
         this.size = size;
-        this.date = date;
+        this.timestamp = timestamp;
         this.user = user;
         this.group = group;
         this.name = name;
@@ -171,8 +169,8 @@ public class LsOutputBean {
         return size;
     }
 
-    public Date getDate() {
-        return date;
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public String getUser() {
