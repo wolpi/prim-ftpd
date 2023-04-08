@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.primftpd.R;
+import org.primftpd.ui.ThemeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +43,7 @@ public class AboutActivity extends Activity
 
 		// set theme
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        Theme theme = LoadPrefsUtil.theme(prefs);
-        setTheme(theme.resourceId());
+        ThemeUtil.applyTheme(this, prefs);
 
 		// set layout
 		setContentView(R.layout.about);

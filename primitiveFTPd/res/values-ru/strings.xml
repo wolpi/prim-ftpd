@@ -85,6 +85,7 @@
     <string-array name="prefThemeNames">
         <item>Темная</item>
         <item>Светлая</item>
+        <item>System Default</item>
     </string-array>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP и SFTP</item>

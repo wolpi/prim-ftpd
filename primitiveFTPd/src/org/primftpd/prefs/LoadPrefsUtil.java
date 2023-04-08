@@ -154,7 +154,7 @@ public class LoadPrefsUtil
 	public static Theme theme(SharedPreferences prefs) {
 		String themeStr = prefs.getString(
 			PREF_KEY_THEME,
-			Theme.DARK.xmlValue());
+			Theme.SYS_DEFAULT.xmlValue());
 		return Theme.byXmlVal(themeStr);
 	}
 

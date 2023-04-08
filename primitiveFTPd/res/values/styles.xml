@@ -1,4 +1,12 @@
 <resources>
+	<style name="PrimFtpdDeviceTheme" parent="Theme.AppCompat.DayNight">
+		<item name="android:actionBarStyle">@style/PrimFtpdActionBar</item>
+		<item name="iconStart">@drawable/ic_play_white_36dp</item>
+		<item name="iconStop">@drawable/ic_stop_white_36dp</item>
+		<item name="iconSettings">@drawable/ic_settings_white_36dp</item>
+		<item name="iconRefresh">@drawable/ic_refresh_white_18dp</item>
+	</style>
+
 	<style name="PrimFtpdDarkTheme" parent="android:Theme.Holo">
 		<item name="android:actionBarStyle">@style/PrimFtpdActionBar</item>
 		<item name="iconStart">@drawable/ic_play_white_36dp</item>

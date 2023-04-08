@@ -14,6 +14,7 @@ import android.widget.Toast;
 import org.primftpd.R;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Theme;
+import org.primftpd.ui.ThemeUtil;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.primftpd.util.TmpDirType;
@@ -35,8 +36,7 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
 
         // set theme
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        Theme theme = LoadPrefsUtil.theme(prefs);
-        setTheme(theme.resourceId());
+        ThemeUtil.applyTheme(this, prefs);
 
         // set layout
         setContentView(R.layout.receive_share);

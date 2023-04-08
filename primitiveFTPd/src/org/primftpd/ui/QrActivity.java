@@ -12,9 +12,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -36,6 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+
 public class QrActivity extends FragmentActivity {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -50,8 +50,7 @@ public class QrActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        Theme theme = LoadPrefsUtil.theme(prefs);
-        setTheme(theme.resourceId());
+        ThemeUtil.applyTheme(this, prefs);
         setContentView(R.layout.qr);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -116,6 +115,22 @@ public class QrActivity extends FragmentActivity {
             }
         }
 
+        Theme theme = LoadPrefsUtil.theme(prefs);
+        final boolean darkMode;
+        switch (theme) {
+            case LIGHT:
+                darkMode = false;
+                break;
+            case SYS_DEFAULT:
+                int uiMode = getResources().getConfiguration().uiMode;
+                int nightModeFlags = uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                darkMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+                break;
+            default:
+                darkMode = true;
+                break;
+        }
+
         RadioGroup radioGroup = new RadioGroup(this);
         radioGroup.setOrientation(RadioGroup.VERTICAL);
         for (final String url : urls) {
@@ -126,7 +141,7 @@ public class QrActivity extends FragmentActivity {
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bitmap qr = activity.generateQr(url);
+                    Bitmap qr = activity.generateQr(url, darkMode);
                     activity.qrImage.setImageBitmap(qr);
                 }
             });
@@ -139,11 +154,14 @@ public class QrActivity extends FragmentActivity {
         }
     }
 
-    private Bitmap generateQr(String url) {
+    private Bitmap generateQr(String url, boolean darkMode) {
         Map<EncodeHintType, Object> hintsMap = new HashMap<>();
         hintsMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
         hintsMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.Q);
         hintsMap.put(EncodeHintType.MARGIN, 5);
+
+        int colorForeground = darkMode ? 0xFFFFFFFF : 0x000000;
+        int colorBackground = darkMode ? 0x000000 : 0xFFFFFFFF;
 
         try {
             BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, width, height, hintsMap);
@@ -151,10 +169,10 @@ public class QrActivity extends FragmentActivity {
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
                     boolean bitSet = bitMatrix.get(j, i);
-                    pixels[i * width + j] = bitSet ? 0xFFFFFFFF : 0x282946;
+                    pixels[i * width + j] = bitSet ? colorForeground : colorBackground;
                 }
             }
-            return Bitmap.createBitmap(pixels, width, height, Bitmap.Config.ARGB_4444);
+            return Bitmap.createBitmap(pixels, width, height, Bitmap.Config.RGB_565);
         } catch (WriterException e) {
             logger.error("could not create QR code", e);
         }

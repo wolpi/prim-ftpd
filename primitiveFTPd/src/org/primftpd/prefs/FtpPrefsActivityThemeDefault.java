@@ -2,15 +2,9 @@ package org.primftpd.prefs;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 
-/**
- * Defined in manifest with Theme. Required as it does not work to change theme
- * programmatically for {@link PreferenceActivity}.
- *
- */
-public class FtpPrefsActivityThemeLight extends FtpPrefsActivity
-{
+public class FtpPrefsActivityThemeDefault extends FtpPrefsActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,9 +14,9 @@ public class FtpPrefsActivityThemeLight extends FtpPrefsActivity
         if (Theme.DARK == theme) {
             this.finish();
             startActivity(new Intent(this, FtpPrefsActivityThemeDark.class));
-        } else if (Theme.SYS_DEFAULT == theme) {
+        } else if (Theme.LIGHT == theme) {
             this.finish();
-            startActivity(new Intent(this, FtpPrefsActivity.class));
+            startActivity(new Intent(this, FtpPrefsActivityThemeLight.class));
         }
     }
 }

@@ -1,5 +1,6 @@
 <resources>
-	<style name="PrimFtpdDeviceTheme" parent="Theme.AppCompat.DayNight">
+	<!-- device default theme, may switch between dark and light -->
+	<style name="PrimFtpdDeviceTheme" parent="android:Theme.DeviceDefault.DayNight">
 		<item name="android:colorPrimary">@color/blueIcon</item>
 		<item name="android:colorPrimaryDark">@color/blueIconDark</item>
 		<item name="android:colorAccent">@color/blueIconAccent</item>
@@ -8,7 +9,23 @@
 		<item name="iconStop">@drawable/ic_stop_white_36dp</item>
 		<item name="iconSettings">@drawable/ic_settings_white_36dp</item>
 		<item name="iconRefresh">@drawable/ic_refresh_white_18dp</item>
+
+		<!-- ensure white as text color in actionbar even in light theme -->
+		<item name="android:actionBarStyle">@style/PrimFtpdDeviceTheme.ActionBarStyle</item>
+		<item name="android:actionMenuTextColor">@color/lightThemeActionbarText</item>
+		<item name="android:actionOverflowButtonStyle">@style/PrimFtpdDeviceTheme.Overflow</item>
 	</style>
+	<style name="PrimFtpdDeviceTheme.ActionBarStyle" parent="@android:style/Widget.DeviceDefault.Light.ActionBar.Solid">
+		<item name="android:titleTextStyle">@style/PrimFtpdDeviceTheme.ActionBar.TitleTextStyle</item>
+	</style>
+	<style name="PrimFtpdDeviceTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title">
+		<item name="android:textColor">@color/lightThemeActionbarText</item>
+	</style>
+	<style name="PrimFtpdDeviceTheme.Overflow" parent="@style/Widget.AppCompat.ActionButton.Overflow" >
+		<item name="android:tint">@color/lightThemeActionbarText</item>
+	</style>
+
+	<!-- own dark theme -->
 	<style name="PrimFtpdDarkTheme" parent="android:Theme.Material">
 		<item name="android:colorPrimary">@color/blueIcon</item>
 		<item name="android:colorPrimaryDark">@color/blueIconDark</item>
@@ -19,6 +36,8 @@
 		<item name="iconSettings">@drawable/ic_settings_white_36dp</item>
 		<item name="iconRefresh">@drawable/ic_refresh_white_18dp</item>
 	</style>
+
+	<!-- own light theme -->
 	<style name="PrimFtpdLightTheme" parent="android:Theme.Material.Light.DarkActionBar">
 		<item name="android:colorPrimary">@color/blueIcon</item>
 		<item name="android:colorPrimaryDark">@color/blueIconDark</item>
@@ -30,4 +49,5 @@
 
 		<item name="iconRefresh">@drawable/ic_refresh_black_18dp</item>
 	</style>
+
 </resources>

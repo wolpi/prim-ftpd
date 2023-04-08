@@ -70,6 +70,7 @@
     <string-array name="prefThemeNames">
         <item>Iluna</item>
         <item>Argia</item>
+        <item>System Default</item>
     </string-array>
 
     <string-array name="prefLoggingNames">

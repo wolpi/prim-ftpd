@@ -121,8 +121,7 @@ public class ClientActionActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        Theme theme = LoadPrefsUtil.theme(prefs);
-        setTheme(theme.resourceId());
+        ThemeUtil.applyTheme(this, prefs);
         setContentView(R.layout.client_action);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);

@@ -134,6 +134,12 @@
         </activity>
 
         <activity
+            android:name="org.primftpd.prefs.FtpPrefsActivityThemeDefault"
+            android:label="@string/prefs"
+            android:theme="@style/PrimFtpdDeviceTheme">
+        </activity>
+
+        <activity
             android:name="org.primftpd.prefs.FtpPrefsActivityThemeDark"
             android:label="@string/prefs"
             android:theme="@style/PrimFtpdDarkTheme">

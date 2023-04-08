@@ -20,6 +20,9 @@ public class FtpPrefsActivityThemeDark extends FtpPrefsActivity
         if (Theme.LIGHT == theme) {
             this.finish();
             startActivity(new Intent(this, FtpPrefsActivityThemeLight.class));
+        } else if (Theme.SYS_DEFAULT == theme) {
+            this.finish();
+            startActivity(new Intent(this, FtpPrefsActivity.class));
         }
     }
 }

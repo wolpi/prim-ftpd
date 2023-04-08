@@ -35,9 +35,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -49,6 +46,7 @@ import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.log.PrimFtpdLoggerBinder;
 import org.primftpd.prefs.AboutActivity;
 import org.primftpd.prefs.FtpPrefsActivityThemeDark;
+import org.primftpd.prefs.FtpPrefsActivityThemeDefault;
 import org.primftpd.prefs.FtpPrefsActivityThemeLight;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
@@ -62,6 +60,7 @@ import org.primftpd.ui.GenKeysAskDialogFragment;
 import org.primftpd.ui.GenKeysAsyncTask;
 import org.primftpd.ui.KeysFingerprintsActivity;
 import org.primftpd.ui.QrActivity;
+import org.primftpd.ui.ThemeUtil;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.KeyFingerprintBean;
@@ -76,6 +75,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * Activity to display network info and to start FTP service.
@@ -144,8 +146,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener);
 
 		// layout & theme
-		theme = LoadPrefsUtil.theme(prefs);
-		setTheme(theme.resourceId());
+		theme = ThemeUtil.applyTheme(this, prefs);
 		setContentView(getLayoutId());
 
 		// calc keys fingerprints
@@ -266,6 +267,9 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 		super.onResume();
 
 		logger.debug("onResume()");
+
+		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+		this.theme = ThemeUtil.applyTheme(this, prefs);
 
 		// register listener to reprint interfaces table when network connections change
 		// android sends those events when registered in code but not when registered in manifest
@@ -906,9 +910,18 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	protected void handlePrefs() {
 		logger.trace("handlePrefs()");
-		Class<?> prefsActivityClass = theme == Theme.DARK
-			? FtpPrefsActivityThemeDark.class
-			: FtpPrefsActivityThemeLight.class;
+		Class<?> prefsActivityClass;
+		switch (theme) {
+			case DARK:
+				prefsActivityClass = FtpPrefsActivityThemeDark.class;
+				break;
+			case LIGHT:
+				prefsActivityClass = FtpPrefsActivityThemeLight.class;
+				break;
+			default:
+				prefsActivityClass = FtpPrefsActivityThemeDefault.class;
+				break;
+		}
 		Intent intent = new Intent(this, prefsActivityClass);
 		startActivity(intent);
 	}

@@ -21,8 +21,7 @@ public class KeysFingerprintsActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        Theme theme = LoadPrefsUtil.theme(prefs);
-        setTheme(theme.resourceId());
+        ThemeUtil.applyTheme(this, prefs);
         setContentView(R.layout.keys_fingerprints);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);

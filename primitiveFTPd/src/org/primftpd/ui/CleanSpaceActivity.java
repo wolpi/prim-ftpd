@@ -41,8 +41,7 @@ public class CleanSpaceActivity extends Activity {
         logger.trace("onCreate()");
 
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        Theme theme = LoadPrefsUtil.theme(prefs);
-        setTheme(theme.resourceId());
+        ThemeUtil.applyTheme(this, prefs);
         setContentView(R.layout.clean_space);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);

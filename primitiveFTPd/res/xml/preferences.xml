@@ -135,7 +135,7 @@
 			android:key="themePref"
 			android:title="@string/prefTheme"
 			android:summary="@string/prefSummaryTheme"
-			android:defaultValue="0"
+			android:defaultValue="2"
 			android:entries="@array/prefThemeNames"
 			android:entryValues="@array/prefThemeValues"
 			/>

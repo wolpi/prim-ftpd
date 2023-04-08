@@ -132,6 +132,7 @@
     <string-array name="prefThemeNames">
         <item>Dunkel</item>
         <item>Hell</item>
+        <item>System Default</item>
     </string-array>
     <string-array name="prefLoggingNames">
         <item>Kein Log</item>

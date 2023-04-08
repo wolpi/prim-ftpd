@@ -102,6 +102,7 @@
     <string-array name="prefThemeNames">
         <item>Σκούρο</item>
         <item>Φωτεινό</item>
+        <item>System Default</item>
     </string-array>
 
     <string-array name="prefLoggingNames">

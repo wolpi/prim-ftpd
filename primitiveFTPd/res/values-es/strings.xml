@@ -62,6 +62,7 @@
     <string-array name="prefThemeNames">
         <item>Oscuro</item>
         <item>Claro</item>
+        <item>System Default</item>
     </string-array>
     <string-array name="prefLoggingNames">
         <item>Sin registro</item>
