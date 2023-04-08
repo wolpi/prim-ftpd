@@ -122,7 +122,11 @@ public abstract class SafFile<T> extends AbstractFile {
                 String clientActionMsg = baseMsg + ", error: " + e.getClass().getName();
                 postClientActionError(clientActionMsg);
                 String toastMsg = baseMsg + ", file: " + name + ", error: " + e.getClass().getName();
-                Toast.makeText(pftpdService.getContext(), toastMsg, Toast.LENGTH_SHORT).show();
+                try {
+                    Toast.makeText(pftpdService.getContext(), toastMsg, Toast.LENGTH_SHORT).show();
+                } catch (Exception e2) {
+                    logger.error("cannot show toast: {}: {}", e2.getClass(), e2.getMessage());
+                }
             }
         }
         return false;

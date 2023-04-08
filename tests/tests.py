@@ -60,11 +60,12 @@ KEY_PATH_ECDSA_521 = KEY_DIR + "/" + KEY_FILE_ECDSA_521
 KEY_PATH_RSA_BAD = KEY_DIR + "/" + KEY_FILE_RSA_BAD
 KEY_PATH_ED25519_BAD = KEY_DIR + "/" + KEY_FILE_ED25519_BAD
 
-OPTS_SFTP_BASE = "-vk"
+DEFAULT_TIMEOUT = " --max-time 5"
+OPTS_SFTP_BASE = "-vk" + DEFAULT_TIMEOUT
 OPTS_SFTP_NO_KEY = OPTS_SFTP_BASE + " --key "
 DEFAULT_OPTS_SFTP = OPTS_SFTP_NO_KEY + KEY_PATH
 OPTS_USER_PASS = "--user user:test"
-DEFAULT_OPTS_FTP = "-v " + OPTS_USER_PASS
+DEFAULT_OPTS_FTP = "-v " + OPTS_USER_PASS + DEFAULT_TIMEOUT
 DEFAULT_OPTS_SCP = "-i " + KEY_PATH + " -P " + PORT_SFTP + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PreferredAuthentications=publickey"
 
 NEW_DIR = "test-dir-auto"
