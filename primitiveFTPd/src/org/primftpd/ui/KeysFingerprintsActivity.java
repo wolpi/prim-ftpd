@@ -1,20 +1,21 @@
 package org.primftpd.ui;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.primftpd.R;
 import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.prefs.LoadPrefsUtil;
-import org.primftpd.prefs.Theme;
 import org.primftpd.util.KeyFingerprintBean;
 import org.primftpd.util.KeyFingerprintProvider;
 
-public class KeysFingerprintsActivity extends Activity {
+public class KeysFingerprintsActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,12 @@ public class KeysFingerprintsActivity extends Activity {
         ThemeUtil.applyTheme(this, prefs);
         setContentView(R.layout.keys_fingerprints);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        // show action bar to allow user to navigate back
+        // -> the same as for PreferencesActivity
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override

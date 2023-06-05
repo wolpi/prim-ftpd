@@ -1,52 +1,54 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_start"
         android:orderInCategory="100"
-        android:showAsAction="always|withText"
+        app:showAsAction="ifRoom|withText"
         android:title="@string/startService"
         android:icon="?attr/iconStart" />
 
     <item
         android:id="@+id/menu_stop"
         android:orderInCategory="100"
-        android:showAsAction="always|withText"
+        app:showAsAction="ifRoom|withText"
         android:title="@string/stopService"
         android:icon="?attr/iconStop" />
 
     <item
         android:id="@+id/menu_prefs"
         android:orderInCategory="100"
-        android:showAsAction="always|withText"
+        app:showAsAction="ifRoom|withText"
         android:title="@string/prefs"
         android:icon="?attr/iconSettings" />
 
     <item
         android:id="@+id/menu_qr"
         android:orderInCategory="100"
-        android:showAsAction="collapseActionView|withText"
+        app:showAsAction="collapseActionView|withText"
         android:title="QR Code" />
 
     <item
         android:id="@+id/menu_client_action"
         android:orderInCategory="100"
-        android:showAsAction="collapseActionView|withText"
+        app:showAsAction="collapseActionView|withText"
         android:title="@string/clientActionsLabel" />
 
     <item
         android:id="@+id/menu_keys_fingerprints"
         android:orderInCategory="100"
-        android:showAsAction="collapseActionView|withText"
+        app:showAsAction="collapseActionView|withText"
         android:title="Keys Fingerprints" />
 
     <item
         android:id="@+id/menu_clean"
         android:orderInCategory="100"
-        android:showAsAction="collapseActionView|withText"
+        app:showAsAction="collapseActionView|withText"
         android:title="Clean Space" />
 
     <item
         android:id="@+id/menu_about"
         android:orderInCategory="100"
-        android:showAsAction="collapseActionView|withText"
+        app:showAsAction="collapseActionView|withText"
         android:title="About" />
 </menu>

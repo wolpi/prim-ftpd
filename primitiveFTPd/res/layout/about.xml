@@ -1,93 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
 	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical" >
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical" >
 
-	    <TextView
-	        android:id="@+id/versionLabel"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:textStyle="bold"
-	        android:layout_marginTop="20dp"
-	        android:layout_marginLeft="20dp" />
+		<TextView
+			android:id="@+id/versionLabel"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textStyle="bold"
+			android:layout_marginTop="20dp"
+			android:layout_marginLeft="20dp" />
 
-	    <TextView
-	        android:id="@+id/versionTextView"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="5dp"
-	        android:layout_marginLeft="20dp" />
+		<TextView
+			android:id="@+id/versionTextView"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
+			android:layout_marginLeft="20dp" />
 
-	    <TextView
-	        android:id="@+id/licenceLabel"
-	        android:text="@string/licence"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:textStyle="bold"
-	        android:layout_marginTop="20dp"
-	        android:layout_marginLeft="20dp" />
+		<TextView
+			android:id="@+id/licenceLabel"
+			android:text="@string/licence"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textStyle="bold"
+			android:layout_marginTop="20dp"
+			android:layout_marginLeft="20dp" />
 
-	    <TextView
-	        android:id="@+id/licenceTextView"
-	        android:autoLink="web"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="5dp"
-	        android:layout_marginLeft="20dp" />
+		<TextView
+			android:id="@+id/licenceTextView"
+			android:autoLink="web"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
+			android:layout_marginLeft="20dp" />
 
-	    <TextView
-	        android:id="@+id/githubLabel"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:textStyle="bold"
-	        android:layout_marginTop="20dp"
-	        android:layout_marginLeft="20dp" />
+		<TextView
+			android:id="@+id/githubLabel"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textStyle="bold"
+			android:layout_marginTop="20dp"
+			android:layout_marginLeft="20dp" />
 
-	    <TextView
-	        android:id="@+id/githubTextView"
-	        android:autoLink="web"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="5dp"
-	        android:layout_marginLeft="20dp" />
+		<TextView
+			android:id="@+id/githubTextView"
+			android:autoLink="web"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
+			android:layout_marginLeft="20dp" />
 
-	    <TextView
-	        android:id="@+id/fdroidLabel"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:textStyle="bold"
-	        android:layout_marginTop="20dp"
-	        android:layout_marginLeft="20dp" />
+		<TextView
+			android:id="@+id/fdroidLabel"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textStyle="bold"
+			android:layout_marginTop="20dp"
+			android:layout_marginLeft="20dp" />
 
-	    <TextView
-	        android:id="@+id/fdroidTextView"
-	        android:autoLink="web"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="5dp"
-	        android:layout_marginLeft="20dp" />
+		<TextView
+			android:id="@+id/fdroidTextView"
+			android:autoLink="web"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
+			android:layout_marginLeft="20dp" />
 
-	    <TextView
-	        android:id="@+id/googlePlayLabel"
-	        android:text="@string/licence"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:textStyle="bold"
-	        android:layout_marginTop="20dp"
-	        android:layout_marginLeft="20dp" />
+		<TextView
+			android:id="@+id/googlePlayLabel"
+			android:text="@string/licence"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textStyle="bold"
+			android:layout_marginTop="20dp"
+			android:layout_marginLeft="20dp" />
 
-	    <TextView
-	        android:id="@+id/googlePlayTextView"
-	        android:autoLink="web"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="5dp"
-	        android:layout_marginLeft="20dp" />
+		<TextView
+			android:id="@+id/googlePlayTextView"
+			android:autoLink="web"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="5dp"
+			android:layout_marginLeft="20dp" />
 
 		<TextView
 			android:id="@+id/amazonLabel"
@@ -164,4 +165,5 @@
 			android:layout_marginLeft="20dp" />
 
 	</LinearLayout>
+
 </ScrollView>

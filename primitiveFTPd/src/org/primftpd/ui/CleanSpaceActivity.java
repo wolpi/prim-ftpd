@@ -1,6 +1,5 @@
 package org.primftpd.ui;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -10,9 +9,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.primftpd.R;
 import org.primftpd.prefs.LoadPrefsUtil;
-import org.primftpd.prefs.Theme;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.FileSizeUtils;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class CleanSpaceActivity extends Activity {
+public class CleanSpaceActivity extends AppCompatActivity {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -44,7 +45,12 @@ public class CleanSpaceActivity extends Activity {
         ThemeUtil.applyTheme(this, prefs);
         setContentView(R.layout.clean_space);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        // show action bar to allow user to navigate back
+        // -> the same as for PreferencesActivity
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // store references
         quickShareSpaceTextView = findViewById(R.id.quickShareFilesSize);

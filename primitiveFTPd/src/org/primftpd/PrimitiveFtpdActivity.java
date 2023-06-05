@@ -45,9 +45,7 @@ import org.primftpd.events.ServerInfoResponseEvent;
 import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.log.PrimFtpdLoggerBinder;
 import org.primftpd.prefs.AboutActivity;
-import org.primftpd.prefs.FtpPrefsActivityThemeDark;
-import org.primftpd.prefs.FtpPrefsActivityThemeDefault;
-import org.primftpd.prefs.FtpPrefsActivityThemeLight;
+import org.primftpd.prefs.FtpPrefsActivity;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.PrefsBean;
@@ -77,12 +75,12 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Activity to display network info and to start FTP service.
  */
-public class PrimitiveFtpdActivity extends FragmentActivity {
+public class PrimitiveFtpdActivity extends AppCompatActivity {
 
 	private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 		@Override
@@ -910,18 +908,7 @@ public class PrimitiveFtpdActivity extends FragmentActivity {
 
 	protected void handlePrefs() {
 		logger.trace("handlePrefs()");
-		Class<?> prefsActivityClass;
-		switch (theme) {
-			case DARK:
-				prefsActivityClass = FtpPrefsActivityThemeDark.class;
-				break;
-			case LIGHT:
-				prefsActivityClass = FtpPrefsActivityThemeLight.class;
-				break;
-			default:
-				prefsActivityClass = FtpPrefsActivityThemeDefault.class;
-				break;
-		}
+		Class<?> prefsActivityClass = FtpPrefsActivity.class;
 		Intent intent = new Intent(this, prefsActivityClass);
 		startActivity(intent);
 	}

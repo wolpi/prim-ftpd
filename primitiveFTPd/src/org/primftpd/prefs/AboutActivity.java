@@ -1,6 +1,5 @@
 package org.primftpd.prefs;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -9,12 +8,15 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.primftpd.R;
 import org.primftpd.ui.ThemeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AboutActivity extends Activity
+public class AboutActivity extends AppCompatActivity
 {
 	public static final String URL_APL =
 		"https://www.apache.org/licenses/LICENSE-2.0";
@@ -50,7 +52,10 @@ public class AboutActivity extends Activity
 
 		// show action bar to allow user to navigate back
 		// -> the same as for PreferencesActivity
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
 		// show version num
         TextView versionLabel = (TextView)findViewById(R.id.versionLabel);

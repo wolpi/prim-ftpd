@@ -34,9 +34,10 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class QrActivity extends FragmentActivity {
+public class QrActivity extends AppCompatActivity {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -53,7 +54,10 @@ public class QrActivity extends FragmentActivity {
         ThemeUtil.applyTheme(this, prefs);
         setContentView(R.layout.qr);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         urlsParent = findViewById(R.id.qrUrlsParent);
         qrImage = findViewById(R.id.qrImage);

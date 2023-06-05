@@ -1,0 +1,73 @@
+<resources>
+    <!-- Icon attributes -->
+    <declare-styleable name="customAttrs">
+        <attr name="iconStart" format="reference" />
+        <attr name="iconStop" format="reference" />
+        <attr name="iconSettings" format="reference" />
+        <attr name="iconRefresh" format="reference" />
+    </declare-styleable>
+
+    <style name="PrimFtpdDeviceTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/blueIcon</item>
+        <item name="colorPrimaryDark">@color/blueIconDark</item>
+        <item name="colorAccent">@color/blueIconAccent</item>
+
+        <item name="iconStart">@drawable/ic_play_white_36dp</item>
+        <item name="iconStop">@drawable/ic_stop_white_36dp</item>
+        <item name="iconSettings">@drawable/ic_settings_white_36dp</item>
+        <item name="iconRefresh">@drawable/ic_refresh_white_18dp</item>
+    </style>
+
+    <style name="PrimFtpdDarkTheme" parent="PrimFtpdDeviceTheme">
+    </style>
+
+    <style name="PrimFtpdLightTheme" parent="PrimFtpdDeviceTheme">
+    </style>
+
+    <!-- You can also inherit from NNF_BaseTheme.Light -->
+    <style name="FilePickerTheme" parent="FilepickerBaseTheme">
+        <!-- Set these to match your theme -->
+        <item name="colorPrimary">@color/blueIcon</item>
+        <item name="colorPrimaryDark">@color/blueIconDark</item>
+        <item name="colorAccent">@color/blueIconAccent</item>
+
+        <!-- Setting a divider is entirely optional -->
+        <item name="filepickerListItemDivider">?android:attr/listDivider</item>
+
+        <!-- Need to set this also to style create folder dialog -->
+        <item name="alertDialogTheme">@style/FilePickerAlertDialogTheme</item>
+
+        <!-- If you want to set a specific toolbar theme, do it here -->
+        <!-- <item name="nnf_toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item> -->
+    </style>
+
+    <style name="FilePickerAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorPrimary">@color/blueIcon</item>
+        <item name="colorPrimaryDark">@color/blueIconDark</item>
+        <item name="colorAccent">@color/blueIconAccent</item>
+    </style>
+
+    <style name="FilepickerBaseTheme" parent="Theme.AppCompat.DialogWhenLarge">
+        <!-- You can override this in your sub theme -->
+        <item name="filepickerToolbarTheme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+        <item name="filepickerSeparatorColor">@color/filepickerDarkSeparatorColor</item>
+        <item name="filepickerSaveIconColor">?attr/colorAccent</item>
+        <item name="filepickerDirIconColor">?attr/colorAccent</item>
+
+        <!-- These are important. Handled by toolbar. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="FilepickerBaseTheme.Light" parent="Theme.AppCompat.Light.DialogWhenLarge">
+        <!-- You can override this in your sub theme -->
+        <item name="filepickerToolbarTheme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+        <item name="filepickerSeparatorColor">@color/filepickerLightSeparatorColor</item>
+        <item name="filepickerSaveIconColor">?attr/colorAccent</item>
+        <item name="filepickerDirIconColor">?attr/colorAccent</item>
+
+        <!-- These are important. Handled by toolbar. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+</resources>

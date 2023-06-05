@@ -1,16 +1,15 @@
 package org.primftpd.prefs;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 
-public class FtpPrefsActivity extends PreferenceActivity {
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class FtpPrefsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // note: setting theme here does not work for PreferenceActivity
-        // -> sub classes necessary
 
         // prefs fragment
         getFragmentManager().beginTransaction().replace(
@@ -20,7 +19,10 @@ public class FtpPrefsActivity extends PreferenceActivity {
 
         // allow to navigate back with action bar
         // DO NOT, force user to use HW back button
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
