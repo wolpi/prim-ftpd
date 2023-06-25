@@ -101,9 +101,11 @@ public class QrActivity extends AppCompatActivity {
         for (String ipAddressText : ipAddressTexts) {
             boolean ipv6 = ipAddressProvider.isIpv6(ipAddressText);
             if (!ipv6 && !showIpv4) {
+                logger.debug("ignoring ip: {}", ipAddressText);
                 continue;
             }
             if (ipv6 && !showIpv6) {
+                logger.debug("ignoring ip: {}", ipAddressText);
                 continue;
             }
 
@@ -138,6 +140,7 @@ public class QrActivity extends AppCompatActivity {
         RadioGroup radioGroup = new RadioGroup(this);
         radioGroup.setOrientation(RadioGroup.VERTICAL);
         for (final String url : urls) {
+            logger.debug("showing url: {}", url);
             RadioButton radioButton = new RadioButton(this);
             radioButton.setText(url);
             radioGroup.addView(radioButton);
