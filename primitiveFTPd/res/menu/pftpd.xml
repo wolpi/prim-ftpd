@@ -26,7 +26,7 @@
         android:id="@+id/menu_qr"
         android:orderInCategory="100"
         app:showAsAction="collapseActionView|withText"
-        android:title="QR Code" />
+        android:title="@string/iconQrCode" />
 
     <item
         android:id="@+id/menu_client_action"
@@ -38,17 +38,17 @@
         android:id="@+id/menu_keys_fingerprints"
         android:orderInCategory="100"
         app:showAsAction="collapseActionView|withText"
-        android:title="Keys Fingerprints" />
+        android:title="@string/iconKeysFingerprints" />
 
     <item
         android:id="@+id/menu_clean"
         android:orderInCategory="100"
         app:showAsAction="collapseActionView|withText"
-        android:title="Clean Space" />
+        android:title="@string/iconCleanSpace" />
 
     <item
         android:id="@+id/menu_about"
         android:orderInCategory="100"
         app:showAsAction="collapseActionView|withText"
-        android:title="About" />
+        android:title="@string/iconAbout" />
 </menu>
