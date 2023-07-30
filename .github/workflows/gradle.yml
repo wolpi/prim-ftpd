@@ -28,7 +28,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Publish package
-      run: echo github.event_name: ${{ github.event_name }}.
+      run: echo "github.event_name: ${{ github.event_name }}."
       if: ${{ github.event_name == 'push' }}
       uses: gradle/gradle-build-action@v2
       with:
