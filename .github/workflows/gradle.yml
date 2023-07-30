@@ -8,6 +8,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -27,6 +28,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Publish package
+      if: ${{ github.event_name == 'push' }} 
       uses: gradle/gradle-build-action@v2
       with:
         arguments: publish
