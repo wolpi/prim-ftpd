@@ -123,4 +123,14 @@ publishing {
         }
     }
 */
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/wolpi/prim-ftpd")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME") ?: 'never-mind'
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
