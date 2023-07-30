@@ -17,6 +17,7 @@ repositories {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'maven-publish'
 //apply plugin: 'android-cq'
 
 android {
@@ -102,4 +103,24 @@ dependencies {
 
     implementation 'org.bouncycastle:bcpg-jdk15on:1.70'
     implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'org.primftpd'
+            artifactId = 'app'
+            version = 'latest'
+
+            artifact file('build/outputs/apk/debug/primitiveFTPd-debug.apk');
+        }
+    }
+/*
+    //to debug publishing
+    repositories {
+        maven {
+            url = "file://$projectDir/deploy"
+        }
+    }
+*/
 }
