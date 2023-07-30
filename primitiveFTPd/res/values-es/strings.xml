@@ -156,6 +156,10 @@
     <string name="mobileUiLong">Modo dispositivo móvil</string>
     <string name="tvUiShort">Modo TV</string>
     <string name="tvUiLong">Modo televisión</string>
+    <string name="iconQrCode">Código QR</string>
+    <string name="iconKeysFingerprints">Huellas de claves</string>
+    <string name="iconCleanSpace">Liberar espacio</string>
+    <string name="iconAbout">Acerca de</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP y SFTP</item>
         <item>Solo FTP</item>
