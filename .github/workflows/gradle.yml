@@ -27,11 +27,15 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Output event
+      env:
+        EVENT: ${{ github.event_name }}
+      run: echo "github.event_name: $EVENT."
     - name: Publish package
-      run: echo "github.event_name: ${{ github.event_name }}."
       if: ${{ github.event_name == 'push' }}
       uses: gradle/gradle-build-action@v2
       with:
         arguments: publish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
