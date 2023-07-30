@@ -110,7 +110,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'org.primftpd'
             artifactId = 'app'
-            version = 'latest'
+            version = 'latest-SNAPSHOT'
 
             artifact file('build/outputs/apk/debug/primitiveFTPd-debug.apk');
         }
