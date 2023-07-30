@@ -30,7 +30,7 @@ jobs:
     - name: Output event
       env:
         EVENT: ${{ github.event_name }}
-      run: echo "github.event_name: $EVENT."
+      run: echo github.event_name $EVENT.
     - name: Publish package
       if: ${{ github.event_name == 'push' }}
       uses: gradle/gradle-build-action@v2
