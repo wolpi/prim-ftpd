@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="purpleIcon" type="color">#9c27b0</item>
-    <item name="purpleIconDark" type="color">#7b1fa2</item>
-    <item name="purpleIconAccent" type="color">#7b1fa2</item>
-
     <item name="blueIcon" type="color">#03A9F4</item>
     <item name="blueIconDark" type="color">#0288d1</item>
     <item name="blueIconAccent" type="color">#00b0ff</item>
@@ -11,8 +7,6 @@
     <color name="widgetBackgroundDisabled">#999b9b9b</color>
     <color name="widgetBackgroundEnabled">#991dcc1c</color>
     <color name="widgetTextColorEnabled">#000000</color>
-
-    <color name="lightThemeActionbarText">#FFFFFF</color>
 
     <!-- 12% black in LIGHT THEME -->
     <color name="filepickerLightSeparatorColor">#1e000000</color>

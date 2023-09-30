@@ -106,7 +106,7 @@
 
         <activity
             android:theme="@style/PrimFtpdDeviceTheme"
-            android:name=".PrimitiveFtpdActivity"
+            android:name=".ui.MainTabsActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:exported="true">
@@ -137,32 +137,7 @@
         <activity
             android:name="org.primftpd.prefs.FtpPrefsActivity"
             android:label="@string/prefs"
-            android:theme="@style/PrimFtpdLightTheme">
-        </activity>
-
-        <activity
-            android:name="org.primftpd.ui.QrActivity"
-            android:label="QR Code">
-        </activity>
-
-        <activity
-            android:name="org.primftpd.ui.ClientActionActivity"
-            android:label="@string/clientActionsLabel">
-        </activity>
-
-        <activity
-            android:name="org.primftpd.ui.KeysFingerprintsActivity"
-            android:label="Keys Fingerprints">
-        </activity>
-
-        <activity
-            android:name="org.primftpd.ui.CleanSpaceActivity"
-            android:label="Clean Space">
-        </activity>
-
-        <activity
-            android:name="org.primftpd.prefs.AboutActivity"
-            android:label="About">
+            >
         </activity>
 
         <activity

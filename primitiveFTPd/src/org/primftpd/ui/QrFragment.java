@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -33,11 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-public class QrActivity extends AppCompatActivity {
+public class QrFragment extends Fragment {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -47,39 +45,25 @@ public class QrActivity extends AppCompatActivity {
     private int height;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        ThemeUtil.applyTheme(this, prefs);
-        setContentView(R.layout.qr);
+        View view = inflater.inflate(R.layout.qr, container, false);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-        urlsParent = findViewById(R.id.qrUrlsParent);
-        qrImage = findViewById(R.id.qrImage);
+        urlsParent = view.findViewById(R.id.qrUrlsParent);
+        qrImage = view.findViewById(R.id.qrImage);
 
         width = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
         height = getResources().getDisplayMetrics().heightPixels / 2;
+
+        return view;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-
-        // navigate back -> the same as for PreferencesActivity
-        if (android.R.id.home == item.getItemId()) {
-            finish();
-        }
-        return true;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
 
         boolean isLeftToRight = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -88,9 +72,9 @@ public class QrActivity extends AppCompatActivity {
         }
 
         IpAddressProvider ipAddressProvider = new IpAddressProvider();
-        List<String> ipAddressTexts = ipAddressProvider.ipAddressTexts(this, false, isLeftToRight);
+        List<String> ipAddressTexts = ipAddressProvider.ipAddressTexts(getContext(), false, isLeftToRight);
 
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(this);
+        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
         PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
 
         Boolean showIpv4 = LoadPrefsUtil.showIpv4InNotification(prefs);
@@ -137,19 +121,19 @@ public class QrActivity extends AppCompatActivity {
                 break;
         }
 
-        RadioGroup radioGroup = new RadioGroup(this);
+        RadioGroup radioGroup = new RadioGroup(getContext());
         radioGroup.setOrientation(RadioGroup.VERTICAL);
         for (final String url : urls) {
             logger.debug("showing url: {}", url);
-            RadioButton radioButton = new RadioButton(this);
+            RadioButton radioButton = new RadioButton(getContext());
             radioButton.setText(url);
             radioGroup.addView(radioButton);
-            final QrActivity activity = this;
+            final QrFragment fragment = this;
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bitmap qr = activity.generateQr(url, darkMode);
-                    activity.qrImage.setImageBitmap(qr);
+                    Bitmap qr = fragment.generateQr(url, darkMode);
+                    fragment.qrImage.setImageBitmap(qr);
                 }
             });
         }

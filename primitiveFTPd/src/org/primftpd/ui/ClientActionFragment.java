@@ -1,16 +1,13 @@
 package org.primftpd.ui;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,7 +15,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.events.DataTransferredEvent;
-import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.util.FileSizeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +25,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClientActionActivity extends AppCompatActivity {
+import androidx.fragment.app.Fragment;
+
+public class ClientActionFragment extends Fragment {
 
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -118,67 +116,28 @@ public class ClientActionActivity extends AppCompatActivity {
     private ScrollView scrollView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        ThemeUtil.applyTheme(this, prefs);
-        setContentView(R.layout.client_action);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        View view = inflater.inflate(R.layout.client_action, container, false);
 
         EventBus.getDefault().register(this);
 
-        logContent = findViewById(R.id.clientActionsContent);
-        scrollView = findViewById(R.id.clientActionsScrollView);
+        logContent = view.findViewById(R.id.clientActionsContent);
+        scrollView = view.findViewById(R.id.clientActionsScrollView);
 
         TOTAL_BYTES_READ = 0;
         TOTAL_BYTES_WRITTEN = 0;
+
+        return view;
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
+    public void onDestroyView() {
+        super.onDestroyView();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-/*
-        updateStats = true;
-
-        TextView sentTotal = findViewById(R.id.statsTotalSent);
-        TextView receivedTotal = findViewById(R.id.statsTotalReceived);
-        TextView sentPerSec = findViewById(R.id.statsSentPerSec);
-        TextView receivedPerSec = findViewById(R.id.statsReceivedPerSec);
-
-        UpdateStatsHandler handler = new UpdateStatsHandler(sentTotal, receivedTotal, sentPerSec, receivedPerSec);
-        Message msg = handler.obtainMessage(EVENT_UPDATE_STATS);
-        handler.sendMessageDelayed(msg, INTERVAL_UPDATE_STATS);
-*/    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        updateStats = false;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-
-        // navigate back -> the same as for PreferencesActivity
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-        }
-        return true;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Icon attributes -->
     <declare-styleable name="customAttrs">
         <attr name="iconStart" format="reference" />
@@ -7,10 +7,14 @@
         <attr name="iconRefresh" format="reference" />
     </declare-styleable>
 
-    <style name="PrimFtpdDeviceTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="PrimFtpdDeviceTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/blueIcon</item>
-        <item name="colorPrimaryDark">@color/blueIconDark</item>
-        <item name="colorAccent">@color/blueIconAccent</item>
+        <item name="colorPrimaryVariant">@color/blueIconDark</item>
+        <item name="colorOnPrimary">@color/blueIconAccent</item>
+        <item name="colorSecondary">@color/blueIconDark</item>
+        <item name="colorSecondaryVariant">@color/blueIcon</item>
+        <item name="colorOnSecondary">@color/blueIconAccent</item>
+        <item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimaryVariant</item>
 
         <item name="iconStart">@drawable/ic_play_white_36dp</item>
         <item name="iconStop">@drawable/ic_stop_white_36dp</item>
@@ -18,11 +22,8 @@
         <item name="iconRefresh">@drawable/ic_refresh_white_18dp</item>
     </style>
 
-    <style name="PrimFtpdDarkTheme" parent="PrimFtpdDeviceTheme">
-    </style>
-
-    <style name="PrimFtpdLightTheme" parent="PrimFtpdDeviceTheme">
-    </style>
+    <style name="PrimFtpdDarkTheme" parent="PrimFtpdDeviceTheme" />
+    <style name="PrimFtpdLightTheme" parent="PrimFtpdDeviceTheme" />
 
     <!-- You can also inherit from NNF_BaseTheme.Light -->
     <style name="FilePickerTheme" parent="FilepickerBaseTheme">
@@ -47,7 +48,7 @@
         <item name="colorAccent">@color/blueIconAccent</item>
     </style>
 
-    <style name="FilepickerBaseTheme" parent="Theme.AppCompat.DialogWhenLarge">
+    <style name="FilepickerBaseTheme" parent="Theme.MaterialComponents.DialogWhenLarge">
         <!-- You can override this in your sub theme -->
         <item name="filepickerToolbarTheme">@style/ThemeOverlay.AppCompat.ActionBar</item>
         <item name="filepickerSeparatorColor">@color/filepickerDarkSeparatorColor</item>
@@ -59,7 +60,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="FilepickerBaseTheme.Light" parent="Theme.AppCompat.Light.DialogWhenLarge">
+    <style name="FilepickerBaseTheme.Light" parent="Theme.MaterialComponents.Light.DialogWhenLarge">
         <!-- You can override this in your sub theme -->
         <item name="filepickerToolbarTheme">@style/ThemeOverlay.AppCompat.ActionBar</item>
         <item name="filepickerSeparatorColor">@color/filepickerLightSeparatorColor</item>

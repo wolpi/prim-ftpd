@@ -1,33 +1,32 @@
-package org.primftpd.prefs;
+package org.primftpd.ui;
 
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import org.primftpd.R;
-import org.primftpd.ui.ThemeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AboutActivity extends AppCompatActivity
+import androidx.fragment.app.Fragment;
+
+public class AboutFragment extends Fragment
 {
-	public static final String URL_APL =
-		"https://www.apache.org/licenses/LICENSE-2.0";
-	public static final String URL_GITHUB =
-		"https://github.com/wolpi/prim-ftpd";
-	public static final String URL_FDROID =
-		"https://f-droid.org/repository/browse/?fdid=org.primftpd";
-	public static final String URL_GOOGLE_PLAY =
-		"https://play.google.com/store/apps/details?id=org.primftpd";
+    public static final String URL_APL =
+        "https://www.apache.org/licenses/LICENSE-2.0";
+    public static final String URL_GITHUB =
+        "https://github.com/wolpi/prim-ftpd";
+    public static final String URL_FDROID =
+        "https://f-droid.org/repository/browse/?fdid=org.primftpd";
+    public static final String URL_GOOGLE_PLAY =
+        "https://play.google.com/store/apps/details?id=org.primftpd";
     public static final String URL_AMAZON =
-		"http://www.amazon.com/wolpi-primitive-FTPd/dp/B00KERCPNY/ref=sr_1_1";
+        "http://www.amazon.com/wolpi-primitive-FTPd/dp/B00KERCPNY/ref=sr_1_1";
 
     public static final String URL_MINA = "https://mina.apache.org";
     public static final String URL_BC = "https://bouncycastle.org/";
@@ -38,45 +37,34 @@ public class AboutActivity extends AppCompatActivity
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
 
-		// set theme
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        ThemeUtil.applyTheme(this, prefs);
+        View view = inflater.inflate(R.layout.about, container, false);
 
-		// set layout
-		setContentView(R.layout.about);
-
-		// show action bar to allow user to navigate back
-		// -> the same as for PreferencesActivity
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-		// show version num
-        TextView versionLabel = (TextView)findViewById(R.id.versionLabel);
+        // show version num
+        TextView versionLabel = view.findViewById(R.id.versionLabel);
         versionLabel.setText("Version");
 
-        TextView versionView = (TextView)findViewById(R.id.versionTextView);
-        String pkgName = getPackageName();
-        PackageManager pkgMgr = getPackageManager();
+        TextView versionView = view.findViewById(R.id.versionTextView);
+        String pkgName = getContext().getPackageName();
+        PackageManager pkgMgr = getContext().getPackageManager();
         PackageInfo packageInfo = null;
-		try {
-			packageInfo = pkgMgr.getPackageInfo(
-				pkgName,
-				0);
-		} catch (NameNotFoundException e) {
-			logger.error("could not get version", e);
-		}
+        try {
+            packageInfo = pkgMgr.getPackageInfo(
+                pkgName,
+                0);
+        } catch (NameNotFoundException e) {
+            logger.error("could not get version", e);
+        }
         String version = packageInfo != null
-        	? packageInfo.versionName
-        	: "unknown";
+            ? packageInfo.versionName
+            : "unknown";
         if (packageInfo != null) {
-        	version += " (code: " + packageInfo.versionCode + ")";
+            version += " (code: " + packageInfo.versionCode + ")";
         }
 
         logger.debug("pkgName: '{}'", pkgName);
@@ -85,40 +73,28 @@ public class AboutActivity extends AppCompatActivity
         versionView.setText(version);
 
         // show licence
-        TextView lisenseView = ((TextView)findViewById(R.id.licenceTextView));
+        TextView lisenseView = view.findViewById(R.id.licenceTextView);
         lisenseView.setText("APL \n"+URL_APL);
 
         // show other links
-        ((TextView)findViewById(R.id.githubLabel)).setText("GitHub");
-        ((TextView)findViewById(R.id.githubTextView)).setText(URL_GITHUB);
+        ((TextView)view.findViewById(R.id.githubLabel)).setText("GitHub");
+        ((TextView)view.findViewById(R.id.githubTextView)).setText(URL_GITHUB);
 
-        ((TextView)findViewById(R.id.fdroidLabel)).setText("F-Droid");
-        ((TextView)findViewById(R.id.fdroidTextView)).setText(URL_FDROID);
+        ((TextView)view.findViewById(R.id.fdroidLabel)).setText("F-Droid");
+        ((TextView)view.findViewById(R.id.fdroidTextView)).setText(URL_FDROID);
 
-        ((TextView)findViewById(R.id.googlePlayLabel)).setText("Google Play");
-        ((TextView)findViewById(R.id.googlePlayTextView)).setText(URL_GOOGLE_PLAY);
+        ((TextView)view.findViewById(R.id.googlePlayLabel)).setText("Google Play");
+        ((TextView)view.findViewById(R.id.googlePlayTextView)).setText(URL_GOOGLE_PLAY);
 
-        ((TextView)findViewById(R.id.amazonLabel)).setText("Amazon");
-        ((TextView)findViewById(R.id.amazonTextView)).setText(URL_AMAZON);
+        ((TextView)view.findViewById(R.id.amazonLabel)).setText("Amazon");
+        ((TextView)view.findViewById(R.id.amazonTextView)).setText(URL_AMAZON);
 
-        ((TextView)findViewById(R.id.minaTextView)).setText(URL_MINA);
-        ((TextView)findViewById(R.id.bouncyCastleTextView)).setText(URL_BC);
-        ((TextView)findViewById(R.id.slf4jTextView)).setText(URL_SLF4J);
-        ((TextView)findViewById(R.id.filepickerTextView)).setText(URL_FILEPICKER);
-        ((TextView)findViewById(R.id.libsuperuserTextView)).setText(URL_LIBSUPERUSER);
-        ((TextView)findViewById(R.id.eventbusTextView)).setText(URL_EVENTBUS);
-	}
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-
-        // navigate back -> the same as for PreferencesActivity
-        switch (item.getItemId()) {
-            case android.R.id.home:
-            	finish();
-                break;
-        }
-        return true;
+        ((TextView)view.findViewById(R.id.minaTextView)).setText(URL_MINA);
+        ((TextView)view.findViewById(R.id.bouncyCastleTextView)).setText(URL_BC);
+        ((TextView)view.findViewById(R.id.slf4jTextView)).setText(URL_SLF4J);
+        ((TextView)view.findViewById(R.id.filepickerTextView)).setText(URL_FILEPICKER);
+        ((TextView)view.findViewById(R.id.libsuperuserTextView)).setText(URL_LIBSUPERUSER);
+        ((TextView)view.findViewById(R.id.eventbusTextView)).setText(URL_EVENTBUS);
+        return view;
     }
 }

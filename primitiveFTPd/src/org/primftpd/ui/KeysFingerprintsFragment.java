@@ -1,112 +1,84 @@
 package org.primftpd.ui;
 
-import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 
 import org.primftpd.R;
 import org.primftpd.crypto.HostKeyAlgorithm;
-import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.util.KeyFingerprintBean;
 import org.primftpd.util.KeyFingerprintProvider;
 
-public class KeysFingerprintsActivity extends AppCompatActivity {
+import androidx.fragment.app.Fragment;
+
+public class KeysFingerprintsFragment extends Fragment {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        ThemeUtil.applyTheme(this, prefs);
-        setContentView(R.layout.keys_fingerprints);
-
-        // show action bar to allow user to navigate back
-        // -> the same as for PreferencesActivity
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-
-        // navigate back -> the same as for PreferencesActivity
-        if (android.R.id.home == item.getItemId()) {
-            finish();
-        }
-        return true;
-    }
-
-    @Override
-    @SuppressLint("SetTextI18n")
-    protected void onStart() {
-        super.onStart();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.keys_fingerprints, container, false);
 
         KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider();
-        keyFingerprintProvider.calcPubkeyFingerprints(this);
+        keyFingerprintProvider.calcPubkeyFingerprints(getContext());
 
         HostKeyAlgorithm algo = HostKeyAlgorithm.ED_25519;
-        ((TextView) findViewById(R.id.keyFingerprintEd25519Md5Label))
+        ((TextView) view.findViewById(R.id.keyFingerprintEd25519Md5Label))
                 .setText("MD5 (" + algo.getAlgorithmName() + ")");
-        ((TextView) findViewById(R.id.keyFingerprintEd25519Sha1Label))
+        ((TextView) view.findViewById(R.id.keyFingerprintEd25519Sha1Label))
                 .setText("SHA1 (" + algo.getAlgorithmName() + ")");
-        ((TextView) findViewById(R.id.keyFingerprintEd25519Sha256Label))
+        ((TextView) view.findViewById(R.id.keyFingerprintEd25519Sha256Label))
                 .setText("SHA256 (" + algo.getAlgorithmName() + ")");
 
         KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(algo);
 
         if (keyFingerprintBean != null) {
-            ((TextView) findViewById(R.id.keyFingerprintEd25519Md5TextView))
+            ((TextView) view.findViewById(R.id.keyFingerprintEd25519Md5TextView))
                     .setText(keyFingerprintBean.getFingerprintMd5());
-            ((TextView) findViewById(R.id.keyFingerprintEd25519Sha1TextView))
+            ((TextView) view.findViewById(R.id.keyFingerprintEd25519Sha1TextView))
                     .setText(keyFingerprintBean.getFingerprintSha1());
-            ((TextView) findViewById(R.id.keyFingerprintEd25519Sha256TextView))
+            ((TextView) view.findViewById(R.id.keyFingerprintEd25519Sha256TextView))
                     .setText(keyFingerprintBean.getFingerprintSha256());
         }
 
         algo = HostKeyAlgorithm.RSA_4096;
-        ((TextView) findViewById(R.id.keyFingerprintRsa4096Md5Label))
+        ((TextView) view.findViewById(R.id.keyFingerprintRsa4096Md5Label))
                 .setText("MD5 (" + algo.getAlgorithmName() + " 4096)");
-        ((TextView) findViewById(R.id.keyFingerprintRsa4096Sha1Label))
+        ((TextView) view.findViewById(R.id.keyFingerprintRsa4096Sha1Label))
                 .setText("SHA1 (" + algo.getAlgorithmName() + " 4096)");
-        ((TextView) findViewById(R.id.keyFingerprintRsa4096Sha256Label))
+        ((TextView) view.findViewById(R.id.keyFingerprintRsa4096Sha256Label))
                 .setText("SHA256 (" + algo.getAlgorithmName() + " 4096)");
 
         keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(algo);
 
         if (keyFingerprintBean != null) {
-            ((TextView) findViewById(R.id.keyFingerprintRsa4096Md5TextView))
+            ((TextView) view.findViewById(R.id.keyFingerprintRsa4096Md5TextView))
                     .setText(keyFingerprintBean.getFingerprintMd5());
-            ((TextView) findViewById(R.id.keyFingerprintRsa4096Sha1TextView))
+            ((TextView) view.findViewById(R.id.keyFingerprintRsa4096Sha1TextView))
                     .setText(keyFingerprintBean.getFingerprintSha1());
-            ((TextView) findViewById(R.id.keyFingerprintRsa4096Sha256TextView))
+            ((TextView) view.findViewById(R.id.keyFingerprintRsa4096Sha256TextView))
                     .setText(keyFingerprintBean.getFingerprintSha256());
         }
 
         algo = HostKeyAlgorithm.RSA_2048;
-        ((TextView) findViewById(R.id.keyFingerprintRsa2048Md5Label))
+        ((TextView) view.findViewById(R.id.keyFingerprintRsa2048Md5Label))
                 .setText("MD5 (" + algo.getAlgorithmName() + " 2048)");
-        ((TextView) findViewById(R.id.keyFingerprintRsa2048Sha1Label))
+        ((TextView) view.findViewById(R.id.keyFingerprintRsa2048Sha1Label))
                 .setText("SHA1 (" + algo.getAlgorithmName() + " 2048)");
-        ((TextView) findViewById(R.id.keyFingerprintRsa2048Sha256Label))
+        ((TextView) view.findViewById(R.id.keyFingerprintRsa2048Sha256Label))
                 .setText("SHA256 (" + algo.getAlgorithmName() + " 2048)");
 
         keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(algo);
 
         if (keyFingerprintBean != null) {
-            ((TextView) findViewById(R.id.keyFingerprintRsa2048Md5TextView))
+            ((TextView) view.findViewById(R.id.keyFingerprintRsa2048Md5TextView))
                     .setText(keyFingerprintBean.getFingerprintMd5());
-            ((TextView) findViewById(R.id.keyFingerprintRsa2048Sha1TextView))
+            ((TextView) view.findViewById(R.id.keyFingerprintRsa2048Sha1TextView))
                     .setText(keyFingerprintBean.getFingerprintSha1());
-            ((TextView) findViewById(R.id.keyFingerprintRsa2048Sha256TextView))
+            ((TextView) view.findViewById(R.id.keyFingerprintRsa2048Sha256TextView))
                     .setText(keyFingerprintBean.getFingerprintSha256());
         }
+        return view;
     }
 }

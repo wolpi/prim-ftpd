@@ -1,19 +1,15 @@
 package org.primftpd.ui;
 
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import org.primftpd.R;
-import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.FileSizeUtils;
 import org.slf4j.Logger;
@@ -21,7 +17,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class CleanSpaceActivity extends AppCompatActivity {
+import androidx.fragment.app.Fragment;
+
+public class CleanSpaceFragment extends Fragment {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -36,90 +34,61 @@ public class CleanSpaceActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-        logger.trace("onCreate()");
-
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        ThemeUtil.applyTheme(this, prefs);
-        setContentView(R.layout.clean_space);
-
-        // show action bar to allow user to navigate back
-        // -> the same as for PreferencesActivity
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-        // store references
-        quickShareSpaceTextView = findViewById(R.id.quickShareFilesSize);
-        logsSpaceTextView = findViewById(R.id.logFilesSize);
-        rootTmpSpaceTextView = findViewById(R.id.rootTmpFilesSize);
+        View view = inflater.inflate(R.layout.clean_space, container, false);
+        quickShareSpaceTextView = view.findViewById(R.id.quickShareFilesSize);
+        logsSpaceTextView = view.findViewById(R.id.logFilesSize);
+        rootTmpSpaceTextView = view.findViewById(R.id.rootTmpFilesSize);
 
         // register listeners
-        final CleanSpaceActivity activity = this;
-        findViewById(R.id.quickShareFilesDelete).setOnClickListener(new View.OnClickListener() {
+        final CleanSpaceFragment fragment = this;
+        view.findViewById(R.id.quickShareFilesDelete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onButtonClick(activity, quickShareDir(), true);
+                onButtonClick(fragment, quickShareDir(), true);
             }
         });
-        findViewById(R.id.logFilesDelete).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.logFilesDelete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onButtonClick(activity, logsDir(), false);
+                onButtonClick(fragment, logsDir(), false);
             }
         });
-        findViewById(R.id.rootTmpFilesDelete).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.rootTmpFilesDelete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onButtonClick(activity, rootTmpDir(), true);
+                onButtonClick(fragment, rootTmpDir(), true);
             }
         });
+
+        return view;
     }
 
-    private void onButtonClick(CleanSpaceActivity activity, File dir, boolean includeChildren) {
+    private void onButtonClick(CleanSpaceFragment fragment, File dir, boolean includeChildren) {
         int numberOfFiles = collectNumberOfFiles(dir, includeChildren);
         if (numberOfFiles > 0) {
             final ProgressDialog progressDialog = createProgressDialog(numberOfFiles);
-            DeleteTask deleteTask = new DeleteTask(activity, progressDialog, dir, includeChildren);
+            DeleteTask deleteTask = new DeleteTask(fragment, progressDialog, dir, includeChildren);
             deleteTask.execute();
 
             new DialogHandler();
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        logger.trace("onResume()");
-
-        updateView();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-
-        // navigate back -> the same as for PreferencesActivity
-        if (android.R.id.home == item.getItemId()) {
-            finish();
-        }
-        return true;
-    }
-
     protected File quickShareDir() {
-        return Defaults.quickShareTmpDir(this);
+        return Defaults.quickShareTmpDir(this.getContext());
     }
 
     protected File logsDir() {
-        return Defaults.homeDirScoped(this);
+        return Defaults.homeDirScoped(this.getContext());
     }
 
     protected File rootTmpDir() {
-        return Defaults.rootCopyTmpDir(this);
+        return Defaults.rootCopyTmpDir(this.getContext());
     }
 
     protected void updateView() {
@@ -170,7 +139,7 @@ public class CleanSpaceActivity extends AppCompatActivity {
     }
 
     protected ProgressDialog createProgressDialog(int maxProgress) {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
+        final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
         progressDialog.setMax(maxProgress);
         progressDialog.setMessage("delete ...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -184,17 +153,17 @@ public class CleanSpaceActivity extends AppCompatActivity {
 
         protected Logger logger = LoggerFactory.getLogger(getClass());
 
-        private final CleanSpaceActivity activity;
+        private final CleanSpaceFragment fragment;
         private final ProgressDialog progressDiag;
         private final File dir;
         private final boolean includeChildren;
 
-        DeleteTask(CleanSpaceActivity activity,
+        DeleteTask(CleanSpaceFragment fragment,
                  ProgressDialog progressDiag,
                  File dir,
                  boolean includeChildren) {
             super();
-            this.activity = activity;
+            this.fragment = fragment;
             this.progressDiag = progressDiag;
             this.dir = dir;
             this.includeChildren = includeChildren;
@@ -226,7 +195,7 @@ public class CleanSpaceActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             progressDiag.dismiss();
-            activity.updateView();
+            fragment.updateView();
         }
     }
 }

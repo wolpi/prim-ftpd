@@ -44,7 +44,6 @@ import org.primftpd.events.ServerInfoRequestEvent;
 import org.primftpd.events.ServerInfoResponseEvent;
 import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.log.PrimFtpdLoggerBinder;
-import org.primftpd.prefs.AboutActivity;
 import org.primftpd.prefs.FtpPrefsActivity;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
@@ -52,12 +51,9 @@ import org.primftpd.prefs.PrefsBean;
 import org.primftpd.prefs.StorageType;
 import org.primftpd.prefs.Theme;
 import org.primftpd.ui.CalcPubkeyFinterprintsTask;
-import org.primftpd.ui.CleanSpaceActivity;
-import org.primftpd.ui.ClientActionActivity;
+import org.primftpd.ui.ClientActionFragment;
 import org.primftpd.ui.GenKeysAskDialogFragment;
 import org.primftpd.ui.GenKeysAsyncTask;
-import org.primftpd.ui.KeysFingerprintsActivity;
-import org.primftpd.ui.QrActivity;
 import org.primftpd.ui.ThemeUtil;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.IpAddressProvider;
@@ -735,7 +731,7 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 
 	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
 	public void onEvent(ClientActionEvent event) {
-		String clientAction = ClientActionActivity.format(event);
+		String clientAction = ClientActionFragment.format(event);
 
 		clientActionView2.setVisibility(View.VISIBLE);
 		clientActionView3.setVisibility(View.VISIBLE);
@@ -914,33 +910,23 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 	}
 
 	protected void handleQr() {
-		logger.trace("handle QR");
-		Intent intent = new Intent(this, QrActivity.class);
-		startActivity(intent);
+		logger.trace("handle QR -> no impl");
 	}
 
 	protected void handleClientAction() {
-		logger.trace("handleClientAction()");
-		Intent intent = new Intent(this, ClientActionActivity.class);
-		startActivity(intent);
+		logger.trace("handleClientAction() -> no impl");
 	}
 
 	protected void handleKeysFingerprints() {
-		logger.trace("handleKeysFingerprints()");
-		Intent intent = new Intent(this, KeysFingerprintsActivity.class);
-		startActivity(intent);
+		logger.trace("handleKeysFingerprints() -> no impl");
 	}
 
 	protected void handleClean() {
-		logger.trace("handleClean()");
-		Intent intent = new Intent(this, CleanSpaceActivity.class);
-		startActivity(intent);
+		logger.trace("handleClean() -> no impl");
 	}
 
 	protected void handleAbout() {
-		logger.trace("handleAbout()");
-		Intent intent = new Intent(this, AboutActivity.class);
-		startActivity(intent);
+		logger.trace("handleAbout() -> no impl");
 	}
 
 	/**
