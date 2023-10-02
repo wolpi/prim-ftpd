@@ -44,7 +44,6 @@ import org.primftpd.events.ServerInfoRequestEvent;
 import org.primftpd.events.ServerInfoResponseEvent;
 import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.log.PrimFtpdLoggerBinder;
-import org.primftpd.prefs.FtpPrefsActivity;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.PrefsBean;
@@ -903,10 +902,7 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 	}
 
 	protected void handlePrefs() {
-		logger.trace("handlePrefs()");
-		Class<?> prefsActivityClass = FtpPrefsActivity.class;
-		Intent intent = new Intent(this, prefsActivityClass);
-		startActivity(intent);
+		logger.trace("handlePrefs() -> no impl");
 	}
 
 	protected void handleQr() {

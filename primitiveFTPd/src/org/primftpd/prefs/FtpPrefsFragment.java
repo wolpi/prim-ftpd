@@ -1,19 +1,12 @@
 package org.primftpd.prefs;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
 
 import org.primftpd.R;
-import org.primftpd.filepicker.nononsenseapps.Utils;
 import org.primftpd.log.CsvLoggerFactory;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.NotificationUtil;
@@ -22,16 +15,18 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class FtpPrefsFragment extends PreferenceFragment
+import androidx.annotation.NonNull;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceFragmentCompat;
+
+public class FtpPrefsFragment extends PreferenceFragmentCompat
 {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
-	private EditTextPreference startDirPref;
-
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		logger.debug("onCreate()");
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+		logger.debug("onCreatePreferences()");
 		addPreferencesFromResource(R.xml.preferences);
 
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
@@ -50,7 +45,7 @@ public class FtpPrefsFragment extends PreferenceFragment
 		}
 
 		// context
-		final Context context = getActivity().getApplicationContext();
+		final Context context = getContext();
 
 		// text parameter for pub key auth pref
 		Resources res = getResources();
@@ -82,34 +77,15 @@ public class FtpPrefsFragment extends PreferenceFragment
 		});
 
 		// directory picker for choosing home dir
-		startDirPref = (EditTextPreference)findPreference(LoadPrefsUtil.PREF_KEY_START_DIR);
+		Preference startDirPref = findPreference(LoadPrefsUtil.PREF_KEY_START_DIR);
 		startDirPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				// don't show default dialog
-				startDirPref.getDialog().dismiss();
-
+			public boolean onPreferenceClick(@NonNull Preference preference) {
 				File startDirVal = LoadPrefsUtil.startDir(startDirPref.getSharedPreferences());
-				logger.debug("using initial start dir val: {}", startDirVal);
-				Intent dirPickerIntent = Defaults.createDefaultDirPicker(context, startDirVal);
-				startActivityForResult(dirPickerIntent, 0);
-
+				Intent dirPickerIntent = Defaults.createPrefDirPicker(context, startDirVal, LoadPrefsUtil.PREF_KEY_START_DIR);
+				startDirPref.setIntent(dirPickerIntent);
 				return false;
 			}
 		});
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		logger.debug("onActivityResult()");
-		super.onActivityResult(requestCode, resultCode, data);
-
-		if(resultCode == Activity.RESULT_OK) {
-			Uri uri = data.getData();
-			File file = Utils.getFileForUri(uri);
-			String path = file.getAbsolutePath();
-			logger.debug("got start dir path: {}", path);
-			startDirPref.setText(path);
-		}
 	}
 }

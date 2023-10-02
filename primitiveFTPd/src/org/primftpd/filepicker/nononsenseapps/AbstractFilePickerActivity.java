@@ -4,9 +4,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.primftpd.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +64,9 @@ public abstract class AbstractFilePickerActivity<T> extends AppCompatActivity
     public static final int MODE_FILE_AND_DIR = AbstractFilePickerFragment.MODE_FILE_AND_DIR;
     public static final int MODE_NEW_FILE = AbstractFilePickerFragment.MODE_NEW_FILE;
     public static final int MODE_DIR = AbstractFilePickerFragment.MODE_DIR;
+
+    public static final String MODE_SAFE_PREFERENCE = "org.pftpd.safeAsPref";
+
     protected static final String TAG = "filepicker_fragment";
     protected String startPath = null;
     protected int mode = AbstractFilePickerFragment.MODE_FILE;
@@ -67,6 +74,8 @@ public abstract class AbstractFilePickerActivity<T> extends AppCompatActivity
     protected boolean allowMultiple = false;
     private boolean allowExistingFile = true;
     protected boolean singleClick = false;
+
+    protected String prefKeyToSave = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +91,7 @@ public abstract class AbstractFilePickerActivity<T> extends AppCompatActivity
             allowMultiple = intent.getBooleanExtra(EXTRA_ALLOW_MULTIPLE, allowMultiple);
             allowExistingFile = intent.getBooleanExtra(EXTRA_ALLOW_EXISTING_FILE, allowExistingFile);
             singleClick = intent.getBooleanExtra(EXTRA_SINGLE_CLICK, singleClick);
+            prefKeyToSave = intent.getStringExtra(MODE_SAFE_PREFERENCE);
         }
 
         // Default to cancelled
@@ -120,6 +130,13 @@ public abstract class AbstractFilePickerActivity<T> extends AppCompatActivity
         Intent i = new Intent();
         i.setData(file);
         setResult(Activity.RESULT_OK, i);
+
+        if (this.prefKeyToSave != null) {
+            File fileObj = Utils.getFileForUri(file);
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+            sharedPrefs.edit().putString(this.prefKeyToSave, fileObj.getAbsolutePath()).apply();
+        }
+
         finish();
     }
 

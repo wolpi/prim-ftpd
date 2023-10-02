@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
-import android.preference.EditTextPreference;
+import androidx.preference.EditTextPreference;
 import android.util.AttributeSet;
 
 public class EncryptingEditTextPreference extends EditTextPreference

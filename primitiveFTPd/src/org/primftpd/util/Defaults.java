@@ -7,6 +7,7 @@ import android.os.Environment;
 
 import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.filepicker.ResettingFilePickerActivity;
+import org.primftpd.filepicker.nononsenseapps.AbstractFilePickerActivity;
 import org.primftpd.filepicker.nononsenseapps.FilePickerActivity;
 
 import java.io.File;
@@ -65,6 +66,12 @@ public final class Defaults {
 		dirPickerIntent.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, false);
 		dirPickerIntent.putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
 		dirPickerIntent.putExtra(FilePickerActivity.EXTRA_START_PATH, initialVal.getAbsolutePath());
+		return dirPickerIntent;
+	}
+
+	public static Intent createPrefDirPicker(Context ctxt, File initialVal, String prefKey) {
+		Intent dirPickerIntent = createDefaultDirPicker(ctxt, initialVal);
+		dirPickerIntent.putExtra(AbstractFilePickerActivity.MODE_SAFE_PREFERENCE, prefKey);
 		return dirPickerIntent;
 	}
 

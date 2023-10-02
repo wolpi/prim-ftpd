@@ -142,7 +142,7 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/prefsCategoryTitleSystem" android:key="ftpPrefCatSystem">
-		<org.primftpd.prefs.StartDirEditTextPreference
+		<Preference
 			android:name="startDir"
 			android:key="startDirPref"
 			android:title="@string/prefTitleStartDir"

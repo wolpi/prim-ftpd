@@ -1,8 +1,8 @@
 package org.primftpd.prefs;
 
 import android.content.Context;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
 import android.util.AttributeSet;
 import android.widget.Toast;
 
