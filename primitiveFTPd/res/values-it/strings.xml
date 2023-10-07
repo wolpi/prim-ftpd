@@ -90,7 +90,7 @@
     <string name="prefSummaryAllowedIpsPattern">Pattern degli indirizzi IP consentiti. Può essere utilizzata solo una Wildcard (*), solo come ultimo carattere.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Quick Settings Tile unlock requirement</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Clicking the quick settings tile requires the device to be unlocked to start/stop the server. When enabled, will prompt to unlock the device if it\'s locked.</string>
-    <string name="prefRootCopyFiles">Root: copia i file in cartella temporanea per l'up-/download</string>
+    <string name="prefRootCopyFiles">Root: copia i file in cartella temporanea per l\'up-/download</string>
     <string name="prefSummaryRootCopyFiles">Ci sono problemi nell\'accesso ai file con dd su alcuni dispositivi. Con questa opzione, i file vengono prima copiati in una cartella temporanea e gestiti mediante filesystem. Si consiglia di disattivare per i file molto grandi.</string>
     <string name="licence">Licenza</string>
     <string name="reset">Reimposta</string>
@@ -103,7 +103,7 @@
     <string name="isServerRunning">Server attivo?</string>
     <string name="storageType">Tipo di memoria</string>
     <string name="storageTypePlain">Filesystem classico</string>
-    <string name="storageTypePlainV2">Filesystem classico\nHai l'accesso in sola lettura? Vedi la nostra <a href="https://www.github.com/wolpi/prim-ftpd/">pagina GitHub</a>.</string>
+    <string name="storageTypePlainV2">Filesystem classico\nHai l\'accesso in sola lettura? Vedi la nostra <a href="https://www.github.com/wolpi/prim-ftpd/">pagina GitHub</a>.</string>
     <string name="storageTypeRoot">Super user (richiede permessi root)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(es. per SD card)</string>
     <string name="storageTypeRoSaf">SAF in sola lettura (più veloce!)</string>
