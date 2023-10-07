@@ -7,7 +7,7 @@
         <attr name="iconRefresh" format="reference" />
     </declare-styleable>
 
-    <style name="PrimFtpdDeviceTheme" parent="Theme.MaterialComponents.DayNight">
+    <style name="PrimFtpdDeviceTheme" parent="Theme.AppCompat.DayNight">
         <item name="colorPrimary">@color/blueIcon</item>
         <item name="colorPrimaryVariant">@color/blueIconDark</item>
         <item name="colorOnPrimary">@color/black</item>
