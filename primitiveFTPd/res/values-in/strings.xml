@@ -19,7 +19,6 @@
     <string name="quickSettingsServerStarted">pFTPd Berjalan …</string>
     <string name="quickSettingsServerStopped">pFTPd Berhenti</string>
     <string name="saveAs">Simpan sebagai</string>
-    <string name="translate">Terjemahkan</string>
     <string name="startService">Mulai Server</string>
     <string name="stopService">Setop Server</string>
     <string name="toggleService">Mulai/Setop Server</string>

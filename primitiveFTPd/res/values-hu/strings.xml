@@ -81,7 +81,6 @@
     <string name="prefTitlePortSecure">Secure FTP port</string>
     <string name="prefSummaryPort">FTP szerver port</string>
     <string name="prefsCategoryTitleAuth">Hitelesítés</string>
-    <string name="translate">Lefordítás</string>
     <string name="prefsCategoryTitleSystem">Rendszer</string>
     <string name="prefsCategoryTitleUi">UI - Felhasználói felület</string>
     <string name="prefsCategoryTitleConnectivity">Elérhetőség</string>

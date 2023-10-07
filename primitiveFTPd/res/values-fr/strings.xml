@@ -57,7 +57,6 @@
     <string name="storageType">Type du stockage</string>
     <string name="permissionRequired">La permission \"%1$s\" est requise pour que cette application fonctionne !</string>
     <string name="quickSettingsServerStopped">pFTPd Arrêté</string>
-    <string name="translate">Traduction</string>
     <string name="haveToSetAuthMechanism">Vous devez configurer au préalable un mécanisme d\'authentification</string>
     <string name="ftpPassivePortsInvalid">Valeur des ports passifs FTP invalide.</string>
     <string name="prefsCategoryTitleAuth">Authentification</string>

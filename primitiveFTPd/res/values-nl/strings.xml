@@ -19,7 +19,6 @@
     <string name="quickSettingsServerStarted">pFTPd draait …</string>
     <string name="quickSettingsServerStopped">pFTPd is gestopt</string>
     <string name="saveAs">Opslaan als</string>
-    <string name="translate">Vertalen</string>
 
     <string name="startService">Start server</string>
     <string name="stopService">Stop server</string>

@@ -15,7 +15,6 @@
     <string name="permissionNameStorage">Pamięć masowa</string>
     <string name="quickSettingsServerStarted">pFTPd uruchomiony…</string>
     <string name="saveAs">Zapisz jako</string>
-    <string name="translate">Przetłumacz</string>
     <string name="startService">Uruchom serwer</string>
     <string name="stopService">Zatrzymaj serwer</string>
     <string name="toggleService">Przełącz uruchom/zatrzymaj serwer</string>

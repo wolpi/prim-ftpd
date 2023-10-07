@@ -20,7 +20,6 @@
     <string name="quickSettingsServerStarted">pFTPd قيد التشغيل …</string>
     <string name="quickSettingsServerStopped">pFTPd متوقّف</string>
     <string name="saveAs">حفظ كـ</string>
-    <string name="translate">تَرجِم</string>
 
     <string name="startService">ابدأ الخادم</string>
     <string name="stopService">أوقف الخادم</string>

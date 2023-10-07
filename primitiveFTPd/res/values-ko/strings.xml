@@ -7,7 +7,6 @@
     <string name="permissionNameStorage">저장공간</string>
     <string name="quickSettingsServerStarted">pFTPd가 작동 중입니다…</string>
     <string name="saveAs">다음으로 저장</string>
-    <string name="translate">번역</string>
 
     <string name="startService">서버 시작</string>
     <string name="stopService">서버 중지</string>
