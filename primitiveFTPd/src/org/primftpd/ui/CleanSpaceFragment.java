@@ -65,6 +65,7 @@ public class CleanSpaceFragment extends Fragment {
             }
         });
 
+        updateView();
         return view;
     }
 
