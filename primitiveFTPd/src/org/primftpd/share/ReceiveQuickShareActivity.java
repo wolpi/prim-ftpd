@@ -2,7 +2,6 @@ package org.primftpd.share;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,9 +11,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.primftpd.R;
-import org.primftpd.prefs.LoadPrefsUtil;
-import org.primftpd.prefs.Theme;
-import org.primftpd.ui.ThemeUtil;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.primftpd.util.TmpDirType;
@@ -33,10 +29,6 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         logger.debug("onCreate()");
-
-        // set theme
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        ThemeUtil.applyTheme(this, prefs);
 
         // set layout
         setContentView(R.layout.receive_share);

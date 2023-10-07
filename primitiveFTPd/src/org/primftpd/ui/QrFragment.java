@@ -22,7 +22,6 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.primftpd.R;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.PrefsBean;
-import org.primftpd.prefs.Theme;
 import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.NotificationUtil;
 import org.slf4j.Logger;
@@ -105,22 +104,7 @@ public class QrFragment extends Fragment {
             }
         }
 
-        Theme theme = LoadPrefsUtil.theme(prefs);
-        final boolean darkMode;
-        switch (theme) {
-            case LIGHT:
-                darkMode = false;
-                break;
-            case SYS_DEFAULT:
-                int uiMode = getResources().getConfiguration().uiMode;
-                int nightModeFlags = uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                darkMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
-                break;
-            default:
-                darkMode = true;
-                break;
-        }
-
+        final boolean darkMode = UiModeUtil.isDarkMode(getResources());
         RadioGroup radioGroup = new RadioGroup(getContext());
         radioGroup.setOrientation(RadioGroup.VERTICAL);
         for (final String url : urls) {

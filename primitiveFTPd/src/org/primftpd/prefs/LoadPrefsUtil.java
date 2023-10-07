@@ -151,13 +151,6 @@ public class LoadPrefsUtil
 		return ServerToStart.byXmlVal(whichServerStr);
 	}
 
-	public static Theme theme(SharedPreferences prefs) {
-		String themeStr = prefs.getString(
-			PREF_KEY_THEME,
-			Theme.SYS_DEFAULT.xmlValue());
-		return Theme.byXmlVal(themeStr);
-	}
-
 	public static void storeLogging(SharedPreferences prefs, Logging value) {
 		prefs.edit().putString(PREF_KEY_LOGGING, value.xmlValue()).commit();
 	}

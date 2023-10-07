@@ -130,15 +130,7 @@
 			android:title="@string/prefTitleQuickSettingsRequiresUnlock"
 			android:summary="@string/prefSummaryQuickSettingsRequiresUnlock"
 			/>
-		<ListPreference
-			android:name="theme"
-			android:key="themePref"
-			android:title="@string/prefTheme"
-			android:summary="@string/prefSummaryTheme"
-			android:defaultValue="2"
-			android:entries="@array/prefThemeNames"
-			android:entryValues="@array/prefThemeValues"
-			/>
+
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/prefsCategoryTitleSystem" android:key="ftpPrefCatSystem">

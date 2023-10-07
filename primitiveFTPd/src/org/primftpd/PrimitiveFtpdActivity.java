@@ -48,12 +48,11 @@ import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.prefs.StorageType;
-import org.primftpd.prefs.Theme;
 import org.primftpd.ui.CalcPubkeyFinterprintsTask;
 import org.primftpd.ui.ClientActionFragment;
 import org.primftpd.ui.GenKeysAskDialogFragment;
 import org.primftpd.ui.GenKeysAsyncTask;
-import org.primftpd.ui.ThemeUtil;
+import org.primftpd.ui.UiModeUtil;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.KeyFingerprintBean;
@@ -111,7 +110,6 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 	private PrefsBean prefsBean;
 	private IpAddressProvider ipAddressProvider = new IpAddressProvider();
 	private KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider();
-	private Theme theme;
 	private ServersRunningBean serversRunning;
 	private long timestampOfLastEvent = 0;
 
@@ -138,8 +136,7 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
 		prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener);
 
-		// layout & theme
-		theme = ThemeUtil.applyTheme(this, prefs);
+		// layout
 		setContentView(getLayoutId());
 
 		// calc keys fingerprints
@@ -260,9 +257,6 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		super.onResume();
 
 		logger.debug("onResume()");
-
-		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-		this.theme = ThemeUtil.applyTheme(this, prefs);
 
 		// register listener to reprint interfaces table when network connections change
 		// android sends those events when registered in code but not when registered in manifest
@@ -433,7 +427,8 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 				// remove warning if it was present
 				safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 			} else {
-				int icon = theme == Theme.DARK
+				final boolean darkMode = UiModeUtil.isDarkMode(getResources());
+				int icon = darkMode
 						? R.drawable.ic_warning_white_36dp
 						: R.drawable.ic_warning_black_36dp;
 				safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0);

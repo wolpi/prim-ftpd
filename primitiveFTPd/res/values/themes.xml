@@ -23,9 +23,6 @@
         <item name="iconRefresh">@drawable/ic_refresh_white_18dp</item>
     </style>
 
-    <style name="PrimFtpdDarkTheme" parent="PrimFtpdDeviceTheme" />
-    <style name="PrimFtpdLightTheme" parent="PrimFtpdDeviceTheme" />
-
     <!-- You can also inherit from NNF_BaseTheme.Light -->
     <style name="FilePickerTheme" parent="FilepickerBaseTheme">
         <!-- Set these to match your theme -->

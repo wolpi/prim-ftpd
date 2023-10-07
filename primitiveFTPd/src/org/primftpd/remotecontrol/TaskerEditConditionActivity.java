@@ -2,16 +2,12 @@ package org.primftpd.remotecontrol;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.primftpd.R;
-import org.primftpd.prefs.LoadPrefsUtil;
-import org.primftpd.prefs.Theme;
-import org.primftpd.ui.ThemeUtil;
 
 public class TaskerEditConditionActivity extends ListActivity {
 
@@ -20,8 +16,6 @@ public class TaskerEditConditionActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        ThemeUtil.applyTheme(this, prefs);
         setContentView(R.layout.tasker_edit_activity);
 
         TaskerCondition[] conditions = TaskerCondition.values();
@@ -30,7 +24,7 @@ public class TaskerEditConditionActivity extends ListActivity {
             data[i] = getText(conditions[i].getStringId()).toString();
         }
 
-        ListView listView = (ListView) findViewById(android.R.id.list);
+        ListView listView = findViewById(android.R.id.list);
         listView.setAdapter(new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,

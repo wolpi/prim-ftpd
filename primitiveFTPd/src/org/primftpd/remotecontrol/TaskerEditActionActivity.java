@@ -2,16 +2,12 @@ package org.primftpd.remotecontrol;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.primftpd.R;
-import org.primftpd.prefs.LoadPrefsUtil;
-import org.primftpd.prefs.Theme;
-import org.primftpd.ui.ThemeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +21,6 @@ public class TaskerEditActionActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         logger.debug("onCreate()");
         super.onCreate(savedInstanceState);
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        ThemeUtil.applyTheme(this, prefs);
         setContentView(R.layout.tasker_edit_activity);
 
         TaskerAction[] actions = TaskerAction.values();
