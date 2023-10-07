@@ -7,13 +7,14 @@
         <attr name="iconRefresh" format="reference" />
     </declare-styleable>
 
-    <style name="PrimFtpdDeviceTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="PrimFtpdDeviceTheme" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimary">@color/blueIcon</item>
         <item name="colorPrimaryVariant">@color/blueIconDark</item>
-        <item name="colorOnPrimary">@color/blueIconAccent</item>
+        <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@color/blueIconDark</item>
         <item name="colorSecondaryVariant">@color/blueIcon</item>
-        <item name="colorOnSecondary">@color/blueIconAccent</item>
+        <item name="colorOnSecondary">@color/black</item>
+
         <item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimaryVariant</item>
 
         <item name="iconStart">@drawable/ic_play_white_36dp</item>
