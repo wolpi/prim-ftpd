@@ -78,8 +78,6 @@
     <string name="prefTitleIdleTimeout">Tempo de servidor inactivo para expirar</string>
     <string name="prefSummaryIdleTimeout">O servidor irá terminar as ligações inactivas após este tempo em segundos (apenas FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">O servidor irá terminar as ligações inactivas após este tempo, em segundos. Definir para 0 para desactivar.</string>
-    <string name="prefTheme">Tema</string>
-    <string name="prefSummaryTheme">A mudança de tema poderá obrigar a um reinicio a aplicação.</string>
     <string name="prefTitleLogging">Registo</string>
     <string name="prefSummaryLogging">O registo serve uma análise de erros. Se a aplicação não funcionar correctamente no seu dispositivo, pode enviar o registo para os desenvolvedores. Pode obrigar a um reinicio da aplicação.</string>
 

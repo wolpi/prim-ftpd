@@ -65,8 +65,6 @@
     <string name="prefSummaryFtpPassivePorts">Porty do pasywnego połączenia danych FTP. Może być pojedynczym portem, listą lub zakresem portów. Na przykład 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Limit czasu bezczynności serwera</string>
     <string name="prefSummaryIdleTimeout">Serwer będzie kończył bezczynne połączenia po upływie tego czasu w sekundach (tylko FTP)</string>
-    <string name="prefTheme">Motyw</string>
-    <string name="prefSummaryTheme">Zmiana motywu może wymagać ponownego uruchomienia aplikacji.</string>
     <string name="prefTitleLogging">Dziennik</string>
     <string name="prefSummaryLogging">Dziennik służy do analizy błędów. Jeśli aplikacja nie działa poprawnie na Twoim urządzeniu, możesz wysłać dziennik do programistów. Może wymagać ponownego uruchomienia aplikacji.</string>
     <string name="licence">Licencja</string>

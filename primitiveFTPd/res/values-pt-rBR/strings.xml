@@ -82,8 +82,6 @@
     <string name="prefTitleIdleTimeout">Tempo de inatividade do servidor</string>
     <string name="prefSummaryIdleTimeout">O servidor encerrará as conexões inativas após este tempo em segundos (apenas FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">O servidor encerrará as conexões inativas após este tempo, em segundos. Defina 0 para desativar.</string>
-    <string name="prefTheme">Tema</string>
-    <string name="prefSummaryTheme">A mudança de tema pode exigir o reinício do app.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">O log serve para análise de erros. Se o app não funcionar corretamente no seu dispositivo, você pode enviar um registro com logs aos desenvolvedores. Pode ser necessário reiniciar o app.</string>
     <string name="prefSummaryLoggingV2">O log serve para análise de erros. Se o app não funcionar corretamente no seu dispositivo, você pode enviar um registro com logs aos desenvolvedores. Pode ser necessário reiniciar o app. Logs de texto são salvos em %s.</string>
@@ -149,18 +147,6 @@
     </string-array>
 
     <string-array name="prefWhichServerToStartValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
-    <string-array name="prefThemeNames">
-        <item>Escuro</item>
-        <item>Claro</item>
-        <item>System Default</item>
-    </string-array>
-
-    <string-array name="prefThemeValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>

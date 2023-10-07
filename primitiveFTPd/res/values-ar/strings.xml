@@ -82,8 +82,6 @@
     <string name="prefTitleIdleTimeout">مهلة عدم نشاط الخادم</string>
     <string name="prefSummaryIdleTimeout">سينهي الخادم الاتصالات الخاملة بعد هذا الوقت بالثواني. اضبط على 0 للتعطيل.</string>
     <string name="prefSummaryIdleTimeoutV2">سينهي الخادم الاتصالات الخاملة بعد هذا الوقت بالثواني. اضبط على 0 للتعطيل.</string>
-    <string name="prefTheme">السمة</string>
-    <string name="prefSummaryTheme">تغيير السمة سيتطلّب إعادة تشغيل التطبيق.</string>
     <string name="prefTitleLogging">السجل</string>
     <string name="prefSummaryLogging">يفيد السجل في تحليل الأخطاء. إذا لم يعمل التطبيق بالشكل الصحيح على جهازك يمكنك إرسال السجل إلى المطوّرين. سيتطلّب إعادة تشغيل البرنامج.</string>
     <string name="prefSummaryLoggingV2">يفيد السجل في تحليل الأخطاء. إذا لم يعمل التطبيق بالشكل الصحيح على جهازك يمكنك إرسال السجل إلى المطوّرين. سيتطلّب إعادة تشغيل البرنامج. يتم حفظ السجلّات النصّيّة في %s.</string>
@@ -142,18 +140,6 @@
     </string-array>
 
     <string-array name="prefWhichServerToStartValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
-    <string-array name="prefThemeNames">
-        <item>داكن</item>
-        <item>فاتح</item>
-        <item>System Default</item>
-    </string-array>
-
-    <string-array name="prefThemeValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>

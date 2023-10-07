@@ -81,8 +81,6 @@
     <string name="prefTitleIdleTimeout">Temps d\'inactivitat</string>
     <string name="prefSummaryIdleTimeout">Es tancaran les connexions sense activitat després d\'un temps, en segons. (Només FTP).</string>
     <string name="prefSummaryIdleTimeoutV2">Es tancaran les connexions sense activitat després d\'un temps, en segons. Poseu 0 per a desactivar-ho.</string>
-    <string name="prefTheme">Tema</string>
-    <string name="prefSummaryTheme">Canviar el tema pot requerir reiniciar l\'aplicació.</string>
     <string name="prefTitleLogging">Registre</string>
     <string name="prefSummaryLogging">El registre permet analitzar errors. Si l\'aplicació no funciona correctament en el vostre dispositiu, podeu enviar el registre als desenvolupadors. Pot requerir reiniciar l\'aplicació.</string>
     <string name="prefSummaryLoggingV2">El registre permet analitzar errors. Si l\'aplicació no funciona correctament en el vostre dispositiu, podeu enviar el registre als desenvolupadors. Pot requerir reiniciar l\'aplicació. Els registres es desen en %s.</string>
@@ -166,16 +164,6 @@
         <item>Només SFTP</item>
     </string-array>
     <string-array name="prefWhichServerToStartValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="prefThemeNames">
-        <item>Fosc</item>
-        <item>Clar</item>
-        <item>Determinat pel sistema</item>
-    </string-array>
-    <string-array name="prefThemeValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>

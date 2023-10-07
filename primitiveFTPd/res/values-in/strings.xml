@@ -77,8 +77,6 @@
     <string name="prefSummaryFtpPassivePorts">Porta untuk koneksi data FTP Pasif. Boleh porta tunggal, beberapa atau rentang porta. Mis. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Batas Waktu Menganggur Server</string>
     <string name="prefSummaryIdleTimeout">Server akan menghentikan koneksi yang tidak aktif setelah batas waktu ini dalam hitungan detik (hanya FTP)</string>
-    <string name="prefTheme">Tema</string>
-    <string name="prefSummaryTheme">Mengubah Tema mungkin membutuhkan aplikasi untuk dimulai ulang.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log disediakan untuk analisa galat. Jika apl tidak bekerja sebagaimana mestinya pada perangkat Anda, Anda bisa mengirim log ke pengembang. Mungkin membutuhkan apl untuk dimulai ulang.</string>
     <string name="prefSummaryLoggingV2">Log disediakan untuk analisa galat. Jika apl tidak bekerja sebagaimana mestinya pada perangkat Anda, Anda bisa mengirim log ke pengembang. Mungkin membutuhkan apl untuk dimulai ulang. Teks Log disimpan di %s.</string>
@@ -119,16 +117,6 @@
         <item>Hanya SFTP</item>
     </string-array>
     <string-array name="prefWhichServerToStartValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="prefThemeNames">
-        <item>Gelap</item>
-        <item>Terang</item>
-        <item>System Default</item>
-    </string-array>
-    <string-array name="prefThemeValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>

@@ -50,8 +50,6 @@
     <string name="prefSummaryStartOnBoot">Zerbitzaria abiarazi sistemaren abioan.</string>
     <string name="prefTitlePubKeyAuth">Baimentzeko gako publiko</string>
     <string name="prefSummaryPubKeyAuth">Gaituta dagoenean jarri ezazu zure ssh2 gako publikoa %s kokalekuan. SFTPrentzat soilik.</string>
-    <string name="prefTheme">Gaia</string>
-    <string name="prefSummaryTheme">Gaia aldatzeak aplikazioa berrabiaraztea behar izan dezake.</string>
     <string name="prefTitleLogging">Erregistroa</string>
     <string name="prefSummaryLogging">Erregistroa akatsak aztertzeko balio du. Aplikazioa zure gailuan zuzen funtzionatzen ez badu garatzaileei erregistroa bidali diezaiekezu. Aplikazioa berrabiaraztea behar izan dezake.</string>
     
@@ -65,12 +63,6 @@
         <item>FTP eta SFTP</item>
         <item>FTP soilik</item>
         <item>SFTP soilik</item>
-    </string-array>
-
-    <string-array name="prefThemeNames">
-        <item>Iluna</item>
-        <item>Argia</item>
-        <item>System Default</item>
     </string-array>
 
     <string-array name="prefLoggingNames">

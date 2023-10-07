@@ -66,8 +66,6 @@
     <string name="pubKeyAuth">Nyilvános kulcs: %1$b</string>
     <string name="passwordPresent">Jelenlegi jelszó: %1$b</string>
     <string name="prefTitleLogging">Log</string>
-    <string name="prefSummaryTheme">A téma megváltoztatásához szükség lehet az alkalmazás újraindítására.</string>
-    <string name="prefTheme">Téma</string>
     <string name="prefTitleFtpPassivePorts">FTP passzív portok</string>
     <string name="prefTitleSshowIpv4InNotification">IPv4 cím legyen látható az értesítésben</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Csatlakozási információk, pl. IP-cím megjelenítésa az értesítésben.</string>

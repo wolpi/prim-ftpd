@@ -79,7 +79,6 @@
     <string name="prefTitleIdleTimeout">Server Idle-Timeout</string>
     <string name="prefSummaryIdleTimeout">Server wird ungenutzte Verbindungen nach dieser Zeit in Sekunden beenden (nur FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">Server wird ungenutzte Verbindungen nach dieser Zeit in Sekunden beenden. Auf 0 setzen um abzuschalten.</string>
-    <string name="prefSummaryTheme">Das Theme zu ändern kann einen Neustart der App erfordern.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>
     <string name="prefSummaryLoggingV2">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten. Text Logs werden abgelegt in %s.</string>
@@ -129,18 +128,12 @@
         <item>nur FTP</item>
         <item>nur SFTP</item>
     </string-array>
-    <string-array name="prefThemeNames">
-        <item>Dunkel</item>
-        <item>Hell</item>
-        <item>System Default</item>
-    </string-array>
     <string-array name="prefLoggingNames">
         <item>Kein Log</item>
         <item>In Textdatei loggen</item>
         <item>In Android Log schreiben</item>
     </string-array>
     <string name="prefTitleAnonymousLogin">anonymer Login</string>
-    <string name="prefTheme">Design</string>
     <string name="prefTitlePubKeyAuth">Public-Key-Authentifizierung</string>
     <string name="isServerRunning">Läuft der Server\?</string>
     <string name="widgetTextStop">stoppe (s)ftpd</string>

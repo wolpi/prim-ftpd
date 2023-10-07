@@ -81,8 +81,6 @@
     <string name="prefTitleIdleTimeout">Tiempo de inactividad</string>
     <string name="prefSummaryIdleTimeout">Se cerrarán las conexiones sin actividad tras un tiempo, en segundos. (Solo FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">Se cerrarán las conexiones sin actividad tras un tiempo, en segundos. Ponga 0 para desactivarlo.</string>
-    <string name="prefTheme">Tema</string>
-    <string name="prefSummaryTheme">Cambiar el tema puede requerir reiniciar la aplicación.</string>
     <string name="prefTitleLogging">Registro</string>
     <string name="prefSummaryLogging">El registro sirve para analizar errores. Si la aplicación no funciona correctamente, puede enviar el registro a los desarrolladores. Puede requerir reiniciar de la aplicación.</string>
     <string name="prefSummaryLoggingV2">El registro sirve para analizar errores. Si la aplicación no funciona correctamente, puede enviar el registro a los desarrolladores. Puede requerir reiniciar de la aplicación. Los registros se guardan en %s.</string>
@@ -166,16 +164,6 @@
         <item>Solo SFTP</item>
     </string-array>
     <string-array name="prefWhichServerToStartValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="prefThemeNames">
-        <item>Oscuro</item>
-        <item>Claro</item>
-        <item>Determinado por el sistema</item>
-    </string-array>
-    <string-array name="prefThemeValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>

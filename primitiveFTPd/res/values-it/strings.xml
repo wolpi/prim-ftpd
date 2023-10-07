@@ -81,8 +81,6 @@
     <string name="prefTitleIdleTimeout">Timeout inattività server</string>
     <string name="prefSummaryIdleTimeout">Il server terminerà le connessioni inattive dopo questo tempo in secondi (solo FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">Il server terminerà le connessioni inattive dopo questo tempo in secondi. Impostare a 0 per disabilitare.</string>
-    <string name="prefTheme">Tema</string>
-    <string name="prefSummaryTheme">La modifica del Tema richiede il riavvio dell\'app.</string>
     <string name="prefTitleLogging">Log</string>
     <string name="prefSummaryLogging">Il log permette di analizzare gli errori. Se l\'app non funziona correttamente sul tuo dispositivo, puoi inviare il log agli sviluppatori. Questa modifica potrebbe richiedere il riavvio dell\'app.</string>
     <string name="prefSummaryLoggingV2">Il log permette di analizzare gli errori. Se l\'app non funziona correttamente sul tuo dispositivo, puoi inviare il log agli sviluppatori. Questa modifica potrebbe richiedere il riavvio dell\'app. I log in formato testo sono salvati in %s.</string>
@@ -166,16 +164,6 @@
         <item>Solo SFTP</item>
     </string-array>
     <string-array name="prefWhichServerToStartValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="prefThemeNames">
-        <item>Scuro</item>
-        <item>Chiaro</item>
-        <item>Predefinito del sistema</item>
-    </string-array>
-    <string-array name="prefThemeValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>

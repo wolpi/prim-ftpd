@@ -32,11 +32,9 @@
     <string name="prefSummaryPubKeyAuth">Если включено, разместите ваши открытые ключи SSH2 в %s. Только для SFTP.</string>
     <string name="prefSummaryStartDir">Каталог, отображаемый после авторизации</string>
     <string name="prefSummaryStartOnBoot">Запускать сервер после загрузки системы.</string>
-    <string name="prefSummaryTheme">Смена темы оформления, может потребоваться перезапуск приложения.</string>
     <string name="prefSummaryUser">Имя пользователя FTP-сервера</string>
     <string name="prefSummaryWakelock">Предотвращает засыпание устройства, когда сервер запущен. Засыпание может приводить к прекращению передачи файлов.</string>
     <string name="prefSummaryWhichServerToStart">Выберите серверы для запуска: FTP, SFTP или оба одновременно.</string>
-    <string name="prefTheme">Тема</string>
     <string name="prefTitleAnnounce">Анонсировать сервер в локальной сети</string>
     <string name="prefTitleAnnounceName">Имя сервера</string>
     <string name="prefTitleAnonymousLogin">Анонимный вход</string>
@@ -82,11 +80,6 @@
     <string name="prefSummaryIdleTimeout">Сервер прервёт простаивающие соединения через это время в секундах (только FTP).</string>
     <string name="prefTitleStartOnOpen">Запуск при открытии</string>
     <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
-    <string-array name="prefThemeNames">
-        <item>Темная</item>
-        <item>Светлая</item>
-        <item>System Default</item>
-    </string-array>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP и SFTP</item>
         <item>Только FTP</item>

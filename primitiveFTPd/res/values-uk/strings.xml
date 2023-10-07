@@ -41,8 +41,6 @@
     <string name="prefs">Налаштування</string>
     <string name="prefTitleWhichServerToStart">Сервери до запуску</string>
     <string name="prefTitleWakelock">Запобігати засинанню пристрою</string>
-    <string name="prefSummaryTheme">Зміна теми зовнішнього вигляду може потребувати перезапуску додатку.</string>
-    <string name="prefTheme">Тема</string>
     <string name="prefSummaryStartOnBoot">Запускати сервер після завантаження системи.</string>
     <string name="prefSummaryStartDir">Директорія, що відображається після входу на сервер</string>
     <string name="prefSummaryPubKeyAuth">Якщо увімкнуто, розмістіть ваші відкриті ключі ssh2 в %s. Лише для SFTP.</string>

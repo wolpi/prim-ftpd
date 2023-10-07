@@ -50,7 +50,6 @@
     <string name="prefTitleAnonymousLogin">Connexion anonyme</string>
     <string name="prefSummaryAnonymousLogin">Spécifie si les connexions anonymes sont autorisées sur le serveur.</string>
     <string name="prefTitleFtpPassivePorts">Ports FTP passifs</string>
-    <string name="prefTheme">Thème</string>
     <string name="prefTitleLogging">Journal</string>
     <string name="licence">Licence</string>
     <string name="reset">Réinitialiser</string>
@@ -67,7 +66,6 @@
     <string name="prefsCategoryTitleSystem">Système</string>
     <string name="prefTitleStartOnOpen">Démarrer à l\'ouverture</string>
     <string name="prefTitleShowConnectionInfoInNotification">Afficher les informations de connexion dans les notifications</string>
-    <string name="prefSummaryTheme">Le changement de thème requiert le redémarrage de l\'app.</string>
     <string name="isServerRunning">Est-ce que le serveur fonctionne ?</string>
     <string name="storageTypeRoot">Super utilisateur (l\'appareil doit être rooté)</string>
     <string name="startServerAndExit">Démarrer uniquement le serveur</string>

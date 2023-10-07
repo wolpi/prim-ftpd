@@ -46,8 +46,6 @@
     <string name="prefSummaryLoggingV2">Logul servește la analiza erorilor. Dacă aplicația nu funcționează corect pe dispozitivul dvs., puteți trimite un log programatorilor. Poate fi necesar să reporniți aplicația. Jurnalele de text sunt stocate în %s .</string>
     <string name="prefSummaryLogging">Logul servește la analiza erorilor. Dacă aplicația nu funcționează corect pe dispozitivul dvs., puteți trimite un log autorului. Poate fi necesar să reporniți aplicația.</string>
     <string name="prefTitleLogging">Log</string>
-    <string name="prefSummaryTheme">Schimbarea temei poate necesita repornirea aplicației.</string>
-    <string name="prefTheme">Tema</string>
     <string name="prefSummaryIdleTimeoutV2">Serverul va întrerupe conexiunile inactive după acest timp. Setați 0 pentru dezactivare.</string>
     <string name="prefSummaryIdleTimeout">Serverul va întrerupe conexiunile inactive după acest timp (numai FTP)</string>
     <string name="prefTitleIdleTimeout">Timp de inactivitate server</string>
