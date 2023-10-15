@@ -1,11 +1,24 @@
 package org.primftpd.ui;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.material.tabs.TabLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
+import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.prefs.FtpPrefsFragment;
+import org.primftpd.prefs.LoadPrefsUtil;
+import org.primftpd.prefs.PrefsBean;
+import org.primftpd.util.KeyFingerprintProvider;
+import org.primftpd.util.NotificationUtil;
+import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +34,9 @@ import androidx.viewpager.widget.ViewPager;
 public class MainTabsActivity extends AppCompatActivity {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    protected MenuItem startIcon;
+    protected MenuItem stopIcon;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +64,15 @@ public class MainTabsActivity extends AppCompatActivity {
         AboutFragment aboutFragment = new AboutFragment();
         adapter.addFragment(aboutFragment, "\uD83D\uDE4F " + getText(R.string.iconAbout));
         adapter.notifyDataSetChanged();
+
+        // listen for events
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private class MainAdapter extends FragmentPagerAdapter {
@@ -81,5 +106,75 @@ public class MainTabsActivity extends AppCompatActivity {
             logger.trace("getPageTitle({})", position);
             return titles.get(position);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        logger.debug("onCreateOptionsMenu()");
+
+        getMenuInflater().inflate(R.menu.pftpd, menu);
+
+        startIcon = menu.findItem(R.id.menu_start);
+        stopIcon = menu.findItem(R.id.menu_stop);
+
+        // at least required on app start
+        updateButtonStates();
+
+        return true;
+    }
+
+    protected void updateButtonStates() {
+        logger.debug("updateButtonStates()");
+
+        boolean atLeastOneRunning = ServicesStartStopUtil.checkServicesRunning(this).atLeastOneRunning();
+
+        // remove status bar notification if server not running
+        if (!atLeastOneRunning) {
+            NotificationUtil.removeStatusbarNotification(this);
+        }
+
+        // action bar icons
+        if (startIcon == null || stopIcon == null) {
+            return;
+        }
+
+        startIcon.setVisible(!atLeastOneRunning);
+        stopIcon.setVisible(atLeastOneRunning);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        logger.debug("onOptionsItemSelected()");
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.menu_start:
+                handleStart();
+                break;
+            case R.id.menu_stop:
+                handleStop();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void handleStart() {
+        logger.trace("handleStart()");
+
+        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+        PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
+
+        ServicesStartStopUtil.startServers(this, prefsBean, new KeyFingerprintProvider(), null);
+    }
+
+    protected void handleStop() {
+        logger.trace("handleStop()");
+        ServicesStartStopUtil.stopServers(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(ServerStateChangedEvent event) {
+        logger.debug("got ServerStateChangedEvent");
+        updateButtonStates();
     }
 }

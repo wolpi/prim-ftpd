@@ -15,40 +15,4 @@
         android:title="@string/stopService"
         android:icon="?attr/iconStop" />
 
-    <item
-        android:id="@+id/menu_prefs"
-        android:orderInCategory="100"
-        app:showAsAction="ifRoom|withText"
-        android:title="@string/prefs"
-        android:icon="?attr/iconSettings" />
-
-    <item
-        android:id="@+id/menu_qr"
-        android:orderInCategory="100"
-        app:showAsAction="collapseActionView|withText"
-        android:title="@string/iconQrCode" />
-
-    <item
-        android:id="@+id/menu_client_action"
-        android:orderInCategory="100"
-        app:showAsAction="collapseActionView|withText"
-        android:title="@string/clientActionsLabel" />
-
-    <item
-        android:id="@+id/menu_keys_fingerprints"
-        android:orderInCategory="100"
-        app:showAsAction="collapseActionView|withText"
-        android:title="@string/iconKeysFingerprints" />
-
-    <item
-        android:id="@+id/menu_clean"
-        android:orderInCategory="100"
-        app:showAsAction="collapseActionView|withText"
-        android:title="@string/iconCleanSpace" />
-
-    <item
-        android:id="@+id/menu_about"
-        android:orderInCategory="100"
-        app:showAsAction="collapseActionView|withText"
-        android:title="@string/iconAbout" />
 </menu>

@@ -77,7 +77,8 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
 
         if (startServerOnFinish) {
             // icon members should be set at this time
-            activity.handleStart();
+            // TODO handle start after key generation
+            //activity.handleStart();
         }
     }
 }

@@ -667,7 +667,7 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		showAllKeysFingerprints.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				activity.handleKeysFingerprints();
+				// TODO switch to other tab
 			}
 		});
 	}
@@ -805,71 +805,6 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		if (!atLeastOneRunning) {
 			NotificationUtil.removeStatusbarNotification(this);
 		}
-
-		// action bar icons
-		if (startIcon == null || stopIcon == null) {
-			return;
-		}
-
-		startIcon.setVisible(!atLeastOneRunning);
-		stopIcon.setVisible(atLeastOneRunning);
-	}
-
-	protected MenuItem startIcon;
-	protected MenuItem stopIcon;
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		logger.debug("onCreateOptionsMenu()");
-
-		getMenuInflater().inflate(R.menu.pftpd, menu);
-
-		startIcon = menu.findItem(R.id.menu_start);
-		stopIcon = menu.findItem(R.id.menu_stop);
-
-		// at least required on app start
-		displayServersState();
-
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		logger.debug("onOptionsItemSelected()");
-		Intent intent;
-		switch (item.getItemId()) {
-		case R.id.menu_start:
-			handleStart();
-			break;
-		case R.id.menu_stop:
-			handleStop();
-			break;
-		case R.id.menu_prefs:
-			handlePrefs();
-			break;
-		case R.id.menu_qr:
-			handleQr();
-			break;
-		case R.id.menu_client_action:
-			handleClientAction();
-			break;
-		case R.id.menu_keys_fingerprints:
-			handleKeysFingerprints();
-			break;
-		case R.id.menu_clean:
-			handleClean();
-			break;
-		case R.id.menu_about:
-			handleAbout();
-			break;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
-
-	public void handleStart() {
-		logger.trace("handleStart()");
-		ServicesStartStopUtil.startServers(this, prefsBean, keyFingerprintProvider, this);
 	}
 
 	public boolean isKeyPresent() {
@@ -889,35 +824,6 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		diagArgs.putBoolean(GenKeysAskDialogFragment.KEY_START_SERVER, true);
 		askDiag.setArguments(diagArgs);
 		askDiag.show(getSupportFragmentManager(), DIALOG_TAG);
-	}
-
-	protected void handleStop() {
-		logger.trace("handleStop()");
-		ServicesStartStopUtil.stopServers(this);
-	}
-
-	protected void handlePrefs() {
-		logger.trace("handlePrefs() -> no impl");
-	}
-
-	protected void handleQr() {
-		logger.trace("handle QR -> no impl");
-	}
-
-	protected void handleClientAction() {
-		logger.trace("handleClientAction() -> no impl");
-	}
-
-	protected void handleKeysFingerprints() {
-		logger.trace("handleKeysFingerprints() -> no impl");
-	}
-
-	protected void handleClean() {
-		logger.trace("handleClean() -> no impl");
-	}
-
-	protected void handleAbout() {
-		logger.trace("handleAbout() -> no impl");
 	}
 
 	/**
