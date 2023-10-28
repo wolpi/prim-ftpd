@@ -1,9 +1,11 @@
 package org.primftpd.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -12,7 +14,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
 import org.primftpd.events.ServerStateChangedEvent;
+import org.primftpd.log.PrimFtpdLoggerBinder;
 import org.primftpd.prefs.FtpPrefsFragment;
+import org.primftpd.prefs.LoadPrefsUtil;
+import org.primftpd.prefs.Logging;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
@@ -27,9 +32,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainTabsActivity extends AppCompatActivity {
+public class MainTabsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     protected MenuItem startIcon;
     protected MenuItem stopIcon;
@@ -67,12 +72,18 @@ public class MainTabsActivity extends AppCompatActivity {
 
         // listen for events
         EventBus.getDefault().register(this);
+
+        SharedPreferences prefs = LoadPrefsUtil.getPrefs(this);
+        prefs.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+
+        SharedPreferences prefs = LoadPrefsUtil.getPrefs(this);
+        prefs.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     private class MainAdapter extends FragmentPagerAdapter {
@@ -173,5 +184,39 @@ public class MainTabsActivity extends AppCompatActivity {
     public void onEvent(ServerStateChangedEvent event) {
         logger.debug("got ServerStateChangedEvent");
         updateButtonStates();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        boolean atLeastOneRunning = ServicesStartStopUtil.checkServicesRunning(this).atLeastOneRunning();
+        if (atLeastOneRunning) {
+            Toast.makeText(
+                    this,
+                    R.string.restartServer,
+                    Toast.LENGTH_LONG).show();
+        }
+        if (LoadPrefsUtil.PREF_KEY_LOGGING.equals(key)) {
+            handleLoggingPref();
+        }
+    }
+
+    protected void handleLoggingPref() {
+        SharedPreferences prefs = LoadPrefsUtil.getPrefs(this);
+        String loggingStr = prefs.getString(
+                LoadPrefsUtil.PREF_KEY_LOGGING,
+                Logging.NONE.xmlValue());
+        Logging logging = Logging.byXmlVal(loggingStr);
+        logger.debug("got 'logging': {}", logging);
+
+        Logging activeLogging = PrimFtpdLoggerBinder.getLoggingPref();
+
+        boolean recreateLogger = activeLogging != logging;
+
+        if (recreateLogger) {
+            // re-create own log, don't care about other classes
+            PrimFtpdLoggerBinder.setLoggingPref(logging);
+            this.logger = LoggerFactory.getLogger(getClass());
+            logger.debug("changed logging");
+        }
     }
 }

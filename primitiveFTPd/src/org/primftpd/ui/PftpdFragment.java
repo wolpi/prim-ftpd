@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.UriPermission;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -44,9 +43,7 @@ import org.primftpd.events.ClientActionEvent;
 import org.primftpd.events.ServerInfoRequestEvent;
 import org.primftpd.events.ServerInfoResponseEvent;
 import org.primftpd.events.ServerStateChangedEvent;
-import org.primftpd.log.PrimFtpdLoggerBinder;
 import org.primftpd.prefs.LoadPrefsUtil;
-import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.prefs.StorageType;
 import org.primftpd.util.Defaults;
@@ -79,19 +76,6 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 			intent.getDataString(),
 			intent.getAction());
 		showAddresses();
-		}
-	};
-
-	// flag must be static to be avail after activity change
-	private static boolean prefsChanged = false;
-	private final OnSharedPreferenceChangeListener prefsChangeListener =
-		new OnSharedPreferenceChangeListener()
-	{
-		@Override public void onSharedPreferenceChanged(
-			SharedPreferences sharedPreferences, String key)
-		{
-			logger.debug("onSharedPreferenceChanged(), key: {}", key);
-			prefsChanged = true;
 		}
 	};
 
@@ -128,10 +112,6 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 
 		// fixes/workarounds for android security issue below 4.3 regarding key generation
 		PrngFixes.apply();
-
-		// prefs change
-		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener);
 
 		// layout
 		View view = inflater.inflate(getLayoutId(), container, false);
@@ -170,6 +150,7 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 		}
 
 		// start on open ?
+		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
 		Boolean startOnOpen = LoadPrefsUtil.startOnOpen(prefs);
 		if (startOnOpen) {
 			PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
@@ -199,10 +180,6 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 	public void onDestroyView()
 	{
 		super.onDestroyView();
-
-		// prefs change
-		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
-		prefs.unregisterOnSharedPreferenceChangeListener(prefsChangeListener);
 
 		// server state change events
 		EventBus.getDefault().unregister(this);
@@ -832,39 +809,6 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
 		this.prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-
-		handlePrefsChanged();
-		handleLoggingPref(prefs);
-	}
-
-	protected void handlePrefsChanged() {
-		if (prefsChanged) {
-			prefsChanged = false;
-			if (serversRunning != null && serversRunning.atLeastOneRunning()) {
-				Toast.makeText(
-					getContext(),
-					R.string.restartServer,
-					Toast.LENGTH_LONG).show();
-			}
-		}
-	}
-
-	protected void handleLoggingPref(SharedPreferences prefs) {
-		String loggingStr = prefs.getString(
-			LoadPrefsUtil.PREF_KEY_LOGGING,
-			Logging.NONE.xmlValue());
-		Logging logging = Logging.byXmlVal(loggingStr);
-		logger.debug("got 'logging': {}", logging);
-
-		Logging activeLogging = PrimFtpdLoggerBinder.getLoggingPref();
-
-		boolean recreateLogger = activeLogging != logging;
-
-		if (recreateLogger) {
-			// re-create own log, don't care about other classes
-			PrimFtpdLoggerBinder.setLoggingPref(logging);
-			this.logger = LoggerFactory.getLogger(getClass());
-		}
 	}
 
 	public PrefsBean getPrefsBean() {
