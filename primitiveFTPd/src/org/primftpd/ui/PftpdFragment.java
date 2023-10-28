@@ -53,7 +53,6 @@ import org.primftpd.util.Defaults;
 import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.KeyFingerprintBean;
 import org.primftpd.util.KeyFingerprintProvider;
-import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.PrngFixes;
 import org.primftpd.util.SampleAuthKeysFileCreator;
 import org.primftpd.util.ServersRunningBean;
@@ -296,6 +295,9 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		logger.debug("onCheckedChanged()");
 		View view = getView();
+		if (view == null) {
+			return;
+		}
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			view.findViewById(R.id.safUriLabel).setVisibility(View.GONE);
 			view.findViewById(R.id.safUri).setVisibility(View.GONE);
@@ -770,7 +772,7 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 
 		// should be triggered by onCreateOptionsMenu() to avoid icon flicker
 		// when invoked via notification
-		updateButtonStates(running);
+		updateFallbackButtonStates(running);
 
 		// by checking ButtonStates we get info which services are running
 		// that is displayed in portsTable
@@ -800,7 +802,7 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 		}
 	}
 
-	protected void updateButtonStates(Boolean running) {
+	protected void updateFallbackButtonStates(Boolean running) {
 		logger.debug("updateButtonStates()");
 
 		boolean atLeastOneRunning;
@@ -821,14 +823,6 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 			View fallbackButtonStop = view.findViewById(R.id.fallbackButtonStopServer);
 			if (fallbackButtonStop != null) {
 				fallbackButtonStop.setVisibility(atLeastOneRunning ? View.VISIBLE : View.GONE);
-			}
-		}
-
-		// remove status bar notification if server not running
-		if (!atLeastOneRunning) {
-			Context context = getContext();
-			if (context != null) {
-				NotificationUtil.removeStatusbarNotification(context);
 			}
 		}
 	}
