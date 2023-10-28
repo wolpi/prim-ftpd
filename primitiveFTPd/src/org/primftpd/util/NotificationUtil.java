@@ -14,7 +14,6 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.view.View;
 
-import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.StartStopWidgetProvider;
 import org.primftpd.crypto.HostKeyAlgorithm;
@@ -22,6 +21,7 @@ import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.services.DownloadsService;
 import org.primftpd.share.QuickShareBean;
+import org.primftpd.ui.MainTabsActivity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +74,7 @@ public class NotificationUtil
 			String channelId,
 			QuickShareBean quickShareBean) {
 		// create pending intent
-		Intent notificationIntent = new Intent(ctxt, PrimitiveFtpdActivity.class);
+		Intent notificationIntent = new Intent(ctxt, MainTabsActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(
 				ctxt,
 				0,
@@ -98,7 +98,6 @@ public class NotificationUtil
 		CharSequence contentTitle = quickShareBean != null
 			? String.format(ctxt.getResources().getString(R.string.quickShareInfoNotificationV2), quickShareBean.numberOfFiles())
 			: ctxt.getText(R.string.notificationTitle);
-		CharSequence contentText = tickerText;
 
 		// use main icon as large one
 		Bitmap largeIcon = BitmapFactory.decodeResource(
@@ -110,7 +109,7 @@ public class NotificationUtil
 		Notification.Builder builder = new Notification.Builder(ctxt)
 				.setTicker(tickerText)
 				.setContentTitle(contentTitle)
-				.setContentText(contentText)
+				.setContentText(tickerText)
 				.setSmallIcon(iconId)
 				.setLargeIcon(largeIcon)
 				.setContentIntent(contentIntent)

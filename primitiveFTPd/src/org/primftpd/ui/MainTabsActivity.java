@@ -51,6 +51,8 @@ public class MainTabsActivity extends AppCompatActivity {
         MainAdapter adapter = new MainAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
+        PftpdFragment pftpdFragment = new PftpdFragment();
+        adapter.addFragment(pftpdFragment, "pftpd");
         CleanSpaceFragment cleanSpaceFragment = new CleanSpaceFragment();
         adapter.addFragment(cleanSpaceFragment, "\uD83D\uDDD1️" + getText(R.string.iconCleanSpace));
         QrFragment qrFragment = new QrFragment();

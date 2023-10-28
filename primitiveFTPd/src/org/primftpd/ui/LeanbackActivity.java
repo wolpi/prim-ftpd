@@ -1,11 +1,9 @@
 package org.primftpd.ui;
 
-import android.view.View;
 
-import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 
-public class LeanbackActivity extends PrimitiveFtpdActivity {
+public class LeanbackActivity {
 
     protected int getLayoutId() {
         return R.layout.leanback;

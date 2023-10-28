@@ -1,4 +1,4 @@
-package org.primftpd;
+package org.primftpd.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -26,18 +26,20 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.UnderlineSpan;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.primftpd.R;
 import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.events.ServerInfoRequestEvent;
@@ -48,11 +50,6 @@ import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.prefs.StorageType;
-import org.primftpd.ui.CalcPubkeyFinterprintsTask;
-import org.primftpd.ui.ClientActionFragment;
-import org.primftpd.ui.GenKeysAskDialogFragment;
-import org.primftpd.ui.GenKeysAsyncTask;
-import org.primftpd.ui.UiModeUtil;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.KeyFingerprintBean;
@@ -69,14 +66,15 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * Activity to display network info and to start FTP service.
  */
-public class PrimitiveFtpdActivity extends AppCompatActivity {
+public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
 
-	private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
+	private final BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 		@Override
 	 	public void onReceive(Context context, Intent intent) {
 		logger.debug("network connectivity changed, data str: '{}', action: '{}'",
@@ -88,7 +86,7 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 
 	// flag must be static to be avail after activity change
 	private static boolean prefsChanged = false;
-	private OnSharedPreferenceChangeListener prefsChangeListener =
+	private final OnSharedPreferenceChangeListener prefsChangeListener =
 		new OnSharedPreferenceChangeListener()
 	{
 		@Override public void onSharedPreferenceChanged(
@@ -108,8 +106,8 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PrefsBean prefsBean;
-	private IpAddressProvider ipAddressProvider = new IpAddressProvider();
-	private KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider();
+	private final IpAddressProvider ipAddressProvider = new IpAddressProvider();
+	private final KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider();
 	private ServersRunningBean serversRunning;
 	private long timestampOfLastEvent = 0;
 
@@ -123,33 +121,34 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 
 	/** Called when the activity is first created. */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
 		// basic setup
-		super.onCreate(savedInstanceState);
+		super.onCreateView(inflater, container, savedInstanceState);
 
-		logger.debug("onCreate()");
+		logger.debug("onCreateView()");
 
 		// fixes/workarounds for android security issue below 4.3 regarding key generation
 		PrngFixes.apply();
 
 		// prefs change
-		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener);
 
 		// layout
-		setContentView(getLayoutId());
+		View view = inflater.inflate(getLayoutId(), container, false);
 
 		// calc keys fingerprints
 		AsyncTask<Void, Void, Void> task = new CalcPubkeyFinterprintsTask(keyFingerprintProvider, this);
 		task.execute();
 
 		// create addresses label
-		((TextView) findViewById(R.id.addressesLabel)).setText(
+		((TextView) view.findViewById(R.id.addressesLabel)).setText(
 				String.format("%s (%s)", getText(R.string.ipAddrLabel), getText(R.string.ifacesLabel))
 		);
 
 		// create ports label
-		((TextView) findViewById(R.id.portsLabel)).setText(
+		((TextView) view.findViewById(R.id.portsLabel)).setText(
 				String.format("%s / %s / %s",
 						getText(R.string.protocolLabel), getText(R.string.portLabel), getText(R.string.state))
 		);
@@ -159,16 +158,16 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 
 		// hide SAF storage type radios and texts for old androids
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			View radioStorageSaf = findViewById(R.id.radioStorageSaf);
+			View radioStorageSaf = view.findViewById(R.id.radioStorageSaf);
 			((ViewManager)radioStorageSaf.getParent()).removeView(radioStorageSaf);
 
-			View radioStorageRoSaf = findViewById(R.id.radioStorageRoSaf);
+			View radioStorageRoSaf = view.findViewById(R.id.radioStorageRoSaf);
 			((ViewManager)radioStorageRoSaf.getParent()).removeView(radioStorageRoSaf);
 
-			View safExplainHeading = findViewById(R.id.safExplainHeading);
+			View safExplainHeading = view.findViewById(R.id.safExplainHeading);
 			((ViewManager)safExplainHeading.getParent()).removeView(safExplainHeading);
 
-			View safExplain = findViewById(R.id.safExplain);
+			View safExplain = view.findViewById(R.id.safExplain);
 			((ViewManager)safExplain.getParent()).removeView(safExplain);
 		}
 
@@ -176,84 +175,91 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		Boolean startOnOpen = LoadPrefsUtil.startOnOpen(prefs);
 		if (startOnOpen) {
 			PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-			keyFingerprintProvider.calcPubkeyFingerprints(this); // see GH issue #204
+			keyFingerprintProvider.calcPubkeyFingerprints(getContext()); // see GH issue #204
 			ServicesStartStopUtil.startServers(
-					getBaseContext(),
+					getContext(),
 					prefsBean,
 					keyFingerprintProvider,
 					this);
 		}
 
 		// init client action views
-		clientActionView1 = findViewById(R.id.clientActionsLine1);
-		clientActionView2 = findViewById(R.id.clientActionsLine2);
-		clientActionView3 = findViewById(R.id.clientActionsLine3);
+		clientActionView1 = view.findViewById(R.id.clientActionsLine1);
+		clientActionView2 = view.findViewById(R.id.clientActionsLine2);
+		clientActionView3 = view.findViewById(R.id.clientActionsLine3);
 
 		// make links clickable
-		((TextView)findViewById(R.id.radioStoragePlain)).setMovementMethod(LinkMovementMethod.getInstance());
+		((TextView)view.findViewById(R.id.radioStoragePlain)).setMovementMethod(LinkMovementMethod.getInstance());
 
 		// create sample authorized_keys files
-		new SampleAuthKeysFileCreator().createSampleAuthorizedKeysFiles(this);
+		new SampleAuthKeysFileCreator().createSampleAuthorizedKeysFiles(getContext());
+
+		return view;
 	}
 
 	@Override
-	protected void onDestroy()
+	public void onDestroyView()
 	{
-		super.onDestroy();
+		super.onDestroyView();
 
 		// prefs change
-		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
 		prefs.unregisterOnSharedPreferenceChangeListener(prefsChangeListener);
 
 		// server state change events
 		EventBus.getDefault().unregister(this);
 	}
 
-	@Override
-	protected void onStart() {
-		super.onStart();
+    @Override
+    public void onStart() {
+        super.onStart();
 
-		logger.debug("onStart()");
+        logger.debug("onStart()");
 
-		loadPrefs();
-		showLogindata();
+        loadPrefs();
+        showLogindata();
 
         // init storage type radio
+        View view = getView();
+        if (view == null) {
+            return;
+        }
+		((RadioGroup)view.findViewById(R.id.radioGroupStorage)).setOnCheckedChangeListener(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             switch (prefsBean.getStorageType()) {
                 case PLAIN:
-                    ((RadioButton) findViewById(R.id.radioStoragePlain)).setChecked(true);
+                    ((RadioButton) view.findViewById(R.id.radioStoragePlain)).setChecked(true);
                     break;
                 case ROOT:
-                    ((RadioButton) findViewById(R.id.radioStorageRoot)).setChecked(true);
+                    ((RadioButton) view.findViewById(R.id.radioStorageRoot)).setChecked(true);
                     break;
                 case SAF:
-                    ((RadioButton) findViewById(R.id.radioStorageSaf)).setChecked(true);
+                    ((RadioButton) view.findViewById(R.id.radioStorageSaf)).setChecked(true);
                     showSafUrl(prefsBean.getSafUrl());
                     break;
                 case RO_SAF:
-                    ((RadioButton) findViewById(R.id.radioStorageRoSaf)).setChecked(true);
+                    ((RadioButton) view.findViewById(R.id.radioStorageRoSaf)).setChecked(true);
                     showSafUrl(prefsBean.getSafUrl());
                     break;
                 case VIRTUAL:
-                    ((RadioButton) findViewById(R.id.radioStorageVirtual)).setChecked(true);
+                    ((RadioButton) view.findViewById(R.id.radioStorageVirtual)).setChecked(true);
                     showSafUrl(prefsBean.getSafUrl());
                     break;
             }
         } else {
             switch (prefsBean.getStorageType()) {
                 case PLAIN:
-                    ((RadioButton) findViewById(R.id.radioStoragePlain)).setChecked(true);
+                    ((RadioButton) view.findViewById(R.id.radioStoragePlain)).setChecked(true);
                     break;
                 case ROOT:
-                    ((RadioButton) findViewById(R.id.radioStorageRoot)).setChecked(true);
+                    ((RadioButton) view.findViewById(R.id.radioStorageRoot)).setChecked(true);
                     break;
             }
         }
-	}
+    }
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 
 		logger.debug("onResume()");
@@ -261,7 +267,7 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		// register listener to reprint interfaces table when network connections change
 		// android sends those events when registered in code but not when registered in manifest
 		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-		registerReceiver(this.networkStateReceiver, filter);
+		requireActivity().registerReceiver(this.networkStateReceiver, filter);
 
 		// e.g. necessary when ports preferences have been changed
 		displayServersState();
@@ -273,68 +279,76 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		if (!ipAddressProvider.isIpAvail(prefsBean.getBindIp())) {
 			String msg = "IP " + prefsBean.getBindIp() +
 					" is currently not assigned to an interface. May lead to a crash.";
-			Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+			Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
 		}
 	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		super.onPause();
 
 		logger.debug("onPause()");
 
 		// unregister broadcast receiver
-		this.unregisterReceiver(this.networkStateReceiver);
+		requireActivity().unregisterReceiver(this.networkStateReceiver);
 	}
 
-	public void onRadioButtonClicked(View view) {
-		logger.debug("onRadioButtonClicked()");
-		findViewById(R.id.safUriLabel).setVisibility(View.GONE);
-		findViewById(R.id.safUri).setVisibility(View.GONE);
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		logger.debug("onCheckedChanged()");
+		View view = getView();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			view.findViewById(R.id.safUriLabel).setVisibility(View.GONE);
+			view.findViewById(R.id.safUri).setVisibility(View.GONE);
 
-		StorageType storageType = null;
+			StorageType storageType = null;
 
-		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-		intent.addFlags(
-				Intent.FLAG_GRANT_READ_URI_PERMISSION
-				| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-		try {
-			switch (view.getId()) {
-				case R.id.radioStoragePlain:
-					storageType = StorageType.PLAIN;
-					break;
-				case R.id.radioStorageRoot:
-					storageType = StorageType.ROOT;
-					break;
-				case R.id.radioStorageSaf:
-					storageType = StorageType.SAF;
-					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
-					break;
-				case R.id.radioStorageRoSaf:
-					storageType = StorageType.RO_SAF;
-					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
-					break;
-				case R.id.radioStorageVirtual:
-					storageType = StorageType.VIRTUAL;
-					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
-					break;
+			Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+			intent.addFlags(
+					Intent.FLAG_GRANT_READ_URI_PERMISSION
+							| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+			int checkedRadioButtonId = group.getCheckedRadioButtonId();
+			try {
+				switch (checkedRadioButtonId) {
+					case R.id.radioStoragePlain:
+						storageType = StorageType.PLAIN;
+						break;
+					case R.id.radioStorageRoot:
+						storageType = StorageType.ROOT;
+						break;
+					case R.id.radioStorageSaf:
+						storageType = StorageType.SAF;
+						startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+						break;
+					case R.id.radioStorageRoSaf:
+						storageType = StorageType.RO_SAF;
+						startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+						break;
+					case R.id.radioStorageVirtual:
+						storageType = StorageType.VIRTUAL;
+						startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+						break;
+				}
+			} catch (ActivityNotFoundException e) {
+				Toast.makeText(getContext(), "SAF seems to be broken on your device :(", Toast.LENGTH_SHORT).show();
+				storageType = StorageType.PLAIN;
 			}
-		} catch (ActivityNotFoundException e) {
-			Toast.makeText(getBaseContext(), "SAF seems to be broken on your device :(", Toast.LENGTH_SHORT);
-			storageType = StorageType.PLAIN;
-		}
 
-		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-		LoadPrefsUtil.storeStorageType(prefs, storageType);
+			if (storageType != null) {
+				SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
+				LoadPrefsUtil.storeStorageType(prefs, storageType);
+			}
 
-		if (storageType == StorageType.PLAIN || storageType == StorageType.ROOT) {
-			loadPrefs();
-			checkSafAccess();
+			if (storageType == StorageType.PLAIN || storageType == StorageType.ROOT) {
+				loadPrefs();
+				checkSafAccess();
+			}
 		}
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		logger.debug("onActivityResult()");
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -349,10 +363,11 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 							| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
 					// release old permissions
+					FragmentActivity activity = requireActivity();
 					String oldUrl = prefsBean.getSafUrl();
 					if (!StringUtils.isBlank(oldUrl)) {
 						try {
-							getContentResolver().releasePersistableUriPermission(Uri.parse(oldUrl), modeFlags);
+							activity.getContentResolver().releasePersistableUriPermission(Uri.parse(oldUrl), modeFlags);
 						} catch (SecurityException e) {
 							logger.info("SecurityException while calling releasePersistableUriPermission()");
 							logger.trace("", e);
@@ -361,15 +376,15 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 
 					// persist permissions
 					try {
-						grantUriPermission(getPackageName(), uri, modeFlags);
-						getContentResolver().takePersistableUriPermission(uri, modeFlags);
+						activity.grantUriPermission(activity.getPackageName(), uri, modeFlags);
+						activity.getContentResolver().takePersistableUriPermission(uri, modeFlags);
 					} catch (SecurityException e) {
 						logger.info("SecurityException while calling takePersistableUriPermission()");
 						logger.trace("", e);
 					}
 
 					// store uri
-					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
 					LoadPrefsUtil.storeSafUrl(prefs, uriStr);
 
 					// display uri
@@ -387,10 +402,14 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 	protected void checkSafAccess() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			boolean hideWarning = true;
-			RadioButton safRadio = findViewById(R.id.radioStorageSaf);
+			View view = getView();
+			if (view == null) {
+				return;
+			}
+			RadioButton safRadio = view.findViewById(R.id.radioStorageSaf);
 			if (prefsBean.getStorageType() == StorageType.SAF || prefsBean.getStorageType() == StorageType.RO_SAF) {
 				// let's see if the OS has persisted something for us
-				List<UriPermission> persistedUriPermissions = getContentResolver().getPersistedUriPermissions();
+				List<UriPermission> persistedUriPermissions = requireActivity().getContentResolver().getPersistedUriPermissions();
 				for (UriPermission uriPerm : persistedUriPermissions) {
 					logger.debug("persisted uri perm: '{}', pref uri: '{}'", uriPerm.getUri(), prefsBean.getSafUrl());
 				}
@@ -402,7 +421,7 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 				try {
 					String url = prefsBean.getSafUrl();
 					Uri uri = Uri.parse(url);
-					cursor = getContentResolver().query(
+					cursor = requireActivity().getContentResolver().query(
 							uri,
 							new String[]{DocumentsContract.Document.COLUMN_DOCUMENT_ID},
 							null,
@@ -449,13 +468,17 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 	 * Creates table containing network interfaces.
 	 */
 	protected void showAddresses() {
-		LinearLayout container = (LinearLayout)findViewById(R.id.addressesContainer);
+		View view = getView();
+		if (view == null) {
+			return;
+		}
+		LinearLayout container = view.findViewById(R.id.addressesContainer);
 
 		// clear old entries
 		container.removeAllViews();
 
 		boolean isLeftToRight = isLeftToRight();
-		List<String> displayTexts = ipAddressProvider.ipAddressTexts(this, true, isLeftToRight);
+		List<String> displayTexts = ipAddressProvider.ipAddressTexts(getContext(), true, isLeftToRight);
 		for (String displayText : displayTexts) {
 			TextView textView = new TextView(container.getContext());
 			container.addView(textView);
@@ -470,27 +493,31 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 	protected void showPortsAndServerState() {
 		boolean isLeftToRight = isLeftToRight();
 
+		View view = getView();
+		if (view == null) {
+			return;
+		}
 		if (isLeftToRight) {
-			((TextView) findViewById(R.id.ftpTextView))
+			((TextView) view.findViewById(R.id.ftpTextView))
 					.setText("ftp / " + prefsBean.getPortStr() + " / " +
 							getText(serversRunning.ftp
 									? R.string.serverStarted
 									: R.string.serverStopped));
 
-			((TextView) findViewById(R.id.sftpTextView))
+			((TextView) view.findViewById(R.id.sftpTextView))
 					.setText("sftp / " + prefsBean.getSecurePortStr() + " / " +
 							getText(serversRunning.ssh
 									? R.string.serverStarted
 									: R.string.serverStopped));
 		} else {
-			((TextView) findViewById(R.id.ftpTextView))
+			((TextView) view.findViewById(R.id.ftpTextView))
 					.setText(prefsBean.getPortStr() + " / " +
 							getText(serversRunning.ftp
 									? R.string.serverStarted
 									: R.string.serverStopped)
 					+ " / " + "ftp");
 
-			((TextView) findViewById(R.id.sftpTextView))
+			((TextView) view.findViewById(R.id.sftpTextView))
 					.setText(prefsBean.getSecurePortStr() + " / " +
 							getText(serversRunning.ssh
 									? R.string.serverStarted
@@ -500,17 +527,22 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 	}
 
 	protected void showLogindata() {
-		TextView usernameView = findViewById(R.id.usernameTextView);
+		View view = getView();
+		if (view == null) {
+			return;
+		}
+
+		TextView usernameView = view.findViewById(R.id.usernameTextView);
 		usernameView.setText(prefsBean.getUserName());
 
-		TextView anonymousView = findViewById(R.id.anonymousLoginTextView);
+		TextView anonymousView = view.findViewById(R.id.anonymousLoginTextView);
 		anonymousView.setText(getString(R.string.isAnonymous, prefsBean.isAnonymousLogin()));
 
-		TextView passwordPresentView = findViewById(R.id.passwordPresentTextView);
+		TextView passwordPresentView = view.findViewById(R.id.passwordPresentTextView);
 		passwordPresentView.setText(getString(R.string.passwordPresent,
 				StringUtils.isNotEmpty(prefsBean.getPassword())));
 
-		TextView pubKeyAuthView = findViewById(R.id.pubKeyAuthTextView);
+		TextView pubKeyAuthView = view.findViewById(R.id.pubKeyAuthTextView);
 		pubKeyAuthView.setText(getString(R.string.pubKeyAuth, prefsBean.isPubKeyAuth()));
 
 		displayNormalStorageAccess();
@@ -520,19 +552,21 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 
 	private void displayNormalStorageAccess() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			TextView hasNormalStorageAccessTextView = findViewById(R.id.hasNormalStorageAccessTextView);
+			View view = getView();
+			if (view == null) {
+				return;
+			}
+			TextView hasNormalStorageAccessTextView = view.findViewById(R.id.hasNormalStorageAccessTextView);
 			final String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 			final int requestCode = PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
 			boolean hasNormalStorageAccess = hasPermission(permission, requestCode);
 			String hasNormalStorageAccessStr = getString(R.string.hasNormalAccessToStorage, hasNormalStorageAccess);
 
 			if (!hasNormalStorageAccess) {
-				buildPermissionRequestLink(hasNormalStorageAccessTextView, hasNormalStorageAccessStr, new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						requestPermissions(new String[]{permission}, requestCode);
-					}
-				});
+				buildPermissionRequestLink(
+						hasNormalStorageAccessTextView,
+						hasNormalStorageAccessStr,
+						v -> requestPermissions(new String[]{permission}, requestCode));
 
 			} else {
 				hasNormalStorageAccessTextView.setText(hasNormalStorageAccessStr);
@@ -542,19 +576,20 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 
 	private void displayFullStorageAccess() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-			TextView hasFullStorageAccessTextView = findViewById(R.id.hasFullStorageAccessTextView);
+			View view = getView();
+			if (view == null) {
+				return;
+			}
+			TextView hasFullStorageAccessTextView = view.findViewById(R.id.hasFullStorageAccessTextView);
 			boolean hasFullStorageAccess = Environment.isExternalStorageManager();
 			String hasStorageAccessStr = getString(R.string.hasFullAccessToStorage, hasFullStorageAccess);
 
 			if (!hasFullStorageAccess) {
-				buildPermissionRequestLink(hasFullStorageAccessTextView, hasStorageAccessStr, new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-						Uri uri = Uri.fromParts("package", getPackageName(), null);
-						intent.setData(uri);
-						startActivity(intent);
-					}
+				buildPermissionRequestLink(hasFullStorageAccessTextView, hasStorageAccessStr, v -> {
+					Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+					Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
+					intent.setData(uri);
+					startActivity(intent);
 				});
 			} else {
 				hasFullStorageAccessTextView.setText(hasStorageAccessStr);
@@ -563,19 +598,21 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 	}
 	private void displayMediaLocationAccess() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-			TextView hasMediaLocationAccessTextView = findViewById(R.id.hasMediaLocationAccessTextView);
+			View view = getView();
+			if (view == null) {
+				return;
+			}
+			TextView hasMediaLocationAccessTextView = view.findViewById(R.id.hasMediaLocationAccessTextView);
 			final String permission = Manifest.permission.ACCESS_MEDIA_LOCATION;
 			final int requestCode = PERMISSIONS_REQUEST_ACCESS_MEDIA_LOCATION;
 			boolean hasMediaLocationAccess = hasPermission(permission, requestCode);
 			String hasMediaLocationStr = getString(R.string.hasAccessToMediaLocation, hasMediaLocationAccess);
 
 			if (!hasMediaLocationAccess) {
-				buildPermissionRequestLink(hasMediaLocationAccessTextView, hasMediaLocationStr, new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						requestPermissions(new String[]{permission}, requestCode);
-					}
-				});
+				buildPermissionRequestLink(
+						hasMediaLocationAccessTextView,
+						hasMediaLocationStr,
+						v -> requestPermissions(new String[]{permission}, requestCode));
 			} else {
 				hasMediaLocationAccessTextView.setText(hasMediaLocationStr);
 			}
@@ -597,7 +634,7 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 	protected boolean hasPermission(String permission, int requestCode) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			logger.trace("hasPermission({})", permission);
-			return checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED;
+			return requireActivity().checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED;
 		}
 		return true;
 	}
@@ -618,64 +655,66 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 
 
 	protected void showSafUrl(String url) {
-		findViewById(R.id.safUriLabel).setVisibility(View.VISIBLE);
-		TextView safUriView = (TextView)findViewById(R.id.safUri);
+		View view = getView();
+		if (view == null) {
+			return;
+		}
+		view.findViewById(R.id.safUriLabel).setVisibility(View.VISIBLE);
+		TextView safUriView = view.findViewById(R.id.safUri);
 		safUriView.setVisibility(View.VISIBLE);
 		safUriView.setText(url);
 	}
 
 	@SuppressLint("SetTextI18n")
 	public void showKeyFingerprints() {
+		View view = getView();
+		if (view == null) {
+			return;
+		}
 		HostKeyAlgorithm chosenAlgo = Defaults.DEFAULT_HOST_KEY_ALGO;
 
-		((TextView)findViewById(R.id.keyFingerprintMd5Label))
+		((TextView)view.findViewById(R.id.keyFingerprintMd5Label))
 				.setText("MD5 (" + chosenAlgo.getAlgorithmName() + ")");
-		((TextView)findViewById(R.id.keyFingerprintSha1Label))
+		((TextView)view.findViewById(R.id.keyFingerprintSha1Label))
 				.setText("SHA1 (" + chosenAlgo.getAlgorithmName() + ")");
-		((TextView)findViewById(R.id.keyFingerprintSha256Label))
+		((TextView)view.findViewById(R.id.keyFingerprintSha256Label))
 				.setText("SHA256 (" + chosenAlgo.getAlgorithmName() + ")");
 
 		KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(chosenAlgo);
 
 		if (keyFingerprintBean != null) {
-			((TextView) findViewById(R.id.keyFingerprintMd5TextView))
+			((TextView) view.findViewById(R.id.keyFingerprintMd5TextView))
 					.setText(keyFingerprintBean.getFingerprintMd5());
-			((TextView) findViewById(R.id.keyFingerprintSha1TextView))
+			((TextView) view.findViewById(R.id.keyFingerprintSha1TextView))
 					.setText(keyFingerprintBean.getFingerprintSha1());
-			((TextView) findViewById(R.id.keyFingerprintSha256TextView))
+			((TextView) view.findViewById(R.id.keyFingerprintSha256TextView))
 					.setText(keyFingerprintBean.getFingerprintSha256());
 		}
 
 		// create onRefreshListener
-		final PrimitiveFtpdActivity activity = this;
-		View refreshButton = findViewById(R.id.keyFingerprintsLabel);
-		refreshButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				logger.trace("refreshButton OnClickListener");
-				GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
-				askDiag.show(activity.getSupportFragmentManager(), DIALOG_TAG);
-			}
+		PftpdFragment pftpdFragment = this;
+		View refreshButton = view.findViewById(R.id.keyFingerprintsLabel);
+		refreshButton.setOnClickListener(v -> {
+			logger.trace("refreshButton OnClickListener");
+			GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment(pftpdFragment);
+			askDiag.show(requireActivity().getSupportFragmentManager(), DIALOG_TAG);
 		});
 
 		// link to keys fingerprints activity
-		TextView showAllKeysFingerprints = findViewById(R.id.allKeysFingerprintsLabel);
+		TextView showAllKeysFingerprints = view.findViewById(R.id.allKeysFingerprintsLabel);
 		CharSequence text = showAllKeysFingerprints.getText();
 		SpannableString spannable = new SpannableString(text);
 		spannable.setSpan(new UnderlineSpan(), 0, text.length(), 0);
 		showAllKeysFingerprints.setText(spannable);
-		showAllKeysFingerprints.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO switch to other tab
-			}
+		showAllKeysFingerprints.setOnClickListener(v -> {
+			// TODO switch to other tab
 		});
 	}
 
 	public void genKeysAndShowProgressDiag(boolean startServerOnFinish) {
 		logger.trace("genKeysAndShowProgressDiag()");
 		// critical: do not pass getApplicationContext() to dialog
-		final ProgressDialog progressDiag = new ProgressDialog(this);
+		final ProgressDialog progressDiag = new ProgressDialog(getContext());
 		progressDiag.setCancelable(false);
 		progressDiag.setMessage(getText(R.string.generatingKeysMessage));
 		progressDiag.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -695,10 +734,10 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		long offset = currentTime - timestampOfLastEvent;
 		boolean inTime = offset > 20;
 		if (inTime) {
-			logger.debug("handling event '{}', offset: {} ms", event.getClass().getName(), Long.valueOf(offset));
+			logger.debug("handling event '{}', offset: {} ms", event.getClass().getName(), offset);
 			timestampOfLastEvent = currentTime;
 		} else {
-			logger.debug("ignoring event '{}', offset: {} ms", event.getClass().getName(), Long.valueOf(offset));
+			logger.debug("ignoring event '{}', offset: {} ms", event.getClass().getName(), offset);
 		}
 		return inTime;
 	}
@@ -716,7 +755,11 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		logger.debug("got ServerInfoResponseEvent, QuickShare numberOfFiles: {}", numberOfFiles);
 		if (isEventInTime(event)) {
 			if (numberOfFiles >= 0) {
-				TextView quickShareInfo = findViewById(R.id.quickShareInfo);
+				View view = getView();
+				if (view == null) {
+					return;
+				}
+				TextView quickShareInfo = view.findViewById(R.id.quickShareInfo);
 				quickShareInfo.setVisibility(View.VISIBLE);
 				quickShareInfo.setText(String.format(getString(R.string.quickShareInfoActivityV2), numberOfFiles));
 			}
@@ -735,20 +778,13 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 		clientActionView3.setText(clientAction);
 	}
 
-	/**
-	 * Displays UI-elements showing if servers are running. That includes
-	 * Actionbar Icon and Ports-Table. When Activity is shown the first time
-	 * this is triggered by {@link #onCreateOptionsMenu(Menu)}, when user comes back from
-	 * preferences, this is triggered by {@link #onResume()}. It may be invoked by
-	 * {@link GenKeysAsyncTask}.
-	 */
 	protected void displayServersState() {
 		logger.debug("displayServersState()");
 
 		checkServicesRunning();
 		Boolean running = null;
 		if (serversRunning != null) {
-			running = Boolean.valueOf(serversRunning.atLeastOneRunning());
+			running = serversRunning.atLeastOneRunning();
 		}
 
 		// should be triggered by onCreateOptionsMenu() to avoid icon flicker
@@ -768,18 +804,21 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 			logger.debug("posting ServerInfoRequestEvent");
 			EventBus.getDefault().post(new ServerInfoRequestEvent());
 		} else {
-			findViewById(R.id.quickShareInfo).setVisibility(View.GONE);
+			View view = getView();
+			if (view != null) {
+				view.findViewById(R.id.quickShareInfo).setVisibility(View.GONE);
+			}
 		}
 	}
 
 	protected void checkServicesRunning() {
 		logger.debug("checkServicesRunning()");
-		this.serversRunning = ServicesStartStopUtil.checkServicesRunning(this);
+		Context context = getContext();
+		if (context != null) {
+			this.serversRunning = ServicesStartStopUtil.checkServicesRunning(context);
+		}
 	}
 
-	/**
-	 * Updates enabled state of start/stop buttons.
-	 */
 	protected void updateButtonStates(Boolean running) {
 		logger.debug("updateButtonStates()");
 
@@ -788,29 +827,35 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 			checkServicesRunning();
 			atLeastOneRunning = serversRunning.atLeastOneRunning();
 		} else {
-			atLeastOneRunning = running.booleanValue();
+			atLeastOneRunning = running;
 		}
 
 		// update fallback buttons
-		View fallbackButtonStart = findViewById(R.id.fallbackButtonStartServer);
-		if (fallbackButtonStart != null) {
-			fallbackButtonStart.setVisibility(atLeastOneRunning ? View.GONE : View.VISIBLE);
-		}
-		View fallbackButtonStop = findViewById(R.id.fallbackButtonStopServer);
-		if (fallbackButtonStop != null) {
-			fallbackButtonStop.setVisibility(atLeastOneRunning ? View.VISIBLE : View.GONE);
+		View view = getView();
+		if (view != null) {
+			View fallbackButtonStart = view.findViewById(R.id.fallbackButtonStartServer);
+			if (fallbackButtonStart != null) {
+				fallbackButtonStart.setVisibility(atLeastOneRunning ? View.GONE : View.VISIBLE);
+			}
+			View fallbackButtonStop = view.findViewById(R.id.fallbackButtonStopServer);
+			if (fallbackButtonStop != null) {
+				fallbackButtonStop.setVisibility(atLeastOneRunning ? View.VISIBLE : View.GONE);
+			}
 		}
 
 		// remove status bar notification if server not running
 		if (!atLeastOneRunning) {
-			NotificationUtil.removeStatusbarNotification(this);
+			Context context = getContext();
+			if (context != null) {
+				NotificationUtil.removeStatusbarNotification(context);
+			}
 		}
 	}
 
 	public boolean isKeyPresent() {
 		if (!keyFingerprintProvider.areFingerprintsGenerated()) {
 			logger.debug("checking if key is present, but fingerprints have not been generated yet");
-			keyFingerprintProvider.calcPubkeyFingerprints(this);
+			keyFingerprintProvider.calcPubkeyFingerprints(getContext());
 		}
 		boolean keyPresent = keyFingerprintProvider.isKeyPresent();
 		logger.trace("isKeyPresent() -> {}", keyPresent);
@@ -819,22 +864,17 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 
 	public void showGenKeyDialog() {
 		logger.trace("showGenKeyDialog()");
-		GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment();
+		GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment(this);
 		Bundle diagArgs = new Bundle();
 		diagArgs.putBoolean(GenKeysAskDialogFragment.KEY_START_SERVER, true);
 		askDiag.setArguments(diagArgs);
-		askDiag.show(getSupportFragmentManager(), DIALOG_TAG);
+		askDiag.show(requireActivity().getSupportFragmentManager(), DIALOG_TAG);
 	}
 
-	/**
-	 * Loads and parses preferences.
-	 *
-	 * @return {@link PrefsBean}
-	 */
 	protected void loadPrefs() {
 		logger.debug("loadPrefs()");
 
-		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
+		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
 		this.prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
 
 		handlePrefsChanged();
@@ -846,7 +886,7 @@ public class PrimitiveFtpdActivity extends AppCompatActivity {
 			prefsChanged = false;
 			if (serversRunning != null && serversRunning.atLeastOneRunning()) {
 				Toast.makeText(
-					getApplicationContext(),
+					getContext(),
 					R.string.restartServer,
 					Toast.LENGTH_LONG).show();
 			}

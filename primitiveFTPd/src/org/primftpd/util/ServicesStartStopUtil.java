@@ -12,9 +12,10 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import org.primftpd.prefs.PrefsBean;
-import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.R;
 import org.primftpd.share.QuickShareBean;
+import org.primftpd.ui.MainTabsActivity;
+import org.primftpd.ui.PftpdFragment;
 import org.primftpd.ui.StartServerAndExitActivity;
 import org.primftpd.StartStopWidgetProvider;
 import org.primftpd.prefs.LoadPrefsUtil;
@@ -52,16 +53,21 @@ public class ServicesStartStopUtil {
             Context context,
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider,
-            PrimitiveFtpdActivity activity) {
-        startServers(context, prefsBean, keyFingerprintProvider, activity, null);
+            PftpdFragment fragment) {
+        startServers(context, prefsBean, keyFingerprintProvider, fragment, null);
     }
     public static void startServers(
             Context context,
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider,
-            PrimitiveFtpdActivity activity,
+            PftpdFragment fragment,
             QuickShareBean quickShareBean) {
         LOGGER.trace("startServers()");
+
+        if (prefsBean == null) {
+            SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
+            prefsBean = LoadPrefsUtil.loadPrefs(LOGGER, prefs);
+        }
 
         if (!isPasswordOk(prefsBean)) {
             Toast.makeText(
@@ -69,9 +75,9 @@ public class ServicesStartStopUtil {
                 R.string.haveToSetAuthMechanism,
                 Toast.LENGTH_LONG).show();
 
-            if (activity == null) {
+            if (fragment == null) {
                 // Launch the main activity so that the user may set their password.
-                Intent activityIntent = new Intent(context, PrimitiveFtpdActivity.class);
+                Intent activityIntent = new Intent(context, MainTabsActivity.class);
                 activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(activityIntent);
             }
@@ -79,12 +85,12 @@ public class ServicesStartStopUtil {
             boolean continueServerStart = true;
             if (prefsBean.getServerToStart().startSftp()) {
                 boolean keyPresent = true;
-                if (activity != null) {
-                    keyPresent = activity.isKeyPresent();
+                if (fragment != null) {
+                    keyPresent = fragment.isKeyPresent();
                     if (!keyPresent) {
                         // cannot start sftp server when key is not present
                         // ask user to generate it
-                        activity.showGenKeyDialog();
+                        fragment.showGenKeyDialog();
                         continueServerStart = false;
                     }
                 }
@@ -98,7 +104,7 @@ public class ServicesStartStopUtil {
                         Toast.makeText(
                                 context,
                                 "could not start sftp server, " + e.getMessage(),
-                                Toast.LENGTH_SHORT);
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -113,7 +119,7 @@ public class ServicesStartStopUtil {
                         Toast.makeText(
                                 context,
                                 "could not start ftp server, " + e.getMessage(),
-                                Toast.LENGTH_SHORT);
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
             }

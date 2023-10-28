@@ -1,11 +1,12 @@
 package org.primftpd.ui;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 
-import org.primftpd.PrimitiveFtpdActivity;
 import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.util.KeyFingerprintProvider;
+import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,18 +16,19 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final KeyFingerprintProvider keyFingerprintProvider;
-    private final PrimitiveFtpdActivity activity;
+    private final PftpdFragment fragment;
     private final ProgressDialog progressDiag;
     private final boolean startServerOnFinish;
 
     public GenKeysAsyncTask(
             KeyFingerprintProvider keyFingerprintProvider,
-            PrimitiveFtpdActivity activity,
+            PftpdFragment fragment,
             ProgressDialog progressDiag,
             boolean startServerOnFinish) {
+        super();
         logger.trace("GenKeysAsyncTask()");
         this.keyFingerprintProvider = keyFingerprintProvider;
-        this.activity = activity;
+        this.fragment = fragment;
         this.progressDiag = progressDiag;
         this.startServerOnFinish = startServerOnFinish;
     }
@@ -35,7 +37,7 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         logger.debug("generating keys");
         try {
-            String[] fileList = activity.fileList();
+            String[] fileList = fragment.requireActivity().fileList();
             if (fileList != null) {
                 logger.trace("num of existing files: '{}'", fileList.length);
                 for (String file : fileList) {
@@ -45,18 +47,21 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
                 logger.trace("no existing files");
             }
 
+            Context context = fragment.getContext();
+            if (context == null) {
+                logger.trace("context is null");
+                return null;
+            }
             progressDiag.setMax(HostKeyAlgorithm.values().length);
             int i=0;
             for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
-                FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream(activity, hka);
-                FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream(activity, hka);
-                try {
+                try (
+                    FileOutputStream publickeyFos = keyFingerprintProvider.buildPublickeyOutStream(context, hka);
+                    FileOutputStream privatekeyFos = keyFingerprintProvider.buildPrivatekeyOutStream(context, hka)
+                ) {
                     hka.generateKey(publickeyFos, privatekeyFos);
                 } catch (Exception e) {
                     logger.error("could not generate key " + hka.getAlgorithmName(), e);
-                } finally {
-                    publickeyFos.close();
-                    privatekeyFos.close();
                 }
                 i++;
                 progressDiag.setProgress(i);
@@ -71,14 +76,13 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
         logger.trace("onPostExecute()");
-        keyFingerprintProvider.calcPubkeyFingerprints(activity);
+        keyFingerprintProvider.calcPubkeyFingerprints(fragment.getContext());
         progressDiag.dismiss();
-        activity.showKeyFingerprints();
+        fragment.showKeyFingerprints();
 
         if (startServerOnFinish) {
             // icon members should be set at this time
-            // TODO handle start after key generation
-            //activity.handleStart();
+            ServicesStartStopUtil.startServers(fragment.getContext(), null, keyFingerprintProvider, fragment);
         }
     }
 }
