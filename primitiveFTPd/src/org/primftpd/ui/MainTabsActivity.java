@@ -1,7 +1,6 @@
 package org.primftpd.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,9 +13,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
 import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.prefs.FtpPrefsFragment;
-import org.primftpd.prefs.LoadPrefsUtil;
-import org.primftpd.prefs.PrefsBean;
-import org.primftpd.util.KeyFingerprintProvider;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
@@ -38,6 +34,8 @@ public class MainTabsActivity extends AppCompatActivity {
     protected MenuItem startIcon;
     protected MenuItem stopIcon;
 
+    protected PftpdFragment pftpdFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +49,7 @@ public class MainTabsActivity extends AppCompatActivity {
         MainAdapter adapter = new MainAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
-        PftpdFragment pftpdFragment = new PftpdFragment();
+        this.pftpdFragment = new PftpdFragment();
         adapter.addFragment(pftpdFragment, "pftpd");
         CleanSpaceFragment cleanSpaceFragment = new CleanSpaceFragment();
         adapter.addFragment(cleanSpaceFragment, "\uD83D\uDDD1️" + getText(R.string.iconCleanSpace));
@@ -163,10 +161,7 @@ public class MainTabsActivity extends AppCompatActivity {
     public void handleStart() {
         logger.trace("handleStart()");
 
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(getBaseContext());
-        PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
-
-        ServicesStartStopUtil.startServers(this, prefsBean, new KeyFingerprintProvider(), null);
+        ServicesStartStopUtil.startServers(pftpdFragment);
     }
 
     protected void handleStop() {
