@@ -34,6 +34,7 @@ import androidx.viewpager.widget.ViewPager;
 
 public class MainTabsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    protected static int INDEX_FINGERPRINTS = 0;
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     protected MenuItem startIcon;
@@ -65,6 +66,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         adapter.addFragment(clientActionFragment, "\uD83D\uDDD2️" + getText(R.string.clientActionsLabel));
         KeysFingerprintsFragment keysFingerprintsFragment = new KeysFingerprintsFragment();
         adapter.addFragment(keysFingerprintsFragment, "\uD83D\uDD11 " + getText(R.string.iconKeysFingerprints));
+        INDEX_FINGERPRINTS = adapter.getCount() - 1;
         FtpPrefsFragment prefsFragment = new FtpPrefsFragment();
         adapter.addFragment(prefsFragment, "⚙ " + getText(R.string.prefs));
         AboutFragment aboutFragment = new AboutFragment();

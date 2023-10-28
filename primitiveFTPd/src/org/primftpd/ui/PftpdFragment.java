@@ -34,6 +34,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -682,7 +684,11 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		spannable.setSpan(new UnderlineSpan(), 0, text.length(), 0);
 		showAllKeysFingerprints.setText(spannable);
 		showAllKeysFingerprints.setOnClickListener(v -> {
-			// TODO switch to other tab
+			TabLayout tabLayout = view.getRootView().findViewById(R.id.tabs);
+			TabLayout.Tab tab = tabLayout.getTabAt(MainTabsActivity.INDEX_FINGERPRINTS);
+			if (tab != null) {
+				tab.select();
+			}
 		});
 	}
 
