@@ -8,12 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.R;
 import org.primftpd.share.QuickShareBean;
+import org.primftpd.ui.GenKeysAskDialogFragment;
 import org.primftpd.ui.MainTabsActivity;
 import org.primftpd.ui.PftpdFragment;
 import org.primftpd.ui.StartServerAndExitActivity;
@@ -39,14 +41,15 @@ public class ServicesStartStopUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServicesStartStopUtil.class);
 
+    public static void startServers(PftpdFragment fragment) {
+        startServers(null, null, null, fragment);
+    }
     public static void startServers(Context context) {
         startServers(context, null);
     }
 
     public static void startServers(Context context, QuickShareBean quickShareBean) {
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
-        PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(LOGGER, prefs);
-        startServers(context, prefsBean, new KeyFingerprintProvider(), null, quickShareBean);
+        startServers(context, null, null, null, quickShareBean);
     }
 
     public static void startServers(
@@ -64,9 +67,30 @@ public class ServicesStartStopUtil {
             QuickShareBean quickShareBean) {
         LOGGER.trace("startServers()");
 
+        if (context == null && fragment != null) {
+            context = fragment.getContext();
+        }
+        if (context == null) {
+            LOGGER.error("context is null, not starting server");
+            return;
+        }
+
         if (prefsBean == null) {
-            SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
-            prefsBean = LoadPrefsUtil.loadPrefs(LOGGER, prefs);
+            if (fragment != null) {
+                prefsBean = fragment.getPrefsBean();
+            }
+            if (prefsBean == null) {
+                SharedPreferences prefs = LoadPrefsUtil.getPrefs(context);
+                prefsBean = LoadPrefsUtil.loadPrefs(LOGGER, prefs);
+            }
+        }
+        if (keyFingerprintProvider == null) {
+            if (fragment != null) {
+                keyFingerprintProvider = fragment.getKeyFingerprintProvider();
+            }
+            if (keyFingerprintProvider == null) {
+                keyFingerprintProvider = new KeyFingerprintProvider();
+            }
         }
 
         if (!isPasswordOk(prefsBean)) {
@@ -86,11 +110,11 @@ public class ServicesStartStopUtil {
             if (prefsBean.getServerToStart().startSftp()) {
                 boolean keyPresent = true;
                 if (fragment != null) {
-                    keyPresent = fragment.isKeyPresent();
+                    keyPresent = isKeyPresent(keyFingerprintProvider, context);
                     if (!keyPresent) {
                         // cannot start sftp server when key is not present
                         // ask user to generate it
-                        fragment.showGenKeyDialog();
+                        showGenKeyDialog(fragment);
                         continueServerStart = false;
                     }
                 }
@@ -124,6 +148,31 @@ public class ServicesStartStopUtil {
                 }
             }
         }
+    }
+
+
+    private static boolean isKeyPresent(KeyFingerprintProvider keyFingerprintProvider, Context context) {
+        if (keyFingerprintProvider != null && context != null) {
+            if (!keyFingerprintProvider.areFingerprintsGenerated()) {
+                LOGGER.debug("checking if key is present, but fingerprints have not been generated yet");
+                keyFingerprintProvider.calcPubkeyFingerprints(context);
+            }
+            boolean keyPresent = keyFingerprintProvider.isKeyPresent();
+            LOGGER.trace("isKeyPresent() -> {}", keyPresent);
+            return keyPresent;
+        } else {
+            LOGGER.debug("params are null, cannot check for key");
+            return false;
+        }
+    }
+
+    private static void showGenKeyDialog(PftpdFragment fragment) {
+        LOGGER.trace("showGenKeyDialog()");
+        GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment(fragment);
+        Bundle diagArgs = new Bundle();
+        diagArgs.putBoolean(GenKeysAskDialogFragment.KEY_START_SERVER, true);
+        askDiag.setArguments(diagArgs);
+        askDiag.show(fragment.requireActivity().getSupportFragmentManager(), PftpdFragment.DIALOG_TAG);
     }
 
     private static void startServerByIntent(Intent intent, Context context) {

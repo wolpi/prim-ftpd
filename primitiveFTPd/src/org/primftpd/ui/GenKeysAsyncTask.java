@@ -21,13 +21,12 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
     private final boolean startServerOnFinish;
 
     public GenKeysAsyncTask(
-            KeyFingerprintProvider keyFingerprintProvider,
             PftpdFragment fragment,
             ProgressDialog progressDiag,
             boolean startServerOnFinish) {
         super();
         logger.trace("GenKeysAsyncTask()");
-        this.keyFingerprintProvider = keyFingerprintProvider;
+        this.keyFingerprintProvider = fragment.getKeyFingerprintProvider();
         this.fragment = fragment;
         this.progressDiag = progressDiag;
         this.startServerOnFinish = startServerOnFinish;
@@ -82,7 +81,7 @@ public class GenKeysAsyncTask extends AsyncTask<Void, Void, Void> {
 
         if (startServerOnFinish) {
             // icon members should be set at this time
-            ServicesStartStopUtil.startServers(fragment.getContext(), null, keyFingerprintProvider, fragment);
+            ServicesStartStopUtil.startServers(fragment);
         }
     }
 }

@@ -3,7 +3,6 @@ package org.primftpd.ui;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -711,24 +710,6 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 		});
 	}
 
-	public void genKeysAndShowProgressDiag(boolean startServerOnFinish) {
-		logger.trace("genKeysAndShowProgressDiag()");
-		// critical: do not pass getApplicationContext() to dialog
-		final ProgressDialog progressDiag = new ProgressDialog(getContext());
-		progressDiag.setCancelable(false);
-		progressDiag.setMessage(getText(R.string.generatingKeysMessage));
-		progressDiag.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-
-		AsyncTask<Void, Void, Void> task = new GenKeysAsyncTask(
-			keyFingerprintProvider,
-			this,
-			progressDiag,
-			startServerOnFinish);
-		task.execute();
-
-		progressDiag.show();
-	}
-
 	private boolean isEventInTime(Object event) {
 		long currentTime = System.currentTimeMillis();
 		long offset = currentTime - timestampOfLastEvent;
@@ -852,25 +833,6 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 		}
 	}
 
-	public boolean isKeyPresent() {
-		if (!keyFingerprintProvider.areFingerprintsGenerated()) {
-			logger.debug("checking if key is present, but fingerprints have not been generated yet");
-			keyFingerprintProvider.calcPubkeyFingerprints(getContext());
-		}
-		boolean keyPresent = keyFingerprintProvider.isKeyPresent();
-		logger.trace("isKeyPresent() -> {}", keyPresent);
-		return keyPresent;
-	}
-
-	public void showGenKeyDialog() {
-		logger.trace("showGenKeyDialog()");
-		GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment(this);
-		Bundle diagArgs = new Bundle();
-		diagArgs.putBoolean(GenKeysAskDialogFragment.KEY_START_SERVER, true);
-		askDiag.setArguments(diagArgs);
-		askDiag.show(requireActivity().getSupportFragmentManager(), DIALOG_TAG);
-	}
-
 	protected void loadPrefs() {
 		logger.debug("loadPrefs()");
 
@@ -909,5 +871,13 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 			PrimFtpdLoggerBinder.setLoggingPref(logging);
 			this.logger = LoggerFactory.getLogger(getClass());
 		}
+	}
+
+	public PrefsBean getPrefsBean() {
+		return prefsBean;
+	}
+
+	public KeyFingerprintProvider getKeyFingerprintProvider() {
+		return keyFingerprintProvider;
 	}
 }
