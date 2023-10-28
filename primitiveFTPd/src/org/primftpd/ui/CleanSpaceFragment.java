@@ -37,7 +37,7 @@ public class CleanSpaceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.clean_space, container, false);
         quickShareSpaceTextView = view.findViewById(R.id.quickShareFilesSize);

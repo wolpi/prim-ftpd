@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
 import org.primftpd.R;
 import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.util.KeyFingerprintBean;
@@ -16,8 +17,10 @@ import androidx.fragment.app.Fragment;
 public class KeysFingerprintsFragment extends Fragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         View view = inflater.inflate(R.layout.keys_fingerprints, container, false);
 
         KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider();
