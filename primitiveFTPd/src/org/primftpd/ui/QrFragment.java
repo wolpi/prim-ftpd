@@ -34,7 +34,7 @@ import java.util.Map;
 
 import androidx.fragment.app.Fragment;
 
-public class QrFragment extends Fragment {
+public class QrFragment extends Fragment implements RecreateLogger {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -152,5 +152,10 @@ public class QrFragment extends Fragment {
             logger.error("could not create QR code", e);
         }
         return null;
+    }
+
+    @Override
+    public void recreateLogger() {
+        this.logger = LoggerFactory.getLogger(getClass());
     }
 }

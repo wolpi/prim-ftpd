@@ -19,7 +19,7 @@ import java.io.File;
 
 import androidx.fragment.app.Fragment;
 
-public class CleanSpaceFragment extends Fragment {
+public class CleanSpaceFragment extends Fragment implements RecreateLogger {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -198,5 +198,10 @@ public class CleanSpaceFragment extends Fragment {
             progressDiag.dismiss();
             fragment.updateView();
         }
+    }
+
+    @Override
+    public void recreateLogger() {
+        this.logger = LoggerFactory.getLogger(getClass());
     }
 }

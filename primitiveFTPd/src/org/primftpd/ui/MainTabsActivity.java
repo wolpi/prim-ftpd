@@ -40,6 +40,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     protected MenuItem stopIcon;
 
     protected PftpdFragment pftpdFragment;
+    protected MainAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         ViewPager viewPager = findViewById(R.id.view_pager);
         tabLayout.setupWithViewPager(viewPager);
 
-        MainAdapter adapter = new MainAdapter(getSupportFragmentManager());
+        adapter = new MainAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
         this.pftpdFragment = new PftpdFragment();
@@ -213,10 +214,18 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         boolean recreateLogger = activeLogging != logging;
 
         if (recreateLogger) {
-            // re-create own log, don't care about other classes
+            // re-create own log and log of relevant fragments, don't care about other classes
             PrimFtpdLoggerBinder.setLoggingPref(logging);
             this.logger = LoggerFactory.getLogger(getClass());
             logger.debug("changed logging");
+
+            int cnt = adapter.getCount();
+            for (int i = 0; i < cnt; i++) {
+                Fragment fragment = adapter.getItem(i);
+                if (fragment instanceof RecreateLogger) {
+                    ((RecreateLogger) fragment).recreateLogger();
+                }
+            }
         }
     }
 }

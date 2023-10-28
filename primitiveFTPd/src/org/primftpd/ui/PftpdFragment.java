@@ -64,10 +64,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-/**
- * Activity to display network info and to start FTP service.
- */
-public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChangeListener {
+public class PftpdFragment extends Fragment implements RecreateLogger, RadioGroup.OnCheckedChangeListener {
 
 	private final BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
 		@Override
@@ -817,5 +814,10 @@ public class PftpdFragment extends Fragment implements RadioGroup.OnCheckedChang
 
 	public KeyFingerprintProvider getKeyFingerprintProvider() {
 		return keyFingerprintProvider;
+	}
+
+	@Override
+	public void recreateLogger() {
+		this.logger = LoggerFactory.getLogger(getClass());
 	}
 }
