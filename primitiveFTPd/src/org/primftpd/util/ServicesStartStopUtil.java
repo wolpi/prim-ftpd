@@ -42,24 +42,17 @@ public class ServicesStartStopUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServicesStartStopUtil.class);
 
     public static void startServers(PftpdFragment fragment) {
-        startServers(null, null, null, fragment);
+        startServers(null, null, null, fragment, null);
     }
     public static void startServers(Context context) {
-        startServers(context, null);
+        startServers(context, null, null, null, null);
     }
 
     public static void startServers(Context context, QuickShareBean quickShareBean) {
         startServers(context, null, null, null, quickShareBean);
     }
 
-    public static void startServers(
-            Context context,
-            PrefsBean prefsBean,
-            KeyFingerprintProvider keyFingerprintProvider,
-            PftpdFragment fragment) {
-        startServers(context, prefsBean, keyFingerprintProvider, fragment, null);
-    }
-    public static void startServers(
+    private static void startServers(
             Context context,
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider,

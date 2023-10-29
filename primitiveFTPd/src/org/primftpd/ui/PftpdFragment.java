@@ -154,11 +154,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		if (startOnOpen) {
 			PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
 			keyFingerprintProvider.calcPubkeyFingerprints(getContext()); // see GH issue #204
-			ServicesStartStopUtil.startServers(
-					getContext(),
-					prefsBean,
-					keyFingerprintProvider,
-					this);
+			ServicesStartStopUtil.startServers(this);
 		}
 
 		// init client action views
