@@ -123,6 +123,13 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        logger.debug("onResume()");
+        updateButtonStates();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         logger.debug("onCreateOptionsMenu()");
 
