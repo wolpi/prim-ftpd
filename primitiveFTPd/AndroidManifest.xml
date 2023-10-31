@@ -121,6 +121,7 @@
         </activity>
 
         <activity
+            android:theme="@style/PrimFtpdDeviceTheme"
             android:name=".ui.LeanbackActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
@@ -132,12 +133,6 @@
             </intent-filter>
             <meta-data android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-        </activity>
-
-        <activity
-            android:name="org.primftpd.prefs.FtpPrefsActivity"
-            android:label="@string/prefs"
-            >
         </activity>
 
         <activity

@@ -43,6 +43,10 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     protected PftpdFragment pftpdFragment;
     protected MainAdapter adapter;
 
+    protected PftpdFragment createPftpdFragment() {
+        return new PftpdFragment();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +60,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         adapter = new MainAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
-        this.pftpdFragment = new PftpdFragment();
+        this.pftpdFragment = createPftpdFragment();
         adapter.addFragment(pftpdFragment, "pftpd");
         CleanSpaceFragment cleanSpaceFragment = new CleanSpaceFragment();
         adapter.addFragment(cleanSpaceFragment, "\uD83D\uDDD1️" + getText(R.string.iconCleanSpace));

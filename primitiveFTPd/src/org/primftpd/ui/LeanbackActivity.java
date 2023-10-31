@@ -1,12 +1,18 @@
 package org.primftpd.ui;
 
 
-import org.primftpd.R;
+import android.view.Menu;
 
-public class LeanbackActivity {
+public class LeanbackActivity extends MainTabsActivity {
 
-    protected int getLayoutId() {
-        return R.layout.leanback;
+    @Override
+    protected PftpdFragment createPftpdFragment() {
+        return new LeanbackFragment();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // no menu for leanback
+        return true;
+    }
 }
