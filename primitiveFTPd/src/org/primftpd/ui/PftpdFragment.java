@@ -62,7 +62,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -78,8 +81,6 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		}
 	};
 
-	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0xBEEF;
-	private static final int PERMISSIONS_REQUEST_ACCESS_MEDIA_LOCATION = 0xAFFE;
 	private static final int REQUEST_CODE_SAF_PERM = 1234;
 
 	public static final String DIALOG_TAG = "dialogs";
@@ -152,7 +153,6 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
 		Boolean startOnOpen = LoadPrefsUtil.startOnOpen(prefs);
 		if (startOnOpen) {
-			PrefsBean prefsBean = LoadPrefsUtil.loadPrefs(logger, prefs);
 			keyFingerprintProvider.calcPubkeyFingerprints(getContext()); // see GH issue #204
 			ServicesStartStopUtil.startServers(this);
 		}
@@ -194,7 +194,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
         if (view == null) {
             return;
         }
-		((RadioGroup)view.findViewById(R.id.radioGroupStorage)).setOnCheckedChangeListener(this);
+        ((RadioGroup)view.findViewById(R.id.radioGroupStorage)).setOnCheckedChangeListener(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             switch (prefsBean.getStorageType()) {
                 case PLAIN:
@@ -523,6 +523,10 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		displayMediaLocationAccess();
 	}
 
+	private final ActivityResultLauncher<String[]> permissionRequestLauncher = registerForActivityResult(
+			new ActivityResultContracts.RequestMultiplePermissions(),
+				isGranted -> showLogindata());
+
 	private void displayNormalStorageAccess() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			View view = getView();
@@ -531,15 +535,21 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 			}
 			TextView hasNormalStorageAccessTextView = view.findViewById(R.id.hasNormalStorageAccessTextView);
 			final String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-			final int requestCode = PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
-			boolean hasNormalStorageAccess = hasPermission(permission, requestCode);
+			boolean hasNormalStorageAccess = hasPermission(permission);
 			String hasNormalStorageAccessStr = getString(R.string.hasNormalAccessToStorage, hasNormalStorageAccess);
 
-			if (!hasNormalStorageAccess) {
+			if (!hasNormalStorageAccess && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 				buildPermissionRequestLink(
 						hasNormalStorageAccessTextView,
 						hasNormalStorageAccessStr,
-						v -> requestPermissions(new String[]{permission}, requestCode));
+						v -> {
+							logger.debug("PermissionRequestLink onClick");
+
+							permissionRequestLauncher.launch(new String[]{
+									Manifest.permission.WRITE_EXTERNAL_STORAGE,
+							});
+						}
+			);
 
 			} else {
 				hasNormalStorageAccessTextView.setText(hasNormalStorageAccessStr);
@@ -577,15 +587,16 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 			}
 			TextView hasMediaLocationAccessTextView = view.findViewById(R.id.hasMediaLocationAccessTextView);
 			final String permission = Manifest.permission.ACCESS_MEDIA_LOCATION;
-			final int requestCode = PERMISSIONS_REQUEST_ACCESS_MEDIA_LOCATION;
-			boolean hasMediaLocationAccess = hasPermission(permission, requestCode);
+			boolean hasMediaLocationAccess = hasPermission(permission);
 			String hasMediaLocationStr = getString(R.string.hasAccessToMediaLocation, hasMediaLocationAccess);
 
-			if (!hasMediaLocationAccess) {
+			if (!hasMediaLocationAccess && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 				buildPermissionRequestLink(
 						hasMediaLocationAccessTextView,
 						hasMediaLocationStr,
-						v -> requestPermissions(new String[]{permission}, requestCode));
+						v -> permissionRequestLauncher.launch(new String[] {
+								Manifest.permission.ACCESS_MEDIA_LOCATION,
+						}));
 			} else {
 				hasMediaLocationAccessTextView.setText(hasMediaLocationStr);
 			}
@@ -604,28 +615,14 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		textView.setOnClickListener(onClickListener);
 	}
 
-	protected boolean hasPermission(String permission, int requestCode) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+	protected boolean hasPermission(String permission) {
+		Context context = getContext();
+		if (context != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			logger.trace("hasPermission({})", permission);
-			return requireActivity().checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED;
+			return ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED;
 		}
 		return true;
 	}
-
-	@Override
-	public void onRequestPermissionsResult(
-			int requestCode,
-			@NonNull String[] permissions,
-			@NonNull int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		logger.trace("onRequestPermissionsResult()");
-		boolean granted = grantResults.length > 0
-				&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
-		if (granted) {
-			showLogindata();
-		}
-	}
-
 
 	protected void showSafUrl(String url) {
 		View view = getView();
