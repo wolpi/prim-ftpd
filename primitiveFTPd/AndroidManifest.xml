@@ -136,6 +136,7 @@
         </activity>
 
         <activity
+            android:theme="@style/PrimFtpdDeviceTheme"
             android:name="org.primftpd.remotecontrol.TaskerEditActionActivity"
             android:label="@string/selectServerAction"
             android:exported="true">
@@ -144,6 +145,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:theme="@style/PrimFtpdDeviceTheme"
             android:name="org.primftpd.remotecontrol.TaskerEditConditionActivity"
             android:label="@string/state"
             android:exported="true">
@@ -153,6 +155,7 @@
         </activity>
 
         <activity
+            android:theme="@style/PrimFtpdDeviceTheme"
             android:name="org.primftpd.share.ReceiveSaveAsActivity"
             android:label="@string/saveAs"
             android:exported="true">
@@ -209,6 +212,7 @@
         </activity>
 
         <activity
+            android:theme="@style/PrimFtpdDeviceTheme"
             android:name="org.primftpd.share.ReceiveQuickShareActivity"
             android:label="@string/quickShare"
             android:exported="true">
