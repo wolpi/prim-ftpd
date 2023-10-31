@@ -95,25 +95,26 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
 
                 logger.trace("handling uri async: {}", uri);
 
+                boolean[] finished = new boolean[]{false};
                 final String finalContent = content;
-                mainThreadHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        logger.trace("saving uri in main thread");
-                        activity.saveUri(targetDir, uri, finalContent, type);
-                        logger.trace("incrementing progress");
-                        progressDiag.incrementProgressBy(1);
-                    }
+                mainThreadHandler.post(() -> {
+                    logger.trace("saving uri in main thread");
+                    activity.saveUri(targetDir, uri, finalContent, type);
+                    finished[0] = true;
                 });
-            }
 
-            while (progressDiag.getProgress() < progressDiag.getMax()) {
-                try {
-                    logger.trace("waiting in background");
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    logger.error("", e);
+                while (!finished[0]) {
+                    try {
+                        // wait
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        logger.error("", e);
+                    }
                 }
+
+                // progress mus be updated in background task, not in main thread
+                logger.trace("incrementing progress in background task");
+                progressDiag.incrementProgressBy(1);
             }
 
             return null;
@@ -123,12 +124,7 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
             super.onPostExecute(result);
             progressDiag.dismiss();
 
-            mainThreadHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    activity.onCopyFinished(targetDir);
-                }
-            });
+            mainThreadHandler.post(() -> activity.onCopyFinished(targetDir));
         }
     }
 
