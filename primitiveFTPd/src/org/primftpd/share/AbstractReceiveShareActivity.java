@@ -4,7 +4,10 @@ import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.PowerManager;
 
+import org.primftpd.services.AbstractServerService;
+import org.primftpd.services.ServerServiceHandler;
 import org.primftpd.util.FilenameUnique;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +69,8 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         private final List<String> contents;
         private final String type;
 
+        private PowerManager.WakeLock wakeLock;
+
         CopyTask(AbstractReceiveShareActivity activity,
                  ProgressDialog progressDiag,
                  Handler mainThreadHandler,
@@ -85,6 +90,17 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
 
         @Override
         protected java.lang.Void doInBackground(java.lang.Void[] objects) {
+
+            // acquire wake lock to make sure copy finishes before going to sleep
+            logger.debug("acquiring wake lock");
+            PowerManager powerMgr =
+                    (PowerManager) activity.getSystemService(
+                            AbstractServerService.POWER_SERVICE);
+            wakeLock = powerMgr.newWakeLock(
+                    PowerManager.SCREEN_DIM_WAKE_LOCK,
+                    ServerServiceHandler.APP_NAME + ":wakelock:filecopy");
+            wakeLock.acquire(60*60*1000L /*60 minutes*/);
+
             for (int i = 0; i < uris.size(); i++) {
                 final Uri uri = uris.get(i);
 
@@ -123,6 +139,13 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             progressDiag.dismiss();
+
+            try {
+                logger.debug("releasing wake lock");
+                wakeLock.release();
+            } catch (Exception e) {
+                logger.warn("error while releasing wake lock", e);
+            }
 
             mainThreadHandler.post(() -> activity.onCopyFinished(targetDir));
         }
