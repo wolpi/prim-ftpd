@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 public class CleanSpaceFragment extends Fragment implements RecreateLogger {
@@ -34,7 +35,7 @@ public class CleanSpaceFragment extends Fragment implements RecreateLogger {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -46,27 +47,20 @@ public class CleanSpaceFragment extends Fragment implements RecreateLogger {
 
         // register listeners
         final CleanSpaceFragment fragment = this;
-        view.findViewById(R.id.quickShareFilesDelete).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onButtonClick(fragment, quickShareDir(), true);
-            }
-        });
-        view.findViewById(R.id.logFilesDelete).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onButtonClick(fragment, logsDir(), false);
-            }
-        });
-        view.findViewById(R.id.rootTmpFilesDelete).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onButtonClick(fragment, rootTmpDir(), true);
-            }
-        });
+        view.findViewById(R.id.quickShareFilesDelete).setOnClickListener(
+                viewQ -> onButtonClick(fragment, quickShareDir(), true));
+        view.findViewById(R.id.logFilesDelete).setOnClickListener(
+                viewL -> onButtonClick(fragment, logsDir(), false));
+        view.findViewById(R.id.rootTmpFilesDelete).setOnClickListener(
+                viewR -> onButtonClick(fragment, rootTmpDir(), true));
 
-        updateView();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateView();
     }
 
     private void onButtonClick(CleanSpaceFragment fragment, File dir, boolean includeChildren) {
