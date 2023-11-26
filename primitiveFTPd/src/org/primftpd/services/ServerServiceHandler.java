@@ -23,7 +23,7 @@ import eu.chainfire.libsuperuser.Shell;
  */
 public class ServerServiceHandler extends Handler
 {
-	private static final String APP_NAME = "pFTPd";
+	public static final String APP_NAME = "pFTPd";
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -138,7 +138,7 @@ public class ServerServiceHandler extends Handler
 			wakeLock = powerMgr.newWakeLock(
 				PowerManager.SCREEN_DIM_WAKE_LOCK,
 				APP_NAME + ":wakelock");
-			wakeLock.acquire();
+			wakeLock.acquire(60*60*1000L /*60 minutes*/);
 		} else {
 			if (takeWakeLock) {
 				logger.debug("wake lock already taken ({})", logName);
