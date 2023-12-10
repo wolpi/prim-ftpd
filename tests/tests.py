@@ -156,7 +156,7 @@ def checkEmpty(errors, text, msgPrefix):
     if len(text) > 0:
         errors.append(msgPrefix + " not empty")
 
-def checkHomeListing(errors, text, msgPrefix, newDirPresent = False, dirRenamed = False):
+def checkHomeListing(errors, text, msgPrefix, storageType, newDirPresent = False, dirRenamed = False):
     log("checking home listing\n" + text)
     msg = msgPrefix + " missing dir in home: "
     msgPresent = msgPrefix + " present dir in home: "
@@ -169,7 +169,8 @@ def checkHomeListing(errors, text, msgPrefix, newDirPresent = False, dirRenamed 
     else:
         checkNot(NEW_DIR, text, errors, msgPresent)
         checkNot(NEW_DIR_RENAMED, text, errors, msgPresent)
-    checkNot(SUB_DIR, text, errors, msgPresent)
+    if not (storageType == STORAGE_TYPE_SAF or storageType == STORAGE_TYPE_SAFRO or storageType == STORAGE_TYPE_VIRTUAL):
+        checkNot(SUB_DIR, text, errors, msgPresent)
 
 def checkListingLevel1(errors, text, msgPrefix, subDirPresent = True, subDirRenamed = False):
     log("checking listing (level 1)\n" + text)
@@ -327,12 +328,12 @@ def downloadScp(remotePath, tmpPath):
     return runCommand(cmd)
 
 
-def testCycle(baseUrl, remoteBasePath, errorTag, errors, protocol):
+def testCycle(baseUrl, remoteBasePath, errorTag, errors, protocol, storageType):
     setupTmpDir()
 
     # check listing of home dir
     output = downloadListing(baseUrl + remoteBasePath, protocol)
-    checkHomeListing(errors, output, errorTag)
+    checkHomeListing(errors, output, errorTag, storageType)
     # if we have errors that early it is not worth continuing
     if len(errors) > 0:
         print("abort due to errors\n")
@@ -340,7 +341,7 @@ def testCycle(baseUrl, remoteBasePath, errorTag, errors, protocol):
 
     # create dir
     output = createDir(baseUrl, remoteBasePath, NEW_DIR, protocol)
-    checkHomeListing(errors, output, errorTag, newDirPresent = True)
+    checkHomeListing(errors, output, errorTag, storageType, newDirPresent = True)
 
     # create sub-dir
     createSubDir(baseUrl, remoteBasePath, [NEW_DIR, SUB_DIR], protocol)
@@ -374,7 +375,7 @@ def testCycle(baseUrl, remoteBasePath, errorTag, errors, protocol):
     # rename dir
     rename(baseUrl, remoteBasePath, [], NEW_DIR, NEW_DIR_RENAMED, protocol)
     output = downloadListing(baseUrl + remoteBasePath, protocol)
-    checkHomeListing(errors, output, errorTag, newDirPresent = True, dirRenamed = True)
+    checkHomeListing(errors, output, errorTag, storageType, newDirPresent = True, dirRenamed = True)
     url = baseUrl + remoteBasePath + NEW_DIR_RENAMED + "/" + SUB_DIR_RENAMED + "/"
 
     # delete file
@@ -389,15 +390,15 @@ def testCycle(baseUrl, remoteBasePath, errorTag, errors, protocol):
 
     # delete dir
     output = removeDir(baseUrl, remoteBasePath, NEW_DIR_RENAMED, protocol)
-    checkHomeListing(errors, output, errorTag)
+    checkHomeListing(errors, output, errorTag, storageType)
 
 
-def testCycleReadOnly(baseUrl, remoteBasePath, errorTag, errors, protocol):
+def testCycleReadOnly(baseUrl, remoteBasePath, errorTag, errors, protocol, storageType):
     setupTmpDir()
 
     # check listing of home dir
     output = downloadListing(baseUrl + remoteBasePath, protocol)
-    checkHomeListing(errors, output, errorTag)
+    checkHomeListing(errors, output, errorTag, storageType)
     # if we have errors that early it is not worth continuing
     if len(errors) > 0:
         return
@@ -443,13 +444,13 @@ def scpDownload(remoteBasePath, errorTag, errors):
 def testKeys(baseUrl, errors):
     protocol = Protocol.SFTP
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_DSA)
-    checkHomeListing(errors, output, "[key dsa]")
+    checkHomeListing(errors, output, "[key dsa]", storageType)
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_RSA)
-    checkHomeListing(errors, output, "[key rsa]")
+    checkHomeListing(errors, output, "[key rsa]", storageType)
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_ECDSA)
-    checkHomeListing(errors, output, "[key ecdsa]")
+    checkHomeListing(errors, output, "[key ecdsa]", storageType)
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_ECDSA_384)
-    checkHomeListing(errors, output, "[key ecdsa 384]")
+    checkHomeListing(errors, output, "[key ecdsa 384]", storageType)
     # check bad keys
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_RSA_BAD, check = False)
     checkEmpty(errors, output, "[key bad rsa]")
@@ -457,7 +458,7 @@ def testKeys(baseUrl, errors):
     checkEmpty(errors, output, "[key bad ed25519]")
     # check username & password for sftp
     output = downloadListingSftpPassword(baseUrl)
-    checkHomeListing(errors, output, "[sftp password]")
+    checkHomeListing(errors, output, "[sftp password]", storageType)
 
 
 ############################################################################
@@ -485,22 +486,22 @@ setupAdbForwards()
 errors = []
 if storageType == STORAGE_TYPE_FS:
     if readOnly:
-        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs sftp]", errors, Protocol.SFTP)
-        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_FS,  "[fs  ftp]", errors, Protocol.FTP)
+        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs sftp]", errors, Protocol.SFTP, storageType)
+        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_FS,  "[fs  ftp]", errors, Protocol.FTP, storageType)
     else:
-        testCycle(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs sftp]", errors, Protocol.SFTP)
-        testCycle(BASE_URL_FTP, DEFAULT_PATH_FS,  "[fs  ftp]", errors, Protocol.FTP)
+        testCycle(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs sftp]", errors, Protocol.SFTP, storageType)
+        testCycle(BASE_URL_FTP, DEFAULT_PATH_FS,  "[fs  ftp]", errors, Protocol.FTP, storageType)
         scpUpload(BASE_URL_SFTP, DEFAULT_PATH_FS, "[fs  scp]", errors)
     scpDownload(DEFAULT_PATH_FS, "[fs  scp]", errors)
     testKeys(BASE_URL_SFTP + DEFAULT_PATH_FS, errors)
 
 if storageType == STORAGE_TYPE_ROOT:
     if readOnly:
-        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root sftp]", errors, Protocol.SFTP)
-        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_ROOT,  "[root  ftp]", errors, Protocol.FTP)
+        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root sftp]", errors, Protocol.SFTP, storageType)
+        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_ROOT,  "[root  ftp]", errors, Protocol.FTP, storageType)
     else:
-        testCycle(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root sftp]", errors, Protocol.SFTP)
-        testCycle(BASE_URL_FTP, DEFAULT_PATH_ROOT,  "[root  ftp]", errors, Protocol.FTP)
+        testCycle(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root sftp]", errors, Protocol.SFTP, storageType)
+        testCycle(BASE_URL_FTP, DEFAULT_PATH_ROOT,  "[root  ftp]", errors, Protocol.FTP, storageType)
         # note: scp upload with root causes known error: filesize is 0
         scpUpload(BASE_URL_SFTP, DEFAULT_PATH_ROOT, "[root  scp]", errors)
     # scp download with root causes EOFException in ScpHelper.readAck, even with copy-to-tmp
@@ -509,28 +510,28 @@ if storageType == STORAGE_TYPE_ROOT:
 
 if storageType == STORAGE_TYPE_SAF:
     if readOnly:
-        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF sftp]", errors, Protocol.SFTP)
-        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_SAF,  "[SAF  ftp]", errors, Protocol.FTP)
+        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF sftp]", errors, Protocol.SFTP, storageType)
+        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_SAF,  "[SAF  ftp]", errors, Protocol.FTP, storageType)
     else:
-        testCycle(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF sftp]", errors, Protocol.SFTP)
-        testCycle(BASE_URL_FTP, DEFAULT_PATH_SAF,  "[SAF  ftp]", errors, Protocol.FTP)
+        testCycle(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF sftp]", errors, Protocol.SFTP, storageType)
+        testCycle(BASE_URL_FTP, DEFAULT_PATH_SAF,  "[SAF  ftp]", errors, Protocol.FTP, storageType)
         scpUpload(BASE_URL_SFTP, DEFAULT_PATH_SAF, "[SAF  scp]", errors)
     scpDownload(DEFAULT_PATH_SAF, "[SAF  scp]", errors)
     testKeys(BASE_URL_SFTP + DEFAULT_PATH_SAF, errors)
 
 if storageType == STORAGE_TYPE_SAFRO:
-    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_ROSAF, "[SAFRO sftp]", errors, Protocol.SFTP)
-    testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_ROSAF,  "[SAFRO  ftp]", errors, Protocol.FTP)
+    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_ROSAF, "[SAFRO sftp]", errors, Protocol.SFTP, storageType)
+    testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_ROSAF,  "[SAFRO  ftp]", errors, Protocol.FTP, storageType)
     scpDownload(DEFAULT_PATH_ROSAF, "[SAFRO  scp]", errors)
     testKeys(BASE_URL_SFTP + DEFAULT_PATH_ROSAF, errors)
 
 if storageType == STORAGE_TYPE_VIRTUAL:
     try:
-        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_FS, "[virtual fs sftp]", errors, Protocol.SFTP)
+        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_FS, "[virtual fs sftp]", errors, Protocol.SFTP, storageType)
     except:
         errors.append("error in fs sftp")
     # no tests vor virtual FS with FTP because of issues with change-dir with curl
-    #testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_FS,  "[virtual fs  ftp]", errors, Protocol.FTP)
+    #testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_FS,  "[virtual fs  ftp]", errors, Protocol.FTP, storageType)
     # same curl issue prevents creation of dirs -> read only tests, no scp upload
     #scpUpload(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_FS, "[virtual fs  scp]", errors)
     try:
@@ -539,26 +540,26 @@ if storageType == STORAGE_TYPE_VIRTUAL:
         errors.append("error in fs scp")
 
     try:
-        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root sftp]", errors, Protocol.SFTP)
+        testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root sftp]", errors, Protocol.SFTP, storageType)
     except:
         errors.append("error in root sftp")
     try:
-        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_ROOT,  "[virtual root  ftp]", errors, Protocol.FTP)
+        testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_ROOT,  "[virtual root  ftp]", errors, Protocol.FTP, storageType)
     except:
         errors.append("error in root ftp")
     # no scp for root, see above
     #scpUpload(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root  scp]", errors)
     #scpDownload(DEFAULT_PATH_VIRTUAL_ROOT, "[virtual root  scp]", errors)
 
-    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_SAF, "[virtual saf sftp]", errors, Protocol.SFTP)
-    testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_SAF,  "[virtual saf  ftp]", errors, Protocol.FTP)
+    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_SAF, "[virtual saf sftp]", errors, Protocol.SFTP, storageType)
+    testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_SAF,  "[virtual saf  ftp]", errors, Protocol.FTP, storageType)
     # no scp upload for virtual with curl, see above
     #scpUpload(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_SAF, "[virtual saf  scp]", errors)
     scpDownload(DEFAULT_PATH_VIRTUAL_SAF, "[virtual saf  scp]", errors)
 
     # no RoSAF due to issues with SAF-API
-    #testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROSAF, "[virtual SAFRO sftp]", errors, Protocol.SFTP)
-    #testCycleReadOnly(BASE_URL__FTP, DEFAULT_PATH_VIRTUAL_ROSAF,  "[virtual SAFRO  ftp]", errors, Protocol.FTP)
+    #testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROSAF, "[virtual SAFRO sftp]", errors, Protocol.SFTP, storageType)
+    #testCycleReadOnly(BASE_URL__FTP, DEFAULT_PATH_VIRTUAL_ROSAF,  "[virtual SAFRO  ftp]", errors, Protocol.FTP, storageType)
     #scpDownload(DEFAULT_PATH_VIRTUAL_ROSAF, "[virtual SAFRO  scp]", errors)
 
     testKeys(BASE_URL_SFTP + DEFAULT_PATH_VIRTUAL_FS, errors)

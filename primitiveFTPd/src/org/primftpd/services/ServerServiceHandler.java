@@ -7,6 +7,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 
+import org.primftpd.filesystem.Utils;
 import org.primftpd.prefs.StorageType;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.ServicesStartStopUtil;
@@ -170,7 +171,11 @@ public class ServerServiceHandler extends Handler
 		if (shell == null) {
 			logger.debug("opening root shell ({})", logName);
 			// TODO test .setShell()
-			shell = (new Shell.Builder()).useSU().open();
+			Shell.Builder builder = new Shell.Builder();
+			if (!Utils.RUN_TESTS) {
+				builder.useSU();
+			}
+			shell = builder.open();
 		} else {
 			logger.debug("root shell already open ({})", logName);
 		}

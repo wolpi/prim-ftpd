@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SimpleTimeZone;
 
-class Utils {
+public class Utils {
 
     static String absolute(String rel, String workingDir) {
         if (rel.charAt(0) == '/') {
@@ -73,4 +73,6 @@ class Utils {
     static String touchDate(long time) {
         return TOUCH_DATE_FORMAT.format(time);
     }
+
+    public static final boolean RUN_TESTS = false;
 }

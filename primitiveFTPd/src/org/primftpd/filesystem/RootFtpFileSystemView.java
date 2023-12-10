@@ -56,13 +56,22 @@ public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFi
         RootFtpFile newWorkingDir;
         File fileObj = new File(dir);
         if (!fileObj.isAbsolute()) {
-            // curl ignores current WD and tries to switch to WD from root dir by dir
-            File topLevelDir = new File("/" + dir);
-            if (topLevelDir.exists()) {
-                newPath = topLevelDir.getAbsolutePath();
+            if ("..".equals(dir)) {
+                newPath = new File(workingDir.getAbsolutePath()).getParent();
+                if (newPath == null) {
+                    newPath = "/";
+                }
+            } else if (Utils.RUN_TESTS) {
+                // curl ignores current WD and tries to switch to WD from root dir by dir
+                File topLevelDir = new File("/" + dir);
+                if (topLevelDir.exists()) {
+                    newPath = topLevelDir.getAbsolutePath();
+                } else {
+                    newPath = workingDir.getAbsolutePath() + File.separator + dir;
+                    logger.trace("  using path for cwd operation: {}", newPath);
+                }
             } else {
                 newPath = workingDir.getAbsolutePath() + File.separator + dir;
-                logger.trace("  using path for cwd operation: {}", newPath);
             }
         } else {
             newPath = dir;
