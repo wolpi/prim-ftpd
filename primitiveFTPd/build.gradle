@@ -21,12 +21,12 @@ apply plugin: 'maven-publish'
 //apply plugin: 'android-cq'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "org.primftpd"
         minSdkVersion 15
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 63
         versionName "7.0-SNAPSHOT"
         vectorDrawables.useSupportLibrary = true
