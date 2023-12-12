@@ -6,7 +6,11 @@ import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
+import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.util.ServersRunningBean;
 import org.primftpd.util.ServicesStartStopUtil;
@@ -96,12 +100,20 @@ public class QuickSettingsService extends TileService {
         logger.debug("onStartListening");
         super.onStartListening();
         updateTile();
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStopListening() {
         logger.debug("onStopListening");
         super.onStopListening();
+        updateTile();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(ServerStateChangedEvent event) {
+        logger.debug("got ServerStateChangedEvent");
         updateTile();
     }
 
