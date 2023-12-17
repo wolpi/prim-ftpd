@@ -151,6 +151,7 @@
     <string name="hasFullAccessToStorage">Hat vollen Speicherzugriff: %1$b</string>
     <string name="hasNormalAccessToStorage">Hat (normalen) Speicherzugriff: %1$b</string>
     <string name="hasAccessToMediaLocation">Hat Zugriff auf Media-Location (Geo-Daten): %1$b</string>
+    <string name="hasNotificationPermission">Hat Berechtigung um Benachrichtigungen anzuzeigen: %1$b</string>
     <string name="Request">Anfragen</string>
     <string name="quickShareFiles">QuickShare Dateien:</string>
     <string name="logFiles">Log Dateien:</string>

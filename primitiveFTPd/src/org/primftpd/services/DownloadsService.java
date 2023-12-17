@@ -157,7 +157,6 @@ public class DownloadsService extends Service {
             NotificationUtil.createDownloadNotification(
                     this,
                     filename,
-                    localPath,
                     true,
                     false,
                     0,
@@ -172,6 +171,7 @@ public class DownloadsService extends Service {
     private void download(String urlStr) {
         CloseableHttpClient httpclient = null;
         CloseableHttpResponse response = null;
+        FileOutputStream fos = null;
         try {
             httpclient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(urlStr);
@@ -213,7 +213,7 @@ public class DownloadsService extends Service {
 
                 // open streams
                 InputStream inputStream = new BufferedInputStream(response.getEntity().getContent());
-                FileOutputStream fos = new FileOutputStream(localPath);
+                fos = new FileOutputStream(localPath);
 
                 logger.info("downloading {} to file {}", urlStr, localPath);
 
@@ -232,7 +232,6 @@ public class DownloadsService extends Service {
                     NotificationUtil.createDownloadNotification(
                             this,
                             this.filename,
-                            localPath,
                             false,
                             false,
                             bytes,
@@ -246,7 +245,6 @@ public class DownloadsService extends Service {
                     NotificationUtil.createDownloadNotification(
                             this,
                             this.filename,
-                            localPath,
                             false,
                             true,
                             0,
@@ -260,7 +258,6 @@ public class DownloadsService extends Service {
             NotificationUtil.createDownloadNotification(
                     this,
                     filename,
-                    localPath,
                     true,
                     false,
                     0,
@@ -268,6 +265,7 @@ public class DownloadsService extends Service {
         } finally {
             close(response);
             close(httpclient);
+            close(fos);
         }
     }
 

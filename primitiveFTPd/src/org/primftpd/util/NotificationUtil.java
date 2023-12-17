@@ -170,7 +170,7 @@ public class NotificationUtil
 				START_STOP_CHANNEL_ID,
 				null);
 
-		Notification notification = null;
+		Notification notification;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			notification = builder.build();
 		} else {
@@ -195,7 +195,7 @@ public class NotificationUtil
 				NOTIFICATION_CHANNEL_ID,
 				quickShareBean);
 
-		Notification notification = null;
+		Notification notification;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			if (prefsBean.showConnectionInfoInNotification()) {
 				String longText = buildLongText(ctxt, prefsBean, keyFingerprintProvider);
@@ -290,10 +290,9 @@ public class NotificationUtil
 		str.append(port);
 	}
 
-	public static Notification createDownloadNotification(
+	public static void createDownloadNotification(
 			Context ctxt,
 			String filename,
-			String path,
 			boolean canceled,
 			boolean finished,
 			long currentBytes,
@@ -312,19 +311,15 @@ public class NotificationUtil
 			tickerText = "finished";
 		} else {
 			String sizeStr = size != 0 ? String.valueOf(size) : "unknown";
-			StringBuilder builder = new StringBuilder();
-			builder.append("downloading ... (");
-			builder.append(currentBytes);
-			builder.append(" / ");
-			builder.append(sizeStr);
-			builder.append(")");
-			builder.append("\n");
-			builder.append("to ");
-			builder.append("path");
-			tickerText =  builder.toString();
+			tickerText = "downloading ... (" +
+					currentBytes +
+					" / " +
+					sizeStr +
+					")" +
+					"\n" +
+					"to " +
+					filename;
 		}
-		CharSequence contentTitle = filename;
-		CharSequence contentText = tickerText;
 
 		// use main icon as large one
 		Bitmap largeIcon = BitmapFactory.decodeResource(
@@ -335,8 +330,8 @@ public class NotificationUtil
 
 		Notification.Builder builder = new Notification.Builder(ctxt)
 				.setTicker(tickerText)
-				.setContentTitle(contentTitle)
-				.setContentText(contentText)
+				.setContentTitle(filename)
+				.setContentText(tickerText)
 				.setSmallIcon(iconId)
 				.setLargeIcon(largeIcon)
 				.setWhen(when)
@@ -378,6 +373,5 @@ public class NotificationUtil
 		NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
 				Context.NOTIFICATION_SERVICE);
 		notiMgr.notify(DOWNLOAD_ID, notification);
-		return notification;
 	}
 }

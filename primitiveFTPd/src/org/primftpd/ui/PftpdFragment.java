@@ -65,7 +65,7 @@ import java.util.List;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -521,6 +521,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		displayNormalStorageAccess();
 		displayFullStorageAccess();
 		displayMediaLocationAccess();
+		displayNotificationPermission();
 	}
 
 	private final ActivityResultLauncher<String[]> permissionRequestLauncher = registerForActivityResult(
@@ -528,32 +529,11 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 				isGranted -> showLogindata());
 
 	private void displayNormalStorageAccess() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			View view = getView();
-			if (view == null) {
-				return;
-			}
-			TextView hasNormalStorageAccessTextView = view.findViewById(R.id.hasNormalStorageAccessTextView);
-			final String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-			boolean hasNormalStorageAccess = hasPermission(permission);
-			String hasNormalStorageAccessStr = getString(R.string.hasNormalAccessToStorage, hasNormalStorageAccess);
-
-			if (!hasNormalStorageAccess && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-				buildPermissionRequestLink(
-						hasNormalStorageAccessTextView,
-						hasNormalStorageAccessStr,
-						v -> {
-							logger.debug("PermissionRequestLink onClick");
-
-							permissionRequestLauncher.launch(new String[]{
-									Manifest.permission.WRITE_EXTERNAL_STORAGE,
-							});
-						}
-			);
-
-			} else {
-				hasNormalStorageAccessTextView.setText(hasNormalStorageAccessStr);
-			}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+			displayPermission(
+					R.id.hasNormalStorageAccessTextView,
+					R.string.hasNormalAccessToStorage,
+					Manifest.permission.WRITE_EXTERNAL_STORAGE);
 		}
 	}
 
@@ -581,28 +561,39 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 	}
 	private void displayMediaLocationAccess() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-			View view = getView();
-			if (view == null) {
-				return;
-			}
-			TextView hasMediaLocationAccessTextView = view.findViewById(R.id.hasMediaLocationAccessTextView);
-			final String permission = Manifest.permission.ACCESS_MEDIA_LOCATION;
-			boolean hasMediaLocationAccess = hasPermission(permission);
-			String hasMediaLocationStr = getString(R.string.hasAccessToMediaLocation, hasMediaLocationAccess);
-
-			if (!hasMediaLocationAccess && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-				buildPermissionRequestLink(
-						hasMediaLocationAccessTextView,
-						hasMediaLocationStr,
-						v -> permissionRequestLauncher.launch(new String[] {
-								Manifest.permission.ACCESS_MEDIA_LOCATION,
-						}));
-			} else {
-				hasMediaLocationAccessTextView.setText(hasMediaLocationStr);
-			}
+			displayPermission(
+					R.id.hasMediaLocationAccessTextView,
+					R.string.hasAccessToMediaLocation,
+					Manifest.permission.ACCESS_MEDIA_LOCATION);
 		}
 	}
 
+	private void displayNotificationPermission() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			displayPermission(
+					R.id.hasNotificationPermissionTextView,
+					R.string.hasNotificationPermission,
+					Manifest.permission.POST_NOTIFICATIONS);
+		}
+	}
+
+	private void displayPermission(int textViewId, int textId, String permission) {
+		View view = getView();
+		if (view == null) {
+			return;
+		}
+		boolean hasPermission = hasPermission(permission);
+		TextView textView = view.findViewById(textViewId);
+		String hasPermissionStr = getString(textId, hasPermission);
+		if (!hasPermission) {
+			buildPermissionRequestLink(
+					textView,
+					hasPermissionStr,
+					v -> permissionRequestLauncher.launch(new String[] {permission}));
+		} else {
+			textView.setText(hasPermissionStr);
+		}
+	}
 	private void buildPermissionRequestLink(
 			TextView textView,
 			String baseText,
@@ -619,7 +610,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		Context context = getContext();
 		if (context != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			logger.trace("hasPermission({})", permission);
-			return ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED;
+			return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
 		}
 		return true;
 	}

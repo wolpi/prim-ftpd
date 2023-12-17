@@ -141,6 +141,7 @@
     <string name="hasFullAccessToStorage">Has full access to storage: %1$b</string>
     <string name="hasNormalAccessToStorage">Has (normal) access to storage: %1$b</string>
     <string name="hasAccessToMediaLocation">Has access to media location (geo data): %1$b</string>
+    <string name="hasNotificationPermission">Has permission to show notifications: %1$b</string>
     <string name="Request">Request</string>
     <string name="quickShareFiles">QuickShare files:</string>
     <string name="logFiles">Log files:</string>
