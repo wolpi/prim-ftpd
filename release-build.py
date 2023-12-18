@@ -91,7 +91,7 @@ def doRemoteGithubThings(tagName, tagNameGooglePlay, apkPath, apkPathGoogleplay)
         subprocess.run([
             "gh", "api",
             "--method", "PATCH",
-            "-f", "state='closed'",
+            "-f", "state=closed",
             "/repos/wolpi/prim-ftpd/milestones/" + str(milestoneNumber),
             ], stdout=subprocess.PIPE, check=True)
 
