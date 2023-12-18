@@ -28,7 +28,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 33
         versionCode 63
-        versionName "7.0-SNAPSHOT"
+        versionName "7.0"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
     }
