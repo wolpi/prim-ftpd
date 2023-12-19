@@ -7,6 +7,11 @@ import os
 import sys
 import json
 
+
+buildApkPath = "primitiveFTPd/build/outputs/apk/release/primitiveFTPd-release.apk"
+buildBundlePath = "primitiveFTPd/build/outputs/bundle/release/primitiveFTPd-release.aab"
+
+
 def doGithubUpload(githubToken, uploadUrl, apkPath, name):
     subprocess.run([
         "curl", "-v",
@@ -151,6 +156,7 @@ def doRemoteGithubThings(tagName, tagNameGooglePlay, apkPath, apkPathGoogleplay)
 
 def runBuild(bundle = False):
     # run build
+    keyAlias = "prim fptd sign key"
     print("running build")
     if bundle:
         print(" (bundle)")
@@ -166,10 +172,21 @@ def runBuild(bundle = False):
         targetClean,
         targetBuild,
         "-Pandroid.injected.signing.store.file=" + keystorePath,
-        "-Pandroid.injected.signing.key.alias=prim fptd sign key",
+        "-Pandroid.injected.signing.key.alias=" + keyAlias,
         "-Pandroid.injected.signing.store.password=" + storePassword,
         "-Pandroid.injected.signing.key.password=" + keyPassword
     ], stdout=subprocess.PIPE, check=True)
+    if bundle:
+        print("signing bundle")
+        subprocess.run([
+            "jarsigner",
+            "-keystore",
+            keystorePath,
+            buildBundlePath,
+            keyAlias,
+            "-storepass",
+            storePassword
+        ], stdout=subprocess.PIPE, check=True)
 
 
 def commit(msg, path):
@@ -201,17 +218,15 @@ def gitTag(tag):
 
 
 def copyToReleasesDir(isGoogleplayVersion):
-    apkPath = "primitiveFTPd/build/outputs/apk/release/primitiveFTPd-release.apk"
-    bundlePath = "primitiveFTPd/build/outputs/bundle/release/primitiveFTPd-release.aab"
     if len(releasesPath) > 0:
         print("copy to releases dir")
         targetPath = releasesPath + "/primitiveFTPd-" + \
                      (releaseVersion if fullBuild else oldSnapshotVersion) + \
                      ("-googleplay" if isGoogleplayVersion else "") + \
                      ".apk"
-        copyfile(apkPath, targetPath)
+        copyfile(buildApkPath, targetPath)
         if isGoogleplayVersion:
-            copyfile(bundlePath, targetPath.replace(".apk", ".aab"))
+            copyfile(buildBundlePath, targetPath.replace(".apk", ".aab"))
         return targetPath
     else:
         print("releases dir not set, no copy")
