@@ -149,14 +149,22 @@ def doRemoteGithubThings(tagName, tagNameGooglePlay, apkPath, apkPathGoogleplay)
         print()
 
 
-def runBuild():
+def runBuild(bundle = False):
     # run build
     print("running build")
+    if bundle:
+        print(" (bundle)")
+        targetClean = "projects" # use existing target which runs quick and does not change files
+        targetBuild = ":primitiveFTPd:bundleRelease"
+    else:
+        print(" (apk)")
+        targetClean = "clean"
+        targetBuild = "assembleRelease"
     print()
     subprocess.run([
         "./gradlew",
-        "clean",
-        "assembleRelease",
+        targetClean,
+        targetBuild,
         "-Pandroid.injected.signing.store.file=" + keystorePath,
         "-Pandroid.injected.signing.key.alias=prim fptd sign key",
         "-Pandroid.injected.signing.store.password=" + storePassword,
@@ -194,6 +202,7 @@ def gitTag(tag):
 
 def copyToReleasesDir(isGoogleplayVersion):
     apkPath = "primitiveFTPd/build/outputs/apk/release/primitiveFTPd-release.apk"
+    bundlePath = "primitiveFTPd/build/outputs/bundle/release/primitiveFTPd-release.aab"
     if len(releasesPath) > 0:
         print("copy to releases dir")
         targetPath = releasesPath + "/primitiveFTPd-" + \
@@ -201,6 +210,8 @@ def copyToReleasesDir(isGoogleplayVersion):
                      ("-googleplay" if isGoogleplayVersion else "") + \
                      ".apk"
         copyfile(apkPath, targetPath)
+        if isGoogleplayVersion:
+            copyfile(bundlePath, targetPath.replace(".apk", ".aab"))
         return targetPath
     else:
         print("releases dir not set, no copy")
@@ -220,6 +231,7 @@ def handleGooglePlayVersion(fullBuild, releaseVersion):
     file.close()
 
     runBuild()
+    runBuild(True)
 
     tagNameGooglePlay = "google-play-prim-ftpd-" + releaseVersion
     if fullBuild:
