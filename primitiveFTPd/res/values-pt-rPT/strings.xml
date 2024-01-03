@@ -148,4 +148,10 @@
     <string name="tvUiShort"></string>
     <string name="mobileUiLong"></string>
     <string name="iconKeysFingerprints"></string>
+    <string name="prefSummaryShowIpv6InNotification"></string>
+    <string name="filepickerCreateFolderError"></string>
+    <string name="downloadOrSaveUrlToFile"></string>
+    <string name="prefSummaryShowIpv4InNotification"></string>
+    <string name="prefTitleSshowIpv6InNotification"></string>
+    <string name="prefTitleSshowIpv4InNotification"></string>
 </resources>
