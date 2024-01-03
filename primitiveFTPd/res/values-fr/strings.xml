@@ -103,7 +103,7 @@
     <string name="quickShare">Partage rapide</string>
     <string name="saveToTextFile">Sauvegarder dans un fichier texte</string>
     <string name="download">Télécharger</string>
-    <string name="downloadOrSaveUrlToFile">Télécharger ou sauvegarder l\'URL vers un fichier texte \?</string>
+    <string name="downloadOrSaveUrlToFile">Télécharger ou sauvegarder l\'URL vers un fichier texte ?</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">"Le clic sur Vignettes rapides nécessite de déverrouillage de  équipement pour démarrer / arrêter le serveur. Quand actif, une demande de déverrouillage sera affiché si l\'équipement est verrouillé. "</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Déverrouillage nécessaire pour Vignettes Rapides</string>
     <string name="prefSummaryIdleTimeoutV2">Le serveur va couper les connexions inactives après ce délai en secondes. Réglez-le sur 0 pour désactiver.</string>
