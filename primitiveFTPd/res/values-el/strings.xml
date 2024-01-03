@@ -157,4 +157,10 @@
     <string name="tvUiLong"></string>
     <string name="iconCleanSpace"></string>
     <string name="prefSummaryPubKeyAuth_v2"></string>
+    <string name="prefSummaryShowIpv4InNotification"></string>
+    <string name="prefTitleSshowIpv4InNotification"></string>
+    <string name="prefSummaryShowIpv6InNotification"></string>
+    <string name="filepickerCreateFolderError"></string>
+    <string name="downloadOrSaveUrlToFile"></string>
+    <string name="prefTitleSshowIpv6InNotification"></string>
 </resources>
