@@ -122,7 +122,7 @@
     </string-array>
     <string name="saveToTextFile">Simpan ke berkas teks</string>
     <string name="download">Unduh</string>
-    <string name="downloadOrSaveUrlToFile">Unduh atau simpan URL ke berkas teks \?</string>
+    <string name="downloadOrSaveUrlToFile">Unduh atau simpan URL ke berkas teks ?</string>
     <string name="quickShareServerStarted">Server telah mulai membagikan berkas tunggal</string>
     <string name="quickShare">Berbagi Cepat</string>
     <string name="prefSummaryIdleTimeoutV2">Server akan menghentikan koneksi yang tidak aktif setelah ini dalam hitungan detik. Setel ke 0 untuk menonaktifkan.</string>
