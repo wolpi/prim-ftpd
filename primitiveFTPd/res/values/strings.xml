@@ -8,7 +8,7 @@
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Key Fingerprints</string>
     <string name="allKeysFingerprintsLabel">Show fingerprints of all keys</string>
-    <string name="generateKeysMessage">Generate Keys ?</string>
+    <string name="generateKeysMessage">Generate Keys?</string>
     <string name="generatingKeysMessage">Generating Keys …</string>
     <string name="generate">Generate</string>
     <string name="cancel">Cancel</string>
@@ -30,8 +30,8 @@
     <string name="serverCouldNotBeStarted">Server could not be started! Error message: </string>
     <string name="portInvalid_v2">Port value is invalid. Must be between 1024 and 64000.</string>
     <string name="portsEqual_v2">Ports are equal. This cannot work.</string>
-    <string name="restartServer">You have to restart Server for changes to take effect.</string>
-    <string name="invalidDir">Directory is not valid.</string>
+    <string name="restartServer">Restart the server for your changes to take effect.</string>
+    <string name="invalidDir">Invalid folder.</string>
     <string name="couldNotReadKeyAuthKey">Public key for key authentication could not be read. Check logs.</string>
     <string name="ftpPassivePortsInvalid">Value of FTP Passive Ports is invalid.</string>
     <string name="prefs">Preferences</string>
@@ -39,8 +39,8 @@
     <string name="prefsCategoryTitleConnectivity">Connectivity</string>
     <string name="prefsCategoryTitleUi">UI</string>
     <string name="prefsCategoryTitleSystem">System</string>
-    <string name="prefTitleUser">User Name</string>
-    <string name="prefSummaryUser">FTP server user name</string>
+    <string name="prefTitleUser">Username</string>
+    <string name="prefSummaryUser">FTP-server username</string>
     <string name="prefTitlePassword">Password</string>
     <string name="prefSummaryPassword">FTP server password</string>
     <string name="prefTitlePort">Port</string>
@@ -65,10 +65,10 @@
     <string name="prefSummaryStartOnOpen">Start server when app is opened.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Show connection info in notification</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Shows connection info like IP address in notification.</string>
-    <string name="prefTitleSshowIpv4InNotification">Show IPv4 Addresses in notification</string>
-    <string name="prefSummaryShowIpv4InNotification">Shows IPv4 Addresses in notification if connection info is turned on.</string>
-    <string name="prefTitleSshowIpv6InNotification">Show IPv6 Addresses in notification</string>
-    <string name="prefSummaryShowIpv6InNotification">Shows IPv6 Addresses in notification if connection info is turned on.</string>
+    <string name="prefTitleSshowIpv4InNotification">Show IPv4 addresses in notification</string>
+    <string name="prefSummaryShowIpv4InNotification">Shows IPv4 addresses in notification if connection info is turned on.</string>
+    <string name="prefTitleSshowIpv6InNotification">Show IPv6 addresses in notification</string>
+    <string name="prefSummaryShowIpv6InNotification">Shows IPv6 addresses in notification if connection info is turned on.</string>
     <string name="prefTitleShowStartStopNotification">Show notification to start/stop server(s)</string>
     <string name="prefSummaryShowStartStopNotification">Shows a notification at all time to have another quick way to start/stop server(s).</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>
@@ -103,7 +103,8 @@
     <string name="storageTypePlain">Plain old filesystem</string>
     <string name="storageTypePlainV2">Plain old filesystem\nGot read-only access? See our <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub page</a>.</string>
     <string name="storageTypeRoot">Super user (device must be rooted)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(e.g. for sd card)</string>
+    <string name="storageTypeSaf">"Android Storage Access Framework (SAF)
+\n(e.g. for  card)"</string>
     <string name="storageTypeRoSaf">Read only SAF (faster !)</string>
     <string name="storageTypeVirtual">Virtual Folders (provides all Storage Types)</string>
     <string name="safExplainHeading">How SAF works</string>
@@ -111,11 +112,11 @@
     <string name="selectedSafUri">Selected SAF URI:</string>
     <string name="startServerAndExit">start server only</string>
     <string name="startServerAndUi">start with server</string>
-    <string name="downloadOrSaveUrlToFile">Download or save URL to text file ?</string>
+    <string name="downloadOrSaveUrlToFile">Download or save URL to text file?</string>
     <string name="download">Download</string>
     <string name="saveToTextFile">Save to text file</string>
     <string name="open">Open</string>
-    <string name="filepickerCreateFolderError">Failed to create folder</string>
+    <string name="filepickerCreateFolderError">Could not create folder</string>
     <string name="filepickerNewFolder">New folder</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>
     <string name="filepickerNewFolderCancel">@android:string/cancel</string>
@@ -148,7 +149,7 @@
     <string name="rootTmpFiles">Temp files of root access:</string>
     <string name="delete">Delete</string>
     <string name="permReadLabelServerstatus">find out if server runs</string>
-    <string name="permReadDescServerstatus">Allows to find out if ftp/sftp server runs.</string>
+    <string name="permReadDescServerstatus">Allows finding out if the FTP/SFTP server runs.</string>
     <string name="permWriteLabelServerstatus">start and stop server</string>
     <string name="permWriteDescServerstatus">Allows to start and stop ftp/sftp server.</string>
     <string name="mobileUiShort">Mobile Mode</string>
