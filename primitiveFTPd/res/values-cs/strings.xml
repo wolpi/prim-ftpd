@@ -142,4 +142,15 @@
     <string name="statsTotalReceived"></string>
     <string name="statsReceivedPerSec"></string>
     <string name="safExplainV2"></string>
+    <string name="generateKeysMessage"></string>
+    <string name="prefSummaryShowIpv4InNotification"></string>
+    <string name="storageTypeSaf"></string>
+    <string name="filepickerCreateFolderError"></string>
+    <string name="restartServer"></string>
+    <string name="prefTitleUser"></string>
+    <string name="prefSummaryUser"></string>
+    <string name="prefTitleSshowIpv4InNotification"></string>
+    <string name="prefSummaryShowIpv6InNotification"></string>
+    <string name="prefTitleSshowIpv6InNotification"></string>
+    <string name="downloadOrSaveUrlToFile"></string>
 </resources>
