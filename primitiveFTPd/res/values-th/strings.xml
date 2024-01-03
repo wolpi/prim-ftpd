@@ -145,4 +145,12 @@
     <string name="filepickerNewFolderCancel"></string>
     <string name="saveToTextFile"></string>
     <string name="safExplainV2"></string>
+    <string name="prefSummaryShowIpv6InNotification"></string>
+    <string name="storageTypeSaf"></string>
+    <string name="prefTitleUser"></string>
+    <string name="prefTitleSshowIpv4InNotification"></string>
+    <string name="prefSummaryShowIpv4InNotification"></string>
+    <string name="prefTitleSshowIpv6InNotification"></string>
+    <string name="downloadOrSaveUrlToFile"></string>
+    <string name="filepickerCreateFolderError"></string>
 </resources>
