@@ -91,7 +91,7 @@
     <string name="filepickerCreateFolderError">Не вдалося створити папку</string>
     <string name="saveToTextFile">Зберегти у текстовому файлі</string>
     <string name="download">Завантажити</string>
-    <string name="downloadOrSaveUrlToFile">Завантажити або зберегти URL у текстовий файл\?</string>
+    <string name="downloadOrSaveUrlToFile">Завантажити або зберегти URL у текстовий файл?</string>
     <string name="pubKeyAuth">Наявність ключа для авторизації: %1$b</string>
     <string name="passwordPresent">Пароль присутній: %1$b</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Натискаючи на швидкі налаштування в панелі сповіщень вимагатиме, щоб пристрій був розблокований, щоб запустити/зупинити сервер (-и). Якщо ввімкнено, вам буде запропоновано розблокувати пристрій, якщо він заблокований.</string>
