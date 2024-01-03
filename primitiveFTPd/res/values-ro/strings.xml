@@ -15,7 +15,7 @@
     <string name="filepickerCreateFolderError">Nu s-a putut crea dosarul</string>
     <string name="saveToTextFile">Salvați în fișier text</string>
     <string name="download">Descarca</string>
-    <string name="downloadOrSaveUrlToFile">Descărcați sau salvați adresa URL în fișierul text\?</string>
+    <string name="downloadOrSaveUrlToFile">Descărcați sau salvați adresa URL în fișierul text?</string>
     <string name="selectedSafUri">Adresa SAF selectat:</string>
     <string name="safExplainHeading">Cum funcționează SAF</string>
     <string name="storageTypeRoSaf">Citește numai SAF (mai rapidrepede!)</string>
@@ -99,7 +99,7 @@
     <string name="cancel">Anulează</string>
     <string name="generate">Generează</string>
     <string name="generatingKeysMessage">Generare de chei …</string>
-    <string name="generateKeysMessage">Generare chei \?</string>
+    <string name="generateKeysMessage">Generare chei ?</string>
     <string name="fingerprintsLabel">Amprente Cheie</string>
     <string name="portLabel">Port</string>
     <string name="protocolLabel">Protocol</string>
