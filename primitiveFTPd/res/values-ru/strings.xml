@@ -111,7 +111,7 @@
     <string name="filepickerNewFolder">Новая папка</string>
     <string name="saveToTextFile">Сохранить в текстовый файл</string>
     <string name="download">Скачать</string>
-    <string name="downloadOrSaveUrlToFile">Скачать или сохранить URL в текстовый файл\?</string>
+    <string name="downloadOrSaveUrlToFile">Скачать или сохранить URL в текстовый файл?</string>
     <string name="quickShare">Быстро поделиться</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Для доступа к быстрым настройкам устройство должно быть разблокировано, чтобы запускать/останавливать сервер. Когда включено, будет предложено разблокировать устройство, если оно заблокировано.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Требовать разблокировку для быстрых настроек</string>
