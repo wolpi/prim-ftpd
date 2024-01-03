@@ -6,7 +6,7 @@
     <string name="protocolLabel">协议</string>
     <string name="portLabel">端口</string>
     <string name="fingerprintsLabel">密钥指纹</string>
-    <string name="generateKeysMessage">生成新密钥？</string>
+    <string name="generateKeysMessage">生成密钥？</string>
     <string name="generatingKeysMessage">生成密钥中 …</string>
     <string name="generate">生成</string>
     <string name="cancel">取消</string>
@@ -86,7 +86,8 @@
     <string name="prefSummaryAllowedIpsPattern">仅允许此处指定的客户端 IP 连接服务器。允许在末尾使用单个 * 作为通配符。</string>
     <string name="selectServerAction">选择服务器动作</string>
     <string name="storageTypeRoot">超级用户（需要 root 权限）</string>
-    <string name="storageTypeSaf">Android 存储访问框架（SAF），例如访问 SD 卡</string>
+    <string name="storageTypeSaf">Android 存储访问框架（SAF）
+\n（例如 SD 卡）</string>
     <string name="storageTypeRoSaf">SAF 只读模式（速度更快！）</string>
     <string name="safExplainHeading">如何使用 SAF 模式</string>
     <string name="safExplain">在此模式下，Android 将让您选择一个希望访问的路径，服务器只能浏览此路径下的内容。若您重启了设备，应用对这一路径的访问权可能被吊销，您需要重新选择。</string>
@@ -94,23 +95,23 @@
     <string name="startServerAndExit">只启动服务</string>
     <string name="startServerAndUi">启动服务并显示界面</string>
     <string name="prefTitleSshowIpv4InNotification">在通知中显示 IPv4 地址</string>
-    <string name="prefSummaryShowIpv4InNotification">如果启用显示连接信息选项则在通知中显示 IPv4 地址。</string>
+    <string name="prefSummaryShowIpv4InNotification">如果启用显示连接信息则在通知中显示 IPv4 地址。</string>
     <string name="prefTitleSshowIpv6InNotification">在通知中显示 IPv6 地址</string>
-    <string name="prefSummaryShowIpv6InNotification">如果启用显示连接信息选项则在通知中显示 IPv6 地址。</string>
+    <string name="prefSummaryShowIpv6InNotification">如果启用显示连接信息则在通知中显示 IPv6 地址。</string>
     <string name="passwordPresent">启用密码： %1$b</string>
-    <string name="pubKeyAuth">公钥认证： $1$b</string>
+    <string name="pubKeyAuth">公钥认证：%1$b</string>
     <string name="storageTypePlain">旧式文件系统</string>
     <string name="filepickerNeedValidFilename">请输入或选择一个有效的文件名</string>
     <string name="filepickerSelectSomethingFirst">请选择</string>
     <string name="filepickerFilename">文件名</string>
     <string name="filepickerName">名字</string>
     <string name="filepickerNewFolder">新建文件夹</string>
-    <string name="filepickerCreateFolderError">创建文件夹失败</string>
+    <string name="filepickerCreateFolderError">无法创建文件夹</string>
     <string name="filepickerNewFolderCancel">\@android:string/取消</string>
     <string name="filepickerNewFolderOk">\@android:string/好的</string>
     <string name="filepickerListCancel">\@android:string/取消</string>
     <string name="filepickerListOk">\@android:string/好的</string>
-    <string name="quickShareInfoActivity">运行于快速分享模式中的文件：%s</string>
+    <string name="quickShareInfoActivity">对于以下文件运行于快速分享模式下：%1s</string>
     <string name="statsReceivedPerSec">每秒接收</string>
     <string name="statsSentPerSec">每秒发送</string>
     <string name="statsTotalReceived">总计接收</string>
