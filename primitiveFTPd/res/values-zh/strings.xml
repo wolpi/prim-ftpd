@@ -80,8 +80,7 @@
     <string name="prefSummaryAllowedIpsPattern">仅允许此处指定的客户端 IP 连接服务器。允许在末尾使用单个 * 作为通配符。</string>
     <string name="selectServerAction">选择服务器动作</string>
     <string name="storageTypeRoot">超级用户（需要 root 权限）</string>
-    <string name="storageTypeSaf">Android 存储访问框架（SAF）
-\n（例如外部SD 卡）</string>
+    <string name="storageTypeSaf">Android 存储访问框架（SAF）\n（例如外部SD 卡）</string>
     <string name="storageTypeRoSaf">SAF 只读模式（速度更快！）</string>
     <string name="safExplainHeading">如何使用 SAF 模式</string>
     <string name="selectedSafUri">所选的 SAF URI：</string>
@@ -117,8 +116,7 @@
     <string name="allKeysFingerprintsLabel">显示所有密钥的指纹</string>
     <string name="prefBindIp">要绑定的 IP</string>
     <string name="prefSummaryPubKeyAuth_v2">启用后，将你的 ssh2 公钥放在 %s。它必须是一个每行包含一个 key 的文件。仅 SFTP。</string>
-    <string name="storageTypePlainV2">旧文件系统
-\n获得只读权限？ 见我们的 <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub 页面</a>.</string>
+    <string name="storageTypePlainV2">旧文件系统 \n获得只读权限？ 见我们的 <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub 页面</a>.</string>
     <string name="hasAccessToMediaLocation">可以访问媒体位置（定位数据）：%1$b</string>
     <string name="quickShareFiles">快速分享文件：</string>
     <string name="pubkeyAuthKeysHeading">用于公钥验证的密钥</string>
