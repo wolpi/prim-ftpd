@@ -37,6 +37,10 @@ FTP server app for android.
 You may download latest development snapshot from [GitHub packages](https://github.com/wolpi/prim-ftpd/packages/).
 
 
+## Translation
+You may help translate this app in [hosted weblate](https://hosted.weblate.org/projects/pftpd/pftpd/).
+
+
 ## Permission
 Google introduces more and more restrictions to filesystem access to Android. In order to access all
 your files through this server you might have to grant it 'all files access' permission in Anroid settings.
