@@ -106,7 +106,7 @@
     <string name="selectedSafUri">Ausgewählte SAF-URI:</string>
     <string name="startServerAndExit">Starte nur Server</string>
     <string name="startServerAndUi">Starte mit Server</string>
-    <string name="downloadOrSaveUrlToFile">Download oder URL in Textdatei speichern ?</string>
+    <string name="downloadOrSaveUrlToFile">Download oder URL in Textdatei speichern?</string>
     <string name="download">Download</string>
     <string name="saveToTextFile">In Textdatei speichern</string>
     <string name="open">Öffnen</string>
@@ -161,5 +161,4 @@
     <string name="permReadDescServerstatus">Erlaubt herauszufinden ob ftp/sftp Server läuft.</string>
     <string name="permWriteLabelServerstatus">Server starten und stoppen</string>
     <string name="permWriteDescServerstatus">Erlaubt ftp/sftp Server zu starten und stoppen.</string>
-
 </resources>
