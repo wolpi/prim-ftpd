@@ -87,4 +87,7 @@
     <string name="quickSettingsServerStopped">pFTPd stoppet</string>
     <string name="saveAs">Lagre som</string>
     <string name="storageTypePlain">Gammeldags filsystem</string>
+    <string name="prefSummaryAnnounceName">Navn å annonsere tjener som.</string>
+    <string name="prefTitleWakelock">Forhindre hvilemodus</string>
+    <string name="prefTitleWhichServerToStart">Tjener(e) å starte</string>
 </resources>
