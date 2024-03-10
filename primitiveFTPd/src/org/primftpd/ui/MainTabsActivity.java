@@ -115,7 +115,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
 
         @Override
         public int getCount() {
-            logger.trace("getCount()");
+            //logger.trace("getCount()"); // don't log this as it gets called too often
             return fragments.size();
         }
 
