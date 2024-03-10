@@ -15,7 +15,7 @@
     <string name="state">Estado</string>
     <string name="serverStarted">En uso…</string>
     <string name="serverStopped">Detenido</string>
-    <string name="permissionRequired">La aplicación requiere el permiso «%1$s» para funcionar</string>
+    <string name="permissionRequired">¡Se requiere permiso %1$s \" para que esta aplicación funcione!</string>
     <string name="permissionNameStorage">Almacenamiento</string>
     <string name="quickSettingsServerStarted">pFTPd en uso…</string>
     <string name="quickSettingsServerStopped">pFTPd detenido</string>
@@ -30,8 +30,8 @@
     <string name="serverCouldNotBeStarted">No se ha podido iniciar el servidor. Error: </string>
     <string name="portInvalid_v2">El puerto no es válido. Debe ser un valor de 1024 a 64000.</string>
     <string name="portsEqual_v2">Ambos puertos son iguales, esto no es posible.</string>
-    <string name="restartServer">Debe reiniciar la aplicación para que se apliquen los cambios.</string>
-    <string name="invalidDir">La carpeta no es válida.</string>
+    <string name="restartServer">Reinicie el servidor para que los cambios surtan efecto.</string>
+    <string name="invalidDir">Carpeta no válida.</string>
     <string name="couldNotReadKeyAuthKey">No se ha podido leer la clave pública para la autenticación. Más detalles en el registro.</string>
     <string name="ftpPassivePortsInvalid">La lista de puertos de FTP pasivo no es válida.</string>
     <string name="prefs">Preferencias</string>
@@ -40,7 +40,7 @@
     <string name="prefsCategoryTitleUi">Interfaz de usuario</string>
     <string name="prefsCategoryTitleSystem">Sistema</string>
     <string name="prefTitleUser">Nombre de usuario</string>
-    <string name="prefSummaryUser">Nombre del usuario del servidor FTP</string>
+    <string name="prefSummaryUser">Nombre de usuario del servidor FTP</string>
     <string name="prefTitlePassword">Contraseña</string>
     <string name="prefSummaryPassword">La contraseña del usuario del servidor FTP</string>
     <string name="prefTitlePort">Puerto</string>
@@ -65,10 +65,10 @@
     <string name="prefSummaryStartOnOpen">Iniciar el servidor al abrir la aplicación.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Información en área de notificaciones</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Muestra información de la conexión en la notificación (por ejemplo la IP).</string>
-    <string name="prefTitleSshowIpv4InNotification">Direcciones IPv4 en la notificación</string>
-    <string name="prefSummaryShowIpv4InNotification">Muestra direcciones IPv4 en la notificación, si está activada la información en el área de notificaciones.</string>
-    <string name="prefTitleSshowIpv6InNotification">Direcciones IPv6 en la notificación</string>
-    <string name="prefSummaryShowIpv6InNotification">Muestra direcciones IPv6 en la notificación, si está activada la información en el área de notificaciones.</string>
+    <string name="prefTitleSshowIpv4InNotification">Mostrar las direcciones IPv4 en la notificación</string>
+    <string name="prefSummaryShowIpv4InNotification">Muestra las direcciones IPv4 en la notificación si la información de conexión está activada.</string>
+    <string name="prefTitleSshowIpv6InNotification">Mostrar las direcciones IPv6 en la notificación</string>
+    <string name="prefSummaryShowIpv6InNotification">Muestra las direcciones IPv6 en la notificación si la información de conexión está activada.</string>
     <string name="prefTitleShowStartStopNotification">Notificación de encendido/apagado</string>
     <string name="prefSummaryShowStartStopNotification">Muestra en todo momento una notificación para encender y apagar el/los servidor(es) de forma rápida.</string>
     <string name="prefTitlePubKeyAuth">Autenticación de clave pública</string>
@@ -103,7 +103,8 @@
     <string name="storageTypePlain">Sistema de archivos</string>
     <string name="storageTypePlainV2">Sistema de archivos\n¿Acceso solo de lectura? Vea <a href="https://www.github.com/wolpi/prim-ftpd/">página GitHub</a>.</string>
     <string name="storageTypeRoot">Superusuario («root» debe ser accesible)</string>
-    <string name="storageTypeSaf">Entorno Android de acceso al\nalmacenamiento (SAF). (P. ej. tarjetas SD)</string>
+    <string name="storageTypeSaf">Marco de acceso al almacenamiento (SAF) de Android
+\n(por ejemplo, para tarjetas)</string>
     <string name="storageTypeRoSaf">SAF solo de lectura (más rápido)</string>
     <string name="storageTypeVirtual">Carpetas virtuales (admite todos los tipos)</string>
     <string name="safExplainHeading">Funcionamiento de SAF</string>
@@ -111,11 +112,11 @@
     <string name="selectedSafUri">URI escogida para SAF:</string>
     <string name="startServerAndExit">iniciar solo el servidor</string>
     <string name="startServerAndUi">iniciar con el servidor</string>
-    <string name="downloadOrSaveUrlToFile">¿Quiere descargarlo o guardar la URL en un archivo de texto?</string>
+    <string name="downloadOrSaveUrlToFile">¿Descargar o guardar la dirección URL en un archivo de texto?</string>
     <string name="download">Descargar</string>
     <string name="saveToTextFile">Guardar</string>
     <string name="open">Abrir</string>
-    <string name="filepickerCreateFolderError">No se ha podido crear la carpeta</string>
+    <string name="filepickerCreateFolderError">No se pudo crear la carpeta</string>
     <string name="filepickerNewFolder">Nueva carpeta</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>
     <string name="filepickerNewFolderCancel">@android:string/cancel</string>
@@ -146,8 +147,8 @@
     <string name="logFiles">Archivos de registro:</string>
     <string name="rootTmpFiles">Archivos temporales de acceso con «root»:</string>
     <string name="delete">Eliminar</string>
-    <string name="permReadLabelServerstatus">¿el servidor está en uso?</string>
-    <string name="permReadDescServerstatus">Permite saber si el servidor ftp/sftp se está ejecutando.</string>
+    <string name="permReadLabelServerstatus">saber si el servidor funciona</string>
+    <string name="permReadDescServerstatus">Permite averiguar si el servidor FTP/SFTP funciona.</string>
     <string name="permWriteLabelServerstatus">iniciar / parar servidor</string>
     <string name="permWriteDescServerstatus">Permite iniciar y detener el servidor ftp/sftp.</string>
     <string name="mobileUiShort">Modo móvil</string>
@@ -178,4 +179,5 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string name="hasNotificationPermission">Tiene permiso para mostrar notificaciones: %1$b</string>
 </resources>

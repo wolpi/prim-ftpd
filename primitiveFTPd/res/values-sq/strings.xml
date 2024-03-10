@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="protocolLabel">Protokoll</string>
+    <string name="allKeysFingerprintsLabel">Shfaq shenjat e gishtave të gjithë çelësave</string>
+    <string name="generateKeysMessage">Gjeneroni çelësat?</string>
+    <string name="generatingKeysMessage">Duke gjeneruar çelësat…</string>
+    <string name="cancel">Anuloni</string>
+    <string name="state">Shteti</string>
+    <string name="serverStarted">Ekzekutim…</string>
+    <string name="ifacesLabel">Ndërfaqja e rrjetit</string>
+    <string name="ipAddrLabel">Adresa IP</string>
+    <string name="ifacesError">Gabim:</string>
+    <string name="portLabel">Porta</string>
+    <string name="fingerprintsLabel">Gjurmët e gishtërinjve</string>
+    <string name="generate">Gjeneroni</string>
+    <string name="serverStopped">Ndaloi</string>
+</resources>

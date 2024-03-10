@@ -121,4 +121,22 @@
     <string name="prefSummaryQuickSettingsRequiresUnlock">"Le clic sur Vignettes rapides nécessite de déverrouillage de  équipement pour démarrer / arrêter le serveur. Quand actif, une demande de déverrouillage sera affiché si l\'équipement est verrouillé. "</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Déverrouillage nécessaire pour Vignettes Rapides</string>
     <string name="prefSummaryIdleTimeoutV2">Le serveur va couper les connexions inactives après ce délai en secondes. Réglez-le sur 0 pour désactiver.</string>
+    <string name="allKeysFingerprintsLabel">Afficher les empreintes de toutes les clés</string>
+    <string name="storageTypeVirtual">Dossiers virtuels (fournit tous les types de stockage)</string>
+    <string name="statsSentPerSec">Envoyé par seconde</string>
+    <string name="statsReceivedPerSec">Reçus par seconde</string>
+    <string name="hasFullAccessToStorage">A un accès complet au stockage : %1$b</string>
+    <string name="Request">Demander</string>
+    <string name="delete">Supprimer</string>
+    <string name="permReadLabelServerstatus">savoir si le serveur fonctionne</string>
+    <string name="permWriteLabelServerstatus">démarrer et arrêter le serveur</string>
+    <string name="permWriteDescServerstatus">Permet de démarrer et arrêter le serveur ftp/sftp.</string>
+    <string name="mobileUiShort">Mode mobile</string>
+    <string name="mobileUiLong">Mode appareil mobile</string>
+    <string name="tvUiShort">Mode TV</string>
+    <string name="tvUiLong">Mode téléviseur</string>
+    <string name="iconQrCode">Code QR</string>
+    <string name="iconKeysFingerprints">Empreintes des clés</string>
+    <string name="iconAbout">À propos</string>
+    <string name="prefSummaryBindIp">Si vous voulez que les serveurs écoutent sur une seule interface.</string>
 </resources>
