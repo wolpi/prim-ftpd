@@ -7,8 +7,8 @@ import android.os.Handler;
 import android.os.PowerManager;
 
 import org.primftpd.services.AbstractServerService;
-import org.primftpd.services.ServerServiceHandler;
 import org.primftpd.util.FilenameUnique;
+import org.primftpd.util.WakelockUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +57,8 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         return progressDialog;
     }
 
+    protected abstract boolean keepWakelock();
+
     private static class CopyTask extends AsyncTask<Void, Void, Void> {
 
         protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -68,8 +70,6 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         private final List<Uri> uris;
         private final List<String> contents;
         private final String type;
-
-        private PowerManager.WakeLock wakeLock;
 
         CopyTask(AbstractReceiveShareActivity activity,
                  ProgressDialog progressDiag,
@@ -96,10 +96,7 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
             PowerManager powerMgr =
                     (PowerManager) activity.getSystemService(
                             AbstractServerService.POWER_SERVICE);
-            wakeLock = powerMgr.newWakeLock(
-                    PowerManager.SCREEN_DIM_WAKE_LOCK,
-                    ServerServiceHandler.APP_NAME + ":wakelock:filecopy");
-            wakeLock.acquire(60*60*1000L /*60 minutes*/);
+            WakelockUtil.obtainWakeLock(powerMgr);
 
             for (int i = 0; i < uris.size(); i++) {
                 final Uri uri = uris.get(i);
@@ -141,8 +138,9 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
             progressDiag.dismiss();
 
             try {
-                logger.debug("releasing wake lock");
-                wakeLock.release();
+                if (!activity.keepWakelock()) {
+                    WakelockUtil.releaseWakeLock();
+                }
             } catch (Exception e) {
                 logger.warn("error while releasing wake lock", e);
             }

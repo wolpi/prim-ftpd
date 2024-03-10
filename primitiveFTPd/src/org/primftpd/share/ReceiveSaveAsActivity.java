@@ -35,6 +35,11 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
     private String type;
 
     @Override
+    protected boolean keepWakelock() {
+        return false;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         logger.debug("onCreate()");

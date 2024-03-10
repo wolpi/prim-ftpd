@@ -26,6 +26,11 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
     private String type;
 
     @Override
+    protected boolean keepWakelock() {
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         logger.debug("onCreate()");
@@ -96,14 +101,11 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
 
             // delay start of copy process to give the system time to draw progress dialog
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    logger.trace("on delayed saveUris()");
+            handler.postDelayed(() -> {
+                logger.trace("on delayed saveUris()");
 
-                    // this will show a progress dialog
-                    saveUris(progressDialog, targetDir, uris, null, type);
-                }
+                // this will show a progress dialog
+                saveUris(progressDialog, targetDir, uris, null, type);
             }, 500);
         }
     }

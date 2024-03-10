@@ -11,6 +11,7 @@ import org.primftpd.filesystem.Utils;
 import org.primftpd.prefs.StorageType;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.ServicesStartStopUtil;
+import org.primftpd.util.WakelockUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,14 +25,11 @@ import eu.chainfire.libsuperuser.Shell;
  */
 public class ServerServiceHandler extends Handler
 {
-	public static final String APP_NAME = "pFTPd";
-
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final WeakReference<AbstractServerService> serviceRef;
 	private final String logName;
 
-	private static WakeLock wakeLock;
 	private static Shell.Interactive shell;
 
 
@@ -133,38 +131,15 @@ public class ServerServiceHandler extends Handler
 		boolean takeWakeLock)
 	{
 		// acquire wake lock for CPU to still handle requests
-		// note: PARTIAL_WAKE_LOCK is not enough
-		if (wakeLock == null && takeWakeLock) {
-			logger.debug("acquiring wake lock ({})", logName);
-			wakeLock = powerMgr.newWakeLock(
-				PowerManager.SCREEN_DIM_WAKE_LOCK,
-				APP_NAME + ":wakelock");
-			wakeLock.acquire(60*60*1000L /*60 minutes*/);
+		if (takeWakeLock) {
+			WakelockUtil.obtainWakeLock(powerMgr);
 		} else {
-			if (takeWakeLock) {
-				logger.debug("wake lock already taken ({})", logName);
-			} else {
-				logger.debug("wake lock disabled ({})", logName);
-			}
+			logger.debug("wake lock disabled ({})", logName);
 		}
 	}
 
 	private synchronized void releaseWakeLock() {
-		if (wakeLock != null) {
-			if (wakeLock.isHeld()) {
-				logger.debug("releasing wake lock ({})", logName);
-				try {
-					wakeLock.release();
-				} catch (Exception e) {
-					logger.warn("error while releasing wake lock", e);
-				}
-			} else {
-				logger.debug("wake lock not held, not releasing it ({})", logName);
-			}
-			wakeLock = null;
-		} else {
-			logger.debug("wake lock already released ({})", logName);
-		}
+		WakelockUtil.releaseWakeLock();
 	}
 
 	private synchronized void shellOpen() {
