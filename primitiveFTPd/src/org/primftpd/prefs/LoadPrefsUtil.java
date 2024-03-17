@@ -31,7 +31,6 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_SHOW_IPV6 = "showIpv6InNotificationPref";
 	public static final String PREF_KEY_SHOW_START_STOP_NOTIFICATION = "showStartStopNotificationPref";
 	public static final String PREF_KEY_PUB_KEY_AUTH = "pubKeyAuthPref";
-	public static final String PREF_KEY_THEME = "themePref";
 	public static final String PREF_KEY_LOGGING = "loggingPref";
 	public static final String PREF_KEY_FTP_PASSIVE_PORTS = "ftpPassivePortsPref";
 	public static final String PREF_KEY_BIND_IP = "bindIpPref";
