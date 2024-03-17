@@ -1,5 +1,10 @@
 package org.primftpd.filesystem;
 
+import android.content.Context;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.AsyncTask;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,6 +77,24 @@ public class Utils {
     }
     static String touchDate(long time) {
         return TOUCH_DATE_FORMAT.format(time);
+    }
+
+    static void mediaScanFile(Context context, String absPath) {
+        MediaScannerConnection con = new MediaScannerConnection(context, new MediaScannerConnection.MediaScannerConnectionClient() {
+            @Override
+            public void onMediaScannerConnected() {
+            }
+            @Override
+            public void onScanCompleted(String path, Uri uri) {
+            }
+        });
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                con.scanFile(absPath, null);
+                return null;
+            }
+        };
     }
 
     public static final boolean RUN_TESTS = false;

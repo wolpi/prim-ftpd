@@ -12,6 +12,7 @@ import org.primftpd.util.StringUtils;
 import org.primftpd.util.TmpDirType;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -151,11 +152,19 @@ public abstract class RootFile<T> extends AbstractFile {
             runCommand("touch" + " " + escapePath(absPath));
         }
 
+        OutputStream os;
         if (pftpdService.getPrefsBean().isRootCopyFiles()) {
-            return createOutputStreamCopy(offset);
+            os = createOutputStreamCopy(offset);
         } else {
-            return createOutputStreamDd(offset);
+            os = createOutputStreamDd(offset);
         }
+        return new BufferedOutputStream(os) {
+            @Override
+            public void close() throws IOException {
+                super.close();
+                Utils.mediaScanFile(pftpdService.getContext(), getAbsolutePath());
+            }
+        };
     }
 
     public InputStream createInputStream(long offset) throws IOException {

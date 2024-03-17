@@ -182,7 +182,13 @@ public abstract class FsFile<T> extends AbstractFile {
 			};
 		}
 
-		return new BufferedOutputStream(os);
+		return new BufferedOutputStream(os) {
+			@Override
+			public void close() throws IOException {
+				super.close();
+				Utils.mediaScanFile(pftpdService.getContext(), getAbsolutePath());
+			}
+		};
 	}
 
 	public InputStream createInputStream(long offset) throws IOException {
