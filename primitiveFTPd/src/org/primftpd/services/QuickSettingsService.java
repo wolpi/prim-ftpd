@@ -42,12 +42,9 @@ public class QuickSettingsService extends TileService {
             // Check whether the device is locked or not.
             if(isLocked()){
                 unlockAndRun(
-                    new Runnable(){
-                        @Override
-                        public void run() {
-                            toggle();
-                            updateTile();
-                        }
+                    () -> {
+                        toggle();
+                        updateTile();
                     }
                 );
             }
@@ -124,6 +121,6 @@ public class QuickSettingsService extends TileService {
     private boolean isActive() {
         ServersRunningBean serversRunningBean = ServicesStartStopUtil.checkServicesRunning(this);
 
-        return serversRunningBean != null && serversRunningBean.atLeastOneRunning();
+        return serversRunningBean.atLeastOneRunning();
     }
 }
