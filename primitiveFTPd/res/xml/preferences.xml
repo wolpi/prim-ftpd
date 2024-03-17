@@ -89,6 +89,13 @@
 
 	<PreferenceCategory android:title="@string/prefsCategoryTitleUi" android:key="ftpPrefCatUi">
 		<SwitchPreference
+			android:name="showTabNames"
+			android:key="showTabNamesPref"
+			android:defaultValue="false"
+			android:title="@string/prefShowTabNames"
+			android:summary="@string/prefSummaryShowTabNames"
+			/>
+		<SwitchPreference
 			android:name="startOnOpen"
 			android:key="startOnOpenPref"
 			android:defaultValue="false"

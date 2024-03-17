@@ -23,6 +23,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_ANNOUNCE_NAME = "announceNamePref";
 	public static final String PREF_KEY_WAKELOCK = "wakelockPref";
 	public static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
+	public static final String PREF_KEY_SHOW_TAB_NAMES = "showTabNamesPref";
 	public static final String PREF_KEY_START_ON_BOOT = "startOnBootPref";
 	public static final String PREF_KEY_START_ON_OPEN = "startOnOpenPref";
 	public static final String PREF_KEY_SHOW_CONN_INFO = "showConnectionInfoInNotificationPref";

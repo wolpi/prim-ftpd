@@ -61,6 +61,8 @@
     <string name="prefSummaryWhichServerToStart">Choose whether to start FTP server only, SFTP server only or both.</string>
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Start server on system boot.</string>
+    <string name="prefShowTabNames">Show tab names</string>
+    <string name="prefSummaryShowTabNames">Show names on tabs in main UI</string>
     <string name="prefTitleStartOnOpen">Start on open</string>
     <string name="prefSummaryStartOnOpen">Start server when app is opened.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Show connection info in notification</string>

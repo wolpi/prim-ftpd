@@ -61,21 +61,15 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         viewPager.setAdapter(adapter);
 
         this.pftpdFragment = createPftpdFragment();
-        adapter.addFragment(pftpdFragment, "pftpd");
-        CleanSpaceFragment cleanSpaceFragment = new CleanSpaceFragment();
-        adapter.addFragment(cleanSpaceFragment, "\uD83D\uDDD1️" + getText(R.string.iconCleanSpace));
-        QrFragment qrFragment = new QrFragment();
-        adapter.addFragment(qrFragment, "\uD83C\uDF10 " + getText(R.string.iconQrCode));
-        ClientActionFragment clientActionFragment = new ClientActionFragment();
-        adapter.addFragment(clientActionFragment, "\uD83D\uDDD2️" + getText(R.string.clientActionsLabel));
-        KeysFingerprintsFragment keysFingerprintsFragment = new KeysFingerprintsFragment();
-        adapter.addFragment(keysFingerprintsFragment, "\uD83D\uDD11 " + getText(R.string.iconKeysFingerprints));
+        adapter.addFragment(pftpdFragment);
+        adapter.addFragment(new QrFragment());
+        adapter.addFragment(new CleanSpaceFragment());
+        adapter.addFragment(new ClientActionFragment());
+        adapter.addFragment(new KeysFingerprintsFragment());
         INDEX_FINGERPRINTS = adapter.getCount() - 1;
-        FtpPrefsFragment prefsFragment = new FtpPrefsFragment();
-        adapter.addFragment(prefsFragment, "⚙ " + getText(R.string.prefs));
-        AboutFragment aboutFragment = new AboutFragment();
-        adapter.addFragment(aboutFragment, "\uD83D\uDE4F " + getText(R.string.iconAbout));
-        adapter.notifyDataSetChanged();
+        adapter.addFragment(new FtpPrefsFragment());
+        adapter.addFragment(new AboutFragment());
+        updateTabNames();
 
         // listen for events
         EventBus.getDefault().register(this);
@@ -93,13 +87,44 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         prefs.unregisterOnSharedPreferenceChangeListener(this);
     }
 
+    private void updateTabNames() {
+        SharedPreferences prefs = LoadPrefsUtil.getPrefs(this);
+        boolean tabNames = prefs.getBoolean(
+                LoadPrefsUtil.PREF_KEY_SHOW_TAB_NAMES,
+                false);
+        adapter.clearTitles();
+        adapter.addTitle("pftpd");
+        adapter.addTitle("QR");
+        if (tabNames) {
+            adapter.addTitle("\uD83D\uDDD1 " + getText(R.string.iconCleanSpace));
+            adapter.addTitle("\uD83D\uDDD2 " + getText(R.string.clientActionsLabel));
+            adapter.addTitle("\uD83D\uDD11 " + getText(R.string.iconKeysFingerprints));
+            adapter.addTitle("⚙ " + getText(R.string.prefs));
+            adapter.addTitle("\uD83D\uDE4F " + getText(R.string.iconAbout));
+        } else {
+            adapter.addTitle("\uD83D\uDDD1");
+            adapter.addTitle("\uD83D\uDDD2");
+            adapter.addTitle("\uD83D\uDD11");
+            adapter.addTitle("⚙");
+            adapter.addTitle("\uD83D\uDE4F");
+        }
+        adapter.notifyDataSetChanged();
+    }
+
     private class MainAdapter extends FragmentPagerAdapter {
         ArrayList<Fragment> fragments = new ArrayList<>();
         ArrayList<CharSequence> titles = new ArrayList<>();
 
-        public void addFragment(Fragment fragment, String s) {
+        protected void addFragment(Fragment fragment) {
             fragments.add(fragment);
-            titles.add(s);
+        }
+
+        protected void clearTitles() {
+            titles.clear();
+        }
+
+        protected void addTitle(String title) {
+            titles.add(title);
         }
 
         public MainAdapter(FragmentManager supportFragmentManager) {
@@ -211,6 +236,9 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         }
         if (LoadPrefsUtil.PREF_KEY_LOGGING.equals(key)) {
             handleLoggingPref();
+        }
+        if (LoadPrefsUtil.PREF_KEY_SHOW_TAB_NAMES.equals(key)) {
+            updateTabNames();
         }
     }
 
