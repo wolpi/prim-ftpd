@@ -111,7 +111,11 @@ public abstract class RootFile<T> extends AbstractFile {
     public boolean move(RootFile<T> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
         postClientAction(ClientActionEvent.ClientAction.RENAME);
-        return runCommand("mv " + escapePath(absPath) + " " + escapePath(destination.getAbsolutePath()));
+        boolean success = runCommand("mv " + escapePath(absPath) + " " + escapePath(destination.getAbsolutePath()));
+        if (success) {
+            Utils.mediaScanFile(pftpdService.getContext(), getAbsolutePath());
+        }
+        return success;
     }
 
     public List<T> listFiles() {

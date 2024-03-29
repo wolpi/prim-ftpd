@@ -5,6 +5,9 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +15,8 @@ import java.util.List;
 import java.util.SimpleTimeZone;
 
 public class Utils {
+
+    protected static Logger logger = LoggerFactory.getLogger(Utils.class);
 
     static String absolute(String rel, String workingDir) {
         if (rel.charAt(0) == '/') {
@@ -91,6 +96,7 @@ public class Utils {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
+                logger.info("media scanning file: {}", absPath);
                 con.scanFile(absPath, null);
                 return null;
             }

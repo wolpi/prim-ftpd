@@ -132,7 +132,11 @@ public abstract class FsFile<T> extends AbstractFile {
 	public boolean move(FsFile<T> destination) {
 		logger.trace("[{}] move({})", name, destination.getAbsolutePath());
 		postClientAction(ClientActionEvent.ClientAction.RENAME);
-		return file.renameTo(new File(destination.getAbsolutePath()));
+		boolean success = file.renameTo(new File(destination.getAbsolutePath()));
+		if (success) {
+			Utils.mediaScanFile(pftpdService.getContext(), getAbsolutePath());
+		}
+		return success;
 	}
 
 	public List<T> listFiles() {
