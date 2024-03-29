@@ -55,7 +55,6 @@ public abstract class AbstractServerService
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private Looper serviceLooper;
 	private ServerServiceHandler serviceHandler;
 	PrefsBean prefsBean;
 	KeyFingerprintProvider keyFingerprintProvider;
@@ -97,7 +96,7 @@ public abstract class AbstractServerService
 		// listen for events
 		EventBus.getDefault().register(this);
 
-		serviceLooper = thread.getLooper();
+		Looper serviceLooper = thread.getLooper();
 		serviceHandler = createServiceHandler(serviceLooper, this);
 	}
 
@@ -242,8 +241,20 @@ public abstract class AbstractServerService
 	protected void cleanQuickShareTmpDir() {
 		if (quickShareBean != null) {
 			File tmpDir = quickShareBean.getTmpDir();
-			if (tmpDir.exists()) {
-				tmpDir.delete();
+			if (tmpDir != null && tmpDir.exists()) {
+				File[] files = tmpDir.listFiles();
+				if (files != null) {
+					for (File child : files) {
+						boolean deleted = child.delete();
+						if (!deleted) {
+							logger.info("could not delete tmp file: {}", child.getAbsolutePath());
+						}
+					}
+				}
+				boolean deleted = tmpDir.delete();
+				if (!deleted) {
+					logger.info("could not delete tmp dir: {}", tmpDir.getAbsolutePath());
+				}
 			}
 		}
 	}

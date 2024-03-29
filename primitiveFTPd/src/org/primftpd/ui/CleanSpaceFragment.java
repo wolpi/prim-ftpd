@@ -75,15 +75,15 @@ public class CleanSpaceFragment extends Fragment implements RecreateLogger {
     }
 
     protected File quickShareDir() {
-        return Defaults.quickShareTmpDir(this.getContext());
+        return Defaults.quickShareTmpDir(this.requireContext());
     }
 
     protected File logsDir() {
-        return Defaults.homeDirScoped(this.getContext());
+        return Defaults.homeDirScoped(this.requireContext());
     }
 
     protected File rootTmpDir() {
-        return Defaults.rootCopyTmpDir(this.getContext());
+        return Defaults.rootCopyTmpDir(this.requireContext());
     }
 
     protected void updateView() {
@@ -108,11 +108,14 @@ public class CleanSpaceFragment extends Fragment implements RecreateLogger {
         logger.trace("calcSizeDir({}, {})", dir, includeChildren);
         long size = 0;
         if (dir != null && dir.exists()) {
-            for (File child : dir.listFiles()) {
-                if (child.isFile()) {
-                    size += child.length();
-                } else if (child.isDirectory() && includeChildren) {
-                    size += calcSizeDir(child, true);
+            File[] children = dir.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    if (child.isFile()) {
+                        size += child.length();
+                    } else if (child.isDirectory() && includeChildren) {
+                        size += calcSizeDir(child, true);
+                    }
                 }
             }
         }
@@ -122,11 +125,14 @@ public class CleanSpaceFragment extends Fragment implements RecreateLogger {
     private int collectNumberOfFiles(File dir, boolean includeChildren) {
         int number = 0;
         if (dir != null && dir.exists()) {
-            for (File child : dir.listFiles()) {
-                if (child.isFile()) {
-                    number ++;
-                } else if (child.isDirectory() && includeChildren) {
-                    number += collectNumberOfFiles(child, true);
+            File[] children = dir.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    if (child.isFile()) {
+                        number++;
+                    } else if (child.isDirectory() && includeChildren) {
+                        number += collectNumberOfFiles(child, true);
+                    }
                 }
             }
         }
@@ -173,14 +179,23 @@ public class CleanSpaceFragment extends Fragment implements RecreateLogger {
 
         private int delete(File dir, boolean includeChildren, int counter) {
             if (dir != null && dir.exists()) {
-                for (File child : dir.listFiles()) {
-                    if (child.isFile()) {
-                        child.delete();
-                        counter ++;
-                        progressDiag.setProgress(counter);
-                    } else if (child.isDirectory() && includeChildren) {
-                        counter = delete(child, true, counter);
-                        child.delete();
+                File[] children = dir.listFiles();
+                if (children != null) {
+                    for (File child : children) {
+                        if (child.isFile()) {
+                            boolean deleted = child.delete();
+                            if (!deleted) {
+                                logger.info("could not delete file: {}", child.getAbsolutePath());
+                            }
+                            counter++;
+                            progressDiag.setProgress(counter);
+                        } else if (child.isDirectory() && includeChildren) {
+                            counter = delete(child, true, counter);
+                            boolean deleted = child.delete();
+                            if (!deleted) {
+                                logger.info("could not delete dir: {}", child.getAbsolutePath());
+                            }
+                        }
                     }
                 }
             }
