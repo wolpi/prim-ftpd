@@ -35,6 +35,8 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_FTP_PASSIVE_PORTS = "ftpPassivePortsPref";
 	public static final String PREF_KEY_BIND_IP = "bindIpPref";
 	public static final String PREF_KEY_IDLE_TIMEOUT = "idleTimeoutPref";
+
+	public static final String PREF_KEY_IDLE_TIMEOUT_SERVER_STOP = "idleTimeoutServerStopPref";
 	public static final String PREF_KEY_STORAGE_TYPE = "storageTypePref";
 	public static final String PREF_KEY_SAF_URL = "safUrlPref";
 	public static final String PREF_KEY_ALLOWED_IPS_PATTERN = "allowedIpsPatternPref";
@@ -50,6 +52,7 @@ public class LoadPrefsUtil
 	static final String PORT_PASSIVE_DEFAULT_VAL_STR = String.valueOf(PORT_PASSIVE_DEFAULT_VAL);
 	public static final int IDLE_TIMEOUT_DEFAULT_VAL = 0;
 	static final String IDLE_TIMEOUT_DEFAULT_VAL_STR = String.valueOf(IDLE_TIMEOUT_DEFAULT_VAL);
+	public static final String IDLE_TIMEOUT_SERVER_STOP_DEFAULT_VAL = "30";
 
 	/**
 	 * @return Android {@link SharedPreferences} object.

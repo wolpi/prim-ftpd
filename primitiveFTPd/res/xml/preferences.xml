@@ -71,7 +71,15 @@
 			android:title="@string/prefTitleIdleTimeout"
 			android:summary="@string/prefSummaryIdleTimeoutV2"
 			android:defaultValue="0"
-			android:numeric="integer"
+			android:inputType="number"
+			/>
+		<EditTextPreference
+			android:name="idleTimeoutServerStop"
+			android:key="idleTimeoutServerStopPref"
+			android:title="@string/prefTitleIdleTimeoutServerStop"
+			android:summary="@string/prefSummaryIdleTimeoutServerStop"
+			android:defaultValue="30"
+			android:inputType="number"
 			/>
 		<EditTextPreference
 			android:name="allowedIpsPattern"

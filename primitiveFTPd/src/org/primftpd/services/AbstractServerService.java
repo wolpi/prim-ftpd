@@ -4,15 +4,18 @@ import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,6 +25,7 @@ import org.primftpd.events.ClientActionEvent;
 import org.primftpd.events.ServerInfoRequestEvent;
 import org.primftpd.events.ServerInfoResponseEvent;
 import org.primftpd.events.ServerStateChangedEvent;
+import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.R;
 import org.primftpd.share.QuickShareBean;
@@ -60,6 +64,13 @@ public abstract class AbstractServerService
 	KeyFingerprintProvider keyFingerprintProvider;
 	QuickShareBean quickShareBean;
 	private NsdManager.RegistrationListener nsdRegistrationListener;
+
+	private Handler timerHandler;
+	private long timerTimeout;
+	private final Runnable timerTask = () -> {
+		logger.info("stopping server due to idle timeout");
+		ServicesStartStopUtil.stopServers(AbstractServerService.this);
+	};
 
 	protected abstract ServerServiceHandler createServiceHandler(
 		Looper serviceLooper,
@@ -125,6 +136,20 @@ public abstract class AbstractServerService
 		// post event
 		EventBus.getDefault().post(new ServerStateChangedEvent());
 
+		// handle server stop on idle timeout
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+		try {
+			long timeout = Long.parseLong(sharedPreferences.getString(
+					LoadPrefsUtil.PREF_KEY_IDLE_TIMEOUT_SERVER_STOP,
+					LoadPrefsUtil.IDLE_TIMEOUT_SERVER_STOP_DEFAULT_VAL));
+			if (timeout > 0) {
+				this.timerTimeout = timeout * 60 * 1000;
+				startTimer();
+			}
+		} catch (Exception e) {
+			logger.error("could not start timer", e);
+		}
+
 		// we don't want the system to kill the ftp server
 		//return START_NOT_STICKY;
 		return START_STICKY;
@@ -139,6 +164,11 @@ public abstract class AbstractServerService
 		msg.arg1 = MSG_STOP;
 		serviceHandler.sendMessage(msg);
 
+		// stop on idle timer not needed anymore
+		if (this.timerHandler != null) {
+			stopTimer();
+		}
+
 		// post event
 		EventBus.getDefault().post(new ServerStateChangedEvent());
 
@@ -151,6 +181,24 @@ public abstract class AbstractServerService
 		logger.debug("got ServerInfoRequestEvent");
 		int quickShareNumberOfFiles = quickShareBean != null ? quickShareBean.numberOfFiles() : -1;
 		EventBus.getDefault().post(new ServerInfoResponseEvent(quickShareNumberOfFiles));
+	}
+
+	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+	public void onEvent(ClientActionEvent event) {
+		if (timerHandler != null) {
+			stopTimer();
+			startTimer();
+		}
+	}
+
+	private synchronized void stopTimer() {
+		this.timerHandler.removeCallbacks(timerTask);
+	}
+	private synchronized void startTimer() {
+		if (this.timerHandler == null) {
+			this.timerHandler = new Handler();
+		}
+		this.timerHandler.postDelayed(timerTask, this.timerTimeout);
 	}
 
 	@Override
