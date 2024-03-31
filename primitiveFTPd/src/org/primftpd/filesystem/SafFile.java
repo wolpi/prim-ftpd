@@ -17,9 +17,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class SafFile<T> extends AbstractFile {
+
+    private final static Set<String> KNOWN_BAD_CHARS;
+    static {
+        Set<String> tmp = new HashSet<>();
+        tmp.add("[");
+        tmp.add("]");
+        KNOWN_BAD_CHARS = Collections.unmodifiableSet(tmp);
+    }
 
     private final ContentResolver contentResolver;
 
@@ -175,6 +186,15 @@ public abstract class SafFile<T> extends AbstractFile {
     public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
         postClientAction(ClientActionEvent.ClientAction.UPLOAD);
+
+        // validate file name for known bad characters
+        for (String badChar : KNOWN_BAD_CHARS) {
+            if (name.contains(badChar)) {
+                String msg = "filename contains known bad char: '" +  badChar + "', will not create file";
+                logger.warn(msg);
+                throw new IOException(msg);
+            }
+        }
 
         Uri uri;
         if (documentFile != null) {
