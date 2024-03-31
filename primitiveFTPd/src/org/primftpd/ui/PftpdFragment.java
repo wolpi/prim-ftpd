@@ -97,6 +97,8 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 	private TextView clientActionView2;
 	private TextView clientActionView3;
 
+	private boolean onStartOngoing = false;
+
 	protected int getLayoutId() {
 		return R.layout.main;
 	}
@@ -185,6 +187,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
         super.onStart();
 
         logger.debug("onStart()");
+		onStartOngoing = true;
 
         loadPrefs();
         showLogindata();
@@ -226,6 +229,8 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
                     break;
             }
         }
+
+		onStartOngoing = false;
     }
 
 	@Override
@@ -292,15 +297,21 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 						break;
 					case R.id.radioStorageSaf:
 						storageType = StorageType.SAF;
-						startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+						if (!onStartOngoing) {
+							startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+						}
 						break;
 					case R.id.radioStorageRoSaf:
 						storageType = StorageType.RO_SAF;
-						startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+						if (!onStartOngoing) {
+							startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+						}
 						break;
 					case R.id.radioStorageVirtual:
 						storageType = StorageType.VIRTUAL;
-						startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+						if (!onStartOngoing) {
+							startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+						}
 						break;
 				}
 			} catch (ActivityNotFoundException e) {
