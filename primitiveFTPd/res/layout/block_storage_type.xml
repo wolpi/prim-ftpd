@@ -25,8 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/storageTypePlainV2"
-                android:nextFocusUp="@+id/fallbackButtonsContainer"
-                android:nextFocusLeft="@+id/fallbackButtonsContainer"
+                android:nextFocusUp="@+id/fallbackButtonToggleServer"
+                android:nextFocusLeft="@+id/fallbackButtonToggleServer"
                 android:nextFocusRight="@+id/keyFingerprintsLabel"
                 />
             <RadioButton android:id="@+id/radioStorageRoot"

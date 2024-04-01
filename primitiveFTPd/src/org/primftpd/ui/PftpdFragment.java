@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -791,13 +792,13 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		// update fallback buttons
 		View view = getView();
 		if (view != null) {
-			View fallbackButtonStart = view.findViewById(R.id.fallbackButtonStartServer);
-			if (fallbackButtonStart != null) {
-				fallbackButtonStart.setVisibility(atLeastOneRunning ? View.GONE : View.VISIBLE);
-			}
-			View fallbackButtonStop = view.findViewById(R.id.fallbackButtonStopServer);
-			if (fallbackButtonStop != null) {
-				fallbackButtonStop.setVisibility(atLeastOneRunning ? View.VISIBLE : View.GONE);
+			Button fallbackButtonToggle = view.findViewById(R.id.fallbackButtonToggleServer);
+			if (fallbackButtonToggle != null) {
+				if (atLeastOneRunning) {
+					fallbackButtonToggle.setText(R.string.stopService);
+				} else {
+					fallbackButtonToggle.setText(R.string.startService);
+				}
 			}
 		}
 	}

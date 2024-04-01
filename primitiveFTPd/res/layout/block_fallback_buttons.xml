@@ -11,7 +11,7 @@
         style="?android:attr/buttonBarStyle">
 
         <Button
-            android:id="@+id/fallbackButtonStartServer"
+            android:id="@+id/fallbackButtonToggleServer"
             android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,17 +20,6 @@
             android:nextFocusRight="@+id/keyFingerprintsLabel"
             android:text="@string/startService"
             android:focusedByDefault="true"
-            />
-        <Button
-            android:id="@+id/fallbackButtonStopServer"
-            android:visibility="gone"
-            android:gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:nextFocusForward="@+id/radioStoragePlain"
-            android:nextFocusDown="@+id/radioStoragePlain"
-            android:nextFocusRight="@+id/keyFingerprintsLabel"
-            android:text="@string/stopService"
             />
 
     </LinearLayout>
