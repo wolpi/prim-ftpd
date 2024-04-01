@@ -15,7 +15,9 @@
             android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:nextFocusForward="@+id/radioStoragePlain"
             android:nextFocusDown="@+id/radioStoragePlain"
+            android:nextFocusRight="@+id/keyFingerprintsLabel"
             android:text="@string/startService"
             android:focusedByDefault="true"
             />
@@ -25,7 +27,9 @@
             android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:nextFocusForward="@+id/radioStoragePlain"
             android:nextFocusDown="@+id/radioStoragePlain"
+            android:nextFocusRight="@+id/keyFingerprintsLabel"
             android:text="@string/stopService"
             />
 

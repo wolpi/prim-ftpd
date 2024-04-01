@@ -25,27 +25,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/storageTypePlainV2"
-                android:nextFocusUp="@+id/fallbackButtonPrefs"
+                android:nextFocusUp="@+id/fallbackButtonsContainer"
+                android:nextFocusLeft="@+id/fallbackButtonsContainer"
+                android:nextFocusRight="@+id/keyFingerprintsLabel"
                 />
             <RadioButton android:id="@+id/radioStorageRoot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/storageTypeRoot"
+                android:nextFocusLeft="@+id/radioStoragePlain"
+                android:nextFocusRight="@+id/keyFingerprintsLabel"
                 />
             <RadioButton android:id="@+id/radioStorageSaf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/storageTypeSaf"
+                android:nextFocusLeft="@+id/radioStorageRoot"
+                android:nextFocusRight="@+id/keyFingerprintsLabel"
                 />
             <RadioButton android:id="@+id/radioStorageRoSaf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/storageTypeRoSaf"
+                android:nextFocusLeft="@+id/radioStorageSaf"
+                android:nextFocusRight="@+id/keyFingerprintsLabel"
                 />
             <RadioButton android:id="@+id/radioStorageVirtual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/storageTypeVirtual"
+                android:nextFocusLeft="@+id/radioStorageRoSaf"
+                android:nextFocusRight="@+id/keyFingerprintsLabel"
+                android:nextFocusDown="@+id/keyFingerprintsLabel"
+                android:nextFocusForward="@+id/keyFingerprintsLabel"
                 />
         </RadioGroup>
     </LinearLayout>

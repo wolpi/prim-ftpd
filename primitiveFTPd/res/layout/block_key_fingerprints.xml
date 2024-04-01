@@ -11,6 +11,12 @@
         android:text="@string/fingerprintsLabel"
         android:drawableRight="?attr/iconRefresh"
         android:drawablePadding="4dp"
+        android:focusable="true"
+        android:nextFocusLeft="@+id/radioStorageVirtual"
+        android:nextFocusUp="@+id/radioStorageVirtual"
+        android:nextFocusRight="@+id/allKeysFingerprintsLabel"
+        android:nextFocusDown="@+id/allKeysFingerprintsLabel"
+        android:nextFocusForward="@+id/allKeysFingerprintsLabel"
         />
 
     <!-- all keys fingerprints -->
@@ -24,6 +30,11 @@
         android:text="@string/allKeysFingerprintsLabel"
         android:drawablePadding="4dp"
         android:textColor="@color/blueIcon"
+        android:nextFocusLeft="@+id/keyFingerprintsLabel"
+        android:nextFocusUp="@+id/keyFingerprintsLabel"
+        android:nextFocusRight="@+id/tabs"
+        android:nextFocusDown="@+id/tabs"
+        android:nextFocusForward="@+id/tabs"
         />
 
     <!-- MD 5 -->
