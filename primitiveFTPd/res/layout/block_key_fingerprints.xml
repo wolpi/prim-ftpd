@@ -32,9 +32,9 @@
         android:textColor="@color/blueIcon"
         android:nextFocusLeft="@+id/keyFingerprintsLabel"
         android:nextFocusUp="@+id/keyFingerprintsLabel"
-        android:nextFocusRight="@+id/tabs"
-        android:nextFocusDown="@+id/tabs"
-        android:nextFocusForward="@+id/tabs"
+        android:nextFocusDown="@+id/fallbackButtonToggleServer"
+        android:nextFocusRight="@+id/qrUrlsParent"
+        android:nextFocusForward="@+id/qrUrlsParent"
         />
 
     <!-- MD 5 -->

@@ -18,6 +18,8 @@
             android:nextFocusForward="@+id/radioStoragePlain"
             android:nextFocusDown="@+id/radioStoragePlain"
             android:nextFocusRight="@+id/keyFingerprintsLabel"
+            android:nextFocusUp="@+id/allKeysFingerprintsLabel"
+            android:nextFocusLeft="@+id/allKeysFingerprintsLabel"
             android:text="@string/startService"
             android:focusedByDefault="true"
             />
