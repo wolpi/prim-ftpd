@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 public class QrFragment extends Fragment implements RecreateLogger {
@@ -42,9 +44,10 @@ public class QrFragment extends Fragment implements RecreateLogger {
     private ImageView qrImage;
     private int width;
     private int height;
+    private TextView fallbackTextView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -53,6 +56,7 @@ public class QrFragment extends Fragment implements RecreateLogger {
 
         urlsParent = view.findViewById(R.id.qrUrlsParent);
         qrImage = view.findViewById(R.id.qrImage);
+        fallbackTextView = view.findViewById(R.id.qrFallbackTextView);
 
         width = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
         height = getResources().getDisplayMetrics().heightPixels / 2;
@@ -80,6 +84,12 @@ public class QrFragment extends Fragment implements RecreateLogger {
         Boolean showIpv6 = LoadPrefsUtil.showIpv6InNotification(prefs);
 
         List<String> urls = new ArrayList<>();
+
+        if (ipAddressTexts.isEmpty()) {
+            fallbackTextView.setVisibility(View.VISIBLE);
+        } else {
+            fallbackTextView.setVisibility(View.GONE);
+        }
 
         for (String ipAddressText : ipAddressTexts) {
             boolean ipv6 = ipAddressProvider.isIpv6(ipAddressText);
@@ -113,12 +123,9 @@ public class QrFragment extends Fragment implements RecreateLogger {
             radioButton.setText(url);
             radioGroup.addView(radioButton);
             final QrFragment fragment = this;
-            radioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bitmap qr = fragment.generateQr(url, darkMode);
-                    fragment.qrImage.setImageBitmap(qr);
-                }
+            radioButton.setOnClickListener(v -> {
+                Bitmap qr = fragment.generateQr(url, darkMode);
+                fragment.qrImage.setImageBitmap(qr);
             });
         }
         urlsParent.addView(radioGroup);

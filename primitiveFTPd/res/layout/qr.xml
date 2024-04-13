@@ -26,6 +26,16 @@
             android:layout_marginStart="25dp"
             android:contentDescription="@null" />
 
+
+        <TextView
+            android:id="@+id/qrFallbackTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/qrFallback"
+            android:focusable="false"
+            android:visibility="gone"
+            />
     </LinearLayout>
 
 </ScrollView>

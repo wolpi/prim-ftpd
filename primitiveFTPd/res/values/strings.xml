@@ -164,6 +164,7 @@
     <string name="iconKeysFingerprints">Keys Fingerprints</string>
     <string name="iconCleanSpace">Clean Space</string>
     <string name="iconAbout">About</string>
+    <string name="qrFallback">no network interfaces, no IP addresses, no QR code</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
         <item>FTP only</item>
