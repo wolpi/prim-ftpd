@@ -29,6 +29,9 @@ public abstract class SafFile<T> extends AbstractFile {
         Set<String> tmp = new HashSet<>();
         tmp.add("[");
         tmp.add("]");
+        tmp.add("*");
+        tmp.add("?");
+        tmp.add("\\");
         KNOWN_BAD_CHARS = Collections.unmodifiableSet(tmp);
     }
 
