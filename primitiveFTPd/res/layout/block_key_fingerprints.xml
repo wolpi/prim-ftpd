@@ -12,6 +12,7 @@
         android:drawableRight="?attr/iconRefresh"
         android:drawablePadding="4dp"
         android:focusable="true"
+        android:background="@drawable/label_custom"
         android:nextFocusLeft="@+id/radioStorageVirtual"
         android:nextFocusUp="@+id/radioStorageVirtual"
         android:nextFocusRight="@+id/allKeysFingerprintsLabel"
@@ -30,6 +31,7 @@
         android:text="@string/allKeysFingerprintsLabel"
         android:drawablePadding="4dp"
         android:textColor="@color/blueIcon"
+        android:background="@drawable/label_custom"
         android:nextFocusLeft="@+id/keyFingerprintsLabel"
         android:nextFocusUp="@+id/keyFingerprintsLabel"
         android:nextFocusDown="@+id/fallbackButtonToggleServer"
@@ -43,6 +45,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:focusable="false"
         />
     <TextView
         android:id="@+id/keyFingerprintMd5TextView"
@@ -52,6 +55,7 @@
         android:typeface="monospace"
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
+        android:focusable="false"
         />
     <!-- SHA 1 -->
     <TextView
@@ -60,6 +64,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:layout_marginTop="8dp"
+        android:focusable="false"
         />
     <TextView
         android:id="@+id/keyFingerprintSha1TextView"
@@ -69,6 +74,7 @@
         android:typeface="monospace"
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
+        android:focusable="false"
         />
     <!-- SHA 256 -->
     <TextView
@@ -77,6 +83,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:layout_marginTop="8dp"
+        android:focusable="false"
         />
     <TextView
         android:id="@+id/keyFingerprintSha256TextView"
@@ -86,6 +93,7 @@
         android:typeface="monospace"
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
+        android:focusable="false"
         />
 
 </merge>

@@ -8,6 +8,7 @@
         android:gravity="center_horizontal"
         android:textStyle="bold"
         android:layout_marginTop="16dp"
+        android:focusable="false"
     />
 
     <!-- interfaces/addresses and ports info in 2 columns -->
@@ -32,6 +33,7 @@
                 android:gravity="center_horizontal"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
+                android:focusable="false"
             />
 
             <LinearLayout
@@ -58,6 +60,7 @@
                 android:gravity="center_horizontal"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
+                android:focusable="false"
             />
             <TextView
                 android:id="@+id/ftpTextView"
@@ -65,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:textIsSelectable="true"
+                android:focusable="false"
             />
             <TextView
                 android:id="@+id/sftpTextView"
@@ -72,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:textIsSelectable="true"
+                android:focusable="false"
             />
         </LinearLayout>
     </LinearLayout>
@@ -85,6 +90,7 @@
         android:textStyle="bold"
         android:layout_marginTop="16dp"
         android:text="@string/prefTitleUser"
+        android:focusable="false"
     />
     <TextView
         android:id="@+id/usernameTextView"
@@ -92,6 +98,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textIsSelectable="true"
+        android:focusable="false"
     />
 
     <!-- login / auth / permission info in 2 columns -->
@@ -115,6 +122,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:focusable="false"
             />
 
             <TextView
@@ -122,6 +130,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:focusable="false"
                 />
 
             <TextView
@@ -129,6 +138,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:focusable="false"
                 />
         </LinearLayout>
 
@@ -144,6 +154,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:focusable="false"
                 />
 
             <TextView
@@ -151,6 +162,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:focusable="false"
                 />
 
             <TextView
@@ -158,6 +170,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:focusable="false"
                 />
 
             <TextView
@@ -165,6 +178,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:focusable="false"
                 />
         </LinearLayout>
 
