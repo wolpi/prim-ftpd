@@ -606,7 +606,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 			textView.setText(hasPermissionStr);
 		}
 	}
-	private void buildPermissionRequestLink(
+	protected void buildPermissionRequestLink(
 			TextView textView,
 			String baseText,
 			View.OnClickListener onClickListener) {

@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.primftpd.R;
 import org.primftpd.util.ServersRunningBean;
 import org.primftpd.util.ServicesStartStopUtil;
 
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
 
@@ -38,5 +38,11 @@ public class LeanbackFragment extends PftpdFragment {
                     });
         }
         return view;
+    }
+
+    @Override
+    protected void buildPermissionRequestLink(TextView textView, String baseText, View.OnClickListener onClickListener) {
+        // don't show permission links in TV mode as they are not accessible by d-pad
+        textView.setText(baseText);
     }
 }
