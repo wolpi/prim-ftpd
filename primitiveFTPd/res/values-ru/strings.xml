@@ -71,7 +71,7 @@
     <string name="storageTypePlain">Обычная файловая система</string>
     <string name="storageTypeRoSaf">SAF только для чтения (работает быстрее!)</string>
     <string name="storageTypeRoot">Суперпользователь (необходим root на устройстве)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF) 
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
 \n(например, для SD-карты)</string>
     <string name="toggleService">Запуск/остановка сервера</string>
     <string name="widgetTextStart">Запустить ftpd</string>
