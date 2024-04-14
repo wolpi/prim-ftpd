@@ -76,7 +76,7 @@
     <string name="storageType">Typ Pamięci</string>
     <string name="storageTypePlain">Zwykły stary system plików</string>
     <string name="storageTypeRoot">Super użytkownik (urządzenie musi być zrootowane)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF) 
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
 \n(np. dla karty SD)</string>
     <string name="storageTypeRoSaf">SAF tylko do odczytu (szybsze!)</string>
     <string name="safExplainHeading">Jak działa SAF</string>
