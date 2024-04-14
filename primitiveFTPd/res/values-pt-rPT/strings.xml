@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="ifacesLabel">Interface de Rede</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ifacesLabel">Interface de Rede</string>
     <string name="ipAddrLabel">Endereço IP</string>
     <string name="ifacesError">Erro:</string>
     <string name="protocolLabel">Protocolo</string>
@@ -16,12 +17,10 @@
     <string name="quickSettingsServerStarted">pFTPd A Correr …</string>
     <string name="quickSettingsServerStopped">pFTPd Parado</string>
     <string name="saveAs">Guardar como</string>
-
     <string name="startService">Iniciar Servidor</string>
     <string name="stopService">Parar Servidor</string>
     <string name="toggleService">Iniciar ou Parar o Servidor</string>
     <string name="notificationTitle">Servidor FTP</string>
-
     <string name="haveToSetPassword">Primeiro defina uma password</string>
     <string name="serverRunning">O Servidor FTP está a correr</string>
     <string name="serverCouldNotBeStarted">O Servidor FTP não pôde ser iniciado! Mensagem de erro:</string>
@@ -60,11 +59,9 @@
     <string name="app_name">ftpd primitivo</string>
     <string name="fingerprintsLabel">Impressões Digitais da Chave</string>
     <string name="translate">Traduza</string>
-
     <string name="haveToSetAuthMechanism">Necessita de seleccionar um mecanismo de autenticação primeiro</string>
     <string name="couldNotReadKeyAuthKey">A chave pública para autenticação de chaves não pôde ser lida. Verifique os registos (logs).</string>
     <string name="ftpPassivePortsInvalid">O valor das Portas Passivas FTP é inválido.</string>
-
     <string name="prefsCategoryTitleAuth">Aut</string>
     <string name="prefsCategoryTitleConnectivity">Conectividade</string>
     <string name="prefsCategoryTitleUi">IU</string>
@@ -80,16 +77,13 @@
     <string name="prefSummaryIdleTimeoutV2">O servidor irá terminar as ligações inactivas após este tempo, em segundos. Definir para 0 para desactivar.</string>
     <string name="prefTitleLogging">Registo</string>
     <string name="prefSummaryLogging">O registo serve uma análise de erros. Se a aplicação não funcionar correctamente no seu dispositivo, pode enviar o registo para os desenvolvedores. Pode obrigar a um reinicio da aplicação.</string>
-
     <string name="licence">Licença</string>
     <string name="reset">Reset</string>
-
     <string name="widgetTextStart">Iniciar (s)ftpd</string>
     <string name="widgetTextStop">Parar (s)ftpd</string>
     <string name="isAnonymous">Login Anónimo: %1$b</string>
     <string name="selectServerAction">Acção de Seleccionar o Servidor</string>
     <string name="isServerRunning">O servidor está a correr?</string>
-
     <string name="storageType">Tipo de Armazenamento</string>
     <string name="storageTypePlain">Sistema de ficheiros antigo</string>
     <string name="storageTypeRoot">Super user (o dispositivo deve estar rooteado)</string>
@@ -99,8 +93,6 @@
     <string name="safExplainHeading">Como funciona o SAF</string>
     <string name="safExplain">O Android vai pedir-lhe para escolher um diretório. O tal estará acessivel através do(s) servidore(s). De tempo a tempo a permissão pode ser revogada e deverá re-selecionar.</string>
     <string name="selectedSafUri">URI da SAF Selecionada:</string>
-
     <string name="startServerAndExit">Arrancar apenas o servidor</string>
     <string name="startServerAndUi">Arrancar com o servidor</string>
-
-    </resources>
+</resources>
