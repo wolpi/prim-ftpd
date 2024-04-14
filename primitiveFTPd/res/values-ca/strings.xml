@@ -103,7 +103,8 @@
     <string name="storageTypePlain">Sistema de fitxers</string>
     <string name="storageTypePlainV2">Sistema de fitxers\nAccés només de lectura? Vegeu <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub</a>.</string>
     <string name="storageTypeRoot">Superusuari (requereix «root» accessible)</string>
-    <string name="storageTypeSaf">Entorn Android d\'accés\na l\'emmagatzematge (SAF). (P. ex. per a targetes SD)</string>
+    <string name="storageTypeSaf">Entorn Android d\'accés
+\na l\'emmagatzematge (SAF). (P. ex. per a targetes SD)</string>
     <string name="storageTypeRoSaf">SAF només de lectura (més ràpid)</string>
     <string name="storageTypeVirtual">Carpetes virtuals (admet tots els tipus)</string>
     <string name="safExplainHeading">Funcionament del SAF</string>
