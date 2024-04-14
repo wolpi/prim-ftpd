@@ -25,15 +25,15 @@
     <string name="portInvalid_v2">Wartość portu jest nieprawidłowa. Musi mieścić się w przedziale od 1024 do 64000.</string>
     <string name="portsEqual_v2">Porty są takie same. To nie może zadziałać.</string>
     <string name="restartServer">Musisz ponownie uruchomić serwer, aby zmiany zaczęły obowiązywać.</string>
-    <string name="invalidDir">Katalog jest nieprawidłowy.</string>
+    <string name="invalidDir">Nieprawidłowy katalog.</string>
     <string name="couldNotReadKeyAuthKey">Nie można odczytać klucza publicznego do uwierzytelniania kluczem. Sprawdź dzienniki.</string>
     <string name="ftpPassivePortsInvalid">Wartość pasywnych portów FTP jest nieprawidłowa.</string>
     <string name="prefs">Preferencje</string>
     <string name="prefsCategoryTitleConnectivity">Łączność</string>
     <string name="prefsCategoryTitleUi">Interfejs użytkownika</string>
     <string name="prefsCategoryTitleSystem">System</string>
-    <string name="prefTitleUser">Nazwa Użytkownika</string>
-    <string name="prefSummaryUser">Nazwa użytkownika serwera FTP</string>
+    <string name="prefTitleUser">Nazwa użytkownika</string>
+    <string name="prefSummaryUser">FTP - nazwa użytkownika serwera</string>
     <string name="prefTitlePassword">Hasło</string>
     <string name="prefSummaryPassword">Hasło do serwera FTP</string>
     <string name="prefTitlePort">Port</string>
@@ -76,7 +76,7 @@
     <string name="storageType">Typ Pamięci</string>
     <string name="storageTypePlain">Zwykły stary system plików</string>
     <string name="storageTypeRoot">Super użytkownik (urządzenie musi być zrootowane)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF) 
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
 \n(np. dla karty SD)</string>
     <string name="storageTypeRoSaf">SAF tylko do odczytu (szybsze!)</string>
     <string name="safExplainHeading">Jak działa SAF</string>
@@ -104,7 +104,7 @@
     <string name="filepickerNewFolderCancel">\@android:ciąg/anuluj</string>
     <string name="filepickerNewFolderOk">\@android:ciąg/ok</string>
     <string name="filepickerNewFolder">Nowy folder</string>
-    <string name="filepickerCreateFolderError">Nie można utworzyć folderu</string>
+    <string name="filepickerCreateFolderError">Nie można utworzyć katalogu</string>
     <string name="open">Otwórz</string>
     <string name="saveToTextFile">Zapisz do pliku tekstowego</string>
     <string name="download">Pobierz</string>
@@ -129,4 +129,16 @@
     <string name="clientActionsLabel">Dziennik działań klienta</string>
     <string name="quickShareInfoActivity">Działa w trybie szybkiego udostępniania dla pliku: %1s</string>
     <string name="quickShareInfoNotification">Szybkie udostępnianie: %1s</string>
+    <string name="allKeysFingerprintsLabel">Pokaż odciski palców wszystkich kluczy</string>
+    <string name="Request">Żądanie</string>
+    <string name="logFiles">Plik logów:</string>
+    <string name="delete">Usuń</string>
+    <string name="mobileUiShort">Tryb mobilny</string>
+    <string name="tvUiShort">Tryb TV</string>
+    <string name="mobileUiLong">Tryb urządzenia mobilnego</string>
+    <string name="permWriteLabelServerstatus">uruchom i wyłącz serwer</string>
+    <string name="iconAbout">O aplikacji</string>
+    <string name="tvUiLong">Tryb telewizji</string>
+    <string name="iconQrCode">Kod QR</string>
+    <string name="iconKeysFingerprints">Odciski palców kluczy</string>
 </resources>

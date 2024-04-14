@@ -1,6 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">واجهة الشبكة</string>
     <string name="ipAddrLabel">عنوان IP</string>
@@ -20,12 +19,10 @@
     <string name="quickSettingsServerStarted">pFTPd قيد التشغيل …</string>
     <string name="quickSettingsServerStopped">pFTPd متوقّف</string>
     <string name="saveAs">حفظ كـ</string>
-
     <string name="startService">ابدأ الخادم</string>
     <string name="stopService">أوقف الخادم</string>
     <string name="toggleService">بدّل حالة بدء/إيقاف الخادم</string>
     <string name="notificationTitle">خادم FTP</string>
-
     <string name="haveToSetPassword">يجب عليك تحديد كلمة سر أوّلاً</string>
     <string name="haveToSetAuthMechanism">يجب عليك تحديد آلية المصادقة أولاً</string>
     <string name="serverRunning">خادم FTP قيد التشغيل</string>
@@ -36,7 +33,6 @@
     <string name="invalidDir">المسار غير صالح.</string>
     <string name="couldNotReadKeyAuthKey">لا يمكن قراءة المفتاح العام المطلوب للمصادقة. تفقّد السجل.</string>
     <string name="ftpPassivePortsInvalid">قيمة منافذ FTP الخاملة غير صالحة.</string>
-
     <string name="prefs">الإعدادت</string>
     <string name="prefsCategoryTitleAuth">المصادقة</string>
     <string name="prefsCategoryTitleConnectivity">الاتّصال</string>
@@ -88,10 +84,8 @@
     <string name="prefSummaryAllowedIpsPattern">نمط عناوين IP المسموح لها الاتّصال. يمكن استخدام رمز بدل (*) واحد فقط، مكان الحرف الأخير.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">متطلّب فك قفل الجهاز لزر الإعدادات السريعة</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">الضغط على زر الإعدادات السريعة سيتطلّب أن يكون قفل الجهاز مفتوحاً ليتم بدء/إيقاف الخادم. عند التفعيل، سيُطلب فك القفل إذا كان الجهاز مقفلاً.</string>
-  
     <string name="licence">الرخصة</string>
     <string name="reset">إعادة تعيين</string>
-
     <string name="widgetTextStart">ابدأ (s)ftpd</string>
     <string name="widgetTextStop">أوقف (s)ftpd</string>
     <string name="isAnonymous">تسجيل الدخول المجهول: %1$b</string>
@@ -99,24 +93,21 @@
     <string name="pubKeyAuth">المصادقة عن طريق مفتاح عام: %1$b</string>
     <string name="selectServerAction">اختر إجراء الخادم</string>
     <string name="isServerRunning">هل الخادم قيد التشغيل؟</string>
-
     <string name="storageType">نوع التخزين</string>
     <string name="storageTypePlain">نظام الملفّات القديم العادي</string>
     <string name="storageTypeRoot">المستخدم العالي (يجب أن يمتلك الجهاز صلاحيّات الـroot)</string>
-    <string name="storageTypeSaf">إطار أندرويد للوصول إلى التخزين (SAF)\n(مثلاً: بطاقة SD)</string>
+    <string name="storageTypeSaf">إطار أندرويد للوصول إلى التخزين (SAF)
+\n(مثلاً: بطاقة SD)</string>
     <string name="storageTypeRoSaf">SAF للقراءة فقط (أسرع !)</string>
     <string name="safExplainHeading">طريقة عمل SAF</string>
     <string name="safExplain">سيطلب منك لأندرويد أن تختار المسار الذي سيكون متوفّراً من خلال الخادم. من وقت لآخر قد يتم إلغاء الإذن وسيتوجّب عليك إعادة الاختيار.</string>
     <string name="selectedSafUri">اختر عنوان URI لـSAF:</string>
-
     <string name="startServerAndExit">ابدأ الخادم فقط</string>
     <string name="startServerAndUi">ابدأ مع الخادم</string>
-
     <string name="downloadOrSaveUrlToFile">تنزيل أو حفظ عنوان URL إلى ملف نصّي؟</string>
     <string name="download">تنزيل</string>
     <string name="saveToTextFile">حفظ إلى ملف نصّي</string>
     <string name="open">فتح</string>
-
     <string name="filepickerCreateFolderError">خطأ في إنشاء المجلد</string>
     <string name="filepickerNewFolder">مجلّد جديد</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>
@@ -127,33 +118,27 @@
     <string name="filepickerFilename">اسم الملف</string>
     <string name="filepickerSelectSomethingFirst">يرجى اختيار شيء أوّلاً</string>
     <string name="filepickerNeedValidFilename">يرجى إدخال أو اختيار اسم ملف صالح</string>
-
     <string name="quickShare">المشاركة السريعة</string>
     <string name="quickShareServerStarted">تم بدء الخادم لمشاركة ملف واحد</string>
     <string name="quickShareCouldNotStartServer">لا يمكن بدء الخادم</string>
-
     <string-array name="prefWhichServerToStartNames">
         <item>FTP و SFTP</item>
         <item>FTP فقط</item>
         <item>SFTP فقط</item>
     </string-array>
-
     <string-array name="prefWhichServerToStartValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
-
     <string-array name="prefLoggingNames">
         <item>بدون تسجيل</item>
         <item>التسجيل في ملف نصّي</item>
         <item>التسجيل في النظام</item>
     </string-array>
-
     <string-array name="prefLoggingValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
-
 </resources>
