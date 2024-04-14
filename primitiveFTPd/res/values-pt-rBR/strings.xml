@@ -1,6 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="ifacesLabel">Interface da rede</string>
     <string name="ipAddrLabel">Endereço IP</string>
     <string name="ifacesError">Erro: </string>
@@ -103,7 +102,8 @@
     <string name="storageTypePlain">Sistema de arquivos antigo e simples</string>
     <string name="storageTypePlainV2">Sistema de arquivos antigo e simples\nTem acesso somente de leitura? Veja nosso <a href="https://www.github.com/wolpi/prim-ftpd/">site do GitHub</a>.</string>
     <string name="storageTypeRoot">Super usuário (o dispositivo precisa acesso root)</string>
-    <string name="storageTypeSaf">Framework de acesso ao armazenamento do Android (SAF)\n(p.ex. para cartãoSD)</string>
+    <string name="storageTypeSaf">Framework de acesso ao armazenamento do Android (SAF)
+\n(p.ex. para cartãoSD)</string>
     <string name="storageTypeRoSaf">Apenas leitura SAF (mais rápido!)</string>
     <string name="storageTypeVirtual">Pastas virtuais (fornece todos os tipos de armazenamento)</string>
     <string name="safExplainHeading">Como o SAF funciona</string>
@@ -145,23 +145,19 @@
         <item>Apenas FTP</item>
         <item>Apenas SFTP</item>
     </string-array>
-
     <string-array name="prefWhichServerToStartValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
-
     <string-array name="prefLoggingNames">
         <item>Sem log</item>
         <item>Log para arquivo de texto</item>
         <item>Log ao Android</item>
     </string-array>
-
     <string-array name="prefLoggingValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
-
 </resources>
