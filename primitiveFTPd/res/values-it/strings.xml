@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Primitive FTPd</string>
     <string name="ifacesLabel">Interfaccia di rete</string>
@@ -103,7 +103,8 @@
     <string name="storageTypePlain">Filesystem classico</string>
     <string name="storageTypePlainV2">Filesystem classico\nHai l\'accesso in sola lettura? Vedi la nostra <a href="https://www.github.com/wolpi/prim-ftpd/">pagina GitHub</a>.</string>
     <string name="storageTypeRoot">Super user (richiede permessi root)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(es. per SD card)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
+\n(es. per SD card)</string>
     <string name="storageTypeRoSaf">SAF in sola lettura (più veloce!)</string>
     <string name="storageTypeVirtual">Cartelle virtuali (fornisce tutti i tipi di memoria)</string>
     <string name="safExplainHeading">Come funziona SAF</string>
