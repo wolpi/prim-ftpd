@@ -103,7 +103,7 @@
     <string name="storageTypeRoSaf">Nur-Lesen SAF (schneller!)</string>
     <string name="storageTypeVirtual">Virtuelle Ordner (bietet alle Speicher-Arten)</string>
     <string name="safExplainHeading">Wie SAF funktioniert</string>
-    <string name="safExplain">Android wird sie darum bitten ein Verzeichnis auszuwählen. Dieses wird über die Server verfügbar gemacht. Von Zeit zu Zeit kann die Berechtigung zurückgezogen werden und das Verzeichnis muss erneut ausgewählt werden.</string>
+    <string name="safExplain">Android wird Sie darum bitten ein Verzeichnis auszuwählen. Dieses wird über die Server verfügbar gemacht. Von Zeit zu Zeit kann die Berechtigung zurückgezogen werden und das Verzeichnis muss erneut ausgewählt werden.</string>
     <string name="selectedSafUri">Ausgewählte SAF-URI:</string>
     <string name="startServerAndExit">Starte nur Server</string>
     <string name="startServerAndUi">Starte mit Server</string>
@@ -158,7 +158,7 @@
     <string name="logFiles">Log Dateien:</string>
     <string name="rootTmpFiles">Temp Dateien des root Zugriff:</string>
     <string name="delete">Löschen</string>
-    <string name="permReadLabelServerstatus">herausfinden ob Server läuft</string>
+    <string name="permReadLabelServerstatus">Herausfinden, ob Server läuft</string>
     <string name="permReadDescServerstatus">Erlaubt herauszufinden ob ftp/sftp Server läuft.</string>
     <string name="permWriteLabelServerstatus">Server starten und stoppen</string>
     <string name="permWriteDescServerstatus">Erlaubt ftp/sftp Server zu starten und stoppen.</string>
