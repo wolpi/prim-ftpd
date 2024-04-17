@@ -104,6 +104,7 @@
     <string name="storageTypePlainV2">Sistema de archivos\n¿Acceso solo de lectura? Vea <a href="https://www.github.com/wolpi/prim-ftpd/">página GitHub</a>.</string>
     <string name="storageTypeRoot">Superusuario («root» debe ser accesible)</string>
     <string name="storageTypeSaf">Marco de acceso al almacenamiento (SAF) de Android
+\n
 \n(por ejemplo, para tarjetas)</string>
     <string name="storageTypeRoSaf">SAF solo de lectura (más rápido)</string>
     <string name="storageTypeVirtual">Carpetas virtuales (admite todos los tipos)</string>
@@ -180,4 +181,9 @@
         <item>2</item>
     </string-array>
     <string name="hasNotificationPermission">Tiene permiso para mostrar notificaciones: %1$b</string>
+    <string name="qrFallback">ni interfaces de red, ni direcciones IP, ni código QR</string>
+    <string name="prefShowTabNames">Mostrar los nombres de las pestañas</string>
+    <string name="prefSummaryShowTabNames">Mostrar nombres en las pestañas de la interfaz de usuario principal</string>
+    <string name="prefTitleIdleTimeoutServerStop">Tiempo de espera para detener el servidor</string>
+    <string name="prefSummaryIdleTimeoutServerStop">Los servidores se detendrán después de este tiempo en minutos si no hay actividad de clientes. Establecer en 0 para desactivar.</string>
 </resources>
