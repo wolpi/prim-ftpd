@@ -30,7 +30,7 @@
     <string name="portInvalid_v2">قيمة المنفذ غير صحيحة. يجب أن تكون بين 1024 و 64000.</string>
     <string name="portsEqual_v2">المنافذ متساوية. لن يعمل ذلك.</string>
     <string name="restartServer">يجب عليك إعادة بدء الخادم لكي يظهر أثر التغييرات.</string>
-    <string name="invalidDir">المسار غير صالح.</string>
+    <string name="invalidDir">مجلد غير صالح.</string>
     <string name="couldNotReadKeyAuthKey">لا يمكن قراءة المفتاح العام المطلوب للمصادقة. تفقّد السجل.</string>
     <string name="ftpPassivePortsInvalid">قيمة منافذ FTP الخاملة غير صالحة.</string>
     <string name="prefs">الإعدادت</string>
@@ -104,11 +104,11 @@
     <string name="selectedSafUri">اختر عنوان URI لـSAF:</string>
     <string name="startServerAndExit">ابدأ الخادم فقط</string>
     <string name="startServerAndUi">ابدأ مع الخادم</string>
-    <string name="downloadOrSaveUrlToFile">تنزيل أو حفظ عنوان URL إلى ملف نصّي؟</string>
+    <string name="downloadOrSaveUrlToFile">تنزيل أو حفظ عنوان URL في ملف نصّي؟</string>
     <string name="download">تنزيل</string>
     <string name="saveToTextFile">حفظ إلى ملف نصّي</string>
     <string name="open">فتح</string>
-    <string name="filepickerCreateFolderError">خطأ في إنشاء المجلد</string>
+    <string name="filepickerCreateFolderError">لا يمكن إنشاء المجلد</string>
     <string name="filepickerNewFolder">مجلّد جديد</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>
     <string name="filepickerNewFolderCancel">@android:string/cancel</string>
@@ -141,4 +141,12 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string name="allKeysFingerprintsLabel">إظهار بصمات الأصابع لجميع المفاتيح</string>
+    <string name="prefSummaryRootCopyFiles">توجد مشكلات في الوصول إلى الملفات باستخدام dd على بعض الأجهزة. باستخدام هذا الإعداد، يتم نسخ الملفات إلى tmp dir أولاً والوصول إليها باستخدام آليات نظام الملفات. ينبغي تعطيله للملفات الكبيرة.</string>
+    <string name="prefSummaryBindIp">إذا كنت تريد أن تستمع الخوادم على واجهة واحدة فقط.</string>
+    <string name="prefShowTabNames">إظهار أسماء علامات التبويب</string>
+    <string name="storageTypeVirtual">المجلدات الافتراضية (توفر كافة أنواع التخزين)</string>
+    <string name="clientActionsLabel">سجل إجراءات العميل</string>
+    <string name="statsLabel">احصائيات</string>
+    <string name="statsTotalSent">إجمالي المرسل</string>
 </resources>
