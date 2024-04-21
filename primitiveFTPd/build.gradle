@@ -27,8 +27,8 @@ android {
         applicationId "org.primftpd"
         minSdkVersion 15
         targetSdkVersion 33
-        versionCode 64
-        versionName "7.1"
+        versionCode 65
+        versionName "7.2-SNAPSHOT"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
     }
