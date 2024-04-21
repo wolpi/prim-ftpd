@@ -106,13 +106,13 @@ def doRemoteGithubThings(tagName, tagNameGooglePlay, apkPath, apkPathGoogleplay)
         subprocess.run([
             "gh", "api",
             "--method", "POST",
-            "-f", "title='" + str(newVersion) + "'",
+            "-f", "title=" + str(newVersion),
             "/repos/wolpi/prim-ftpd/milestones",
             ], stdout=subprocess.PIPE, check=True)
 
         # create github release
         print()
-        print("creating github release")
+        print("creating github release      tagName: " + str(tagName) + ", milestone: " + str(milestoneNumber))
         proc = subprocess.run([
             "gh", "api",
             "/repos/wolpi/prim-ftpd/releases",
@@ -121,8 +121,8 @@ def doRemoteGithubThings(tagName, tagNameGooglePlay, apkPath, apkPathGoogleplay)
             "-f", "name='" + str(tagName) + "'",
             "-f", "body='See [milestone](https://github.com/wolpi/prim-ftpd/milestone/" + str(milestoneNumber) + "?closed=1) for changes.\n'",
             "-f", "target_commitish='master'",
-            "-f", "draft=false",
-            "-f", "prerelease=false",
+            "-F", "draft=false",
+            "-F", "prerelease=false",
             ], stdout=subprocess.PIPE, check=True)
         releaseObj = json.loads(proc.stdout)
 
