@@ -24,7 +24,7 @@
     <string name="serverCouldNotBeStarted">Nie można uruchomić serwera! Komunikat o błędzie:</string>
     <string name="portInvalid_v2">Wartość portu jest nieprawidłowa. Musi mieścić się w przedziale od 1024 do 64000.</string>
     <string name="portsEqual_v2">Porty są takie same. To nie może zadziałać.</string>
-    <string name="restartServer">Musisz ponownie uruchomić serwer, aby zmiany zaczęły obowiązywać.</string>
+    <string name="restartServer">Uruchom ponownie serwer, aby zmiany zaczęły obowiązywać.</string>
     <string name="invalidDir">Nieprawidłowy katalog.</string>
     <string name="couldNotReadKeyAuthKey">Nie można odczytać klucza publicznego do uwierzytelniania kluczem. Sprawdź dzienniki.</string>
     <string name="ftpPassivePortsInvalid">Wartość pasywnych portów FTP jest nieprawidłowa.</string>
@@ -108,7 +108,7 @@
     <string name="open">Otwórz</string>
     <string name="saveToTextFile">Zapisz do pliku tekstowego</string>
     <string name="download">Pobierz</string>
-    <string name="downloadOrSaveUrlToFile">Pobrać lub zapisać adres URL do pliku tekstowego\?</string>
+    <string name="downloadOrSaveUrlToFile">Pobrać lub zapisać adres URL do pliku tekstowego?</string>
     <string name="pubKeyAuth">Uwierzytelnianie za pomocą klucza publicznego: %1$b</string>
     <string name="passwordPresent">Obecne hasło: %1$b</string>
     <string name="prefSummaryShowIpv6InNotification">Pokazuje adresy IPv6 w powiadomieniu, jeśli informacje o połączeniu są włączone.</string>
@@ -141,4 +141,25 @@
     <string name="tvUiLong">Tryb telewizji</string>
     <string name="iconQrCode">Kod QR</string>
     <string name="iconKeysFingerprints">Odciski palców kluczy</string>
+    <string name="prefSummaryIdleTimeoutServerStop">Serwer(y) zostaną zatrzymane po upływie tego czasu (w minutach), jeśli nie będzie żadnej aktywności klienta. Ustaw na 0, aby wyłączyć.</string>
+    <string name="prefSummaryRootCopyFiles">Na niektórych urządzeniach występują problemy z dostępem do plików za pomocą dd. Przy tym ustawieniu pliki są najpierw kopiowane do katalogu tmp, a dostęp do nich uzyskuje się za pomocą mechanizmów systemu plików. Należy wyłączyć dla dużych plików.</string>
+    <string name="prefBindIp">IP do powiązania</string>
+    <string name="prefSummaryBindIp">Jeśli chcesz, aby serwery nasłuchiwały tylko na jednym interfejsie.</string>
+    <string name="prefSummaryPubKeyAuth_v2">Po włączeniu umieść swój klucz publiczny ssh2 w %s. Musi to być plik zawierający jeden klucz w każdej linii. Tylko SFTP.</string>
+    <string name="prefRootCopyFiles">Root: skopiuj pliki do katalogu tmp w celu przesłania/pobrania</string>
+    <string name="storageTypePlainV2">Zwykły stary system plików
+\nMasz dostęp tylko do odczytu? Zobacz naszą &lt;a href=\"https://www.github.com/wolpi/prim-ftpd/\"&gt;stronę GitHub&lt;/a&gt;.</string>
+    <string name="storageTypeVirtual">Foldery wirtualne (zapewniają wszystkie typy przechowywania)</string>
+    <string name="hasAccessToMediaLocation">Ma dostęp do lokalizacji multimediów (dane geograficzne): %1$b</string>
+    <string name="rootTmpFiles">Pliki tymczasowe dostępu do konta root:</string>
+    <string name="prefShowTabNames">Pokaż nazwy zakładek</string>
+    <string name="prefSummaryShowTabNames">Pokaż nazwy na kartach głównego interfejsu użytkownika</string>
+    <string name="prefTitleIdleTimeoutServerStop">Limit czasu bezczynności, aby zatrzymać serwer</string>
+    <string name="hasFullAccessToStorage">Ma pełny dostęp do pamięci: %1$b</string>
+    <string name="hasNormalAccessToStorage">Ma (normalny) dostęp do pamięci: %1$b</string>
+    <string name="hasNotificationPermission">Ma uprawnienia do wyświetlania powiadomień: %1$b</string>
+    <string name="permReadLabelServerstatus">dowiedz się, czy serwer działa</string>
+    <string name="permReadDescServerstatus">Umożliwia sprawdzenie, czy serwer FTP/SFTP działa.</string>
+    <string name="permWriteDescServerstatus">Umożliwia uruchamianie i zatrzymywanie serwera ftp/sftp.</string>
+    <string name="qrFallback">bez interfejsów sieciowych, bez adresów IP, bez kodu QR</string>
 </resources>
