@@ -132,8 +132,7 @@
     <string name="prefSummaryBindIp">Jeśli chcesz, aby serwery nasłuchiwały tylko na jednym interfejsie.</string>
     <string name="prefSummaryPubKeyAuth_v2">Po włączeniu umieść swój klucz publiczny ssh2 w %s. Musi to być plik zawierający jeden klucz w każdej linii. Tylko SFTP.</string>
     <string name="prefRootCopyFiles">Root: skopiuj pliki do katalogu tmp w celu przesłania/pobrania</string>
-    <string name="storageTypePlainV2">Zwykły stary system plików
-\nMasz dostęp tylko do odczytu? Zobacz naszą &lt;a href=\"https://www.github.com/wolpi/prim-ftpd/\"&gt;stronę GitHub&lt;/a&gt;.</string>
+    <string name="storageTypePlainV2">Zwykły stary system plików\nMasz dostęp tylko do odczytu? Zobacz naszą <a href="https://www.github.com/wolpi/prim-ftpd/">stronę GitHub</a>.</string>
     <string name="storageTypeVirtual">Foldery wirtualne (zapewniają wszystkie typy przechowywania)</string>
     <string name="hasAccessToMediaLocation">Ma dostęp do lokalizacji multimediów (dane geograficzne): %1$b</string>
     <string name="rootTmpFiles">Pliki tymczasowe dostępu do konta root:</string>
