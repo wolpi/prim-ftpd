@@ -1,10 +1,15 @@
 package org.primftpd.share;
 
 import android.app.ProgressDialog;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import org.primftpd.services.AbstractServerService;
 import org.primftpd.util.FilenameUnique;
@@ -17,11 +22,31 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 public abstract class AbstractReceiveShareActivity extends FragmentActivity {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // if screen orientation changes and copy-dialog is currently shown
+        // the dialog will be destroyed
+        // to avoid that we request a specific orientation to prevent it being changed
+        // check first if we have a landscape or portrait like screen
+        // re-set after copy is finished
+        Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        boolean isWideScreen = metrics.heightPixels < metrics.widthPixels;
+        int requestedOrientation = isWideScreen
+                ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        setRequestedOrientation(requestedOrientation);
+    }
 
     protected void saveUris(
             ProgressDialog progressDialog,
@@ -145,7 +170,10 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
                 logger.warn("error while releasing wake lock", e);
             }
 
-            mainThreadHandler.post(() -> activity.onCopyFinished(targetDir));
+            mainThreadHandler.post(() -> {
+                activity.onCopyFinished(targetDir);
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            });
         }
     }
 
