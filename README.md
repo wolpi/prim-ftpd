@@ -41,7 +41,7 @@ You may download latest development snapshot from [GitHub packages](https://gith
 You may help translate this app in [hosted weblate](https://hosted.weblate.org/projects/pftpd/pftpd/).
 
 ## sftp vs scp
-Note: when accessing this app's server via SFTP, it might be necessary for some clients (specific versions of ssh coming with linux distros), to specify option -O. 
+Note: when accessing this app's server via scp, it might be necessary for some clients (specific versions of ssh coming with linux distros), to specify option -O. 
 
 ## Permission
 Google introduces more and more restrictions to filesystem access to Android. In order to access all
