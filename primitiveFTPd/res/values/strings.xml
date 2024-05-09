@@ -12,6 +12,7 @@
     <string name="generatingKeysMessage">Generating Keys …</string>
     <string name="generate">Generate</string>
     <string name="cancel">Cancel</string>
+    <string name="pubkeyAuthKeysHeading">Keys for public key auth</string>
     <string name="state">State</string>
     <string name="serverStarted">Running …</string>
     <string name="serverStopped">Stopped</string>

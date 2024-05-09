@@ -67,6 +67,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         adapter.addFragment(new ClientActionFragment());
         adapter.addFragment(new KeysFingerprintsFragment());
         INDEX_FINGERPRINTS = adapter.getCount() - 1;
+        adapter.addFragment(new PubKeyAuthKeysFragment());
         adapter.addFragment(new FtpPrefsFragment());
         adapter.addFragment(new AboutFragment());
         updateTabNames();
@@ -99,12 +100,14 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
             adapter.addTitle("\uD83D\uDDD1 " + getText(R.string.iconCleanSpace));
             adapter.addTitle("\uD83D\uDDD2 " + getText(R.string.clientActionsLabel));
             adapter.addTitle("\uD83D\uDD11 " + getText(R.string.iconKeysFingerprints));
+            adapter.addTitle("\uD83D\uDD10 " + getText(R.string.pubkeyAuthKeysHeading));
             adapter.addTitle("⚙ " + getText(R.string.prefs));
             adapter.addTitle("\uD83D\uDE4F " + getText(R.string.iconAbout));
         } else {
             adapter.addTitle("\uD83D\uDDD1");
             adapter.addTitle("\uD83D\uDDD2");
             adapter.addTitle("\uD83D\uDD11");
+            adapter.addTitle("\uD83D\uDD10");
             adapter.addTitle("⚙");
             adapter.addTitle("\uD83D\uDE4F");
         }
