@@ -105,7 +105,7 @@
     <string name="storageTypeRoot">Superusuario («root» debe ser accesible)</string>
     <string name="storageTypeSaf">Marco de acceso al almacenamiento (SAF)
 \nde Android. (P. ej. para tarjetas)</string>
-    <string name="storageTypeRoSaf">SAF de sólo lectura (¡más rápido!)</string>
+    <string name="storageTypeRoSaf">SAF de solo lectura (¡más rápido!)</string>
     <string name="storageTypeVirtual">Carpetas virtuales (admite todos los tipos)</string>
     <string name="safExplainHeading">Funcionamiento de SAF</string>
     <string name="safExplain">Android le pedirá que seleccione una carpeta, que será accesible conectándose al servidor(es). De vez en cuando es posible que se revoquen los permisos, y deba volver a seleccionarla.</string>
