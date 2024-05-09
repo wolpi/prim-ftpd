@@ -121,6 +121,7 @@
     <string name="download">Download</string>
     <string name="saveToTextFile">Save to text file</string>
     <string name="open">Open</string>
+    <string name="add">Add</string>
     <string name="filepickerCreateFolderError">Could not create folder</string>
     <string name="filepickerNewFolder">New folder</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>

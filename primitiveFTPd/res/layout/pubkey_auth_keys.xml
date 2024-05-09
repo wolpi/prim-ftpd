@@ -1,25 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        <!-- LinearLayout just to wrap heading in order to position it -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            >
+            <!-- Heading -->
+            <TextView
+                android:id="@+id/pubkeyAuthKeysHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:text="@string/pubkeyAuthKeysHeading"
+                android:drawablePadding="4dp"
+                />
+        </LinearLayout>
 
-        <!-- Heading -->
-        <TextView
-            android:id="@+id/pubkeyAuthKeysHeader"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addPubkeyAuthKey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:text="@string/pubkeyAuthKeysHeading"
-            android:drawablePadding="4dp"
-            />
+            android:layout_gravity="end|bottom"
+            android:src="@android:drawable/ic_menu_add"
+            android:contentDescription="@string/add"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="40dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -27,6 +49,5 @@
             android:layout_height="wrap_content"
             android:id="@+id/pubkeyAuthKeysContainer">
         </LinearLayout>
-    </LinearLayout>
-
-</ScrollView>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
