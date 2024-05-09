@@ -59,7 +59,7 @@ public class PubKeyAuthKeysFragment extends Fragment {
                 BufferedReader reader = new BufferedReader(filereader);
                 while (reader.ready()) {
                     String line = reader.readLine();
-                    if (!line.startsWith("#")) {
+                    if (!line.startsWith("#") && line.length() > 0) {
                         keys.add(line);
                     }
                 }
