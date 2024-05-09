@@ -15,7 +15,7 @@
     <string name="state">Estado</string>
     <string name="serverStarted">En uso…</string>
     <string name="serverStopped">Detenido</string>
-    <string name="permissionRequired">Se requiere permiso «%1$s» para que esta aplicación funcione</string>
+    <string name="permissionRequired">¡Se necesita el permiso «%1$s» para que esta aplicación funcione!</string>
     <string name="permissionNameStorage">Almacenamiento</string>
     <string name="quickSettingsServerStarted">pFTPd en uso…</string>
     <string name="quickSettingsServerStopped">pFTPd detenido</string>
@@ -103,9 +103,10 @@
     <string name="storageTypePlain">Sistema de archivos</string>
     <string name="storageTypePlainV2">Sistema de archivos\n¿Acceso solo de lectura? Vea <a href="https://www.github.com/wolpi/prim-ftpd/">página GitHub</a>.</string>
     <string name="storageTypeRoot">Superusuario («root» debe ser accesible)</string>
-    <string name="storageTypeSaf">Marco de acceso al almacenamiento (SAF)
-\nde Android . (P. ej. para tarjetas)</string>
-    <string name="storageTypeRoSaf">SAF solo de lectura (más rápido)</string>
+    <string name="storageTypeSaf">Marco de acceso al almacenamiento (SAF) de Android
+\n
+\n(por ejemplo, para tarjetas)</string>
+    <string name="storageTypeRoSaf">SAF de sólo lectura (¡más rápido!)</string>
     <string name="storageTypeVirtual">Carpetas virtuales (admite todos los tipos)</string>
     <string name="safExplainHeading">Funcionamiento de SAF</string>
     <string name="safExplain">Android le pedirá que seleccione una carpeta, que será accesible conectándose al servidor(es). De vez en cuando es posible que se revoquen los permisos, y deba volver a seleccionarla.</string>
