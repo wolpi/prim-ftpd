@@ -148,7 +148,7 @@
     <string name="rootTmpFiles">Fitxers temporals d\'accés amb «root»:</string>
     <string name="delete">Elimina</string>
     <string name="permReadLabelServerstatus">el servidor està en ús?</string>
-    <string name="permReadDescServerstatus">Permet saber si el servidor ftp/sftp està en ús.</string>
+    <string name="permReadDescServerstatus">Permet saber si el servidor FTP/SFTP està en ús.</string>
     <string name="permWriteLabelServerstatus">engega i atura el servidor</string>
     <string name="permWriteDescServerstatus">Permet engegar i aturar el servidor ftp/sftp.</string>
     <string name="mobileUiShort">Mode mòbil</string>
