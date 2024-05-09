@@ -67,7 +67,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         adapter.addFragment(new ClientActionFragment());
         adapter.addFragment(new KeysFingerprintsFragment());
         INDEX_FINGERPRINTS = adapter.getCount() - 1;
-        adapter.addFragment(new PubKeyAuthKeysFragment());
+        adapter.addFragment(new PubKeyAuthKeysFragment(isLeanback()));
         adapter.addFragment(new FtpPrefsFragment());
         adapter.addFragment(new AboutFragment());
         updateTabNames();
@@ -77,6 +77,10 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
 
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    protected boolean isLeanback() {
+        return false;
     }
 
     @Override

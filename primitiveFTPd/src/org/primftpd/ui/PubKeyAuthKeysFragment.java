@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 import org.primftpd.R;
@@ -24,6 +27,11 @@ import androidx.fragment.app.Fragment;
 public class PubKeyAuthKeysFragment extends Fragment {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
+    protected final boolean isLeanback;
+
+    public PubKeyAuthKeysFragment(boolean isLeanback) {
+        this.isLeanback = isLeanback;
+    }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -31,6 +39,14 @@ public class PubKeyAuthKeysFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.pubkey_auth_keys, container, false);
+
+        FloatingActionButton addButton = view.findViewById(R.id.addPubkeyAuthKey);
+        if (isLeanback) {
+            addButton.setVisibility(View.GONE);
+        } else {
+            addButton.setOnClickListener(v -> {
+            });
+        }
 
         List<String> keys = loadKeysForDisplay();
         displayKeys(view, keys);

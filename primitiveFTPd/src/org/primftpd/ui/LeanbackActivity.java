@@ -15,4 +15,9 @@ public class LeanbackActivity extends MainTabsActivity {
         // no menu for leanback
         return true;
     }
+
+    @Override
+    protected boolean isLeanback() {
+        return true;
+    }
 }
