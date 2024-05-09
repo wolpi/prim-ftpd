@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +45,8 @@ public class PubKeyAuthKeysFragment extends Fragment {
             addButton.setVisibility(View.GONE);
         } else {
             addButton.setOnClickListener(v -> {
+                AddPubkeyAuthKeyDialogFragment addDiag = new AddPubkeyAuthKeyDialogFragment(this);
+                addDiag.show(requireActivity().getSupportFragmentManager(), PftpdFragment.DIALOG_TAG);
             });
         }
 
@@ -56,9 +58,9 @@ public class PubKeyAuthKeysFragment extends Fragment {
 
     private List<String> loadKeysForDisplay() {
         String[] keyPaths = new java.lang.String[]{
-                Defaults.pubKeyAuthKeyPath(getContext()),
-                Defaults.PUB_KEY_AUTH_KEY_PATH_OLD,
                 Defaults.PUB_KEY_AUTH_KEY_PATH_OLDER,
+                Defaults.PUB_KEY_AUTH_KEY_PATH_OLD,
+                Defaults.pubKeyAuthKeyPath(getContext()),
         };
 
         List<String> keys = new ArrayList<>();
@@ -95,6 +97,25 @@ public class PubKeyAuthKeysFragment extends Fragment {
             textView.setText(key);
             textView.setPadding(1, 1, 1, 5);
             container.addView(textView);
+        }
+    }
+
+    protected void addKeyToFile(CharSequence key) {
+        final String path = Defaults.pubKeyAuthKeyPath(getContext());
+        try {
+            try (FileWriter writer = new FileWriter(path, true)) {
+                writer.append("\n");
+                writer.append(key);
+            }
+
+            View view = getView();
+            if (view != null) {
+                List<String> keys = loadKeysForDisplay();
+                displayKeys(view, keys);
+            }
+        } catch (IOException e) {
+            logger.info("could not store key in file '{}': {}, {}",
+                    new Object[]{path, e.getClass().getName(), e.getMessage()});
         }
     }
 }
