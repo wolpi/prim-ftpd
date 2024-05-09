@@ -85,7 +85,7 @@
     <string name="prefSummaryLogging">El registre permet analitzar errors. Si l\'aplicació no funciona correctament en el vostre dispositiu, podeu enviar el registre als desenvolupadors. Pot requerir reiniciar l\'aplicació.</string>
     <string name="prefSummaryLoggingV2">El registre permet analitzar errors. Si l\'aplicació no funciona correctament en el vostre dispositiu, podeu enviar el registre als desenvolupadors. Pot requerir reiniciar l\'aplicació. Els registres es desen en %s.</string>
     <string name="prefAllowedIpsPattern">Patró d\'IPs permeses</string>
-    <string name="prefSummaryAllowedIpsPattern">Definiu amb un patró les adreces IP que poden connectar-se al servidor. Només podeu emprar un caràcter comodí (*), i ha d\'ésser l\'últim.</string>
+    <string name="prefSummaryAllowedIpsPattern">Definiu amb un patró les adreces IP que poden connectar-se al servidor. Només podeu emprar un caràcter comodí (*), i ha d\'ésser el darrer caràcter.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Desbloqueig per a configurar</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Si l\'activeu, prémer el requadre de configuració ràpida demarà desbloquejar el dispositiu per a iniciar o aturar el servidor.</string>
     <string name="prefRootCopyFiles">Root: emprar carpeta temporal</string>
@@ -108,7 +108,7 @@
     <string name="storageTypeRoSaf">SAF només de lectura (més ràpid)</string>
     <string name="storageTypeVirtual">Carpetes virtuals (admet tots els tipus)</string>
     <string name="safExplainHeading">Funcionament del SAF</string>
-    <string name="safExplain">El sistema us demanarà triar una carpeta; que serà accessible connectant-se al(s) servidor(s). De tant en tant és possible que es revoquin els permisos, i hàgiu de seleccionar la carpeta novament.</string>
+    <string name="safExplain">El sistema us demanarà triar la carpeta que serà accessible en connectant-se al(s) servidor(s). De tant en tant és possible que es revoquin els permisos i hàgiu de seleccionar la carpeta novament.</string>
     <string name="selectedSafUri">URI triada per al SAF:</string>
     <string name="startServerAndExit">engega només el servidor</string>
     <string name="startServerAndUi">engega amb el servidor</string>
