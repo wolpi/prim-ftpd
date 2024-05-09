@@ -103,9 +103,8 @@
     <string name="storageTypePlain">Sistema de archivos</string>
     <string name="storageTypePlainV2">Sistema de archivos\n¿Acceso solo de lectura? Vea <a href="https://www.github.com/wolpi/prim-ftpd/">página GitHub</a>.</string>
     <string name="storageTypeRoot">Superusuario («root» debe ser accesible)</string>
-    <string name="storageTypeSaf">Marco de acceso al almacenamiento (SAF) de Android
-\n
-\n(por ejemplo, para tarjetas)</string>
+    <string name="storageTypeSaf">Marco de acceso al almacenamiento (SAF)
+\nde Android. (P. ej. para tarjetas)</string>
     <string name="storageTypeRoSaf">SAF de sólo lectura (¡más rápido!)</string>
     <string name="storageTypeVirtual">Carpetas virtuales (admite todos los tipos)</string>
     <string name="safExplainHeading">Funcionamiento de SAF</string>
