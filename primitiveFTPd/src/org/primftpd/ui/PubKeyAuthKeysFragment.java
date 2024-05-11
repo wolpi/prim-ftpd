@@ -1,17 +1,22 @@
 package org.primftpd.ui;
 
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 import org.primftpd.R;
+import org.primftpd.pojo.KeyParser;
 import org.primftpd.util.Defaults;
+import org.primftpd.util.ServersRunningBean;
+import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,20 +108,42 @@ public class PubKeyAuthKeysFragment extends Fragment {
 
     protected void addKeyToFile(CharSequence key) {
         final String path = Defaults.pubKeyAuthKeyPath(getContext());
-        try {
-            try (FileWriter writer = new FileWriter(path, true)) {
-                writer.append("\n");
-                writer.append(key);
-            }
+        if (validateKey(key)) {
+            try {
+                try (FileWriter writer = new FileWriter(path, true)) {
+                    writer.append("\n");
+                    writer.append(key);
+                }
 
-            View view = getView();
-            if (view != null) {
-                List<String> keys = loadKeysForDisplay();
-                displayKeys(view, keys);
+                View view = getView();
+                if (view != null) {
+                    List<String> keys = loadKeysForDisplay();
+                    displayKeys(view, keys);
+                }
+
+                ServersRunningBean serversRunningBean = ServicesStartStopUtil.checkServicesRunning(
+                        requireContext());
+                if (serversRunningBean.atLeastOneRunning()) {
+                    Toast.makeText(getContext(), R.string.restartServer, Toast.LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                logger.info("could not store key in file '{}': {}, {}",
+                        new Object[]{path, e.getClass().getName(), e.getMessage()});
             }
-        } catch (IOException e) {
-            logger.info("could not store key in file '{}': {}, {}",
-                    new Object[]{path, e.getClass().getName(), e.getMessage()});
+        } else {
+            Toast.makeText(getContext(), R.string.pubkeyInvalid, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    protected boolean validateKey(CharSequence key) {
+        PublicKey pubKey = null;
+        try {
+            pubKey = KeyParser.parseKeyLine(
+                    key.toString(),
+                    str -> Base64.decode(str, Base64.DEFAULT));
+        } catch (Exception e) {
+            // handled by having pubKey equal null
+        }
+        return pubKey != null;
     }
 }

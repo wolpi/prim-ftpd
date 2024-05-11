@@ -19,7 +19,6 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
@@ -49,9 +48,9 @@ public class KeyParser {
 
     static {
         Map<String, Integer> tmpCoordSize = new HashMap<>();
-        tmpCoordSize.put(NAME_ECDSA_256, Integer.valueOf(32));
-        tmpCoordSize.put(NAME_ECDSA_384, Integer.valueOf(48));
-        tmpCoordSize.put(NAME_ECDSA_521, Integer.valueOf(66));
+        tmpCoordSize.put(NAME_ECDSA_256, 32);
+        tmpCoordSize.put(NAME_ECDSA_384, 48);
+        tmpCoordSize.put(NAME_ECDSA_521, 66);
         EC_NAME_TO_COORD_SIZE = Collections.unmodifiableMap(tmpCoordSize);
 
         // see org.bouncycastle.asn1.nist.NISTNamedCurves
@@ -74,35 +73,9 @@ public class KeyParser {
             try {
                 String keyLine = reader.readLine();
                 lineCounter++;
-                String[] parts = keyLine.split(" ");
-
-                String name = null;
-                String keyEncoded = null;
-                if (parts.length >= 2) {
-                    name = parts[0];
-                    keyEncoded = parts[1];
-                }
-
-                if (keyEncoded != null) {
-                    byte[] keyBytes = base64Decoder.decode(keyEncoded);
-
-                    PublicKey key = null;
-                    if (NAME_RSA.equals(name)) {
-                        key = parsePublicKeyRsa(keyBytes);
-                    } else if (NAME_DSA.equals(name)) {
-                        key = parsePublicKeyDsa(keyBytes);
-                    } else if (NAME_ECDSA_256.equals(name)) {
-                        key = parsePublicKeyEcdsa(name, keyBytes);
-                    } else if (NAME_ECDSA_384.equals(name)) {
-                        key = parsePublicKeyEcdsa(name, keyBytes);
-                    } else if (NAME_ECDSA_521.equals(name)) {
-                        key = parsePublicKeyEcdsa(name, keyBytes);
-                    } else if (NAME_ED25519.equals(name)) {
-                        key = parsePublicKeyEd25519(keyBytes);
-                    }
-                    if (key != null) {
-                        keys.add(key);
-                    }
+                PublicKey key = parseKeyLine(keyLine, base64Decoder);
+                if (key != null) {
+                    keys.add(key);
                 }
             } catch (Exception e) {
                 errors.add("could not read key at line " + lineCounter + ": " + e.getClass().getName() + ", " + e.getMessage());
@@ -110,6 +83,37 @@ public class KeyParser {
         }
 
         return keys;
+    }
+
+    public static PublicKey parseKeyLine(String keyLine, Base64Decoder base64Decoder) throws Exception {
+        PublicKey key = null;
+        String[] parts = keyLine.split(" ");
+
+        String name = null;
+        String keyEncoded = null;
+        if (parts.length >= 2) {
+            name = parts[0];
+            keyEncoded = parts[1];
+        }
+
+        if (keyEncoded != null) {
+            byte[] keyBytes = base64Decoder.decode(keyEncoded);
+
+            if (NAME_RSA.equals(name)) {
+                key = parsePublicKeyRsa(keyBytes);
+            } else if (NAME_DSA.equals(name)) {
+                key = parsePublicKeyDsa(keyBytes);
+            } else if (NAME_ECDSA_256.equals(name)) {
+                key = parsePublicKeyEcdsa(name, keyBytes);
+            } else if (NAME_ECDSA_384.equals(name)) {
+                key = parsePublicKeyEcdsa(name, keyBytes);
+            } else if (NAME_ECDSA_521.equals(name)) {
+                key = parsePublicKeyEcdsa(name, keyBytes);
+            } else if (NAME_ED25519.equals(name)) {
+                key = parsePublicKeyEd25519(keyBytes);
+            }
+        }
+        return key;
     }
 
     protected static PublicKey parsePublicKeyRsa(byte[] keyBytes)
@@ -164,29 +168,27 @@ public class KeyParser {
         return kf.generatePublic(keySpec);
     }
 
-    protected static PublicKey parsePublicKeyEcdsa(String name, byte[] keyBytes)
-            throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, NoSuchProviderException {
+    protected static PublicKey parsePublicKeyEcdsa(String name, byte[] keyBytes) {
 
         // use as Buffer to avoid issue with java 8, see GH #226
-        Buffer byteBuffer = ByteBuffer.wrap(keyBytes);
+        ByteBuffer byteBuffer = ByteBuffer.wrap(keyBytes);
 
         // https://security.stackexchange.com/questions/129910/ecdsa-why-do-ssh-keygen-and-java-generated-public-keys-have-different-sizes
         final int coordLength = EC_NAME_TO_COORD_SIZE.get(name);
         byteBuffer.position(keyBytes.length - 2*coordLength);
         byte[] xBytes = new byte[coordLength];
-        ((ByteBuffer)byteBuffer).get(xBytes);
+        byteBuffer.get(xBytes);
         BigInteger x = new BigInteger(1, xBytes);
 
         byteBuffer.position(keyBytes.length - coordLength);
         byte[] yBytes = new byte[coordLength];
-        ((ByteBuffer)byteBuffer).get(yBytes);
+        byteBuffer.get(yBytes);
         BigInteger y = new BigInteger(1, yBytes);
 
         return createPubKeyEcdsa(name, x, y);
     }
 
-    public static PublicKey createPubKeyEcdsa(String name, BigInteger x, BigInteger y)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static PublicKey createPubKeyEcdsa(String name, BigInteger x, BigInteger y) {
         final String curveName = EC_NAME_TO_CURVE_NAME.get(name);
         // note: this bouncy castle helper class is awesome!
         // it justifies the additional dependency even though api-level 28 comes with conscrypt
@@ -204,8 +206,7 @@ public class KeyParser {
         if (keyBytes.length > KEY_SIZE_ED25519) {
             int startIndex = keyBytes.length-KEY_SIZE_ED25519;
             int endIndex = keyBytes.length;
-            byte[] copy = Arrays.copyOfRange(keyBytes, startIndex, endIndex);
-            keyBytes = copy;
+            keyBytes = Arrays.copyOfRange(keyBytes, startIndex, endIndex);
         }
 
         KeyFactorySpi factory = new KeyFactorySpi.Ed25519();
