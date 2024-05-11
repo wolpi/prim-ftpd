@@ -61,7 +61,9 @@ import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -644,8 +646,25 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		if (view == null) {
 			return;
 		}
+		// find algo to show
+		Set<HostKeyAlgorithm> algosWithKeys = new HashSet<>();
+		for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
+			KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(hka);
+			if (keyFingerprintBean != null) {
+				String fingerprintSha256 = keyFingerprintBean.getFingerprintSha256();
+				if (fingerprintSha256 != null && fingerprintSha256.length() > 5) {
+					algosWithKeys.add(hka);
+				}
+			}
+		}
 		HostKeyAlgorithm chosenAlgo = Defaults.DEFAULT_HOST_KEY_ALGO;
+		if (!algosWithKeys.contains(chosenAlgo)) {
+			if (!algosWithKeys.isEmpty()) {
+				chosenAlgo = algosWithKeys.iterator().next();
+			}
+		}
 
+		// show info about chosen algo and it's key
 		((TextView)view.findViewById(R.id.keyFingerprintMd5Label))
 				.setText("MD5 (" + chosenAlgo.getAlgorithmName() + ")");
 		((TextView)view.findViewById(R.id.keyFingerprintSha1Label))

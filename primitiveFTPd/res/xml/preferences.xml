@@ -183,6 +183,15 @@
 			android:title="@string/prefTitleStartOnBoot"
 			android:summary="@string/prefSummaryStartOnBoot"
 			/>
+		<MultiSelectListPreference
+			android:name="hostkeyAlgos"
+			android:key="hostkeyAlgosPref"
+			android:title="@string/prefHostkeyAlgos"
+			android:summary="@string/prefSummaryHostkeyAlgos"
+			android:defaultValue="@array/prefHostkeyAlgosDefaults"
+			android:entries="@array/prefHostkeyAlgosNames"
+			android:entryValues="@array/prefHostkeyAlgosValues"
+			/>
 		<SwitchPreference
 			android:name="rootCopyFiles"
 			android:key="rootCopyFilesPref"

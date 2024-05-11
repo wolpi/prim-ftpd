@@ -56,6 +56,11 @@ public enum HostKeyAlgorithm {
         }
 
         @Override
+        public String getPreferenceValue() {
+            return "ed25519";
+        }
+
+        @Override
         public void generateKey(FileOutputStream pubKeyFos, FileOutputStream privKeyFos)
                 throws IOException, NoSuchAlgorithmException {
             generateEd25519(pubKeyFos, privKeyFos);
@@ -96,6 +101,11 @@ public enum HostKeyAlgorithm {
         }
 
         @Override
+        public String getPreferenceValue() {
+            return "rsa4096";
+        }
+
+        @Override
         public void generateKey(FileOutputStream pubKeyFos, FileOutputStream privKeyFos)
                 throws IOException, NoSuchAlgorithmException {
             generateRsa(4096, pubKeyFos, privKeyFos);
@@ -124,6 +134,11 @@ public enum HostKeyAlgorithm {
         }
 
         @Override
+        public String getPreferenceValue() {
+            return "rsa2048";
+        }
+
+        @Override
         public void generateKey(FileOutputStream pubKeyFos, FileOutputStream privKeyFos)
                 throws IOException, NoSuchAlgorithmException {
             generateRsa(2048, pubKeyFos, privKeyFos);
@@ -144,6 +159,7 @@ public enum HostKeyAlgorithm {
 
     public abstract String getFilenamePrivateKey();
     public abstract String getFilenamePublicKey();
+    public abstract String getPreferenceValue();
 
     private static final int BUFFER_SIZE = 4096;
 

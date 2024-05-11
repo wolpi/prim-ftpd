@@ -44,6 +44,11 @@ public class KeyFingerprintProvider implements Serializable {
         return ctxt.openFileOutput(hka.getFilenamePrivateKey(), Context.MODE_PRIVATE);
     }
 
+    public void deleteKeyFiles(Context ctxt, HostKeyAlgorithm hka) {
+        ctxt.deleteFile(hka.getFilenamePublicKey());
+        ctxt.deleteFile(hka.getFilenamePrivateKey());
+    }
+
     /**
      * Creates figerprints of public key.
      */
@@ -51,70 +56,50 @@ public class KeyFingerprintProvider implements Serializable {
         Logger logger = LoggerFactory.getLogger(getClass());
         logger.trace("calcPubkeyFingerprints()");
         fingerprintsGenerated = true;
+        fingerprints.clear();
         FileInputStream fis = null;
         for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
+            String fingerprintMd5 = " - ";
+            String fingerprintSha1 = " - ";
+            String fingerprintSha256 = " - ";
+            String base64Md5 = "";
+            String base64Sha1 = "";
+            String base64Sha256 = "";
+            String bytesMd5 = "";
+            String bytesSha1 = "";
+            String bytesSha256 = "";
+
             try {
                 fis = buildPublickeyInStream(ctxt, hka);
-
-                // check if key is present
-                if (fis.available() <= 0) {
-                    keyPresent = false;
-                    throw new Exception("key seems not to be present");
-                }
-
                 PublicKey pubKey = hka.readPublicKey(fis);
-                if (pubKey == null) {
-                    logger.info("key is null");
-                    return;
+                if (pubKey != null) {
+                    keyPresent = true;
+                    byte[] encodedKey = hka.encodeAsSsh(pubKey);
+
+                    // fingerprints
+                    FingerprintBean bean = fingerprint(encodedKey, "MD5");
+                    if (bean != null) {
+                        fingerprintMd5 = bean.fingerprint();
+                        base64Md5 = bean.base64;
+                        bytesMd5 = bean.bytes;
+                    }
+
+                    bean = fingerprint(encodedKey, "SHA-1");
+                    if (bean != null) {
+                        fingerprintSha1 = bean.fingerprint();
+                        base64Sha1 = bean.base64;
+                        bytesSha1 = bean.bytes;
+                    }
+
+                    bean = fingerprint(encodedKey, "SHA-256");
+                    if (bean != null) {
+                        fingerprintSha256 = bean.fingerprint();
+                        base64Sha256 = bean.base64;
+                        bytesSha256 = bean.bytes;
+                    }
+                } else {
+                    logger.info("key is null ({})", hka.getAlgorithmName());
                 }
-                byte[] encodedKey = hka.encodeAsSsh(pubKey);
-
-                String fingerprintMd5 = " - ";
-                String fingerprintSha1 = " - ";
-                String fingerprintSha256 = " - ";
-                String base64Md5 = "";
-                String base64Sha1 = "";
-                String base64Sha256 = "";
-                String bytesMd5 = "";
-                String bytesSha1 = "";
-                String bytesSha256 = "";
-
-                // fingerprints
-                FingerprintBean bean = fingerprint(encodedKey, "MD5");
-                if (bean != null) {
-                    fingerprintMd5 = bean.fingerprint();
-                    base64Md5 = bean.base64;
-                    bytesMd5 = bean.bytes;
-                }
-
-                bean = fingerprint(encodedKey, "SHA-1");
-                if (bean != null) {
-                    fingerprintSha1 = bean.fingerprint();
-                    base64Sha1 = bean.base64;
-                    bytesSha1 = bean.bytes;
-                }
-
-                bean = fingerprint(encodedKey, "SHA-256");
-                if (bean != null) {
-                    fingerprintSha256 = bean.fingerprint();
-                    base64Sha256 = bean.base64;
-                    bytesSha256 = bean.bytes;
-                }
-
-                fingerprints.put(hka, new KeyFingerprintBean(
-                        fingerprintMd5,
-                        fingerprintSha1,
-                        fingerprintSha256,
-                        base64Md5,
-                        base64Sha1,
-                        base64Sha256,
-                        bytesMd5,
-                        bytesSha1,
-                        bytesSha256
-                ));
-
-                keyPresent = true;
-
             } catch (Exception e) {
                 logger.info("key does probably not exist");
                 logger.debug("tried to load key", e);
@@ -123,6 +108,17 @@ public class KeyFingerprintProvider implements Serializable {
                     IoUtils.close(fis);
                 }
             }
+            fingerprints.put(hka, new KeyFingerprintBean(
+                    fingerprintMd5,
+                    fingerprintSha1,
+                    fingerprintSha256,
+                    base64Md5,
+                    base64Sha1,
+                    base64Sha256,
+                    bytesMd5,
+                    bytesSha1,
+                    bytesSha256
+            ));
         }
     }
 

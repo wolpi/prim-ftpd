@@ -334,7 +334,7 @@ public class SshServerService extends AbstractServerService
 				// return key pair
 				keyPairList.add(new KeyPair(publicKey, privateKey));
 			} catch (Exception e) {
-				logger.debug("could not read key: " + e.getMessage(), e);
+				logger.debug("could not read key: " + e.getClass().getName() + " " + e.getMessage());
 			} finally {
 				if (pubkeyFis != null) {
 					IoUtils.close(pubkeyFis);

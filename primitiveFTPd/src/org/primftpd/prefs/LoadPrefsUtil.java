@@ -5,11 +5,15 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import org.apache.ftpserver.impl.PassivePorts;
+import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LoadPrefsUtil
 {
@@ -42,6 +46,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_ALLOWED_IPS_PATTERN = "allowedIpsPatternPref";
 	public static final String PREF_QUICK_SETTINGS_REQUIRES_UNLOCK = "quickSettingsRequiresUnlockPref";
 	public static final String PREF_ROOT_COPY_FILES = "rootCopyFilesPref";
+	public static final String PREF_KEY_HOSTKEY_ALGOS = "hostkeyAlgosPref";
 
 	public static final int PORT_DEFAULT_VAL = 12345;
 	static final String PORT_DEFAULT_VAL_STR = String.valueOf(PORT_DEFAULT_VAL);
@@ -53,6 +58,9 @@ public class LoadPrefsUtil
 	public static final int IDLE_TIMEOUT_DEFAULT_VAL = 0;
 	static final String IDLE_TIMEOUT_DEFAULT_VAL_STR = String.valueOf(IDLE_TIMEOUT_DEFAULT_VAL);
 	public static final String IDLE_TIMEOUT_SERVER_STOP_DEFAULT_VAL = "30";
+	public static final Set<String> HOSTKEY_ALGOS_DEFAULTS = Collections.unmodifiableSet(
+			new HashSet<>(Collections.singletonList(HostKeyAlgorithm.ED_25519.getPreferenceValue()))
+	);
 
 	/**
 	 * @return Android {@link SharedPreferences} object.

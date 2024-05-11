@@ -97,6 +97,8 @@
     <string name="prefSummaryQuickSettingsRequiresUnlock">Clicking the quick settings tile requires the device to be unlocked to start/stop the server. When enabled, will prompt to unlock the device if it\'s locked.</string>
     <string name="prefRootCopyFiles">Root: copy files to tmp dir for up-/download</string>
     <string name="prefSummaryRootCopyFiles">There are issues accessing files with dd on some devices. With this setting files are copied to tmp dir first and access with filesystem mechanisms. Should be disabled for large files.</string>
+    <string name="prefHostkeyAlgos">SFTP Hostkey algorithms</string>
+    <string name="prefSummaryHostkeyAlgos">Algorithms to generate SFTP server keys (hostkeys) for</string>
     <string name="licence">Licence</string>
     <string name="reset">Reset</string>
     <string name="widgetTextStart">start (s)ftpd</string>
@@ -188,5 +190,18 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+    <string-array name="prefHostkeyAlgosNames">
+        <item>ed25519</item>
+        <item>RSA with 4096 Bit Key</item>
+        <item>RSA with 2048 Bit Key</item>
+    </string-array>
+    <string-array name="prefHostkeyAlgosValues">
+        <item>ed25519</item>
+        <item>rsa4096</item>
+        <item>rsa2048</item>
+    </string-array>
+    <string-array name="prefHostkeyAlgosDefaults">
+        <item>ed25519</item>
     </string-array>
 </resources>

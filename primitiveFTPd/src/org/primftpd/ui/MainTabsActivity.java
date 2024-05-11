@@ -247,6 +247,10 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         if (LoadPrefsUtil.PREF_KEY_SHOW_TAB_NAMES.equals(key)) {
             updateTabNames();
         }
+        if (LoadPrefsUtil.PREF_KEY_HOSTKEY_ALGOS.equals(key)) {
+            GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment(pftpdFragment);
+            askDiag.show(getSupportFragmentManager(), PftpdFragment.DIALOG_TAG);
+        }
     }
 
     protected void handleLoggingPref() {
