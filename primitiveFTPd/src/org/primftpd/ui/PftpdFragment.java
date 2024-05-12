@@ -49,7 +49,6 @@ import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.prefs.StorageType;
-import org.primftpd.util.Defaults;
 import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.KeyFingerprintBean;
 import org.primftpd.util.KeyFingerprintProvider;
@@ -61,9 +60,7 @@ import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
