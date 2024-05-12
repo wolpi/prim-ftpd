@@ -58,6 +58,7 @@ public class KeyFingerprintProvider implements Serializable {
         Logger logger = LoggerFactory.getLogger(getClass());
         logger.trace("calcPubkeyFingerprints()");
         fingerprintsGenerated = true;
+        keyPresent = false;
         fingerprints.clear();
         FileInputStream fis = null;
         for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {

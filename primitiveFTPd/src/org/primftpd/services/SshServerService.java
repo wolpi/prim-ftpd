@@ -97,6 +97,10 @@ public class SshServerService extends AbstractServerService
 	protected void stopServer()
 	{
 		try {
+			if (sshServer == null) {
+				logger.info("ssh server already null");
+				return;
+			}
 			List<AbstractSession> activeSessions = sshServer.getActiveSessions();
 			for (AbstractSession session : activeSessions) {
 				try {

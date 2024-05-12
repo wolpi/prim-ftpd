@@ -68,8 +68,12 @@ public class FtpServerService extends AbstractServerService
 	@Override
 	protected void stopServer()
 	{
-		ftpServer.stop();
-		ftpServer = null;
+		if (ftpServer != null) {
+			ftpServer.stop();
+			ftpServer = null;
+		} else {
+			logger.info("ssh server already null");
+		}
 	}
 
 	@Override
