@@ -255,7 +255,7 @@ public class NotificationUtil
 			if (!keyFingerprintProvider.areFingerprintsGenerated()) {
 				keyFingerprintProvider.calcPubkeyFingerprints(ctxt);
 			}
-			HostKeyAlgorithm chosenAlgo = Defaults.DEFAULT_HOST_KEY_ALGO;
+			HostKeyAlgorithm chosenAlgo = keyFingerprintProvider.findPreferredHostKeyAlog();
 			KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(chosenAlgo);
 
 			if (keyFingerprintBean != null) {

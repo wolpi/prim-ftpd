@@ -16,8 +16,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class KeyFingerprintProvider implements Serializable {
 
@@ -168,5 +170,25 @@ public class KeyFingerprintProvider implements Serializable {
 
     public Map<HostKeyAlgorithm, KeyFingerprintBean> getFingerprints() {
         return fingerprints;
+    }
+
+    public HostKeyAlgorithm findPreferredHostKeyAlog() {
+        Set<HostKeyAlgorithm> algosWithKeys = new HashSet<>();
+        for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
+            KeyFingerprintBean keyFingerprintBean = fingerprints.get(hka);
+            if (keyFingerprintBean != null) {
+                String fingerprintSha256 = keyFingerprintBean.getFingerprintSha256();
+                if (fingerprintSha256 != null && fingerprintSha256.length() > 5) {
+                    algosWithKeys.add(hka);
+                }
+            }
+        }
+        HostKeyAlgorithm chosenAlgo = Defaults.DEFAULT_HOST_KEY_ALGO;
+        if (!algosWithKeys.contains(chosenAlgo)) {
+            if (!algosWithKeys.isEmpty()) {
+                chosenAlgo = algosWithKeys.iterator().next();
+            }
+        }
+        return chosenAlgo;
     }
 }

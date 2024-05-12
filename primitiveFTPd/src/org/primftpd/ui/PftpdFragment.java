@@ -647,22 +647,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 			return;
 		}
 		// find algo to show
-		Set<HostKeyAlgorithm> algosWithKeys = new HashSet<>();
-		for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
-			KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(hka);
-			if (keyFingerprintBean != null) {
-				String fingerprintSha256 = keyFingerprintBean.getFingerprintSha256();
-				if (fingerprintSha256 != null && fingerprintSha256.length() > 5) {
-					algosWithKeys.add(hka);
-				}
-			}
-		}
-		HostKeyAlgorithm chosenAlgo = Defaults.DEFAULT_HOST_KEY_ALGO;
-		if (!algosWithKeys.contains(chosenAlgo)) {
-			if (!algosWithKeys.isEmpty()) {
-				chosenAlgo = algosWithKeys.iterator().next();
-			}
-		}
+		HostKeyAlgorithm chosenAlgo = keyFingerprintProvider.findPreferredHostKeyAlog();
 
 		// show info about chosen algo and it's key
 		((TextView)view.findViewById(R.id.keyFingerprintMd5Label))
