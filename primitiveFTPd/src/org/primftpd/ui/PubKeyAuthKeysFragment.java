@@ -104,6 +104,12 @@ public class PubKeyAuthKeysFragment extends Fragment {
             textView.setPadding(1, 1, 1, 5);
             container.addView(textView);
         }
+
+        if (keys.isEmpty()) {
+            TextView textView = new TextView(container.getContext());
+            textView.setText(R.string.noKeysPresent);
+            container.addView(textView);
+        }
     }
 
     protected void addKeyToFile(CharSequence key) {
