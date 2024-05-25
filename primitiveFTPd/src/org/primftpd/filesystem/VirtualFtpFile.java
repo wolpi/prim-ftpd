@@ -44,7 +44,7 @@ public class VirtualFtpFile extends VirtualFile<FtpFile> implements FtpFile {
     @Override
     public boolean move(FtpFile target) {
         logger.trace("move()");
-        return delegate != null && ((FtpFile) delegate).move(target);
+        return delegate != null && ((FtpFile) delegate).move((FtpFile) ((VirtualFtpFile) target).delegate);
     }
 
     @Override
