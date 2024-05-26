@@ -54,11 +54,11 @@ public class VirtualSshFile extends VirtualFile<SshFile> implements SshFile {
         return session.getUsername();
     }
 
-	@Override
-	public boolean create() throws IOException {
-		logger.trace("[{}] create()", name);
+    @Override
+    public boolean create() throws IOException {
+        logger.trace("[{}] create()", name);
         return delegate != null && ((SshFile) delegate).create();
-	}
+    }
 
     @Override
     public boolean isExecutable() {

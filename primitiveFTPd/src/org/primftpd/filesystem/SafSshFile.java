@@ -68,11 +68,11 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
         return session.getUsername();
     }
 
-	@Override
-	public boolean create() throws IOException {
-		logger.trace("[{}] create()", name);
+    @Override
+    public boolean create() throws IOException {
+        logger.trace("[{}] create()", name);
         return createNewFile();
-	}
+    }
 
     @Override
     public SshFile getParentFile() {
