@@ -7,6 +7,7 @@ import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
 import org.primftpd.services.PftpdService;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SafSshFile extends SafFile<SshFile> implements SshFile {
@@ -66,6 +67,12 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
         logger.trace("[{}] getOwner()", name);
         return session.getUsername();
     }
+
+	@Override
+	public boolean create() throws IOException {
+		logger.trace("[{}] create()", name);
+        return createNewFile();
+	}
 
     @Override
     public SshFile getParentFile() {

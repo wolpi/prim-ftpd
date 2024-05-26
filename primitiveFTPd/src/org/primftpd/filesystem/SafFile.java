@@ -225,4 +225,13 @@ public abstract class SafFile<T> extends AbstractFile {
 
         return null;
     }
+
+    boolean createNewFile() throws IOException {
+        logger.trace("[{}] createNewFile()", name);
+        try {
+		    return (documentFile = parentDocumentFile.createFile(null, name)) != null;
+        } catch (Exception e) {
+            throw new IOException("Failed to create file", e);
+        }
+    }
 }
