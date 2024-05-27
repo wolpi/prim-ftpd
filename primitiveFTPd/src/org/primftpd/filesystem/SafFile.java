@@ -43,7 +43,7 @@ public abstract class SafFile<T> extends AbstractFile {
     private DocumentFile documentFile;
     private final DocumentFile parentDocumentFile;
 
-    private final boolean writable;
+    private boolean writable;
 
     public SafFile(
             ContentResolver contentResolver,
@@ -229,9 +229,20 @@ public abstract class SafFile<T> extends AbstractFile {
     boolean createNewFile() throws IOException {
         logger.trace("[{}] createNewFile()", name);
         try {
-            return (documentFile = parentDocumentFile.createFile(null, name)) != null;
+            documentFile = parentDocumentFile.createFile(null, name);
         } catch (Exception e) {
             throw new IOException("Failed to create file", e);
         }
+
+        if (documentFile != null) {
+            lastModified = documentFile.lastModified();
+            size = 0;
+            readable = documentFile.canRead();
+            exists = true;
+            writable = documentFile.canWrite();
+            return true;
+        }
+
+        return false;
     }
 }
