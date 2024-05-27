@@ -113,12 +113,11 @@
     <string name="storageTypePlain">Plain old filesystem</string>
     <string name="storageTypePlainV2">Plain old filesystem\nGot read-only access? See our <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub page</a>.</string>
     <string name="storageTypeRoot">Super user (device must be rooted)</string>
-    <string name="storageTypeSaf">"Android Storage Access Framework (SAF)
-\n(e.g. for  card)"</string>
+    <string name="storageTypeSaf">"Android Storage Access Framework (SAF)\n(e.g. for external SD-card)"</string>
     <string name="storageTypeRoSaf">Read only SAF (faster !)</string>
     <string name="storageTypeVirtual">Virtual Folders (provides all Storage Types)</string>
     <string name="safExplainHeading">How SAF works</string>
-    <string name="safExplain">Android will ask you to choose a directory. That will be available via server(s). From time to time permission might be revoked and you have to re-select.</string>
+    <string name="safExplain">Android will ask you to choose a directory. That will be available via server(s). Permission gets revoked and you have to re-select regularly? See our <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub page</a>.</string>
     <string name="selectedSafUri">Selected SAF URI:</string>
     <string name="startServerAndExit">start server only</string>
     <string name="startServerAndUi">start with server</string>
