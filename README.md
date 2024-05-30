@@ -36,6 +36,7 @@ You may download latest development snapshot from [GitHub packages](https://gith
 * Android 7 Quicksettings Tile
 * Optional root access
 * Optional support for Android Storage Access Framework to be able to write external SD-cards
+* Can calculate hash for complete files on server side (sftp extended command)
 
 ## Translation
 You may help translate this app in [hosted weblate](https://hosted.weblate.org/projects/pftpd/pftpd/).
