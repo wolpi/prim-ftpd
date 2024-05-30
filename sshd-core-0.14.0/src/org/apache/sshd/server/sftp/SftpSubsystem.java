@@ -457,7 +457,7 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
 
     protected void process(Buffer buffer) throws IOException {
         int length = buffer.getInt();
-        int type = buffer.getByte();
+        int type = ((int) buffer.getByte()) & 0xFF;
         int id = buffer.getInt();
         switch (type) {
             case SSH_FXP_INIT: {
