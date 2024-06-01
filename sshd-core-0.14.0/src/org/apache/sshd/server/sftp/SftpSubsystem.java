@@ -689,7 +689,7 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                         sendStatus(id, SSH_FX_NO_SUCH_FILE, path);
                     } else if (!p.isDirectory()) {
                         sendStatus(id, SSH_FX_NO_SUCH_FILE, path);
-                    } else if (!p.isReadable()) {
+                    } else if (!p.isExecutable()) {
                         sendStatus(id, SSH_FX_PERMISSION_DENIED, path);
                     } else {
                         String handle = UUID.randomUUID().toString();
@@ -714,7 +714,7 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                         sendStatus(id, SSH_FX_NO_SUCH_FILE, p.getFile().getAbsolutePath());
                     } else if (!p.getFile().isDirectory()) {
                         sendStatus(id, SSH_FX_NO_SUCH_FILE, p.getFile().getAbsolutePath());
-                    } else if (!p.getFile().isReadable()) {
+                    } else if (!p.getFile().isExecutable()) {
                         sendStatus(id, SSH_FX_PERMISSION_DENIED, p.getFile().getAbsolutePath());
                     } else {
                         DirectoryHandle dh = (DirectoryHandle) p;
