@@ -601,10 +601,6 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                     } else {
                         FileHandle fh = (FileHandle) p;
                         fh.write(data, offset);
-                        SshFile sshFile = fh.getFile();
-
-                        sshFile.setLastModified(new Date().getTime());
-                        
                         sendStatus(id, SSH_FX_OK, "");
                     }
                 } catch (IOException e) {

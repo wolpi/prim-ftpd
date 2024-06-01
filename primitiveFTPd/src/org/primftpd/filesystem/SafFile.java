@@ -16,11 +16,17 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributeView;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public abstract class SafFile<T> extends AbstractFile {
 
@@ -124,12 +130,9 @@ public abstract class SafFile<T> extends AbstractFile {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
-                ContentValues updateValues = new ContentValues();
-                //time = Utils.sshTimeToFileTime(time);
-                updateValues.put(DocumentsContract.Document.COLUMN_LAST_MODIFIED, time);
                 Uri docUri = documentFile.getUri();
-                int updated = contentResolver.update(docUri, updateValues, "name="+name, null);
-                return updated == 1;
+                Path filePath = Paths.get(FileUtil.getFullDocIdPathFromTreeUri(docUri, pftpdService.getContext()));
+                Files.getFileAttributeView(filePath, BasicFileAttributeView.class).setTimes(FileTime.fromMillis(time), null, null);
             } catch (Exception e) {
                 String baseMsg = "could not set last modified time";
                 logger.error(baseMsg, e);
