@@ -12,10 +12,10 @@ public abstract class VirtualFileSystemView<
         RoSafType extends RoSafFile<MinaType>
         > {
 
-    public static final String PREFIX_FS = "/fs";
-    public static final String PREFIX_ROOT = "/superuser";
-    public static final String PREFIX_SAF = "/saf";
-    public static final String PREFIX_ROSAF = "/rosaf";
+    public static final String PREFIX_FS = "fs";
+    public static final String PREFIX_ROOT = "superuser";
+    public static final String PREFIX_SAF = "saf";
+    public static final String PREFIX_ROSAF = "rosaf";
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -48,28 +48,28 @@ public abstract class VirtualFileSystemView<
         logger.debug("getFile '{}', absolute: '{}'", file, absoluteVirtualPath);
         if ("/".equals(absoluteVirtualPath)) {
             return createFile(absoluteVirtualPath, null, true, pftpdService);
-        } else if (absoluteVirtualPath.startsWith(PREFIX_FS)) {
-            String realPath = toRealPath(absoluteVirtualPath, PREFIX_FS);
+        } else if (absoluteVirtualPath.startsWith("/" + PREFIX_FS)) {
+            String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_FS);
             logger.debug("Using FS '{}' for '{}'", realPath, absoluteVirtualPath);
             if ("/".equals(realPath)) {
                 realPath = pftpdService.getPrefsBean().getStartDir().getAbsolutePath();
-                absoluteVirtualPath = PREFIX_FS + realPath;
+                absoluteVirtualPath = "/" + PREFIX_FS + realPath;
                 logger.debug("  switching to FS default dir: '{}'", absoluteVirtualPath);
             }
             AbstractFile delegate = fsFileSystemView.getFile(realPath);
             return createFile(absoluteVirtualPath, delegate, pftpdService);
-        } else if (absoluteVirtualPath.startsWith(PREFIX_ROOT)) {
-            String realPath = toRealPath(absoluteVirtualPath, PREFIX_ROOT);
+        } else if (absoluteVirtualPath.startsWith("/" + PREFIX_ROOT)) {
+            String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_ROOT);
             logger.debug("Using ROOT '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = rootFileSystemView.getFile(realPath);
             return createFile(absoluteVirtualPath, delegate, pftpdService);
-        } else if (absoluteVirtualPath.startsWith(PREFIX_SAF)) {
-            String realPath = toRealPath(absoluteVirtualPath, PREFIX_SAF);
+        } else if (absoluteVirtualPath.startsWith("/" + PREFIX_SAF)) {
+            String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_SAF);
             logger.debug("Using SAF '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = safFileSystemView.getFile(realPath);
             return createFile(absoluteVirtualPath, delegate, pftpdService);
-        } else if (absoluteVirtualPath.startsWith(PREFIX_ROSAF)) {
-            String realPath = toRealPath(absoluteVirtualPath, PREFIX_ROSAF);
+        } else if (absoluteVirtualPath.startsWith("/" + PREFIX_ROSAF)) {
+            String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_ROSAF);
             logger.debug("Using ROSAF '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = roSafFileSystemView.getFile(realPath);
             return createFile(absoluteVirtualPath, delegate, pftpdService);
