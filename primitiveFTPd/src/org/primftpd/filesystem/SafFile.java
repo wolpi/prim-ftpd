@@ -131,7 +131,7 @@ public abstract class SafFile<T> extends AbstractFile {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
                 Uri docUri = documentFile.getUri();
-                Path filePath = Paths.get(FileUtil.getFullDocIdPathFromTreeUri(docUri, pftpdService.getContext()));
+                Path filePath = Paths.get(StorageManagerUtil.getFullDocIdPathFromTreeUri(docUri, pftpdService.getContext()));
                 Files.getFileAttributeView(filePath, BasicFileAttributeView.class).setTimes(FileTime.fromMillis(time), null, null);
             } catch (Exception e) {
                 String baseMsg = "could not set last modified time";
