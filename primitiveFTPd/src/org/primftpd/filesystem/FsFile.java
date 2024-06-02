@@ -25,8 +25,8 @@ public abstract class FsFile<T> extends AbstractFile {
 	protected final boolean injectedDirectory;
 
 	private final static Map<String, String[]> DIRECTORY_INJECTIONS = Map.ofEntries(
-		entry("/",					new String[] {"dev", "etc", "mnt", "proc", "product", "storage", "system", "vendor"}),
-		// entry("/",					new String[] {"storage"}),
+		// entry("/",					new String[] {"dev", "etc", "mnt", "proc", "product", "storage", "system", "vendor"}),
+		entry("/",					new String[] {"storage"}),
 		entry("/storage/emulated",	new String[] {"0"})
 	);
 
