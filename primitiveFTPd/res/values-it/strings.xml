@@ -108,7 +108,7 @@
     <string name="storageTypeRoSaf">SAF in sola lettura (più veloce!)</string>
     <string name="storageTypeVirtual">Cartelle virtuali (fornisce tutti i tipi di memoria)</string>
     <string name="safExplainHeading">Come funziona SAF</string>
-    <string name="safExplain">Android richiederà di scegliere una cartella. Questa sarà resa visibile al/ai server. Può capitare che il permesso venga revocato, e dovrai nuovamente selezionare la cartella.</string>
+    <string name="safExplainV2">Android richiederà di scegliere una cartella. Questa sarà resa visibile al/ai server. Può capitare che il permesso venga revocato, e dovrai nuovamente selezionare la cartella.</string>
     <string name="selectedSafUri">URI SAF selezionato:</string>
     <string name="startServerAndExit">avvia solo il server</string>
     <string name="startServerAndUi">avvia server e interfaccia</string>

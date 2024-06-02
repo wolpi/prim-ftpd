@@ -91,7 +91,7 @@
 \n（例如 SD 卡）</string>
     <string name="storageTypeRoSaf">SAF 只读模式（速度更快！）</string>
     <string name="safExplainHeading">如何使用 SAF 模式</string>
-    <string name="safExplain">在此模式下，Android 将让您选择一个希望访问的路径，服务器只能浏览此路径下的内容。若您重启了设备，应用对这一路径的访问权可能被吊销，您需要重新选择。</string>
+    <string name="safExplainV2">在此模式下，Android 将让您选择一个希望访问的路径，服务器只能浏览此路径下的内容。若您重启了设备，应用对这一路径的访问权可能被吊销，您需要重新选择。</string>
     <string name="selectedSafUri">所选的 SAF URI：</string>
     <string name="startServerAndExit">只启动服务</string>
     <string name="startServerAndUi">启动服务并显示界面</string>

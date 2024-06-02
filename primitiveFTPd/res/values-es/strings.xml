@@ -109,7 +109,7 @@
     <string name="storageTypeRoSaf">SAF solo de lectura (más rápido)</string>
     <string name="storageTypeVirtual">Carpetas virtuales (admite todos los tipos)</string>
     <string name="safExplainHeading">Funcionamiento de SAF</string>
-    <string name="safExplain">Android le pedirá que seleccione una carpeta, que será accesible conectándose al servidor(es). De vez en cuando es posible que se revoquen los permisos, y deba volver a seleccionarla.</string>
+    <string name="safExplainV2">Android le pedirá que seleccione una carpeta, que será accesible conectándose al servidor(es). De vez en cuando es posible que se revoquen los permisos, y deba volver a seleccionarla.</string>
     <string name="selectedSafUri">URI escogida para SAF:</string>
     <string name="startServerAndExit">iniciar solo el servidor</string>
     <string name="startServerAndUi">iniciar con el servidor</string>

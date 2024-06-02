@@ -55,7 +55,7 @@
     <string name="quickSettingsServerStopped">pFTPd остановлен</string>
     <string name="reset">Сбросить</string>
     <string name="restartServer">Изменения применятся после перезапуска сервера.</string>
-    <string name="safExplain">Android попросит выбрать каталог, который будет доступен с сервера. Периодически разрешение будет отзываться и потребуется выбрать каталог снова.</string>
+    <string name="safExplainV2">Android попросит выбрать каталог, который будет доступен с сервера. Периодически разрешение будет отзываться и потребуется выбрать каталог снова.</string>
     <string name="safExplainHeading">Как работает SAF</string>
     <string name="saveAs">Сохранить как</string>
     <string name="selectServerAction">Выберите действие сервера</string>

@@ -79,7 +79,7 @@
 \n（例如用於 SD 卡）</string>
     <string name="storageTypeRoSaf">唯讀 SAF（比較快！）</string>
     <string name="safExplainHeading">SAF 如何運作</string>
-    <string name="safExplain">Android 會要您選擇一個目錄。那個目錄會在伺服器中可用。權限偶爾可能會被撤回，您必須重新選擇。</string>
+    <string name="safExplainV2">Android 會要您選擇一個目錄。那個目錄會在伺服器中可用。權限偶爾可能會被撤回，您必須重新選擇。</string>
     <string name="selectedSafUri">選擇的 SAF URI：</string>
     <string name="startServerAndExit">只啟動伺服器</string>
     <string name="translate">翻譯</string>

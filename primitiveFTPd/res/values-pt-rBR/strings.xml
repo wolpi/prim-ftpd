@@ -107,7 +107,7 @@
     <string name="storageTypeRoSaf">Apenas leitura SAF (mais rápido!)</string>
     <string name="storageTypeVirtual">Pastas virtuais (fornece todos os tipos de armazenamento)</string>
     <string name="safExplainHeading">Como o SAF funciona</string>
-    <string name="safExplain">O Android pedirá que você escolha uma pasta. Esta estará disponível via servidor(es). De vez em quando, a permissão poderá ser revogada e você terá que selecionar ela novamente.</string>
+    <string name="safExplainV2">O Android pedirá que você escolha uma pasta. Esta estará disponível via servidor(es). De vez em quando, a permissão poderá ser revogada e você terá que selecionar ela novamente.</string>
     <string name="selectedSafUri">SAF URI selecionado:</string>
     <string name="startServerAndExit">iniciar apenas o servidor</string>
     <string name="startServerAndUi">comece com o servidor</string>

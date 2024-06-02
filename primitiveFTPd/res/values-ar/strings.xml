@@ -100,7 +100,7 @@
 \n(مثلاً: بطاقة SD)</string>
     <string name="storageTypeRoSaf">SAF للقراءة فقط (أسرع !)</string>
     <string name="safExplainHeading">طريقة عمل SAF</string>
-    <string name="safExplain">سيطلب منك لأندرويد أن تختار المسار الذي سيكون متوفّراً من خلال الخادم. من وقت لآخر قد يتم إلغاء الإذن وسيتوجّب عليك إعادة الاختيار.</string>
+    <string name="safExplainV2">سيطلب منك لأندرويد أن تختار المسار الذي سيكون متوفّراً من خلال الخادم. من وقت لآخر قد يتم إلغاء الإذن وسيتوجّب عليك إعادة الاختيار.</string>
     <string name="selectedSafUri">اختر عنوان URI لـSAF:</string>
     <string name="startServerAndExit">ابدأ الخادم فقط</string>
     <string name="startServerAndUi">ابدأ مع الخادم</string>

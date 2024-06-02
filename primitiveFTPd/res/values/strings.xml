@@ -117,7 +117,7 @@
     <string name="storageTypeRoSaf">Read only SAF (faster !)</string>
     <string name="storageTypeVirtual">Virtual Folders (provides all Storage Types)</string>
     <string name="safExplainHeading">How SAF works</string>
-    <string name="safExplain">Android will ask you to choose a directory. That will be available via server(s). Permission gets revoked and you have to re-select regularly? See our <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub page</a>.</string>
+    <string name="safExplainV2">Android will ask you to choose a directory. That will be available via server(s). Permission gets revoked and you have to re-select regularly? See our <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub page</a>.</string>
     <string name="selectedSafUri">Selected SAF URI:</string>
     <string name="startServerAndExit">start server only</string>
     <string name="startServerAndUi">start with server</string>

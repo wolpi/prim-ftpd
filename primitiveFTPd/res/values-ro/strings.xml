@@ -2,7 +2,7 @@
 <resources>
     <string name="prefTitleSshowIpv4InNotification">Arată adresa IPv4 în notificare</string>
     <string name="portInvalid_v2">Portul est invalid. Valoarea trebuie sa fie cuprinsă intre 1024 și 64000.</string>
-    <string name="safExplain">Android vă va cere să alegeți un dosar. Acesta va fi disponibil pentru server (e). Din când în când, permisiunea poate fi revocată și trebuie să o selectați din nou.</string>
+    <string name="safExplainV2">Android vă va cere să alegeți un dosar. Acesta va fi disponibil pentru server (e). Din când în când, permisiunea poate fi revocată și trebuie să o selectați din nou.</string>
     <string name="quickShareCouldNotStartServer">Serverul nu a putut fi pornit</string>
     <string name="quickShareServerStarted">Serverul a pornit în partajare fișier unic</string>
     <string name="quickShare">Partajare rapidă</string>

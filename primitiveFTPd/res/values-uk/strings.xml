@@ -64,7 +64,7 @@
     <string name="prefTitleStartDir">Коренева директорія сервера</string>
     <string name="prefTitleStartOnBoot">Запускати при старті системи</string>
     <string name="prefTitleUser">Ім\'я користувача</string>
-    <string name="safExplain">Android попросить обрати директорію, що буде доступна з серверів. Періодично дозвіл буде скидатися і необхідно буде обрати директорію знову.</string>
+    <string name="safExplainV2">Android попросить обрати директорію, що буде доступна з серверів. Періодично дозвіл буде скидатися і необхідно буде обрати директорію знову.</string>
     <string name="storageType">Тип сховища</string>
     <string name="storageTypeRoot">Суперкористувач (потрібен root на пристрої)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF) (наприклад, для карти SD)</string>

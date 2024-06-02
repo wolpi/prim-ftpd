@@ -103,7 +103,7 @@
     <string name="storageTypeRoSaf">Nur-Lesen SAF (schneller!)</string>
     <string name="storageTypeVirtual">Virtuelle Ordner (bietet alle Speicher-Arten)</string>
     <string name="safExplainHeading">Wie SAF funktioniert</string>
-    <string name="safExplain">Android wird Sie darum bitten ein Verzeichnis auszuwählen. Dieses wird über die Server verfügbar gemacht. Von Zeit zu Zeit kann die Berechtigung zurückgezogen werden und das Verzeichnis muss erneut ausgewählt werden.</string>
+    <string name="safExplainV2">Android wird Sie darum bitten ein Verzeichnis auszuwählen. Dieses wird über die Server verfügbar gemacht. Von Zeit zu Zeit kann die Berechtigung zurückgezogen werden und das Verzeichnis muss erneut ausgewählt werden.</string>
     <string name="selectedSafUri">Ausgewählte SAF-URI:</string>
     <string name="startServerAndExit">Starte nur Server</string>
     <string name="startServerAndUi">Starte mit Server</string>

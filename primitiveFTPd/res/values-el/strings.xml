@@ -78,7 +78,7 @@
     <string name="storageTypeSaf">Σύστημα Πρόσβασης Αποθηκευτικού χώρου (ΣΠΑ/SAF) (π.χ. για κάρτα μνήμης SD)</string>
     <string name="storageTypeRoSaf">SAF Μόνο για ανάγνωση (ταχύτερο!)</string>
     <string name="safExplainHeading">Πώς λειτουργεί το ΣΑΠ (SAF)</string>
-    <string name="safExplain">Το λειτουργικό θα ρωτήσει να επιλέξετε φάκελο. Αυτός θα είναι διαθέσιμος μέσω του εξυπηρετητή. Κατά διαστήματα η άδεια χρήσης θα ανακαλείται και θα πρέπει να ξανά επιλέξετε τον φάκελο.</string>
+    <string name="safExplainV2">Το λειτουργικό θα ρωτήσει να επιλέξετε φάκελο. Αυτός θα είναι διαθέσιμος μέσω του εξυπηρετητή. Κατά διαστήματα η άδεια χρήσης θα ανακαλείται και θα πρέπει να ξανά επιλέξετε τον φάκελο.</string>
     <string name="selectedSafUri">Επιλεγμένο SAF URI:</string>
     <string name="startServerAndExit">εκκίνηση του εξυπηρετητή μόνο</string>
     <string name="startServerAndUi">εκκίνηση με τον εξυπηρετητή</string>

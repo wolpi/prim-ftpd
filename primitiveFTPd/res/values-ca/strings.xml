@@ -108,7 +108,7 @@
     <string name="storageTypeRoSaf">SAF només de lectura (més ràpid)</string>
     <string name="storageTypeVirtual">Carpetes virtuals (admet tots els tipus)</string>
     <string name="safExplainHeading">Funcionament del SAF</string>
-    <string name="safExplain">El sistema us demanarà triar una carpeta; que serà accessible connectant-se al(s) servidor(s). De tant en tant és possible que es revoquin els permisos, i hàgiu de seleccionar la carpeta novament.</string>
+    <string name="safExplainV2">El sistema us demanarà triar una carpeta; que serà accessible connectant-se al(s) servidor(s). De tant en tant és possible que es revoquin els permisos, i hàgiu de seleccionar la carpeta novament.</string>
     <string name="selectedSafUri">URI triada per al SAF:</string>
     <string name="startServerAndExit">engega només el servidor</string>
     <string name="startServerAndUi">engega amb el servidor</string>

@@ -89,7 +89,7 @@
     <string name="couldNotReadKeyAuthKey">A kulcshitelesítés nyilvános kulcsa nem olvasható. Ellenőrizze a naplókat!</string>
     <string name="portsEqual_v2">A portok azonosak. Így nem működhet.</string>
     <string name="serverCouldNotBeStarted">A szerver nem indítható el! Hibaüzenet:</string>
-    <string name="safExplain">Az Android kéri, hogy válassza ki a könyvtárat. Ez a szerver(ek)en keresztül elérhető lesz. Időnként visszavonódhatnak az engedélyek, és újra meg kell őket adnia!</string>
+    <string name="safExplainV2">Az Android kéri, hogy válassza ki a könyvtárat. Ez a szerver(ek)en keresztül elérhető lesz. Időnként visszavonódhatnak az engedélyek, és újra meg kell őket adnia!</string>
     <string name="filepickerNeedValidFilename">Kérem írjon be vagy válasszon érvényes fájlnevet!</string>
     <string name="filepickerSelectSomethingFirst">Kérem először válasszon ki valamit</string>
     <string name="filepickerFilename">Fájlnév</string>
