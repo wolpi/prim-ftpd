@@ -194,11 +194,13 @@
     </string-array>
     <string-array name="prefHostkeyAlgosNames">
         <item>ed25519</item>
+        <item>ECDSA 256</item>
         <item>RSA with 4096 Bit Key</item>
         <item>RSA with 2048 Bit Key</item>
     </string-array>
     <string-array name="prefHostkeyAlgosValues">
         <item>ed25519</item>
+        <item>ecdsa256</item>
         <item>rsa4096</item>
         <item>rsa2048</item>
     </string-array>

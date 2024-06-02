@@ -255,13 +255,13 @@ public class NotificationUtil
 			if (!keyFingerprintProvider.areFingerprintsGenerated()) {
 				keyFingerprintProvider.calcPubkeyFingerprints(ctxt);
 			}
-			HostKeyAlgorithm chosenAlgo = keyFingerprintProvider.findPreferredHostKeyAlog();
+			HostKeyAlgorithm chosenAlgo = keyFingerprintProvider.findPreferredHostKeyAlog(ctxt);
 			KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(chosenAlgo);
 
 			if (keyFingerprintBean != null) {
 				str.append("\n");
 				str.append("Key Fingerprints (");
-				str.append(chosenAlgo.getAlgorithmName());
+				str.append(chosenAlgo.getDisplayName());
 				str.append(")");
 				str.append("\n");
 				// show md5-bytes and sha256-base64 (no sha1) as that is what clients usually show

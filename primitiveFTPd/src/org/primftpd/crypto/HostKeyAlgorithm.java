@@ -3,6 +3,7 @@ package org.primftpd.crypto;
 import org.apache.ftpserver.util.IoUtils;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
+import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.util.OpenSSHPrivateKeyUtil;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -31,6 +33,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -42,6 +45,11 @@ public enum HostKeyAlgorithm {
     ED_25519 {
         @Override
         public String getAlgorithmName() {
+            return "ed25519";
+        }
+
+        @Override
+        public String getDisplayName() {
             return "ed25519";
         }
 
@@ -84,10 +92,53 @@ public enum HostKeyAlgorithm {
         }
     },
 
+    ECDSA_256 {
+        @Override
+        public String getAlgorithmName() {
+            return "EC";
+        }
+
+        @Override
+        public String getDisplayName() {
+            return "ECDSA 256";
+        }
+
+        @Override
+        public String getFilenamePrivateKey() {
+            return "id_ecdsa265";
+        }
+
+        @Override
+        public String getFilenamePublicKey() {
+            return "id_ecdsa265.pub";
+        }
+
+        @Override
+        public String getPreferenceValue() {
+            return "ecdsa256";
+        }
+
+        @Override
+        public void generateKey(FileOutputStream pubKeyFos, FileOutputStream privKeyFos)
+                throws IOException, NoSuchAlgorithmException {
+            generateEcdsa256(pubKeyFos, privKeyFos);
+        }
+
+        @Override
+        public byte[] encodeAsSsh(PublicKey pubKey) throws IOException {
+            return encodeAsSshEcdsa256(pubKey);
+        }
+    },
+
     RSA_4096 {
         @Override
         public String getAlgorithmName() {
             return "RSA";
+        }
+
+        @Override
+        public String getDisplayName() {
+            return "RSA 4096";
         }
 
         @Override
@@ -124,6 +175,11 @@ public enum HostKeyAlgorithm {
         }
 
         @Override
+        public String getDisplayName() {
+            return "RSA 2048";
+        }
+
+        @Override
         public String getFilenamePrivateKey() {
             return "pftpd-priv.pk8";
         }
@@ -151,6 +207,7 @@ public enum HostKeyAlgorithm {
     };
 
     public abstract String getAlgorithmName();
+    public abstract String getDisplayName();
     public abstract void generateKey(FileOutputStream pubKeyFos, FileOutputStream privKeyFos)
             throws IOException, NoSuchAlgorithmException;
 
@@ -217,6 +274,27 @@ public enum HostKeyAlgorithm {
 
         PKCS8EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(privKey.getEncoded());
         privKeyFos.write(privKeySpec.getEncoded());
+    }
+
+    void generateEcdsa256(FileOutputStream pubKeyFos, FileOutputStream privKeyFos)
+            throws IOException, NoSuchAlgorithmException
+    {
+        SecureRandom sr = new SecureRandom();
+
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance(getAlgorithmName());
+        try {
+            keyGen.initialize(new ECGenParameterSpec("secp256r1"), sr);
+            KeyPair keypair = keyGen.generateKeyPair();
+            PrivateKey privKey = keypair.getPrivate();
+            PublicKey pubKey = keypair.getPublic();
+
+            pubKeyFos.write(pubKey.getEncoded());
+
+            PKCS8EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(privKey.getEncoded());
+            privKeyFos.write(privKeySpec.getEncoded());
+        } catch (InvalidAlgorithmParameterException e) {
+            throw new NoSuchAlgorithmException(e);
+        }
     }
 
     void generateEd25519(FileOutputStream pubKeyFos, FileOutputStream privKeyFos) throws IOException {
@@ -288,6 +366,24 @@ public enum HostKeyAlgorithm {
 
         writeKeyPart(pubKey.getPublicExponent().toByteArray(), buf);
         writeKeyPart(pubKey.getModulus().toByteArray(), buf);
+
+        return buf.toByteArray();
+    }
+
+    byte[] encodeAsSshEcdsa256(PublicKey pubKey)
+            throws IOException
+    {
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+
+        byte[] name = "ecdsa-sha2-nistp256".getBytes("US-ASCII");
+        writeKeyPart(name, buf);
+        byte[] curveName = "nistp256".getBytes("US-ASCII");
+        writeKeyPart(curveName, buf);
+
+        AsymmetricKeyParameter asyncKeyParameter = PublicKeyFactory.createKey(pubKey.getEncoded());
+        ECPublicKeyParameters ecPubKeyParas = (ECPublicKeyParameters)asyncKeyParameter;
+        byte[] encoded = ecPubKeyParas.getQ().getEncoded(false);
+        writeKeyPart(encoded, buf);
 
         return buf.toByteArray();
     }

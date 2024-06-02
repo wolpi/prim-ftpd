@@ -28,11 +28,11 @@ public class KeysFingerprintsFragment extends Fragment {
 
         HostKeyAlgorithm algo = HostKeyAlgorithm.ED_25519;
         ((TextView) view.findViewById(R.id.keyFingerprintEd25519Md5Label))
-                .setText("MD5 (" + algo.getAlgorithmName() + ")");
+                .setText("MD5 (" + algo.getDisplayName() + ")");
         ((TextView) view.findViewById(R.id.keyFingerprintEd25519Sha1Label))
-                .setText("SHA1 (" + algo.getAlgorithmName() + ")");
+                .setText("SHA1 (" + algo.getDisplayName() + ")");
         ((TextView) view.findViewById(R.id.keyFingerprintEd25519Sha256Label))
-                .setText("SHA256 (" + algo.getAlgorithmName() + ")");
+                .setText("SHA256 (" + algo.getDisplayName() + ")");
 
         KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(algo);
 
@@ -45,13 +45,32 @@ public class KeysFingerprintsFragment extends Fragment {
                     .setText(keyFingerprintBean.getFingerprintSha256());
         }
 
+        algo = HostKeyAlgorithm.ECDSA_256;
+        ((TextView) view.findViewById(R.id.keyFingerprintEcdsa256Md5Label))
+                .setText("MD5 (" + algo.getDisplayName() + ")");
+        ((TextView) view.findViewById(R.id.keyFingerprintEcdsa256Sha1Label))
+                .setText("SHA1 (" + algo.getDisplayName() + ")");
+        ((TextView) view.findViewById(R.id.keyFingerprintEcdsa256Sha256Label))
+                .setText("SHA256 (" + algo.getDisplayName() + ")");
+
+        keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(algo);
+
+        if (keyFingerprintBean != null) {
+            ((TextView) view.findViewById(R.id.keyFingerprintEcdsa256Md5TextView))
+                    .setText(keyFingerprintBean.getFingerprintMd5());
+            ((TextView) view.findViewById(R.id.keyFingerprintEcdsa256Sha1TextView))
+                    .setText(keyFingerprintBean.getFingerprintSha1());
+            ((TextView) view.findViewById(R.id.keyFingerprintEcdsa256Sha256TextView))
+                    .setText(keyFingerprintBean.getFingerprintSha256());
+        }
+
         algo = HostKeyAlgorithm.RSA_4096;
         ((TextView) view.findViewById(R.id.keyFingerprintRsa4096Md5Label))
-                .setText("MD5 (" + algo.getAlgorithmName() + " 4096)");
+                .setText("MD5 (" + algo.getDisplayName() + ")");
         ((TextView) view.findViewById(R.id.keyFingerprintRsa4096Sha1Label))
-                .setText("SHA1 (" + algo.getAlgorithmName() + " 4096)");
+                .setText("SHA1 (" + algo.getDisplayName() + ")");
         ((TextView) view.findViewById(R.id.keyFingerprintRsa4096Sha256Label))
-                .setText("SHA256 (" + algo.getAlgorithmName() + " 4096)");
+                .setText("SHA256 (" + algo.getDisplayName() + ")");
 
         keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(algo);
 
@@ -66,11 +85,11 @@ public class KeysFingerprintsFragment extends Fragment {
 
         algo = HostKeyAlgorithm.RSA_2048;
         ((TextView) view.findViewById(R.id.keyFingerprintRsa2048Md5Label))
-                .setText("MD5 (" + algo.getAlgorithmName() + " 2048)");
+                .setText("MD5 (" + algo.getDisplayName() + ")");
         ((TextView) view.findViewById(R.id.keyFingerprintRsa2048Sha1Label))
-                .setText("SHA1 (" + algo.getAlgorithmName() + " 2048)");
+                .setText("SHA1 (" + algo.getDisplayName() + ")");
         ((TextView) view.findViewById(R.id.keyFingerprintRsa2048Sha256Label))
-                .setText("SHA256 (" + algo.getAlgorithmName() + " 2048)");
+                .setText("SHA256 (" + algo.getDisplayName() + ")");
 
         keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(algo);
 

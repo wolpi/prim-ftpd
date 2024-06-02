@@ -173,7 +173,10 @@ public class KeyFingerprintProvider implements Serializable {
         return fingerprints;
     }
 
-    public HostKeyAlgorithm findPreferredHostKeyAlog() {
+    public HostKeyAlgorithm findPreferredHostKeyAlog(Context ctxt) {
+        if (!areFingerprintsGenerated()) {
+            calcPubkeyFingerprints(ctxt);
+        }
         Set<HostKeyAlgorithm> algosWithKeys = new HashSet<>();
         for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
             KeyFingerprintBean keyFingerprintBean = fingerprints.get(hka);

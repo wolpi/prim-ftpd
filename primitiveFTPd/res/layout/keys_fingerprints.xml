@@ -72,6 +72,57 @@
             android:selectAllOnFocus="true"
             />
 
+        <!-- ECDSA 256 MD 5 -->
+        <TextView
+            android:id="@+id/keyFingerprintEcdsa256Md5Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintEcdsa256Md5TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+        <!-- ECDSA 256 SHA 1 -->
+        <TextView
+            android:id="@+id/keyFingerprintEcdsa256Sha1Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintEcdsa256Sha1TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+        <!-- ECDSA 256 SHA 256 -->
+        <TextView
+            android:id="@+id/keyFingerprintEcdsa256Sha256Label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintEcdsa256Sha256TextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:typeface="monospace"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+
         <!-- rsa4096 MD 5 -->
         <TextView
             android:id="@+id/keyFingerprintRsa4096Md5Label"
