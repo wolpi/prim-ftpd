@@ -123,8 +123,7 @@
     <string name="prefTitleIdleTimeoutServerStop">Időtúllépés a szerver leállítására</string>
     <string name="downloadOrSaveUrlToFile">URL letöltése vagy mentése file-ba?</string>
     <string name="saveToTextFile">Mentés szövegfájlba</string>
-    <string name="storageTypePlainV2">Hagyományos file-rendszer
-\nCsak olvasható a hozzáférése? Olvassa el a <a href="https://www.github.com/wolpi/prim-ftpd/">Github oldalunkat</a>.</string>
+    <string name="storageTypePlainV2">Hagyományos file-rendszer \nCsak olvasható a hozzáférése? Olvassa el a <a href="https://www.github.com/wolpi/prim-ftpd/">Github oldalunkat</a>.</string>
     <string name="storageTypeVirtual">Virtuális mappák (az összes Tároló típus elérhető)</string>
     <string name="download">Letölt</string>
     <string name="statsSentPerSec">Másodpercenként küldött</string>
