@@ -50,6 +50,11 @@ public class FsSshFile extends FsFile<SshFile> implements SshFile {
 	}
 
 	@Override
+	public boolean isReadable() {
+		return super.isReadable() || isDirectory() && isExecutable();
+	}
+
+	@Override
 	public boolean isExecutable() {
 		logger.trace("[{}] isExecutable()", name);
 		return file.canExecute();
