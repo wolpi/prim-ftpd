@@ -279,7 +279,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             logger.trace("  building children uri for doc: {}, parent: {}", documentId, parentId);
             Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
                     startUrl,
-                    documentId);
+                    parentId);
             Cursor childCursor = contentResolver.query(
                     childrenUri,
                     SAF_QUERY_COLUMNS,
