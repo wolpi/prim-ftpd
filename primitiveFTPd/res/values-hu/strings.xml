@@ -107,7 +107,7 @@
     <string name="isAnonymous">Névtelen belépés: %1$b</string>
     <string name="widgetTextStop">(s)ftpd leállítása</string>
     <string name="widgetTextStart">(s)ftpd indítása</string>
-    <string name="reset">Újraindítás / Reset</string>
+    <string name="reset">Alaphelyzet</string>
     <string name="licence">Licensz</string>
     <string name="prefTitleWakelock">Az alvó mód megakadályozása</string>
     <string name="prefSummaryStartDir">A bejelentkezés utáni első mappa</string>
