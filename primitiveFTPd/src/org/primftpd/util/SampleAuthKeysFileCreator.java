@@ -16,7 +16,6 @@ public class SampleAuthKeysFileCreator
 	public void createSampleAuthorizedKeysFiles(Context context) {
 		String[] paths = new String[]{
 				Defaults.pubKeyAuthKeyPath(context),
-				Defaults.PUB_KEY_AUTH_KEY_PATH_OLD,
 		};
 
 		for (String path : paths) {
