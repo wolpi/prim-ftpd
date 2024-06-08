@@ -21,7 +21,7 @@ public abstract class VirtualFile <T> extends AbstractFile {
             PftpdService pftpdService) {
         super(
                 absPath,
-                delegate != null ? delegate.getName() : absPath,
+                delegate != null ? delegate.getName() : absPath.length() > 1 && absPath.charAt(0) == '/' ? absPath.substring(1) : absPath,
                 delegate != null ? delegate.getLastModified() : 0,
                 delegate != null ? delegate.getSize() : 0,
                 delegate == null || delegate.isReadable(),
@@ -82,10 +82,10 @@ public abstract class VirtualFile <T> extends AbstractFile {
     public List<T> listFiles() {
         if ("/".equals(absPath)) {
             List<T> files = new ArrayList<>(4);
-            files.add(createFile(VirtualFileSystemView.PREFIX_FS, null, pftpdService));
-            files.add(createFile(VirtualFileSystemView.PREFIX_ROOT, null, pftpdService));
-            files.add(createFile(VirtualFileSystemView.PREFIX_SAF, null, pftpdService));
-            files.add(createFile(VirtualFileSystemView.PREFIX_ROSAF, null, pftpdService));
+            files.add(createFile("/" + VirtualFileSystemView.PREFIX_FS, null, pftpdService));
+            files.add(createFile("/" + VirtualFileSystemView.PREFIX_ROOT, null, pftpdService));
+            files.add(createFile("/" + VirtualFileSystemView.PREFIX_SAF, null, pftpdService));
+            files.add(createFile("/" + VirtualFileSystemView.PREFIX_ROSAF, null, pftpdService));
             return Collections.unmodifiableList(files);
         }
         return listDelegateFiles();
