@@ -1,10 +1,8 @@
 package org.primftpd.filesystem;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.DocumentsContract;
 import android.widget.Toast;
 
 import androidx.documentfile.provider.DocumentFile;
@@ -26,7 +24,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public abstract class SafFile<T> extends AbstractFile {
 
