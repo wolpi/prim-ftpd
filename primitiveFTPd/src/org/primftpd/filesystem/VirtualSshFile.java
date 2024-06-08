@@ -43,7 +43,8 @@ public class VirtualSshFile extends VirtualFile<SshFile> implements SshFile {
     @Override
     public boolean move(SshFile target) {
         logger.trace("move()");
-        return delegate != null && ((SshFile) delegate).move((SshFile) ((VirtualSshFile) target).delegate);
+        SshFile realTarget = (SshFile) ((VirtualSshFile) target).delegate;
+        return delegate != null && ((SshFile) delegate).move(realTarget);
     }
 
     @Override
