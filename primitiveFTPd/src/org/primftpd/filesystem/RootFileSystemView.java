@@ -29,12 +29,12 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
     public T getFile(String file) {
         logger.trace("getFile({})", file);
 
-        file = absolute(file);
-        logger.trace("  getFile(abs: {})", file);
+        String abs = absolute(file);
+        logger.trace("  getFile(abs: {})", abs);
 
         final LsOutputParser parser = new LsOutputParser();
         final LsOutputBean[] wrapper = new LsOutputBean[1];
-        final String cmd = "ls -lad " + RootFile.escapePath(file);
+        final String cmd = "ls -lad " + RootFile.escapePath(abs);
         logger.trace("  running command: {}", cmd);
         shell.addCommand(cmd, 0, new Shell.OnCommandResultListener() {
             @Override
@@ -58,19 +58,19 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
             //if (bean.isLink()) {
             //    bean = findFinalLinkTarget(bean, parser);
             //    // TODO make sym link target absolute
-            //    file = bean.getName();
+            //    abs = bean.getName();
             //}
-            return createFile(bean, file, pftpdService);
+            return createFile(bean, abs, pftpdService);
         } else {
             // probably new
             String name;
-            if (file.contains("/")) {
-                name = file.substring(file.lastIndexOf('/') + 1, file.length());
+            if (abs.contains("/")) {
+                name = abs.substring(abs.lastIndexOf('/') + 1, abs.length());
             } else {
-                name = file;
+                name = abs;
             }
             bean = new LsOutputBean(name);
-            return createFile(bean, file, pftpdService);
+            return createFile(bean, abs, pftpdService);
         }
     }
 

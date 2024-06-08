@@ -48,11 +48,11 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
     public T getFile(String file) {
         logger.trace("getFile({})", file);
 
-        file = absolute(file);
-        logger.trace("  getFile(abs: {})", file);
+        String abs = absolute(file);
+        logger.trace("  getFile(abs: {})", abs);
 
         try {
-            List<String> parts = Utils.normalizePath(file);
+            List<String> parts = Utils.normalizePath(abs);
             logger.trace("  getFile(): normalized path parts: '{}'", parts);
             DocumentFile rootDocFile = DocumentFile.fromTreeUri(context, startUrl);
             DocumentFile docFile = rootDocFile;
