@@ -84,10 +84,4 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
     public List<SshFile> listSshFiles() {
         return listFiles();
     }
-
-    @Override
-    public boolean isExecutable() {
-        logger.trace("[{}] isExecutable()", name);
-        return isDirectory;
-    }
 }

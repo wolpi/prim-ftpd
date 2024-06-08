@@ -200,7 +200,9 @@ public abstract class AbstractFile {
 
     public boolean isExecutable() {
         logger.trace("[{}] isExecutable()", name);
-        return false;
+        // return directories as executable in order to allow to enter them
+        // at least we tell clients that they can try
+        return isDirectory;
     }
 
     public boolean create() throws IOException {
