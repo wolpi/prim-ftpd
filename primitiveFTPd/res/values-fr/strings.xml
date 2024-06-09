@@ -90,7 +90,7 @@
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)
 \n(ex. pour une carte SD)</string>
     <string name="storageTypeRoSaf">SAF en lecture seule (plus rapide !)</string>
-    <string name="safExplainV2">Android va vous demander de sélectionner un dossier. Il sera disponible via le(s) serveur(s). De temps en temps, cette permission peut être révoquée et vous devez la sélectionner à nouveau.</string>
+    <string name="safExplain">Android va vous demander de sélectionner un dossier. Il sera disponible via le(s) serveur(s). De temps en temps, cette permission peut être révoquée et vous devez la sélectionner à nouveau.</string>
     <string name="selectedSafUri">Sélectionné SAF URI :</string>
     <string name="filepickerCreateFolderError">Création du répertoire : erreur</string>
     <string name="filepickerNewFolder">Nouveau répertoire</string>

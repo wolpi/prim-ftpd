@@ -74,7 +74,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/safExplainV2"
+        android:text="@string/safExplain"
         />
     <TextView
         android:id="@+id/safUriLabel"

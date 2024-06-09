@@ -91,7 +91,7 @@
 \n(Ex. para um cartão SD)</string>
     <string name="storageTypeRoSaf">SAF de leitura apenas (mais rápido!)</string>
     <string name="safExplainHeading">Como funciona o SAF</string>
-    <string name="safExplainV2">O Android vai pedir-lhe para escolher um diretório. O tal estará acessivel através do(s) servidore(s). De tempo a tempo a permissão pode ser revogada e deverá re-selecionar.</string>
+    <string name="safExplain">O Android vai pedir-lhe para escolher um diretório. O tal estará acessivel através do(s) servidore(s). De tempo a tempo a permissão pode ser revogada e deverá re-selecionar.</string>
     <string name="selectedSafUri">URI da SAF Selecionada:</string>
     <string name="startServerAndExit">Arrancar apenas o servidor</string>
     <string name="startServerAndUi">Arrancar com o servidor</string>
