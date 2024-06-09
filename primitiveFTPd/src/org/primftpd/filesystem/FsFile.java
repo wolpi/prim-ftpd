@@ -13,33 +13,39 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import static java.util.Map.entry;    
 
 public abstract class FsFile<T> extends AbstractFile {
 
 	protected final File file;
 	protected final boolean injectedDirectory;
 
-	private final static Map<String, String[]> DIRECTORY_INJECTIONS = Map.ofEntries(
-		// entry("/", new String[] {"dev", "etc", "mnt", "proc", "product", "storage", "system", "vendor"}), // comment out the line below if you enable this injection!!!
-		entry("/", new String[] {"storage"}),
-		entry("/storage/emulated", new String[] {"0"})
-	);
-
-	private final static Set<String> CUSTOMIZED_DIRECTORIES;
+	private final static Map<String, String[]> DIRECTORY_INJECTIONS;
 	static {
-		CUSTOMIZED_DIRECTORIES = new HashSet<String>();
+		Map<String, String[]> tmp = new HashMap<>();
+		// more known directories might be added
+		//tmp.put("/", new String[] {"dev", "etc", "mnt", "proc", "product", "storage", "system", "vendor"});
+		tmp.put("/", new String[] {"storage"});
+		tmp.put("/storage/emulated", new String[] {"0"});
+		DIRECTORY_INJECTIONS = Collections.unmodifiableMap(tmp);
+	}
+
+	private final static Set<String> INJECTIONS_AND_CHILDREN;
+	static {
+		Set<String> tmp = new HashSet<>();
 		for (Map.Entry<String, String[]> entry : DIRECTORY_INJECTIONS.entrySet()) {
 			String k = entry.getKey();
-			CUSTOMIZED_DIRECTORIES.add(k);
+			tmp.add(k);
 			for (String v : entry.getValue()) {
-				CUSTOMIZED_DIRECTORIES.add(k + File.separator + v);
+				tmp.add(k + File.separator + v);
 			}
 		}
+		INJECTIONS_AND_CHILDREN = Collections.unmodifiableSet(tmp);
     }
 
 	public FsFile(File file, PftpdService pftpdService) {
@@ -54,7 +60,7 @@ public abstract class FsFile<T> extends AbstractFile {
 				pftpdService);
 		this.file = file;
 		this.name = file.getName();
-		this.injectedDirectory = file.isDirectory() && CUSTOMIZED_DIRECTORIES.contains(file.getAbsolutePath());
+		this.injectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
 	}
 
 	protected abstract T createFile(File file, PftpdService pftpdService);
@@ -167,7 +173,10 @@ public abstract class FsFile<T> extends AbstractFile {
 		logger.trace("[{}] listFiles()", name);
 		postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 		File[] filesArray = file.listFiles();
+
+		// if the OS did not provide child elements:
 		if (filesArray == null) {
+			// check if requested file is among injected ones
 			String[] folders = DIRECTORY_INJECTIONS.get(file.getAbsolutePath());
 			if (folders != null) {
 				filesArray = new File[folders.length];
@@ -176,6 +185,7 @@ public abstract class FsFile<T> extends AbstractFile {
 				}
 			}
 		}
+
 		if (filesArray != null) {
 			List<T> files = new ArrayList<>(filesArray.length);
 			for (File file : filesArray) {
