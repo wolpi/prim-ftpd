@@ -185,4 +185,11 @@
     <string name="prefSummaryShowTabNames">Mostrar nombres en las pestañas de la interfaz de usuario principal</string>
     <string name="prefTitleIdleTimeoutServerStop">Tiempo de espera para detener el servidor</string>
     <string name="prefSummaryIdleTimeoutServerStop">Los servidores se detendrán después de este tiempo en minutos si no hay actividad de clientes. Establecer en 0 para desactivar.</string>
+    <string name="noKeysPresent">No hay claves presentes.</string>
+    <string name="prefSummaryHostkeyAlgos">Algoritmos para generar claves de servidor SFTP (claves de host) para</string>
+    <string name="add">Añadir</string>
+    <string name="pubkeyInvalid">La entrada no es una clave válida, se ha ignorado.</string>
+    <string name="prefHostkeyAlgos">Algoritmos de clave de host SFTP</string>
+    <string name="pubkeyAuthKeysHeading">Claves para la autenticación de clave pública</string>
+    <string name="addPubkeyForAuth">Agregar clave pública para la autenticación</string>
 </resources>
