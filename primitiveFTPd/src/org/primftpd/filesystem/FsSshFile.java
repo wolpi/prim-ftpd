@@ -52,7 +52,7 @@ public class FsSshFile extends FsFile<SshFile> implements SshFile {
 	@Override
 	public boolean isExecutable() {
 		logger.trace("[{}] isExecutable()", name);
-		return file.canExecute();
+		return injectedDirectory || file.canExecute();
 	}
 
 	@Override

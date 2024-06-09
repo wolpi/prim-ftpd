@@ -13,11 +13,34 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import static java.util.Map.entry;    
 
 public abstract class FsFile<T> extends AbstractFile {
 
 	protected final File file;
+	protected final boolean injectedDirectory;
+
+	private final static Map<String, String[]> DIRECTORY_INJECTIONS = Map.ofEntries(
+		// entry("/", new String[] {"dev", "etc", "mnt", "proc", "product", "storage", "system", "vendor"}), // comment out the line below if you enable this injection!!!
+		entry("/", new String[] {"storage"}),
+		entry("/storage/emulated", new String[] {"0"})
+	);
+
+	private final static Set<String> CUSTOMIZED_DIRECTORIES;
+	static {
+		CUSTOMIZED_DIRECTORIES = new HashSet<String>();
+		for (Map.Entry<String, String[]> entry : DIRECTORY_INJECTIONS.entrySet()) {
+			String k = entry.getKey();
+			CUSTOMIZED_DIRECTORIES.add(k);
+			for (String v : entry.getValue()) {
+				CUSTOMIZED_DIRECTORIES.add(k + File.separator + v);
+			}
+		}
+    }
 
 	public FsFile(File file, PftpdService pftpdService) {
 		super(
@@ -31,6 +54,7 @@ public abstract class FsFile<T> extends AbstractFile {
 				pftpdService);
 		this.file = file;
 		this.name = file.getName();
+		this.injectedDirectory = file.isDirectory() && CUSTOMIZED_DIRECTORIES.contains(file.getAbsolutePath());
 	}
 
 	protected abstract T createFile(File file, PftpdService pftpdService);
@@ -75,7 +99,7 @@ public abstract class FsFile<T> extends AbstractFile {
 	}
 
 	public boolean isReadable() {
-		boolean canRead = file.canRead();
+		boolean canRead = injectedDirectory || file.canRead();
 		logger.trace("[{}] isReadable() -> {}", name, canRead);
 		return canRead;
 	}
@@ -143,6 +167,15 @@ public abstract class FsFile<T> extends AbstractFile {
 		logger.trace("[{}] listFiles()", name);
 		postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 		File[] filesArray = file.listFiles();
+		if (filesArray == null) {
+			String[] folders = DIRECTORY_INJECTIONS.get(file.getAbsolutePath());
+			if (folders != null) {
+				filesArray = new File[folders.length];
+				for (int i = 0; i < folders.length; i++) {
+					filesArray[i] = new File(file.getAbsolutePath() + File.separator + folders[i]);
+				}
+			}
+		}
 		if (filesArray != null) {
 			List<T> files = new ArrayList<>(filesArray.length);
 			for (File file : filesArray) {
