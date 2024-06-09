@@ -52,40 +52,40 @@
     <string name="prefTitleStartDir">Carpeta d\'inici del servidor</string>
     <string name="prefSummaryStartDir">Carpeta inicial en connectar-se al servidor.</string>
     <string name="prefTitleAnnounce">Anuncia el servidor (LAN)</string>
-    <string name="prefSummaryAnnounce">Anuncia el servidor FTP en la xarxa local (LAN) via DNS-SD (Bonjour). Pot fer que l\'aplicació falli en alguns dispositius.</string>
+    <string name="prefSummaryAnnounce">Anuncia el servidor FTP a la xarxa local (LAN) via DNS-SD (Bonjour). Pot fer que l\'aplicació falli en alguns dispositius.</string>
     <string name="prefTitleAnnounceName">Nom del servidor</string>
     <string name="prefSummaryAnnounceName">Nom amb què anunciar el servidor a la xarxa.</string>
     <string name="prefTitleWakelock">Evita el mode d\'espera</string>
     <string name="prefSummaryWakelock">Evita el mode d\'espera mentre el servidor estigui encès. El mode d\'espera por causar interrupcions en les pujades i baixades.</string>
     <string name="prefTitleWhichServerToStart">Servidor(s) a iniciar</string>
-    <string name="prefSummaryWhichServerToStart">Trieu si voleu iniciar només el servidor FTP, només l\'SFTP, o ambdós.</string>
+    <string name="prefSummaryWhichServerToStart">Trieu si voleu iniciar només el servidor FTP, només l\'SFTP o ambdós.</string>
     <string name="prefTitleStartOnBoot">Engega durant l\'arrencada</string>
     <string name="prefSummaryStartOnBoot">Engega el servidor durant l\'arrencada del sistema.</string>
     <string name="prefTitleStartOnOpen">Engega en obrir</string>
     <string name="prefSummaryStartOnOpen">Engega el servidor en obrir l\'aplicació.</string>
-    <string name="prefTitleShowConnectionInfoInNotification">Informació en l\'àrea de notificacions</string>
-    <string name="prefSummaryShowConnectionInfoInNotification">Mostra informació de la connexió en la notificació (per exemple la IP).</string>
-    <string name="prefTitleSshowIpv4InNotification">Adreces IPv4 en la notificació</string>
-    <string name="prefSummaryShowIpv4InNotification">Mostra adreces IPv4 en la notificació, si està activada la informació en l\'àrea de notificacions.</string>
-    <string name="prefTitleSshowIpv6InNotification">Adreces IPv6 en la notificació</string>
-    <string name="prefSummaryShowIpv6InNotification">Mostra adreces IPv6 en la notificació, si està activada la informació en l\'àrea de notificacions.</string>
+    <string name="prefTitleShowConnectionInfoInNotification">Informació a l\'àrea de notificacions</string>
+    <string name="prefSummaryShowConnectionInfoInNotification">Mostra informació de la connexió a la notificació (per exemple la IP).</string>
+    <string name="prefTitleSshowIpv4InNotification">Adreces IPv4 a la notificació</string>
+    <string name="prefSummaryShowIpv4InNotification">Mostra adreces IPv4 a la notificació, si està activada la informació a l\'àrea de notificacions.</string>
+    <string name="prefTitleSshowIpv6InNotification">Adreces IPv6 a la notificació</string>
+    <string name="prefSummaryShowIpv6InNotification">Mostra adreces IPv6 a la notificació, si està activada la informació a l\'àrea de notificacions.</string>
     <string name="prefTitleShowStartStopNotification">Notificació d\'engegada/aturada</string>
     <string name="prefSummaryShowStartStopNotification">Mostra en tot moment una notificació per a permetre engegar i aturar el(s) servidor(s) d\'una manera ràpida.</string>
     <string name="prefTitlePubKeyAuth">Autenticació de clau pública</string>
-    <string name="prefSummaryPubKeyAuth">Si l\'activeu, deseu la vostra clau pública SSH2 en %s. Només per a SFTP.</string>
-    <string name="prefSummaryPubKeyAuth_v2">Si l\'activeu, deseu la vostra clau pública SSH2 en %s. El fitxer ha de tenir cada clau en una línia. Només per a SFTP.</string>
+    <string name="prefSummaryPubKeyAuth">Si l\'activeu, deseu la vostra clau pública SSH2 a %s. Només per a SFTP.</string>
+    <string name="prefSummaryPubKeyAuth_v2">Si l\'activeu, deseu la vostra clau pública SSH2 a %s. El fitxer ha de tenir cada clau en una línia. Només per a SFTP.</string>
     <string name="prefTitleAnonymousLogin">Sessió anònima</string>
     <string name="prefSummaryAnonymousLogin">Permet als clients accedir al servidor sense usuari ni contrasenya.</string>
     <string name="prefTitleFtpPassivePorts">Ports d\'FTP passiu</string>
-    <string name="prefSummaryFtpPassivePorts">Els ports per a connexions FTP passives. Els valors poden ser, un sol port, o una llista de ports i intervals de ports. Per exemple 5678,5700-5710,5800,5900.</string>
+    <string name="prefSummaryFtpPassivePorts">Els ports per a connexions FTP passives. Els valors poden ser un sol port o una llista de ports i intervals de ports. Per exemple 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Temps d\'inactivitat</string>
     <string name="prefSummaryIdleTimeout">Es tancaran les connexions sense activitat després d\'un temps, en segons. (Només FTP).</string>
     <string name="prefSummaryIdleTimeoutV2">Es tancaran les connexions sense activitat després d\'un temps, en segons. Poseu 0 per a desactivar-ho.</string>
     <string name="prefTitleLogging">Registre</string>
     <string name="prefSummaryLogging">El registre permet analitzar errors. Si l\'aplicació no funciona correctament en el vostre dispositiu, podeu enviar el registre als desenvolupadors. Pot requerir reiniciar l\'aplicació.</string>
-    <string name="prefSummaryLoggingV2">El registre permet analitzar errors. Si l\'aplicació no funciona correctament en el vostre dispositiu, podeu enviar el registre als desenvolupadors. Pot requerir reiniciar l\'aplicació. Els registres es desen en %s.</string>
+    <string name="prefSummaryLoggingV2">El registre permet analitzar errors. Si l\'aplicació no funciona correctament en el vostre dispositiu, podeu enviar el registre als desenvolupadors. Pot requerir reiniciar l\'aplicació. Els registres es desen a %s.</string>
     <string name="prefAllowedIpsPattern">Patró d\'IPs permeses</string>
-    <string name="prefSummaryAllowedIpsPattern">Definiu amb un patró les adreces IP que poden connectar-se al servidor. Només podeu emprar un caràcter comodí (*), i ha d\'ésser l\'últim.</string>
+    <string name="prefSummaryAllowedIpsPattern">Definiu amb un patró les adreces IP que poden connectar-se al servidor. Només podeu emprar un caràcter comodí (*), i ha d\'ésser el darrer caràcter.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Desbloqueig per a configurar</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Si l\'activeu, prémer el requadre de configuració ràpida demarà desbloquejar el dispositiu per a iniciar o aturar el servidor.</string>
     <string name="prefRootCopyFiles">Root: emprar carpeta temporal</string>
@@ -108,11 +108,11 @@
     <string name="storageTypeRoSaf">SAF només de lectura (més ràpid)</string>
     <string name="storageTypeVirtual">Carpetes virtuals (admet tots els tipus)</string>
     <string name="safExplainHeading">Funcionament del SAF</string>
-    <string name="safExplain">El sistema us demanarà triar una carpeta; que serà accessible connectant-se al(s) servidor(s). De tant en tant és possible que es revoquin els permisos, i hàgiu de seleccionar la carpeta novament.</string>
+    <string name="safExplain">El sistema us demanarà triar la carpeta que serà accessible en connectant-se al(s) servidor(s). De tant en tant és possible que es revoquin els permisos i hàgiu de seleccionar la carpeta novament.</string>
     <string name="selectedSafUri">URI triada per al SAF:</string>
     <string name="startServerAndExit">engega només el servidor</string>
     <string name="startServerAndUi">engega amb el servidor</string>
-    <string name="downloadOrSaveUrlToFile">Voleu descarregar-ho o desar la URL en un fitxer?</string>
+    <string name="downloadOrSaveUrlToFile">Voleu descarregar-ho o desar la URL a un fitxer?</string>
     <string name="download">Descarrega</string>
     <string name="saveToTextFile">Desa</string>
     <string name="open">Obre</string>
@@ -148,7 +148,7 @@
     <string name="rootTmpFiles">Fitxers temporals d\'accés amb «root»:</string>
     <string name="delete">Elimina</string>
     <string name="permReadLabelServerstatus">el servidor està en ús?</string>
-    <string name="permReadDescServerstatus">Permet saber si el servidor ftp/sftp està en ús.</string>
+    <string name="permReadDescServerstatus">Permet saber si el servidor FTP/SFTP està en ús.</string>
     <string name="permWriteLabelServerstatus">engega i atura el servidor</string>
     <string name="permWriteDescServerstatus">Permet engegar i aturar el servidor ftp/sftp.</string>
     <string name="mobileUiShort">Mode mòbil</string>
@@ -179,4 +179,10 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string name="prefShowTabNames">Pestanyes amb nom</string>
+    <string name="hasNotificationPermission">Té permís per a mostrar notificacions: %1$b</string>
+    <string name="prefSummaryShowTabNames">Mostra el nom de les pestanyes de la interfície</string>
+    <string name="prefTitleIdleTimeoutServerStop">Temps d\'inactivitat del servidor</string>
+    <string name="prefSummaryIdleTimeoutServerStop">El(s) servidor(s) s\'aturarà si no hi ha cap activitat de clients en un temps, en minuts. Poseu 0 per a desactivar-ho.</string>
+    <string name="qrFallback">Sense interfícies de xarxa, adreces IP o codi QR</string>
 </resources>

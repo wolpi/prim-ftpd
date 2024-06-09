@@ -15,7 +15,7 @@
     <string name="state">Estado</string>
     <string name="serverStarted">En uso…</string>
     <string name="serverStopped">Detenido</string>
-    <string name="permissionRequired">¡Se requiere permiso %1$s \" para que esta aplicación funcione!</string>
+    <string name="permissionRequired">¡Se necesita el permiso «%1$s» para que esta aplicación funcione!</string>
     <string name="permissionNameStorage">Almacenamiento</string>
     <string name="quickSettingsServerStarted">pFTPd en uso…</string>
     <string name="quickSettingsServerStopped">pFTPd detenido</string>
@@ -80,7 +80,7 @@
     <string name="prefSummaryFtpPassivePorts">Los puertos para conexiones FTP pasivas. Los valores pueden ser, un solo puerto, o una lista o rango de puertos. Por ejemplo 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Tiempo de inactividad</string>
     <string name="prefSummaryIdleTimeout">Se cerrarán las conexiones sin actividad tras un tiempo, en segundos. (Solo FTP)</string>
-    <string name="prefSummaryIdleTimeoutV2">Se cerrarán las conexiones sin actividad tras un tiempo, en segundos. Ponga 0 para desactivarlo.</string>
+    <string name="prefSummaryIdleTimeoutV2">Se cerrarán las conexiones sin actividad tras un tiempo, en segundos. Establecer en 0 para desactivar.</string>
     <string name="prefTitleLogging">Registro</string>
     <string name="prefSummaryLogging">El registro sirve para analizar errores. Si la aplicación no funciona correctamente, puede enviar el registro a los desarrolladores. Puede requerir reiniciar de la aplicación.</string>
     <string name="prefSummaryLoggingV2">El registro sirve para analizar errores. Si la aplicación no funciona correctamente, puede enviar el registro a los desarrolladores. Puede requerir reiniciar de la aplicación. Los registros se guardan en %s.</string>
@@ -103,10 +103,9 @@
     <string name="storageTypePlain">Sistema de archivos</string>
     <string name="storageTypePlainV2">Sistema de archivos\n¿Acceso solo de lectura? Vea <a href="https://www.github.com/wolpi/prim-ftpd/">página GitHub</a>.</string>
     <string name="storageTypeRoot">Superusuario («root» debe ser accesible)</string>
-    <string name="storageTypeSaf">Marco de acceso al almacenamiento (SAF) de Android
-\n
-\n(por ejemplo, para tarjetas)</string>
-    <string name="storageTypeRoSaf">SAF solo de lectura (más rápido)</string>
+    <string name="storageTypeSaf">Marco de acceso al almacenamiento (SAF)
+\nde Android. (P. ej. para tarjetas)</string>
+    <string name="storageTypeRoSaf">SAF de solo lectura (¡más rápido!)</string>
     <string name="storageTypeVirtual">Carpetas virtuales (admite todos los tipos)</string>
     <string name="safExplainHeading">Funcionamiento de SAF</string>
     <string name="safExplain">Android le pedirá que seleccione una carpeta, que será accesible conectándose al servidor(es). De vez en cuando es posible que se revoquen los permisos, y deba volver a seleccionarla.</string>
@@ -134,7 +133,7 @@
     <string name="quickShareInfoNotificationV2">Envío rápido con %1d archivo(s)</string>
     <string name="quickShareInfoActivity">Modo de envío rápido para el archivo: %1s</string>
     <string name="quickShareInfoActivityV2">Modo de envío rápido para %1d archivo(s)</string>
-    <string name="clientActionsLabel">Registro acciones cliente</string>
+    <string name="clientActionsLabel">Registro de acciones del cliente</string>
     <string name="statsLabel">Métricas</string>
     <string name="statsTotalSent">Total enviado</string>
     <string name="statsTotalReceived">Total recibido</string>
