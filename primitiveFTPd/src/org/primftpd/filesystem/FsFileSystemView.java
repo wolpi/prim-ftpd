@@ -22,7 +22,7 @@ public abstract class FsFileSystemView<T extends FsFile<X>, X> {
 	public T getFile(String file) {
 		logger.trace("getFile({})", file);
 		String abs = absolute(file);
-		logger.trace("  getFile(abs: {})", file);
+		logger.trace("  getFile(abs: {})", abs);
 		return createFile(new File(abs), pftpdService);
 	}
 }

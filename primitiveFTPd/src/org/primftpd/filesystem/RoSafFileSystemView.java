@@ -50,17 +50,17 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
     public T getFile(String file) {
         logger.trace("getFile({}), startUrl: {}", file, startUrl);
 
-        file = absolute(file);
-        logger.trace("  getFile(abs: {})", file);
+        String abs = absolute(file);
+        logger.trace("  getFile(abs: {})", abs);
 
-        if (ROOT_PATH.equals(file)) {
+        if (ROOT_PATH.equals(abs)) {
             return createFile(contentResolver, startUrl, ROOT_PATH, pftpdService);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String parentId = DocumentsContract.getTreeDocumentId(startUrl);
 
-            List<String> parts = Utils.normalizePath(file);
+            List<String> parts = Utils.normalizePath(abs);
             logger.trace("    getFile(normalized: {})", parts);
 
             for (int i=0; i<parts.size(); i++) {
