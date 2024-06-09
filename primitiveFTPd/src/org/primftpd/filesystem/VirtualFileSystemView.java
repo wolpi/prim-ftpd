@@ -50,8 +50,6 @@ public abstract class VirtualFileSystemView<
             return createFile(absoluteVirtualPath, null, true, pftpdService);
         } else if (absoluteVirtualPath.startsWith("/" + PREFIX_FS)) {
             String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_FS);
-            String startDir = pftpdService.getPrefsBean().getStartDir().getAbsolutePath();
-            realPath = ("/".equals(startDir) ? "" : startDir) + "/" + ("/".equals(realPath) ? "" : realPath);
             logger.debug("Using FS '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = fsFileSystemView.getFile(realPath);
             return createFile(absoluteVirtualPath, delegate, pftpdService);

@@ -238,6 +238,7 @@ public class SshServerService extends AbstractServerService
 											SshServerService.this,
 											session),
 									SshServerService.this,
+									prefsBean.getStartDir(),
 									session
 							);
 					}

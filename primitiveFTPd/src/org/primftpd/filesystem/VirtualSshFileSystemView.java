@@ -5,6 +5,8 @@ import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.file.SshFile;
 import org.primftpd.services.PftpdService;
 
+import java.io.File;
+
 public class VirtualSshFileSystemView extends VirtualFileSystemView<
         SshFile,
         FsSshFile,
@@ -12,6 +14,7 @@ public class VirtualSshFileSystemView extends VirtualFileSystemView<
         SafSshFile,
         RoSafSshFile> implements FileSystemView {
 
+    private final File homeDir;
     private final Session session;
 
     public VirtualSshFileSystemView(
@@ -20,8 +23,10 @@ public class VirtualSshFileSystemView extends VirtualFileSystemView<
             SafSshFileSystemView safFileSystemView,
             RoSafSshFileSystemView roSafFileSystemView,
             PftpdService pftpdService,
+            File homeDir,
             Session session) {
         super(fsFileSystemView, rootFileSystemView, safFileSystemView, roSafFileSystemView, pftpdService);
+		this.homeDir = homeDir;
         this.session = session;
     }
 
@@ -37,7 +42,7 @@ public class VirtualSshFileSystemView extends VirtualFileSystemView<
 
     @Override
     protected String absolute(String file) {
-        return Utils.absoluteOrHome(file, "/");
+        return Utils.absoluteOrHome(file, "/" + PREFIX_FS + homeDir.getAbsolutePath());
     }
 
     @Override
