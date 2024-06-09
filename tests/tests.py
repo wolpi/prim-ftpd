@@ -557,10 +557,10 @@ if storageType == STORAGE_TYPE_VIRTUAL:
     #scpUpload(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_SAF, "[virtual saf  scp]", errors)
     scpDownload(DEFAULT_PATH_VIRTUAL_SAF, "[virtual saf  scp]", errors)
 
-    # no RoSAF due to issues with SAF-API
-    #testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROSAF, "[virtual SAFRO sftp]", errors, Protocol.SFTP, storageType)
-    #testCycleReadOnly(BASE_URL__FTP, DEFAULT_PATH_VIRTUAL_ROSAF,  "[virtual SAFRO  ftp]", errors, Protocol.FTP, storageType)
-    #scpDownload(DEFAULT_PATH_VIRTUAL_ROSAF, "[virtual SAFRO  scp]", errors)
+    # RoSAF
+    testCycleReadOnly(BASE_URL_SFTP, DEFAULT_PATH_VIRTUAL_ROSAF, "[virtual SAFRO sftp]", errors, Protocol.SFTP, storageType)
+    testCycleReadOnly(BASE_URL_FTP, DEFAULT_PATH_VIRTUAL_ROSAF,  "[virtual SAFRO  ftp]", errors, Protocol.FTP, storageType)
+    scpDownload(DEFAULT_PATH_VIRTUAL_ROSAF, "[virtual SAFRO  scp]", errors)
 
     testKeys(BASE_URL_SFTP + DEFAULT_PATH_VIRTUAL_FS, errors)
 
