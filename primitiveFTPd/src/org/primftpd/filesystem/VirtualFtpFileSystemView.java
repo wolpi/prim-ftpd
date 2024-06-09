@@ -15,7 +15,7 @@ public class VirtualFtpFileSystemView extends VirtualFileSystemView<
         RoSafFtpFile> implements FileSystemView {
 
     private final User user;
-	private final File homeDir;
+    private final File homeDir;
     private FtpFile workingDir;
 
     public VirtualFtpFileSystemView(
@@ -28,7 +28,7 @@ public class VirtualFtpFileSystemView extends VirtualFileSystemView<
             User user) {
         super(fsFileSystemView, rootFileSystemView, safFileSystemView, roSafFileSystemView, pftpdService);
         this.user = user;
-		this.homeDir = homeDir;
+        this.homeDir = homeDir;
         workingDir = getHomeDirectory();
     }
 
