@@ -1,8 +1,5 @@
 package org.primftpd.filesystem;
 
-import java.io.File;
-import java.nio.file.Paths;
-
 import org.primftpd.services.PftpdService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +50,7 @@ public abstract class VirtualFileSystemView<
             return createFile(absoluteVirtualPath, null, true, pftpdService);
         } else if (absoluteVirtualPath.startsWith("/" + PREFIX_FS)) {
             String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_FS);
-            realPath = Paths.get(pftpdService.getPrefsBean().getStartDir().getAbsolutePath(), realPath).toString();
+            realPath = pftpdService.getPrefsBean().getStartDir().getAbsolutePath() + "/" + realPath;
             logger.debug("Using FS '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = fsFileSystemView.getFile(realPath);
             return createFile(absoluteVirtualPath, delegate, pftpdService);
