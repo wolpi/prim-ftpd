@@ -57,6 +57,18 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
     }
 
     @Override
+    public boolean setLastModified(long time) {
+        int timeResolution = fileSystemView.getTimeResolution();
+        long convertedTime;
+        if (timeResolution != 1000) { // in case of sftp, this is the finest resolution
+            convertedTime = (time / timeResolution) * timeResolution;
+        } else {
+            convertedTime = time;
+        }
+        return super.setLastModified(convertedTime);
+    }
+
+    @Override
     public boolean move(SshFile target) {
         logger.trace("move()");
         return super.move((SafFile)target);

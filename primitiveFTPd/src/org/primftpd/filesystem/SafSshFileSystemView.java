@@ -13,12 +13,18 @@ import org.primftpd.services.PftpdService;
 public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile> implements FileSystemView {
 
     private final Session session;
+    private final int timeResolution;
 
     public SafSshFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService, Session session) {
         super(context, startUrl, contentResolver, pftpdService);
         this.session = session;
+        timeResolution = StorageManagerUtil.getFilesystemTimeResolutionForSftp(startUrl);
     }
 
+    protected int getTimeResolution() {
+        return timeResolution;
+    }
+    
     @Override
     protected SafSshFile createFile(
             ContentResolver contentResolver,

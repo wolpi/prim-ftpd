@@ -11,13 +11,20 @@ import android.provider.DocumentsContract;
 import androidx.annotation.Nullable;
 import androidx.documentfile.provider.DocumentFile;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
 public final class StorageManagerUtil {
     private static final String PRIMARY_VOLUME_NAME = "primary";
+
+    private static Logger logger = LoggerFactory.getLogger(StorageManagerUtil.class);
 
     public static String getFullDocIdPathFromTreeUri(@Nullable final Uri treeUri, Context context) {
         if (treeUri == null) {
@@ -45,6 +52,40 @@ public final class StorageManagerUtil {
         } else {
             return volumePath;
         }
+    }
+
+    public static int getFilesystemTimeResolutionForSftp(Uri startUrl) {
+        logger.trace("getFilesystemTimeResolutionForSftp({})", startUrl);
+        String mountPoint = "/mnt/media_rw/" + getVolumeIdFromTreeUri(startUrl);
+        try(BufferedReader br = new BufferedReader(new FileReader("/proc/mounts"))) {
+            // sample contents for /proc/mounts
+            // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX vfat ... 0 0
+            // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=exfat,... 0 0
+            // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=vfat:32,... 0 0
+            for (String line; (line = br.readLine()) != null; ) {
+                String[] mountInformations = line.split(" ");
+                if (mountInformations.length >= 4 && mountInformations[1].equals(mountPoint)) {
+                    if (mountInformations[2].equals("vfat")) {
+                        logger.trace("  found mount point {} with type {}", mountInformations[1], mountInformations[2]);
+                        return 2000;
+                    } else if (mountInformations[2].equals("sdfat")) {
+                        for (String option : mountInformations[3].split(",")) {
+                            if (option.startsWith("fs=")) {
+                                if (option.startsWith("fs=vfat")) {
+                                    logger.trace("  found mount point {} with type {} with option {}", new Object[]{mountInformations[1], mountInformations[2], option});
+                                    return 2000;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("getFilesystemTimeResolutionForSftp() {}", e);
+        }
+        return 1000; // in case of sftp, this is the finest resolution
     }
 
     @SuppressLint("ObsoleteSdkInt")
