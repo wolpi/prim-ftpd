@@ -13,7 +13,6 @@ import java.util.List;
 public class SafSshFile extends SafFile<SshFile> implements SshFile {
 
     private final Session session;
-    private final SafSshFileSystemView fileSystemView;
 
     public SafSshFile(
             ContentResolver contentResolver,
@@ -21,11 +20,10 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             DocumentFile documentFile,
             String absPath,
             PftpdService pftpdService,
-            Session session,
-            SafSshFileSystemView fileSystemView) {
-        super(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService);
+            SafFileSystemView fileSystemView,
+            Session session) {
+        super(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, fileSystemView);
         this.session = session;
-        this.fileSystemView = fileSystemView;
     }
 
     public SafSshFile(
@@ -34,11 +32,10 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             String name,
             String absPath,
             PftpdService pftpdService,
-            Session session,
-            SafSshFileSystemView fileSystemView) {
-        super(contentResolver, parentDocumentFile, name, absPath, pftpdService);
+            SafFileSystemView fileSystemView,
+            Session session) {
+        super(contentResolver, parentDocumentFile, name, absPath, pftpdService, fileSystemView);
         this.session = session;
-        this.fileSystemView = fileSystemView;
     }
 
     @Override
@@ -47,25 +44,14 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, session, fileSystemView);
+            PftpdService pftpdService,
+            SafFileSystemView fileSystemView) {
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, fileSystemView, session);
     }
 
     @Override
     public String getClientIp() {
         return SshUtils.getClientIp(session);
-    }
-
-    @Override
-    public boolean setLastModified(long time) {
-        int timeResolution = fileSystemView.getTimeResolution();
-        long convertedTime;
-        if (timeResolution != 1000) { // in case of sftp, this is the finest resolution
-            convertedTime = (time / timeResolution) * timeResolution;
-        } else {
-            convertedTime = time;
-        }
-        return super.setLastModified(convertedTime);
     }
 
     @Override
@@ -98,7 +84,7 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             parentPath = "/";
         }
         logger.trace("[{}]   getParentFile() -> {}", name, parentPath);
-        return fileSystemView.getFile(parentPath);
+        return (SshFile)fileSystemView.getFile(parentPath);
     }
 
     @Override

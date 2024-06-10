@@ -25,12 +25,18 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
     protected final Uri startUrl;
     protected final ContentResolver contentResolver;
     protected final PftpdService pftpdService;
+    protected final int timeResolution;
 
     public SafFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService) {
         this.context = context;
         this.startUrl = startUrl;
         this.contentResolver = contentResolver;
         this.pftpdService = pftpdService;
+        timeResolution = StorageManagerUtil.getFilesystemTimeResolutionForTreeUri(startUrl);
+    }
+
+    protected int getTimeResolution() {
+        return timeResolution;
     }
 
     protected abstract T createFile(
@@ -38,13 +44,15 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            PftpdService pftpdService);
+            PftpdService pftpdService,
+            SafFileSystemView fileSystemView);
     protected abstract T createFile(
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
-            PftpdService pftpdService);
+            PftpdService pftpdService,
+            SafFileSystemView fileSystemView);
 
     protected abstract String absolute(String file);
 
