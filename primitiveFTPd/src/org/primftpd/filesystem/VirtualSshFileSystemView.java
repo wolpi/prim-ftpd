@@ -26,7 +26,7 @@ public class VirtualSshFileSystemView extends VirtualFileSystemView<
             File homeDir,
             Session session) {
         super(fsFileSystemView, rootFileSystemView, safFileSystemView, roSafFileSystemView, pftpdService);
-		this.homeDir = homeDir;
+        this.homeDir = homeDir;
         this.session = session;
     }
 
