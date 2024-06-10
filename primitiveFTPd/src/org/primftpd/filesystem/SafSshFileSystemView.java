@@ -13,16 +13,15 @@ import org.primftpd.services.PftpdService;
 public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile> implements FileSystemView {
 
     private final Session session;
-    private final int timeResolution;
 
     public SafSshFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService, Session session) {
         super(context, startUrl, contentResolver, pftpdService);
         this.session = session;
-        timeResolution = StorageManagerUtil.getFilesystemTimeResolutionForSftp(startUrl);
     }
 
+    @Override
     protected int getTimeResolution() {
-        return timeResolution;
+        return timeResolution > 1000 ? timeResolution : 1000; // sftp messages have 1s resolution
     }
     
     @Override
@@ -31,8 +30,9 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, session, this);
+            PftpdService pftpdService,
+            SafFileSystemView fileSystemView) {
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, fileSystemView, session);
     }
 
     @Override
@@ -41,8 +41,9 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
-            PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, session, this);
+            PftpdService pftpdService,
+            SafFileSystemView fileSystemView) {
+        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, fileSystemView, session);
     }
 
     @Override

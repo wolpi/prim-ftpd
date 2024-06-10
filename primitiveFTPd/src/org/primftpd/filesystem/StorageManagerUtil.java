@@ -54,26 +54,30 @@ public final class StorageManagerUtil {
         }
     }
 
-    public static int getFilesystemTimeResolutionForSftp(Uri startUrl) {
-        logger.trace("getFilesystemTimeResolutionForSftp({})", startUrl);
+    public static int getFilesystemTimeResolutionForTreeUri(Uri startUrl) {
+        logger.trace("getFilesystemTimeResolutionForTreeUri({})", startUrl);
         String mountPoint = "/mnt/media_rw/" + getVolumeIdFromTreeUri(startUrl);
         try(BufferedReader br = new BufferedReader(new FileReader("/proc/mounts"))) {
             // sample contents for /proc/mounts
-            // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX vfat ... 0 0
-            // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=exfat,... 0 0
-            // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=vfat:32,... 0 0
+            // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX vfat ... 0 0                     -> 2000 ms
+            // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=vfat:16,... 0 0     -> 2000 ms
+            // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=vfat:32,... 0 0     -> 2000 ms
+            // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=exfat,... 0 0       ->   10 ms
             for (String line; (line = br.readLine()) != null; ) {
                 String[] mountInformations = line.split(" ");
                 if (mountInformations.length >= 4 && mountInformations[1].equals(mountPoint)) {
                     if (mountInformations[2].equals("vfat")) {
-                        logger.trace("  found mount point {} with type {}", mountInformations[1], mountInformations[2]);
+                        logger.trace("  found mount point {} with type {} -> 2000ms", mountInformations[1], mountInformations[2]);
                         return 2000;
                     } else if (mountInformations[2].equals("sdfat")) {
                         for (String option : mountInformations[3].split(",")) {
                             if (option.startsWith("fs=")) {
                                 if (option.startsWith("fs=vfat")) {
-                                    logger.trace("  found mount point {} with type {} with option {}", new Object[]{mountInformations[1], mountInformations[2], option});
+                                    logger.trace("  found mount point {} with type {} with option {} -> 2000ms", new Object[]{mountInformations[1], mountInformations[2], option});
                                     return 2000;
+                                } else if (option.startsWith("fs=exfat")) {
+                                    logger.trace("  found mount point {} with type {} with option {} -> 10ms", new Object[]{mountInformations[1], mountInformations[2], option});
+                                    return 10;
                                 }
                                 break;
                             }
@@ -83,9 +87,9 @@ public final class StorageManagerUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error("getFilesystemTimeResolutionForSftp() {}", e);
+            logger.error("getFilesystemTimeResolutionForTreeUri() {}", e);
         }
-        return 1000; // in case of sftp, this is the finest resolution
+        return 1; // we don't know, assume 1ms
     }
 
     @SuppressLint("ObsoleteSdkInt")
