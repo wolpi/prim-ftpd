@@ -10,7 +10,7 @@ FTP and SFTP server app for Android with external SD-card access.
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Q8TU8ZQX3WV8J)
 
-How can you use this server on your device to access your files?
+How can you use this server on your device to access your files (see discussion regarding permission and restriction below in terms of Google and Play)?
 * Install from F-Droid
 * Download from GitHub releases
 * Use SAF
