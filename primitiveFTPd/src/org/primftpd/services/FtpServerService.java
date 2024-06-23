@@ -153,6 +153,7 @@ public class FtpServerService extends AbstractServerService
 											FtpServerService.this,
 											user),
 									FtpServerService.this,
+									prefsBean.getStartDir(),
 									user
 							);
 					}
