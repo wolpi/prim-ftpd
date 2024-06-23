@@ -57,6 +57,9 @@ public class VirtualSshFile extends VirtualFile<SshFile> implements SshFile {
     @Override
     public boolean create() throws IOException {
         logger.trace("[{}] create()", name);
+        // This call and the update of the cached properties is required by SSHFS, because it calls STAT and later FSTAT on created new files,
+        // STAT requires a created new file, FSTAT requires updated properties.
+        // This call is not required by normal clients who simply open, write and close the file.
         if (delegate != null && ((SshFile) delegate).create()) {
             lastModified = delegate.getLastModified();
             size = 0;

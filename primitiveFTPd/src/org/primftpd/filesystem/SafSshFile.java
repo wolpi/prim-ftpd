@@ -71,6 +71,9 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
     @Override
     public boolean create() throws IOException {
         logger.trace("[{}] create()", name);
+        // This call is required by SSHFS, because it calls STAT and later FSTAT on created new files,
+        // STAT requires a created new file, FSTAT requires updated properties.
+        // This call is not required by normal clients who simply open, write and close the file.
         return createNewFile();
     }
 
