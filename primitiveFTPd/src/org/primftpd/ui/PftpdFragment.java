@@ -166,6 +166,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 
 		// make links clickable
 		((TextView)view.findViewById(R.id.radioStoragePlain)).setMovementMethod(LinkMovementMethod.getInstance());
+		((TextView)view.findViewById(R.id.safExplain)).setMovementMethod(LinkMovementMethod.getInstance());
 
 		// create sample authorized_keys files
 		new SampleAuthKeysFileCreator().createSampleAuthorizedKeysFiles(getContext());
