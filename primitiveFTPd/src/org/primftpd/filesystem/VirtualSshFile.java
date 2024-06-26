@@ -4,6 +4,7 @@ import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
 import org.primftpd.services.PftpdService;
 
+import java.io.IOException;
 import java.util.List;
 
 public class VirtualSshFile extends VirtualFile<SshFile> implements SshFile {
@@ -51,6 +52,22 @@ public class VirtualSshFile extends VirtualFile<SshFile> implements SshFile {
     public String getOwner() {
         logger.trace("[{}] getOwner()", name);
         return session.getUsername();
+    }
+
+    @Override
+    public boolean create() throws IOException {
+        logger.trace("[{}] create()", name);
+        // This call and the update of the cached properties is required by SSHFS, because it calls STAT and later FSTAT on created new files,
+        // STAT requires a created new file, FSTAT requires updated properties.
+        // This call is not required by normal clients who simply open, write and close the file.
+        if (delegate != null && ((SshFile) delegate).create()) {
+            lastModified = delegate.getLastModified();
+            size = 0;
+            readable = delegate.isReadable();
+            exists = true;
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -43,7 +43,7 @@ public abstract class SafFile<T> extends AbstractFile {
     private DocumentFile documentFile;
     private final DocumentFile parentDocumentFile;
 
-    private final boolean writable;
+    private boolean writable;
 
     public SafFile(
             ContentResolver contentResolver,
@@ -224,5 +224,29 @@ public abstract class SafFile<T> extends AbstractFile {
         }
 
         return null;
+    }
+
+    // This method is the equivalent of java.io.File.createNewFile(), it creates the file and updates the cached properties of it.
+    // This method is required by SSHFS, because it calls STAT and later FSTAT on created new files,
+    // STAT requires a created new file, FSTAT requires updated properties.
+    // This method is not required by normal clients who simply open, write and close the file.
+    boolean createNewFile() throws IOException {
+        logger.trace("[{}] createNewFile()", name);
+        try {
+            documentFile = parentDocumentFile.createFile(null, name);
+        } catch (Exception e) {
+            throw new IOException("Failed to create file", e);
+        }
+
+        if (documentFile != null) {
+            lastModified = documentFile.lastModified();
+            size = 0;
+            readable = documentFile.canRead();
+            exists = true;
+            writable = documentFile.canWrite();
+            return true;
+        }
+
+        return false;
     }
 }
