@@ -77,6 +77,7 @@
     <string name="storageTypePlain">Zwykły stary system plików</string>
     <string name="storageTypeRoot">Super użytkownik (urządzenie musi być zrootowane)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)
+\n
 \n(np. dla karty SD)</string>
     <string name="storageTypeRoSaf">SAF tylko do odczytu (szybsze!)</string>
     <string name="safExplainHeading">Jak działa SAF</string>
@@ -162,4 +163,15 @@
     <string name="permReadDescServerstatus">Umożliwia sprawdzenie, czy serwer FTP/SFTP działa.</string>
     <string name="permWriteDescServerstatus">Umożliwia uruchamianie i zatrzymywanie serwera ftp/sftp.</string>
     <string name="qrFallback">bez interfejsów sieciowych, bez adresów IP, bez kodu QR</string>
+    <string name="quickShareInfoNotificationV2">QuickShare z %1d plikiem(ami)</string>
+    <string name="addPubkeyForAuth">Dodaj klucz publiczny dla autoryzacji</string>
+    <string name="pubkeyAuthKeysHeading">Klucze autoryzacji klucza publicznego</string>
+    <string name="pubkeyInvalid">Wejście nie jest prawidłowym kluczem, zostało zignorowane.</string>
+    <string name="noKeysPresent">Brak kluczy.</string>
+    <string name="prefHostkeyAlgos">Algorytmy klucza hosta SFTP</string>
+    <string name="prefSummaryHostkeyAlgos">Algorytmy do generowania kluczy serwera SFTP (hostkeys) dla</string>
+    <string name="add">Dodaj</string>
+    <string name="iconCleanSpace">Czyste miejsce</string>
+    <string name="quickShareInfoActivityV2">Uruchamianie w trybie QuickShare dla %1d pliku(ów)</string>
+    <string name="quickShareFiles">Pliki QuickShare:</string>
 </resources>

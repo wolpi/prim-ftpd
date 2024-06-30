@@ -103,8 +103,8 @@
     <string name="storageTypePlain">Sistema de archivos</string>
     <string name="storageTypePlainV2">Sistema de archivos\n¿Acceso solo de lectura? Vea <a href="https://www.github.com/wolpi/prim-ftpd/">página GitHub</a>.</string>
     <string name="storageTypeRoot">Superusuario («root» debe ser accesible)</string>
-    <string name="storageTypeSaf">Marco de acceso al almacenamiento (SAF)
-\nde Android. (P. ej. para tarjetas)</string>
+    <string name="storageTypeSaf">Marco de acceso al almacenamiento de Android (SAF)
+\n(por ejemplo, para tarjeta SD externa)</string>
     <string name="storageTypeRoSaf">SAF de solo lectura (¡más rápido!)</string>
     <string name="storageTypeVirtual">Carpetas virtuales (admite todos los tipos)</string>
     <string name="safExplainHeading">Funcionamiento de SAF</string>
@@ -192,4 +192,5 @@
     <string name="prefHostkeyAlgos">Algoritmos de clave de host SFTP</string>
     <string name="pubkeyAuthKeysHeading">Claves para la autenticación de clave pública</string>
     <string name="addPubkeyForAuth">Agregar clave pública para la autenticación</string>
+    <string name="safExplainV2">Android te pedirá que elijas un directorio. Eso estará disponible a través de servidor(es). ¿La autorización es revocada y tienes que volver a elegir regularmente? Ver nuestra página <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub</a>.</string>
 </resources>
