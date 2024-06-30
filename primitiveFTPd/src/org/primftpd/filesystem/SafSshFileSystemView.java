@@ -20,13 +20,19 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
     }
 
     @Override
+    protected int getTimeResolution() {
+        return timeResolution > 1000 ? timeResolution : 1000; // sftp messages have 1s resolution
+    }
+    
+    @Override
     protected SafSshFile createFile(
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, session, this);
+            PftpdService pftpdService,
+            SafFileSystemView fileSystemView) {
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, fileSystemView, session);
     }
 
     @Override
@@ -35,8 +41,9 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             DocumentFile parentDocumentFile,
             String name,
             String absPath,
-            PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, session, this);
+            PftpdService pftpdService,
+            SafFileSystemView fileSystemView) {
+        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, fileSystemView, session);
     }
 
     @Override
