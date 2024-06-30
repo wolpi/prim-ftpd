@@ -41,7 +41,8 @@ You may download latest development snapshot from [GitHub packages](https://gith
 You may help translate this app in [hosted weblate](https://hosted.weblate.org/projects/pftpd/pftpd/).
 
 [<img alt="Translation State Overview" src="https://hosted.weblate.org/widget/pftpd/287x66-black.png" />](https://hosted.weblate.org/engage/pftpd/)
-[<img alt="Translation State Detail" src="https://hosted.weblate.org/widget/pftpd/horizontal-auto.svg" />"](https://hosted.weblate.org/engage/pftpd/)
+
+[<img alt="Translation State Detail" src="https://hosted.weblate.org/widget/pftpd/horizontal-auto.svg" />](https://hosted.weblate.org/engage/pftpd/)
 
 ## SFTP vs SCP
 
