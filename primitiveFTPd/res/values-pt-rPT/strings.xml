@@ -93,8 +93,7 @@
     <string name="statsLabel">Stats</string>
     <string name="statsTotalSent">Total enviado</string>
     <string name="prefRootCopyFiles">Root: copiar ficheiros à tmp dir para envio/descarga</string>
-    <string name="storageTypePlainV2">Sistema de ficheiros antigo e simples
-\nTem acesso somente de leitura? Veja o nosso <a href="https://www.github.com/wolpi/prim-ftpd/">site do GitHub</a>.</string>
+    <string name="storageTypePlainV2">Sistema de ficheiros antigo e simples \nTem acesso somente de leitura? Veja o nosso <a href="https://www.github.com/wolpi/prim-ftpd/">site do GitHub</a>.</string>
     <string name="storageTypeVirtual">Pastas virtuais (fornece todos os tipos de armazenamento)</string>
     <string name="download">Descarregar</string>
     <string name="filepickerNewFolder">Nova pasta</string>
