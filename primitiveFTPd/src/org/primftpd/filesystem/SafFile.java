@@ -30,8 +30,6 @@ public abstract class SafFile<T> extends AbstractFile {
     private final static Set<String> KNOWN_BAD_CHARS;
     static {
         Set<String> tmp = new HashSet<>();
-        tmp.add("[");
-        tmp.add("]");
         tmp.add("*");
         tmp.add("?");
         tmp.add("\\");
