@@ -81,8 +81,11 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
         while (tmp.isLink()) {
             shell.addCommand("ls -lad \"" + tmp.getLinkTarget() + "\"", 0, new Shell.OnCommandLineListener() {
                 @Override
-                public void onLine(String s) {
+                public void onSTDOUT(String s) {
                     wrapper[0] = parser.parseLine(s);
+                }
+                @Override
+                public void onSTDERR(String s) {
                 }
                 @Override
                 public void onCommandResult(int i, int i1) {

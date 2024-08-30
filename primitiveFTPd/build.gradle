@@ -13,7 +13,7 @@ buildscript {
 repositories {
     google()
     mavenCentral()
-    jcenter()
+    maven { url 'https://jitpack.io' }
 }
 
 apply plugin: 'com.android.application'
@@ -98,7 +98,7 @@ dependencies {
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'com.google.android.material:material:1.6.0'
-    implementation 'eu.chainfire:libsuperuser:1.0.0.201704021214'
+    implementation 'eu.chainfire:libsuperuser:1.1.1'
     implementation 'org.apache.httpcomponents.client5:httpclient5:5.0'
     implementation ('me.dm7.barcodescanner:zxing:1.9.8') {
         exclude group: 'com.android.support'
