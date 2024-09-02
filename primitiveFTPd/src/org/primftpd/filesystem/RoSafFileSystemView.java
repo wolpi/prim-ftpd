@@ -40,7 +40,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             String docId,
             String absPath,
             PftpdService pftpdService);
-    protected abstract T createFileNonExistant(
+    protected abstract T createFileNonExistent(
             ContentResolver contentResolver,
             Uri startUrl,
             String name,

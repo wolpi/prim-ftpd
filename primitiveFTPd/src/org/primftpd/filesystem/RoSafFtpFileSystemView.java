@@ -30,7 +30,7 @@ public class RoSafFtpFileSystemView extends RoSafFileSystemView<RoSafFtpFile, Ft
         return new RoSafFtpFile(contentResolver, startUrl, docId, absPath, true, pftpdService, user);
     }
 
-    protected RoSafFtpFile createFileNonExistant(ContentResolver contentResolver, Uri startUrl, String name, String absPath, PftpdService pftpdService) {
+    protected RoSafFtpFile createFileNonExistent(ContentResolver contentResolver, Uri startUrl, String name, String absPath, PftpdService pftpdService) {
         return new RoSafFtpFile(contentResolver, startUrl, name, absPath, false, pftpdService, user);
     }
 
