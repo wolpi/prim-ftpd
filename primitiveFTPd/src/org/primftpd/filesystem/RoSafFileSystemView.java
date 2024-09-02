@@ -53,11 +53,8 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
         String abs = absolute(file);
         logger.trace("  getFile(abs: {})", abs);
 
-        if (ROOT_PATH.equals(abs)) {
-            return createFile(contentResolver, startUrl, ROOT_PATH, pftpdService);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && !ROOT_PATH.equals(abs)) {
             String parentId = DocumentsContract.getTreeDocumentId(startUrl);
 
             List<String> parts = Utils.normalizePath(abs);
@@ -70,6 +67,8 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                 Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
                         startUrl,
                         parentId);
+                // Do not use selection and selectionArgs for ContentResolver.query(), Android doesn't care, it will return all the files whatever you do.
+                // See: https://stackoverflow.com/a/61214849
                 Cursor childCursor = contentResolver.query(
                         childrenUri,
                         new String[] {
@@ -83,7 +82,6 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                     while (childCursor.moveToNext()) {
                         String docId = childCursor.getString(0);
                         String docName = childCursor.getString(1);
-                        logger.trace("    checking current part: {} for doc name: {}", currentPart, docName);
                         if (currentPart.equals(docName)) {
                             if (i == parts.size() - 1) {
                                 logger.trace("    calling createFile() for doc: {}, parent: {}", docName, parentId);
@@ -94,10 +92,21 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                             }
                         }
                     }
-                    // not found -> probably upload -> create object just with name
-                    // -> this breaks navigation for level 2 -> we are read only -> there is no upload anyway
-                    //logger.trace("    calling createFile() for not found doc: {}", currentPart);
-                    //return createFileNonExistant(contentResolver, startUrl, currentPart, Utils.toPath(parts));
+                    if (childCursor.isAfterLast()) {
+                        // not found
+                        if (i == parts.size() - 1) {
+                            // TODO we are read only -> there is no upload anyway
+                            // probably upload -> create object just with name
+                            logger.trace("    calling createFile() for not found doc: {}", currentPart);
+                            return createFileNonExistent(contentResolver, startUrl, currentPart, Utils.toPath(parts), pftpdService);
+                        } else {
+                            // invalid path
+                            String absPath = Utils.toPath(parts.subList(0, i+1));
+                            logger.error("path does not exist: {}", absPath);
+                            // fall through to returning the root document
+                            break;
+                        }
+                    }
                 } finally {
                     closeQuietly(childCursor);
                 }
