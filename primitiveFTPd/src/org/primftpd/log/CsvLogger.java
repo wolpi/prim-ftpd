@@ -13,7 +13,7 @@ public class CsvLogger extends MarkerIgnoringBase
 {
 	private static final long serialVersionUID = 3245106428450758061L;
 
-	private static final int MAX_MSG_LEN = 100;
+	private static final int MAX_MSG_LEN = 250;
 
 	private static final DateFormat DATE_FORMAT =
 		new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S", Locale.GERMAN);
