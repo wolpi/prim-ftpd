@@ -124,7 +124,6 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
                                 logger.error("path does not exist: {}", absPath);
                                 // fall through to returning the root document
                                 break;
-
                             }
                         }
                     } finally {
