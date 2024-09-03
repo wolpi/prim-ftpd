@@ -78,8 +78,7 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
                             childrenUri,
                             new String[] {
                                     DocumentsContract.Document.COLUMN_DOCUMENT_ID,
-                                    DocumentsContract.Document.COLUMN_DISPLAY_NAME,
-                                    DocumentsContract.Document.COLUMN_MIME_TYPE
+                                    DocumentsContract.Document.COLUMN_DISPLAY_NAME
                             },
                             null,
                             null,
@@ -88,19 +87,13 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
                         while (childCursor.moveToNext()) {
                             String docId = childCursor.getString(0);
                             String docName = childCursor.getString(1);
-                            String docMimeType = childCursor.getString(2);
                             if (currentPart.equals(docName)) {
                                 if (i == parts.size() - 1) {
                                     Uri docUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, docId);
                                     Uri parentUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, parentId);
                                     logger.trace("    calling createFile() for doc: {}, docId: {}, docUri: {}, parentId: {}, parentUri: {}", new Object[]{currentPart, docId, docUri, parentId, parentUri});
                                     DocumentFile parentDocFile = DocumentFile.fromTreeUri(context, parentUri);
-                                    DocumentFile docFile = null;
-                                    if (docMimeType.equals(DocumentsContract.Document.MIME_TYPE_DIR)) {
-                                        docFile = DocumentFile.fromTreeUri(context, docUri);
-                                    } else {
-                                        docFile = DocumentFile.fromSingleUri(context, docUri);
-                                    }
+                                    DocumentFile docFile = DocumentFile.fromTreeUri(context, docUri);
                                     String absPath = Utils.toPath(parts);
                                     return createFile(contentResolver, parentDocFile, docFile, absPath, pftpdService);
                                 } else {
