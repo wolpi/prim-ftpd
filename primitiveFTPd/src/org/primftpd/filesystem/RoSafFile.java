@@ -26,8 +26,6 @@ public abstract class RoSafFile<T> extends AbstractFile {
     private boolean writable;
     private boolean deletable;
 
-    private static final String MIME_TYPE_DIRECTORY = "vnd.android.document/directory";
-
     static final int CURSOR_INDEX_NAME = 1;
     static final String[] SAF_QUERY_COLUMNS = {
             DocumentsContract.Document.COLUMN_DOCUMENT_ID,
@@ -161,7 +159,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
         exists = true;
 
         String mime = cursor.getString(4);
-        isDirectory = MIME_TYPE_DIRECTORY.equals(mime);
+        isDirectory = DocumentsContract.Document.MIME_TYPE_DIR.equals(mime);
 
         int flags = cursor.getInt(5);
         writable = flagPresent(flags, DocumentsContract.Document.FLAG_SUPPORTS_WRITE);
@@ -222,7 +220,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             }
             logger.trace("mkdir(): parent uri: '{}'", parentUri);
             try {
-                Uri newDirUri = DocumentsContract.createDocument(contentResolver, parentUri, MIME_TYPE_DIRECTORY, name);
+                Uri newDirUri = DocumentsContract.createDocument(contentResolver, parentUri, DocumentsContract.Document.MIME_TYPE_DIR, name);
                 return newDirUri != null;
             } catch (FileNotFoundException e) {
                 logger.error("could not create dir " + name, e);
