@@ -246,6 +246,9 @@ public abstract class RoSafFile<T> extends AbstractFile {
             logger.trace("move(): docUri: '{}'", docUri);
             try {
                 Uri newNameUri = DocumentsContract.renameDocument(contentResolver, docUri, destination.getName());
+                if (newNameUri != null && !docUri.equals(newNameUri)) {
+                    documentId = DocumentsContract.getDocumentId(newNameUri);
+                }
                 return newNameUri != null;
             } catch (FileNotFoundException e) {
                 logger.error("could not rename " + name, e);
