@@ -95,7 +95,6 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                     if (childCursor.isAfterLast()) {
                         // not found
                         if (i == parts.size() - 1) {
-                            // TODO we are read only -> there is no upload anyway
                             // probably upload -> create object just with name
                             logger.trace("    calling createFile() for not found doc: {}", currentPart);
                             return createFileNonExistent(contentResolver, startUrl, currentPart, Utils.toPath(parts), pftpdService);
