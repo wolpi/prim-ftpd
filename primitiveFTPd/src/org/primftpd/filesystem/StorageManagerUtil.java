@@ -54,42 +54,73 @@ public final class StorageManagerUtil {
         }
     }
 
+    // This function is to handle 2 Android bugs:
+    // 1. Android caches the modification times for files, ie. when we read back the modification time of a freshly created file,
+    //    Andorid will lie and return the value the file was asked to be saved, and not the value the real file-system was able to store,
+    //    so we have to figure out whether the underlying file-system is an SD-card related and use the file-system specific resolution.
+    // 2. Even when the SD-card is mounted at /mnt/media_rw/XXXX-XXXX with the proper file-system, when it is mounted at /storage/XXXX-XXXX,
+    //    the used sdcardfs has another bug, it provides the same 2s resolution even for the exfat file-system,
+    //    so in this case we have to modify the resolution even for the exfat file-system to 2s.
     public static int getFilesystemTimeResolutionForTreeUri(Uri startUrl) {
         logger.trace("getFilesystemTimeResolutionForTreeUri({})", startUrl);
-        String mountPoint = "/mnt/media_rw/" + getVolumeIdFromTreeUri(startUrl);
+        int mediaTimeResolution = 0;
+        int storageTimeResolution = 0;
+        String volumeId = getVolumeIdFromTreeUri(startUrl);
+        String mediaMountPoint = "/mnt/media_rw/" + volumeId;
+        String mediaOption = null;
+        String storageMountPoint = "/storage/" + volumeId;
         try(BufferedReader br = new BufferedReader(new FileReader("/proc/mounts"))) {
             // sample contents for /proc/mounts
             // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX vfat ... 0 0                     -> 2000 ms
             // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=vfat:16,... 0 0     -> 2000 ms
             // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=vfat:32,... 0 0     -> 2000 ms
             // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=exfat,... 0 0       ->   10 ms
+            // /mnt/media_rw/XXXX-XXXX /storage/XXXX-XXXX sdcardfs ... 0 0                            -> 2000 ms
             for (String line; (line = br.readLine()) != null; ) {
                 String[] mountInformations = line.split(" ");
-                if (mountInformations.length >= 4 && mountInformations[1].equals(mountPoint)) {
-                    if (mountInformations[2].equals("vfat")) {
-                        logger.trace("  found mount point {} with type {} -> 2000ms", mountInformations[1], mountInformations[2]);
-                        return 2000;
-                    } else if (mountInformations[2].equals("sdfat")) {
-                        for (String option : mountInformations[3].split(",")) {
-                            if (option.startsWith("fs=")) {
-                                if (option.startsWith("fs=vfat")) {
-                                    logger.trace("  found mount point {} with type {} with option {} -> 2000ms", new Object[]{mountInformations[1], mountInformations[2], option});
-                                    return 2000;
-                                } else if (option.startsWith("fs=exfat")) {
-                                    logger.trace("  found mount point {} with type {} with option {} -> 10ms", new Object[]{mountInformations[1], mountInformations[2], option});
-                                    return 10;
+                if (mountInformations.length >= 4) {
+                    if (mediaTimeResolution == 0 && mountInformations[1].equals(mediaMountPoint)) {
+                        if (mountInformations[2].equals("vfat")) {
+                            mediaTimeResolution = 2000;
+                        } else if (mountInformations[2].equals("sdfat")) {
+                            mediaTimeResolution = 2000; // use 2000ms by default
+                            for (String option : mountInformations[3].split(",")) {
+                                if (option.startsWith("fs=")) {
+                                    mediaOption = option;
+                                    if (option.startsWith("fs=vfat")) {
+                                        mediaTimeResolution = 2000;
+                                    } else if (option.startsWith("fs=exfat")) {
+                                        mediaTimeResolution = 10;
+                                    }
+                                    break;
                                 }
-                                break;
                             }
+                        } else {
+                            mediaTimeResolution = 1;
+                        }
+                        if (mediaOption == null) {
+                            logger.trace("  found media mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaTimeResolution});
+                        } else {
+                            logger.trace("  found media mount point {} with type {} with option {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaOption, mediaTimeResolution});
                         }
                     }
-                    break;
+                    if (storageTimeResolution == 0 && mountInformations[1].equals(storageMountPoint)) {
+                        if (mountInformations[2].equals("sdcardfs")) {
+                            storageTimeResolution = 2000;
+                        } else {
+                            storageTimeResolution = 1;
+                        }
+                        logger.trace("  found storage mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], storageTimeResolution});
+                    }
+                    if (mediaTimeResolution != 0 && storageTimeResolution != 0) {
+                        break;
+                    }
                 }
             }
         } catch (Exception e) {
             logger.error("getFilesystemTimeResolutionForTreeUri() {}", e);
         }
-        return 1; // we don't know, assume 1ms
+        return Math.max(1, Math.max(mediaTimeResolution, storageTimeResolution)); // use 1ms by default
     }
 
     @SuppressLint("ObsoleteSdkInt")
@@ -140,7 +171,7 @@ public final class StorageManagerUtil {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP) 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static String getDocumentPathFromTreeUri(final Uri treeUri) {
         final String docId = DocumentsContract.getDocumentId(treeUri);
         final String[] split = docId.split(":");
