@@ -127,11 +127,14 @@ public abstract class RootFile<T> extends AbstractFile {
         final List<LsOutputBean> beans = new ArrayList<>();
         shell.addCommand("ls -la " + escapePath(absPath), 0, new Shell.OnCommandLineListener() {
             @Override
-            public void onLine(String s) {
+            public void onSTDOUT(String s) {
                 LsOutputBean bean = parser.parseLine(s);
                 if (bean != null) {
                     beans.add(bean);
                 }
+            }
+            @Override
+            public void onSTDERR(String s) {
             }
             @Override
             public void onCommandResult(int i, int i1) {
@@ -340,7 +343,10 @@ public abstract class RootFile<T> extends AbstractFile {
         final Boolean[] wrapper = new Boolean[1];
         shell.addCommand(cmd, 0, new Shell.OnCommandLineListener() {
             @Override
-            public void onLine(String s) {
+            public void onSTDOUT(String s) {
+            }
+            @Override
+            public void onSTDERR(String s) {
             }
             @Override
             public void onCommandResult(int i, int i1) {
@@ -358,10 +364,13 @@ public abstract class RootFile<T> extends AbstractFile {
             public void onCommandResult(int i, int i1) {
             }
             @Override
-            public void onLine(String s) {
+            public void onSTDOUT(String s) {
                 if (s != null) {
                     sb.append(s);
                 }
+            }
+            @Override
+            public void onSTDERR(String s) {
             }
         });
         shell.waitForIdle();
