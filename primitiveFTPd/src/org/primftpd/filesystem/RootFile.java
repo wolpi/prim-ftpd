@@ -135,6 +135,7 @@ public abstract class RootFile<T> extends AbstractFile {
             }
             @Override
             public void onSTDERR(String s) {
+                logger.error("stderr: {}", s);
             }
             @Override
             public void onCommandResult(int i, int i1) {
@@ -344,9 +345,12 @@ public abstract class RootFile<T> extends AbstractFile {
         shell.addCommand(cmd, 0, new Shell.OnCommandLineListener() {
             @Override
             public void onSTDOUT(String s) {
+                // usually commands don't print
+                logger.error("stdout: {}", s);
             }
             @Override
             public void onSTDERR(String s) {
+                logger.error("stderr: {}", s);
             }
             @Override
             public void onCommandResult(int i, int i1) {
@@ -371,6 +375,7 @@ public abstract class RootFile<T> extends AbstractFile {
             }
             @Override
             public void onSTDERR(String s) {
+                logger.error("stderr: {}", s);
             }
         });
         shell.waitForIdle();

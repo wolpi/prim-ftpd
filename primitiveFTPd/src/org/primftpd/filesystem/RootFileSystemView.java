@@ -86,6 +86,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
                 }
                 @Override
                 public void onSTDERR(String s) {
+                    logger.error("stderr: {}", s);
                 }
                 @Override
                 public void onCommandResult(int i, int i1) {
