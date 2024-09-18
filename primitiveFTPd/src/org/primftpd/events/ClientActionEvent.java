@@ -10,7 +10,8 @@ public class ClientActionEvent {
         ROOT,
         SAF,
         ROSAF,
-        QUICKSHARE
+        QUICKSHARE,
+        CONFIG
     }
 
     public enum Protocol {
