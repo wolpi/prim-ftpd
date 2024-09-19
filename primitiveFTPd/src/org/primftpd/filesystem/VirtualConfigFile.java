@@ -34,7 +34,7 @@ public abstract class VirtualConfigFile extends AbstractFile {
     private String getContent() {
         return
             "{" +
-                "\"announceName\":\"" + pftpdService.getPrefsBean().getAnnounceName().replaceAll("\"", "\\\"") + "\"" +
+                "\"announceName\":\"" + pftpdService.getPrefsBean().getAnnounceName().replace("\"", "\\\"") + "\"" +
             "}";
     }
 
