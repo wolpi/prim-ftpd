@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
+// For more details see https://github.com/wolpi/prim-ftpd/pull/378
 public abstract class VirtualConfigFile extends AbstractFile {
 
     public static final String NAME = "primftpd.config";
