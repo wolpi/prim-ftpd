@@ -185,4 +185,12 @@
     <string name="prefTitleIdleTimeoutServerStop">Temps d\'inactivitat del servidor</string>
     <string name="prefSummaryIdleTimeoutServerStop">El(s) servidor(s) s\'aturarà si no hi ha cap activitat de clients en un temps, en minuts. Poseu 0 per a desactivar-ho.</string>
     <string name="qrFallback">Sense interfícies de xarxa, adreces IP o codi QR</string>
+    <string name="safExplainV2">L\'Android us demanarà que trieu la carpeta que voleu fer accessible a través del(s) servidor(s). Si de tant en tant es revoca el permís d\'accés a la carpeta, consulteu la <a href="https://www.github.com/wolpi/prim-ftpd/">pàgina de GitHub</a> del projecte.</string>
+    <string name="pubkeyAuthKeysHeading">Claus per a l\'autenticació amb clau pública</string>
+    <string name="addPubkeyForAuth">Afegir una clau pública</string>
+    <string name="noKeysPresent">Sense claus.</string>
+    <string name="pubkeyInvalid">La clau que heu proporcionat no és vàlida i s\'ignorarà.</string>
+    <string name="prefHostkeyAlgos">Algorisme de claus del servidor SFTP</string>
+    <string name="prefSummaryHostkeyAlgos">L\'algorisme amb què generar el parell de claus pública i privada del servidor SFTP</string>
+    <string name="add">Afegeix</string>
 </resources>
