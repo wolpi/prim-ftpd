@@ -24,6 +24,7 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	protected final File file;
 	protected final boolean injectedDirectory;
+	protected final int timeResolution;
 
 	private final static Map<String, String[]> DIRECTORY_INJECTIONS;
 	static {
@@ -48,11 +49,11 @@ public abstract class FsFile<T> extends AbstractFile {
 		INJECTIONS_AND_CHILDREN = Collections.unmodifiableSet(tmp);
     }
 
-	public FsFile(File file, PftpdService pftpdService) {
+	public FsFile(File file, PftpdService pftpdService, int timeResolution) {
 		super(
 				file.getAbsolutePath(),
 				file.getName(),
-				file.lastModified(),
+				(file.lastModified() / timeResolution) * timeResolution,
 				file.length(),
 				file.canRead(),
 				file.exists(),
@@ -61,6 +62,7 @@ public abstract class FsFile<T> extends AbstractFile {
 		this.file = file;
 		this.name = file.getName();
 		this.injectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
+		this.timeResolution = timeResolution;
 	}
 
 	protected abstract T createFile(File file, PftpdService pftpdService);
@@ -144,7 +146,8 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	public boolean setLastModified(long time) {
 		logger.trace("[{}] setLastModified({})", name, Long.valueOf(time));
-		return file.setLastModified(time);
+		long convertedTime = (time / timeResolution) * timeResolution;
+		return file.setLastModified(convertedTime);
 	}
 
 	public boolean mkdir() {

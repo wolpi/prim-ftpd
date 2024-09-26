@@ -1,5 +1,8 @@
 package org.primftpd.filesystem;
 
+import android.content.Context;
+import android.net.Uri;
+
 import java.io.File;
 
 import org.apache.ftpserver.ftplet.FtpFile;
@@ -14,8 +17,8 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 	private final File homeDir;
 	private FsFtpFile workingDir;
 
-	public FsFtpFileSystemView(PftpdService pftpdService, File homeDir, User user) {
-		super(pftpdService);
+	public FsFtpFileSystemView(Context context, Uri safStartUrl, PftpdService pftpdService, File homeDir, User user) {
+		super(context, safStartUrl, pftpdService);
 		this.homeDir = homeDir;
 		workingDir = getHomeDirectory();
 		this.user = user;
@@ -23,7 +26,7 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 
 	@Override
 	protected FsFtpFile createFile(File file, PftpdService pftpdService) {
-		return new FsFtpFile(file, pftpdService, user);
+		return new FsFtpFile(file, pftpdService, getTimeResolution(file.getAbsolutePath()), user);
 	}
 
 	@Override

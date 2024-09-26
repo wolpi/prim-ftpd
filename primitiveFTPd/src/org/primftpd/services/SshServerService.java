@@ -206,7 +206,12 @@ public class SshServerService extends AbstractServerService
 				} else {
 					switch (prefsBean.getStorageType()) {
 						case PLAIN:
-							return new FsSshFileSystemView(SshServerService.this, prefsBean.getStartDir(), session);
+							return new FsSshFileSystemView(
+									getApplicationContext(),
+									Uri.parse(prefsBean.getSafUrl()),
+									SshServerService.this,
+									prefsBean.getStartDir(),
+									session);
 						case ROOT:
 							return new RootSshFileSystemView(shell, SshServerService.this, prefsBean.getStartDir(), session);
 						case SAF:
@@ -224,7 +229,12 @@ public class SshServerService extends AbstractServerService
 									session);
 						case VIRTUAL:
 							return new VirtualSshFileSystemView(
-									new FsSshFileSystemView(SshServerService.this, prefsBean.getStartDir(), session),
+									new FsSshFileSystemView(
+											getApplicationContext(),
+											Uri.parse(prefsBean.getSafUrl()),
+											SshServerService.this,
+											prefsBean.getStartDir(),
+											session),
 									new RootSshFileSystemView(shell, SshServerService.this, prefsBean.getStartDir(), session),
 									new SafSshFileSystemView(
 											getApplicationContext(),

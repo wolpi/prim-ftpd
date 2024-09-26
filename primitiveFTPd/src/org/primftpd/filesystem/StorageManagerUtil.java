@@ -54,6 +54,20 @@ public final class StorageManagerUtil {
         }
     }
 
+    public static String getVolumePathFromTreeUri(@Nullable final Uri treeUri, Context context) {
+        if (treeUri == null) {
+            return null;
+        }
+        String volumePath = getVolumePath(getVolumeIdFromTreeUri(treeUri), context);
+        if (volumePath == null) {
+            return null;
+        }
+        if (! volumePath.endsWith(File.separator)) {
+            volumePath += File.separator;
+        }
+        return volumePath;
+    }
+
     /**
      * This function is to handle 2 Android bugs.
      * <p>

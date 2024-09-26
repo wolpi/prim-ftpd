@@ -1,5 +1,8 @@
 package org.primftpd.filesystem;
 
+import android.content.Context;
+import android.net.Uri;
+
 import java.io.File;
 
 import org.apache.sshd.common.file.SshFile;
@@ -12,15 +15,15 @@ public class FsSshFileSystemView extends FsFileSystemView<FsSshFile, SshFile> im
 	private final File homeDir;
 	private final Session session;
 
-	public FsSshFileSystemView(PftpdService pftpdService, File homeDir, Session session) {
-		super(pftpdService);
+	public FsSshFileSystemView(Context context, Uri safStartUrl, PftpdService pftpdService, File homeDir, Session session) {
+		super(context, safStartUrl, pftpdService);
 		this.homeDir = homeDir;
 		this.session = session;
 	}
 
 	@Override
 	protected FsSshFile createFile(File file, PftpdService pftpdService) {
-		return new FsSshFile(file, pftpdService, session);
+		return new FsSshFile(file, pftpdService, getTimeResolution(file.getAbsolutePath()), session, this);
 	}
 
 	@Override

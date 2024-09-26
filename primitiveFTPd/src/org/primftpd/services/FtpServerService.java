@@ -121,7 +121,12 @@ public class FtpServerService extends AbstractServerService
 				} else {
 					switch (prefsBean.getStorageType()) {
 						case PLAIN:
-							return new FsFtpFileSystemView(FtpServerService.this, prefsBean.getStartDir(), user);
+							return new FsFtpFileSystemView(
+									getApplicationContext(),
+									Uri.parse(prefsBean.getSafUrl()),
+									FtpServerService.this,
+									prefsBean.getStartDir(),
+									user);
 						case ROOT:
 							return new RootFtpFileSystemView(shell, FtpServerService.this, prefsBean.getStartDir(), user);
 						case SAF:
@@ -139,7 +144,12 @@ public class FtpServerService extends AbstractServerService
 									user);
 						case VIRTUAL:
 							return new VirtualFtpFileSystemView(
-									new FsFtpFileSystemView(FtpServerService.this, prefsBean.getStartDir(), user),
+									new FsFtpFileSystemView(
+											getApplicationContext(),
+											Uri.parse(prefsBean.getSafUrl()),
+											FtpServerService.this,
+											prefsBean.getStartDir(),
+											user),
 									new RootFtpFileSystemView(shell, FtpServerService.this, prefsBean.getStartDir(), user),
 									new SafFtpFileSystemView(
 											getApplicationContext(),
