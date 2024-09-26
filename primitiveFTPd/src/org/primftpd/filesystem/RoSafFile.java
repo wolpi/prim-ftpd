@@ -21,6 +21,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
 
     private final ContentResolver contentResolver;
     protected final Uri startUrl;
+    protected final int timeResolution;
 
     private String documentId;
     private boolean writable;
@@ -40,7 +41,8 @@ public abstract class RoSafFile<T> extends AbstractFile {
             ContentResolver contentResolver,
             Uri startUrl,
             String absPath,
-            PftpdService pftpdService) {
+            PftpdService pftpdService,
+            int timeResolution) {
         // this c-tor is to be used for start directory
         super(
                 absPath,
@@ -54,6 +56,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
         logger.trace("  c-tor 1");
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
+        this.timeResolution = timeResolution;
 
         try {
             Cursor cursor = contentResolver.query(
@@ -85,7 +88,8 @@ public abstract class RoSafFile<T> extends AbstractFile {
             String docId,
             String absPath,
             boolean exists,
-            PftpdService pftpdService) {
+            PftpdService pftpdService,
+            int timeResolution) {
         // this c-tor is to be used for FileSystemView.getFile()
         super(
                 absPath,
@@ -99,6 +103,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
         logger.trace("  c-tor 2");
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
+        this.timeResolution = timeResolution;
 
         if (exists) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -130,7 +135,8 @@ public abstract class RoSafFile<T> extends AbstractFile {
             Uri startUrl,
             Cursor cursor,
             String absPath,
-            PftpdService pftpdService) {
+            PftpdService pftpdService,
+            int timeResolution) {
         // this c-tor is to be used by listFiles()
         super(
                 absPath,
@@ -144,13 +150,14 @@ public abstract class RoSafFile<T> extends AbstractFile {
         logger.trace("  c-tor 3");
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
+        this.timeResolution = timeResolution;
         initByCursor(cursor);
     }
 
     private void initByCursor(Cursor cursor) {
         documentId = cursor.getString(0);
         name = cursor.getString(1);
-        lastModified = cursor.getLong(2);
+        lastModified = (cursor.getLong(2) / timeResolution) * timeResolution;
         size = cursor.getLong(3);
 
         logger.trace("    initByCursor, doc id: {}, name: {}", documentId, name);
