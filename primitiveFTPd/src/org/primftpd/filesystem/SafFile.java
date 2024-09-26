@@ -55,7 +55,7 @@ public abstract class SafFile<T> extends AbstractFile {
         super(
                 absPath,
                 null,
-                documentFile.lastModified(),
+                (documentFile.lastModified() / timeResolution) * timeResolution,
                 documentFile.length(),
                 documentFile.canRead(),
                 documentFile.exists(),
