@@ -10,12 +10,10 @@ import java.util.List;
 
 public class FsSshFile extends FsFile<SshFile> implements SshFile {
 	private final Session session;
-    private final FsSshFileSystemView fileSystemView;
 
-	public FsSshFile(File file, PftpdService pftpdService, int timeResolution, Session session, FsSshFileSystemView fileSystemView) {
-		super(file, pftpdService, timeResolution);
+	public FsSshFile(File file, PftpdService pftpdService, int timeResolution, FsSshFileSystemView fileSystemView, Session session) {
+		super(file, pftpdService, timeResolution, fileSystemView);
 		this.session = session;
-		this.fileSystemView = fileSystemView;
 	}
 
 	@Override
@@ -25,7 +23,7 @@ public class FsSshFile extends FsFile<SshFile> implements SshFile {
 
 	@Override
 	protected SshFile createFile(File file, PftpdService pftpdService) {
-		return new FsSshFile(file, pftpdService, timeResolution, session, fileSystemView);
+		return new FsSshFile(file, pftpdService, fileSystemView.getTimeResolution(file.getAbsolutePath()), (FsSshFileSystemView)fileSystemView, session);
 	}
 
 	@Override
@@ -48,12 +46,8 @@ public class FsSshFile extends FsFile<SshFile> implements SshFile {
 	@Override
 	public SshFile getParentFile() {
 		logger.trace("[{}] getParentFile()", name);
-        String parentPath = file.getParent();
-        if (parentPath == null || parentPath.length() == 0) {
-            parentPath = File.separator;
-        }
-        logger.trace("[{}]   getParentFile() -> {}", name, parentPath);
-        return fileSystemView.getFile(parentPath);
+		File parentFile = file.getParentFile();
+		return new FsSshFile(parentFile, pftpdService, fileSystemView.getTimeResolution(parentFile.getAbsolutePath()), (FsSshFileSystemView)fileSystemView, session);
 	}
 
 	@Override

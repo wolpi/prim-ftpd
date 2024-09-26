@@ -23,6 +23,7 @@ import java.util.Set;
 public abstract class FsFile<T> extends AbstractFile {
 
 	protected final File file;
+    protected final FsFileSystemView fileSystemView;
 	protected final boolean injectedDirectory;
 	protected final int timeResolution;
 
@@ -49,7 +50,7 @@ public abstract class FsFile<T> extends AbstractFile {
 		INJECTIONS_AND_CHILDREN = Collections.unmodifiableSet(tmp);
     }
 
-	public FsFile(File file, PftpdService pftpdService, int timeResolution) {
+	public FsFile(File file, PftpdService pftpdService, int timeResolution, FsFileSystemView fileSystemView) {
 		super(
 				file.getAbsolutePath(),
 				file.getName(),
@@ -63,6 +64,7 @@ public abstract class FsFile<T> extends AbstractFile {
 		this.name = file.getName();
 		this.injectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
 		this.timeResolution = timeResolution;
+		this.fileSystemView = fileSystemView;
 	}
 
 	protected abstract T createFile(File file, PftpdService pftpdService);

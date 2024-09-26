@@ -26,7 +26,7 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 
 	@Override
 	protected FsFtpFile createFile(File file, PftpdService pftpdService) {
-		return new FsFtpFile(file, pftpdService, getTimeResolution(file.getAbsolutePath()), user);
+		return new FsFtpFile(file, pftpdService, getTimeResolution(file.getAbsolutePath()), this, user);
 	}
 
 	@Override
