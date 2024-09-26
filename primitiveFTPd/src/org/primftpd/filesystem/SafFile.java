@@ -40,7 +40,7 @@ public abstract class SafFile<T> extends AbstractFile {
 
     private DocumentFile documentFile;
     private final DocumentFile parentDocumentFile;
-    protected final SafFileSystemView fileSystemView;
+    protected final int timeResolution;
 
     private boolean writable;
 
@@ -50,7 +50,7 @@ public abstract class SafFile<T> extends AbstractFile {
             DocumentFile documentFile,
             String absPath,
             PftpdService pftpdService,
-            SafFileSystemView fileSystemView) {
+            int timeResolution) {
         // this c-tor is to be used to access existing files
         super(
                 absPath,
@@ -67,7 +67,7 @@ public abstract class SafFile<T> extends AbstractFile {
 
         this.parentDocumentFile = parentDocumentFile;
         this.documentFile = documentFile;
-        this.fileSystemView = fileSystemView;
+        this.timeResolution = timeResolution;
 
         name = documentFile.getName();
         if (name == null && SafFileSystemView.ROOT_PATH.equals(absPath)) {
@@ -82,7 +82,7 @@ public abstract class SafFile<T> extends AbstractFile {
             String name,
             String absPath,
             PftpdService pftpdService,
-            SafFileSystemView fileSystemView) {
+            int timeResolution) {
         // this c-tor is to be used to upload new files, create directories or renaming
         super(absPath, name, 0, 0, false, false, false, pftpdService);
         String parentName = parentDocumentFile.getName();
@@ -93,7 +93,7 @@ public abstract class SafFile<T> extends AbstractFile {
         this.writable = true;
 
         this.parentDocumentFile = parentDocumentFile;
-        this.fileSystemView = fileSystemView;
+        this.timeResolution = timeResolution;
     }
 
     protected abstract T createFile(
@@ -101,8 +101,7 @@ public abstract class SafFile<T> extends AbstractFile {
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
             String absPath,
-            PftpdService pftpdService,
-            SafFileSystemView fileSystemView);
+            PftpdService pftpdService);
 
     @Override
     public ClientActionEvent.Storage getClientActionStorage() {
@@ -133,7 +132,6 @@ public abstract class SafFile<T> extends AbstractFile {
             try {
                 Uri docUri = documentFile.getUri();
                 Path filePath = Paths.get(StorageManagerUtil.getFullDocIdPathFromTreeUri(docUri, pftpdService.getContext()));
-                int timeResolution = fileSystemView.getTimeResolution();
                 long convertedTime = (time / timeResolution) * timeResolution;
                 Files.getFileAttributeView(filePath, BasicFileAttributeView.class).setTimes(FileTime.fromMillis(convertedTime), null, null);
             } catch (Exception e) {
@@ -188,7 +186,7 @@ public abstract class SafFile<T> extends AbstractFile {
             String absPath = this.absPath.endsWith("/")
                     ? this.absPath + child.getName()
                     : this.absPath + "/" + child.getName();
-            result.add(createFile(contentResolver, documentFile, child, absPath, pftpdService, fileSystemView));
+            result.add(createFile(contentResolver, documentFile, child, absPath, pftpdService));
         }
         logger.trace("  [{}] listFiles(): num children: {}", name, Integer.valueOf(result.size()));
         return result;

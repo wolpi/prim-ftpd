@@ -54,13 +54,20 @@ public final class StorageManagerUtil {
         }
     }
 
-    // This function is to handle 2 Android bugs:
-    // 1. Android caches the modification times for files, ie. when we read back the modification time of a freshly created file,
-    //    Andorid will lie and return the value the file was asked to be saved, and not the value the real file-system was able to store,
-    //    so we have to figure out whether the underlying file-system is an SD-card related and use the file-system specific resolution.
-    // 2. Even when the SD-card is mounted at /mnt/media_rw/XXXX-XXXX with the proper file-system, when it is mounted at /storage/XXXX-XXXX,
-    //    the used sdcardfs has another bug, it provides the same 2s resolution even for the exfat file-system,
-    //    so in this case we have to modify the resolution even for the exfat file-system to 2s.
+    /**
+     * This function is to handle 2 Android bugs.
+     * <p>
+     * 1. Android caches the modification times for files, ie. when we read back the modification time of a freshly created file,
+     *    Andorid will lie and return the value the file was asked to be saved, and not the value the real file-system was able to store,
+     *    so we have to figure out whether the underlying file-system is an SD-card related and use the file-system specific resolution.
+     * <p>
+     * 2. Even when the SD-card is mounted at /mnt/media_rw/XXXX-XXXX with the proper file-system, when it is mounted at /storage/XXXX-XXXX,
+     *    the used sdcardfs has another bug, it provides the same 2s resolution even for the exfat file-system,
+     *    so in this case we have to modify the resolution even for the exfat file-system to 2s.
+     *
+     * @param  startUrl SAF startUrl
+     * @return          SAF file system's time resolution measured in milliseconds
+     */
     public static int getFilesystemTimeResolutionForTreeUri(Uri startUrl) {
         logger.trace("getFilesystemTimeResolutionForTreeUri({})", startUrl);
         int mediaTimeResolution = 0;
@@ -77,6 +84,7 @@ public final class StorageManagerUtil {
             // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=exfat,... 0 0       ->   10 ms
             // /mnt/media_rw/XXXX-XXXX /storage/XXXX-XXXX sdcardfs ... 0 0                            -> 2000 ms
             for (String line; (line = br.readLine()) != null; ) {
+                logger.trace("  {}", line);
                 String[] mountInformations = line.split(" ");
                 if (mountInformations.length >= 4) {
                     if (mediaTimeResolution == 0 && mountInformations[1].equals(mediaMountPoint)) {
@@ -99,9 +107,9 @@ public final class StorageManagerUtil {
                             mediaTimeResolution = 1;
                         }
                         if (mediaOption == null) {
-                            logger.trace("  found media mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaTimeResolution});
+                            logger.trace("    found media mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaTimeResolution});
                         } else {
-                            logger.trace("  found media mount point {} with type {} with option {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaOption, mediaTimeResolution});
+                            logger.trace("    found media mount point {} with type {} with option {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaOption, mediaTimeResolution});
                         }
                     }
                     if (storageTimeResolution == 0 && mountInformations[1].equals(storageMountPoint)) {
@@ -110,7 +118,7 @@ public final class StorageManagerUtil {
                         } else {
                             storageTimeResolution = 1;
                         }
-                        logger.trace("  found storage mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], storageTimeResolution});
+                        logger.trace("    found storage mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], storageTimeResolution});
                     }
                     if (mediaTimeResolution != 0 && storageTimeResolution != 0) {
                         break;
@@ -120,7 +128,9 @@ public final class StorageManagerUtil {
         } catch (Exception e) {
             logger.error("getFilesystemTimeResolutionForTreeUri() {}", e);
         }
-        return Math.max(1, Math.max(mediaTimeResolution, storageTimeResolution)); // use 1ms by default
+        int timeResolution = Math.max(1, Math.max(mediaTimeResolution, storageTimeResolution)); // use 1ms by default
+        logger.trace("  getFilesystemTimeResolutionForTreeUri({}) -> {}", startUrl, timeResolution);
+        return timeResolution;
     }
 
     @SuppressLint("ObsoleteSdkInt")
