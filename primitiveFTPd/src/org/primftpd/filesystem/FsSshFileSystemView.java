@@ -23,7 +23,7 @@ public class FsSshFileSystemView extends FsFileSystemView<FsSshFile, SshFile> im
 
 	@Override
 	protected FsSshFile createFile(File file, PftpdService pftpdService) {
-		return new FsSshFile(file, pftpdService, getTimeResolution(file.getAbsolutePath()), this, session);
+		return new FsSshFile(file, pftpdService, this, session);
 	}
 
 	@Override

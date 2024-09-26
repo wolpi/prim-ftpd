@@ -50,11 +50,11 @@ public abstract class FsFile<T> extends AbstractFile {
 		INJECTIONS_AND_CHILDREN = Collections.unmodifiableSet(tmp);
     }
 
-	public FsFile(File file, PftpdService pftpdService, int timeResolution, FsFileSystemView fileSystemView) {
+	public FsFile(File file, PftpdService pftpdService, FsFileSystemView fileSystemView) {
 		super(
 				file.getAbsolutePath(),
 				file.getName(),
-				(file.lastModified() / timeResolution) * timeResolution,
+				file.lastModified(),
 				file.length(),
 				file.canRead(),
 				file.exists(),
@@ -62,9 +62,13 @@ public abstract class FsFile<T> extends AbstractFile {
 				pftpdService);
 		this.file = file;
 		this.name = file.getName();
-		this.injectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
-		this.timeResolution = timeResolution;
 		this.fileSystemView = fileSystemView;
+		this.injectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
+		this.timeResolution = fileSystemView.getTimeResolution(file.getAbsolutePath());
+
+		if (timeResolution != 1) {
+			this.lastModified = (this.lastModified / timeResolution) * timeResolution;
+		}
 	}
 
 	protected abstract T createFile(File file, PftpdService pftpdService);
