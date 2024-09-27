@@ -25,7 +25,6 @@ public abstract class FsFile<T> extends AbstractFile {
 	protected final File file;
     protected final FsFileSystemView fileSystemView;
 	protected final boolean injectedDirectory;
-	protected final int timeResolution;
 
 	private final static Map<String, String[]> DIRECTORY_INJECTIONS;
 	static {
@@ -64,11 +63,9 @@ public abstract class FsFile<T> extends AbstractFile {
 		this.name = file.getName();
 		this.fileSystemView = fileSystemView;
 		this.injectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
-		this.timeResolution = fileSystemView.getTimeResolution(file.getAbsolutePath());
 
-		if (timeResolution != 1) {
-			this.lastModified = (this.lastModified / timeResolution) * timeResolution;
-		}
+		int timeResolution = fileSystemView.getTimeResolution(file.getAbsolutePath());
+		this.lastModified = (this.lastModified / timeResolution) * timeResolution;
 	}
 
 	protected abstract T createFile(File file, PftpdService pftpdService);
@@ -152,6 +149,7 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	public boolean setLastModified(long time) {
 		logger.trace("[{}] setLastModified({})", name, Long.valueOf(time));
+		int timeResolution = fileSystemView.getTimeResolution(file.getAbsolutePath());
 		long convertedTime = (time / timeResolution) * timeResolution;
 		return file.setLastModified(convertedTime);
 	}

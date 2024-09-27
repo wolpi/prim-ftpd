@@ -22,7 +22,6 @@ public abstract class RoSafFile<T> extends AbstractFile {
     private final ContentResolver contentResolver;
     protected final Uri startUrl;
     protected final RoSafFileSystemView fileSystemView;
-    protected final int timeResolution;
 
     private String documentId;
     private boolean writable;
@@ -58,7 +57,6 @@ public abstract class RoSafFile<T> extends AbstractFile {
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
         this.fileSystemView = fileSystemView;
-        this.timeResolution = fileSystemView.getTimeResolution();
 
         try {
             Cursor cursor = contentResolver.query(
@@ -106,7 +104,6 @@ public abstract class RoSafFile<T> extends AbstractFile {
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
         this.fileSystemView = fileSystemView;
-        this.timeResolution = fileSystemView.getTimeResolution();
 
         if (exists) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -154,13 +151,13 @@ public abstract class RoSafFile<T> extends AbstractFile {
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
         this.fileSystemView = fileSystemView;
-        this.timeResolution = fileSystemView.getTimeResolution();
         initByCursor(cursor);
     }
 
     private void initByCursor(Cursor cursor) {
         documentId = cursor.getString(0);
         name = cursor.getString(1);
+        int timeResolution = fileSystemView.getTimeResolution();
         lastModified = (cursor.getLong(2) / timeResolution) * timeResolution;
         size = cursor.getLong(3);
 

@@ -41,7 +41,6 @@ public abstract class SafFile<T> extends AbstractFile {
     private DocumentFile documentFile;
     private final DocumentFile parentDocumentFile;
     protected final SafFileSystemView fileSystemView;
-    protected final int timeResolution;
 
     private boolean writable;
 
@@ -69,11 +68,9 @@ public abstract class SafFile<T> extends AbstractFile {
         this.parentDocumentFile = parentDocumentFile;
         this.documentFile = documentFile;
         this.fileSystemView = fileSystemView;
-        this.timeResolution = fileSystemView.getTimeResolution();
 
-        if (timeResolution != 1) {
-            this.lastModified = (this.lastModified / timeResolution) * timeResolution;
-        }
+        int timeResolution = fileSystemView.getTimeResolution();
+        this.lastModified = (this.lastModified / timeResolution) * timeResolution;
 
         name = documentFile.getName();
         if (name == null && SafFileSystemView.ROOT_PATH.equals(absPath)) {
@@ -100,7 +97,6 @@ public abstract class SafFile<T> extends AbstractFile {
 
         this.parentDocumentFile = parentDocumentFile;
         this.fileSystemView = fileSystemView;
-        this.timeResolution = fileSystemView.getTimeResolution();
     }
 
     protected abstract T createFile(
@@ -139,6 +135,7 @@ public abstract class SafFile<T> extends AbstractFile {
             try {
                 Uri docUri = documentFile.getUri();
                 Path filePath = Paths.get(StorageManagerUtil.getFullDocIdPathFromTreeUri(docUri, pftpdService.getContext()));
+                int timeResolution = fileSystemView.getTimeResolution();
                 long convertedTime = (time / timeResolution) * timeResolution;
                 Files.getFileAttributeView(filePath, BasicFileAttributeView.class).setTimes(FileTime.fromMillis(convertedTime), null, null);
             } catch (Exception e) {
