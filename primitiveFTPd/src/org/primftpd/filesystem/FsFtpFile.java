@@ -14,6 +14,10 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 		this.user = user;
 	}
 
+	private FsFtpFileSystemView getFileSystemView() {
+		return (FsFtpFileSystemView)fileSystemView;
+	}
+
 	@Override
 	public String getClientIp() {
 		return FtpUtils.getClientIp(user);
@@ -21,7 +25,7 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 
 	@Override
 	protected FtpFile createFile(File file, PftpdService pftpdService) {
-		return new FsFtpFile(file, pftpdService, (FsFtpFileSystemView)fileSystemView, user);
+		return new FsFtpFile(file, pftpdService, getFileSystemView(), user);
 	}
 
 	@Override

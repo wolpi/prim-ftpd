@@ -38,6 +38,10 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
         this.session = session;
     }
 
+    private SafSshFileSystemView getFileSystemView() {
+        return (SafSshFileSystemView)fileSystemView;
+    }
+
     @Override
     protected SshFile createFile(
             ContentResolver contentResolver,
@@ -45,7 +49,7 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             DocumentFile documentFile,
             String absPath,
             PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, (SafSshFileSystemView)fileSystemView, session);
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, getFileSystemView(), session);
     }
 
     @Override
@@ -83,7 +87,7 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             parentPath = "/";
         }
         logger.trace("[{}]   getParentFile() -> {}", name, parentPath);
-        return (SshFile)fileSystemView.getFile(parentPath);
+        return getFileSystemView().getFile(parentPath);
     }
 
     @Override

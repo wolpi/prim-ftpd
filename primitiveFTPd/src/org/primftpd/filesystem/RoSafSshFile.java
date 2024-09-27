@@ -50,6 +50,10 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
         this.session = session;
     }
 
+    private RoSafSshFileSystemView getFileSystemView() {
+        return (RoSafSshFileSystemView)fileSystemView;
+    }
+
     @Override
     protected SshFile createFile(
             ContentResolver contentResolver,
@@ -57,7 +61,7 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             Cursor cursor,
             String absPath,
             PftpdService pftpdService) {
-        return new RoSafSshFile(contentResolver, startUrl, cursor, absPath, pftpdService, (RoSafSshFileSystemView)fileSystemView, session);
+        return new RoSafSshFile(contentResolver, startUrl, cursor, absPath, pftpdService, getFileSystemView(), session);
     }
 
     @Override

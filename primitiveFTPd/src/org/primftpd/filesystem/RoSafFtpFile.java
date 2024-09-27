@@ -48,6 +48,10 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
         this.user = user;
     }
 
+    private RoSafFtpFileSystemView getFileSystemView() {
+        return (RoSafFtpFileSystemView)fileSystemView;
+    }
+
     @Override
     protected FtpFile createFile(
             ContentResolver contentResolver,
@@ -55,7 +59,7 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             Cursor cursor,
             String absPath,
             PftpdService pftpdService) {
-        return new RoSafFtpFile(contentResolver, startUrl, cursor, absPath, pftpdService, (RoSafFtpFileSystemView)fileSystemView, user);
+        return new RoSafFtpFile(contentResolver, startUrl, cursor, absPath, pftpdService, getFileSystemView(), user);
     }
 
     @Override

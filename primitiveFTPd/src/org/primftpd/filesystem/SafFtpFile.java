@@ -35,6 +35,10 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
         this.user = user;
     }
 
+    private SafFtpFileSystemView getFileSystemView() {
+        return (SafFtpFileSystemView)fileSystemView;
+    }
+
     @Override
     protected FtpFile createFile(
             ContentResolver contentResolver,
@@ -42,7 +46,7 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
             DocumentFile documentFile,
             String absPath,
             PftpdService pftpdService) {
-        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, (SafFtpFileSystemView)fileSystemView, user);
+        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, getFileSystemView(), user);
     }
 
     @Override
