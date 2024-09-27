@@ -23,7 +23,7 @@ import java.util.Set;
 public abstract class FsFile<T> extends AbstractFile {
 
 	protected final File file;
-    protected final FsFileSystemView fileSystemView;
+	protected final FsFileSystemView fileSystemView;
 	protected final boolean injectedDirectory;
 
 	private final static Map<String, String[]> DIRECTORY_INJECTIONS;
@@ -47,7 +47,7 @@ public abstract class FsFile<T> extends AbstractFile {
 			}
 		}
 		INJECTIONS_AND_CHILDREN = Collections.unmodifiableSet(tmp);
-    }
+	}
 
 	public FsFile(File file, PftpdService pftpdService, FsFileSystemView fileSystemView) {
 		super(

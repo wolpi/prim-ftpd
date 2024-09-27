@@ -21,7 +21,7 @@ public abstract class FsFileSystemView<T extends FsFile<X>, X> {
 	protected abstract String absolute(String file);
 
 	public FsFileSystemView(Context context, Uri safStartUrl, PftpdService pftpdService) {
-        this.safTimeResolution = StorageManagerUtil.getFilesystemTimeResolutionForTreeUri(safStartUrl);
+		this.safTimeResolution = StorageManagerUtil.getFilesystemTimeResolutionForTreeUri(safStartUrl);
 		this.safVolumePath = safTimeResolution != 1 ? StorageManagerUtil.getVolumePathFromTreeUri(safStartUrl, context) : null;
 		this.pftpdService = pftpdService;
 	}
