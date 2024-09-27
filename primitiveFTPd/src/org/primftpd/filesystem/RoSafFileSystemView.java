@@ -49,6 +49,10 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             String absPath,
             PftpdService pftpdService);
 
+    public int getTimeResolution() {
+        return timeResolution;
+    }
+
     public T getFile(String file) {
         logger.trace("getFile({}), startUrl: {}", file, startUrl);
 

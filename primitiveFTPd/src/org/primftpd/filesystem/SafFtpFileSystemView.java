@@ -30,7 +30,7 @@ public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile>
             String absPath,
             PftpdService pftpdService) {
         logger.trace("createFile(DocumentFile)");
-        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, timeResolution, user);
+        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, this, user);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile>
             String absPath,
             PftpdService pftpdService) {
         logger.trace("createFile(String)");
-        return new SafFtpFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, timeResolution, user);
+        return new SafFtpFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, this, user);
     }
 
     @Override

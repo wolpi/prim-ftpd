@@ -17,9 +17,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             Uri startUrl,
             String absPath,
             PftpdService pftpdService,
-            int timeResolution,
+            RoSafFtpFileSystemView fileSystemView,
             User user) {
-        super(contentResolver, startUrl, absPath, pftpdService, timeResolution);
+        super(contentResolver, startUrl, absPath, pftpdService, fileSystemView);
         this.user = user;
     }
 
@@ -30,9 +30,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             String absPath,
             boolean exists,
             PftpdService pftpdService,
-            int timeResolution,
+            RoSafFtpFileSystemView fileSystemView,
             User user) {
-        super(contentResolver, startUrl, docId, absPath, exists, pftpdService, timeResolution);
+        super(contentResolver, startUrl, docId, absPath, exists, pftpdService, fileSystemView);
         this.user = user;
     }
 
@@ -42,9 +42,9 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             Cursor cursor,
             String absPath,
             PftpdService pftpdService,
-            int timeResolution,
+            RoSafFtpFileSystemView fileSystemView,
             User user) {
-        super(contentResolver, startUrl, cursor, absPath, pftpdService, timeResolution);
+        super(contentResolver, startUrl, cursor, absPath, pftpdService, fileSystemView);
         this.user = user;
     }
 
@@ -55,7 +55,7 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
             Cursor cursor,
             String absPath,
             PftpdService pftpdService) {
-        return new RoSafFtpFile(contentResolver, startUrl, cursor, absPath, pftpdService, timeResolution, user);
+        return new RoSafFtpFile(contentResolver, startUrl, cursor, absPath, pftpdService, (RoSafFtpFileSystemView)fileSystemView, user);
     }
 
     @Override

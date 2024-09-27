@@ -26,7 +26,7 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             DocumentFile documentFile,
             String absPath,
             PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, timeResolution, session, this);
+        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, this, session);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile>
             String name,
             String absPath,
             PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, timeResolution, session, this);
+        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, this, session);
     }
 
     @Override

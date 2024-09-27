@@ -50,6 +50,10 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
 
     protected abstract String absolute(String file);
 
+    public int getTimeResolution() {
+        return timeResolution;
+    }
+
     public T getFile(String file) {
         logger.trace("getFile({}), startUrl: {}", file, startUrl);
 

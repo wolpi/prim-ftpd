@@ -17,9 +17,9 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
             DocumentFile documentFile,
             String absPath,
             PftpdService pftpdService,
-            int timeResolution,
+            SafFtpFileSystemView fileSystemView,
             User user) {
-        super(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, timeResolution);
+        super(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, fileSystemView);
         this.user = user;
     }
 
@@ -29,9 +29,9 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
             String name,
             String absPath,
             PftpdService pftpdService,
-            int timeResolution,
+            SafFtpFileSystemView fileSystemView,
             User user) {
-        super(contentResolver, parentDocumentFile, name, absPath, pftpdService, timeResolution);
+        super(contentResolver, parentDocumentFile, name, absPath, pftpdService, fileSystemView);
         this.user = user;
     }
 
@@ -42,7 +42,7 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
             DocumentFile documentFile,
             String absPath,
             PftpdService pftpdService) {
-        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, timeResolution, user);
+        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, (SafFtpFileSystemView)fileSystemView, user);
     }
 
     @Override

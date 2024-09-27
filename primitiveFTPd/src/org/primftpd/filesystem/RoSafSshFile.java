@@ -19,9 +19,9 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             Uri startUrl,
             String absPath,
             PftpdService pftpdService,
-            int timeResolution,
+            RoSafSshFileSystemView fileSystemView,
             Session session) {
-        super(contentResolver, startUrl, absPath, pftpdService, timeResolution);
+        super(contentResolver, startUrl, absPath, pftpdService, fileSystemView);
         this.session = session;
     }
 
@@ -32,9 +32,9 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             String absPath,
             boolean exists,
             PftpdService pftpdService,
-            int timeResolution,
+            RoSafSshFileSystemView fileSystemView,
             Session session) {
-        super(contentResolver, startUrl, docId, absPath, exists, pftpdService, timeResolution);
+        super(contentResolver, startUrl, docId, absPath, exists, pftpdService, fileSystemView);
         this.session = session;
     }
 
@@ -44,9 +44,9 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             Cursor cursor,
             String absPath,
             PftpdService pftpdService,
-            int timeResolution,
+            RoSafSshFileSystemView fileSystemView,
             Session session) {
-        super(contentResolver, startUrl, cursor, absPath, pftpdService, timeResolution);
+        super(contentResolver, startUrl, cursor, absPath, pftpdService, fileSystemView);
         this.session = session;
     }
 
@@ -57,7 +57,7 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
             Cursor cursor,
             String absPath,
             PftpdService pftpdService) {
-        return new RoSafSshFile(contentResolver, startUrl, cursor, absPath, pftpdService, timeResolution, session);
+        return new RoSafSshFile(contentResolver, startUrl, cursor, absPath, pftpdService, (RoSafSshFileSystemView)fileSystemView, session);
     }
 
     @Override

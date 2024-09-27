@@ -40,6 +40,7 @@ public abstract class SafFile<T> extends AbstractFile {
 
     private DocumentFile documentFile;
     private final DocumentFile parentDocumentFile;
+    protected final SafFileSystemView fileSystemView;
     protected final int timeResolution;
 
     private boolean writable;
@@ -50,12 +51,12 @@ public abstract class SafFile<T> extends AbstractFile {
             DocumentFile documentFile,
             String absPath,
             PftpdService pftpdService,
-            int timeResolution) {
+            SafFileSystemView fileSystemView) {
         // this c-tor is to be used to access existing files
         super(
                 absPath,
                 null,
-                (documentFile.lastModified() / timeResolution) * timeResolution,
+                documentFile.lastModified(),
                 documentFile.length(),
                 documentFile.canRead(),
                 documentFile.exists(),
@@ -67,7 +68,12 @@ public abstract class SafFile<T> extends AbstractFile {
 
         this.parentDocumentFile = parentDocumentFile;
         this.documentFile = documentFile;
-        this.timeResolution = timeResolution;
+        this.fileSystemView = fileSystemView;
+        this.timeResolution = fileSystemView.getTimeResolution();
+
+        if (timeResolution != 1) {
+            this.lastModified = (this.lastModified / timeResolution) * timeResolution;
+        }
 
         name = documentFile.getName();
         if (name == null && SafFileSystemView.ROOT_PATH.equals(absPath)) {
@@ -82,7 +88,7 @@ public abstract class SafFile<T> extends AbstractFile {
             String name,
             String absPath,
             PftpdService pftpdService,
-            int timeResolution) {
+            SafFileSystemView fileSystemView) {
         // this c-tor is to be used to upload new files, create directories or renaming
         super(absPath, name, 0, 0, false, false, false, pftpdService);
         String parentName = parentDocumentFile.getName();
@@ -93,7 +99,8 @@ public abstract class SafFile<T> extends AbstractFile {
         this.writable = true;
 
         this.parentDocumentFile = parentDocumentFile;
-        this.timeResolution = timeResolution;
+        this.fileSystemView = fileSystemView;
+        this.timeResolution = fileSystemView.getTimeResolution();
     }
 
     protected abstract T createFile(

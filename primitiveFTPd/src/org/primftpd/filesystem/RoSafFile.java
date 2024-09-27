@@ -21,6 +21,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
 
     private final ContentResolver contentResolver;
     protected final Uri startUrl;
+    protected final RoSafFileSystemView fileSystemView;
     protected final int timeResolution;
 
     private String documentId;
@@ -42,7 +43,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             Uri startUrl,
             String absPath,
             PftpdService pftpdService,
-            int timeResolution) {
+            RoSafFileSystemView fileSystemView) {
         // this c-tor is to be used for start directory
         super(
                 absPath,
@@ -56,7 +57,8 @@ public abstract class RoSafFile<T> extends AbstractFile {
         logger.trace("  c-tor 1");
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
-        this.timeResolution = timeResolution;
+        this.fileSystemView = fileSystemView;
+        this.timeResolution = fileSystemView.getTimeResolution();
 
         try {
             Cursor cursor = contentResolver.query(
@@ -89,7 +91,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             String absPath,
             boolean exists,
             PftpdService pftpdService,
-            int timeResolution) {
+            RoSafFileSystemView fileSystemView) {
         // this c-tor is to be used for FileSystemView.getFile()
         super(
                 absPath,
@@ -103,7 +105,8 @@ public abstract class RoSafFile<T> extends AbstractFile {
         logger.trace("  c-tor 2");
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
-        this.timeResolution = timeResolution;
+        this.fileSystemView = fileSystemView;
+        this.timeResolution = fileSystemView.getTimeResolution();
 
         if (exists) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -136,7 +139,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
             Cursor cursor,
             String absPath,
             PftpdService pftpdService,
-            int timeResolution) {
+            RoSafFileSystemView fileSystemView) {
         // this c-tor is to be used by listFiles()
         super(
                 absPath,
@@ -150,7 +153,8 @@ public abstract class RoSafFile<T> extends AbstractFile {
         logger.trace("  c-tor 3");
         this.contentResolver = contentResolver;
         this.startUrl = startUrl;
-        this.timeResolution = timeResolution;
+        this.fileSystemView = fileSystemView;
+        this.timeResolution = fileSystemView.getTimeResolution();
         initByCursor(cursor);
     }
 
