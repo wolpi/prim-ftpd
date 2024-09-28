@@ -62,10 +62,10 @@
     <string name="prefSummaryStartOnOpen">Mulai server saat aplikasi dibuka.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Tampilkan info koneksi di notifikasi</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Menampilkan info koneksi seperti alamat IP di notifikasi.</string>
-    <string name="prefTitleSshowIpv4InNotification">Tampilkan Alamat IPv4 di notifikasi</string>
-    <string name="prefSummaryShowIpv4InNotification">Menampilkan Alamat IPv4 di notifikasi jika info koneksi diaktifkan.</string>
-    <string name="prefTitleSshowIpv6InNotification">Tampilkan Alamat IPv6 di notifikasi</string>
-    <string name="prefSummaryShowIpv6InNotification">Menampilkan Alamat IPv6 di notifikasi jika info koneksi diaktifkan.</string>
+    <string name="prefTitleSshowIpv4InNotification">Tampilkan alamat IPv4 di notifikasi</string>
+    <string name="prefSummaryShowIpv4InNotification">Tampilkan alamat IPv4 di notifikasi jika info koneksi diaktifkan.</string>
+    <string name="prefTitleSshowIpv6InNotification">Tampilkan alamat IPv6 di notifikasi</string>
+    <string name="prefSummaryShowIpv6InNotification">Menampilkan alamat IPv6 di notifikasi jika info koneksi diaktifkan.</string>
     <string name="prefTitleShowStartStopNotification">Tampilkan notifikasi untuk mulai/setop server</string>
     <string name="prefSummaryShowStartStopNotification">Selalu menampilkan notifikasi untuk mempercepat proses mulai/setop server.</string>
     <string name="prefTitlePubKeyAuth">Otentikasi Kunci Publik</string>
@@ -153,4 +153,10 @@
     <string name="addPubkeyForAuth">Tambahkan kunci publik untuk auth</string>
     <string name="pubkeyInvalid">Ini bukan kunci yang valid, telah diabaikan.</string>
     <string name="noKeysPresent">Tidak ada kunci.</string>
+    <string name="prefShowTabNames">Tampilkan nama tab</string>
+    <string name="prefBindIp">IP untuk mengikat</string>
+    <string name="prefSummaryBindIp">Jika Anda ingin server mendengarkan pada satu antarmuka saja.</string>
+    <string name="prefSummaryShowTabNames">Tampilkan nama pada tab di UI utama</string>
+    <string name="prefSummaryPubKeyAuth_v2">Jika diaktifkan, letakkan kunci publik ssh2 Anda di %s. Ini harus berupa berkas yang berisi satu kunci per baris. Hanya SFTP.</string>
+    <string name="prefTitleIdleTimeoutServerStop">Batas waktu idle untuk menghentikan server</string>
 </resources>
