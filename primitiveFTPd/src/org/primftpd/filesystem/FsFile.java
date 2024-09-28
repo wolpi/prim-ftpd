@@ -29,7 +29,7 @@ public abstract class FsFile<T> extends AbstractFile {
 	static {
 		Map<String, String[]> tmp = new HashMap<>();
 		// more known directories might be added
-		//tmp.put("/", new String[] {"dev", "etc", "mnt", "proc", "product", "storage", "system", "vendor"});
+		//tmp.put("/", new String[] {"dev", "etc", "mnt", "proc", "product", "sdcard", "storage", "system", "vendor"});
 		tmp.put("/", new String[] {"storage"});
 		tmp.put("/storage/emulated", new String[] {"0"});
 		DIRECTORY_INJECTIONS = Collections.unmodifiableMap(tmp);
