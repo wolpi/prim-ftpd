@@ -218,7 +218,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     public void handleStart() {
         logger.trace("handleStart()");
 
-        ServicesStartStopUtil.startServers(pftpdFragment);
+        ServicesStartStopUtil.startServers(this);
     }
 
     protected void handleStop() {
