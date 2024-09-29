@@ -53,7 +53,7 @@ public abstract class FsFile<T> extends AbstractFile {
 		super(
 				file.getAbsolutePath(),
 				file.getName(),
-				file.lastModified(),
+				correctTime(fileSystemView, file.getAbsolutePath(), file.lastModified()),
 				file.length(),
 				file.canRead(),
 				file.exists(),
@@ -63,9 +63,11 @@ public abstract class FsFile<T> extends AbstractFile {
 		this.name = file.getName();
 		this.fileSystemView = fileSystemView;
 		this.injectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
+	}
 
-		int timeResolution = fileSystemView.getTimeResolution(file.getAbsolutePath());
-		this.lastModified = (this.lastModified / timeResolution) * timeResolution;
+	private static long correctTime(FsFileSystemView fileSystemView, String abs, long time) {
+		int timeResolution = fileSystemView.getTimeResolution(abs);
+		return (time / timeResolution) * timeResolution;
 	}
 
 	protected abstract T createFile(File file, PftpdService pftpdService);
@@ -149,9 +151,8 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	public boolean setLastModified(long time) {
 		logger.trace("[{}] setLastModified({})", name, Long.valueOf(time));
-		int timeResolution = fileSystemView.getTimeResolution(file.getAbsolutePath());
-		long convertedTime = (time / timeResolution) * timeResolution;
-		return file.setLastModified(convertedTime);
+		long correctedTime = correctTime(fileSystemView, absPath, time);
+		return file.setLastModified(correctedTime);
 	}
 
 	public boolean mkdir() {

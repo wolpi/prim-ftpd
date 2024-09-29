@@ -55,7 +55,7 @@ public abstract class SafFile<T> extends AbstractFile {
         super(
                 absPath,
                 null,
-                documentFile.lastModified(),
+                correctTime(fileSystemView, documentFile.lastModified()),
                 documentFile.length(),
                 documentFile.canRead(),
                 documentFile.exists(),
@@ -68,9 +68,6 @@ public abstract class SafFile<T> extends AbstractFile {
         this.parentDocumentFile = parentDocumentFile;
         this.documentFile = documentFile;
         this.fileSystemView = fileSystemView;
-
-        int timeResolution = fileSystemView.getTimeResolution();
-        this.lastModified = (this.lastModified / timeResolution) * timeResolution;
 
         name = documentFile.getName();
         if (name == null && SafFileSystemView.ROOT_PATH.equals(absPath)) {
@@ -97,6 +94,11 @@ public abstract class SafFile<T> extends AbstractFile {
 
         this.parentDocumentFile = parentDocumentFile;
         this.fileSystemView = fileSystemView;
+    }
+
+    private static long correctTime(SafFileSystemView fileSystemView, long time) {
+        int timeResolution = fileSystemView.getTimeResolution();
+        return (time / timeResolution) * timeResolution;
     }
 
     protected abstract T createFile(
@@ -135,9 +137,9 @@ public abstract class SafFile<T> extends AbstractFile {
             try {
                 Uri docUri = documentFile.getUri();
                 Path filePath = Paths.get(StorageManagerUtil.getFullDocIdPathFromTreeUri(docUri, pftpdService.getContext()));
-                int timeResolution = fileSystemView.getTimeResolution();
-                long convertedTime = (time / timeResolution) * timeResolution;
-                Files.getFileAttributeView(filePath, BasicFileAttributeView.class).setTimes(FileTime.fromMillis(convertedTime), null, null);
+                long correctedTime = correctTime(fileSystemView, time);
+                Files.getFileAttributeView(filePath, BasicFileAttributeView.class).setTimes(FileTime.fromMillis(correctedTime), null, null);
+                return true;
             } catch (Exception e) {
                 String baseMsg = "could not set last modified time";
                 logger.error(baseMsg, e);
