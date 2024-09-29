@@ -185,12 +185,12 @@
     <string name="prefSummaryShowTabNames">Mostrar nombres en las pestañas de la interfaz de usuario principal</string>
     <string name="prefTitleIdleTimeoutServerStop">Tiempo de espera para detener el servidor</string>
     <string name="prefSummaryIdleTimeoutServerStop">Los servidores se detendrán después de este tiempo en minutos si no hay actividad de clientes. Establecer en 0 para desactivar.</string>
-    <string name="noKeysPresent">No hay claves presentes.</string>
-    <string name="prefSummaryHostkeyAlgos">Algoritmos para generar claves de servidor SFTP (claves de host) para</string>
+    <string name="noKeysPresent">No hay claves.</string>
+    <string name="prefSummaryHostkeyAlgos">El algoritmo con que generar las claves pública y privada del servidor SFTP</string>
     <string name="add">Añadir</string>
     <string name="pubkeyInvalid">La entrada no es una clave válida, se ha ignorado.</string>
-    <string name="prefHostkeyAlgos">Algoritmos de clave de host SFTP</string>
+    <string name="prefHostkeyAlgos">Algoritmos SFTP Hostkey</string>
     <string name="pubkeyAuthKeysHeading">Claves para la autenticación de clave pública</string>
     <string name="addPubkeyForAuth">Agregar clave pública para la autenticación</string>
-    <string name="safExplainV2">Android te pedirá que elijas un directorio. Eso estará disponible a través de servidor(es). ¿La autorización es revocada y tienes que volver a elegir regularmente? Ver nuestra página <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub</a>.</string>
+    <string name="safExplainV2">Android le pedirá que elija una carpeta. Ésta estará disponible a través de uno o más servidores. ¿Se revoca el permiso y tiene que volver a seleccionarlo periódicamente? Consulte nuestra <a href="https://www.github.com/wolpi/prim-ftpd/">página de GitHub</a>.</string>
 </resources>

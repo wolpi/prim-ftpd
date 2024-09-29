@@ -7,7 +7,7 @@
     <string name="protocolLabel">Protokol</string>
     <string name="portLabel">Porta</string>
     <string name="fingerprintsLabel">Sidik Jari Kunci</string>
-    <string name="generateKeysMessage">Buat Kunci ?</string>
+    <string name="generateKeysMessage">Buat Kunci?</string>
     <string name="generatingKeysMessage">Membuat Kunci …</string>
     <string name="generate">Buat</string>
     <string name="cancel">Batal</string>
@@ -29,8 +29,8 @@
     <string name="serverCouldNotBeStarted">Server tidak bisa dimulai! Pesan galat: </string>
     <string name="portInvalid_v2">Porta tidak valid. Harus antara 1024 dan 64000.</string>
     <string name="portsEqual_v2">Porta sama. Ini tidak akan bisa bekerja.</string>
-    <string name="restartServer">Anda harus memulai ulang server agar perubahan bisa diterapkan.</string>
-    <string name="invalidDir">Direktori tidak valid.</string>
+    <string name="restartServer">Mulai ulang server agar perubahan yang Anda buat dapat diterapkan.</string>
+    <string name="invalidDir">Folder tidak valid.</string>
     <string name="couldNotReadKeyAuthKey">Kunci publik untuk otentikasi kunci tidak bisa dibaca. Silakan periksa log.</string>
     <string name="ftpPassivePortsInvalid">Nilai dari Porta FTP Pasif tidak valid.</string>
     <string name="prefs">Preferensi</string>
@@ -38,8 +38,8 @@
     <string name="prefsCategoryTitleConnectivity">Konektivitas</string>
     <string name="prefsCategoryTitleUi">UI</string>
     <string name="prefsCategoryTitleSystem">Sistem</string>
-    <string name="prefTitleUser">Nama Pengguna</string>
-    <string name="prefSummaryUser">Nama pengguna server FTP</string>
+    <string name="prefTitleUser">Nama pengguna</string>
+    <string name="prefSummaryUser">Nama pengguna server-FTP</string>
     <string name="prefTitlePassword">Sandi</string>
     <string name="prefSummaryPassword">Sandi server FTP</string>
     <string name="prefTitlePort">Porta</string>
@@ -62,10 +62,10 @@
     <string name="prefSummaryStartOnOpen">Mulai server saat aplikasi dibuka.</string>
     <string name="prefTitleShowConnectionInfoInNotification">Tampilkan info koneksi di notifikasi</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Menampilkan info koneksi seperti alamat IP di notifikasi.</string>
-    <string name="prefTitleSshowIpv4InNotification">Tampilkan Alamat IPv4 di notifikasi</string>
-    <string name="prefSummaryShowIpv4InNotification">Menampilkan Alamat IPv4 di notifikasi jika info koneksi diaktifkan.</string>
-    <string name="prefTitleSshowIpv6InNotification">Tampilkan Alamat IPv6 di notifikasi</string>
-    <string name="prefSummaryShowIpv6InNotification">Menampilkan Alamat IPv6 di notifikasi jika info koneksi diaktifkan.</string>
+    <string name="prefTitleSshowIpv4InNotification">Tampilkan alamat IPv4 di notifikasi</string>
+    <string name="prefSummaryShowIpv4InNotification">Tampilkan alamat IPv4 di notifikasi jika info koneksi diaktifkan.</string>
+    <string name="prefTitleSshowIpv6InNotification">Tampilkan alamat IPv6 di notifikasi</string>
+    <string name="prefSummaryShowIpv6InNotification">Menampilkan alamat IPv6 di notifikasi jika info koneksi diaktifkan.</string>
     <string name="prefTitleShowStartStopNotification">Tampilkan notifikasi untuk mulai/setop server</string>
     <string name="prefSummaryShowStartStopNotification">Selalu menampilkan notifikasi untuk mempercepat proses mulai/setop server.</string>
     <string name="prefTitlePubKeyAuth">Otentikasi Kunci Publik</string>
@@ -148,4 +148,15 @@
     <string name="statsLabel">Stat</string>
     <string name="quickShareInfoNotification">Berbagi Cepat: %1s</string>
     <string name="quickShareInfoActivity">Berjalan dalam Mode Berbagi Cepat untuk berkas: %1s</string>
+    <string name="allKeysFingerprintsLabel">Tampilkan sidik jari dari semua tombol</string>
+    <string name="pubkeyAuthKeysHeading">Kunci untuk autentikasi kunci publik</string>
+    <string name="addPubkeyForAuth">Tambahkan kunci publik untuk auth</string>
+    <string name="pubkeyInvalid">Ini bukan kunci yang valid, telah diabaikan.</string>
+    <string name="noKeysPresent">Tidak ada kunci.</string>
+    <string name="prefShowTabNames">Tampilkan nama tab</string>
+    <string name="prefBindIp">IP untuk mengikat</string>
+    <string name="prefSummaryBindIp">Jika Anda ingin server mendengarkan pada satu antarmuka saja.</string>
+    <string name="prefSummaryShowTabNames">Tampilkan nama pada tab di UI utama</string>
+    <string name="prefSummaryPubKeyAuth_v2">Jika diaktifkan, letakkan kunci publik ssh2 Anda di %s. Ini harus berupa berkas yang berisi satu kunci per baris. Hanya SFTP.</string>
+    <string name="prefTitleIdleTimeoutServerStop">Batas waktu idle untuk menghentikan server</string>
 </resources>
