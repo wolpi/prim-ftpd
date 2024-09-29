@@ -18,21 +18,18 @@
     <string name="quickSettingsServerStarted">pFTPd Running …</string>
     <string name="quickSettingsServerStopped">pFTPd Stopped</string>
     <string name="saveAs">Save as</string>
-    <string name="translate">Translate</string>
 
     <string name="startService">Start Server</string>
     <string name="stopService">Stop Server</string>
     <string name="toggleService">Toggle Server start/stop</string>
     <string name="notificationTitle">FTP Server</string>
 
-    <string name="haveToSetPassword">You have to set a password first</string>
     <string name="haveToSetAuthMechanism">You have to set an authentication mechanism first</string>
     <string name="serverRunning">FTP Server is running</string>
     <string name="serverCouldNotBeStarted">Server could not be started! Error message:</string>
     <string name="portInvalid_v2">Port value is invalid. Must be between 1024 and 64000.</string>
     <string name="portsEqual_v2">Ports are equal. This cannot work.</string>
     <string name="restartServer">You have to restart Server for changes to take effect.</string>
-    <string name="invalidDir">Directory is not valid.</string>
     <string name="couldNotReadKeyAuthKey">Public key for key authentication could not be read. Check logs.</string>
     <string name="ftpPassivePortsInvalid">Value of FTP Passive Ports is invalid.</string>
 

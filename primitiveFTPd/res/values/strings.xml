@@ -28,14 +28,12 @@
     <string name="stopService">Stop Server</string>
     <string name="toggleService">Toggle Server start/stop</string>
     <string name="notificationTitle">FTP Server</string>
-    <string name="haveToSetPassword">You have to set a password first</string>
     <string name="haveToSetAuthMechanism">You have to set an authentication mechanism first</string>
     <string name="serverRunning">FTP Server is running</string>
     <string name="serverCouldNotBeStarted">Server could not be started! Error message: </string>
     <string name="portInvalid_v2">Port value is invalid. Must be between 1024 and 64000.</string>
     <string name="portsEqual_v2">Ports are equal. This cannot work.</string>
     <string name="restartServer">Restart the server for your changes to take effect.</string>
-    <string name="invalidDir">Invalid folder.</string>
     <string name="couldNotReadKeyAuthKey">Public key for key authentication could not be read. Check logs.</string>
     <string name="ftpPassivePortsInvalid">Value of FTP Passive Ports is invalid.</string>
     <string name="prefs">Preferences</string>
@@ -78,19 +76,16 @@
     <string name="prefTitleShowStartStopNotification">Show notification to start/stop server(s)</string>
     <string name="prefSummaryShowStartStopNotification">Shows a notification at all time to have another quick way to start/stop server(s).</string>
     <string name="prefTitlePubKeyAuth">Public Key Authentication</string>
-    <string name="prefSummaryPubKeyAuth">When enabled place your ssh2 public key in %s. SFTP only.</string>
     <string name="prefSummaryPubKeyAuth_v2">When enabled place your ssh2 public key in %s. It must be a file containing one key per line. SFTP only.</string>
     <string name="prefTitleAnonymousLogin">Anonymous Login</string>
     <string name="prefSummaryAnonymousLogin">Set if anonymous login is allowed on the server.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
     <string name="prefSummaryFtpPassivePorts">Ports for FTP passive data connection. May be a single port, a list or range of ports. E.g. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Server Idle Timeout</string>
-    <string name="prefSummaryIdleTimeout">Server will terminate idle connections after this time in seconds (FTP only)</string>
     <string name="prefTitleIdleTimeoutServerStop">Idle timeout to stop server</string>
     <string name="prefSummaryIdleTimeoutServerStop">Server(s) will be stopped after this time in minutes if no client activity takes place. Set to 0 to disable.</string>
     <string name="prefSummaryIdleTimeoutV2">Server will terminate idle connections after this time in seconds. Set to 0 to disable.</string>
     <string name="prefTitleLogging">Log</string>
-    <string name="prefSummaryLogging">Log serves analyzing of errors. If the app does not work properly on your device you can send a log to developers. May require to restart the app.</string>
     <string name="prefSummaryLoggingV2">Log serves analyzing of errors. If the app does not work properly on your device you can send a log to developers. May require to restart the app. Text Logs are stored in %s.</string>
     <string name="prefAllowedIpsPattern">Allowed IPs pattern</string>
     <string name="prefSummaryAllowedIpsPattern">Pattern of allowed IP Addresses. Just one Wildcard (*) may be used, as last character only.</string>
@@ -110,7 +105,6 @@
     <string name="selectServerAction">Select Server Action</string>
     <string name="isServerRunning">Is server running?</string>
     <string name="storageType">Storage Type</string>
-    <string name="storageTypePlain">Plain old filesystem</string>
     <string name="storageTypePlainV2">Plain old filesystem\nGot read-only access? See our <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub page</a>.</string>
     <string name="storageTypeRoot">Super user (device must be rooted)</string>
     <string name="storageTypeSaf">"Android Storage Access Framework (SAF)\n(e.g. for external SD-card)"</string>
@@ -119,12 +113,9 @@
     <string name="safExplainHeading">How SAF works</string>
     <string name="safExplainV2">Android will ask you to choose a directory. That will be available via server(s). Permission gets revoked and you have to re-select regularly? See our <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub page</a>.</string>
     <string name="selectedSafUri">Selected SAF URI:</string>
-    <string name="startServerAndExit">start server only</string>
-    <string name="startServerAndUi">start with server</string>
     <string name="downloadOrSaveUrlToFile">Download or save URL to text file?</string>
     <string name="download">Download</string>
     <string name="saveToTextFile">Save to text file</string>
-    <string name="open">Open</string>
     <string name="add">Add</string>
     <string name="filepickerCreateFolderError">Could not create folder</string>
     <string name="filepickerNewFolder">New folder</string>
@@ -135,13 +126,9 @@
     <string name="filepickerName">Name</string>
     <string name="filepickerFilename">Filename</string>
     <string name="filepickerSelectSomethingFirst">Please select something first</string>
-    <string name="filepickerNeedValidFilename">Please enter or select a valid filename</string>
     <string name="quickShare">Quick Share</string>
     <string name="quickShareServerStarted">Server has been started sharing single file</string>
-    <string name="quickShareCouldNotStartServer">Server could not be started</string>
-    <string name="quickShareInfoNotification">QuickShare of: %1s</string>
     <string name="quickShareInfoNotificationV2">QuickShare with %1d file(s)</string>
-    <string name="quickShareInfoActivity">Running in QuickShare Mode for file: %1s</string>
     <string name="quickShareInfoActivityV2">Running in QuickShare Mode for %1d file(s)</string>
     <string name="clientActionsLabel">Client Action Log</string>
     <string name="statsLabel">Stats</string>
@@ -158,15 +145,10 @@
     <string name="logFiles">Log files:</string>
     <string name="rootTmpFiles">Temp files of root access:</string>
     <string name="delete">Delete</string>
-    <string name="permReadLabelServerstatus">find out if server runs</string>
-    <string name="permReadDescServerstatus">Allows finding out if the FTP/SFTP server runs.</string>
-    <string name="permWriteLabelServerstatus">start and stop server</string>
-    <string name="permWriteDescServerstatus">Allows to start and stop ftp/sftp server.</string>
     <string name="mobileUiShort">Mobile Mode</string>
     <string name="mobileUiLong">Mobile Device Mode</string>
     <string name="tvUiShort">TV Mode</string>
     <string name="tvUiLong">Television Mode</string>
-    <string name="iconQrCode">QR Code</string>
     <string name="iconKeysFingerprints">Keys Fingerprints</string>
     <string name="iconCleanSpace">Clean Space</string>
     <string name="iconAbout">About</string>

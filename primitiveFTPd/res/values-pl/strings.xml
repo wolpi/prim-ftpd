@@ -19,13 +19,11 @@
     <string name="stopService">Zatrzymaj serwer</string>
     <string name="toggleService">Przełącz uruchom/zatrzymaj serwer</string>
     <string name="notificationTitle">Serwer FTP</string>
-    <string name="haveToSetPassword">Najpierw musisz ustawić hasło</string>
     <string name="serverRunning">Serwer FTP jest uruchomiony</string>
     <string name="serverCouldNotBeStarted">Nie można uruchomić serwera! Komunikat o błędzie:</string>
     <string name="portInvalid_v2">Wartość portu jest nieprawidłowa. Musi mieścić się w przedziale od 1024 do 64000.</string>
     <string name="portsEqual_v2">Porty są takie same. To nie może zadziałać.</string>
     <string name="restartServer">Uruchom ponownie serwer, aby zmiany zaczęły obowiązywać.</string>
-    <string name="invalidDir">Nieprawidłowy katalog.</string>
     <string name="couldNotReadKeyAuthKey">Nie można odczytać klucza publicznego do uwierzytelniania kluczem. Sprawdź dzienniki.</string>
     <string name="ftpPassivePortsInvalid">Wartość pasywnych portów FTP jest nieprawidłowa.</string>
     <string name="prefs">Preferencje</string>
@@ -57,15 +55,12 @@
     <string name="prefTitleShowStartStopNotification">Pokaż powiadomienie do uruchom/zatrzymaj serwer(y)</string>
     <string name="prefSummaryShowStartStopNotification">Wyświetla powiadomienie przez cały czas, aby mieć kolejną szybką drogę na uruchamianie/zatrzymywanie serwera(ów).</string>
     <string name="prefTitlePubKeyAuth">Uwierzytelnianie kluczem publicznym</string>
-    <string name="prefSummaryPubKeyAuth">Po włączeniu umieść publiczny klucz ssh2 w %s. Tylko SFTP.</string>
     <string name="prefTitleAnonymousLogin">Logowanie anonimowe</string>
     <string name="prefSummaryAnonymousLogin">Ustaw, czy na serwerze jest dozwolone logowanie anonimowe.</string>
     <string name="prefTitleFtpPassivePorts">Pasywne porty FTP</string>
     <string name="prefSummaryFtpPassivePorts">Porty do pasywnego połączenia danych FTP. Może być pojedynczym portem, listą lub zakresem portów. Na przykład 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Limit czasu bezczynności serwera</string>
-    <string name="prefSummaryIdleTimeout">Serwer będzie kończył bezczynne połączenia po upływie tego czasu w sekundach (tylko FTP)</string>
     <string name="prefTitleLogging">Dziennik</string>
-    <string name="prefSummaryLogging">Dziennik służy do analizy błędów. Jeśli aplikacja nie działa poprawnie na Twoim urządzeniu, możesz wysłać dziennik do programistów. Może wymagać ponownego uruchomienia aplikacji.</string>
     <string name="licence">Licencja</string>
     <string name="reset">Uruchom ponownie</string>
     <string name="widgetTextStart">uruchom (s)ftpd</string>
@@ -74,16 +69,13 @@
     <string name="selectServerAction">Wybierz akcję serwera</string>
     <string name="isServerRunning">Czy serwer działa?</string>
     <string name="storageType">Typ Pamięci</string>
-    <string name="storageTypePlain">Zwykły stary system plików</string>
     <string name="storageTypeRoot">Super użytkownik (urządzenie musi być zrootowane)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)
 \n
 \n(np. dla karty SD)</string>
     <string name="storageTypeRoSaf">SAF tylko do odczytu (szybsze!)</string>
     <string name="safExplainHeading">Jak działa SAF</string>
-    <string name="safExplain">Android poprosi cię o wybranie katalogu. Będzie on dostępny przez serwer(y). Od czasu do czasu uprawnienia mogą zostać cofnięte i trzeba będzie dokonać ponownego wyboru.</string>
     <string name="selectedSafUri">Wybrany identyfikator SAF URI:</string>
-    <string name="startServerAndExit">uruchom tylko serwer</string>
     <string name="fingerprintsLabel">Odcisk Klucza</string>
     <string name="state">Stan</string>
     <string name="serverStarted">Uruchomiony…</string>
@@ -91,12 +83,10 @@
     <string name="prefsCategoryTitleAuth">Uwierzytelnianie</string>
     <string name="prefTitleStartOnOpen">Uruchom przy otwieraniu</string>
     <string name="prefTitleShowConnectionInfoInNotification">Pokaż informacje o połączeniu</string>
-    <string name="startServerAndUi">uruchom razem z serwerem</string>
     <string name="haveToSetAuthMechanism">Najpierw musisz ustawić mechanizm uwierzytelniania</string>
     <string name="prefSummaryLoggingV2">Dziennik służy do analizy błędów. Jeśli aplikacja nie działa poprawnie na Twoim urządzeniu, możesz wysłać dziennik do programistów. Może wymagać ponownego uruchomienia aplikacji. Logi tekstowe są przechowywane w %s.</string>
     <string name="prefAllowedIpsPattern">Wzorzec dozwolonych adresów IP</string>
     <string name="prefSummaryAllowedIpsPattern">Wzorzec dozwolonych adresów IP. Tylko jeden symbol wieloznaczny (*) może być użyty i tylko jako ostatni znak.</string>
-    <string name="filepickerNeedValidFilename">Wprowadź lub wybierz prawidłową nazwę pliku</string>
     <string name="filepickerSelectSomethingFirst">Najpierw wybierz coś</string>
     <string name="filepickerFilename">Nazwa pliku</string>
     <string name="filepickerName">Nazwa</string>
@@ -106,7 +96,6 @@
     <string name="filepickerNewFolderOk">\@android:ciąg/ok</string>
     <string name="filepickerNewFolder">Nowy folder</string>
     <string name="filepickerCreateFolderError">Nie można utworzyć katalogu</string>
-    <string name="open">Otwórz</string>
     <string name="saveToTextFile">Zapisz do pliku tekstowego</string>
     <string name="download">Pobierz</string>
     <string name="downloadOrSaveUrlToFile">Pobrać lub zapisać adres URL do pliku tekstowego?</string>
@@ -116,7 +105,6 @@
     <string name="prefTitleSshowIpv6InNotification">Pokaż w powiadomieniu adresy IPv6</string>
     <string name="prefSummaryShowIpv4InNotification">Pokazuje adresy IPv4 w powiadomieniu, jeśli informacje o połączeniu są włączone.</string>
     <string name="prefTitleSshowIpv4InNotification">Pokaż w powiadomieniu adresy IPv4</string>
-    <string name="quickShareCouldNotStartServer">Nie można uruchomić serwera</string>
     <string name="quickShareServerStarted">Serwer został uruchomiony udostępniając pojedynczy plik</string>
     <string name="quickShare">Szybkie udostępnianie</string>
     <string name="prefSummaryIdleTimeoutV2">Serwer będzie kończył bezczynne połączenia po upływie tego czasu w sekundach. Ustaw na 0 aby wyłączyć.</string>
@@ -128,8 +116,6 @@
     <string name="statsTotalSent">Wysłano łącznie</string>
     <string name="statsLabel">Statystyki</string>
     <string name="clientActionsLabel">Dziennik działań klienta</string>
-    <string name="quickShareInfoActivity">Działa w trybie szybkiego udostępniania dla pliku: %1s</string>
-    <string name="quickShareInfoNotification">Szybkie udostępnianie: %1s</string>
     <string name="allKeysFingerprintsLabel">Pokaż odciski palców wszystkich kluczy</string>
     <string name="Request">Żądanie</string>
     <string name="logFiles">Plik logów:</string>
@@ -137,10 +123,8 @@
     <string name="mobileUiShort">Tryb mobilny</string>
     <string name="tvUiShort">Tryb TV</string>
     <string name="mobileUiLong">Tryb urządzenia mobilnego</string>
-    <string name="permWriteLabelServerstatus">uruchom i wyłącz serwer</string>
     <string name="iconAbout">O aplikacji</string>
     <string name="tvUiLong">Tryb telewizji</string>
-    <string name="iconQrCode">Kod QR</string>
     <string name="iconKeysFingerprints">Odciski palców kluczy</string>
     <string name="prefSummaryIdleTimeoutServerStop">Serwer(y) zostaną zatrzymane po upływie tego czasu (w minutach), jeśli nie będzie żadnej aktywności klienta. Ustaw na 0, aby wyłączyć.</string>
     <string name="prefSummaryRootCopyFiles">Na niektórych urządzeniach występują problemy z dostępem do plików za pomocą dd. Przy tym ustawieniu pliki są najpierw kopiowane do katalogu tmp, a dostęp do nich uzyskuje się za pomocą mechanizmów systemu plików. Należy wyłączyć dla dużych plików.</string>
@@ -159,9 +143,6 @@
     <string name="hasFullAccessToStorage">Ma pełny dostęp do pamięci: %1$b</string>
     <string name="hasNormalAccessToStorage">Ma (normalny) dostęp do pamięci: %1$b</string>
     <string name="hasNotificationPermission">Ma uprawnienia do wyświetlania powiadomień: %1$b</string>
-    <string name="permReadLabelServerstatus">dowiedz się, czy serwer działa</string>
-    <string name="permReadDescServerstatus">Umożliwia sprawdzenie, czy serwer FTP/SFTP działa.</string>
-    <string name="permWriteDescServerstatus">Umożliwia uruchamianie i zatrzymywanie serwera ftp/sftp.</string>
     <string name="qrFallback">bez interfejsów sieciowych, bez adresów IP, bez kodu QR</string>
     <string name="quickShareInfoNotificationV2">QuickShare z %1d plikiem(ami)</string>
     <string name="addPubkeyForAuth">Dodaj klucz publiczny dla autoryzacji</string>

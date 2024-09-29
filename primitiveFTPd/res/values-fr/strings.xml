@@ -9,7 +9,6 @@
     <string name="startService">Démarrer le serveur</string>
     <string name="stopService">Arrêter le serveur</string>
     <string name="notificationTitle">Serveur FTP</string>
-    <string name="haveToSetPassword">Vous devez d\'abord définir un mot de passe</string>
     <string name="serverRunning">Serveur FTP en cours d’exécution</string>
     <string name="serverCouldNotBeStarted">Impossible de démarrer le serveur ! Erreur : </string>
     <string name="restartServer">Vous devez redémarrer le serveur pour que les changements soient pris en compte.</string>
@@ -36,12 +35,10 @@
     <string name="prefTitleWakelock">Empêcher la mise en veille</string>
     <string name="prefTitleWhichServerToStart">Serveur(s) à démarrer</string>
     <string name="prefSummaryWhichServerToStart">Choisissez de lancer soit le serveur FTP uniquement ou SFTP, ou les deux à la fois.</string>
-    <string name="permissionNameStorage">Stockage</string>
     <string name="quickSettingsServerStarted">pFTPd en cours d\'exécution …</string>
     <string name="saveAs">Sauvegarder sous</string>
     <string name="portInvalid_v2">Valeur du port invalide. Doit être entre 1024 et 64000.</string>
     <string name="portsEqual_v2">Les deux ports sont identique. Cela ne peut fonctionner.</string>
-    <string name="invalidDir">Répertoire invalide.</string>
     <string name="prefTitleAnnounceName">Nom du serveur</string>
     <string name="prefTitleStartOnBoot">Lancer au démarrage de l\'appareil</string>
     <string name="prefSummaryStartOnBoot">Lancer le serveur après l’amorçage du système.</string>
@@ -67,8 +64,6 @@
     <string name="prefTitleShowConnectionInfoInNotification">Afficher les informations de connexion dans les notifications</string>
     <string name="isServerRunning">Est-ce que le serveur fonctionne ?</string>
     <string name="storageTypeRoot">Super utilisateur (l\'appareil doit être rooté)</string>
-    <string name="startServerAndExit">Démarrer uniquement le serveur</string>
-    <string name="startServerAndUi">démarrer avec le serveur</string>
     <string name="prefSummaryStartDir">Premier dossier après connexion</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Afficher les infos de connexion telles que l\'adresse IP dans les notifications.</string>
     <string name="safExplainHeading">Comment fonctionne SAF</string>
@@ -86,11 +81,9 @@
     <string name="prefTitleIdleTimeout">Délai d\'inactivité du serveur</string>
     <string name="pubKeyAuth">Authtification par clé publique : %1$b</string>
     <string name="selectServerAction">Sélectionner l\'action du serveur</string>
-    <string name="storageTypePlain">Ancien système de fichiers classique</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)
 \n(ex. pour une carte SD)</string>
     <string name="storageTypeRoSaf">SAF en lecture seule (plus rapide !)</string>
-    <string name="safExplain">Android va vous demander de sélectionner un dossier. Il sera disponible via le(s) serveur(s). De temps en temps, cette permission peut être révoquée et vous devez la sélectionner à nouveau.</string>
     <string name="selectedSafUri">Sélectionné SAF URI :</string>
     <string name="filepickerCreateFolderError">Création du répertoire : erreur</string>
     <string name="filepickerNewFolder">Nouveau répertoire</string>
@@ -100,21 +93,15 @@
     <string name="filepickerName">Nom</string>
     <string name="filepickerFilename">Nom de fichier</string>
     <string name="filepickerSelectSomethingFirst">Merci de sélectionner quelque chose d\'abord</string>
-    <string name="filepickerNeedValidFilename">Merci de saisir ou choisir un nom de fichier valide</string>
     <string name="passwordPresent">Mot de passe présent : %1$b</string>
     <string name="widgetTextStop">Arréter (s)ftpd</string>
     <string name="widgetTextStart">Démarrer (s)ftpd</string>
     <string name="prefSummaryAllowedIpsPattern">Modèles d\'adresses IP autorisés. Une seule Wildcard (*) peut être utilisé et uniquement comme dernier caractère.</string>
     <string name="prefAllowedIpsPattern">Modèle d\'adresses IP autorisés</string>
     <string name="prefSummaryLoggingV2">Les log servent à l\'analyse des erreurs. Si l\'application ne fonctionne pas correctement sur votre appareil, vous pouvez l\'envoyer aux développeurs. Peut nécessiter de redémarrer l\'application. Les logs textuel sont stocké dans %s.</string>
-    <string name="prefSummaryLogging">Les log servent à l\'analyse des erreurs. Si l\'application ne fonctionne pas correctement sur votre appareil, vous pouvez l\'envoyer aux développeurs. Peut nécessiter de redémarrer l\'application.</string>
-    <string name="prefSummaryIdleTimeout">Le serveur terminera les connexions inactives après ce délais en secondes (FTP seulement).</string>
     <string name="prefSummaryFtpPassivePorts">Ports pour les connexions FTP passive. Peut être un seul port, une liste ou une plage de ports. Ex. 5678,5700-5710,5800,5900.</string>
-    <string name="prefSummaryPubKeyAuth">Si activé, placer vos clés publique ssh2 dans %s. SFTP seulement.</string>
-    <string name="quickShareCouldNotStartServer">Le serveur ne peut pas démarrer</string>
     <string name="quickShareServerStarted">Le serveur a démarré avec partage fichier seul</string>
     <string name="quickShare">Partage rapide</string>
-    <string name="open">Ouvert</string>
     <string name="saveToTextFile">Sauvegarder dans un fichier texte</string>
     <string name="download">Télécharger</string>
     <string name="downloadOrSaveUrlToFile">Télécharger ou sauvegarder l\'URL vers un fichier texte \?</string>
@@ -128,15 +115,11 @@
     <string name="hasFullAccessToStorage">A un accès complet au stockage : %1$b</string>
     <string name="Request">Demander</string>
     <string name="delete">Supprimer</string>
-    <string name="permReadLabelServerstatus">savoir si le serveur fonctionne</string>
-    <string name="permWriteLabelServerstatus">démarrer et arrêter le serveur</string>
-    <string name="permWriteDescServerstatus">Permet de démarrer et arrêter le serveur ftp/sftp.</string>
-    <string name="mobileUiShort">Mode mobile</string>
+  <string name="mobileUiShort">Mode mobile</string>
     <string name="mobileUiLong">Mode appareil mobile</string>
     <string name="tvUiShort">Mode TV</string>
     <string name="tvUiLong">Mode téléviseur</string>
-    <string name="iconQrCode">Code QR</string>
-    <string name="iconKeysFingerprints">Empreintes des clés</string>
+  <string name="iconKeysFingerprints">Empreintes des clés</string>
     <string name="iconAbout">À propos</string>
     <string name="prefSummaryBindIp">Si vous voulez que les serveurs écoutent sur une seule interface.</string>
 </resources>

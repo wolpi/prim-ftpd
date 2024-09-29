@@ -23,14 +23,12 @@
     <string name="stopService">Setop Server</string>
     <string name="toggleService">Mulai/Setop Server</string>
     <string name="notificationTitle">Server FTP</string>
-    <string name="haveToSetPassword">Anda harus menyiapkan sandi terlebih dahulu</string>
     <string name="haveToSetAuthMechanism">Anda harus menyiapkan mekanisme otentikasi terlebih dahulu</string>
     <string name="serverRunning">Server FTP sedang berjalan</string>
     <string name="serverCouldNotBeStarted">Server tidak bisa dimulai! Pesan galat: </string>
     <string name="portInvalid_v2">Porta tidak valid. Harus antara 1024 dan 64000.</string>
     <string name="portsEqual_v2">Porta sama. Ini tidak akan bisa bekerja.</string>
     <string name="restartServer">Anda harus memulai ulang server agar perubahan bisa diterapkan.</string>
-    <string name="invalidDir">Direktori tidak valid.</string>
     <string name="couldNotReadKeyAuthKey">Kunci publik untuk otentikasi kunci tidak bisa dibaca. Silakan periksa log.</string>
     <string name="ftpPassivePortsInvalid">Nilai dari Porta FTP Pasif tidak valid.</string>
     <string name="prefs">Preferensi</string>
@@ -69,15 +67,12 @@
     <string name="prefTitleShowStartStopNotification">Tampilkan notifikasi untuk mulai/setop server</string>
     <string name="prefSummaryShowStartStopNotification">Selalu menampilkan notifikasi untuk mempercepat proses mulai/setop server.</string>
     <string name="prefTitlePubKeyAuth">Otentikasi Kunci Publik</string>
-    <string name="prefSummaryPubKeyAuth">Ketika diaktifkan simpan kunci publik ssh2 Anda di %s. Hanya SFTP.</string>
     <string name="prefTitleAnonymousLogin">Masuk Anonim</string>
     <string name="prefSummaryAnonymousLogin">Mengatur apakah proses masuk secara anonim diizinkan pada server.</string>
     <string name="prefTitleFtpPassivePorts">Porta FTP Pasif</string>
     <string name="prefSummaryFtpPassivePorts">Porta untuk koneksi data FTP Pasif. Boleh porta tunggal, beberapa atau rentang porta. Mis. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Batas Waktu Menganggur Server</string>
-    <string name="prefSummaryIdleTimeout">Server akan menghentikan koneksi yang tidak aktif setelah batas waktu ini dalam hitungan detik (hanya FTP)</string>
     <string name="prefTitleLogging">Log</string>
-    <string name="prefSummaryLogging">Log disediakan untuk analisa galat. Jika apl tidak bekerja sebagaimana mestinya pada perangkat Anda, Anda bisa mengirim log ke pengembang. Mungkin membutuhkan apl untuk dimulai ulang.</string>
     <string name="prefSummaryLoggingV2">Log disediakan untuk analisa galat. Jika apl tidak bekerja sebagaimana mestinya pada perangkat Anda, Anda bisa mengirim log ke pengembang. Mungkin membutuhkan apl untuk dimulai ulang. Teks Log disimpan di %s.</string>
     <string name="prefAllowedIpsPattern">&gt;Pola IP yang diizinkan</string>
     <string name="prefSummaryAllowedIpsPattern">Pola alamat IP yang diizinkan. Hanya satu Wildcard (*) yang boleh digunakan, hanya sebagai karakter terakhir.</string>
@@ -91,16 +86,12 @@
     <string name="selectServerAction">Pilih Tindakan Server</string>
     <string name="isServerRunning">Apakah server sedang berjalan?</string>
     <string name="storageType">Tipe Penyimpanan</string>
-    <string name="storageTypePlain">Sistem berkas lama</string>
     <string name="storageTypeRoot">Pengguna super (perangkat harus diroot)</string>
     <string name="storageTypeSaf">Storage Access Framework (SAF) Android
 \n(mis. untuk kartu sd)</string>
     <string name="storageTypeRoSaf">SAF baca saja (lebih cepat !)</string>
     <string name="safExplainHeading">Bagaimana SAF bekerja</string>
-    <string name="safExplain">Android akan bertanya pada Anda untuk memilih direktori. Direktori tersebut akan tersedia untuk diakses via server. Seiring berjalannya waktu, izin mungkin akan dicabut dan Anda harus memilihnya kembali.</string>
     <string name="selectedSafUri">URI SAF yang dipilih:</string>
-    <string name="startServerAndExit">hanya mulai server</string>
-    <string name="startServerAndUi">mulai dengan server</string>
     <string name="filepickerCreateFolderError">Gagal membuat folder baru</string>
     <string name="filepickerNewFolder">Folder baru</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>
@@ -110,7 +101,6 @@
     <string name="filepickerName">Nama</string>
     <string name="filepickerFilename">Nama berkas</string>
     <string name="filepickerSelectSomethingFirst">Silakan pilih apa saja terlebih dahulu</string>
-    <string name="filepickerNeedValidFilename">Silakan masukkan atau pilih nama berkas yang valid</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP dan SFTP</item>
         <item>Hanya FTP</item>
@@ -131,11 +121,9 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string name="open">Buka</string>
     <string name="saveToTextFile">Simpan ke berkas teks</string>
     <string name="download">Unduh</string>
     <string name="downloadOrSaveUrlToFile">Unduh atau simpan URL ke berkas teks \?</string>
-    <string name="quickShareCouldNotStartServer">Server tidak bisa dimulai</string>
     <string name="quickShareServerStarted">Server telah mulai membagikan berkas tunggal</string>
     <string name="quickShare">Berbagi Cepat</string>
     <string name="prefSummaryIdleTimeoutV2">Server akan menghentikan koneksi yang tidak aktif setelah ini dalam hitungan detik. Setel ke 0 untuk menonaktifkan.</string>
@@ -146,6 +134,4 @@
     <string name="statsTotalReceived">Total Diterima</string>
     <string name="statsTotalSent">Total Terkirim</string>
     <string name="statsLabel">Stat</string>
-    <string name="quickShareInfoNotification">Berbagi Cepat: %1s</string>
-    <string name="quickShareInfoActivity">Berjalan dalam Mode Berbagi Cepat untuk berkas: %1s</string>
 </resources>

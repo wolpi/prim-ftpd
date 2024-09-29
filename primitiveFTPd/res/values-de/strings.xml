@@ -24,14 +24,12 @@
     <string name="stopService">Server stoppen</string>
     <string name="toggleService">Server zwischen Start/Stop umschalten</string>
     <string name="notificationTitle">FTP-Server</string>
-    <string name="haveToSetPassword">Sie müssen erst ein Passwort setzen</string>
     <string name="haveToSetAuthMechanism">Sie müssen erst einen Authentifizierungs-Mechanismus festlegen</string>
     <string name="serverRunning">FTP-Server läuft</string>
     <string name="serverCouldNotBeStarted">Server konnte nicht gestartet werden! Fehlermeldung: </string>
     <string name="portInvalid_v2">Port ist ungültig. Er muss zwischen 1024 und 64000 liegen.</string>
     <string name="portsEqual_v2">Ports sind gleich. Das kann nicht funktionieren.</string>
     <string name="restartServer">Sie müssen den Server neu starten, damit die Änderungen wirksam werden.</string>
-    <string name="invalidDir">Ungültiger Ordner.</string>
     <string name="couldNotReadKeyAuthKey">Öffentlicher Schlüssel für Authentifizierung konnte nicht gelesen werden. Prüfen Sie die Logs.</string>
     <string name="ftpPassivePortsInvalid">Wert für FTP Passive Ports ist ungültig.</string>
     <string name="prefs">Einstellungen</string>
@@ -71,16 +69,13 @@
     <string name="prefSummaryShowIpv6InNotification">IPv6-Adressen in Benachrichtigung anzeigen, falls Konnektivitätsinfo eingeschaltet ist.</string>
     <string name="prefTitleShowStartStopNotification">Zeige Benachrichtigung, um Server zu starten/stoppen</string>
     <string name="prefSummaryShowStartStopNotification">Zeige dauerhafte Benachrichtigung um den Server einfach zu starten/stoppen.</string>
-    <string name="prefSummaryPubKeyAuth">Wenn aktiviert, legen Sie Ihren öffentlichen ssh2 Schlüssel in %s ab. Nur SFTP.</string>
     <string name="prefSummaryPubKeyAuth_v2">Wenn aktiviert, legen Sie Ihre öffentlichen ssh2 Schlüssel in %s ab. Dies muss eine Datei sein, welche einen Schlüssel pro Zeile enthält. Nur SFTP.</string>
     <string name="prefSummaryAnonymousLogin">Anonymen Login erlauben.</string>
     <string name="prefTitleFtpPassivePorts">FTP Passive Ports</string>
     <string name="prefSummaryFtpPassivePorts">Ports für FTP Passive-Daten-Verbindung. Kann ein einzelner Port, eine Liste oder Bereich von Ports sein. Z.B. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Server Idle-Timeout</string>
-    <string name="prefSummaryIdleTimeout">Server wird ungenutzte Verbindungen nach dieser Zeit in Sekunden beenden (nur FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">Server wird ungenutzte Verbindungen nach dieser Zeit in Sekunden beenden. Auf 0 setzen um abzuschalten.</string>
     <string name="prefTitleLogging">Log</string>
-    <string name="prefSummaryLogging">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten.</string>
     <string name="prefSummaryLoggingV2">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten. Text Logs werden abgelegt in %s.</string>
     <string name="prefAllowedIpsPattern">Erlaubte IPs Pattern</string>
     <string name="prefSummaryAllowedIpsPattern">Pattern der erlaubten IP Adressen. Nur eine Wildcard (*) kann genutzt werden, nur als letztes Zeichen.</string>
@@ -95,7 +90,6 @@
     <string name="pubKeyAuth">Public-Key-Authentifizierung: %1$b</string>
     <string name="selectServerAction">Serveraktion wählen</string>
     <string name="storageType">Art des Speichers</string>
-    <string name="storageTypePlain">Gutes, altes Dateisystem</string>
     <string name="storageTypePlainV2">Gutes, altes Dateisystem\nNur lesenden Zugriff? Siehe unsere <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub Seite</a>.</string>
     <string name="storageTypeRoot">Super user (Gerät muss gerooted sein)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)
@@ -103,17 +97,12 @@
     <string name="storageTypeRoSaf">Nur-Lesen SAF (schneller!)</string>
     <string name="storageTypeVirtual">Virtuelle Ordner (bietet alle Speicher-Arten)</string>
     <string name="safExplainHeading">Wie SAF funktioniert</string>
-    <string name="safExplain">Android wird Sie darum bitten ein Verzeichnis auszuwählen. Dieses wird über die Server verfügbar gemacht. Von Zeit zu Zeit kann die Berechtigung zurückgezogen werden und das Verzeichnis muss erneut ausgewählt werden.</string>
     <string name="selectedSafUri">Ausgewählte SAF-URI:</string>
-    <string name="startServerAndExit">Starte nur Server</string>
-    <string name="startServerAndUi">Starte mit Server</string>
     <string name="downloadOrSaveUrlToFile">Download oder URL in Textdatei speichern?</string>
     <string name="download">Download</string>
     <string name="saveToTextFile">In Textdatei speichern</string>
-    <string name="open">Öffnen</string>
     <string name="quickShare">Quick Share</string>
     <string name="quickShareServerStarted">Server wurde gestartet, stellt eine Datei bereit</string>
-    <string name="quickShareCouldNotStartServer">Server konnte nicht gestartet werden</string>
     <string name="filepickerCreateFolderError">Ordner konnte nicht erstellt werden</string>
     <string name="filepickerNewFolder">Neuer Ordner</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>
@@ -123,7 +112,6 @@
     <string name="filepickerName">Name</string>
     <string name="filepickerFilename">Dateiname</string>
     <string name="filepickerSelectSomethingFirst">Bitte erst etwas ausählen</string>
-    <string name="filepickerNeedValidFilename">Bitte gültigen Dateinamen eingeben oder auswählen</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP und SFTP</item>
         <item>nur FTP</item>
@@ -140,14 +128,12 @@
     <string name="widgetTextStop">stoppe (s)ftpd</string>
     <string name="widgetTextStart">starte (s)ftpd</string>
     <string name="clientActionsLabel">Client Action Log</string>
-    <string name="quickShareInfoActivity">Ausführung im QuickShare-Modus für Datei: %1s</string>
     <string name="quickShareInfoActivityV2">Ausführung im QuickShare-Modus für %1d Datei(en)</string>
     <string name="statsReceivedPerSec">Empfangen pro Sekunde</string>
     <string name="statsSentPerSec">Gesendet pro Sekunde</string>
     <string name="statsTotalReceived">Insgesamt empfangen</string>
     <string name="statsTotalSent">Insgesamt gesendet</string>
     <string name="statsLabel">Statistiken</string>
-    <string name="quickShareInfoNotification">QuickShare von: %1s</string>
     <string name="quickShareInfoNotificationV2">QuickShare von %1d Datei(en)</string>
     <string name="hasFullAccessToStorage">Hat vollen Speicherzugriff: %1$b</string>
     <string name="hasNormalAccessToStorage">Hat (normalen) Speicherzugriff: %1$b</string>
@@ -158,14 +144,9 @@
     <string name="logFiles">Log Dateien:</string>
     <string name="rootTmpFiles">Temp Dateien des root Zugriff:</string>
     <string name="delete">Löschen</string>
-    <string name="permReadLabelServerstatus">Herausfinden, ob Server läuft</string>
-    <string name="permReadDescServerstatus">Erlaubt herauszufinden ob ftp/sftp Server läuft.</string>
-    <string name="permWriteLabelServerstatus">Server starten und stoppen</string>
-    <string name="permWriteDescServerstatus">Erlaubt ftp/sftp Server zu starten und stoppen.</string>
     <string name="mobileUiShort">Mobiler Modus</string>
     <string name="mobileUiLong">Mobilgerät-Modus</string>
     <string name="tvUiShort">TV-Modus</string>
     <string name="tvUiLong">Fernsehmodus</string>
-    <string name="iconQrCode">QR-Code</string>
     <string name="iconAbout">Über</string>
 </resources>

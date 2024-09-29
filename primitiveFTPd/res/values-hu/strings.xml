@@ -22,9 +22,7 @@
     <string name="startService">Szerver indítása</string>
     <string name="stopService">Szerver leállítása</string>
     <string name="notificationTitle">FTP szerver</string>
-    <string name="haveToSetPassword">Először jelszót kell beállítani</string>
     <string name="serverRunning">FTP Szerver működik</string>
-    <string name="invalidDir">Érvénytelen könyvtár.</string>
     <string name="prefTitleUser">Felhasználónév</string>
     <string name="prefTitlePort">Port</string>
     <string name="safExplainHeading">Hogyan működik a SAF</string>
@@ -49,12 +47,9 @@
     <string name="prefSummaryAllowedIpsPattern">Az engedélyezett IP-címek alakja. Csak egy helyettesítő karakter (*) használható, és csak utolsó karakterként.</string>
     <string name="prefAllowedIpsPattern">Engedélyezett IP-mód</string>
     <string name="prefSummaryLoggingV2">"A napló a hibák elemzését szolgálja. Ha az alkalmazás nem működik megfelelően az eszközén, akkor a naplót elküldheti a fejlesztőknek. Szükség lehet az app újraindítására. A szövegnaplókat  %s tárolja."</string>
-    <string name="prefSummaryLogging">A napló a hibák elemzését szolgálja. Ha az alkalmazás nem működik megfelelően az eszközén, a naplót elküldhei a fejlesztőknek. Ehhez az alkalmazás újraindítására is szükség lehet .</string>
-    <string name="prefSummaryIdleTimeout">A kiszolgáló az üresjárati kapcsolatokat másodpercben megadott idő után megszakítja (csak FTP).</string>
     <string name="prefSummaryIdleTimeoutV2">A kiszolgáló az üresjárati kapcsolatokat a másodpercben megadott idő után megszakítja. A letiltáshoz állítsa 0-ra.</string>
     <string name="prefTitleIdleTimeout">Szerver alap(értelmezett) időtúllépés</string>
     <string name="prefSummaryAnonymousLogin">Névtelen bejelentkezés engedélyezett-e a szerveren.</string>
-    <string name="prefSummaryPubKeyAuth">Ha engedélyezve van, illessze be %s SSH2 nyilvános kulcsát. Csak SFTP-nél.</string>
     <string name="prefTitlePubKeyAuth">Nyilvános kulcsos hitelesítés</string>
     <string name="prefTitleShowStartStopNotification">Értesítés megjelenítése a kiszolgáló(k) indításakor / leállításakor</string>
     <string name="prefTitleSshowIpv6InNotification">IPv6 cím legyen látható az értesítésben</string>
@@ -89,20 +84,15 @@
     <string name="couldNotReadKeyAuthKey">A kulcshitelesítés nyilvános kulcsa nem olvasható. Ellenőrizze a naplókat.</string>
     <string name="portsEqual_v2">A portok azonosak. Így nem működhet.</string>
     <string name="serverCouldNotBeStarted">A szerver nem indítható el! Hibaüzenet:</string>
-    <string name="safExplain">Az Android kéri majd, hogy válasszon ki egy könyvtárat. Ez lesz a szerver(ek)en keresztül elérhető. Időnként visszavonódhatnak az engedélyek, és újra meg kell adnia őket.</string>
-    <string name="filepickerNeedValidFilename">Kérem írjon be vagy válasszon érvényes fájlnevet!</string>
     <string name="filepickerSelectSomethingFirst">Kérem először válasszon ki valamit</string>
     <string name="filepickerFilename">Fájlnév</string>
     <string name="filepickerNewFolder">Új mappa</string>
     <string name="filepickerCreateFolderError">Hiba a mappa létrehozásakor</string>
-    <string name="startServerAndUi">Szerver indítása felhasználói felülettel (UI)</string>
-    <string name="startServerAndExit">Csak szerverindítás és kilépés</string>
     <string name="selectedSafUri">Kiválasztott SAF URI:</string>
     <string name="storageTypeRoSaf">Csak olvasható SAF (gyorsabb!)</string>
     <string name="storageTypeSaf">Android Storage Access Framework (SAF)
 \n(pl. SD kártyához)</string>
     <string name="storageTypeRoot">Super user (root)</string>
-    <string name="storageTypePlain">Egyszerű régi fájlrendszer</string>
     <string name="storageType">Tároló típus</string>
     <string name="isAnonymous">Névtelen belépés: %1$b</string>
     <string name="widgetTextStop">(s)ftpd leállítása</string>
@@ -122,7 +112,6 @@
     <string name="prefBindIp">Szerver IP címe</string>
     <string name="prefSummaryBindIp">Ha azt akarja, hogy csak egy adott hálózati felületen legyenek a szerverek elérhetőek.</string>
     <string name="delete">Eltávolítás</string>
-    <string name="iconQrCode">QR kód</string>
     <string name="mobileUiLong">Mobil eszköz mód</string>
     <string name="tvUiLong">Televízió mód</string>
     <string name="tvUiShort">TV mód</string>
@@ -137,7 +126,6 @@
     <string name="storageTypePlainV2">Hagyományos file-rendszer
 \nCsak olvasható a hozzáférése? Olvassa el a <a href="https://www.github.com/wolpi/prim-ftpd/">Github oldalunkat</a>.</string>
     <string name="storageTypeVirtual">Virtuális mappák (az összes Tároló típus elérhető)</string>
-    <string name="open">Megnyit</string>
     <string name="download">Letölt</string>
     <string name="statsSentPerSec">Másodpercenként küldött</string>
     <string name="statsReceivedPerSec">Másodpercenként fogadott</string>

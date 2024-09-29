@@ -21,15 +21,12 @@
     <string name="stopService">Parar Servidor</string>
     <string name="toggleService">Iniciar ou Parar o Servidor</string>
     <string name="notificationTitle">Servidor FTP</string>
-    <string name="haveToSetPassword">Primeiro defina uma password</string>
     <string name="serverRunning">O Servidor FTP está a correr</string>
     <string name="serverCouldNotBeStarted">O Servidor FTP não pôde ser iniciado! Mensagem de erro:</string>
     <string name="portInvalid_v2">O valor da porta é inválido. Deve ser entre 1024 e 64000.</string>
     <string name="portsEqual_v2">As portas são iguais. Isto não vai funcionar.</string>
     <string name="restartServer">Necessita de reiniciar o Servidor para as alterações tomarem efeito.</string>
-    <string name="invalidDir">O directório não é válido.</string>
     <string name="prefs">Definições</string>
-    <string name="prefCategoryTitle">Definições do Servidor FTP</string>
     <string name="prefTitleUser">Nome de Utilizador</string>
     <string name="prefSummaryUser">Nome de utilizador do servidor FTP</string>
     <string name="prefTitlePassword">Palavra-Passe</string>
@@ -52,13 +49,11 @@
     <string name="prefTitleStartOnOpen">Arrancar ao abrir</string>
     <string name="prefSummaryStartOnOpen">Arrancar o servidor quando a aplicação é aberta.</string>
     <string name="prefTitlePubKeyAuth">"Chave de Autenticação Pública "</string>
-    <string name="prefSummaryPubKeyAuth">Quando activado coloque a chave pública ssh2 em %s. SFTP apenas.</string>
     <string name="prefTitleAnonymousLogin">Autenticação Anónima</string>
     <string name="prefSummaryAnonymousLogin">Ativar se autenticação anónima é permitida no servidor.</string>
     <string name="prefTitleFtpPassivePorts">Portas Passivas FTP</string>
     <string name="app_name">ftpd primitivo</string>
     <string name="fingerprintsLabel">Impressões Digitais da Chave</string>
-    <string name="translate">Traduza</string>
     <string name="haveToSetAuthMechanism">Necessita de seleccionar um mecanismo de autenticação primeiro</string>
     <string name="couldNotReadKeyAuthKey">A chave pública para autenticação de chaves não pôde ser lida. Verifique os registos (logs).</string>
     <string name="ftpPassivePortsInvalid">O valor das Portas Passivas FTP é inválido.</string>
@@ -73,10 +68,8 @@
     <string name="prefSummaryShowStartStopNotification">Mostra uma notificação a todo o tempo para ter mais uma forma rápida de arrancar/parar o(s) servidor(es).</string>
     <string name="prefSummaryFtpPassivePorts">Portas para ligações FTP passivas. Pode ser apenas uma porta, uma lista ou entre dois valores. Ex. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Tempo de servidor inactivo para expirar</string>
-    <string name="prefSummaryIdleTimeout">O servidor irá terminar as ligações inactivas após este tempo em segundos (apenas FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">O servidor irá terminar as ligações inactivas após este tempo, em segundos. Definir para 0 para desactivar.</string>
     <string name="prefTitleLogging">Registo</string>
-    <string name="prefSummaryLogging">O registo serve uma análise de erros. Se a aplicação não funcionar correctamente no seu dispositivo, pode enviar o registo para os desenvolvedores. Pode obrigar a um reinicio da aplicação.</string>
     <string name="licence">Licença</string>
     <string name="reset">Reset</string>
     <string name="widgetTextStart">Iniciar (s)ftpd</string>
@@ -85,14 +78,10 @@
     <string name="selectServerAction">Acção de Seleccionar o Servidor</string>
     <string name="isServerRunning">O servidor está a correr?</string>
     <string name="storageType">Tipo de Armazenamento</string>
-    <string name="storageTypePlain">Sistema de ficheiros antigo</string>
     <string name="storageTypeRoot">Super user (o dispositivo deve estar rooteado)</string>
     <string name="storageTypeSaf">Framework de Acesso ao Armazenamento Android (SAF)
 \n(Ex. para um cartão SD)</string>
     <string name="storageTypeRoSaf">SAF de leitura apenas (mais rápido!)</string>
     <string name="safExplainHeading">Como funciona o SAF</string>
-    <string name="safExplain">O Android vai pedir-lhe para escolher um diretório. O tal estará acessivel através do(s) servidore(s). De tempo a tempo a permissão pode ser revogada e deverá re-selecionar.</string>
     <string name="selectedSafUri">URI da SAF Selecionada:</string>
-    <string name="startServerAndExit">Arrancar apenas o servidor</string>
-    <string name="startServerAndUi">Arrancar com o servidor</string>
 </resources>
