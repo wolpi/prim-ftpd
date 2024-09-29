@@ -41,6 +41,8 @@ public abstract class VirtualFileSystemView<
     public abstract MinaType createFile(String absPath, AbstractFile delegate, PftpdService pftpdService);
     public abstract MinaType createFile(String absPath, AbstractFile delegate, boolean exists, PftpdService pftpdService);
 
+    public abstract AbstractFile getConfigFile();
+
     protected abstract String absolute(String file);
 
     public MinaType getFile(String file) {
@@ -68,7 +70,11 @@ public abstract class VirtualFileSystemView<
             logger.debug("Using ROSAF '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = roSafFileSystemView.getFile(realPath);
             return createFile(absoluteVirtualPath, delegate, pftpdService);
-        } else {
+        } else if (VirtualConfigFile.ABS_PATH.equals(absoluteVirtualPath)) {
+            logger.debug("Using VirtualFile for CONFIG path '{}'", absoluteVirtualPath);
+            AbstractFile delegate = getConfigFile();
+            return createFile(absoluteVirtualPath, delegate, pftpdService);
+        } else{
             logger.debug("Using VirtualFile for unknown path '{}'", absoluteVirtualPath);
             return createFile(absoluteVirtualPath, null, false, pftpdService);
         }
