@@ -12,48 +12,39 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
+public abstract class RoSafFileSystemView<TFile extends RoSafFile<TMina, ? extends RoSafFileSystemView>, TMina> extends AbstractFileSystemView {
 
     protected final static String ROOT_PATH = "/";
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final Uri startUrl;
-    protected final ContentResolver contentResolver;
-    protected final PftpdService pftpdService;
+
     protected final int timeResolution;
 
-    public RoSafFileSystemView(Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService) {
+    public RoSafFileSystemView(PftpdService pftpdService, Uri startUrl) {
+        super(pftpdService);
         this.startUrl = startUrl;
-        this.contentResolver = contentResolver;
-        this.pftpdService = pftpdService;
+
         this.timeResolution = StorageManagerUtil.getFilesystemTimeResolutionForTreeUri(startUrl);
     }
 
     protected abstract String absolute(String file);
 
-    protected abstract T createFile(
-            ContentResolver contentResolver,
-            Uri startUrl,
+    protected abstract TFile createFile(
+            String absPath);
+    protected abstract TFile createFile(
             String absPath,
-            PftpdService pftpdService);
-    protected abstract T createFile(
-            ContentResolver contentResolver,
-            Uri startUrl,
             String docId,
-            String absPath,
-            PftpdService pftpdService);
-    protected abstract T createFileNonExistent(
-            ContentResolver contentResolver,
-            Uri startUrl,
-            String name,
-            String absPath,
-            PftpdService pftpdService);
+            boolean exists);
+
+    public final Uri getStartUrl() {
+        return startUrl;
+    }
 
     public long getCorrectedTime(long time) {
         return (time / timeResolution) * timeResolution;
     }
 
-    public T getFile(String file) {
+    public TFile getFile(String file) {
         logger.trace("getFile({}), startUrl: {}", file, startUrl);
 
         String abs = absolute(file);
@@ -75,7 +66,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                         parentId);
                 // Do not use selection and selectionArgs for ContentResolver.query(), Android doesn't care, it will return all the files whatever you do.
                 // See: https://stackoverflow.com/a/61214849
-                Cursor childCursor = contentResolver.query(
+                Cursor childCursor = pftpdService.getContext().getContentResolver().query(
                         childrenUri,
                         new String[] {
                                 DocumentsContract.Document.COLUMN_DOCUMENT_ID,
@@ -91,7 +82,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                         if (currentPart.equals(docName)) {
                             if (i == parts.size() - 1) {
                                 logger.trace("    calling createFile() for doc: {}, parent: {}", docName, parentId);
-                                return createFile(contentResolver, startUrl, docId, Utils.toPath(parts), pftpdService);
+                                return createFile(Utils.toPath(parts), docId, true);
                             } else {
                                 parentId = docId;
                                 break;
@@ -104,12 +95,13 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
                             // TODO we are read only -> there is no upload anyway
                             // probably upload -> create object just with name
                             logger.trace("    calling createFile() for not found doc: {}", currentPart);
-                            return createFileNonExistent(contentResolver, startUrl, currentPart, Utils.toPath(parts), pftpdService);
+                            return createFile(Utils.toPath(parts), currentPart, false);
                         } else {
                             // invalid path
                             String absPath = Utils.toPath(parts.subList(0, i+1));
                             logger.error("path does not exist: {}", absPath);
                             // fall through to returning the root document
+                            // TODO follow SAF implementation
                             break;
                         }
                     }
@@ -119,7 +111,7 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             }
         }
         logger.trace("    calling createFile() for root doc: {}", startUrl);
-        return createFile(contentResolver, startUrl, ROOT_PATH, pftpdService);
+        return createFile(ROOT_PATH);
     }
 
     private void closeQuietly(Cursor cursor) {

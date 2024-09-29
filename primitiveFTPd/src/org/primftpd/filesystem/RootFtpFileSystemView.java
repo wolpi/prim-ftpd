@@ -13,19 +13,22 @@ import eu.chainfire.libsuperuser.Shell;
 
 public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFile> implements FileSystemView {
 
-    private final User user;
     private final RootFtpFile homeDir;
+    private final User user;
+
     private RootFtpFile workingDir;
 
-    public RootFtpFileSystemView(Shell.Interactive shell, PftpdService pftpdService, File homeDir, User user) {
-        super(shell, pftpdService);
+    public RootFtpFileSystemView(PftpdService pftpdService, Shell.Interactive shell, File homeDir, User user) {
+        super(pftpdService, shell);
+        this.homeDir = getFile(homeDir.getAbsolutePath());
         this.user = user;
-        this.workingDir = this.homeDir = getFile(homeDir.getAbsolutePath());
+
+        workingDir = this.homeDir;
     }
 
     @Override
-    protected RootFtpFile createFile(LsOutputBean bean, String absPath, PftpdService pftpdService) {
-        return new RootFtpFile(shell, bean, absPath, pftpdService, user);
+    protected RootFtpFile createFile(String absPath, LsOutputBean bean) {
+        return new RootFtpFile(this, absPath, bean, user);
     }
 
     @Override

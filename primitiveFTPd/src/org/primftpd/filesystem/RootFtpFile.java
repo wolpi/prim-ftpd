@@ -13,17 +13,17 @@ import java.io.OutputStream;
 
 import eu.chainfire.libsuperuser.Shell;
 
-public class RootFtpFile extends RootFile<FtpFile> implements FtpFile {
+public class RootFtpFile extends RootFile<FtpFile, RootFtpFileSystemView> implements FtpFile {
 
     private final User user;
 
-    public RootFtpFile(Shell.Interactive shell, LsOutputBean bean, String absPath, PftpdService pftpdService, User user) {
-        super(shell, bean, absPath, pftpdService);
+    public RootFtpFile(RootFtpFileSystemView fileSystemView, String absPath, LsOutputBean bean, User user) {
+        super(fileSystemView, absPath, bean);
         this.user = user;
     }
 
-    protected RootFtpFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath, PftpdService pftpdService) {
-        return new RootFtpFile(shell, bean, absPath, pftpdService, user);
+    protected RootFtpFile createFile(String absPath, LsOutputBean bean) {
+        return new RootFtpFile(getFileSystemView(), absPath, bean, user);
     }
 
     @Override
@@ -59,8 +59,7 @@ public class RootFtpFile extends RootFile<FtpFile> implements FtpFile {
 
     @Override
     public boolean move(FtpFile target) {
-        logger.trace("move()");
-        return super.move((RootFile)target);
+        return super.move((AbstractFile)target);
     }
 
     @Override

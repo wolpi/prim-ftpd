@@ -13,20 +13,22 @@ import org.primftpd.services.PftpdService;
 
 public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> implements FileSystemView {
 
-	private final User user;
 	private final File homeDir;
+	private final User user;
+
 	private FsFtpFile workingDir;
 
-	public FsFtpFileSystemView(Context context, Uri safStartUrl, PftpdService pftpdService, File homeDir, User user) {
-		super(context, safStartUrl, pftpdService);
+	public FsFtpFileSystemView(PftpdService pftpdService, Uri safStartUrl, File homeDir, User user) {
+		super(pftpdService, safStartUrl);
 		this.homeDir = homeDir;
-		workingDir = getHomeDirectory();
 		this.user = user;
+
+		workingDir = getHomeDirectory();
 	}
 
 	@Override
-	protected FsFtpFile createFile(File file, PftpdService pftpdService) {
-		return new FsFtpFile(file, pftpdService, this, user);
+	protected FsFtpFile createFile(File file) {
+		return new FsFtpFile(this, file, user);
 	}
 
 	@Override
@@ -38,7 +40,7 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 	public FsFtpFile getHomeDirectory() {
 		logger.trace("getHomeDirectory() -> {}", (homeDir != null ? homeDir.getAbsolutePath() : "null"));
 
-		return createFile(homeDir, pftpdService);
+		return createFile(homeDir);
 	}
 
 	public FsFtpFile getWorkingDirectory() {
@@ -100,7 +102,7 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 		logger.trace("current WD '{}', new path '{}'",
 				currentAbsPath,
 				path);
-		workingDir = createFile(new File(path), pftpdService);
+		workingDir = createFile(new File(path));
 
 		return true;
 	}

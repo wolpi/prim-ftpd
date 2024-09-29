@@ -200,54 +200,54 @@ public class SshServerService extends AbstractServerService
 				if (quickShareBean != null) {
 					logger.debug("launching server in quick share mode");
 					return new QuickShareSshFileSystemView(
-							quickShareBean.getTmpDir(),
 							SshServerService.this,
+							quickShareBean.getTmpDir(),
 							session);
 				} else {
 					switch (prefsBean.getStorageType()) {
 						case PLAIN:
 							return new FsSshFileSystemView(
-									getApplicationContext(),
-									Uri.parse(prefsBean.getSafUrl()),
 									SshServerService.this,
+									Uri.parse(prefsBean.getSafUrl()),
 									prefsBean.getStartDir(),
 									session);
 						case ROOT:
-							return new RootSshFileSystemView(shell, SshServerService.this, prefsBean.getStartDir(), session);
+							return new RootSshFileSystemView(
+									SshServerService.this,
+									shell,
+									prefsBean.getStartDir(),
+									session);
 						case SAF:
 							return new SafSshFileSystemView(
-									getApplicationContext(),
-									Uri.parse(prefsBean.getSafUrl()),
-									getContentResolver(),
 									SshServerService.this,
+									Uri.parse(prefsBean.getSafUrl()),
 									session);
 						case RO_SAF:
 							return new RoSafSshFileSystemView(
-									Uri.parse(prefsBean.getSafUrl()),
-									getContentResolver(),
 									SshServerService.this,
+									Uri.parse(prefsBean.getSafUrl()),
 									session);
 						case VIRTUAL:
 							return new VirtualSshFileSystemView(
+									SshServerService.this,
 									new FsSshFileSystemView(
-											getApplicationContext(),
-											Uri.parse(prefsBean.getSafUrl()),
 											SshServerService.this,
+											Uri.parse(prefsBean.getSafUrl()),
 											prefsBean.getStartDir(),
 											session),
-									new RootSshFileSystemView(shell, SshServerService.this, prefsBean.getStartDir(), session),
-									new SafSshFileSystemView(
-											getApplicationContext(),
-											Uri.parse(prefsBean.getSafUrl()),
-											getContentResolver(),
+									new RootSshFileSystemView(
 											SshServerService.this,
+											shell,
+											prefsBean.getStartDir(),
+											session),
+									new SafSshFileSystemView(
+											SshServerService.this,
+											Uri.parse(prefsBean.getSafUrl()),
 											session),
 									new RoSafSshFileSystemView(
-											Uri.parse(prefsBean.getSafUrl()),
-											getContentResolver(),
 											SshServerService.this,
+											Uri.parse(prefsBean.getSafUrl()),
 											session),
-									SshServerService.this,
 									prefsBean.getStartDir(),
 									session
 							);

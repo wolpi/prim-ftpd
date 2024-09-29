@@ -15,15 +15,15 @@ public class RootSshFileSystemView extends RootFileSystemView<RootSshFile, SshFi
     private final File homeDir;
     private final Session session;
 
-    public RootSshFileSystemView(Shell.Interactive shell, PftpdService pftpdService, File homeDir, Session session) {
-        super(shell, pftpdService);
+    public RootSshFileSystemView(PftpdService pftpdService, Shell.Interactive shell, File homeDir, Session session) {
+        super(pftpdService, shell);
         this.homeDir = homeDir;
         this.session = session;
     }
 
     @Override
-    protected RootSshFile createFile(LsOutputBean bean, String absPath, PftpdService pftpdService) {
-        return new RootSshFile(shell, bean, absPath, pftpdService, session, this);
+    protected RootSshFile createFile(String absPath, LsOutputBean bean) {
+        return new RootSshFile(this, absPath, bean, session);
     }
 
     @Override

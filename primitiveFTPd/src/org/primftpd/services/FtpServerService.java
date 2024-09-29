@@ -115,54 +115,54 @@ public class FtpServerService extends AbstractServerService
 				if (quickShareBean != null) {
 					logger.debug("launching server in quick share mode");
 					return new QuickShareFtpFileSystemView(
+							FtpServerService.this,
 							quickShareBean.getTmpDir(),
-							user,
-							FtpServerService.this);
+							user);
 				} else {
 					switch (prefsBean.getStorageType()) {
 						case PLAIN:
 							return new FsFtpFileSystemView(
-									getApplicationContext(),
-									Uri.parse(prefsBean.getSafUrl()),
 									FtpServerService.this,
+									Uri.parse(prefsBean.getSafUrl()),
 									prefsBean.getStartDir(),
 									user);
 						case ROOT:
-							return new RootFtpFileSystemView(shell, FtpServerService.this, prefsBean.getStartDir(), user);
+							return new RootFtpFileSystemView(
+									FtpServerService.this,
+									shell,
+									prefsBean.getStartDir(),
+									user);
 						case SAF:
 							return new SafFtpFileSystemView(
-									getApplicationContext(),
-									Uri.parse(prefsBean.getSafUrl()),
-									getContentResolver(),
 									FtpServerService.this,
+									Uri.parse(prefsBean.getSafUrl()),
 									user);
 						case RO_SAF:
 							return new RoSafFtpFileSystemView(
-									Uri.parse(prefsBean.getSafUrl()),
-									getContentResolver(),
 									FtpServerService.this,
+									Uri.parse(prefsBean.getSafUrl()),
 									user);
 						case VIRTUAL:
 							return new VirtualFtpFileSystemView(
+									FtpServerService.this,
 									new FsFtpFileSystemView(
-											getApplicationContext(),
-											Uri.parse(prefsBean.getSafUrl()),
 											FtpServerService.this,
+											Uri.parse(prefsBean.getSafUrl()),
 											prefsBean.getStartDir(),
 											user),
-									new RootFtpFileSystemView(shell, FtpServerService.this, prefsBean.getStartDir(), user),
-									new SafFtpFileSystemView(
-											getApplicationContext(),
-											Uri.parse(prefsBean.getSafUrl()),
-											getContentResolver(),
+									new RootFtpFileSystemView(
 											FtpServerService.this,
+											shell,
+											prefsBean.getStartDir(),
+											user),
+									new SafFtpFileSystemView(
+											FtpServerService.this,
+											Uri.parse(prefsBean.getSafUrl()),
 											user),
 									new RoSafFtpFileSystemView(
-											Uri.parse(prefsBean.getSafUrl()),
-											getContentResolver(),
 											FtpServerService.this,
+											Uri.parse(prefsBean.getSafUrl()),
 											user),
-									FtpServerService.this,
 									prefsBean.getStartDir(),
 									user
 							);

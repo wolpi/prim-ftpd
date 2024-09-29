@@ -13,51 +13,72 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class QuickShareFile<T> extends AbstractFile {
+public abstract class QuickShareFile<TMina, TFileSystemView extends QuickShareFileSystemView> extends AbstractFile<TFileSystemView> {
 
-    protected final File tmpDir;
     protected final File realFile;
 
-    QuickShareFile(File tmpDir, PftpdService pftpdService) {
+    public QuickShareFile(TFileSystemView fileSystemView) {
         // this c-tor is to be used to access fake directory
         super(
+                fileSystemView,
                 QuickShareFileSystemView.ROOT_PATH,
-                QuickShareFileSystemView.ROOT_PATH,
-                0,
-                0,
-                true,
-                true,
-                true,
-                pftpdService);
-        this.tmpDir = tmpDir;
+                QuickShareFileSystemView.ROOT_PATH);
         this.realFile = null;
     }
 
-    QuickShareFile(File tmpDir, File realFile, PftpdService pftpdService) {
+    public QuickShareFile(TFileSystemView fileSystemView, File realFile) {
         // this c-tor is to be used to access actual file
         super(
+                fileSystemView,
                 QuickShareFileSystemView.ROOT_PATH + realFile.getName(),
-                realFile.getName(),
-                realFile.lastModified(),
-                realFile.length(),
-                realFile.canRead(),
-                realFile.exists(),
-                false,
-                pftpdService);
-        this.tmpDir = tmpDir;
+                realFile.getName());
         this.realFile = realFile;
     }
 
-    abstract protected T createFile(File tmpDir, PftpdService pftpdService);
-    abstract protected T createFile(File tmpDir, File realFile, PftpdService pftpdService);
+    protected final File getTmpDir() {
+        return getFileSystemView().getTmpDir();
+    }
+
+    abstract protected TMina createFile();
+    abstract protected TMina createFile(File realFile);
 
     @Override
     public ClientActionEvent.Storage getClientActionStorage() {
         return ClientActionEvent.Storage.QUICKSHARE;
     }
 
+    public boolean isDirectory() {
+        boolean result = realFile == null;
+        logger.trace("[{}] isDirectory() -> {}", name, result);
+        return result;
+    }
+
+    public boolean doesExist() {
+        boolean result = realFile == null || realFile.exists();
+        logger.trace("[{}] doesExist() -> {}", name, result);
+        return result;
+    }
+
+    public boolean isReadable() {
+        boolean result = realFile == null || realFile.canRead();
+        logger.trace("[{}] isReadable() -> {}", name, result);
+        return result;
+    }
+
+    public long getLastModified() {
+        long result = realFile != null ? realFile.lastModified() : 0;
+        logger.trace("[{}] getLastModified() -> {}", name, result);
+        return result;
+    }
+
+    public long getSize() {
+        long result = realFile != null ? realFile.length() : 0;
+        logger.trace("[{}] getSize() -> {}", name, result);
+        return result;
+    }
+
     public boolean isFile() {
-        boolean result = !isDirectory;
+        boolean result = realFile != null;
         logger.trace("[{}] isFile() -> {}", name, result);
         return result;
     }
@@ -87,41 +108,40 @@ public abstract class QuickShareFile<T> extends AbstractFile {
         return false;
     }
 
-    public boolean move(SafFile<T> destination) {
+    public boolean move(AbstractFile destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
         return false;
     }
 
-    public List<T> listFiles() {
+    public List<TMina> listFiles() {
         logger.trace("[{}] listFiles()", name);
         postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 
-        File[] filesArray = tmpDir.listFiles();
+        File[] filesArray = getTmpDir().listFiles();
         if (filesArray != null) {
-            List<T> files = new ArrayList<>(filesArray.length);
+            List<TMina> files = new ArrayList<>(filesArray.length);
             for (File file : filesArray) {
-                files.add(createFile(tmpDir, file, pftpdService));
+                files.add(createFile(file));
             }
             return files;
         }
         return new ArrayList<>(0);
     }
 
-    public OutputStream createOutputStream(long offset) {
+    public OutputStream createOutputStream(long offset) throws IOException {
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
-        return new ByteArrayOutputStream();
+        throw new IOException(String.format("Can not write file '%s'", absPath));
     }
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
         postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
-        if (realFile != null) {
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(realFile));
-            bis.skip(offset);
-            return bis;
+        if (realFile == null) {
+            throw new IOException(String.format("Can not read file '%s'", absPath));
         }
-
-        return null;
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(realFile));
+        bis.skip(offset);
+        return bis;
     }
 }

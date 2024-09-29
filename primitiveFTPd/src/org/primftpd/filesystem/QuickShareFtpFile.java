@@ -6,16 +6,16 @@ import org.primftpd.services.PftpdService;
 
 import java.io.File;
 
-public class QuickShareFtpFile extends QuickShareFile<FtpFile> implements FtpFile {
+public class QuickShareFtpFile extends QuickShareFile<FtpFile, QuickShareFtpFileSystemView> implements FtpFile {
     private final User user;
 
-    QuickShareFtpFile(File tmpDir, PftpdService pftpdService, User user) {
-        super(tmpDir, pftpdService);
+    public QuickShareFtpFile(QuickShareFtpFileSystemView fileSystemView, User user) {
+        super(fileSystemView);
         this.user = user;
     }
 
-    QuickShareFtpFile(File tmpDir, File realFile, PftpdService pftpdService, User user) {
-        super(tmpDir, realFile, pftpdService);
+    public QuickShareFtpFile(QuickShareFtpFileSystemView fileSystemView, File realFile, User user) {
+        super(fileSystemView, realFile);
         this.user = user;
     }
 
@@ -25,18 +25,18 @@ public class QuickShareFtpFile extends QuickShareFile<FtpFile> implements FtpFil
     }
 
     @Override
-    protected FtpFile createFile(File tmpDir, PftpdService pftpdService) {
-        return new QuickShareFtpFile(tmpDir, pftpdService, user);
+    protected FtpFile createFile() {
+        return new QuickShareFtpFile(getFileSystemView(), user);
     }
 
     @Override
-    protected FtpFile createFile(File tmpDir, File realFile, PftpdService pftpdService) {
-        return new QuickShareFtpFile(tmpDir, realFile, pftpdService, user);
+    protected FtpFile createFile(File realFile) {
+        return new QuickShareFtpFile(getFileSystemView(), realFile, user);
     }
 
     @Override
     public boolean move(FtpFile target) {
-        return false;
+		return super.move((AbstractFile) target);
     }
 
     @Override

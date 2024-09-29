@@ -11,37 +11,38 @@ import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.primftpd.services.PftpdService;
 
+import java.util.List;
+
 public class SafFtpFileSystemView extends SafFileSystemView<SafFtpFile, FtpFile> implements FileSystemView {
 
     private final User user;
+
     private SafFtpFile workingDir;
 
-    public SafFtpFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService, User user) {
-        super(context, startUrl, contentResolver, pftpdService);
+    public SafFtpFileSystemView(PftpdService pftpdService, Uri startUrl, User user) {
+        super(pftpdService, startUrl);
         this.user = user;
+
         this.workingDir = getHomeDirectory();
     }
 
     @Override
     protected SafFtpFile createFile(
-            ContentResolver contentResolver,
-            DocumentFile parentDocumentFile,
-            DocumentFile documentFile,
             String absPath,
-            PftpdService pftpdService) {
+            DocumentFile parentDocumentFile,
+            DocumentFile documentFile) {
         logger.trace("createFile(DocumentFile)");
-        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, this, user);
+        return new SafFtpFile(this, absPath, parentDocumentFile, documentFile, user);
     }
 
     @Override
     protected SafFtpFile createFile(
-            ContentResolver contentResolver,
-            DocumentFile parentDocumentFile,
-            String name,
             String absPath,
-            PftpdService pftpdService) {
+            DocumentFile parentDocumentFile,
+            List<String> parentNonexistentDirs,
+            String name) {
         logger.trace("createFile(String)");
-        return new SafFtpFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, this, user);
+        return new SafFtpFile(this, absPath, parentDocumentFile, parentNonexistentDirs, name, user);
     }
 
     @Override

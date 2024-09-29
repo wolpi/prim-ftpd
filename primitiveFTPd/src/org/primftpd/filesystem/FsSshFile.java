@@ -8,16 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class FsSshFile extends FsFile<SshFile> implements SshFile {
+public class FsSshFile extends FsFile<SshFile, FsSshFileSystemView> implements SshFile {
 	private final Session session;
 
-	public FsSshFile(File file, PftpdService pftpdService, FsSshFileSystemView fileSystemView, Session session) {
-		super(file, pftpdService, fileSystemView);
+	public FsSshFile(FsSshFileSystemView fileSystemView, File file, Session session) {
+		super(fileSystemView, file);
 		this.session = session;
-	}
-
-	private FsSshFileSystemView getFileSystemView() {
-		return (FsSshFileSystemView)fileSystemView;
 	}
 
 	@Override
@@ -26,13 +22,13 @@ public class FsSshFile extends FsFile<SshFile> implements SshFile {
 	}
 
 	@Override
-	protected SshFile createFile(File file, PftpdService pftpdService) {
-		return new FsSshFile(file, pftpdService, getFileSystemView(), session);
+	protected SshFile createFile(File file) {
+		return new FsSshFile(getFileSystemView(), file, session);
 	}
 
 	@Override
-	public boolean move(org.apache.sshd.common.file.SshFile target) {
-		return super.move((FsFile)target);
+	public boolean move(SshFile target) {
+		return super.move((AbstractFile)target);
 	}
 
 	@Override
@@ -43,20 +39,24 @@ public class FsSshFile extends FsFile<SshFile> implements SshFile {
 
 	@Override
 	public boolean create() throws IOException {
-		logger.trace("[{}] create()", name);
-		return file.createNewFile();
+        // This call is required by SSHFS, because it calls STAT on created new files.
+        // This call is not required by normal clients who simply open, write and close the file.
+		boolean result = file.createNewFile();
+		logger.trace("[{}] create() -> {}", name, result);
+		return result;
 	}
 
 	@Override
 	public SshFile getParentFile() {
 		logger.trace("[{}] getParentFile()", name);
-		return new FsSshFile(file.getParentFile(), pftpdService, getFileSystemView(), session);
+		return new FsSshFile(getFileSystemView(), file.getParentFile(), session);
 	}
 
 	@Override
 	public boolean isExecutable() {
-		logger.trace("[{}] isExecutable()", name);
-		return injectedDirectory || file.canExecute();
+		boolean result = isInjectedDirectory || file.canExecute();
+		logger.trace("[{}] isExecutable() -> {}", name, result);
+		return result;
 	}
 
 	@Override

@@ -15,15 +15,15 @@ public class FsSshFileSystemView extends FsFileSystemView<FsSshFile, SshFile> im
 	private final File homeDir;
 	private final Session session;
 
-	public FsSshFileSystemView(Context context, Uri safStartUrl, PftpdService pftpdService, File homeDir, Session session) {
-		super(context, safStartUrl, pftpdService);
+	public FsSshFileSystemView(PftpdService pftpdService, Uri safStartUrl, File homeDir, Session session) {
+		super(pftpdService, safStartUrl);
 		this.homeDir = homeDir;
 		this.session = session;
 	}
 
 	@Override
-	protected FsSshFile createFile(File file, PftpdService pftpdService) {
-		return new FsSshFile(file, pftpdService, this, session);
+	protected FsSshFile createFile(File file) {
+		return new FsSshFile(this, file, session);
 	}
 
 	@Override
