@@ -38,6 +38,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.file.FileSystemAware;
@@ -457,7 +459,8 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
 
     protected void process(Buffer buffer) throws IOException {
         int length = buffer.getInt();
-        int type = buffer.getByte();
+        // XXX has been changed to support hashing as extended command, see below (check-file)
+        int type = ((int) buffer.getByte()) & 0xFF;
         int id = buffer.getInt();
         switch (type) {
             case SSH_FXP_INIT: {
@@ -893,9 +896,48 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                 break;
             }
             case SSH_FXP_EXTENDED: {
+                // XXX added to support "prim sync", see
+                // https://github.com/lmagyar/prim-sync/
+                // might be used with python lib paramiko:
+                // remote_file.check('sha256', 0, 0, 0)
                 String extension = buffer.getString();
-                log.info("Received unsupported SSH_FXP_EXTENDED({})", extension);
-                sendStatus(id, SSH_FX_OP_UNSUPPORTED, "Command SSH_FXP_EXTENDED(" + extension + ") is unsupported or not implemented");
+                switch (extension) {
+                    case "check-file": {
+                        String handle = buffer.getString();
+                        String hashalgorithms = buffer.getString();
+                        long hashoffset = buffer.getLong();
+                        long hashlength = buffer.getLong();
+                        int blocksize = buffer.getInt();
+                        log.debug("Received SSH_FXP_EXTENDED({}(handle={}, hashalgorithms={}, offset={}, length={}, blocksize={}))",
+                                extension, handle, hashalgorithms, hashoffset, hashlength, blocksize);
+                        try {
+                            Handle p = handles.get(handle);
+                            if (!(p instanceof FileHandle)) {
+                                sendStatus(id, SSH_FX_FAILURE, handle);
+                            } else {
+                                FileHandle fh = (FileHandle) p;
+                                Object[] filehash = checkFileHash(fh, hashalgorithms, hashoffset, hashlength, blocksize);
+                                String hashalgorithm = (String)filehash[0];
+                                byte[] hash = (byte[])filehash[1];
+                                Buffer buf = new Buffer(extension.length() + hashalgorithm.length() + hash.length + 2*4 + 5);
+                                buf.putByte((byte) SSH_FXP_EXTENDED_REPLY);
+                                buf.putInt(id);
+                                buf.putString(extension);
+                                buf.putString(hashalgorithm);
+                                buf.putRawBytes(hash);
+                                send(buf);
+                            }
+                        } catch (NoSuchAlgorithmException | UnsupportedOperationException e) {
+                            sendStatus(id, SSH_FX_OP_UNSUPPORTED, e.getMessage());
+                        } catch (IOException e) {
+                            sendStatus(id, SSH_FX_FAILURE, e.getMessage());
+                        }
+                    }
+                    default: {
+                        log.info("Received unsupported SSH_FXP_EXTENDED({})", extension);
+                        sendStatus(id, SSH_FX_OP_UNSUPPORTED, "Command SSH_FXP_EXTENDED(" + extension + ") is unsupported or not implemented");
+                    }
+                }
                 break;
             }
             default: {
@@ -1182,6 +1224,30 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
             attrs.put(SshFile.Attribute.LastModifiedTime, ((long) buffer.getInt()) * 1000);
         }
         return attrs;
+    }
+
+    protected Object[] checkFileHash(FileHandle fh, String hashalgorithms, long offset, long length, int blocksize) throws IOException,
+            NoSuchAlgorithmException, UnsupportedOperationException {
+        // XXX added as part of check-file (extended command for hashing), see above
+        // TODO support multiple hash algorithms
+        // TODO support hashing blocks of the file, not only the whole file
+        String hashalgorithm = hashalgorithms.split(",")[0];
+        if (offset != 0 || length != 0 || blocksize != 0) {
+            throw new UnsupportedOperationException("Only offset=0, length=0, blocksize=0 is supported");
+        }
+
+        MessageDigest digest = MessageDigest.getInstance(hashalgorithm);
+        byte[] buffer = new byte[Buffer.MAX_LEN];
+        int readLen = 0;
+        while (true) {
+            readLen = fh.read(buffer, offset);
+            if (readLen <= 0) {
+                break;
+            }
+            offset += readLen;
+            digest.update(buffer, 0, readLen);
+        };
+        return new Object[]{hashalgorithm, digest.digest()};
     }
 
     protected void sendStatus(int id, int substatus, String msg) throws IOException {

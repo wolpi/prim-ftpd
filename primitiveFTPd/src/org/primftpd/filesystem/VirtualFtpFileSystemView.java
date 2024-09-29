@@ -43,6 +43,11 @@ public class VirtualFtpFileSystemView extends VirtualFileSystemView<
     }
 
     @Override
+    public AbstractFile getConfigFile() {
+        return new VirtualFtpConfigFile(pftpdService, user);
+    }
+
+    @Override
     protected String absolute(String file) {
         logger.trace("  finding abs path for '{}' with wd '{}'", file, (workingDir != null ? workingDir.getAbsolutePath() : "null"));
         if (workingDir == null) {
