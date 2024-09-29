@@ -20,6 +20,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class StorageManagerUtil {
     private static final String PRIMARY_VOLUME_NAME = "primary";
@@ -68,6 +70,8 @@ public final class StorageManagerUtil {
         return volumePath;
     }
 
+    private final static Map<String, Integer> cachedFilesystemTimeResolutions = new HashMap<>();
+
     /**
      * This function is to handle 2 Android bugs.
      * <p>
@@ -84,67 +88,75 @@ public final class StorageManagerUtil {
      */
     public static int getFilesystemTimeResolutionForTreeUri(Uri startUrl) {
         logger.trace("getFilesystemTimeResolutionForTreeUri({})", startUrl);
-        int mediaTimeResolution = 0;
-        int storageTimeResolution = 0;
+        int timeResolution = 1; // use 1ms by default
         String volumeId = getVolumeIdFromTreeUri(startUrl);
         if (volumeId != null) {
-            String mediaMountPoint = "/mnt/media_rw/" + volumeId;
-            String mediaOption = null;
-            String storageMountPoint = "/storage/" + volumeId;
-            try(BufferedReader br = new BufferedReader(new FileReader("/proc/mounts"))) {
-                // sample contents for /proc/mounts
-                // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX vfat ... 0 0                     -> 2000 ms
-                // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=vfat:16,... 0 0     -> 2000 ms
-                // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=vfat:32,... 0 0     -> 2000 ms
-                // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=exfat,... 0 0       ->   10 ms
-                // /mnt/media_rw/XXXX-XXXX /storage/XXXX-XXXX sdcardfs ... 0 0                            -> 2000 ms
-                for (String line; (line = br.readLine()) != null; ) {
-                    logger.trace("  {}", line);
-                    String[] mountInformations = line.split(" ");
-                    if (mountInformations.length >= 4) {
-                        if (mediaTimeResolution == 0 && mountInformations[1].equals(mediaMountPoint)) {
-                            if (mountInformations[2].equals("vfat")) {
-                                mediaTimeResolution = 2000;
-                            } else if (mountInformations[2].equals("sdfat")) {
-                                mediaTimeResolution = 2000; // use 2000ms by default
-                                for (String option : mountInformations[3].split(",")) {
-                                    if (option.startsWith("fs=")) {
-                                        mediaOption = option;
-                                        if (option.startsWith("fs=vfat")) {
-                                            mediaTimeResolution = 2000;
-                                        } else if (option.startsWith("fs=exfat")) {
-                                            mediaTimeResolution = 10;
+            Integer cachedTimeResolution = cachedFilesystemTimeResolutions.get(volumeId);
+            if (cachedTimeResolution != null) {
+                timeResolution = cachedTimeResolution.intValue();
+                logger.trace("  used cached value");
+            } else {
+                int mediaTimeResolution = 0;
+                int storageTimeResolution = 0;
+                String mediaMountPoint = "/mnt/media_rw/" + volumeId;
+                String mediaOption = null;
+                String storageMountPoint = "/storage/" + volumeId;
+                try(BufferedReader br = new BufferedReader(new FileReader("/proc/mounts"))) {
+                    // sample contents for /proc/mounts
+                    // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX vfat ... 0 0                     -> 2000 ms
+                    // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=vfat:16,... 0 0     -> 2000 ms
+                    // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=vfat:32,... 0 0     -> 2000 ms
+                    // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=exfat,... 0 0       ->   10 ms
+                    // /mnt/media_rw/XXXX-XXXX /storage/XXXX-XXXX sdcardfs ... 0 0                            -> 2000 ms
+                    for (String line; (line = br.readLine()) != null; ) {
+                        logger.trace("  {}", line);
+                        String[] mountInformations = line.split(" ");
+                        if (mountInformations.length >= 4) {
+                            if (mediaTimeResolution == 0 && mountInformations[1].equals(mediaMountPoint)) {
+                                if (mountInformations[2].equals("vfat")) {
+                                    mediaTimeResolution = 2000;
+                                } else if (mountInformations[2].equals("sdfat")) {
+                                    mediaTimeResolution = 2000; // use 2000ms by default
+                                    for (String option : mountInformations[3].split(",")) {
+                                        if (option.startsWith("fs=")) {
+                                            mediaOption = option;
+                                            if (option.startsWith("fs=vfat")) {
+                                                mediaTimeResolution = 2000;
+                                            } else if (option.startsWith("fs=exfat")) {
+                                                mediaTimeResolution = 10;
+                                            }
+                                            break;
                                         }
-                                        break;
                                     }
+                                } else {
+                                    mediaTimeResolution = 1;
                                 }
-                            } else {
-                                mediaTimeResolution = 1;
+                                if (mediaOption == null) {
+                                    logger.trace("    found media mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaTimeResolution});
+                                } else {
+                                    logger.trace("    found media mount point {} with type {} with option {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaOption, mediaTimeResolution});
+                                }
                             }
-                            if (mediaOption == null) {
-                                logger.trace("    found media mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaTimeResolution});
-                            } else {
-                                logger.trace("    found media mount point {} with type {} with option {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaOption, mediaTimeResolution});
+                            if (storageTimeResolution == 0 && mountInformations[1].equals(storageMountPoint)) {
+                                if (mountInformations[2].equals("sdcardfs")) {
+                                    storageTimeResolution = 2000;
+                                } else {
+                                    storageTimeResolution = 1;
+                                }
+                                logger.trace("    found storage mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], storageTimeResolution});
                             }
-                        }
-                        if (storageTimeResolution == 0 && mountInformations[1].equals(storageMountPoint)) {
-                            if (mountInformations[2].equals("sdcardfs")) {
-                                storageTimeResolution = 2000;
-                            } else {
-                                storageTimeResolution = 1;
+                            if (mediaTimeResolution != 0 && storageTimeResolution != 0) {
+                                break;
                             }
-                            logger.trace("    found storage mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], storageTimeResolution});
-                        }
-                        if (mediaTimeResolution != 0 && storageTimeResolution != 0) {
-                            break;
                         }
                     }
+                    timeResolution = Math.max(timeResolution, Math.max(mediaTimeResolution, storageTimeResolution));
+                    cachedFilesystemTimeResolutions.put(volumeId, timeResolution);
+                } catch (Exception e) {
+                    logger.error("getFilesystemTimeResolutionForTreeUri() {}", e);
                 }
-            } catch (Exception e) {
-                logger.error("getFilesystemTimeResolutionForTreeUri() {}", e);
             }
         }
-        int timeResolution = Math.max(1, Math.max(mediaTimeResolution, storageTimeResolution)); // use 1ms by default
         logger.trace("  getFilesystemTimeResolutionForTreeUri({}) -> {}", startUrl, timeResolution);
         return timeResolution;
     }
