@@ -49,8 +49,8 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             String absPath,
             PftpdService pftpdService);
 
-    public int getTimeResolution() {
-        return timeResolution;
+    public long getCorrectedTime(long time) {
+        return (time / timeResolution) * timeResolution;
     }
 
     public T getFile(String file) {

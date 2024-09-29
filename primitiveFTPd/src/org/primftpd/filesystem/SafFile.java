@@ -55,7 +55,7 @@ public abstract class SafFile<T> extends AbstractFile {
         super(
                 absPath,
                 null,
-                correctTime(fileSystemView, documentFile.lastModified()),
+                fileSystemView.getCorrectedTime(documentFile.lastModified()),
                 documentFile.length(),
                 documentFile.canRead(),
                 documentFile.exists(),
@@ -96,11 +96,6 @@ public abstract class SafFile<T> extends AbstractFile {
         this.fileSystemView = fileSystemView;
     }
 
-    private static long correctTime(SafFileSystemView fileSystemView, long time) {
-        int timeResolution = fileSystemView.getTimeResolution();
-        return (time / timeResolution) * timeResolution;
-    }
-
     protected abstract T createFile(
             ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
@@ -137,7 +132,7 @@ public abstract class SafFile<T> extends AbstractFile {
             try {
                 Uri docUri = documentFile.getUri();
                 Path filePath = Paths.get(StorageManagerUtil.getFullDocIdPathFromTreeUri(docUri, pftpdService.getContext()));
-                long correctedTime = correctTime(fileSystemView, time);
+                long correctedTime = fileSystemView.getCorrectedTime(time);
                 Files.getFileAttributeView(filePath, BasicFileAttributeView.class).setTimes(FileTime.fromMillis(correctedTime), null, null);
                 return true;
             } catch (Exception e) {

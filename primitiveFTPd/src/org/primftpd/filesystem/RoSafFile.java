@@ -157,7 +157,7 @@ public abstract class RoSafFile<T> extends AbstractFile {
     private void initByCursor(Cursor cursor) {
         documentId = cursor.getString(0);
         name = cursor.getString(1);
-        lastModified = correctTime(this.fileSystemView, cursor.getLong(2));
+        lastModified = fileSystemView.getCorrectedTime(cursor.getLong(2));
         size = cursor.getLong(3);
 
         logger.trace("    initByCursor, doc id: {}, name: {}", documentId, name);
@@ -175,11 +175,6 @@ public abstract class RoSafFile<T> extends AbstractFile {
 
     private boolean flagPresent(int flags, int flag) {
         return ((flags & flag) == flag);
-    }
-
-    private static long correctTime(RoSafFileSystemView fileSystemView, long time) {
-        int timeResolution = fileSystemView.getTimeResolution();
-        return (time / timeResolution) * timeResolution;
     }
 
     protected abstract T createFile(

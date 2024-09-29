@@ -50,8 +50,8 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
 
     protected abstract String absolute(String file);
 
-    public int getTimeResolution() {
-        return timeResolution;
+    public long getCorrectedTime(long time) {
+        return (time / timeResolution) * timeResolution;
     }
 
     public T getFile(String file) {

@@ -53,7 +53,7 @@ public abstract class FsFile<T> extends AbstractFile {
 		super(
 				file.getAbsolutePath(),
 				file.getName(),
-				correctTime(fileSystemView, file.getAbsolutePath(), file.lastModified()),
+				fileSystemView.getCorrectedTime(file.getAbsolutePath(), file.lastModified()),
 				file.length(),
 				file.canRead(),
 				file.exists(),
@@ -63,11 +63,6 @@ public abstract class FsFile<T> extends AbstractFile {
 		this.name = file.getName();
 		this.fileSystemView = fileSystemView;
 		this.injectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
-	}
-
-	private static long correctTime(FsFileSystemView fileSystemView, String abs, long time) {
-		int timeResolution = fileSystemView.getTimeResolution(abs);
-		return (time / timeResolution) * timeResolution;
 	}
 
 	protected abstract T createFile(File file, PftpdService pftpdService);
@@ -151,7 +146,7 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	public boolean setLastModified(long time) {
 		logger.trace("[{}] setLastModified({})", name, Long.valueOf(time));
-		long correctedTime = correctTime(fileSystemView, absPath, time);
+		long correctedTime = fileSystemView.getCorrectedTime(absPath, time);
 		return file.setLastModified(correctedTime);
 	}
 

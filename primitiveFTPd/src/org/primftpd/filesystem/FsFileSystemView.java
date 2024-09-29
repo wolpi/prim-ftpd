@@ -26,8 +26,9 @@ public abstract class FsFileSystemView<T extends FsFile<X>, X> {
 		this.pftpdService = pftpdService;
 	}
 
-	public int getTimeResolution(String abs) {
-		return safVolumePath != null && abs.startsWith(safVolumePath) ? safTimeResolution : 1;
+	public long getCorrectedTime(String abs, long time) {
+		int timeResolution = safVolumePath != null && abs.startsWith(safVolumePath) ? safTimeResolution : 1;
+		return (time / timeResolution) * timeResolution;
 	}
 
 	public T getFile(String file) {
