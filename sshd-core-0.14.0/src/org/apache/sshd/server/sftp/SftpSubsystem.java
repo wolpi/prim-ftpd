@@ -459,6 +459,7 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
 
     protected void process(Buffer buffer) throws IOException {
         int length = buffer.getInt();
+        // XXX has been changed to support hashing as extended command, see below (check-file)
         int type = ((int) buffer.getByte()) & 0xFF;
         int id = buffer.getInt();
         switch (type) {
@@ -895,6 +896,10 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                 break;
             }
             case SSH_FXP_EXTENDED: {
+                // XXX added to support "prim sync", see
+                // https://github.com/lmagyar/prim-sync/
+                // might be used with python lib paramiko:
+                // remote_file.check('sha256', 0, 0, 0)
                 String extension = buffer.getString();
                 switch (extension) {
                     case "check-file": {
@@ -904,7 +909,7 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                         long hashlength = buffer.getLong();
                         int blocksize = buffer.getInt();
                         log.debug("Received SSH_FXP_EXTENDED({}(handle={}, hashalgorithms={}, offset={}, length={}, blocksize={}))",
-                            new Object[] { extension, handle, hashalgorithms, hashoffset, hashlength, blocksize });
+                                extension, handle, hashalgorithms, hashoffset, hashlength, blocksize);
                         try {
                             Handle p = handles.get(handle);
                             if (!(p instanceof FileHandle)) {
@@ -922,9 +927,7 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                                 buf.putRawBytes(hash);
                                 send(buf);
                             }
-                        } catch (NoSuchAlgorithmException e) {
-                            sendStatus(id, SSH_FX_OP_UNSUPPORTED, e.getMessage());
-                        } catch (UnsupportedOperationException e) {
+                        } catch (NoSuchAlgorithmException | UnsupportedOperationException e) {
                             sendStatus(id, SSH_FX_OP_UNSUPPORTED, e.getMessage());
                         } catch (IOException e) {
                             sendStatus(id, SSH_FX_FAILURE, e.getMessage());
@@ -1225,6 +1228,7 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
 
     protected Object[] checkFileHash(FileHandle fh, String hashalgorithms, long offset, long length, int blocksize) throws IOException,
             NoSuchAlgorithmException, UnsupportedOperationException {
+        // XXX added as part of check-file (extended command for hashing), see above
         // TODO support multiple hash algorithms
         // TODO support hashing blocks of the file, not only the whole file
         String hashalgorithm = hashalgorithms.split(",")[0];

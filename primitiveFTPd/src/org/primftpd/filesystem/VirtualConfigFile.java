@@ -4,18 +4,23 @@ import org.primftpd.events.ClientActionEvent;
 import org.primftpd.services.PftpdService;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-// For more details see https://github.com/wolpi/prim-ftpd/pull/378
+/**
+ * Provides a virtual file to allow clients to read some of server's config.
+ *
+ * To support "prim-sync", see <a href="https://github.com/lmagyar/prim-sync/">prim-sync</a>
+ *
+ * For more details see <a href="https://github.com/wolpi/prim-ftpd/pull/378">PR</a>
+ */
 public abstract class VirtualConfigFile extends AbstractFile {
 
     public static final String NAME = "primftpd.config";
     public static final String ABS_PATH = "/" + NAME;
 
-    private String content;
+    private final String content;
 
     public VirtualConfigFile(
             PftpdService pftpdService) {
@@ -67,11 +72,11 @@ public abstract class VirtualConfigFile extends AbstractFile {
         return false;
     }
 
-    public OutputStream createOutputStream(long offset) throws IOException {
+    public OutputStream createOutputStream(long offset) {
         return null;
     }
 
-    public InputStream createInputStream(long offset) throws IOException {
+    public InputStream createInputStream(long offset) {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
         postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
