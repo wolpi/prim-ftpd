@@ -23,14 +23,12 @@
     <string name="stopService">أوقف الخادم</string>
     <string name="toggleService">بدّل حالة بدء/إيقاف الخادم</string>
     <string name="notificationTitle">خادم FTP</string>
-    <string name="haveToSetPassword">يجب عليك تحديد كلمة سر أوّلاً</string>
     <string name="haveToSetAuthMechanism">يجب عليك تحديد آلية المصادقة أولاً</string>
     <string name="serverRunning">خادم FTP قيد التشغيل</string>
     <string name="serverCouldNotBeStarted">لا يمكن بدء الخادم! رسالة الخطأ: </string>
     <string name="portInvalid_v2">قيمة المنفذ غير صحيحة. يجب أن تكون بين 1024 و 64000.</string>
     <string name="portsEqual_v2">المنافذ متساوية. لن يعمل ذلك.</string>
     <string name="restartServer">يجب عليك إعادة بدء الخادم لكي يظهر أثر التغييرات.</string>
-    <string name="invalidDir">مجلد غير صالح.</string>
     <string name="couldNotReadKeyAuthKey">لا يمكن قراءة المفتاح العام المطلوب للمصادقة. تفقّد السجل.</string>
     <string name="ftpPassivePortsInvalid">قيمة منافذ FTP الخاملة غير صالحة.</string>
     <string name="prefs">الإعدادت</string>
@@ -69,16 +67,13 @@
     <string name="prefTitleShowStartStopNotification">أظهر إشعار لبدء/إيقاف الخادم</string>
     <string name="prefSummaryShowStartStopNotification">سيتم إظهار إشعار دائم ليتوفّر لك طريقة أخرى سريعة لبدء/إيقاف الخادم.</string>
     <string name="prefTitlePubKeyAuth">المصادقة باستخدام مفتاح عام</string>
-    <string name="prefSummaryPubKeyAuth">عند التفعيل، ضع مفتاح ssh2 العام الخاص بك في %s.\nSFTP فقط.</string>
     <string name="prefTitleAnonymousLogin">تسجيل الدخول المجهول</string>
     <string name="prefSummaryAnonymousLogin">حدّد إذا ما كان تسجيل الدخول المجهول إلى الخادم مسموحاً.</string>
     <string name="prefTitleFtpPassivePorts">منافذ FTP الخاملة</string>
     <string name="prefSummaryFtpPassivePorts">المنافذ المستخدمة للاتّصالات الخاملة لنقل البيانات عن طريق FTP. يمكن أن يكون منفذاً وحيداً، أو قائمة أو نطاق من المنافذ. مثل: 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">مهلة عدم نشاط الخادم</string>
-    <string name="prefSummaryIdleTimeout">سينهي الخادم الاتصالات الخاملة بعد هذا الوقت بالثواني. اضبط على 0 للتعطيل.</string>
     <string name="prefSummaryIdleTimeoutV2">سينهي الخادم الاتصالات الخاملة بعد هذا الوقت بالثواني. اضبط على 0 للتعطيل.</string>
     <string name="prefTitleLogging">السجل</string>
-    <string name="prefSummaryLogging">يفيد السجل في تحليل الأخطاء. إذا لم يعمل التطبيق بالشكل الصحيح على جهازك يمكنك إرسال السجل إلى المطوّرين. سيتطلّب إعادة تشغيل البرنامج.</string>
     <string name="prefSummaryLoggingV2">يفيد السجل في تحليل الأخطاء. إذا لم يعمل التطبيق بالشكل الصحيح على جهازك يمكنك إرسال السجل إلى المطوّرين. سيتطلّب إعادة تشغيل البرنامج. يتم حفظ السجلّات النصّيّة في %s.</string>
     <string name="prefAllowedIpsPattern">نمط عناوين IP المقبولة</string>
     <string name="prefSummaryAllowedIpsPattern">نمط عناوين IP المسموح لها الاتّصال. يمكن استخدام رمز بدل (*) واحد فقط، مكان الحرف الأخير.</string>
@@ -94,20 +89,15 @@
     <string name="selectServerAction">اختر إجراء الخادم</string>
     <string name="isServerRunning">هل الخادم قيد التشغيل؟</string>
     <string name="storageType">نوع التخزين</string>
-    <string name="storageTypePlain">نظام الملفّات القديم العادي</string>
     <string name="storageTypeRoot">المستخدم العالي (يجب أن يمتلك الجهاز صلاحيّات الـroot)</string>
     <string name="storageTypeSaf">إطار أندرويد للوصول إلى التخزين (SAF)
 \n(مثلاً: بطاقة SD)</string>
     <string name="storageTypeRoSaf">SAF للقراءة فقط (أسرع !)</string>
     <string name="safExplainHeading">طريقة عمل SAF</string>
-    <string name="safExplain">سيطلب منك لأندرويد أن تختار المسار الذي سيكون متوفّراً من خلال الخادم. من وقت لآخر قد يتم إلغاء الإذن وسيتوجّب عليك إعادة الاختيار.</string>
     <string name="selectedSafUri">اختر عنوان URI لـSAF:</string>
-    <string name="startServerAndExit">ابدأ الخادم فقط</string>
-    <string name="startServerAndUi">ابدأ مع الخادم</string>
     <string name="downloadOrSaveUrlToFile">تنزيل أو حفظ عنوان URL في ملف نصّي؟</string>
     <string name="download">تنزيل</string>
     <string name="saveToTextFile">حفظ إلى ملف نصّي</string>
-    <string name="open">فتح</string>
     <string name="filepickerCreateFolderError">لا يمكن إنشاء المجلد</string>
     <string name="filepickerNewFolder">مجلّد جديد</string>
     <string name="filepickerNewFolderOk">@android:string/ok</string>
@@ -117,10 +107,8 @@
     <string name="filepickerName">الاسم</string>
     <string name="filepickerFilename">اسم الملف</string>
     <string name="filepickerSelectSomethingFirst">يرجى اختيار شيء أوّلاً</string>
-    <string name="filepickerNeedValidFilename">يرجى إدخال أو اختيار اسم ملف صالح</string>
     <string name="quickShare">المشاركة السريعة</string>
     <string name="quickShareServerStarted">تم بدء الخادم لمشاركة ملف واحد</string>
-    <string name="quickShareCouldNotStartServer">لا يمكن بدء الخادم</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP و SFTP</item>
         <item>FTP فقط</item>

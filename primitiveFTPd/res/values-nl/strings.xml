@@ -25,5 +25,4 @@
     <string name="toggleService">"Server snel starten/stoppen "</string>
     <string name="notificationTitle">FTP server</string>
 
-    <string name="haveToSetPassword">U dient eerst een wachtwoord in te stellen</string>
-    </resources>
+</resources>

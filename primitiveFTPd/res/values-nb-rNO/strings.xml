@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="startServerAndExit">start kun tjeneren</string>
     <string name="restartServer">Du må starte tjeneren på ny for at endringene skal tre i effekt.</string>
     <string name="prefTitlePort">Port</string>
     <string name="filepickerFilename">Filnavn</string>
@@ -14,14 +13,12 @@
     <string name="isServerRunning">Kjører tjeneren?</string>
     <string name="prefTitleAnnounceName">Tjenernavn</string>
     <string name="quickShare">Hurtigdeling</string>
-    <string name="haveToSetPassword">Du må sette et passord først</string>
     <string name="prefTitleAnonymousLogin">Anonym innlogging</string>
     <string name="passwordPresent">Passord: %1$b</string>
     <string name="ipAddrLabel">IP-adresse</string>
     <string name="toggleService">Veksle tjener-oppstart/stopp</string>
     <string name="saveToTextFile">Lagre som tekstfil</string>
     <string name="statsLabel">Statistikk</string>
-    <string name="invalidDir">Mappen er ikke gyldig.</string>
     <string name="prefSummaryBindIp">Hvis du ønsker at tjenerne skal lytte til kun ett grensesnitt.</string>
     <string name="protocolLabel">Protokoll</string>
     <string name="pubKeyAuth">Offentlig nøkkelidentifikasjon: %1$b</string>
@@ -48,15 +45,11 @@
     <string name="ifacesError">Error:</string>
     <string name="fingerprintsLabel">Nøkkelfingeravtrykk</string>
     <string name="serverStopped">Stoppet</string>
-    <string name="startServerAndUi">start med tjener</string>
     <string name="prefsCategoryTitleSystem">System</string>
     <string name="prefsCategoryTitleUi">Grensesnitt</string>
-    <string name="filepickerNeedValidFilename">Skriv inn eller velg et gyldig filnavn</string>
-    <string name="iconQrCode">QR-kode</string>
     <string name="generate">Generer</string>
     <string name="cancel">Avbryt</string>
     <string name="isAnonymous">Anonym innlogging: %1$b</string>
-    <string name="open">Åpne</string>
     <string name="licence">Lisens</string>
     <string name="prefSummaryPortSecure">FTP-tjenerport (kryptert)</string>
     <string name="Request">Forespørsel</string>
@@ -76,17 +69,14 @@
     <string name="mobileUiShort">Mobilmodus</string>
     <string name="portLabel">Port</string>
     <string name="prefs">Innstillinger</string>
-    <string name="permWriteLabelServerstatus">start og stopp tjener</string>
-    <string name="ifacesLabel">Nettverksgrensesnitt</string>
+  <string name="ifacesLabel">Nettverksgrensesnitt</string>
     <string name="prefTitleSshowIpv4InNotification">Vis IPv4-adresser i merknad</string>
-    <string name="permissionNameStorage">Lagring</string>
     <string name="filepickerName">Navn</string>
     <string name="startService">Start tjener</string>
     <string name="serverCouldNotBeStarted">Kunne ikke starte tjener. Feilmelding:</string>
     <string name="prefSummaryShowIpv6InNotification">Viser IPv6-adresser i merknad hvis tilkoblingsinfo er påskrudd.</string>
     <string name="quickSettingsServerStopped">pFTPd stoppet</string>
     <string name="saveAs">Lagre som</string>
-    <string name="storageTypePlain">Gammeldags filsystem</string>
     <string name="prefSummaryAnnounceName">Navn å annonsere tjener som.</string>
     <string name="prefTitleWakelock">Forhindre hvilemodus</string>
     <string name="prefTitleWhichServerToStart">Tjener(e) å starte</string>
