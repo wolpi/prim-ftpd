@@ -141,7 +141,7 @@ def check(value, text, errors, msg):
 def checkExp(exp, text, errors, msg):
     found = False
     if type(text) is str:
-        matchobject = re.match(exp, text)
+        matchobject = re.match(exp, text, re.DOTALL)
         if not matchobject is None:
             found = True
     if not found == True:
