@@ -1,0 +1,5 @@
+A simple FTP and SFTP (SSH file transfer) server. Allows to exchange files with
+other machines over WiFi. No more USB cable searching. Runs without root
+privileges and is not started when device boots: Control yourself when the
+server runs. However, while it runs it prevents standby to avoid long uploads
+and downloads to abort.
