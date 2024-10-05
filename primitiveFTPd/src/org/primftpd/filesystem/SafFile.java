@@ -161,7 +161,7 @@ public abstract class SafFile<T> extends AbstractFile {
 
     public boolean move(SafFile<T> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
-        if (writable && documentFile != null) {
+        if (writable && documentFile != null && Utils.parent(this.absPath).equals(Utils.parent(destination.getAbsolutePath()))) {
             postClientAction(ClientActionEvent.ClientAction.RENAME);
             return documentFile.renameTo(destination.getName());
         }
