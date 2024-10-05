@@ -70,9 +70,7 @@
     <string name="isServerRunning">Czy serwer działa?</string>
     <string name="storageType">Typ Pamięci</string>
     <string name="storageTypeRoot">Super użytkownik (urządzenie musi być zrootowane)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
-\n
-\n(np. dla karty SD)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n\n(np. dla karty SD)</string>
     <string name="storageTypeRoSaf">SAF tylko do odczytu (szybsze!)</string>
     <string name="safExplainHeading">Jak działa SAF</string>
     <string name="selectedSafUri">Wybrany identyfikator SAF URI:</string>
@@ -154,4 +152,5 @@
     <string name="iconCleanSpace">Czyste miejsce</string>
     <string name="quickShareInfoActivityV2">Uruchamianie w trybie QuickShare dla %1d pliku(ów)</string>
     <string name="quickShareFiles">Pliki QuickShare:</string>
+    <string name="safExplainV2"></string>
 </resources>
