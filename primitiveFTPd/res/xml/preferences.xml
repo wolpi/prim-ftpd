@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto">
 
-	<PreferenceCategory android:title="@string/prefsCategoryTitleAuth" android:key="ftpPrefCatAuth">
+	<PreferenceCategory android:title="@string/prefsCategoryTitleAuth" android:key="ftpPrefCatAuth" app:iconSpaceReserved="false">
 		<SwitchPreference
 			android:name="anonymousLogin"
 			android:key="anonymousLoginPref"
 			android:defaultValue="false"
 			android:title="@string/prefTitleAnonymousLogin"
 			android:summary="@string/prefSummaryAnonymousLogin"
+			app:iconSpaceReserved="false"
 			/>
 		<EditTextPreference
 			android:name="user_name"
@@ -15,6 +17,7 @@
 			android:defaultValue="user"
 			android:title="@string/prefTitleUser"
 			android:summary="@string/prefSummaryUser"
+			app:iconSpaceReserved="false"
 			/>
 		<org.primftpd.prefs.EncryptingEditTextPreference
 			android:name="password"
@@ -22,6 +25,7 @@
 			android:title="@string/prefTitlePassword"
 			android:summary="@string/prefSummaryPassword"
 			android:inputType="textPassword"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="pubKeyAuth"
@@ -29,10 +33,11 @@
 			android:defaultValue="false"
 			android:title="@string/prefTitlePubKeyAuth"
 			android:summary="@string/prefSummaryPubKeyAuth_v2"
+			app:iconSpaceReserved="false"
 			/>
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/prefsCategoryTitleConnectivity" android:key="ftpPrefCatConnectivity">
+	<PreferenceCategory android:title="@string/prefsCategoryTitleConnectivity" android:key="ftpPrefCatConnectivity" app:iconSpaceReserved="false">
 		<ListPreference
 			android:name="whichServerToStart"
 			android:key="whichServerToStartPref"
@@ -41,6 +46,7 @@
 			android:defaultValue="0"
 			android:entries="@array/prefWhichServerToStartNames"
 			android:entryValues="@array/prefWhichServerToStartValues"
+			app:iconSpaceReserved="false"
 			/>
 		<org.primftpd.prefs.PortEditTextPreference
 			android:name="port"
@@ -49,6 +55,7 @@
 			android:title="@string/prefTitlePort"
 			android:summary="@string/prefSummaryPort"
 			android:inputType="number"
+			app:iconSpaceReserved="false"
 			/>
 		<org.primftpd.prefs.PortEditTextPreference
 			android:name="sslPort"
@@ -57,6 +64,7 @@
 			android:title="@string/prefTitlePortSecure"
 			android:summary="@string/prefSummaryPortSecure"
 			android:inputType="number"
+			app:iconSpaceReserved="false"
 			/>
 		<org.primftpd.prefs.FtpPassivePortsEditTextPreference
 			android:name="ftpPassivePorts"
@@ -64,6 +72,7 @@
 			android:title="@string/prefTitleFtpPassivePorts"
 			android:summary="@string/prefSummaryFtpPassivePorts"
 			android:defaultValue="5678"
+			app:iconSpaceReserved="false"
 			/>
 		<EditTextPreference
 			android:name="idleTimeout"
@@ -72,6 +81,7 @@
 			android:summary="@string/prefSummaryIdleTimeoutV2"
 			android:defaultValue="0"
 			android:inputType="number"
+			app:iconSpaceReserved="false"
 			/>
 		<EditTextPreference
 			android:name="idleTimeoutServerStop"
@@ -80,28 +90,32 @@
 			android:summary="@string/prefSummaryIdleTimeoutServerStop"
 			android:defaultValue="30"
 			android:inputType="number"
+			app:iconSpaceReserved="false"
 			/>
 		<EditTextPreference
 			android:name="allowedIpsPattern"
 			android:key="allowedIpsPatternPref"
 			android:title="@string/prefAllowedIpsPattern"
 			android:summary="@string/prefSummaryAllowedIpsPattern"
+			app:iconSpaceReserved="false"
 			/>
 		<EditTextPreference
 			android:name="bindIp"
 			android:key="bindIpPref"
 			android:title="@string/prefBindIp"
 			android:summary="@string/prefSummaryBindIp"
+			app:iconSpaceReserved="false"
 			/>
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/prefsCategoryTitleUi" android:key="ftpPrefCatUi">
+	<PreferenceCategory android:title="@string/prefsCategoryTitleUi" android:key="ftpPrefCatUi" app:iconSpaceReserved="false">
 		<SwitchPreference
 			android:name="showTabNames"
 			android:key="showTabNamesPref"
 			android:defaultValue="false"
 			android:title="@string/prefShowTabNames"
 			android:summary="@string/prefSummaryShowTabNames"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="startOnOpen"
@@ -109,6 +123,7 @@
 			android:defaultValue="false"
 			android:title="@string/prefTitleStartOnOpen"
 			android:summary="@string/prefSummaryStartOnOpen"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="showConnectionInfoInNotification"
@@ -116,6 +131,7 @@
 			android:defaultValue="true"
 			android:title="@string/prefTitleShowConnectionInfoInNotification"
 			android:summary="@string/prefSummaryShowConnectionInfoInNotification"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="showIpv4InNotification"
@@ -123,6 +139,7 @@
 			android:defaultValue="true"
 			android:title="@string/prefTitleSshowIpv4InNotification"
 			android:summary="@string/prefSummaryShowIpv4InNotification"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="showIpv6InNotification"
@@ -130,6 +147,7 @@
 			android:defaultValue="true"
 			android:title="@string/prefTitleSshowIpv6InNotification"
 			android:summary="@string/prefSummaryShowIpv6InNotification"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="showStartStopNotification"
@@ -137,6 +155,7 @@
 			android:defaultValue="false"
 			android:title="@string/prefTitleShowStartStopNotification"
 			android:summary="@string/prefSummaryShowStartStopNotification"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="quickSettingsRequiresUnlock"
@@ -144,16 +163,18 @@
 			android:defaultValue="true"
 			android:title="@string/prefTitleQuickSettingsRequiresUnlock"
 			android:summary="@string/prefSummaryQuickSettingsRequiresUnlock"
+			app:iconSpaceReserved="false"
 			/>
 
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="@string/prefsCategoryTitleSystem" android:key="ftpPrefCatSystem">
+	<PreferenceCategory android:title="@string/prefsCategoryTitleSystem" android:key="ftpPrefCatSystem" app:iconSpaceReserved="false">
 		<Preference
 			android:name="startDir"
 			android:key="startDirPref"
 			android:title="@string/prefTitleStartDir"
 			android:summary="@string/prefSummaryStartDir"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="wakelock"
@@ -161,6 +182,7 @@
 			android:defaultValue="true"
 			android:title="@string/prefTitleWakelock"
 			android:summary="@string/prefSummaryWakelock"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="announce"
@@ -168,6 +190,7 @@
 			android:defaultValue="false"
 			android:title="@string/prefTitleAnnounce"
 			android:summary="@string/prefSummaryAnnounce"
+			app:iconSpaceReserved="false"
 			/>
 		<EditTextPreference
 			android:name="announce_name"
@@ -175,6 +198,7 @@
 			android:defaultValue="primitive ftpd"
 			android:title="@string/prefTitleAnnounceName"
 			android:summary="@string/prefSummaryAnnounceName"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="startOnBoot"
@@ -182,6 +206,7 @@
 			android:defaultValue="false"
 			android:title="@string/prefTitleStartOnBoot"
 			android:summary="@string/prefSummaryStartOnBoot"
+			app:iconSpaceReserved="false"
 			/>
 		<MultiSelectListPreference
 			android:name="hostkeyAlgos"
@@ -191,6 +216,7 @@
 			android:defaultValue="@array/prefHostkeyAlgosDefaults"
 			android:entries="@array/prefHostkeyAlgosNames"
 			android:entryValues="@array/prefHostkeyAlgosValues"
+			app:iconSpaceReserved="false"
 			/>
 		<SwitchPreference
 			android:name="rootCopyFiles"
@@ -198,6 +224,7 @@
 			android:defaultValue="true"
 			android:title="@string/prefRootCopyFiles"
 			android:summary="@string/prefSummaryRootCopyFiles"
+			app:iconSpaceReserved="false"
 			/>
 		<ListPreference
 			android:name="logging"
@@ -207,6 +234,7 @@
 			android:defaultValue="0"
 			android:entries="@array/prefLoggingNames"
 			android:entryValues="@array/prefLoggingValues"
+			app:iconSpaceReserved="false"
 			/>
 	</PreferenceCategory>
 
