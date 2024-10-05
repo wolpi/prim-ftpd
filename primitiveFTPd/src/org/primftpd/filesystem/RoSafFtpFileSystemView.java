@@ -31,7 +31,7 @@ public class RoSafFtpFileSystemView extends RoSafFileSystemView<RoSafFtpFile, Ft
     }
 
     protected RoSafFtpFile createFileNonExistent(ContentResolver contentResolver, Uri startUrl, String name, String absPath, PftpdService pftpdService) {
-        return new RoSafFtpFile(contentResolver, startUrl, name, absPath, false, pftpdService, user);
+        return new RoSafFtpFile(contentResolver, startUrl, name, absPath, false, pftpdService, this, user);
     }
 
     @Override
