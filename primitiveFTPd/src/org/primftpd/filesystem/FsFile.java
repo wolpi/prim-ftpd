@@ -232,13 +232,8 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView>
 		// some clients do not issue mkdir commands like filezilla
 		// see isWritable()
 		File parent = file.getParentFile();
-		if (parent == null) {
+		if (parent == null || (!parent.exists() && !parent.mkdirs())) {
 			throw new IOException(String.format("Failed to create parent folder(s) '%s'", file.getAbsolutePath()));
-		}
-		if (!parent.exists()) {
-			if (!parent.mkdirs()) {
-				throw new IOException(String.format("Failed to create parent folder(s) '%s'", file.getAbsolutePath()));
-			}
 		}
 
 		// now create out stream

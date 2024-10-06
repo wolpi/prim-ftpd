@@ -45,7 +45,7 @@ public class VirtualFtpFileSystemView extends VirtualFileSystemView<
     }
 
     @Override
-    public AbstractFile getConfigFile() {
+    public VirtualFtpConfigFile getConfigFile() {
         return new VirtualFtpConfigFile(this, user);
     }
 
