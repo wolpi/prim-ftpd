@@ -11,16 +11,16 @@ public class QuickShareSshFileSystemView extends QuickShareFileSystemView<QuickS
 
     private final Session session;
 
-    public QuickShareSshFileSystemView(File quickShareFile, PftpdService pftpdService, Session session) {
-        super(quickShareFile, pftpdService);
+    public QuickShareSshFileSystemView(PftpdService pftpdService, File tmpDir, Session session) {
+        super(pftpdService, tmpDir);
         this.session = session;
     }
 
-    protected QuickShareSshFile createFile(File tmpDir, PftpdService pftpdService) {
-        return new QuickShareSshFile(tmpDir, pftpdService, session);
+    protected QuickShareSshFile createFile() {
+        return new QuickShareSshFile(this, session);
     }
-    protected QuickShareSshFile createFile(File tmpDir, File realFile, PftpdService pftpdService) {
-        return new QuickShareSshFile(tmpDir, realFile, pftpdService, session);
+    protected QuickShareSshFile createFile(File realFile) {
+        return new QuickShareSshFile(this, realFile, session);
     }
 
     @Override

@@ -15,25 +15,17 @@ import java.util.Set;
 
 import eu.chainfire.libsuperuser.Shell;
 
-public class RootSshFile extends RootFile<SshFile> implements SshFile {
+public class RootSshFile extends RootFile<SshFile, RootSshFileSystemView> implements SshFile {
 
     private final Session session;
-    private final RootSshFileSystemView fileSystemView;
 
-    public RootSshFile(
-            Shell.Interactive shell,
-            LsOutputBean bean,
-            String absPath,
-            PftpdService pftpdService,
-            Session session,
-            RootSshFileSystemView fileSystemView) {
-        super(shell, bean, absPath, pftpdService);
+    public RootSshFile(RootSshFileSystemView fileSystemView, String absPath, LsOutputBean bean, Session session) {
+        super(fileSystemView, absPath, bean);
         this.session = session;
-        this.fileSystemView = fileSystemView;
     }
 
-    protected RootSshFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath, PftpdService pftpdService) {
-        return new RootSshFile(shell, bean, absPath, pftpdService, session, fileSystemView);
+    protected RootSshFile createFile(String absPath, LsOutputBean bean) {
+        return new RootSshFile(getFileSystemView(), absPath, bean, session);
     }
 
     @Override
@@ -43,8 +35,7 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
 
     @Override
     public boolean move(SshFile target) {
-        logger.trace("move()");
-        return super.move((RootFile)target);
+        return super.move((AbstractFile)target);
     }
 
     @Override
@@ -129,11 +120,20 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     }
 
     @Override
+    public boolean create() throws IOException {
+        // This call is required by SSHFS, because it calls STAT on created new files.
+        // This call is not required by normal clients who simply open, write and close the file.
+        boolean result = runCommand("touch" + " " + escapePath(absPath));
+        logger.trace("[{}] create() -> {}", name, result);
+        return result;
+    }
+
+    @Override
     public SshFile getParentFile() {
         logger.trace("[{}] getParentFile()", name);
         String parentPath = Utils.parent(absPath);
         logger.trace("[{}]   getParentFile() -> {}", name, parentPath);
-        return fileSystemView.getFile(parentPath);
+        return getFileSystemView().getFile(parentPath);
     }
 
     @Override

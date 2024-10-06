@@ -6,28 +6,28 @@ import org.primftpd.services.PftpdService;
 
 import java.util.List;
 
-public class VirtualFtpFile extends VirtualFile<FtpFile> implements FtpFile {
+public class VirtualFtpFile extends VirtualFile<FtpFile, VirtualFtpFileSystemView> implements FtpFile {
 
     private final User user;
 
-    public VirtualFtpFile(String absPath, AbstractFile delegate, PftpdService pftpdService, User user) {
-        super(absPath, delegate, pftpdService);
+    public VirtualFtpFile(VirtualFtpFileSystemView fileSystemView, String absPath, AbstractFile delegate, User user) {
+        super(fileSystemView, absPath, delegate);
         this.user = user;
     }
 
-    public VirtualFtpFile(String absPath, AbstractFile delegate, boolean exists, PftpdService pftpdService, User user) {
-        super(absPath, delegate, exists, pftpdService);
+    public VirtualFtpFile(VirtualFtpFileSystemView fileSystemView, String absPath, boolean exists, User user) {
+        super(fileSystemView, absPath, exists);
         this.user = user;
     }
 
     @Override
-    protected FtpFile createFile(String absPath, AbstractFile delegate, PftpdService pftpdService) {
-        return new VirtualFtpFile(absPath, delegate, pftpdService, user);
+    protected FtpFile createFile(String absPath, AbstractFile delegate) {
+        return new VirtualFtpFile(getFileSystemView(), absPath, delegate, user);
     }
 
     @Override
-    protected FtpFile createFile(String absPath, AbstractFile delegate, boolean exists, PftpdService pftpdService) {
-        return new VirtualFtpFile(absPath, delegate, exists, pftpdService, user);
+    protected FtpFile createFile(String absPath, boolean exists) {
+        return new VirtualFtpFile(getFileSystemView(), absPath, exists, user);
     }
 
     @Override
@@ -43,9 +43,7 @@ public class VirtualFtpFile extends VirtualFile<FtpFile> implements FtpFile {
 
     @Override
     public boolean move(FtpFile target) {
-        logger.trace("move()");
-        FtpFile realTarget = (FtpFile) ((VirtualFtpFile) target).delegate;
-        return delegate != null && ((FtpFile) delegate).move(realTarget);
+        return super.move(((VirtualFile)target).delegate);
     }
 
     @Override

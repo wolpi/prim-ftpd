@@ -3,6 +3,7 @@ package org.primftpd.filesystem;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.services.PftpdService;
 
+import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,7 +16,7 @@ import java.nio.charset.StandardCharsets;
  *
  * For more details see <a href="https://github.com/wolpi/prim-ftpd/pull/378">PR</a>
  */
-public abstract class VirtualConfigFile extends AbstractFile {
+public abstract class VirtualConfigFile<TFileSystemView extends VirtualFileSystemView> extends AbstractFile<TFileSystemView> {
 
     public static final String NAME = "primftpd.config";
     public static final String ABS_PATH = "/" + NAME;
@@ -23,29 +24,43 @@ public abstract class VirtualConfigFile extends AbstractFile {
     private final String content;
 
     public VirtualConfigFile(
-            PftpdService pftpdService) {
+            TFileSystemView fileSystemView) {
         super(
-                ABS_PATH,
-                NAME,
-                0,
-                0,
-                true,
-                true,
-                false,
-                pftpdService);
+            fileSystemView,
+            ABS_PATH,
+            NAME);
         this.content = getContent();
-        size = content.length();
     }
 
     private String getContent() {
         return
             "{" +
-                "\"announceName\":\"" + pftpdService.getPrefsBean().getAnnounceName().replace("\"", "\\\"") + "\"" +
+                "\"announceName\":\"" + getPftpdService().getPrefsBean().getAnnounceName().replace("\"", "\\\"") + "\"" +
             "}";
     }
 
     public ClientActionEvent.Storage getClientActionStorage() {
         return ClientActionEvent.Storage.CONFIG;
+    }
+
+    public boolean isDirectory() {
+        return false;
+    }
+
+    public boolean doesExist() {
+        return true;
+    }
+
+    public boolean isReadable() {
+        return true;
+    }
+
+    public long getLastModified() {
+        return 0;
+    }
+
+    public long getSize() {
+        return content.length();
     }
 
     public boolean isFile() {
@@ -72,8 +87,12 @@ public abstract class VirtualConfigFile extends AbstractFile {
         return false;
     }
 
-    public OutputStream createOutputStream(long offset) {
-        return null;
+    public boolean move(AbstractFile target) {
+        return false;
+    }
+
+    public OutputStream createOutputStream(long offset) throws IOException{
+        throw new IOException(String.format("Can not write file '%s'", absPath));
     }
 
     public InputStream createInputStream(long offset) {
@@ -84,5 +103,4 @@ public abstract class VirtualConfigFile extends AbstractFile {
         bais.skip(offset);
         return bais;
     }
-
 }

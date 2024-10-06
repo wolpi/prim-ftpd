@@ -8,58 +8,40 @@ import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.primftpd.services.PftpdService;
 
-public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
+public class RoSafFtpFile extends RoSafFile<FtpFile, RoSafFtpFileSystemView> implements FtpFile {
 
     private final User user;
 
     public RoSafFtpFile(
-            ContentResolver contentResolver,
-            Uri startUrl,
-            String absPath,
-            PftpdService pftpdService,
             RoSafFtpFileSystemView fileSystemView,
+            String absPath,
             User user) {
-        super(contentResolver, startUrl, absPath, pftpdService, fileSystemView);
+        super(fileSystemView, absPath);
         this.user = user;
     }
 
     public RoSafFtpFile(
-            ContentResolver contentResolver,
-            Uri startUrl,
+            RoSafFtpFileSystemView fileSystemView,
+            String absPath,
             String docId,
-            String absPath,
             boolean exists,
-            PftpdService pftpdService,
-            RoSafFtpFileSystemView fileSystemView,
             User user) {
-        super(contentResolver, startUrl, docId, absPath, exists, pftpdService, fileSystemView);
+        super(fileSystemView, absPath, docId, exists);
         this.user = user;
     }
 
-    public RoSafFtpFile(
-            ContentResolver contentResolver,
-            Uri startUrl,
-            Cursor cursor,
+    protected RoSafFtpFile(
+            RoSafFtpFileSystemView fileSystemView,
             String absPath,
-            PftpdService pftpdService,
-            RoSafFtpFileSystemView fileSystemView,
+            Cursor cursor,
             User user) {
-        super(contentResolver, startUrl, cursor, absPath, pftpdService, fileSystemView);
+        super(fileSystemView, absPath, cursor);
         this.user = user;
-    }
-
-    private RoSafFtpFileSystemView getFileSystemView() {
-        return (RoSafFtpFileSystemView)fileSystemView;
     }
 
     @Override
-    protected FtpFile createFile(
-            ContentResolver contentResolver,
-            Uri startUrl,
-            Cursor cursor,
-            String absPath,
-            PftpdService pftpdService) {
-        return new RoSafFtpFile(contentResolver, startUrl, cursor, absPath, pftpdService, getFileSystemView(), user);
+    protected FtpFile createFile(String absPath, Cursor cursor) {
+        return new RoSafFtpFile(getFileSystemView(), absPath, cursor, user);
     }
 
     @Override
@@ -69,8 +51,7 @@ public class RoSafFtpFile extends RoSafFile<FtpFile> implements FtpFile {
 
     @Override
     public boolean move(FtpFile target) {
-        logger.trace("move()");
-        return super.move((RoSafFile)target);
+        return super.move((AbstractFile)target);
     }
 
     @Override

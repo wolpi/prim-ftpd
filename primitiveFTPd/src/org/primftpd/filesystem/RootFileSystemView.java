@@ -10,23 +10,30 @@ import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
 
-public abstract class RootFileSystemView<T extends RootFile<X>, X> {
+public abstract class RootFileSystemView<TFile extends RootFile<TMina, ? extends RootFileSystemView>, TMina> extends AbstractFileSystemView {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-
+    private final MediaScannerClient mediaScannerClient;
     protected final Shell.Interactive shell;
-    protected final PftpdService pftpdService;
 
-    public RootFileSystemView(Shell.Interactive shell, PftpdService pftpdService) {
+    public RootFileSystemView(PftpdService pftpdService, Shell.Interactive shell) {
+        super(pftpdService);
+        this.mediaScannerClient = new MediaScannerClient(pftpdService.getContext());
         this.shell = shell;
-        this.pftpdService = pftpdService;
     }
 
-    protected abstract T createFile(LsOutputBean bean, String absPath, PftpdService pftpdService);
+    public final MediaScannerClient getMediaScannerClient() {
+        return mediaScannerClient;
+    }
+
+    public final Shell.Interactive getShell() {
+        return shell;
+    }
+
+    protected abstract TFile createFile(String absPath, LsOutputBean bean);
 
     protected abstract String absolute(String file);
 
-    public T getFile(String file) {
+    public TFile getFile(String file) {
         logger.trace("getFile({})", file);
 
         String abs = absolute(file);
@@ -60,7 +67,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
             //    // TODO make sym link target absolute
             //    abs = bean.getName();
             //}
-            return createFile(bean, abs, pftpdService);
+            return createFile(abs, bean);
         } else {
             // probably new
             String name;
@@ -70,7 +77,7 @@ public abstract class RootFileSystemView<T extends RootFile<X>, X> {
                 name = abs;
             }
             bean = new LsOutputBean(name);
-            return createFile(bean, abs, pftpdService);
+            return createFile(abs, bean);
         }
     }
 

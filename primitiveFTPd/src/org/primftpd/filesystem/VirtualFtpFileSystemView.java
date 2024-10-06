@@ -8,43 +8,45 @@ import org.primftpd.services.PftpdService;
 import java.io.File;
 
 public class VirtualFtpFileSystemView extends VirtualFileSystemView<
-        FtpFile,
         FsFtpFile,
         RootFtpFile,
         SafFtpFile,
-        RoSafFtpFile> implements FileSystemView {
+        RoSafFtpFile,
+        FtpFile> implements FileSystemView {
 
-    private final User user;
     private final File homeDir;
+    private final User user;
+
     private FtpFile workingDir;
 
     public VirtualFtpFileSystemView(
+            PftpdService pftpdService,
             FsFtpFileSystemView fsFileSystemView,
             RootFtpFileSystemView rootFileSystemView,
             SafFtpFileSystemView safFileSystemView,
             RoSafFtpFileSystemView roSafFileSystemView,
-            PftpdService pftpdService,
             File homeDir,
             User user) {
-        super(fsFileSystemView, rootFileSystemView, safFileSystemView, roSafFileSystemView, pftpdService);
-        this.user = user;
+        super(pftpdService, fsFileSystemView, rootFileSystemView, safFileSystemView, roSafFileSystemView);
         this.homeDir = homeDir;
+        this.user = user;
+
         workingDir = getHomeDirectory();
     }
 
     @Override
-    public FtpFile createFile(String absPath, AbstractFile delegate, PftpdService pftpdService) {
-        return new VirtualFtpFile(absPath, delegate, pftpdService, user);
+    public FtpFile createFile(String absPath, AbstractFile delegate) {
+        return new VirtualFtpFile(this, absPath, delegate, user);
     }
 
     @Override
-    public FtpFile createFile(String absPath, AbstractFile delegate, boolean exists, PftpdService pftpdService) {
-        return new VirtualFtpFile(absPath, delegate, exists, pftpdService, user);
+    public FtpFile createFile(String absPath, boolean exists) {
+        return new VirtualFtpFile(this, absPath, exists, user);
     }
 
     @Override
     public AbstractFile getConfigFile() {
-        return new VirtualFtpConfigFile(pftpdService, user);
+        return new VirtualFtpConfigFile(this, user);
     }
 
     @Override

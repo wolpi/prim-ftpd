@@ -10,49 +10,70 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class VirtualFile <T> extends AbstractFile {
+public abstract class VirtualFile<TMina, TFileSystemView extends VirtualFileSystemView> extends AbstractFile<TFileSystemView> {
 
     protected final AbstractFile delegate;
+    protected final boolean exists;
 
-    public VirtualFile(
+    private VirtualFile(
+            TFileSystemView fileSystemView,
             String absPath,
             AbstractFile delegate,
-            boolean exists,
-            PftpdService pftpdService) {
+            boolean exists) {
         super(
-                absPath,
-                delegate != null ? delegate.getName() : absPath.length() > 1 && absPath.charAt(0) == '/' ? absPath.substring(1) : absPath,
-                delegate != null ? delegate.getLastModified() : 0,
-                delegate != null ? delegate.getSize() : 0,
-                delegate == null || delegate.isReadable(),
-                exists,
-                delegate == null || delegate.isDirectory,
-                pftpdService);
+            fileSystemView,
+            absPath,
+            delegate != null ? delegate.getName() : absPath.length() > 1 && absPath.charAt(0) == '/' ? absPath.substring(1) : absPath);
         this.delegate = delegate;
+        this.exists = exists;
     }
 
     public VirtualFile(
+            TFileSystemView fileSystemView,
             String absPath,
-            AbstractFile delegate,
-            PftpdService pftpdService) {
-        this(absPath, delegate, delegate == null || delegate.exists, pftpdService);
+            AbstractFile delegate) {
+        this(fileSystemView, absPath, delegate, true);
     }
 
-    protected abstract T createFile(
+    public VirtualFile(
+            TFileSystemView fileSystemView,
             String absPath,
-            AbstractFile delegate,
-            PftpdService pftpdService);
+            boolean exists) {
+        this(fileSystemView, absPath, null, exists);
+    }
 
-    protected abstract T createFile(
+    protected abstract TMina createFile(
             String absPath,
-            AbstractFile delegate,
-            boolean exists,
-            PftpdService pftpdService);
+            AbstractFile delegate);
 
-    protected abstract List<T> listDelegateFiles();
+    protected abstract TMina createFile(
+            String absPath,
+            boolean exists);
+
+    protected abstract List<TMina> listDelegateFiles();
 
     public ClientActionEvent.Storage getClientActionStorage() {
         return delegate.getClientActionStorage();
+    }
+
+    public boolean isDirectory() {
+        return delegate == null || delegate.isDirectory();
+    }
+
+    public boolean doesExist() {
+        return delegate != null ? delegate.doesExist() : exists;
+    }
+
+    public boolean isReadable() {
+        return delegate == null || delegate.isReadable();
+    }
+
+    public long getLastModified() {
+        return delegate != null ? delegate.getLastModified() : 0;
+    }
+
+    public long getSize() {
+        return delegate != null ? delegate.getSize() : 0;
     }
 
     public boolean isFile() {
@@ -79,24 +100,33 @@ public abstract class VirtualFile <T> extends AbstractFile {
         return delegate != null && delegate.delete();
     }
 
-    public List<T> listFiles() {
+    public boolean move(AbstractFile target) {
+        return delegate != null && delegate.move(target);
+    }
+
+    public List<TMina> listFiles() {
         if ("/".equals(absPath)) {
-            List<T> files = new ArrayList<>(4);
-            files.add(createFile("/" + VirtualFileSystemView.PREFIX_FS, null, pftpdService));
-            files.add(createFile("/" + VirtualFileSystemView.PREFIX_ROOT, null, pftpdService));
-            files.add(createFile("/" + VirtualFileSystemView.PREFIX_SAF, null, pftpdService));
-            files.add(createFile("/" + VirtualFileSystemView.PREFIX_ROSAF, null, pftpdService));
+            List<TMina> files = new ArrayList<>(4);
+            files.add(createFile("/" + VirtualFileSystemView.PREFIX_FS, null));
+            files.add(createFile("/" + VirtualFileSystemView.PREFIX_ROOT, null));
+            files.add(createFile("/" + VirtualFileSystemView.PREFIX_SAF, null));
+            files.add(createFile("/" + VirtualFileSystemView.PREFIX_ROSAF, null));
             return Collections.unmodifiableList(files);
         }
         return listDelegateFiles();
     }
 
     public OutputStream createOutputStream(long offset) throws IOException {
-        return delegate != null ? delegate.createOutputStream(offset) : null;
+        if (delegate == null) {
+            throw new IOException(String.format("Can not write file '%s'", absPath));
+        }
+        return delegate.createOutputStream(offset);
     }
 
     public InputStream createInputStream(long offset) throws IOException {
-        return delegate != null ? delegate.createInputStream(offset) : null;
+        if (delegate == null) {
+            throw new IOException(String.format("Can not read file '%s'", absPath));
+        }
+        return delegate.createInputStream(offset);
     }
-
 }

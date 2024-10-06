@@ -8,41 +8,41 @@ import org.primftpd.services.PftpdService;
 import java.io.File;
 
 public class VirtualSshFileSystemView extends VirtualFileSystemView<
-        SshFile,
         FsSshFile,
         RootSshFile,
         SafSshFile,
-        RoSafSshFile> implements FileSystemView {
+        RoSafSshFile,
+        SshFile> implements FileSystemView {
 
     private final File homeDir;
     private final Session session;
 
     public VirtualSshFileSystemView(
+            PftpdService pftpdService,
             FsSshFileSystemView fsFileSystemView,
             RootSshFileSystemView rootFileSystemView,
             SafSshFileSystemView safFileSystemView,
             RoSafSshFileSystemView roSafFileSystemView,
-            PftpdService pftpdService,
             File homeDir,
             Session session) {
-        super(fsFileSystemView, rootFileSystemView, safFileSystemView, roSafFileSystemView, pftpdService);
+        super(pftpdService, fsFileSystemView, rootFileSystemView, safFileSystemView, roSafFileSystemView);
         this.homeDir = homeDir;
         this.session = session;
     }
 
     @Override
-    public SshFile createFile(String absPath, AbstractFile delegate, PftpdService pftpdService) {
-        return new VirtualSshFile(absPath, delegate, pftpdService, session);
+    public SshFile createFile(String absPath, AbstractFile delegate) {
+        return new VirtualSshFile(this, absPath, delegate, session);
     }
 
     @Override
-    public SshFile createFile(String absPath, AbstractFile delegate, boolean exists, PftpdService pftpdService) {
-        return new VirtualSshFile(absPath, delegate, exists, pftpdService, session);
+    public SshFile createFile(String absPath, boolean exists) {
+        return new VirtualSshFile(this, absPath, exists, session);
     }
 
     @Override
     public AbstractFile getConfigFile() {
-        return new VirtualSshConfigFile(pftpdService, session);
+        return new VirtualSshConfigFile(this, session);
     }
 
     @Override

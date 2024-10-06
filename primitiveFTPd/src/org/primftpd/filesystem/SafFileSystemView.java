@@ -14,39 +14,33 @@ import org.primftpd.services.PftpdService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 
-public abstract class SafFileSystemView<T extends SafFile<X>, X> {
+public abstract class SafFileSystemView<TFile extends SafFile<TMina, ? extends SafFileSystemView>, TMina> extends AbstractFileSystemView {
 
     protected final static String ROOT_PATH = "/";
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-    protected final Context context;
     protected final Uri startUrl;
-    protected final ContentResolver contentResolver;
-    protected final PftpdService pftpdService;
+
     protected final int timeResolution;
 
-    public SafFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService) {
-        this.context = context;
+    public SafFileSystemView(PftpdService pftpdService, Uri startUrl) {
+        super(pftpdService);
         this.startUrl = startUrl;
-        this.contentResolver = contentResolver;
-        this.pftpdService = pftpdService;
+
         this.timeResolution = StorageManagerUtil.getFilesystemTimeResolutionForTreeUri(startUrl);
     }
 
-    protected abstract T createFile(
-            ContentResolver contentResolver,
-            DocumentFile parentDocumentFile,
-            DocumentFile documentFile,
+    protected abstract TFile createFile(
             String absPath,
-            PftpdService pftpdService);
-    protected abstract T createFile(
-            ContentResolver contentResolver,
             DocumentFile parentDocumentFile,
-            String name,
+            DocumentFile documentFile);
+    protected abstract TFile createFile(
             String absPath,
-            PftpdService pftpdService);
+            DocumentFile parentDocumentFile,
+            List<String> parentNonexistentDirs,
+            String name);
 
     protected abstract String absolute(String file);
 
@@ -54,12 +48,13 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
         return (time / timeResolution) * timeResolution;
     }
 
-    public T getFile(String file) {
+    public TFile getFile(String file) {
         logger.trace("getFile({}), startUrl: {}", file, startUrl);
 
         String abs = absolute(file);
         logger.trace("  getFile(abs: {})", abs);
 
+        Context context = pftpdService.getContext();
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                     && !ROOT_PATH.equals(abs)) {
@@ -80,7 +75,7 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
                     // See: https://www.reddit.com/r/androiddev/comments/bbejc4/caveats_with_documentfile/
                     // Do not use selection and selectionArgs for ContentResolver.query(), Android doesn't care, it will return all the files whatever you do.
                     // See: https://stackoverflow.com/a/61214849
-                    Cursor childCursor = contentResolver.query(
+                    Cursor childCursor = context.getContentResolver().query(
                             childrenUri,
                             new String[] {
                                     DocumentsContract.Document.COLUMN_DOCUMENT_ID,
@@ -97,11 +92,12 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
                                 if (i == parts.size() - 1) {
                                     Uri docUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, docId);
                                     Uri parentUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, parentId);
-                                    logger.trace("    calling createFile() for doc: {}, docId: {}, docUri: {}, parentId: {}, parentUri: {}", new Object[]{currentPart, docId, docUri, parentId, parentUri});
+                                    logger.trace("    calling createFile() for doc: {}, docId: {}, docUri: {}, parentId: {}, parentUri: {}",
+                                        new Object[]{currentPart, docId, docUri, parentId, parentUri});
+                                    String absPath = Utils.toPath(parts);
                                     DocumentFile parentDocFile = DocumentFile.fromTreeUri(context, parentUri);
                                     DocumentFile docFile = DocumentFile.fromTreeUri(context, docUri);
-                                    String absPath = Utils.toPath(parts);
-                                    return createFile(contentResolver, parentDocFile, docFile, absPath, pftpdService);
+                                    return createFile(absPath, parentDocFile, docFile);
                                 } else {
                                     parentId = docId;
                                     break;
@@ -109,20 +105,21 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
                             }
                         }
                         if (childCursor.isAfterLast()) {
-                            // not found
+                            // not found, probably upload or dir creation -> create object just with name
+                            String absPath = Utils.toPath(parts);
+                            Uri parentUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, parentId);
+                            DocumentFile parentDocFile = DocumentFile.fromTreeUri(context, parentUri);
                             if (i == parts.size() - 1) {
-                                // probably upload -> create object just with name
-                                Uri parentUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, parentId);
+                                // file upload or dir creation in an existing dir
                                 logger.trace("    calling createFile() for doc: {}, parentId: {}, parentUri: {}", new Object[]{currentPart, parentId, parentUri});
-                                DocumentFile parentDocFile = DocumentFile.fromTreeUri(context, parentUri);
-                                String absPath = Utils.toPath(parts);
-                                return createFile(contentResolver, parentDocFile, currentPart, absPath, pftpdService);
+                                return createFile(absPath, parentDocFile, Collections.<String>emptyList(), currentPart);
                             } else {
-                                // invalid path
-                                String absPath = Utils.toPath(parts.subList(0, i+1));
-                                logger.error("path does not exist: {}", absPath);
-                                // fall through to returning the root document
-                                break;
+                                // file upload or dir creation in an nonexistent dir, probably called without first calling mkdirs
+                                List<String> parentNonexistentDirs = parts.subList(i, parts.size() - 1);
+                                String name = parts.get(parts.size() - 1);
+                                logger.trace("    calling createFile() for doc: {}, parentId: {}, parentUri: {}, parentNonexistentDirs: {}",
+                                    new Object[]{name, parentId, parentUri, Utils.toPath(parentNonexistentDirs)});
+                                return createFile(absPath, parentDocFile, parentNonexistentDirs, name);
                             }
                         }
                     } finally {
@@ -132,7 +129,7 @@ public abstract class SafFileSystemView<T extends SafFile<X>, X> {
             }
             DocumentFile rootDocFile = DocumentFile.fromTreeUri(context, startUrl);
             logger.trace("    calling createFile() for root doc: {}", startUrl);
-            return createFile(contentResolver, rootDocFile, rootDocFile, ROOT_PATH, pftpdService);
+            return createFile(ROOT_PATH, rootDocFile, rootDocFile);
         } catch (Exception e) {
             final String msg = "[(s)ftpd] Error getting data from SAF: " + e.toString();
             logger.error(msg);

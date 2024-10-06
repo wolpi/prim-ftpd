@@ -6,16 +6,12 @@ import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.primftpd.services.PftpdService;
 
-public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
+public class FsFtpFile extends FsFile<FtpFile, FsFtpFileSystemView> implements FtpFile {
 	private final User user;
 
-	public FsFtpFile(File file, PftpdService pftpdService, FsFtpFileSystemView fileSystemView, User user) {
-		super(file, pftpdService, fileSystemView);
+	public FsFtpFile(FsFtpFileSystemView fileSystemView, File file, User user) {
+		super(fileSystemView, file);
 		this.user = user;
-	}
-
-	private FsFtpFileSystemView getFileSystemView() {
-		return (FsFtpFileSystemView)fileSystemView;
 	}
 
 	@Override
@@ -24,13 +20,13 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 	}
 
 	@Override
-	protected FtpFile createFile(File file, PftpdService pftpdService) {
-		return new FsFtpFile(file, pftpdService, getFileSystemView(), user);
+	protected FtpFile createFile(File file) {
+		return new FsFtpFile(getFileSystemView(), file, user);
 	}
 
 	@Override
 	public boolean move(FtpFile target) {
-		return super.move((FsFile) target);
+		return super.move((AbstractFile) target);
 	}
 
 	@Override

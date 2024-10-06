@@ -7,28 +7,28 @@ import org.primftpd.services.PftpdService;
 import java.io.IOException;
 import java.util.List;
 
-public class VirtualSshFile extends VirtualFile<SshFile> implements SshFile {
+public class VirtualSshFile extends VirtualFile<SshFile, VirtualSshFileSystemView> implements SshFile {
 
     private final Session session;
 
-    public VirtualSshFile(String absPath, AbstractFile delegate, PftpdService pftpdService, Session session) {
-        super(absPath, delegate, pftpdService);
+    public VirtualSshFile(VirtualSshFileSystemView fileSystemView, String absPath, AbstractFile delegate, Session session) {
+        super(fileSystemView, absPath, delegate);
         this.session = session;
     }
 
-    public VirtualSshFile(String absPath, AbstractFile delegate, boolean exists, PftpdService pftpdService, Session session) {
-        super(absPath, delegate, exists, pftpdService);
+    public VirtualSshFile(VirtualSshFileSystemView fileSystemView, String absPath, boolean exists, Session session) {
+        super(fileSystemView, absPath, exists);
         this.session = session;
     }
 
     @Override
-    protected SshFile createFile(String absPath, AbstractFile delegate, PftpdService pftpdService) {
-        return new VirtualSshFile(absPath, delegate, pftpdService, session);
+    protected SshFile createFile(String absPath, AbstractFile delegate) {
+        return new VirtualSshFile(getFileSystemView(), absPath, delegate, session);
     }
 
     @Override
-    protected SshFile createFile(String absPath, AbstractFile delegate, boolean exists, PftpdService pftpdService) {
-        return new VirtualSshFile(absPath, delegate, exists, pftpdService, session);
+    protected SshFile createFile(String absPath, boolean exists) {
+        return new VirtualSshFile(getFileSystemView(), absPath, exists, session);
     }
 
     @Override
@@ -43,9 +43,7 @@ public class VirtualSshFile extends VirtualFile<SshFile> implements SshFile {
 
     @Override
     public boolean move(SshFile target) {
-        logger.trace("move()");
-        SshFile realTarget = (SshFile) ((VirtualSshFile) target).delegate;
-        return delegate != null && ((SshFile) delegate).move(realTarget);
+        return super.move(((VirtualFile)target).delegate);
     }
 
     @Override
@@ -56,18 +54,11 @@ public class VirtualSshFile extends VirtualFile<SshFile> implements SshFile {
 
     @Override
     public boolean create() throws IOException {
-        logger.trace("[{}] create()", name);
-        // This call and the update of the cached properties is required by SSHFS, because it calls STAT and later FSTAT on created new files,
-        // STAT requires a created new file, FSTAT requires updated properties.
+        // This call is required by SSHFS, because it calls STAT on created new files.
         // This call is not required by normal clients who simply open, write and close the file.
-        if (delegate != null && ((SshFile) delegate).create()) {
-            lastModified = delegate.getLastModified();
-            size = 0;
-            readable = delegate.isReadable();
-            exists = true;
-            return true;
-        }
-        return false;
+        boolean result = delegate != null && ((SshFile) delegate).create();
+        logger.trace("[{}] create() -> {}", name, result);
+        return result;
     }
 
     @Override
