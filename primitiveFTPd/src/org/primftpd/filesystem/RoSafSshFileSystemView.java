@@ -19,17 +19,17 @@ public class RoSafSshFileSystemView extends RoSafFileSystemView<RoSafSshFile, Ss
 
     @Override
     protected RoSafSshFile createFile(ContentResolver contentResolver, Uri startUrl, String absPath, PftpdService pftpdService) {
-        return new RoSafSshFile(contentResolver, startUrl, absPath, pftpdService, session);
+        return new RoSafSshFile(contentResolver, startUrl, absPath, pftpdService, this, session);
     }
 
     @Override
     protected RoSafSshFile createFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath, PftpdService pftpdService) {
-        return new RoSafSshFile(contentResolver, startUrl, docId, absPath, true, pftpdService, session);
+        return new RoSafSshFile(contentResolver, startUrl, docId, absPath, true, pftpdService, this, session);
     }
 
     @Override
     protected RoSafSshFile createFileNonExistent(ContentResolver contentResolver, Uri startUrl, String name, String absPath, PftpdService pftpdService) {
-        return new RoSafSshFile(contentResolver, startUrl, name, absPath, false, pftpdService, session);
+        return new RoSafSshFile(contentResolver, startUrl, name, absPath, false, pftpdService, this, session);
     }
 
     @Override

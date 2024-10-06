@@ -9,9 +9,13 @@ import org.primftpd.services.PftpdService;
 public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 	private final User user;
 
-	public FsFtpFile(File file, PftpdService pftpdService, User user) {
-		super(file, pftpdService);
+	public FsFtpFile(File file, PftpdService pftpdService, FsFtpFileSystemView fileSystemView, User user) {
+		super(file, pftpdService, fileSystemView);
 		this.user = user;
+	}
+
+	private FsFtpFileSystemView getFileSystemView() {
+		return (FsFtpFileSystemView)fileSystemView;
 	}
 
 	@Override
@@ -21,7 +25,7 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 
 	@Override
 	protected FtpFile createFile(File file, PftpdService pftpdService) {
-		return new FsFtpFile(file, pftpdService, user);
+		return new FsFtpFile(file, pftpdService, getFileSystemView(), user);
 	}
 
 	@Override

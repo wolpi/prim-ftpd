@@ -23,6 +23,7 @@ import java.util.Set;
 public abstract class FsFile<T> extends AbstractFile {
 
 	protected final File file;
+	protected final FsFileSystemView fileSystemView;
 	protected final boolean injectedDirectory;
 
 	private final static Map<String, String[]> DIRECTORY_INJECTIONS;
@@ -46,13 +47,13 @@ public abstract class FsFile<T> extends AbstractFile {
 			}
 		}
 		INJECTIONS_AND_CHILDREN = Collections.unmodifiableSet(tmp);
-    }
+	}
 
-	public FsFile(File file, PftpdService pftpdService) {
+	public FsFile(File file, PftpdService pftpdService, FsFileSystemView fileSystemView) {
 		super(
 				file.getAbsolutePath(),
 				file.getName(),
-				file.lastModified(),
+				fileSystemView.getCorrectedTime(file.getAbsolutePath(), file.lastModified()),
 				file.length(),
 				file.canRead(),
 				file.exists(),
@@ -60,6 +61,7 @@ public abstract class FsFile<T> extends AbstractFile {
 				pftpdService);
 		this.file = file;
 		this.name = file.getName();
+		this.fileSystemView = fileSystemView;
 		this.injectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
 	}
 
@@ -144,7 +146,8 @@ public abstract class FsFile<T> extends AbstractFile {
 
 	public boolean setLastModified(long time) {
 		logger.trace("[{}] setLastModified({})", name, Long.valueOf(time));
-		return file.setLastModified(time);
+		long correctedTime = fileSystemView.getCorrectedTime(absPath, time);
+		return file.setLastModified(correctedTime);
 	}
 
 	public boolean mkdir() {

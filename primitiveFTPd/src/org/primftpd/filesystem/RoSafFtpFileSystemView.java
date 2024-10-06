@@ -22,16 +22,16 @@ public class RoSafFtpFileSystemView extends RoSafFileSystemView<RoSafFtpFile, Ft
 
     @Override
     protected RoSafFtpFile createFile(ContentResolver contentResolver, Uri startUrl, String absPath, PftpdService pftpdService) {
-        return new RoSafFtpFile(contentResolver, startUrl, absPath, pftpdService, user);
+        return new RoSafFtpFile(contentResolver, startUrl, absPath, pftpdService, this, user);
     }
 
     @Override
     protected RoSafFtpFile createFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath, PftpdService pftpdService) {
-        return new RoSafFtpFile(contentResolver, startUrl, docId, absPath, true, pftpdService, user);
+        return new RoSafFtpFile(contentResolver, startUrl, docId, absPath, true, pftpdService, this, user);
     }
 
     protected RoSafFtpFile createFileNonExistent(ContentResolver contentResolver, Uri startUrl, String name, String absPath, PftpdService pftpdService) {
-        return new RoSafFtpFile(contentResolver, startUrl, name, absPath, false, pftpdService, user);
+        return new RoSafFtpFile(contentResolver, startUrl, name, absPath, false, pftpdService, this, user);
     }
 
     @Override

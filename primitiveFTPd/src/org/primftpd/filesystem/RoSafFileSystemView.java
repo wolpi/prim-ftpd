@@ -20,11 +20,13 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
     protected final Uri startUrl;
     protected final ContentResolver contentResolver;
     protected final PftpdService pftpdService;
+    protected final int timeResolution;
 
     public RoSafFileSystemView(Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService) {
         this.startUrl = startUrl;
         this.contentResolver = contentResolver;
         this.pftpdService = pftpdService;
+        this.timeResolution = StorageManagerUtil.getFilesystemTimeResolutionForTreeUri(startUrl);
     }
 
     protected abstract String absolute(String file);
@@ -46,6 +48,10 @@ public abstract class RoSafFileSystemView<T extends RoSafFile<X>, X> {
             String name,
             String absPath,
             PftpdService pftpdService);
+
+    public long getCorrectedTime(long time) {
+        return (time / timeResolution) * timeResolution;
+    }
 
     public T getFile(String file) {
         logger.trace("getFile({}), startUrl: {}", file, startUrl);
