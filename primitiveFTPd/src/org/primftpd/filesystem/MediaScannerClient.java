@@ -57,7 +57,7 @@ public class MediaScannerClient implements MediaScannerConnectionClient {
             // Android 10 (API level 29) and lower: just requests the scan
             connection.scanFile(path, null);
         } catch (Exception e) {
-            logger.error("  media scanning start error for file '{}': '{}' ", e, path);
+            logger.error("  media scanning start error for file '{}': '{}'", path, e.getMessage());
         }
     }
 
