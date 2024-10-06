@@ -8,25 +8,23 @@ import android.os.Build;
 import android.os.storage.StorageManager;
 import android.provider.DocumentsContract;
 
-import androidx.annotation.Nullable;
-import androidx.documentfile.provider.DocumentFile;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
+
 public final class StorageManagerUtil {
     private static final String PRIMARY_VOLUME_NAME = "primary";
 
-    private static Logger logger = LoggerFactory.getLogger(StorageManagerUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StorageManagerUtil.class);
 
     public static String getFullDocIdPathFromTreeUri(@Nullable final Uri treeUri, Context context) {
         if (treeUri == null) {
@@ -70,7 +68,7 @@ public final class StorageManagerUtil {
         return volumePath;
     }
 
-    private final static Map<String, Integer> cachedFilesystemTimeResolutions = new HashMap<>();
+    private final static Map<String, Integer> CACHED_FILESYSTEM_TIME_RESOLUTIONS = new HashMap<>();
 
     /**
      * This function is to handle 2 Android bugs.
@@ -87,14 +85,14 @@ public final class StorageManagerUtil {
      * @return          SAF file system's time resolution measured in milliseconds
      */
     public static int getFilesystemTimeResolutionForTreeUri(Uri startUrl) {
-        logger.trace("getFilesystemTimeResolutionForTreeUri({})", startUrl);
+        LOGGER.trace("getFilesystemTimeResolutionForTreeUri({})", startUrl);
         int timeResolution = 1; // use 1ms by default
         String volumeId = getVolumeIdFromTreeUri(startUrl);
         if (volumeId != null) {
-            Integer cachedTimeResolution = cachedFilesystemTimeResolutions.get(volumeId);
+            Integer cachedTimeResolution = CACHED_FILESYSTEM_TIME_RESOLUTIONS.get(volumeId);
             if (cachedTimeResolution != null) {
-                timeResolution = cachedTimeResolution.intValue();
-                logger.trace("  used cached value");
+                timeResolution = cachedTimeResolution;
+                LOGGER.trace("  used cached value ({})", timeResolution);
             } else {
                 int mediaTimeResolution = 0;
                 int storageTimeResolution = 0;
@@ -109,7 +107,7 @@ public final class StorageManagerUtil {
                     // /dev/block/vold/public:xxx,xx /mnt/media_rw/XXXX-XXXX sdfat ...,fs=exfat,... 0 0       ->   10 ms
                     // /mnt/media_rw/XXXX-XXXX /storage/XXXX-XXXX sdcardfs ... 0 0                            -> 2000 ms
                     for (String line; (line = br.readLine()) != null; ) {
-                        logger.trace("  {}", line);
+                        LOGGER.trace("  {}", line);
                         String[] mountInformations = line.split(" ");
                         if (mountInformations.length >= 4) {
                             if (mediaTimeResolution == 0 && mountInformations[1].equals(mediaMountPoint)) {
@@ -132,9 +130,9 @@ public final class StorageManagerUtil {
                                     mediaTimeResolution = 1;
                                 }
                                 if (mediaOption == null) {
-                                    logger.trace("    found media mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaTimeResolution});
+                                    LOGGER.trace("    found media mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaTimeResolution});
                                 } else {
-                                    logger.trace("    found media mount point {} with type {} with option {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaOption, mediaTimeResolution});
+                                    LOGGER.trace("    found media mount point {} with type {} with option {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], mediaOption, mediaTimeResolution});
                                 }
                             }
                             if (storageTimeResolution == 0 && mountInformations[1].equals(storageMountPoint)) {
@@ -143,7 +141,7 @@ public final class StorageManagerUtil {
                                 } else {
                                     storageTimeResolution = 1;
                                 }
-                                logger.trace("    found storage mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], storageTimeResolution});
+                                LOGGER.trace("    found storage mount point {} with type {} -> {}ms", new Object[]{mountInformations[1], mountInformations[2], storageTimeResolution});
                             }
                             if (mediaTimeResolution != 0 && storageTimeResolution != 0) {
                                 break;
@@ -151,13 +149,13 @@ public final class StorageManagerUtil {
                         }
                     }
                     timeResolution = Math.max(timeResolution, Math.max(mediaTimeResolution, storageTimeResolution));
-                    cachedFilesystemTimeResolutions.put(volumeId, timeResolution);
+                    CACHED_FILESYSTEM_TIME_RESOLUTIONS.put(volumeId, timeResolution);
                 } catch (Exception e) {
-                    logger.error("getFilesystemTimeResolutionForTreeUri() {}", e);
+                    LOGGER.error("getFilesystemTimeResolutionForTreeUri()", e);
                 }
             }
         }
-        logger.trace("  getFilesystemTimeResolutionForTreeUri({}) -> {}", startUrl, timeResolution);
+        LOGGER.trace("  getFilesystemTimeResolutionForTreeUri({}) -> {}", startUrl, timeResolution);
         return timeResolution;
     }
 
@@ -175,11 +173,12 @@ public final class StorageManagerUtil {
             Method isPrimary = storageVolumeClass.getMethod("isPrimary");
             Object result = getVolumeList.invoke(mStorageManager);
 
-            final int length = Array.getLength(result);
+            final int length = result != null ? Array.getLength(result) : 0;
             for (int i = 0; i < length; i++) {
                 Object storageVolumeElement = Array.get(result, i);
                 String uuid = (String) getUuid.invoke(storageVolumeElement);
-                Boolean primary = (Boolean) isPrimary.invoke(storageVolumeElement);
+                Boolean primaryObj = (Boolean) isPrimary.invoke(storageVolumeElement);
+                boolean primary = primaryObj != null && primaryObj;
 
                 // primary volume?
                 if (primary && PRIMARY_VOLUME_NAME.equals(volumeId)) {
@@ -192,6 +191,7 @@ public final class StorageManagerUtil {
                 }
             }
         } catch (Exception ex) {
+            LOGGER.error("", ex);
         }
         return null;
     }
@@ -205,6 +205,7 @@ public final class StorageManagerUtil {
                 return split[0];
             }
         } catch (Exception ex) {
+            LOGGER.error("", ex);
         }
         return null;
     }
@@ -218,6 +219,7 @@ public final class StorageManagerUtil {
                 return split[1];
             }
         } catch (Exception ex) {
+            LOGGER.error("", ex);
         }
         return File.separator;
     }
