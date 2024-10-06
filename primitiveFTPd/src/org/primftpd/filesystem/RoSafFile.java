@@ -1,13 +1,11 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.services.PftpdService;
 
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
@@ -243,7 +241,7 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
         return false;
     }
 
-    public boolean move(AbstractFile destination) {
+    public boolean move(AbstractFile<TFileSystemView> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
         // TODO writing with SAF cursor/uri api
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

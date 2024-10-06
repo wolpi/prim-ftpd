@@ -1,9 +1,6 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
-import android.content.Context;
 import android.net.Uri;
-import androidx.documentfile.provider.DocumentFile;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
@@ -11,6 +8,8 @@ import org.apache.sshd.common.file.SshFile;
 import org.primftpd.services.PftpdService;
 
 import java.util.List;
+
+import androidx.documentfile.provider.DocumentFile;
 
 public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile> implements FileSystemView {
 

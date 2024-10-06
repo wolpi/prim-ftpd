@@ -1,12 +1,9 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
 import android.database.Cursor;
-import android.net.Uri;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.services.PftpdService;
 
 public class RoSafFtpFile extends RoSafFile<FtpFile, RoSafFtpFileSystemView> implements FtpFile {
 
@@ -51,7 +48,7 @@ public class RoSafFtpFile extends RoSafFile<FtpFile, RoSafFtpFileSystemView> imp
 
     @Override
     public boolean move(FtpFile target) {
-        return super.move((AbstractFile)target);
+        return super.move((RoSafFtpFile)target);
     }
 
     @Override

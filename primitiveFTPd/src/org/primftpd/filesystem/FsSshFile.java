@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.services.PftpdService;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class FsSshFile extends FsFile<SshFile, FsSshFileSystemView> implements S
 
 	@Override
 	public boolean move(SshFile target) {
-		return super.move((AbstractFile)target);
+		return super.move((FsSshFile)target);
 	}
 
 	@Override

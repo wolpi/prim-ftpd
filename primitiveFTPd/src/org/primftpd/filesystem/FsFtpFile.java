@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.services.PftpdService;
 
 public class FsFtpFile extends FsFile<FtpFile, FsFtpFileSystemView> implements FtpFile {
 	private final User user;
@@ -26,7 +25,7 @@ public class FsFtpFile extends FsFile<FtpFile, FsFtpFileSystemView> implements F
 
 	@Override
 	public boolean move(FtpFile target) {
-		return super.move((AbstractFile) target);
+		return super.move((FsFtpFile) target);
 	}
 
 	@Override
@@ -49,9 +48,8 @@ public class FsFtpFile extends FsFile<FtpFile, FsFtpFileSystemView> implements F
 
 	@Override
 	public boolean isHidden() {
-		//boolean result = file.isHidden();
-		//logger.trace("[{}] isHidden() -> {}", name, result);
-		//return result;
-		return super.isHidden();
+		boolean result = file.isHidden();
+		logger.trace("[{}] isHidden() -> {}", name, result);
+		return result;
 	}
 }

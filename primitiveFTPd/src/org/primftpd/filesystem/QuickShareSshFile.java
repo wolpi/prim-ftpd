@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.services.PftpdService;
 
 import java.io.File;
 import java.util.List;
@@ -37,7 +36,7 @@ public class QuickShareSshFile extends QuickShareFile<SshFile, QuickShareSshFile
 
     @Override
     public boolean move(SshFile target) {
-		return super.move((AbstractFile) target);
+		return super.move((QuickShareSshFile) target);
     }
 
     @Override

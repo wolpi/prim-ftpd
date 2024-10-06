@@ -1,6 +1,5 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
 import android.net.Uri;
 
 import org.apache.sshd.common.Session;

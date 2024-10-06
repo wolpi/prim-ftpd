@@ -1,14 +1,13 @@
 package org.primftpd.filesystem;
 
-import android.content.Context;
 import android.net.Uri;
 
-import java.io.File;
-
-import org.apache.sshd.common.file.SshFile;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
+import org.apache.sshd.common.file.SshFile;
 import org.primftpd.services.PftpdService;
+
+import java.io.File;
 
 public class FsSshFileSystemView extends FsFileSystemView<FsSshFile, SshFile> implements FileSystemView {
 

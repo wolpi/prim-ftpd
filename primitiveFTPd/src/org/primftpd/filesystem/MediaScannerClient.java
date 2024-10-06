@@ -57,7 +57,7 @@ public class MediaScannerClient implements MediaScannerConnectionClient {
             // Android 10 (API level 29) and lower: just requests the scan
             connection.scanFile(path, null);
         } catch (Exception e) {
-            logger.error("  media scanning start error '{}' for file '{}'", e.toString(), path);
+            logger.error("  media scanning start error for file '{}': '{}' ", e, path);
         }
     }
 
@@ -65,4 +65,4 @@ public class MediaScannerClient implements MediaScannerConnectionClient {
     public void onScanCompleted(String path, Uri uri) {
         logger.info("media scanning completed for file '{}'", path);
     }
-};
+}

@@ -41,7 +41,7 @@ public class VirtualSshFileSystemView extends VirtualFileSystemView<
     }
 
     @Override
-    public AbstractFile getConfigFile() {
+    public VirtualSshConfigFile getConfigFile() {
         return new VirtualSshConfigFile(this, session);
     }
 

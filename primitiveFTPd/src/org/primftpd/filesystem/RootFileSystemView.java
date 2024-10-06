@@ -1,13 +1,12 @@
 package org.primftpd.filesystem;
 
-import org.primftpd.services.PftpdService;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.primftpd.services.PftpdService;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import eu.chainfire.libsuperuser.Shell;
 
 public abstract class RootFileSystemView<TFile extends RootFile<TMina, ? extends RootFileSystemView>, TMina> extends AbstractFileSystemView {
@@ -45,15 +44,13 @@ public abstract class RootFileSystemView<TFile extends RootFile<TMina, ? extends
         logger.trace("  running command: {}", cmd);
         shell.addCommand(cmd, 0, new Shell.OnCommandResultListener() {
             @Override
-            public void onCommandResult(int commandCode, int exitCode, List<String> output) {
+            public void onCommandResult(int commandCode, int exitCode, @NonNull List<String> output) {
                 if (exitCode == 0) {
                     wrapper[0] = parser.parseLine(output.get(0));
                 } else {
                     logger.error("could not run 'ls' command (exitCode: {})", exitCode);
-                    if (output != null) {
-                        for (String line : output) {
-                            logger.error("{}", line);
-                        }
+                    for (String line : output) {
+                        logger.error("{}", line);
                     }
                 }
             }
@@ -72,7 +69,7 @@ public abstract class RootFileSystemView<TFile extends RootFile<TMina, ? extends
             // probably new
             String name;
             if (abs.contains("/")) {
-                name = abs.substring(abs.lastIndexOf('/') + 1, abs.length());
+                name = abs.substring(abs.lastIndexOf('/') + 1);
             } else {
                 name = abs;
             }
@@ -88,11 +85,11 @@ public abstract class RootFileSystemView<TFile extends RootFile<TMina, ? extends
         while (tmp.isLink()) {
             shell.addCommand("ls -lad \"" + tmp.getLinkTarget() + "\"", 0, new Shell.OnCommandLineListener() {
                 @Override
-                public void onSTDOUT(String s) {
+                public void onSTDOUT(@NonNull String s) {
                     wrapper[0] = parser.parseLine(s);
                 }
                 @Override
-                public void onSTDERR(String s) {
+                public void onSTDERR(@NonNull String s) {
                     logger.error("stderr: {}", s);
                 }
                 @Override

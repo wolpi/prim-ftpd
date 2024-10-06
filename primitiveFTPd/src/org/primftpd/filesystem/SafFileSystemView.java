@@ -1,21 +1,19 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.DocumentsContract;
-import androidx.documentfile.provider.DocumentFile;
 import android.widget.Toast;
 
 import org.primftpd.services.PftpdService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
+
+import androidx.documentfile.provider.DocumentFile;
 
 public abstract class SafFileSystemView<TFile extends SafFile<TMina, ? extends SafFileSystemView>, TMina> extends AbstractFileSystemView {
 
@@ -112,7 +110,7 @@ public abstract class SafFileSystemView<TFile extends SafFile<TMina, ? extends S
                             if (i == parts.size() - 1) {
                                 // file upload or dir creation in an existing dir
                                 logger.trace("    calling createFile() for doc: {}, parentId: {}, parentUri: {}", new Object[]{currentPart, parentId, parentUri});
-                                return createFile(absPath, parentDocFile, Collections.<String>emptyList(), currentPart);
+                                return createFile(absPath, parentDocFile, Collections.emptyList(), currentPart);
                             } else {
                                 // file upload or dir creation in an nonexistent dir, probably called without first calling mkdirs
                                 List<String> parentNonexistentDirs = parts.subList(i, parts.size() - 1);
@@ -131,7 +129,7 @@ public abstract class SafFileSystemView<TFile extends SafFile<TMina, ? extends S
             logger.trace("    calling createFile() for root doc: {}", startUrl);
             return createFile(ROOT_PATH, rootDocFile, rootDocFile);
         } catch (Exception e) {
-            final String msg = "[(s)ftpd] Error getting data from SAF: " + e.toString();
+            final String msg = "[(s)ftpd] Error getting data from SAF: " + e.getMessage();
             logger.error(msg);
             Handler handler = new Handler(context.getMainLooper());
             handler.post(new Runnable() {

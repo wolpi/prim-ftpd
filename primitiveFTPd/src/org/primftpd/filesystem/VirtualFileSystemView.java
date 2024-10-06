@@ -1,8 +1,6 @@
 package org.primftpd.filesystem;
 
 import org.primftpd.services.PftpdService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class VirtualFileSystemView<
         TFsFile extends FsFile<TMina, ? extends FsFileSystemView>,

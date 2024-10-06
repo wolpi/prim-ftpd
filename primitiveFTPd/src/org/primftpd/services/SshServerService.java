@@ -12,19 +12,14 @@ import org.apache.ftpserver.usermanager.UsernamePasswordAuthentication;
 import org.apache.ftpserver.util.IoUtils;
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.NamedFactory;
-import org.apache.sshd.common.Session;
 import org.apache.sshd.common.Signature;
-import org.apache.sshd.common.file.FileSystemFactory;
-import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.io.IoSession;
 import org.apache.sshd.common.io.mina.MinaServiceFactoryFactory;
 import org.apache.sshd.common.keyprovider.AbstractKeyPairProvider;
 import org.apache.sshd.common.session.AbstractSession;
 import org.apache.sshd.common.util.KeyUtils;
 import org.apache.sshd.server.Command;
-import org.apache.sshd.server.PasswordAuthenticator;
 import org.apache.sshd.server.command.ScpCommandFactory;
-import org.apache.sshd.server.session.ServerSession;
 import org.apache.sshd.server.session.SessionFactory;
 import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.primftpd.R;
@@ -37,7 +32,6 @@ import org.primftpd.filesystem.RoSafSshFileSystemView;
 import org.primftpd.filesystem.RootSshFileSystemView;
 import org.primftpd.filesystem.SafSshFileSystemView;
 import org.primftpd.filesystem.VirtualSshFileSystemView;
-import org.primftpd.pojo.Base64Decoder;
 import org.primftpd.pojo.KeyParser;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.RemoteIpChecker;
@@ -150,24 +144,18 @@ public class SshServerService extends AbstractServerService
 				|| prefsBean.isAnonymousLogin())
 		{
 			final AndroidPrefsUserManager userManager = new AndroidPrefsUserManager(prefsBean);
-			sshServer.setPasswordAuthenticator(new PasswordAuthenticator() {
-				@Override
-				public boolean authenticate(
-					String username,
-					String password,
-					ServerSession session) {
-				Authentication authentication = prefsBean.isAnonymousLogin()
-					? new AnonymousAuthentication()
-					: new UsernamePasswordAuthentication(username, password);
-				logger.debug("auth type '{}' for user: {}", authentication.getClass().getName(), username);
-				try {
-					userManager.authenticate(authentication);
-				} catch (AuthenticationFailedException e) {
-					logger.debug("AuthenticationFailed", e);
-					return false;
-				}
-				return true;
-				}
+			sshServer.setPasswordAuthenticator((username, password, session) -> {
+			Authentication authentication = prefsBean.isAnonymousLogin()
+				? new AnonymousAuthentication()
+				: new UsernamePasswordAuthentication(username, password);
+			logger.debug("auth type '{}' for user: {}", authentication.getClass().getName(), username);
+			try {
+				userManager.authenticate(authentication);
+			} catch (AuthenticationFailedException e) {
+				logger.debug("AuthenticationFailed", e);
+				return false;
+			}
+			return true;
 			});
 		}
 
@@ -193,68 +181,64 @@ public class SshServerService extends AbstractServerService
 		}
 
 		// android filesystem view
-		sshServer.setFileSystemFactory(new FileSystemFactory() {
-			@Override
-			public FileSystemView createFileSystemView(Session session)
-			{
-				if (quickShareBean != null) {
-					logger.debug("launching server in quick share mode");
-					return new QuickShareSshFileSystemView(
-							SshServerService.this,
-							quickShareBean.getTmpDir(),
-							session);
-				} else {
-					switch (prefsBean.getStorageType()) {
-						case PLAIN:
-							return new FsSshFileSystemView(
-									SshServerService.this,
-									Uri.parse(prefsBean.getSafUrl()),
-									prefsBean.getStartDir(),
-									session);
-						case ROOT:
-							return new RootSshFileSystemView(
-									SshServerService.this,
-									shell,
-									prefsBean.getStartDir(),
-									session);
-						case SAF:
-							return new SafSshFileSystemView(
-									SshServerService.this,
-									Uri.parse(prefsBean.getSafUrl()),
-									session);
-						case RO_SAF:
-							return new RoSafSshFileSystemView(
-									SshServerService.this,
-									Uri.parse(prefsBean.getSafUrl()),
-									session);
-						case VIRTUAL:
-							return new VirtualSshFileSystemView(
-									SshServerService.this,
-									new FsSshFileSystemView(
-											SshServerService.this,
-											Uri.parse(prefsBean.getSafUrl()),
-											prefsBean.getStartDir(),
-											session),
-									new RootSshFileSystemView(
-											SshServerService.this,
-											shell,
-											prefsBean.getStartDir(),
-											session),
-									new SafSshFileSystemView(
-											SshServerService.this,
-											Uri.parse(prefsBean.getSafUrl()),
-											session),
-									new RoSafSshFileSystemView(
-											SshServerService.this,
-											Uri.parse(prefsBean.getSafUrl()),
-											session),
-									prefsBean.getStartDir(),
-									session
-							);
-					}
+		sshServer.setFileSystemFactory(session -> {
+			if (quickShareBean != null) {
+				logger.debug("launching server in quick share mode");
+				return new QuickShareSshFileSystemView(
+						SshServerService.this,
+						quickShareBean.getTmpDir(),
+						session);
+			} else {
+				switch (prefsBean.getStorageType()) {
+					case PLAIN:
+						return new FsSshFileSystemView(
+								SshServerService.this,
+								Uri.parse(prefsBean.getSafUrl()),
+								prefsBean.getStartDir(),
+								session);
+					case ROOT:
+						return new RootSshFileSystemView(
+								SshServerService.this,
+								shell,
+								prefsBean.getStartDir(),
+								session);
+					case SAF:
+						return new SafSshFileSystemView(
+								SshServerService.this,
+								Uri.parse(prefsBean.getSafUrl()),
+								session);
+					case RO_SAF:
+						return new RoSafSshFileSystemView(
+								SshServerService.this,
+								Uri.parse(prefsBean.getSafUrl()),
+								session);
+					case VIRTUAL:
+						return new VirtualSshFileSystemView(
+								SshServerService.this,
+								new FsSshFileSystemView(
+										SshServerService.this,
+										Uri.parse(prefsBean.getSafUrl()),
+										prefsBean.getStartDir(),
+										session),
+								new RootSshFileSystemView(
+										SshServerService.this,
+										shell,
+										prefsBean.getStartDir(),
+										session),
+								new SafSshFileSystemView(
+										SshServerService.this,
+										Uri.parse(prefsBean.getSafUrl()),
+										session),
+								new RoSafSshFileSystemView(
+										SshServerService.this,
+										Uri.parse(prefsBean.getSafUrl()),
+										session),
+								prefsBean.getStartDir(),
+								session
+						);
 				}
-				return null;
 			}
+			return null;
 		});
 
 		// ed25519
@@ -372,12 +356,7 @@ public class SshServerService extends AbstractServerService
 			List<String> parserErrors = new ArrayList<>();
 			keys = KeyParser.parsePublicKeys(
 					fis,
-					new Base64Decoder() {
-						@Override
-						public byte[] decode(String str) {
-							return Base64.decode(str, Base64.DEFAULT);
-						}
-					},
+					str -> Base64.decode(str, Base64.DEFAULT),
 					parserErrors);
 
 			for (String parserError : parserErrors) {
@@ -400,6 +379,6 @@ public class SshServerService extends AbstractServerService
 				}
 			}
 		}
-		return keys != null ? keys : Collections.<PublicKey>emptyList();
+		return keys != null ? keys : Collections.emptyList();
 	}
 }

@@ -1,14 +1,12 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
-import androidx.documentfile.provider.DocumentFile;
-
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.services.PftpdService;
 
 import java.io.IOException;
 import java.util.List;
+
+import androidx.documentfile.provider.DocumentFile;
 
 public class SafSshFile extends SafFile<SshFile, SafSshFileSystemView> implements SshFile {
 
@@ -50,7 +48,7 @@ public class SafSshFile extends SafFile<SshFile, SafSshFileSystemView> implement
 
     @Override
     public boolean move(SshFile target) {
-        return super.move((AbstractFile)target);
+        return super.move((SafSshFile)target);
     }
 
     @Override

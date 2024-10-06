@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.services.PftpdService;
 import org.primftpd.pojo.LsOutputBean;
 
 import java.io.IOException;
@@ -12,8 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import eu.chainfire.libsuperuser.Shell;
 
 public class RootSshFile extends RootFile<SshFile, RootSshFileSystemView> implements SshFile {
 
@@ -35,18 +32,17 @@ public class RootSshFile extends RootFile<SshFile, RootSshFileSystemView> implem
 
     @Override
     public boolean move(SshFile target) {
-        return super.move((AbstractFile)target);
+        return super.move((RootSshFile)target);
     }
 
     @Override
-    public String readSymbolicLink() throws IOException {
+    public String readSymbolicLink() {
         logger.trace("[{}] readSymbolicLink()", name);
         return bean.getLinkTarget();
     }
 
     @Override
     public void createSymbolicLink(SshFile arg0)
-            throws IOException
     {
         // TODO ssh createSymbolicLink
         logger.trace("[{}] createSymbolicLink()", name);
@@ -101,7 +97,7 @@ public class RootSshFile extends RootFile<SshFile, RootSshFileSystemView> implem
                 logger.trace("  [{}] getAttribute({}) -> {}", new Object[]{name, attribute, tmp});
                 return  tmp.isEmpty() ? EnumSet.noneOf(Permission.class) : EnumSet.copyOf(tmp);
             default:
-                return SshUtils.getAttribute(this, attribute, followLinks);
+                return SshUtils.getAttribute(this, attribute);
         }
     }
 

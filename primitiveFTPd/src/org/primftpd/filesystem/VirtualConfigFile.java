@@ -1,10 +1,9 @@
 package org.primftpd.filesystem;
 
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.services.PftpdService;
 
-import java.io.IOException;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -87,7 +86,7 @@ public abstract class VirtualConfigFile<TFileSystemView extends VirtualFileSyste
         return false;
     }
 
-    public boolean move(AbstractFile target) {
+    public boolean move(AbstractFile<TFileSystemView> target) {
         return false;
     }
 

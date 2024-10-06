@@ -6,7 +6,6 @@ import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
-import org.primftpd.services.PftpdService;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.StringUtils;
 import org.primftpd.util.TmpDirType;
@@ -25,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
+import androidx.annotation.NonNull;
 import eu.chainfire.libsuperuser.Shell;
 
 public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView> extends AbstractFile<TFileSystemView> {
@@ -139,7 +139,7 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
         return success;
     }
 
-    public boolean move(AbstractFile destination) {
+    public boolean move(AbstractFile<TFileSystemView> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
         postClientAction(ClientActionEvent.ClientAction.RENAME);
         boolean success = runCommand("mv " + escapePath(absPath) + " " + escapePath(destination.getAbsolutePath()));
@@ -161,14 +161,14 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
         final List<LsOutputBean> beans = new ArrayList<>();
         getShell().addCommand("ls -la " + escapePath(absPath), 0, new Shell.OnCommandLineListener() {
             @Override
-            public void onSTDOUT(String s) {
+            public void onSTDOUT(@NonNull String s) {
                 LsOutputBean bean = parser.parseLine(s);
                 if (bean != null) {
                     beans.add(bean);
                 }
             }
             @Override
-            public void onSTDERR(String s) {
+            public void onSTDERR(@NonNull String s) {
                 logger.error("stderr: {}", s);
             }
             @Override
@@ -320,13 +320,20 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
             tmpDir = Defaults.buildTmpDir(getPftpdService().getContext(), TmpDirType.ROOT_COPY);
             runCommand("cp" + " " + escapePath(absPath) + " " + escapePath(tmpDir.getAbsolutePath()));
         }
-        File tmpFile = tmpDir.listFiles()[0];
+        if (tmpDir == null) {
+            throw new IOException("cannot find parent dir");
+        }
+        File[] files = tmpDir.listFiles();
+        if (files == null) {
+            throw new IOException("cannot find parent dir");
+        }
+        File tmpFile = files[0];
         FileInputStream fis = new FileInputStream(tmpFile);
         fis.skip(offset);
         return fis;
     }
 
-    public void handleCloseCopy() throws IOException {
+    public void handleCloseCopy() {
         if (moveFileOnClose) {
             runCommand("mv" + " " +
                     escapePath(new File(tmpDir, getName()).getAbsolutePath()) + " " + escapePath(absPath));
@@ -379,12 +386,12 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
         final Boolean[] wrapper = new Boolean[1];
         getShell().addCommand(cmd, 0, new Shell.OnCommandLineListener() {
             @Override
-            public void onSTDOUT(String s) {
+            public void onSTDOUT(@NonNull String s) {
                 // usually commands don't print
                 logger.error("stdout: {}", s);
             }
             @Override
-            public void onSTDERR(String s) {
+            public void onSTDERR(@NonNull String s) {
                 logger.error("stderr: {}", s);
             }
             @Override
@@ -403,13 +410,11 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
             public void onCommandResult(int i, int i1) {
             }
             @Override
-            public void onSTDOUT(String s) {
-                if (s != null) {
-                    sb.append(s);
-                }
+            public void onSTDOUT(@NonNull String s) {
+                sb.append(s);
             }
             @Override
-            public void onSTDERR(String s) {
+            public void onSTDERR(@NonNull String s) {
                 logger.error("stderr: {}", s);
             }
         });

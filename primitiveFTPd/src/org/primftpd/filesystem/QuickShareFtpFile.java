@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.services.PftpdService;
 
 import java.io.File;
 
@@ -36,7 +35,7 @@ public class QuickShareFtpFile extends QuickShareFile<FtpFile, QuickShareFtpFile
 
     @Override
     public boolean move(FtpFile target) {
-		return super.move((AbstractFile) target);
+		return super.move((QuickShareFtpFile) target);
     }
 
     @Override

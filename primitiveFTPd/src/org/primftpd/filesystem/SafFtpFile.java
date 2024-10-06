@@ -1,13 +1,11 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
-import androidx.documentfile.provider.DocumentFile;
-
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.services.PftpdService;
 
 import java.util.List;
+
+import androidx.documentfile.provider.DocumentFile;
 
 public class SafFtpFile extends SafFile<FtpFile, SafFtpFileSystemView> implements FtpFile {
 
@@ -49,7 +47,7 @@ public class SafFtpFile extends SafFile<FtpFile, SafFtpFileSystemView> implement
 
     @Override
     public boolean move(FtpFile target) {
-        return super.move((AbstractFile)target);
+        return super.move((SafFtpFile)target);
     }
 
     @Override

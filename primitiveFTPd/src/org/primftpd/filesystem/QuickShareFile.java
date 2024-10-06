@@ -1,10 +1,8 @@
 package org.primftpd.filesystem;
 
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.services.PftpdService;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -108,7 +106,7 @@ public abstract class QuickShareFile<TMina, TFileSystemView extends QuickShareFi
         return false;
     }
 
-    public boolean move(AbstractFile destination) {
+    public boolean move(AbstractFile<TFileSystemView> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
         return false;
     }

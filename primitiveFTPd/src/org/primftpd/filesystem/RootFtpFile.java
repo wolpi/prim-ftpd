@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.services.PftpdService;
 import org.primftpd.pojo.LsOutputBean;
 
 import java.io.BufferedInputStream;
@@ -10,8 +9,6 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import eu.chainfire.libsuperuser.Shell;
 
 public class RootFtpFile extends RootFile<FtpFile, RootFtpFileSystemView> implements FtpFile {
 
@@ -59,7 +56,7 @@ public class RootFtpFile extends RootFile<FtpFile, RootFtpFileSystemView> implem
 
     @Override
     public boolean move(FtpFile target) {
-        return super.move((AbstractFile)target);
+        return super.move((RootFtpFile)target);
     }
 
     @Override

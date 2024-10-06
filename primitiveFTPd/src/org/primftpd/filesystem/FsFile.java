@@ -1,7 +1,6 @@
 package org.primftpd.filesystem;
 
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.services.PftpdService;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -20,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView> extends AbstractFile<TFileSystemView> {
+public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView>
+		extends AbstractFile<TFileSystemView> {
 
 	protected final File file;
 	protected final boolean isInjectedDirectory;
@@ -81,7 +81,7 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView> ex
 			// exists may be false when we don't have read permission
 			// try to figure out if it really does not exist
 			File parentFile = file.getParentFile();
-			File[] children = parentFile.listFiles();
+			File[] children = parentFile != null ? parentFile.listFiles() : new File[]{};
 			if (children != null) {
 				for (File child : children) {
 					if (file.equals(child)) {
@@ -96,8 +96,8 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView> ex
 			new Object[]{
 				name,
 				file.getAbsolutePath(),
-				Boolean.valueOf(exists),
-				Boolean.valueOf(existsChecked)
+				exists,
+				existsChecked
 			});
 		return existsChecked;
 	}
@@ -159,7 +159,7 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView> ex
 	}
 
 	public boolean setLastModified(long time) {
-		logger.trace("[{}] setLastModified({})", name, Long.valueOf(time));
+		logger.trace("[{}] setLastModified({})", name, time);
 		long correctedTime = getFileSystemView().getCorrectedTime(file.getAbsolutePath(), time);
 		return file.setLastModified(correctedTime);
 	}
@@ -183,7 +183,7 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView> ex
 		return success;
 	}
 
-	public boolean move(AbstractFile destination) {
+	public boolean move(AbstractFile<TFileSystemView> destination) {
 		logger.trace("[{}] move({})", name, destination.getAbsolutePath());
 		postClientAction(ClientActionEvent.ClientAction.RENAME);
 		boolean success = file.renameTo(new File(destination.getAbsolutePath()));
@@ -232,6 +232,9 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView> ex
 		// some clients do not issue mkdir commands like filezilla
 		// see isWritable()
 		File parent = file.getParentFile();
+		if (parent == null) {
+			throw new IOException(String.format("Failed to create parent folder(s) '%s'", file.getAbsolutePath()));
+		}
 		if (!parent.exists()) {
 			if (!parent.mkdirs()) {
 				throw new IOException(String.format("Failed to create parent folder(s) '%s'", file.getAbsolutePath()));
@@ -239,24 +242,26 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView> ex
 		}
 
 		// now create out stream
-		OutputStream os = null;
+		OutputStream os;
 		if (offset == 0) {
 			os = new FileOutputStream(file);
 		} else if (offset == this.file.length()) {
 			os = new FileOutputStream(file, true);
 		} else {
-			final RandomAccessFile raf = new RandomAccessFile(this.file, "rw");
-			raf.seek(offset);
-			os = new OutputStream() {
-				@Override
-				public void write(int oneByte) throws IOException {
-					raf.write(oneByte);
-				}
-				@Override
-				public void close() throws IOException {
-					raf.close();
-				}
-			};
+			try (final RandomAccessFile raf = new RandomAccessFile(this.file, "rw")) {
+				raf.seek(offset);
+				os = new OutputStream() {
+					@Override
+					public void write(int oneByte) throws IOException {
+						raf.write(oneByte);
+					}
+
+					@Override
+					public void close() throws IOException {
+						raf.close();
+					}
+				};
+			}
 		}
 
 		return new BufferedOutputStream(os) {

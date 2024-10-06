@@ -1,10 +1,8 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
 import android.net.Uri;
 
 import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.FtpException;
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.primftpd.services.PftpdService;
@@ -63,7 +61,7 @@ public class RoSafFtpFileSystemView extends RoSafFileSystemView<RoSafFtpFile, Ft
         return false;
     }
 
-    public boolean isRandomAccessible() throws FtpException {
+    public boolean isRandomAccessible() {
         logger.trace("isRandomAccessible()");
 
         return true;

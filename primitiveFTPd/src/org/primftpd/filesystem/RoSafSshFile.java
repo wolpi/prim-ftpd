@@ -1,12 +1,9 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
 import android.database.Cursor;
-import android.net.Uri;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.services.PftpdService;
 
 import java.util.List;
 
@@ -53,7 +50,7 @@ public class RoSafSshFile extends RoSafFile<SshFile, RoSafSshFileSystemView> imp
 
     @Override
     public boolean move(SshFile target) {
-        return super.move((AbstractFile)target);
+        return super.move((RoSafSshFile)target);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.primftpd.filesystem;
 
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.services.PftpdService;
 
 public class VirtualFtpConfigFile extends VirtualConfigFile<VirtualFtpFileSystemView> {
 

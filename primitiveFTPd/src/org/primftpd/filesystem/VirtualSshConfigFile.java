@@ -1,7 +1,6 @@
 package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
-import org.primftpd.services.PftpdService;
 
 public class VirtualSshConfigFile extends VirtualConfigFile<VirtualSshFileSystemView> {
 

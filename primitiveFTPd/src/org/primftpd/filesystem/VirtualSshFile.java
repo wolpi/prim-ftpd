@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.services.PftpdService;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +10,7 @@ public class VirtualSshFile extends VirtualFile<SshFile, VirtualSshFileSystemVie
 
     private final Session session;
 
-    public VirtualSshFile(VirtualSshFileSystemView fileSystemView, String absPath, AbstractFile delegate, Session session) {
+    public VirtualSshFile(VirtualSshFileSystemView fileSystemView, String absPath, AbstractFile<VirtualSshFileSystemView> delegate, Session session) {
         super(fileSystemView, absPath, delegate);
         this.session = session;
     }
@@ -22,7 +21,7 @@ public class VirtualSshFile extends VirtualFile<SshFile, VirtualSshFileSystemVie
     }
 
     @Override
-    protected SshFile createFile(String absPath, AbstractFile delegate) {
+    protected SshFile createFile(String absPath, AbstractFile<VirtualSshFileSystemView> delegate) {
         return new VirtualSshFile(getFileSystemView(), absPath, delegate, session);
     }
 
@@ -43,7 +42,7 @@ public class VirtualSshFile extends VirtualFile<SshFile, VirtualSshFileSystemVie
 
     @Override
     public boolean move(SshFile target) {
-        return super.move(((VirtualFile)target).delegate);
+        return super.move(((VirtualSshFile)target).delegate);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class VirtualSshFile extends VirtualFile<SshFile, VirtualSshFileSystemVie
     @Override
     public boolean isExecutable() {
         logger.trace("[{}] isExecutable()", name);
-        return delegate != null ? delegate.isExecutable() : true;
+        return delegate == null || delegate.isExecutable();
     }
 
     @Override

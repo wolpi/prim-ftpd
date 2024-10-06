@@ -1,14 +1,10 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.Build;
 import android.widget.Toast;
 
-import androidx.documentfile.provider.DocumentFile;
-
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.services.PftpdService;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -24,6 +20,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import androidx.documentfile.provider.DocumentFile;
 
 public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> extends AbstractFile<TFileSystemView> {
 
@@ -59,7 +57,7 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
         }
 
         this.parentDocumentFile = parentDocumentFile;
-        this.parentNonexistentDirs = Collections.<String>emptyList();
+        this.parentNonexistentDirs = Collections.emptyList();
         this.documentFile = documentFile;
     }
 
@@ -95,7 +93,7 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
                 parentDoc = currentDoc;
             }
             parentDocumentFile = parentDoc;
-            parentNonexistentDirs = Collections.<String>emptyList();
+            parentNonexistentDirs = Collections.emptyList();
         }
         return true;
     }
@@ -203,7 +201,7 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
         return false;
     }
 
-    public boolean move(AbstractFile destination) {
+    public boolean move(AbstractFile<TFileSystemView> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
         // check if file is renamed in same dir as move to other dir is not supported by documentFile
         boolean isRename = Utils.parent(this.absPath).equals(Utils.parent(destination.getAbsolutePath()));
@@ -226,7 +224,7 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
                     : this.absPath + "/" + child.getName();
             result.add(createFile(absPath, documentFile, child));
         }
-        logger.trace("  [{}] listFiles(): num children: {}", name, Integer.valueOf(result.size()));
+        logger.trace("  [{}] listFiles(): num children: {}", name, result.size());
         return result;
     }
 

@@ -1,7 +1,6 @@
 package org.primftpd.filesystem;
 
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.services.PftpdService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,18 +11,22 @@ import java.util.List;
 
 public abstract class VirtualFile<TMina, TFileSystemView extends VirtualFileSystemView> extends AbstractFile<TFileSystemView> {
 
-    protected final AbstractFile delegate;
+    protected final AbstractFile<TFileSystemView> delegate;
     protected final boolean exists;
 
     private VirtualFile(
             TFileSystemView fileSystemView,
             String absPath,
-            AbstractFile delegate,
+            AbstractFile<TFileSystemView> delegate,
             boolean exists) {
         super(
             fileSystemView,
             absPath,
-            delegate != null ? delegate.getName() : absPath.length() > 1 && absPath.charAt(0) == '/' ? absPath.substring(1) : absPath);
+            delegate != null
+                    ? delegate.getName()
+                    : absPath.length() > 1 && absPath.charAt(0) == '/'
+                        ? absPath.substring(1)
+                        : absPath);
         this.delegate = delegate;
         this.exists = exists;
     }
@@ -31,7 +34,7 @@ public abstract class VirtualFile<TMina, TFileSystemView extends VirtualFileSyst
     public VirtualFile(
             TFileSystemView fileSystemView,
             String absPath,
-            AbstractFile delegate) {
+            AbstractFile<TFileSystemView> delegate) {
         this(fileSystemView, absPath, delegate, true);
     }
 
@@ -44,7 +47,7 @@ public abstract class VirtualFile<TMina, TFileSystemView extends VirtualFileSyst
 
     protected abstract TMina createFile(
             String absPath,
-            AbstractFile delegate);
+            AbstractFile<TFileSystemView> delegate);
 
     protected abstract TMina createFile(
             String absPath,
@@ -100,7 +103,7 @@ public abstract class VirtualFile<TMina, TFileSystemView extends VirtualFileSyst
         return delegate != null && delegate.delete();
     }
 
-    public boolean move(AbstractFile target) {
+    public boolean move(AbstractFile<TFileSystemView> target) {
         return delegate != null && delegate.move(target);
     }
 

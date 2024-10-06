@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.services.PftpdService;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ public class VirtualFtpFile extends VirtualFile<FtpFile, VirtualFtpFileSystemVie
 
     private final User user;
 
-    public VirtualFtpFile(VirtualFtpFileSystemView fileSystemView, String absPath, AbstractFile delegate, User user) {
+    public VirtualFtpFile(VirtualFtpFileSystemView fileSystemView, String absPath, AbstractFile<VirtualFtpFileSystemView> delegate, User user) {
         super(fileSystemView, absPath, delegate);
         this.user = user;
     }
@@ -21,7 +20,7 @@ public class VirtualFtpFile extends VirtualFile<FtpFile, VirtualFtpFileSystemVie
     }
 
     @Override
-    protected FtpFile createFile(String absPath, AbstractFile delegate) {
+    protected FtpFile createFile(String absPath, AbstractFile<VirtualFtpFileSystemView> delegate) {
         return new VirtualFtpFile(getFileSystemView(), absPath, delegate, user);
     }
 
@@ -33,7 +32,7 @@ public class VirtualFtpFile extends VirtualFile<FtpFile, VirtualFtpFileSystemVie
     @Override
     protected List<FtpFile> listDelegateFiles() {
         List<? extends FtpFile> files = ((FtpFile) delegate).listFiles();
-        return (List<FtpFile>)files;
+        return (List<FtpFile>) files;
     }
 
     @Override
@@ -43,7 +42,7 @@ public class VirtualFtpFile extends VirtualFile<FtpFile, VirtualFtpFileSystemVie
 
     @Override
     public boolean move(FtpFile target) {
-        return super.move(((VirtualFile)target).delegate);
+        return super.move(((VirtualFtpFile)target).delegate);
     }
 
     @Override

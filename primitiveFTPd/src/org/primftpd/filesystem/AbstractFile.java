@@ -16,7 +16,7 @@ public abstract class AbstractFile<TFileSystemView extends AbstractFileSystemVie
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final AbstractFileSystemView fileSystemView;
+    private final TFileSystemView fileSystemView;
 
     protected String absPath;
     protected String name;
@@ -31,7 +31,7 @@ public abstract class AbstractFile<TFileSystemView extends AbstractFileSystemVie
     }
 
     protected final TFileSystemView getFileSystemView() {
-        return (TFileSystemView)fileSystemView;
+        return fileSystemView;
     }
 
     protected final PftpdService getPftpdService() {
@@ -90,7 +90,7 @@ public abstract class AbstractFile<TFileSystemView extends AbstractFileSystemVie
 
     public abstract boolean delete();
 
-    public abstract boolean move(AbstractFile destination);
+    public abstract boolean move(AbstractFile<TFileSystemView> destination);
 
     public abstract OutputStream createOutputStream(long offset) throws IOException;
 
@@ -125,7 +125,7 @@ public abstract class AbstractFile<TFileSystemView extends AbstractFileSystemVie
         logger.trace("[{}] handleClose()", name);
     }
 
-    public void truncate() throws IOException {
+    public void truncate() {
         // TODO ssh truncate
         logger.trace("[{}] truncate()", name);
     }
@@ -145,7 +145,7 @@ public abstract class AbstractFile<TFileSystemView extends AbstractFileSystemVie
         logger.trace("[{}] createSymbolicLink()", name);
     }
 
-    public void setAttribute(SshFile.Attribute attribute, Object value) throws IOException {
+    public void setAttribute(SshFile.Attribute attribute, Object value) {
         logger.trace("[{}] setAttribute({})", name, attribute);
         SshUtils.setAttribute((SshFile)this, attribute, value);
     }
@@ -161,7 +161,7 @@ public abstract class AbstractFile<TFileSystemView extends AbstractFileSystemVie
             throws IOException
     {
         logger.trace("[{}] getAttribute({})", name, attribute);
-        return SshUtils.getAttribute((SshFile)this, attribute, followLinks);
+        return SshUtils.getAttribute((SshFile)this, attribute);
     }
 
     public Map<SshFile.Attribute, Object> getAttributes(boolean followLinks)

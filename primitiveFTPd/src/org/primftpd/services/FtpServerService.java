@@ -7,12 +7,7 @@ import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.ftplet.FileSystemFactory;
-import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.User;
-import org.apache.ftpserver.ipfilter.SessionFilter;
 import org.apache.ftpserver.listener.ListenerFactory;
-import org.apache.mina.core.session.IoSession;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.filesystem.FsFtpFileSystemView;
 import org.primftpd.filesystem.QuickShareFtpFileSystemView;
@@ -95,12 +90,9 @@ public class FtpServerService extends AbstractServerService
 			dataConConfigFactory.setIdleTime(prefsBean.getIdleTimeout());
 		}
 
-		listenerFactory.setSessionFilter(new SessionFilter() {
-			@Override
-			public boolean accept(IoSession session) {
-				SocketAddress remoteAddress = session.getRemoteAddress();
-				return RemoteIpChecker.ipAllowed(remoteAddress, prefsBean, logger);
-			}
+		listenerFactory.setSessionFilter(session -> {
+			SocketAddress remoteAddress = session.getRemoteAddress();
+			return RemoteIpChecker.ipAllowed(remoteAddress, prefsBean, logger);
 		});
 		listenerFactory.setDataConnectionConfiguration(dataConConfigFactory.createDataConnectionConfiguration());
 
@@ -109,67 +101,64 @@ public class FtpServerService extends AbstractServerService
 
 		// user manager & file system
 		serverFactory.setUserManager(new AndroidPrefsUserManager(prefsBean));
-		serverFactory.setFileSystem(new FileSystemFactory() {
-			@Override
-			public FileSystemView createFileSystemView(User user) {
-				if (quickShareBean != null) {
-					logger.debug("launching server in quick share mode");
-					return new QuickShareFtpFileSystemView(
-							FtpServerService.this,
-							quickShareBean.getTmpDir(),
-							user);
-				} else {
-					switch (prefsBean.getStorageType()) {
-						case PLAIN:
-							return new FsFtpFileSystemView(
-									FtpServerService.this,
-									Uri.parse(prefsBean.getSafUrl()),
-									prefsBean.getStartDir(),
-									user);
-						case ROOT:
-							return new RootFtpFileSystemView(
-									FtpServerService.this,
-									shell,
-									prefsBean.getStartDir(),
-									user);
-						case SAF:
-							return new SafFtpFileSystemView(
-									FtpServerService.this,
-									Uri.parse(prefsBean.getSafUrl()),
-									user);
-						case RO_SAF:
-							return new RoSafFtpFileSystemView(
-									FtpServerService.this,
-									Uri.parse(prefsBean.getSafUrl()),
-									user);
-						case VIRTUAL:
-							return new VirtualFtpFileSystemView(
-									FtpServerService.this,
-									new FsFtpFileSystemView(
-											FtpServerService.this,
-											Uri.parse(prefsBean.getSafUrl()),
-											prefsBean.getStartDir(),
-											user),
-									new RootFtpFileSystemView(
-											FtpServerService.this,
-											shell,
-											prefsBean.getStartDir(),
-											user),
-									new SafFtpFileSystemView(
-											FtpServerService.this,
-											Uri.parse(prefsBean.getSafUrl()),
-											user),
-									new RoSafFtpFileSystemView(
-											FtpServerService.this,
-											Uri.parse(prefsBean.getSafUrl()),
-											user),
-									prefsBean.getStartDir(),
-									user
-							);
-					}
+		serverFactory.setFileSystem(user -> {
+			if (quickShareBean != null) {
+				logger.debug("launching server in quick share mode");
+				return new QuickShareFtpFileSystemView(
+						FtpServerService.this,
+						quickShareBean.getTmpDir(),
+						user);
+			} else {
+				switch (prefsBean.getStorageType()) {
+					case PLAIN:
+						return new FsFtpFileSystemView(
+								FtpServerService.this,
+								Uri.parse(prefsBean.getSafUrl()),
+								prefsBean.getStartDir(),
+								user);
+					case ROOT:
+						return new RootFtpFileSystemView(
+								FtpServerService.this,
+								shell,
+								prefsBean.getStartDir(),
+								user);
+					case SAF:
+						return new SafFtpFileSystemView(
+								FtpServerService.this,
+								Uri.parse(prefsBean.getSafUrl()),
+								user);
+					case RO_SAF:
+						return new RoSafFtpFileSystemView(
+								FtpServerService.this,
+								Uri.parse(prefsBean.getSafUrl()),
+								user);
+					case VIRTUAL:
+						return new VirtualFtpFileSystemView(
+								FtpServerService.this,
+								new FsFtpFileSystemView(
+										FtpServerService.this,
+										Uri.parse(prefsBean.getSafUrl()),
+										prefsBean.getStartDir(),
+										user),
+								new RootFtpFileSystemView(
+										FtpServerService.this,
+										shell,
+										prefsBean.getStartDir(),
+										user),
+								new SafFtpFileSystemView(
+										FtpServerService.this,
+										Uri.parse(prefsBean.getSafUrl()),
+										user),
+								new RoSafFtpFileSystemView(
+										FtpServerService.this,
+										Uri.parse(prefsBean.getSafUrl()),
+										user),
+								prefsBean.getStartDir(),
+								user
+						);
 				}
-				return null;
 			}
+			return null;
 		});
 
 		// connection settings with some security improvements

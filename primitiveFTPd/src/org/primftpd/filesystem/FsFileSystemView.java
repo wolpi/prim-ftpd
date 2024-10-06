@@ -1,15 +1,12 @@
 package org.primftpd.filesystem;
 
-import android.content.Context;
 import android.net.Uri;
-
-import org.primftpd.services.PftpdService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
+import org.primftpd.services.PftpdService;
 
-public abstract class FsFileSystemView<TFile extends FsFile<TMina, ? extends FsFileSystemView>, TMina> extends AbstractFileSystemView {
+public abstract class FsFileSystemView<
+			TFile extends FsFile<TMina, ? extends FsFileSystemView>, TMina>
+		extends AbstractFileSystemView {
 
 	private final MediaScannerClient mediaScannerClient;
 	private final String safVolumePath;
@@ -25,7 +22,9 @@ public abstract class FsFileSystemView<TFile extends FsFile<TMina, ? extends FsF
 		// FS should not have some relation to SAF
 		// But to workaround Amdroid issues with lastModifiedTimestamps it is required anyway
 		this.safTimeResolution = StorageManagerUtil.getFilesystemTimeResolutionForTreeUri(safStartUrl);
-		this.safVolumePath = safTimeResolution != 1 ? StorageManagerUtil.getVolumePathFromTreeUri(safStartUrl, pftpdService.getContext()) : null;
+		this.safVolumePath = safTimeResolution != 1
+				? StorageManagerUtil.getVolumePathFromTreeUri(safStartUrl, pftpdService.getContext())
+				: null;
 	}
 
 	public final MediaScannerClient getMediaScannerClient() {
