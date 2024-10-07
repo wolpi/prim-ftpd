@@ -4,32 +4,29 @@ import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
 import org.primftpd.util.IpAddressProvider;
 
-import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
 class SshUtils {
-    static Object getAttribute(SshFile sshFile, SshFile.Attribute attribute, boolean followLinks)
-            throws IOException
+    static Object getAttribute(SshFile sshFile, SshFile.Attribute attribute)
     {
         switch (attribute) {
             case Size:
-                return Long.valueOf(sshFile.getSize());
+                return sshFile.getSize();
             case Uid:
                 // TODO ssh uid
-                return Integer.valueOf(1);
+                return 1;
             case Owner:
+            case Group:
                 return sshFile.getOwner();
             case Gid:
                 // TODO ssh gid
-                return Integer.valueOf(1);
-            case Group:
-                return sshFile.getOwner();
+                return 1;
             case IsDirectory:
-                return Boolean.valueOf(sshFile.isDirectory());
+                return sshFile.isDirectory();
             case IsRegularFile:
-                return Boolean.valueOf(sshFile.isFile());
+                return sshFile.isFile();
             case IsSymbolicLink:
                 // as there is no proper sym link support in java 7, just return false, see GH issue #68
                 return false;
@@ -58,12 +55,12 @@ class SshUtils {
                         : EnumSet.copyOf(tmp);
             case CreationTime:
                 // TODO ssh creation time
-                return Long.valueOf(sshFile.getLastModified());
+                return sshFile.getLastModified();
             case LastModifiedTime:
-                return Long.valueOf(sshFile.getLastModified());
+                return sshFile.getLastModified();
             case LastAccessTime:
                 // TODO ssh access time
-                return Long.valueOf(sshFile.getLastModified());
+                return sshFile.getLastModified();
             case NLink:
                 return 0;
             default:

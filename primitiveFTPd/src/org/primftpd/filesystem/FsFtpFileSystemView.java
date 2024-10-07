@@ -1,29 +1,32 @@
 package org.primftpd.filesystem;
 
-import java.io.File;
+import android.net.Uri;
 
-import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.FileSystemView;
-import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
 import org.primftpd.services.PftpdService;
 
+import java.io.File;
+
 public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> implements FileSystemView {
 
-	private final User user;
 	private final File homeDir;
+	private final User user;
+
 	private FsFtpFile workingDir;
 
-	public FsFtpFileSystemView(PftpdService pftpdService, File homeDir, User user) {
-		super(pftpdService);
+	public FsFtpFileSystemView(PftpdService pftpdService, Uri safStartUrl, File homeDir, User user) {
+		super(pftpdService, safStartUrl);
 		this.homeDir = homeDir;
-		workingDir = getHomeDirectory();
 		this.user = user;
+
+		workingDir = getHomeDirectory();
 	}
 
 	@Override
-	protected FsFtpFile createFile(File file, PftpdService pftpdService) {
-		return new FsFtpFile(file, pftpdService, user);
+	protected FsFtpFile createFile(File file) {
+		return new FsFtpFile(this, file, user);
 	}
 
 	@Override
@@ -35,7 +38,7 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 	public FsFtpFile getHomeDirectory() {
 		logger.trace("getHomeDirectory() -> {}", (homeDir != null ? homeDir.getAbsolutePath() : "null"));
 
-		return createFile(homeDir, pftpdService);
+		return createFile(homeDir);
 	}
 
 	public FsFtpFile getWorkingDirectory() {
@@ -97,12 +100,12 @@ public class FsFtpFileSystemView extends FsFileSystemView<FsFtpFile, FtpFile> im
 		logger.trace("current WD '{}', new path '{}'",
 				currentAbsPath,
 				path);
-		workingDir = createFile(new File(path), pftpdService);
+		workingDir = createFile(new File(path));
 
 		return true;
 	}
 
-	public boolean isRandomAccessible() throws FtpException {
+	public boolean isRandomAccessible() {
 		logger.trace("isRandomAccessible()");
 
 		return true;

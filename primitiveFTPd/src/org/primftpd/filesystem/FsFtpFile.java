@@ -4,13 +4,12 @@ import java.io.File;
 
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.services.PftpdService;
 
-public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
+public class FsFtpFile extends FsFile<FtpFile, FsFtpFileSystemView> implements FtpFile {
 	private final User user;
 
-	public FsFtpFile(File file, PftpdService pftpdService, User user) {
-		super(file, pftpdService);
+	public FsFtpFile(FsFtpFileSystemView fileSystemView, File file, User user) {
+		super(fileSystemView, file);
 		this.user = user;
 	}
 
@@ -20,13 +19,13 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 	}
 
 	@Override
-	protected FtpFile createFile(File file, PftpdService pftpdService) {
-		return new FsFtpFile(file, pftpdService, user);
+	protected FtpFile createFile(File file) {
+		return new FsFtpFile(getFileSystemView(), file, user);
 	}
 
 	@Override
 	public boolean move(FtpFile target) {
-		return super.move((FsFile) target);
+		return super.move((FsFtpFile) target);
 	}
 
 	@Override
@@ -49,9 +48,8 @@ public class FsFtpFile extends FsFile<FtpFile> implements FtpFile {
 
 	@Override
 	public boolean isHidden() {
-		//boolean result = file.isHidden();
-		//logger.trace("[{}] isHidden() -> {}", name, result);
-		//return result;
-		return super.isHidden();
+		boolean result = file.isHidden();
+		logger.trace("[{}] isHidden() -> {}", name, result);
+		return result;
 	}
 }

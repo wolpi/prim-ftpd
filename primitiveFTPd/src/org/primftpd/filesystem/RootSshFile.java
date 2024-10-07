@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.services.PftpdService;
 import org.primftpd.pojo.LsOutputBean;
 
 import java.io.IOException;
@@ -13,27 +12,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import eu.chainfire.libsuperuser.Shell;
-
-public class RootSshFile extends RootFile<SshFile> implements SshFile {
+public class RootSshFile extends RootFile<SshFile, RootSshFileSystemView> implements SshFile {
 
     private final Session session;
-    private final RootSshFileSystemView fileSystemView;
 
-    public RootSshFile(
-            Shell.Interactive shell,
-            LsOutputBean bean,
-            String absPath,
-            PftpdService pftpdService,
-            Session session,
-            RootSshFileSystemView fileSystemView) {
-        super(shell, bean, absPath, pftpdService);
+    public RootSshFile(RootSshFileSystemView fileSystemView, String absPath, LsOutputBean bean, Session session) {
+        super(fileSystemView, absPath, bean);
         this.session = session;
-        this.fileSystemView = fileSystemView;
     }
 
-    protected RootSshFile createFile(Shell.Interactive shell, LsOutputBean bean, String absPath, PftpdService pftpdService) {
-        return new RootSshFile(shell, bean, absPath, pftpdService, session, fileSystemView);
+    protected RootSshFile createFile(String absPath, LsOutputBean bean) {
+        return new RootSshFile(getFileSystemView(), absPath, bean, session);
     }
 
     @Override
@@ -43,19 +32,17 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
 
     @Override
     public boolean move(SshFile target) {
-        logger.trace("move()");
-        return super.move((RootFile)target);
+        return super.move((RootSshFile)target);
     }
 
     @Override
-    public String readSymbolicLink() throws IOException {
+    public String readSymbolicLink() {
         logger.trace("[{}] readSymbolicLink()", name);
         return bean.getLinkTarget();
     }
 
     @Override
     public void createSymbolicLink(SshFile arg0)
-            throws IOException
     {
         // TODO ssh createSymbolicLink
         logger.trace("[{}] createSymbolicLink()", name);
@@ -110,7 +97,7 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
                 logger.trace("  [{}] getAttribute({}) -> {}", new Object[]{name, attribute, tmp});
                 return  tmp.isEmpty() ? EnumSet.noneOf(Permission.class) : EnumSet.copyOf(tmp);
             default:
-                return SshUtils.getAttribute(this, attribute, followLinks);
+                return SshUtils.getAttribute(this, attribute);
         }
     }
 
@@ -129,11 +116,20 @@ public class RootSshFile extends RootFile<SshFile> implements SshFile {
     }
 
     @Override
+    public boolean create() throws IOException {
+        // This call is required by SSHFS, because it calls STAT on created new files.
+        // This call is not required by normal clients who simply open, write and close the file.
+        boolean result = runCommand("touch" + " " + escapePath(absPath));
+        logger.trace("[{}] create() -> {}", name, result);
+        return result;
+    }
+
+    @Override
     public SshFile getParentFile() {
         logger.trace("[{}] getParentFile()", name);
         String parentPath = Utils.parent(absPath);
         logger.trace("[{}]   getParentFile() -> {}", name, parentPath);
-        return fileSystemView.getFile(parentPath);
+        return getFileSystemView().getFile(parentPath);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
 import android.net.Uri;
 
 import org.apache.sshd.common.Session;
@@ -12,24 +11,19 @@ public class RoSafSshFileSystemView extends RoSafFileSystemView<RoSafSshFile, Ss
 
     private final Session session;
 
-    public RoSafSshFileSystemView(Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService, Session session) {
-        super(startUrl, contentResolver, pftpdService);
+    public RoSafSshFileSystemView(PftpdService pftpdService, Uri startUrl, Session session) {
+        super(pftpdService, startUrl);
         this.session = session;
     }
 
     @Override
-    protected RoSafSshFile createFile(ContentResolver contentResolver, Uri startUrl, String absPath, PftpdService pftpdService) {
-        return new RoSafSshFile(contentResolver, startUrl, absPath, pftpdService, session);
+    protected RoSafSshFile createFile(String absPath) {
+        return new RoSafSshFile(this, absPath, session);
     }
 
     @Override
-    protected RoSafSshFile createFile(ContentResolver contentResolver, Uri startUrl, String docId, String absPath, PftpdService pftpdService) {
-        return new RoSafSshFile(contentResolver, startUrl, docId, absPath, true, pftpdService, session);
-    }
-
-    @Override
-    protected RoSafSshFile createFileNonExistant(ContentResolver contentResolver, Uri startUrl, String name, String absPath, PftpdService pftpdService) {
-        return new RoSafSshFile(contentResolver, startUrl, name, absPath, false, pftpdService, session);
+    protected RoSafSshFile createFile(String absPath, String docId, boolean exists) {
+        return new RoSafSshFile(this, absPath, docId, exists, session);
     }
 
     @Override

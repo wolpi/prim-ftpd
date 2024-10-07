@@ -1,54 +1,44 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
-import androidx.documentfile.provider.DocumentFile;
-
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.services.PftpdService;
 
 import java.io.IOException;
 import java.util.List;
 
-public class SafSshFile extends SafFile<SshFile> implements SshFile {
+import androidx.documentfile.provider.DocumentFile;
+
+public class SafSshFile extends SafFile<SshFile, SafSshFileSystemView> implements SshFile {
 
     private final Session session;
-    private final SafSshFileSystemView fileSystemView;
 
     public SafSshFile(
-            ContentResolver contentResolver,
+            SafSshFileSystemView fileSystemView,
+            String absPath,
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
-            String absPath,
-            PftpdService pftpdService,
-            Session session,
-            SafSshFileSystemView fileSystemView) {
-        super(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService);
+            Session session) {
+        super(fileSystemView, absPath, parentDocumentFile, documentFile);
         this.session = session;
-        this.fileSystemView = fileSystemView;
     }
 
     public SafSshFile(
-            ContentResolver contentResolver,
-            DocumentFile parentDocumentFile,
-            String name,
+            SafSshFileSystemView fileSystemView,
             String absPath,
-            PftpdService pftpdService,
-            Session session,
-            SafSshFileSystemView fileSystemView) {
-        super(contentResolver, parentDocumentFile, name, absPath, pftpdService);
+            DocumentFile parentDocumentFile,
+            List<String> parentNonexistentDirs,
+            String name,
+            Session session) {
+        super(fileSystemView, absPath, parentDocumentFile, parentNonexistentDirs, name);
         this.session = session;
-        this.fileSystemView = fileSystemView;
     }
 
     @Override
     protected SshFile createFile(
-            ContentResolver contentResolver,
-            DocumentFile parentDocumentFile,
-            DocumentFile documentFile,
             String absPath,
-            PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, session, fileSystemView);
+            DocumentFile parentDocumentFile,
+            DocumentFile documentFile) {
+        return new SafSshFile(getFileSystemView(), absPath, parentDocumentFile, documentFile, session);
     }
 
     @Override
@@ -58,8 +48,7 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
 
     @Override
     public boolean move(SshFile target) {
-        logger.trace("move()");
-        return super.move((SafFile)target);
+        return super.move((SafSshFile)target);
     }
 
     @Override
@@ -70,11 +59,11 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
 
     @Override
     public boolean create() throws IOException {
-        logger.trace("[{}] create()", name);
-        // This call is required by SSHFS, because it calls STAT and later FSTAT on created new files,
-        // STAT requires a created new file, FSTAT requires updated properties.
+        // This call is required by SSHFS, because it calls STAT on created new files.
         // This call is not required by normal clients who simply open, write and close the file.
-        return createNewFile();
+        boolean result = createNewFile();
+        logger.trace("[{}] create() -> {}", name, result);
+        return result;
     }
 
     @Override
@@ -86,7 +75,7 @@ public class SafSshFile extends SafFile<SshFile> implements SshFile {
             parentPath = "/";
         }
         logger.trace("[{}]   getParentFile() -> {}", name, parentPath);
-        return fileSystemView.getFile(parentPath);
+        return getFileSystemView().getFile(parentPath);
     }
 
     @Override

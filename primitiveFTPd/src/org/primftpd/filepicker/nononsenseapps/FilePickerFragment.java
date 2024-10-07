@@ -11,6 +11,8 @@ import androidx.core.content.FileProvider;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.SortedList;
 import androidx.recyclerview.widget.SortedListAdapterCallback;
+
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import org.primftpd.R;
@@ -100,8 +102,13 @@ public class FilePickerFragment extends AbstractFilePickerFragment<File> {
                     refresh(mRequestedPath);
                 }
             } else {
-                Toast.makeText(getContext(), R.string.permissionRequired,
-                        Toast.LENGTH_SHORT).show();
+                String permission = TextUtils.join(", ", permissions);
+                if (requestCode == PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
+                    permission = getString(R.string.permissionNameStorage);
+                }
+
+                String message = String.format(getString(R.string.permissionRequired), permission);
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                 // Treat this as a cancel press
                 if (mListener != null) {
                     mListener.onCancelled();

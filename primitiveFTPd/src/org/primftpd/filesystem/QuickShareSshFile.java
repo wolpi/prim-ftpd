@@ -2,32 +2,31 @@ package org.primftpd.filesystem;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.services.PftpdService;
 
 import java.io.File;
 import java.util.List;
 
-public class QuickShareSshFile extends QuickShareFile<SshFile> implements SshFile {
+public class QuickShareSshFile extends QuickShareFile<SshFile, QuickShareSshFileSystemView> implements SshFile {
     private final Session session;
 
-    QuickShareSshFile(File tmpDir, PftpdService pftpdService, Session session) {
-        super(tmpDir, pftpdService);
+    public QuickShareSshFile(QuickShareSshFileSystemView fileSystemView, Session session) {
+        super(fileSystemView);
         this.session = session;
     }
 
-    QuickShareSshFile(File tmpDir, File realFile, PftpdService pftpdService, Session session) {
-        super(tmpDir, realFile, pftpdService);
+    public QuickShareSshFile(QuickShareSshFileSystemView fileSystemView, File realFile, Session session) {
+        super(fileSystemView, realFile);
         this.session = session;
     }
 
     @Override
-    protected SshFile createFile(File tmpDir, PftpdService pftpdService) {
-        return new QuickShareSshFile(tmpDir, pftpdService, session);
+    protected SshFile createFile() {
+        return new QuickShareSshFile(getFileSystemView(), session);
     }
 
     @Override
-    protected SshFile createFile(File tmpDir, File realFile, PftpdService pftpdService) {
-        return new QuickShareSshFile(tmpDir, realFile, pftpdService, session);
+    protected SshFile createFile(File realFile) {
+        return new QuickShareSshFile(getFileSystemView(), realFile, session);
     }
 
     @Override
@@ -36,8 +35,8 @@ public class QuickShareSshFile extends QuickShareFile<SshFile> implements SshFil
     }
 
     @Override
-    public boolean move(org.apache.sshd.common.file.SshFile target) {
-        return false;
+    public boolean move(SshFile target) {
+		return super.move((QuickShareSshFile) target);
     }
 
     @Override
@@ -48,20 +47,15 @@ public class QuickShareSshFile extends QuickShareFile<SshFile> implements SshFil
 
     @Override
     public boolean create() {
-        logger.trace("[{}] create()", name);
-        return false;
+        boolean result = false;
+        logger.trace("[{}] create() -> {}", name, result);
+        return result;
     }
 
     @Override
     public SshFile getParentFile() {
         logger.trace("[{}] getParentFile()", name);
-        return new QuickShareSshFile(tmpDir, pftpdService, session);
-    }
-
-    @Override
-    public boolean isExecutable() {
-        logger.trace("[{}] isExecutable()", name);
-        return false;
+        return new QuickShareSshFile(getFileSystemView(), session);
     }
 
     @Override

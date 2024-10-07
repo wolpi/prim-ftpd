@@ -12,38 +12,30 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractFile {
+public abstract class AbstractFile<TFileSystemView extends AbstractFileSystemView> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected boolean isDirectory;
+    private final TFileSystemView fileSystemView;
+
     protected String absPath;
-
     protected String name;
-    protected long lastModified;
-    protected long size;
-    protected boolean readable;
-    protected boolean exists;
-
-    protected final PftpdService pftpdService;
 
     public AbstractFile(
+            TFileSystemView fileSystemView,
             String absPath,
-            String name,
-            long lastModified,
-            long size,
-            boolean readable,
-            boolean exists,
-            boolean isDirectory,
-            PftpdService pftpdService) {
+            String name) {
+        this.fileSystemView = fileSystemView;
         this.absPath = absPath;
         this.name = name;
-        this.lastModified = lastModified;
-        this.size = size;
-        this.readable = readable;
-        this.exists = exists;
-        this.isDirectory = isDirectory;
-        this.pftpdService = pftpdService;
+    }
+
+    protected final TFileSystemView getFileSystemView() {
+        return fileSystemView;
+    }
+
+    protected final PftpdService getPftpdService() {
+        return fileSystemView.getPftpdService();
     }
 
     public abstract String getClientIp();
@@ -58,7 +50,7 @@ public abstract class AbstractFile {
     }
 
     public void postClientAction(ClientActionEvent.ClientAction clientAction, String error) {
-        pftpdService.postClientAction(
+        getPftpdService().postClientAction(
                 getClientActionStorage(),
                 clientAction,
                 getClientIp(),
@@ -76,30 +68,15 @@ public abstract class AbstractFile {
         return name != null ? name : "<unknown>";
     }
 
-    public boolean isDirectory() {
-        logger.trace("[{}] isDirectory() -> {}", name, isDirectory);
-        return isDirectory;
-    }
+    public abstract boolean isDirectory();
 
-    public boolean doesExist() {
-        logger.trace("[{}] doesExist() -> {}", name, exists);
-        return exists;
-    }
+    public abstract boolean doesExist();
 
-    public boolean isReadable() {
-        logger.trace("[{}] isReadable() -> {}", name, readable);
-        return readable;
-    }
+    public abstract boolean isReadable();
 
-    public long getLastModified() {
-        logger.trace("[{}] getLastModified() -> {}", name, lastModified);
-        return lastModified;
-    }
+    public abstract long getLastModified();
 
-    public long getSize() {
-        logger.trace("[{}] getSize() -> {}", name, size);
-        return size;
-    }
+    public abstract long getSize();
 
     public abstract boolean isFile();
 
@@ -112,6 +89,8 @@ public abstract class AbstractFile {
     public abstract boolean mkdir();
 
     public abstract boolean delete();
+
+    public abstract boolean move(AbstractFile<TFileSystemView> destination);
 
     public abstract OutputStream createOutputStream(long offset) throws IOException;
 
@@ -146,7 +125,7 @@ public abstract class AbstractFile {
         logger.trace("[{}] handleClose()", name);
     }
 
-    public void truncate() throws IOException {
+    public void truncate() {
         // TODO ssh truncate
         logger.trace("[{}] truncate()", name);
     }
@@ -166,7 +145,7 @@ public abstract class AbstractFile {
         logger.trace("[{}] createSymbolicLink()", name);
     }
 
-    public void setAttribute(SshFile.Attribute attribute, Object value) throws IOException {
+    public void setAttribute(SshFile.Attribute attribute, Object value) {
         logger.trace("[{}] setAttribute({})", name, attribute);
         SshUtils.setAttribute((SshFile)this, attribute, value);
     }
@@ -182,7 +161,7 @@ public abstract class AbstractFile {
             throws IOException
     {
         logger.trace("[{}] getAttribute({})", name, attribute);
-        return SshUtils.getAttribute((SshFile)this, attribute, followLinks);
+        return SshUtils.getAttribute((SshFile)this, attribute);
     }
 
     public Map<SshFile.Attribute, Object> getAttributes(boolean followLinks)
@@ -199,16 +178,18 @@ public abstract class AbstractFile {
     }
 
     public boolean isExecutable() {
-        logger.trace("[{}] isExecutable()", name);
         // return directories as executable in order to allow to enter them
         // at least we tell clients that they can try
-        return isDirectory;
+        boolean result = isDirectory();
+        logger.trace("[{}] isExecutable() -> {}", name, result);
+        return result;
     }
 
     public boolean create() throws IOException {
-        logger.trace("[{}] create()", name);
         // called e.g. when uploading a new file
-        return true;
+        boolean result = true;
+        logger.trace("[{}] create() -> {}", name, result);
+        return result;
     }
 
 }

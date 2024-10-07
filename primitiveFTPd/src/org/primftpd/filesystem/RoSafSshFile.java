@@ -1,60 +1,46 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
 import android.database.Cursor;
-import android.net.Uri;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
-import org.primftpd.services.PftpdService;
 
 import java.util.List;
 
-public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
+public class RoSafSshFile extends RoSafFile<SshFile, RoSafSshFileSystemView> implements SshFile {
 
     private final Session session;
 
     public RoSafSshFile(
-            ContentResolver contentResolver,
-            Uri startUrl,
+            RoSafSshFileSystemView fileSystemView,
             String absPath,
-            PftpdService pftpdService,
             Session session) {
-        super(contentResolver, startUrl, absPath, pftpdService);
+        super(fileSystemView, absPath);
         this.session = session;
     }
 
     public RoSafSshFile(
-            ContentResolver contentResolver,
-            Uri startUrl,
+            RoSafSshFileSystemView fileSystemView,
+            String absPath,
             String docId,
-            String absPath,
             boolean exists,
-            PftpdService pftpdService,
             Session session) {
-        super(contentResolver, startUrl, docId, absPath, exists, pftpdService);
+        super(fileSystemView, absPath, docId, exists);
         this.session = session;
     }
 
-    public RoSafSshFile(
-            ContentResolver contentResolver,
-            Uri startUrl,
-            Cursor cursor,
+    protected RoSafSshFile(
+            RoSafSshFileSystemView fileSystemView,
             String absPath,
-            PftpdService pftpdService,
+            Cursor cursor,
             Session session) {
-        super(contentResolver, startUrl, cursor, absPath, pftpdService);
+        super(fileSystemView, absPath, cursor);
         this.session = session;
     }
 
     @Override
-    protected SshFile createFile(
-            ContentResolver contentResolver,
-            Uri startUrl,
-            Cursor cursor,
-            String absPath,
-            PftpdService pftpdService) {
-        return new RoSafSshFile(contentResolver, startUrl, cursor, absPath, pftpdService, session);
+    protected SshFile createFile(String absPath, Cursor cursor) {
+        return new RoSafSshFile(getFileSystemView(), absPath, cursor, session);
     }
 
     @Override
@@ -64,8 +50,7 @@ public class RoSafSshFile extends RoSafFile<SshFile> implements SshFile {
 
     @Override
     public boolean move(SshFile target) {
-        logger.trace("move()");
-        return super.move((RoSafFile)target);
+        return super.move((RoSafSshFile)target);
     }
 
     @Override

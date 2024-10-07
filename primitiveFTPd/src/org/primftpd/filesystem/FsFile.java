@@ -1,7 +1,6 @@
 package org.primftpd.filesystem;
 
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.services.PftpdService;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -20,10 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class FsFile<T> extends AbstractFile {
+public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView>
+		extends AbstractFile<TFileSystemView> {
 
 	protected final File file;
-	protected final boolean injectedDirectory;
+	protected final boolean isInjectedDirectory;
 
 	private final static Map<String, String[]> DIRECTORY_INJECTIONS;
 	static {
@@ -46,34 +46,32 @@ public abstract class FsFile<T> extends AbstractFile {
 			}
 		}
 		INJECTIONS_AND_CHILDREN = Collections.unmodifiableSet(tmp);
-    }
-
-	public FsFile(File file, PftpdService pftpdService) {
-		super(
-				file.getAbsolutePath(),
-				file.getName(),
-				file.lastModified(),
-				file.length(),
-				file.canRead(),
-				file.exists(),
-				file.isDirectory(),
-				pftpdService);
-		this.file = file;
-		this.name = file.getName();
-		this.injectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
 	}
 
-	protected abstract T createFile(File file, PftpdService pftpdService);
+	public FsFile(TFileSystemView fileSystemView, File file) {
+		super(
+				fileSystemView,
+				file.getAbsolutePath(),
+				file.getName());
+		this.file = file;
+		this.isInjectedDirectory = file.isDirectory() && INJECTIONS_AND_CHILDREN.contains(file.getAbsolutePath());
+	}
+
+	protected final MediaScannerClient getMediaScannerClient() {
+		return getFileSystemView().getMediaScannerClient();
+	}
+
+	protected abstract TMina createFile(File file);
 
 	@Override
 	public ClientActionEvent.Storage getClientActionStorage() {
 		return ClientActionEvent.Storage.FS;
 	}
 
-	public boolean isFile() {
-		boolean isFile = file.isFile();
-		logger.trace("[{}] isFile() -> {}", name, isFile);
-		return isFile;
+	public boolean isDirectory() {
+		boolean result = file.isDirectory();
+		logger.trace("[{}] isDirectory() -> {}", name, result);
+		return result;
 	}
 
 	public boolean doesExist() {
@@ -83,7 +81,7 @@ public abstract class FsFile<T> extends AbstractFile {
 			// exists may be false when we don't have read permission
 			// try to figure out if it really does not exist
 			File parentFile = file.getParentFile();
-			File[] children = parentFile.listFiles();
+			File[] children = parentFile != null ? parentFile.listFiles() : new File[]{};
 			if (children != null) {
 				for (File child : children) {
 					if (file.equals(child)) {
@@ -98,16 +96,34 @@ public abstract class FsFile<T> extends AbstractFile {
 			new Object[]{
 				name,
 				file.getAbsolutePath(),
-				Boolean.valueOf(exists),
-				Boolean.valueOf(existsChecked)
+				exists,
+				existsChecked
 			});
 		return existsChecked;
 	}
 
 	public boolean isReadable() {
-		boolean canRead = injectedDirectory || file.canRead();
-		logger.trace("[{}] isReadable() -> {}", name, canRead);
-		return canRead;
+		boolean result = isInjectedDirectory || file.canRead();
+		logger.trace("[{}] isReadable() -> {}", name, result);
+		return result;
+	}
+
+	public long getLastModified() {
+		long result = getFileSystemView().getCorrectedTime(file.getAbsolutePath(), file.lastModified());
+		logger.trace("[{}] getLastModified() -> {}", name, result);
+		return result;
+	}
+
+	public long getSize() {
+		long result = file.length();
+		logger.trace("[{}] getSize() -> {}", name, result);
+		return result;
+	}
+
+	public boolean isFile() {
+		boolean result = file.isFile();
+		logger.trace("[{}] isFile() -> {}", name, result);
+		return result;
 	}
 
 	public boolean isWritable() {
@@ -124,7 +140,7 @@ public abstract class FsFile<T> extends AbstractFile {
 		}
 
 		// file does not exist, probably an upload of a new file, check parent
-		// must be done in loop as some clients to not issue mkdir commands
+		// must be done in loop as some clients do not issue mkdir commands
 		// like filezilla
 		File parent = file.getParentFile();
 		while (parent != null) {
@@ -143,33 +159,44 @@ public abstract class FsFile<T> extends AbstractFile {
 	}
 
 	public boolean setLastModified(long time) {
-		logger.trace("[{}] setLastModified({})", name, Long.valueOf(time));
-		return file.setLastModified(time);
+		logger.trace("[{}] setLastModified({})", name, time);
+		long correctedTime = getFileSystemView().getCorrectedTime(file.getAbsolutePath(), time);
+		return file.setLastModified(correctedTime);
 	}
 
 	public boolean mkdir() {
 		logger.trace("[{}] mkdir()", name);
 		postClientAction(ClientActionEvent.ClientAction.CREATE_DIR);
-		return file.mkdir();
+		// may be necessary to create dirs
+		// some clients do not issue mkdir commands like filezilla
+		// see isWritable()
+		return file.mkdirs();
 	}
 
 	public boolean delete() {
 		logger.trace("[{}] delete()", name);
 		postClientAction(ClientActionEvent.ClientAction.DELETE);
-		return file.delete();
-	}
-
-	public boolean move(FsFile<T> destination) {
-		logger.trace("[{}] move({})", name, destination.getAbsolutePath());
-		postClientAction(ClientActionEvent.ClientAction.RENAME);
-		boolean success = file.renameTo(new File(destination.getAbsolutePath()));
+		boolean success = file.delete();
 		if (success) {
-			Utils.mediaScanFile(pftpdService.getContext(), getAbsolutePath());
+			getMediaScannerClient().scanFile(file.getAbsolutePath());
 		}
 		return success;
 	}
 
-	public List<T> listFiles() {
+	public boolean move(AbstractFile<TFileSystemView> destination) {
+		logger.trace("[{}] move({})", name, destination.getAbsolutePath());
+		postClientAction(ClientActionEvent.ClientAction.RENAME);
+		boolean success = file.renameTo(new File(destination.getAbsolutePath()));
+		if (success) {
+			// remove old file location
+			getMediaScannerClient().scanFile(file.getAbsolutePath());
+			// add new file location
+			getMediaScannerClient().scanFile(destination.getAbsolutePath());
+		}
+		return success;
+	}
+
+	public List<TMina> listFiles() {
 		logger.trace("[{}] listFiles()", name);
 		postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 		File[] filesArray = file.listFiles();
@@ -187,9 +214,9 @@ public abstract class FsFile<T> extends AbstractFile {
 		}
 
 		if (filesArray != null) {
-			List<T> files = new ArrayList<>(filesArray.length);
+			List<TMina> files = new ArrayList<>(filesArray.length);
 			for (File file : filesArray) {
-				files.add(createFile(file, pftpdService));
+				files.add(createFile(file));
 			}
 			return files;
 		}
@@ -202,38 +229,46 @@ public abstract class FsFile<T> extends AbstractFile {
 		postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
 		// may be necessary to create dirs
+		// some clients do not issue mkdir commands like filezilla
 		// see isWritable()
 		File parent = file.getParentFile();
+		if (parent == null) {
+			throw new IOException(String.format("Failed to create parent folder(s) '%s'", file.getAbsolutePath()));
+		}
 		if (!parent.exists()) {
-			parent.mkdirs();
+			if (!parent.mkdirs()) {
+				throw new IOException(String.format("Failed to create parent folder(s) '%s'", file.getAbsolutePath()));
+			}
 		}
 
 		// now create out stream
-		OutputStream os = null;
+		OutputStream os;
 		if (offset == 0) {
 			os = new FileOutputStream(file);
 		} else if (offset == this.file.length()) {
 			os = new FileOutputStream(file, true);
 		} else {
-			final RandomAccessFile raf = new RandomAccessFile(this.file, "rw");
-			raf.seek(offset);
-			os = new OutputStream() {
-				@Override
-				public void write(int oneByte) throws IOException {
-					raf.write(oneByte);
-				}
-				@Override
-				public void close() throws IOException {
-					raf.close();
-				}
-			};
+			try (final RandomAccessFile raf = new RandomAccessFile(this.file, "rw")) {
+				raf.seek(offset);
+				os = new OutputStream() {
+					@Override
+					public void write(int oneByte) throws IOException {
+						raf.write(oneByte);
+					}
+
+					@Override
+					public void close() throws IOException {
+						raf.close();
+					}
+				};
+			}
 		}
 
 		return new BufferedOutputStream(os) {
 			@Override
 			public void close() throws IOException {
 				super.close();
-				Utils.mediaScanFile(pftpdService.getContext(), getAbsolutePath());
+				getMediaScannerClient().scanFile(file.getAbsolutePath());
 			}
 		};
 	}
