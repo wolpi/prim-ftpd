@@ -1,0 +1,2 @@
+Serverul FTP
+FTP-сервер
