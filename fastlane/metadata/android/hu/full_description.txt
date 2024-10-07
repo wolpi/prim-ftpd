@@ -2,4 +2,4 @@ Egy egyszerű FTP és SFTP (SSH fájlátviteli) szerver. Lehetővé teszi fájlo
 WiFi-n keresztül más gépekel. Nincs több USB-kábel keresgélés. Az eszköz root-olása nélkül
 is használható és nem indul el az eszköz indításakor: dönts te, hogy mikor
 fusson a szerver. Azonban amíg fut, megakadályozza a készenléti állapotot, hogy elkerülje
-a lassú és megszakadó feltöltéseket.
+a lassú és megszakadó fel- és letöltéseket.
