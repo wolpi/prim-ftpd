@@ -1,42 +1,40 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
-import android.content.Context;
 import android.net.Uri;
-import androidx.documentfile.provider.DocumentFile;
 
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.file.SshFile;
 import org.primftpd.services.PftpdService;
 
+import java.util.List;
+
+import androidx.documentfile.provider.DocumentFile;
+
 public class SafSshFileSystemView extends SafFileSystemView<SafSshFile, SshFile> implements FileSystemView {
 
     private final Session session;
 
-    public SafSshFileSystemView(Context context, Uri startUrl, ContentResolver contentResolver, PftpdService pftpdService, Session session) {
-        super(context, startUrl, contentResolver, pftpdService);
+    public SafSshFileSystemView(PftpdService pftpdService, Uri startUrl, Session session) {
+        super(pftpdService, startUrl);
         this.session = session;
     }
 
     @Override
     protected SafSshFile createFile(
-            ContentResolver contentResolver,
-            DocumentFile parentDocumentFile,
-            DocumentFile documentFile,
             String absPath,
-            PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, session, this);
+            DocumentFile parentDocumentFile,
+            DocumentFile documentFile) {
+        return new SafSshFile(this, absPath, parentDocumentFile, documentFile, session);
     }
 
     @Override
     protected SafSshFile createFile(
-            ContentResolver contentResolver,
-            DocumentFile parentDocumentFile,
-            String name,
             String absPath,
-            PftpdService pftpdService) {
-        return new SafSshFile(contentResolver, parentDocumentFile, name, absPath, pftpdService, session, this);
+            DocumentFile parentDocumentFile,
+            List<String> parentNonexistentDirs,
+            String name) {
+        return new SafSshFile(this, absPath, parentDocumentFile, parentNonexistentDirs, name, session);
     }
 
     @Override

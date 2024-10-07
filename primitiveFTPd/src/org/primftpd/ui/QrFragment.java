@@ -128,6 +128,7 @@ public class QrFragment extends Fragment implements RecreateLogger {
                 fragment.qrImage.setImageBitmap(qr);
             });
         }
+        urlsParent.removeAllViewsInLayout();
         urlsParent.addView(radioGroup);
         if (!urls.isEmpty()) {
             View firstRadio = radioGroup.getChildAt(0);

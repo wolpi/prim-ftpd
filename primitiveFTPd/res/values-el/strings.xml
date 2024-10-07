@@ -23,13 +23,11 @@
     <string name="stopService">Διακοπή του Eξυπηρετητή</string>
     <string name="toggleService">Εναλλαγή έναρξης/διακοπής Εξυπηρετητή</string>
     <string name="notificationTitle">Εξυπηρετητής FTP</string>
-    <string name="haveToSetPassword">Πρέπει πρώτα να οριστεί ένας κωδικός</string>
     <string name="serverRunning">Ο εξυπηρετητής FTP είναι ενεργός</string>
     <string name="serverCouldNotBeStarted">Ο εξυπηρετητής δεν μπόρεσε να εκκινηθεί! Μήνυμα σφάλματος:</string>
     <string name="portInvalid_v2">Η τιμή της πόρτας δεν είναι έγκυρη. Πρέπει να είναι μεταξύ 1024 και 64000.</string>
     <string name="portsEqual_v2">Οι πόρτες είναι ίδιες. Αυτό δεν θα δουλέψει.</string>
     <string name="restartServer">Πρέπει να επανεκκινηθεί ο Εξυπηρετητής για να εφαρμοστούν οι αλλαγές.</string>
-    <string name="invalidDir">Ο κατάλογος αρχείων δεν είναι έγκυρος.</string>
     <string name="couldNotReadKeyAuthKey">Το δημόσιο κλειδί (public key) για την πιστοποίηση με κλειδί δεν μπόρεσε να διαβαστεί. Ελέγξτε το αρχείο καταγραφής για πληροφορίες.</string>
     <string name="prefs">Προτιμήσεις</string>
     <string name="prefTitleUser">Όνομα Χρήστη</string>
@@ -55,16 +53,13 @@
     <string name="prefTitleStartOnOpen">Εκκίνηση κατά το άνοιγμα</string>
     <string name="prefSummaryStartOnOpen">Εκκίνηση του εξυπηρετητή με το άνοιγμα της εφαρμογής.</string>
     <string name="prefTitlePubKeyAuth">Πιστοποίηση με την χρήση δημόσιου κλειδιού</string>
-    <string name="prefSummaryPubKeyAuth">Όταν είναι ενεργοποιημένο, τοποθετήστε το δημόσιο ssh2 κλειδί στο %s. SFTP μόνο.</string>
     <string name="prefTitleAnonymousLogin">Ανώνυμη είσοδος</string>
     <string name="prefSummaryAnonymousLogin">Ορίστε εάν οι ανώνυμες συνδέσεις επιτρέπονται από τον εξυπηρετητή.</string>
     <string name="prefTitleFtpPassivePorts">Παθητικές Πόρτες FTP</string>
     <string name="prefSummaryFtpPassivePorts">Πόρτες για παθητική σύνδεση δεδομένων FTP. Μπορεί να είναι μία πόρτα ή μία λίστα από πόρτες. Π.χ. 5678,5700-5710,5800,5900.</string>
     <string name="prefTitleIdleTimeout">Χρονικό όριο Αδράνειας Εξυπηρετητή</string>
-    <string name="prefSummaryIdleTimeout">Ο διακομιστής θα τερματίσει τις αδρανείς συνδέσεις μετά από αυτό το χρονικό διάστημα σε δευτερόλεπτα (μόνο FTP)</string>
     <string name="prefSummaryIdleTimeoutV2">Ο διακομιστής θα τερματίσει τις αδρανείς συνδέσεις μετά από αυτό το χρονικό διάστημα σε δευτερόλεπτα. Ορίστε το 0 για απενεργοποίηση.</string>
     <string name="prefTitleLogging">Αρχείο καταγραφής</string>
-    <string name="prefSummaryLogging">Το αρχείο καταγραφής εξυπηρετεί στην ανάλυση των σφαλμάτων. Εάν η εφαρμογή δεν λειτουργεί κανονικά στην συσκευή μπορεί να γίνει αποστολή του αρχείου στους προγραμματιστές. Ίσως να απαιτείται επανεκκίνηση της εφαρμογής.</string>
     <string name="licence">Άδεια χρήσης</string>
     <string name="reset">Επαναφορά</string>
     <string name="widgetTextStart">εκκίνηση (s)ftpd</string>
@@ -73,15 +68,11 @@
     <string name="selectServerAction">Επιλογή ενέργειας εξυπηρετητή</string>
     <string name="isServerRunning">Είναι ο εξυπηρετητής ενεργός;</string>
     <string name="storageType">Τύπος Αποθήκευσης</string>
-    <string name="storageTypePlain">Απλό σύστημα αρχείων</string>
     <string name="storageTypeRoot">Υπερχρήστης (η συσκευή πρέπει να είναι rooted)</string>
     <string name="storageTypeSaf">Σύστημα Πρόσβασης Αποθηκευτικού χώρου (ΣΠΑ/SAF) (π.χ. για κάρτα μνήμης SD)</string>
     <string name="storageTypeRoSaf">SAF Μόνο για ανάγνωση (ταχύτερο!)</string>
     <string name="safExplainHeading">Πώς λειτουργεί το ΣΑΠ (SAF)</string>
-    <string name="safExplain">Το λειτουργικό θα ρωτήσει να επιλέξετε φάκελο. Αυτός θα είναι διαθέσιμος μέσω του εξυπηρετητή. Κατά διαστήματα η άδεια χρήσης θα ανακαλείται και θα πρέπει να ξανά επιλέξετε τον φάκελο.</string>
     <string name="selectedSafUri">Επιλεγμένο SAF URI:</string>
-    <string name="startServerAndExit">εκκίνηση του εξυπηρετητή μόνο</string>
-    <string name="startServerAndUi">εκκίνηση με τον εξυπηρετητή</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP και SFTP</item>
         <item>Μόνο FTP</item>

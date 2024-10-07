@@ -100,6 +100,8 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         adapter.clearTitles();
         adapter.addTitle("pftpd");
         adapter.addTitle("QR");
+
+        TabLayout tabLayout = findViewById(R.id.tabs);
         if (tabNames) {
             adapter.addTitle("\uD83D\uDDD1 " + getText(R.string.iconCleanSpace));
             adapter.addTitle("\uD83D\uDDD2 " + getText(R.string.clientActionsLabel));
@@ -107,6 +109,8 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
             adapter.addTitle("\uD83D\uDD10 " + getText(R.string.pubkeyAuthKeysHeading));
             adapter.addTitle("⚙ " + getText(R.string.prefs));
             adapter.addTitle("\uD83D\uDE4F " + getText(R.string.iconAbout));
+
+            tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         } else {
             adapter.addTitle("\uD83D\uDDD1");
             adapter.addTitle("\uD83D\uDDD2");
@@ -114,6 +118,8 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
             adapter.addTitle("\uD83D\uDD10");
             adapter.addTitle("⚙");
             adapter.addTitle("\uD83D\uDE4F");
+
+            tabLayout.setTabMode(TabLayout.MODE_FIXED);
         }
         adapter.notifyDataSetChanged();
     }

@@ -1,46 +1,43 @@
 package org.primftpd.filesystem;
 
-import android.content.ContentResolver;
-import androidx.documentfile.provider.DocumentFile;
-
 import org.apache.ftpserver.ftplet.FtpFile;
 import org.apache.ftpserver.ftplet.User;
-import org.primftpd.services.PftpdService;
 
-public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
+import java.util.List;
+
+import androidx.documentfile.provider.DocumentFile;
+
+public class SafFtpFile extends SafFile<FtpFile, SafFtpFileSystemView> implements FtpFile {
 
     private final User user;
 
     public SafFtpFile(
-            ContentResolver contentResolver,
+            SafFtpFileSystemView fileSystemView,
+            String absPath,
             DocumentFile parentDocumentFile,
             DocumentFile documentFile,
-            String absPath,
-            PftpdService pftpdService,
             User user) {
-        super(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService);
+        super(fileSystemView, absPath, parentDocumentFile, documentFile);
         this.user = user;
     }
 
     public SafFtpFile(
-            ContentResolver contentResolver,
-            DocumentFile parentDocumentFile,
-            String name,
+            SafFtpFileSystemView fileSystemView,
             String absPath,
-            PftpdService pftpdService,
+            DocumentFile parentDocumentFile,
+            List<String> parentNonexistentDirs,
+            String name,
             User user) {
-        super(contentResolver, parentDocumentFile, name, absPath, pftpdService);
+        super(fileSystemView, absPath, parentDocumentFile, parentNonexistentDirs, name);
         this.user = user;
     }
 
     @Override
     protected FtpFile createFile(
-            ContentResolver contentResolver,
-            DocumentFile parentDocumentFile,
-            DocumentFile documentFile,
             String absPath,
-            PftpdService pftpdService) {
-        return new SafFtpFile(contentResolver, parentDocumentFile, documentFile, absPath, pftpdService, user);
+            DocumentFile parentDocumentFile,
+            DocumentFile documentFile) {
+        return new SafFtpFile(getFileSystemView(), absPath, parentDocumentFile, documentFile, user);
     }
 
     @Override
@@ -50,8 +47,7 @@ public class SafFtpFile extends SafFile<FtpFile> implements FtpFile {
 
     @Override
     public boolean move(FtpFile target) {
-        logger.trace("move()");
-        return super.move((SafFile)target);
+        return super.move((SafFtpFile)target);
     }
 
     @Override

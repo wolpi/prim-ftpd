@@ -11,28 +11,28 @@ public class QuickShareFtpFileSystemView extends QuickShareFileSystemView<QuickS
 
     private final User user;
 
-    public QuickShareFtpFileSystemView(File quickShareFile, User user, PftpdService pftpdService) {
-        super(quickShareFile, pftpdService);
+    public QuickShareFtpFileSystemView(PftpdService pftpdService, File tmpDir, User user) {
+        super(pftpdService, tmpDir);
         this.user = user;
     }
 
-    protected QuickShareFtpFile createFile(File tmpDir, PftpdService pftpdService) {
-        return new QuickShareFtpFile(tmpDir, pftpdService, user);
+    protected QuickShareFtpFile createFile() {
+        return new QuickShareFtpFile(this, user);
     }
-    protected QuickShareFtpFile createFile(File tmpDir, File realFile, PftpdService pftpdService) {
-        return new QuickShareFtpFile(tmpDir, realFile, pftpdService, user);
+    protected QuickShareFtpFile createFile(File realFile) {
+        return new QuickShareFtpFile(this, realFile, user);
     }
 
     public QuickShareFtpFile getHomeDirectory() {
         logger.trace("getHomeDirectory()");
 
-        return createFile(tmpDir, pftpdService);
+        return createFile(tmpDir);
     }
 
     public QuickShareFtpFile getWorkingDirectory() {
         logger.trace("getWorkingDirectory()");
 
-        return createFile(tmpDir, pftpdService);
+        return createFile(tmpDir);
     }
 
     public boolean changeWorkingDirectory(String dir) {

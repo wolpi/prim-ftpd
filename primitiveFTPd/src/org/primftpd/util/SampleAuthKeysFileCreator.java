@@ -35,7 +35,7 @@ public class SampleAuthKeysFileCreator
 						ps.println("# one key per line");
 						ps.println("# of course without leading #");
 						ps.println("# e.g.");
-						ps.println("# sh-ed25519 AAAAC3NzaC1lZDI1N....");
+						ps.println("# ssh-ed25519 AAAAC3NzaC1lZDI1N....");
 						ps.println("# ssh-rsa AAAAB3NzaC1yc2EAAAAD....");
 					} catch (Exception e) {
 						logger.debug("creation of sample file failed ({}): {}, {}",
