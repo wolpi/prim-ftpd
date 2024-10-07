@@ -1,0 +1,6 @@
+Un servidor simple de FTP y SFTP (transferencia vía SSH). Permite intercambiar
+archivos entre dispositivos a través de una red WiFi. Se acabó el buscar cables
+USB. No requiere privilegios de administrador (root). Tampoco se inicia durante
+el arranque del sistema: tienes total control de cuándo se ejecuta el servidor.
+No obstante, mientras se ejecuta, no permite que el dispositivo entre en modo
+de espera para evitar que se corten las transferencias largas.
