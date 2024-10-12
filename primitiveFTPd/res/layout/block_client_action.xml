@@ -1,4 +1,4 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- label -->
     <TextView
@@ -16,6 +16,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
+        tools:text="2024-10-12 14:00:01 FS FTP 192.168.154.195 LIST_DIR /storage/emulated/0"
         />
     <TextView
         android:id="@+id/clientActionsLine2"
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:textIsSelectable="true"
+        tools:text="2024-10-12 14:00:01 FS FTP 192.168.154.195 LIST_DIR /storage/emulated/0/Download"
         />
     <TextView
         android:id="@+id/clientActionsLine3"
@@ -30,5 +32,6 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:textIsSelectable="true"
+        tools:text="2024-10-12 14:00:01 FS FTP 192.168.154.195 LIST_DIR /storage/emulated/0/Download/temp"
         />
 </merge>

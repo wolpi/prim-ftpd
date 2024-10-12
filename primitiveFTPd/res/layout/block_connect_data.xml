@@ -11,7 +11,10 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:focusable="false"
-            tools:text="Quick Share Info"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            tools:text="Running in QuickShare Mode for 1839 file(s)"
+            tools:visibility="visible"
             />
 
         <!-- interfaces/addresses and ports info in 2 columns -->
@@ -44,7 +47,37 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    />
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        tools:text="10.80.90.70 (rmnet_data3)"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        tools:text="192.168.43.1 (wlan0)"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        tools:text="aaaa:bbbb:cccc:dddd:eeee:ffff:0000:1111 (rmnet_data2)"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        tools:text="aaaa:bbbb:cccc:dddd:eeee:ffff:0000:1112 (rmnet_data1)"
+                        />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- right column -->
@@ -125,6 +158,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
+                tools:text="@string/isAnonymous"
                 />
 
             <TextView
@@ -132,6 +166,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
+                tools:text="@string/passwordPresent"
                 />
 
             <TextView
@@ -139,6 +174,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
+                tools:text="@string/pubKeyAuth"
                 />
 
             <TextView
@@ -146,6 +182,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
+                tools:text="@string/hasNormalAccessToStorage"
                 />
 
             <TextView
@@ -153,6 +190,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
+                tools:text="@string/hasFullAccessToStorage"
                 />
 
             <TextView
@@ -160,6 +198,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
+                tools:text="@string/hasAccessToMediaLocation"
                 />
 
             <TextView
@@ -167,6 +206,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
+                tools:text="@string/hasNotificationPermission"
                 />
         </LinearLayout>
 

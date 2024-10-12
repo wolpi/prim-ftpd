@@ -1,4 +1,6 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <!-- key fingerprints -->
     <TextView
@@ -43,6 +45,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:focusable="false"
+        tools:text="MD5 (ed25519)"
         />
     <TextView
         android:id="@+id/keyFingerprintMd5TextView"
@@ -52,6 +55,7 @@
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
         android:focusable="false"
+        tools:text="00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00\nBase 64\nOyaoinjnvjwnoijjoiejijiewj"
         />
     <!-- SHA 1 -->
     <TextView
@@ -60,6 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:focusable="false"
+        tools:text="SHA1 (ed25519)"
         />
     <TextView
         android:id="@+id/keyFingerprintSha1TextView"
@@ -69,6 +74,7 @@
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
         android:focusable="false"
+        tools:text="00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00\nBase 64\nOyaoinjnvjwnoijjoiejijiewj"
         />
     <!-- SHA 256 -->
     <TextView
@@ -77,6 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:focusable="false"
+        tools:text="SHA256 (ed25519)"
         />
     <TextView
         android:id="@+id/keyFingerprintSha256TextView"
@@ -86,6 +93,7 @@
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
         android:focusable="false"
+        tools:text="00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00\nBase 64\nOyaoinjnvjwnoijjoiejijiewj"
         />
 
 </merge>
