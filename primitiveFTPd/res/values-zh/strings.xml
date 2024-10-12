@@ -152,5 +152,4 @@
     <string name="iconCleanSpace">清理空间</string>
     <string name="qrFallback">无网络接口，无 IP 地址，无二维码</string>
     <string name="safExplainV2">Android 系统会让你选择一个通过服务器可访问的目录。遇到权限被撤销，你必须经常重新选择目录的问题？见我们的 <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub 页面</a>。</string>
-    <string name="app_name" translatable="false"></string>
 </resources>

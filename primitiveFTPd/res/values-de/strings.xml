@@ -148,19 +148,4 @@
     <string name="tvUiShort">TV-Modus</string>
     <string name="tvUiLong">Fernsehmodus</string>
     <string name="iconAbout">Über</string>
-    <string name="prefSummaryShowTabNames"></string>
-    <string name="pubkeyInvalid"></string>
-    <string name="pubkeyAuthKeysHeading"></string>
-    <string name="noKeysPresent"></string>
-    <string name="addPubkeyForAuth"></string>
-    <string name="prefShowTabNames"></string>
-    <string name="prefSummaryIdleTimeoutServerStop"></string>
-    <string name="prefHostkeyAlgos"></string>
-    <string name="prefSummaryHostkeyAlgos"></string>
-    <string name="add"></string>
-    <string name="qrFallback"></string>
-    <string name="iconKeysFingerprints"></string>
-    <string name="iconCleanSpace"></string>
-    <string name="prefTitleIdleTimeoutServerStop"></string>
-    <string name="safExplainV2"></string>
 </resources>

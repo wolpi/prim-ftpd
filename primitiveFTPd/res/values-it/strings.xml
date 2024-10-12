@@ -159,18 +159,4 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string name="hasNotificationPermission"></string>
-    <string name="safExplainV2"></string>
-    <string name="addPubkeyForAuth"></string>
-    <string name="noKeysPresent"></string>
-    <string name="pubkeyAuthKeysHeading"></string>
-    <string name="pubkeyInvalid"></string>
-    <string name="prefTitleIdleTimeoutServerStop"></string>
-    <string name="prefSummaryIdleTimeoutServerStop"></string>
-    <string name="prefHostkeyAlgos"></string>
-    <string name="prefSummaryHostkeyAlgos"></string>
-    <string name="add"></string>
-    <string name="prefSummaryShowTabNames"></string>
-    <string name="prefShowTabNames"></string>
-    <string name="qrFallback"></string>
 </resources>
