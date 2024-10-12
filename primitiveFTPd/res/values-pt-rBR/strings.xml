@@ -144,33 +144,4 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string name="app_name" translatable="false"></string>
-    <string name="safExplainV2"></string>
-    <string name="mobileUiLong"></string>
-    <string name="qrFallback"></string>
-    <string name="addPubkeyForAuth"></string>
-    <string name="pubkeyInvalid"></string>
-    <string name="pubkeyAuthKeysHeading"></string>
-    <string name="noKeysPresent"></string>
-    <string name="prefSummaryShowTabNames"></string>
-    <string name="prefShowTabNames"></string>
-    <string name="prefSummaryRootCopyFiles"></string>
-    <string name="prefHostkeyAlgos"></string>
-    <string name="prefSummaryHostkeyAlgos"></string>
-    <string name="add"></string>
-    <string name="hasNormalAccessToStorage"></string>
-    <string name="delete"></string>
-    <string name="rootTmpFiles"></string>
-    <string name="quickShareFiles"></string>
-    <string name="hasAccessToMediaLocation"></string>
-    <string name="logFiles"></string>
-    <string name="iconKeysFingerprints"></string>
-    <string name="tvUiLong"></string>
-    <string name="iconCleanSpace"></string>
-    <string name="tvUiShort"></string>
-    <string name="iconAbout"></string>
-    <string name="mobileUiShort"></string>
-    <string name="prefTitleIdleTimeoutServerStop"></string>
-    <string name="prefSummaryIdleTimeoutServerStop"></string>
-    <string name="hasNotificationPermission"></string>
 </resources>

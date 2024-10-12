@@ -130,27 +130,4 @@
     <string name="logFiles">Napló fájlok:</string>
     <string name="mobileUiShort">Mobil mód</string>
     <string name="iconKeysFingerprints">Kulcs ujjlenyomatok</string>
-    <string name="hasNotificationPermission"></string>
-    <string name="addPubkeyForAuth"></string>
-    <string name="noKeysPresent"></string>
-    <string name="pubkeyAuthKeysHeading"></string>
-    <string name="pubkeyInvalid"></string>
-    <string name="prefHostkeyAlgos"></string>
-    <string name="prefRootCopyFiles"></string>
-    <string name="prefSummaryHostkeyAlgos"></string>
-    <string name="prefSummaryRootCopyFiles"></string>
-    <string name="add"></string>
-    <string name="quickShareInfoActivityV2"></string>
-    <string name="quickShareInfoNotificationV2"></string>
-    <string name="quickShare"></string>
-    <string name="hasFullAccessToStorage"></string>
-    <string name="prefTitleQuickSettingsRequiresUnlock"></string>
-    <string name="prefSummaryQuickSettingsRequiresUnlock"></string>
-    <string name="quickShareServerStarted"></string>
-    <string name="hasNormalAccessToStorage"></string>
-    <string name="hasAccessToMediaLocation"></string>
-    <string name="Request"></string>
-    <string name="quickShareFiles"></string>
-    <string name="rootTmpFiles"></string>
-    <string name="safExplainV2"></string>
 </resources>

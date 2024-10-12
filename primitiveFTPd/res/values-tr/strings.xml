@@ -170,5 +170,4 @@
     <string name="startServerAndExit">yalnızca sunucuyu başlat</string>
     <string name="hasNotificationPermission">Bildirimleri gösterme izni var: %1$b</string>
     <string name="permWriteLabelServerstatus">sunucuyu başlat ve durdur</string>
-    <string name="app_name" translatable="false"></string>
 </resources>
