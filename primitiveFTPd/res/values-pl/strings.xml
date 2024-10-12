@@ -152,4 +152,5 @@
     <string name="iconCleanSpace">Czyste miejsce</string>
     <string name="quickShareInfoActivityV2">Uruchamianie w trybie QuickShare dla %1d pliku(ów)</string>
     <string name="quickShareFiles">Pliki QuickShare:</string>
+    <string name="safExplainV2">Android poprosi Cię o wybranie katalogu. Będzie on dostępny za pośrednictwem jednego lub większej liczby serwerów. Jeśli uprawnienia dostępu do katalogu są czasami cofane, zobacz naszą <a href="https://www.github.com/wolpi/prim-ftpd/">stronę GitHub</a>.</string>
 </resources>
