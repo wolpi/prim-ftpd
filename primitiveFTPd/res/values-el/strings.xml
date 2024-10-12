@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Διεπαφή Δικτύου</string>
     <string name="ipAddrLabel">Διεύθυνση IP</string>
     <string name="ifacesError">Σφάλμα:</string>
@@ -14,7 +14,7 @@
     <string name="state">Κατάσταση</string>
     <string name="serverStarted">Εκκίνηση ...</string>
     <string name="serverStopped">Ανενεργός</string>
-    <string name="permissionRequired">Η εφαρμογή χρειάζεται \"%1$s\"  άδεια για να λειτουργήσει!</string>
+    <string name="permissionRequired">Η εφαρμογή χρειάζεται \"%1$s\" άδεια για να λειτουργήσει!</string>
     <string name="permissionNameStorage">Αποθηκευτικός χώρος</string>
     <string name="quickSettingsServerStarted">Εκκίνηση του pFTPd ...</string>
     <string name="quickSettingsServerStopped">Διακόπηκε ο pFTPd</string>
@@ -83,4 +83,78 @@
         <item>Καταγραφή σε αρχείο κειμένου</item>
         <item>Καταγραφή στο Android</item>
     </string-array>
+    <string name="allKeysFingerprintsLabel"></string>
+    <string name="prefAllowedIpsPattern"></string>
+    <string name="statsTotalSent"></string>
+    <string name="statsReceivedPerSec"></string>
+    <string name="prefBindIp"></string>
+    <string name="prefSummaryIdleTimeoutServerStop"></string>
+    <string name="prefTitleShowStartStopNotification"></string>
+    <string name="noKeysPresent"></string>
+    <string name="prefTitleShowConnectionInfoInNotification"></string>
+    <string name="prefHostkeyAlgos"></string>
+    <string name="prefSummaryShowStartStopNotification"></string>
+    <string name="prefShowTabNames"></string>
+    <string name="prefTitleIdleTimeoutServerStop"></string>
+    <string name="prefSummaryShowTabNames"></string>
+    <string name="safExplainV2"></string>
+    <string name="prefSummaryRootCopyFiles"></string>
+    <string name="prefSummaryShowConnectionInfoInNotification"></string>
+    <string name="pubkeyAuthKeysHeading"></string>
+    <string name="pubkeyInvalid"></string>
+    <string name="addPubkeyForAuth"></string>
+    <string name="haveToSetAuthMechanism"></string>
+    <string name="ftpPassivePortsInvalid"></string>
+    <string name="prefsCategoryTitleAuth"></string>
+    <string name="prefsCategoryTitleUi"></string>
+    <string name="prefsCategoryTitleSystem"></string>
+    <string name="prefsCategoryTitleConnectivity"></string>
+    <string name="prefSummaryBindIp"></string>
+    <string name="prefSummaryLoggingV2"></string>
+    <string name="prefTitleQuickSettingsRequiresUnlock"></string>
+    <string name="prefSummaryAllowedIpsPattern"></string>
+    <string name="prefRootCopyFiles"></string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock"></string>
+    <string name="prefSummaryHostkeyAlgos"></string>
+    <string name="passwordPresent"></string>
+    <string name="pubKeyAuth"></string>
+    <string name="storageTypePlainV2"></string>
+    <string name="storageTypeVirtual"></string>
+    <string name="add"></string>
+    <string name="filepickerNewFolder"></string>
+    <string name="filepickerListCancel"></string>
+    <string name="filepickerNewFolderCancel"></string>
+    <string name="filepickerNewFolderOk"></string>
+    <string name="filepickerSelectSomethingFirst"></string>
+    <string name="filepickerFilename"></string>
+    <string name="quickShare"></string>
+    <string name="quickShareServerStarted"></string>
+    <string name="statsTotalReceived"></string>
+    <string name="statsLabel"></string>
+    <string name="statsSentPerSec"></string>
+    <string name="clientActionsLabel"></string>
+    <string name="quickShareInfoActivityV2"></string>
+    <string name="hasFullAccessToStorage"></string>
+    <string name="hasAccessToMediaLocation"></string>
+    <string name="hasNormalAccessToStorage"></string>
+    <string name="hasNotificationPermission"></string>
+    <string name="rootTmpFiles"></string>
+    <string name="iconKeysFingerprints"></string>
+    <string name="delete"></string>
+    <string name="iconAbout"></string>
+    <string name="quickShareFiles"></string>
+    <string name="logFiles"></string>
+    <string name="Request"></string>
+    <string name="qrFallback"></string>
+    <string name="download"></string>
+    <string name="saveToTextFile"></string>
+    <string name="filepickerListOk"></string>
+    <string name="filepickerName"></string>
+    <string name="quickShareInfoNotificationV2"></string>
+    <string name="mobileUiShort"></string>
+    <string name="mobileUiLong"></string>
+    <string name="tvUiShort"></string>
+    <string name="tvUiLong"></string>
+    <string name="iconCleanSpace"></string>
+    <string name="prefSummaryPubKeyAuth_v2"></string>
 </resources>
