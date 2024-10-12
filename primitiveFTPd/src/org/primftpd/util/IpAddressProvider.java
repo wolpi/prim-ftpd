@@ -11,8 +11,10 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 
 public class IpAddressProvider {
 
@@ -87,6 +89,11 @@ public class IpAddressProvider {
             String msg = ctxt.getText(R.string.ifacesError) + e.getLocalizedMessage();
             Toast.makeText(ctxt, msg, Toast.LENGTH_SHORT).show();
         }
+        Collections.sort(result, (s1, s2) -> {
+            if (Objects.equals(s1, s2)) return 0;
+            if (s1.contains(".")) return -1;
+            return s1.startsWith("wlan") ? -1 : 1;
+        });
         return result;
     }
 
