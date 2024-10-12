@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">prymitywny ftpd</string>
+    <string name="app_name" translatable="false">prymitywny ftpd</string>
     <string name="ifacesLabel">Interfejs sieciowy</string>
     <string name="ipAddrLabel">Adres IP</string>
     <string name="ifacesError">Błąd:</string>
