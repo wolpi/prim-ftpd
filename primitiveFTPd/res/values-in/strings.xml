@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Antarmuka Jaringan</string>
     <string name="ipAddrLabel">Alamat IP</string>
-    <string name="ifacesError">Galat: </string>
+    <string name="ifacesError">Galat:</string>
     <string name="protocolLabel">Protokol</string>
     <string name="portLabel">Porta</string>
     <string name="fingerprintsLabel">Sidik Jari Kunci</string>
@@ -25,7 +25,7 @@
     <string name="notificationTitle">Server FTP</string>
     <string name="haveToSetAuthMechanism">Anda harus menyiapkan mekanisme otentikasi terlebih dahulu</string>
     <string name="serverRunning">Server FTP sedang berjalan</string>
-    <string name="serverCouldNotBeStarted">Server tidak bisa dimulai! Pesan galat: </string>
+    <string name="serverCouldNotBeStarted">Server tidak bisa dimulai! Pesan galat:</string>
     <string name="portInvalid_v2">Porta tidak valid. Harus antara 1024 dan 64000.</string>
     <string name="portsEqual_v2">Porta sama. Ini tidak akan bisa bekerja.</string>
     <string name="restartServer">Mulai ulang server agar perubahan yang Anda buat dapat diterapkan.</string>
@@ -87,17 +87,16 @@
     <string name="isServerRunning">Apakah server sedang berjalan?</string>
     <string name="storageType">Tipe Penyimpanan</string>
     <string name="storageTypeRoot">Pengguna super (perangkat harus diroot)</string>
-    <string name="storageTypeSaf">Storage Access Framework (SAF) Android
-\n(mis. untuk kartu sd)</string>
+    <string name="storageTypeSaf">Storage Access Framework (SAF) Android\n(mis. untuk kartu sd)</string>
     <string name="storageTypeRoSaf">SAF baca saja (lebih cepat !)</string>
     <string name="safExplainHeading">Bagaimana SAF bekerja</string>
     <string name="selectedSafUri">URI SAF yang dipilih:</string>
     <string name="filepickerCreateFolderError">Gagal membuat folder baru</string>
     <string name="filepickerNewFolder">Folder baru</string>
-    <string name="filepickerNewFolderOk">@android:string/ok</string>
-    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
-    <string name="filepickerListOk">@android:string/ok</string>
-    <string name="filepickerListCancel">@android:string/cancel</string>
+    <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="filepickerNewFolderCancel">\@android:string/cancel</string>
+    <string name="filepickerListOk">\@android:string/ok</string>
+    <string name="filepickerListCancel">\@android:string/cancel</string>
     <string name="filepickerName">Nama</string>
     <string name="filepickerFilename">Nama berkas</string>
     <string name="filepickerSelectSomethingFirst">Silakan pilih apa saja terlebih dahulu</string>
@@ -147,4 +146,33 @@
     <string name="prefSummaryShowTabNames">Tampilkan nama pada tab di UI utama</string>
     <string name="prefSummaryPubKeyAuth_v2">Jika diaktifkan, letakkan kunci publik ssh2 Anda di %s. Ini harus berupa berkas yang berisi satu kunci per baris. Hanya SFTP.</string>
     <string name="prefTitleIdleTimeoutServerStop">Batas waktu idle untuk menghentikan server</string>
+    <string name="storageTypePlainV2"></string>
+    <string name="hasNormalAccessToStorage"></string>
+    <string name="quickShareFiles"></string>
+    <string name="hasAccessToMediaLocation"></string>
+    <string name="hasNotificationPermission"></string>
+    <string name="Request"></string>
+    <string name="rootTmpFiles"></string>
+    <string name="logFiles"></string>
+    <string name="mobileUiShort"></string>
+    <string name="safExplainV2"></string>
+    <string name="mobileUiLong"></string>
+    <string name="prefSummaryHostkeyAlgos"></string>
+    <string name="prefHostkeyAlgos"></string>
+    <string name="add"></string>
+    <string name="quickShareInfoNotificationV2"></string>
+    <string name="hasFullAccessToStorage"></string>
+    <string name="tvUiShort"></string>
+    <string name="prefSummaryIdleTimeoutServerStop"></string>
+    <string name="prefRootCopyFiles"></string>
+    <string name="prefSummaryRootCopyFiles"></string>
+    <string name="storageTypeVirtual"></string>
+    <string name="delete"></string>
+    <string name="clientActionsLabel"></string>
+    <string name="quickShareInfoActivityV2"></string>
+    <string name="tvUiLong"></string>
+    <string name="iconKeysFingerprints"></string>
+    <string name="iconAbout"></string>
+    <string name="iconCleanSpace"></string>
+    <string name="qrFallback"></string>
 </resources>
