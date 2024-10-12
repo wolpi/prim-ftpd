@@ -35,7 +35,7 @@ public abstract class VirtualFileSystemView<
     public abstract TMina createFile(String absPath, AbstractFile delegate);
     public abstract TMina createFile(String absPath, boolean exists);
 
-    public abstract AbstractFile getConfigFile();
+    public abstract VirtualConfigFile getConfigFile();
 
     protected abstract String absolute(String file);
 
