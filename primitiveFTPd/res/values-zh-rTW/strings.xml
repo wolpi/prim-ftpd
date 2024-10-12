@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">網路介面</string>
     <string name="ipAddrLabel">IP 位置</string>
     <string name="ifacesError">錯誤：</string>
@@ -68,8 +68,7 @@
     <string name="isServerRunning">伺服器正在執行嗎？</string>
     <string name="storageType">儲存類型</string>
     <string name="storageTypeRoot">超級使用者（裝置必須 root）</string>
-    <string name="storageTypeSaf">Android 儲存空間存取架構 (SAF)
-\n（例如用於 SD 卡）</string>
+    <string name="storageTypeSaf">Android 儲存空間存取架構 (SAF)\n（例如用於 SD 卡）</string>
     <string name="storageTypeRoSaf">唯讀 SAF（比較快！）</string>
     <string name="safExplainHeading">SAF 如何運作</string>
     <string name="selectedSafUri">選擇的 SAF URI：</string>
@@ -104,4 +103,54 @@
     <string name="filepickerName">名稱</string>
     <string name="filepickerNewFolderCancel">\@android:string/cancel</string>
     <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="allKeysFingerprintsLabel"></string>
+    <string name="quickShareInfoNotificationV2"></string>
+    <string name="tvUiShort"></string>
+    <string name="prefSummaryShowTabNames"></string>
+    <string name="safExplainV2"></string>
+    <string name="storageTypeVirtual"></string>
+    <string name="pubkeyAuthKeysHeading"></string>
+    <string name="pubkeyInvalid"></string>
+    <string name="addPubkeyForAuth"></string>
+    <string name="noKeysPresent"></string>
+    <string name="prefSummaryBindIp"></string>
+    <string name="prefBindIp"></string>
+    <string name="prefShowTabNames"></string>
+    <string name="prefRootCopyFiles"></string>
+    <string name="prefTitleQuickSettingsRequiresUnlock"></string>
+    <string name="prefSummaryQuickSettingsRequiresUnlock"></string>
+    <string name="prefSummaryRootCopyFiles"></string>
+    <string name="prefHostkeyAlgos"></string>
+    <string name="prefSummaryHostkeyAlgos"></string>
+    <string name="storageTypePlainV2"></string>
+    <string name="add"></string>
+    <string name="filepickerListOk"></string>
+    <string name="filepickerListCancel"></string>
+    <string name="filepickerSelectSomethingFirst"></string>
+    <string name="quickShareInfoActivityV2"></string>
+    <string name="statsLabel"></string>
+    <string name="clientActionsLabel"></string>
+    <string name="statsSentPerSec"></string>
+    <string name="statsTotalReceived"></string>
+    <string name="hasNormalAccessToStorage"></string>
+    <string name="statsTotalSent"></string>
+    <string name="hasNotificationPermission"></string>
+    <string name="hasAccessToMediaLocation"></string>
+    <string name="quickShareFiles"></string>
+    <string name="logFiles"></string>
+    <string name="Request"></string>
+    <string name="mobileUiShort"></string>
+    <string name="iconCleanSpace"></string>
+    <string name="iconKeysFingerprints"></string>
+    <string name="mobileUiLong"></string>
+    <string name="tvUiLong"></string>
+    <string name="iconAbout"></string>
+    <string name="prefSummaryPubKeyAuth_v2"></string>
+    <string name="prefTitleIdleTimeoutServerStop"></string>
+    <string name="prefSummaryIdleTimeoutServerStop"></string>
+    <string name="hasFullAccessToStorage"></string>
+    <string name="statsReceivedPerSec"></string>
+    <string name="rootTmpFiles"></string>
+    <string name="delete"></string>
+    <string name="qrFallback"></string>
 </resources>
