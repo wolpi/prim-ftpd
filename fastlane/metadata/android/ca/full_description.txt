@@ -1,0 +1,6 @@
+Un servidor simple d'FTP i SFTP (transferència via SSH). Permet intercanviar
+fitxers amb altres dispositius a través de WiFi. S'ha acabat haver de cercar
+cables USB. S'executa sense privilegis d'administrador (root). No s'inicia
+amb l'arrencada del sistema: teniu el control de quan s'executa el servidor.
+No obstant, mentre funciona, no permet que el dispositiu entri en mode d'espera
+per evitar que es tallin les pujades o baixades llargues.
