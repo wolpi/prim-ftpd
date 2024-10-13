@@ -45,11 +45,6 @@ public class VirtualFtpFileSystemView extends VirtualFileSystemView<
     }
 
     @Override
-    public VirtualFtpConfigFile getConfigFile() {
-        return new VirtualFtpConfigFile(this, user);
-    }
-
-    @Override
     protected String absolute(String file) {
         logger.trace("  finding abs path for '{}' with wd '{}'", file, (workingDir != null ? workingDir.getAbsolutePath() : "null"));
         if (workingDir == null) {
