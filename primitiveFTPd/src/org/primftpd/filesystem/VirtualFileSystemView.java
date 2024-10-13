@@ -35,8 +35,6 @@ public abstract class VirtualFileSystemView<
     public abstract TMina createFile(String absPath, AbstractFile delegate);
     public abstract TMina createFile(String absPath, boolean exists);
 
-    public abstract VirtualConfigFile getConfigFile();
-
     protected abstract String absolute(String file);
 
     public TMina getFile(String file) {
@@ -63,10 +61,6 @@ public abstract class VirtualFileSystemView<
             String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_ROSAF);
             logger.debug("Using ROSAF '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = roSafFileSystemView.getFile(realPath);
-            return createFile(absoluteVirtualPath, delegate);
-        } else if (VirtualConfigFile.ABS_PATH.equals(absoluteVirtualPath)) {
-            logger.debug("Using VirtualFile for CONFIG path '{}'", absoluteVirtualPath);
-            AbstractFile delegate = getConfigFile();
             return createFile(absoluteVirtualPath, delegate);
         } else{
             logger.debug("Using VirtualFile for unknown path '{}'", absoluteVirtualPath);
