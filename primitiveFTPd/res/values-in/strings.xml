@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Antarmuka Jaringan</string>
     <string name="ipAddrLabel">Alamat IP</string>
-    <string name="ifacesError">Galat: </string>
+    <string name="ifacesError">Galat:</string>
     <string name="protocolLabel">Protokol</string>
     <string name="portLabel">Porta</string>
     <string name="fingerprintsLabel">Sidik Jari Kunci</string>
@@ -25,7 +25,7 @@
     <string name="notificationTitle">Server FTP</string>
     <string name="haveToSetAuthMechanism">Anda harus menyiapkan mekanisme otentikasi terlebih dahulu</string>
     <string name="serverRunning">Server FTP sedang berjalan</string>
-    <string name="serverCouldNotBeStarted">Server tidak bisa dimulai! Pesan galat: </string>
+    <string name="serverCouldNotBeStarted">Server tidak bisa dimulai! Pesan galat:</string>
     <string name="portInvalid_v2">Porta tidak valid. Harus antara 1024 dan 64000.</string>
     <string name="portsEqual_v2">Porta sama. Ini tidak akan bisa bekerja.</string>
     <string name="restartServer">Mulai ulang server agar perubahan yang Anda buat dapat diterapkan.</string>
@@ -87,17 +87,16 @@
     <string name="isServerRunning">Apakah server sedang berjalan?</string>
     <string name="storageType">Tipe Penyimpanan</string>
     <string name="storageTypeRoot">Pengguna super (perangkat harus diroot)</string>
-    <string name="storageTypeSaf">Storage Access Framework (SAF) Android
-\n(mis. untuk kartu sd)</string>
+    <string name="storageTypeSaf">Storage Access Framework (SAF) Android\n(mis. untuk kartu sd)</string>
     <string name="storageTypeRoSaf">SAF baca saja (lebih cepat !)</string>
     <string name="safExplainHeading">Bagaimana SAF bekerja</string>
     <string name="selectedSafUri">URI SAF yang dipilih:</string>
     <string name="filepickerCreateFolderError">Gagal membuat folder baru</string>
     <string name="filepickerNewFolder">Folder baru</string>
-    <string name="filepickerNewFolderOk">@android:string/ok</string>
-    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
-    <string name="filepickerListOk">@android:string/ok</string>
-    <string name="filepickerListCancel">@android:string/cancel</string>
+    <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="filepickerNewFolderCancel">\@android:string/cancel</string>
+    <string name="filepickerListOk">\@android:string/ok</string>
+    <string name="filepickerListCancel">\@android:string/cancel</string>
     <string name="filepickerName">Nama</string>
     <string name="filepickerFilename">Nama berkas</string>
     <string name="filepickerSelectSomethingFirst">Silakan pilih apa saja terlebih dahulu</string>
@@ -123,7 +122,7 @@
     </string-array>
     <string name="saveToTextFile">Simpan ke berkas teks</string>
     <string name="download">Unduh</string>
-    <string name="downloadOrSaveUrlToFile">Unduh atau simpan URL ke berkas teks \?</string>
+    <string name="downloadOrSaveUrlToFile">Unduh atau simpan URL ke berkas teks ?</string>
     <string name="quickShareServerStarted">Server telah mulai membagikan berkas tunggal</string>
     <string name="quickShare">Berbagi Cepat</string>
     <string name="prefSummaryIdleTimeoutV2">Server akan menghentikan koneksi yang tidak aktif setelah ini dalam hitungan detik. Setel ke 0 untuk menonaktifkan.</string>

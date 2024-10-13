@@ -15,15 +15,14 @@
     <string name="filepickerCreateFolderError">Nu s-a putut crea dosarul</string>
     <string name="saveToTextFile">Salvați în fișier text</string>
     <string name="download">Descarca</string>
-    <string name="downloadOrSaveUrlToFile">Descărcați sau salvați adresa URL în fișierul text\?</string>
+    <string name="downloadOrSaveUrlToFile">Descărcați sau salvați adresa URL în fișierul text?</string>
     <string name="selectedSafUri">Adresa SAF selectat:</string>
     <string name="safExplainHeading">Cum funcționează SAF</string>
     <string name="storageTypeRoSaf">Citește numai SAF (mai rapidrepede!)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
-\n(de exemplu, pentru card SD)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(de exemplu, pentru card SD)</string>
     <string name="storageTypeRoot">Super utilizator (dispozitivul trebuie root)</string>
     <string name="storageType">Tipul de stocare</string>
-    <string name="isServerRunning">Serverul rulează\?</string>
+    <string name="isServerRunning">Serverul rulează?</string>
     <string name="selectServerAction">Selectați Acțiune server</string>
     <string name="pubKeyAuth">Autentificare cheie publică : %1$b</string>
     <string name="passwordPresent">Parolă prezentă : %1$b</string>
@@ -100,7 +99,7 @@
     <string name="cancel">Anulează</string>
     <string name="generate">Generează</string>
     <string name="generatingKeysMessage">Generare de chei …</string>
-    <string name="generateKeysMessage">Generare chei \?</string>
+    <string name="generateKeysMessage">Generare chei ?</string>
     <string name="fingerprintsLabel">Amprente Cheie</string>
     <string name="portLabel">Port</string>
     <string name="protocolLabel">Protocol</string>

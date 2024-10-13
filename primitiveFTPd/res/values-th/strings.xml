@@ -1,6 +1,6 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="app_name">primiti 
-\nve ftpd</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">primiti\nve ftpd</string>
     <string name="ipAddrLabel">ที่อยู่ IP</string>
     <string name="ifacesError">127.0.0.1:443</string>
     <string name="protocolLabel">8080</string>
@@ -18,12 +18,10 @@
     <string name="quickSettingsServerStarted">pFTPd Running …</string>
     <string name="quickSettingsServerStopped">pFTPd Stopped</string>
     <string name="saveAs">Save as</string>
-
     <string name="startService">Start Server</string>
     <string name="stopService">Stop Server</string>
     <string name="toggleService">Toggle Server start/stop</string>
     <string name="notificationTitle">FTP Server</string>
-
     <string name="haveToSetAuthMechanism">You have to set an authentication mechanism first</string>
     <string name="serverRunning">FTP Server is running</string>
     <string name="serverCouldNotBeStarted">Server could not be started! Error message:</string>
@@ -32,7 +30,6 @@
     <string name="restartServer">You have to restart Server for changes to take effect.</string>
     <string name="couldNotReadKeyAuthKey">Public key for key authentication could not be read. Check logs.</string>
     <string name="ftpPassivePortsInvalid">Value of FTP Passive Ports is invalid.</string>
-
     <string name="prefs">Preferences</string>
     <string name="prefsCategoryTitleAuth">Auth</string>
     <string name="prefsCategoryTitleConnectivity">Connectivity</string>
@@ -45,4 +42,4 @@
     <string name="prefSummaryPort">FTP server port</string>
     <string name="prefTitlePortSecure">Secure Port</string>
     <string name="prefSummaryPortSecure">FTP server port (encrypted)</string>
-    </resources>
+</resources>

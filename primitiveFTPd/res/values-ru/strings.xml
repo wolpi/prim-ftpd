@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">простейший ftpd</string>
+    <string name="app_name" translatable="false">простейший ftpd</string>
     <string name="cancel">Отмена</string>
     <string name="couldNotReadKeyAuthKey">Невозможно прочитать публичный ключ аутентификации. Подробности в журнале.</string>
     <string name="fingerprintsLabel">Ключи авторизации</string>
     <string name="generate">Сгенерировать</string>
     <string name="generateKeysMessage">Сгенерировать ключи?</string>
     <string name="generatingKeysMessage">Генерация ключей…</string>
-  <string name="ifacesError">Ошибка:</string>
+    <string name="ifacesError">Ошибка:</string>
     <string name="ifacesLabel">Сетевой интерфейс</string>
-  <string name="ipAddrLabel">IP-адрес</string>
+    <string name="ipAddrLabel">IP-адрес</string>
     <string name="isAnonymous">Анонимный вход: %1$b</string>
     <string name="isServerRunning">Сервер запущен?</string>
     <string name="licence">Лицензия</string>
     <string name="notificationTitle">FTP-сервер</string>
-  <string name="permissionRequired">Разрешение \"%1$s\" необходимо для работы приложения!</string>
+    <string name="permissionRequired">Разрешение \"%1$s\" необходимо для работы приложения!</string>
     <string name="portInvalid_v2">Недопустимый номер порта: должно быть значение из диапазона 1024–64000.</string>
     <string name="portLabel">Порт</string>
     <string name="portsEqual_v2">Номера портов должны быть разными.</string>
@@ -22,10 +22,10 @@
     <string name="prefSummaryAnnounceName">Имя, под которым анонсируется сервер.</string>
     <string name="prefSummaryAnonymousLogin">Отметьте, если на сервер разрешен анонимный вход.</string>
     <string name="prefSummaryFtpPassivePorts">Порты для пассивной передачи данных по FTP. Может быть один порт, список или диапазон портов. Например: 5678,5700-5710,5800,5900.</string>
-  <string name="prefSummaryPassword">Пароль FTP-сервера</string>
+    <string name="prefSummaryPassword">Пароль FTP-сервера</string>
     <string name="prefSummaryPort">Порт FTP-сервера</string>
     <string name="prefSummaryPortSecure">Порт FTP-сервера (защищенный)</string>
-  <string name="prefSummaryStartDir">Каталог, отображаемый после авторизации</string>
+    <string name="prefSummaryStartDir">Каталог, отображаемый после авторизации</string>
     <string name="prefSummaryStartOnBoot">Запускать сервер после загрузки системы.</string>
     <string name="prefSummaryUser">Имя пользователя FTP-сервера</string>
     <string name="prefSummaryWakelock">Предотвращает засыпание устройства, когда сервер запущен. Засыпание может приводить к прекращению передачи файлов.</string>
@@ -50,7 +50,7 @@
     <string name="quickSettingsServerStopped">pFTPd остановлен</string>
     <string name="reset">Сбросить</string>
     <string name="restartServer">Изменения применятся после перезапуска сервера.</string>
-  <string name="safExplainHeading">Как работает SAF</string>
+    <string name="safExplainHeading">Как работает SAF</string>
     <string name="saveAs">Сохранить как</string>
     <string name="selectServerAction">Выберите действие сервера</string>
     <string name="selectedSafUri">Выбранный SAF URI:</string>
@@ -62,15 +62,14 @@
     <string name="state">Состояние</string>
     <string name="stopService">Остановить сервер</string>
     <string name="storageType">Тип хранилища</string>
-  <string name="storageTypeRoSaf">SAF только для чтения (работает быстрее!)</string>
+    <string name="storageTypeRoSaf">SAF только для чтения (работает быстрее!)</string>
     <string name="storageTypeRoot">Суперпользователь (необходим root на устройстве)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
-\n(например, для SD-карты)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(например, для SD-карты)</string>
     <string name="toggleService">Запуск/остановка сервера</string>
     <string name="widgetTextStart">Запустить ftpd</string>
     <string name="widgetTextStop">Остановить ftpd</string>
     <string name="prefTitleIdleTimeout">Время бездействия</string>
-  <string name="prefTitleStartOnOpen">Запуск при открытии</string>
+    <string name="prefTitleStartOnOpen">Запуск при открытии</string>
     <string name="prefSummaryStartOnOpen">Запускать сервер при открытии приложения.</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP и SFTP</item>
@@ -88,14 +87,14 @@
     <string name="prefTitleShowConnectionInfoInNotification">Показывать информацию о соединении в уведомлении</string>
     <string name="prefSummaryShowConnectionInfoInNotification">Отображение информации о подключении (например, IP-адрес).</string>
     <string name="prefTitleShowStartStopNotification">Показывать уведомление о запуске/остановке серверов</string>
-  <string name="haveToSetAuthMechanism">Сначала необходимо выбрать механизм авторизации</string>
+    <string name="haveToSetAuthMechanism">Сначала необходимо выбрать механизм авторизации</string>
     <string name="ftpPassivePortsInvalid">Значение пассивных портов FTP указано неправильно.</string>
     <string name="prefsCategoryTitleAuth">Авторизация</string>
     <string name="prefSummaryShowStartStopNotification">Постоянно отображать уведомление для быстрого запуска/остановки сервера.</string>
     <string name="prefSummaryLoggingV2">Журнал предназначен для анализа ошибок. Если приложение не работает должным образом на вашем устройстве, вы можете отправить журнал разработчикам. Может потребоваться перезапустить приложение. Текстовые журналы хранятся в %s.</string>
     <string name="prefAllowedIpsPattern">Шаблон разрешенных IP</string>
     <string name="prefSummaryAllowedIpsPattern">Шаблон разрешенных IP-адресов. Только один подстановочный знак (*) может использоваться последним.</string>
-  <string name="prefTitleSshowIpv4InNotification">Показывать IPv4-адреса в уведомлении</string>
+    <string name="prefTitleSshowIpv4InNotification">Показывать IPv4-адреса в уведомлении</string>
     <string name="prefSummaryShowIpv4InNotification">Показывать IPv4-адреса в уведомлении, если включена информация о подключении.</string>
     <string name="prefTitleSshowIpv6InNotification">Показывать IPv6-адреса в уведомлении</string>
     <string name="prefSummaryShowIpv6InNotification">Показывать IPv6-адреса в уведомлении, если включена информация о подключении.</string>
@@ -103,25 +102,25 @@
     <string name="pubKeyAuth">Открытый ключ аутентификации: %1$b</string>
     <string name="filepickerNewFolderCancel">Отмена</string>
     <string name="filepickerCreateFolderError">Не удалось создать папку</string>
-  <string name="filepickerSelectSomethingFirst">Пожалуйста, сначала выберите что-нибудь</string>
+    <string name="filepickerSelectSomethingFirst">Пожалуйста, сначала выберите что-нибудь</string>
     <string name="filepickerFilename">Имя файла</string>
     <string name="filepickerName">Имя</string>
     <string name="filepickerListCancel">Отмена</string>
     <string name="filepickerListOk">OK</string>
     <string name="filepickerNewFolderOk">OK</string>
     <string name="filepickerNewFolder">Новая папка</string>
-  <string name="saveToTextFile">Сохранить в текстовый файл</string>
+    <string name="saveToTextFile">Сохранить в текстовый файл</string>
     <string name="download">Скачать</string>
-    <string name="downloadOrSaveUrlToFile">Скачать или сохранить URL в текстовый файл\?</string>
+    <string name="downloadOrSaveUrlToFile">Скачать или сохранить URL в текстовый файл?</string>
     <string name="quickShare">Быстро поделиться</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">Для доступа к быстрым настройкам устройство должно быть разблокировано, чтобы запускать/останавливать сервер. Когда включено, будет предложено разблокировать устройство, если оно заблокировано.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Требовать разблокировку для быстрых настроек</string>
     <string name="prefSummaryIdleTimeoutV2">Авторазрыв неактивных соединений через указанное время (в секундах). Задайте 0 для отключения.</string>
     <string name="statsLabel">Статистика</string>
     <string name="statsSentPerSec">Отправлено в секунду</string>
-  <string name="statsTotalReceived">Всего получено</string>
+    <string name="statsTotalReceived">Всего получено</string>
     <string name="statsTotalSent">Всего отправлено</string>
     <string name="statsReceivedPerSec">Получено в секунду</string>
     <string name="clientActionsLabel">Журнал действий клиента</string>
-  <string name="quickShareServerStarted">Сервер запущен для быстрого обмена одним файлом</string>
+    <string name="quickShareServerStarted">Сервер запущен для быстрого обмена одним файлом</string>
 </resources>

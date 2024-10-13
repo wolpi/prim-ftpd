@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">واجهة الشبكة</string>
     <string name="ipAddrLabel">عنوان IP</string>
-    <string name="ifacesError">خطأ: </string>
+    <string name="ifacesError">خطأ:</string>
     <string name="protocolLabel">البروتوكول</string>
     <string name="portLabel">المنفذ</string>
     <string name="fingerprintsLabel">بصمات المفاتيح</string>
@@ -25,7 +25,7 @@
     <string name="notificationTitle">خادم FTP</string>
     <string name="haveToSetAuthMechanism">يجب عليك تحديد آلية المصادقة أولاً</string>
     <string name="serverRunning">خادم FTP قيد التشغيل</string>
-    <string name="serverCouldNotBeStarted">لا يمكن بدء الخادم! رسالة الخطأ: </string>
+    <string name="serverCouldNotBeStarted">لا يمكن بدء الخادم! رسالة الخطأ:</string>
     <string name="portInvalid_v2">قيمة المنفذ غير صحيحة. يجب أن تكون بين 1024 و 64000.</string>
     <string name="portsEqual_v2">المنافذ متساوية. لن يعمل ذلك.</string>
     <string name="restartServer">يجب عليك إعادة بدء الخادم لكي يظهر أثر التغييرات.</string>
@@ -90,8 +90,7 @@
     <string name="isServerRunning">هل الخادم قيد التشغيل؟</string>
     <string name="storageType">نوع التخزين</string>
     <string name="storageTypeRoot">المستخدم العالي (يجب أن يمتلك الجهاز صلاحيّات الـroot)</string>
-    <string name="storageTypeSaf">إطار أندرويد للوصول إلى التخزين (SAF)
-\n(مثلاً: بطاقة SD)</string>
+    <string name="storageTypeSaf">إطار أندرويد للوصول إلى التخزين (SAF)\n(مثلاً: بطاقة SD)</string>
     <string name="storageTypeRoSaf">SAF للقراءة فقط (أسرع !)</string>
     <string name="safExplainHeading">طريقة عمل SAF</string>
     <string name="selectedSafUri">اختر عنوان URI لـSAF:</string>
@@ -100,10 +99,10 @@
     <string name="saveToTextFile">حفظ إلى ملف نصّي</string>
     <string name="filepickerCreateFolderError">لا يمكن إنشاء المجلد</string>
     <string name="filepickerNewFolder">مجلّد جديد</string>
-    <string name="filepickerNewFolderOk">@android:string/ok</string>
-    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
-    <string name="filepickerListOk">@android:string/ok</string>
-    <string name="filepickerListCancel">@android:string/cancel</string>
+    <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="filepickerNewFolderCancel">\@android:string/cancel</string>
+    <string name="filepickerListOk">\@android:string/ok</string>
+    <string name="filepickerListCancel">\@android:string/cancel</string>
     <string name="filepickerName">الاسم</string>
     <string name="filepickerFilename">اسم الملف</string>
     <string name="filepickerSelectSomethingFirst">يرجى اختيار شيء أوّلاً</string>

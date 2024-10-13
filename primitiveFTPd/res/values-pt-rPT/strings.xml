@@ -52,7 +52,7 @@
     <string name="prefTitleAnonymousLogin">Autenticação Anónima</string>
     <string name="prefSummaryAnonymousLogin">Ativar se autenticação anónima é permitida no servidor.</string>
     <string name="prefTitleFtpPassivePorts">Portas Passivas FTP</string>
-    <string name="app_name">ftpd primitivo</string>
+    <string name="app_name" translatable="false">ftpd primitivo</string>
     <string name="fingerprintsLabel">Impressões Digitais da Chave</string>
     <string name="haveToSetAuthMechanism">Necessita de seleccionar um mecanismo de autenticação primeiro</string>
     <string name="couldNotReadKeyAuthKey">A chave pública para autenticação de chaves não pôde ser lida. Verifique os registos (logs).</string>
@@ -79,8 +79,7 @@
     <string name="isServerRunning">O servidor está a correr?</string>
     <string name="storageType">Tipo de Armazenamento</string>
     <string name="storageTypeRoot">Super user (o dispositivo deve estar rooteado)</string>
-    <string name="storageTypeSaf">Framework de Acesso ao Armazenamento Android (SAF)
-\n(Ex. para um cartão SD)</string>
+    <string name="storageTypeSaf">Framework de Acesso ao Armazenamento Android (SAF)\n(Ex. para um cartão SD)</string>
     <string name="storageTypeRoSaf">SAF de leitura apenas (mais rápido!)</string>
     <string name="safExplainHeading">Como funciona o SAF</string>
     <string name="selectedSafUri">URI da SAF Selecionada:</string>
@@ -94,8 +93,7 @@
     <string name="statsLabel">Stats</string>
     <string name="statsTotalSent">Total enviado</string>
     <string name="prefRootCopyFiles">Root: copiar ficheiros à tmp dir para envio/descarga</string>
-    <string name="storageTypePlainV2">Sistema de ficheiros antigo e simples
-\nTem acesso somente de leitura? Veja o nosso <a href="https://www.github.com/wolpi/prim-ftpd/">site do GitHub</a>.</string>
+    <string name="storageTypePlainV2">Sistema de ficheiros antigo e simples \nTem acesso somente de leitura? Veja o nosso <a href="https://www.github.com/wolpi/prim-ftpd/">site do GitHub</a>.</string>
     <string name="storageTypeVirtual">Pastas virtuais (fornece todos os tipos de armazenamento)</string>
     <string name="download">Descarregar</string>
     <string name="filepickerNewFolder">Nova pasta</string>

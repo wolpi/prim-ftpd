@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Διεπαφή Δικτύου</string>
     <string name="ipAddrLabel">Διεύθυνση IP</string>
     <string name="ifacesError">Σφάλμα:</string>
@@ -14,7 +14,7 @@
     <string name="state">Κατάσταση</string>
     <string name="serverStarted">Εκκίνηση ...</string>
     <string name="serverStopped">Ανενεργός</string>
-    <string name="permissionRequired">Η εφαρμογή χρειάζεται \"%1$s\"  άδεια για να λειτουργήσει!</string>
+    <string name="permissionRequired">Η εφαρμογή χρειάζεται \"%1$s\" άδεια για να λειτουργήσει!</string>
     <string name="permissionNameStorage">Αποθηκευτικός χώρος</string>
     <string name="quickSettingsServerStarted">Εκκίνηση του pFTPd ...</string>
     <string name="quickSettingsServerStopped">Διακόπηκε ο pFTPd</string>

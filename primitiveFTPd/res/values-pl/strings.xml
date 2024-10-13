@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">prymitywny ftpd</string>
+    <string name="app_name" translatable="false">prymitywny ftpd</string>
     <string name="ifacesLabel">Interfejs sieciowy</string>
     <string name="ipAddrLabel">Adres IP</string>
     <string name="ifacesError">Błąd:</string>
@@ -70,9 +70,7 @@
     <string name="isServerRunning">Czy serwer działa?</string>
     <string name="storageType">Typ Pamięci</string>
     <string name="storageTypeRoot">Super użytkownik (urządzenie musi być zrootowane)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
-\n
-\n(np. dla karty SD)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n\n(np. dla karty SD)</string>
     <string name="storageTypeRoSaf">SAF tylko do odczytu (szybsze!)</string>
     <string name="safExplainHeading">Jak działa SAF</string>
     <string name="selectedSafUri">Wybrany identyfikator SAF URI:</string>
@@ -132,8 +130,7 @@
     <string name="prefSummaryBindIp">Jeśli chcesz, aby serwery nasłuchiwały tylko na jednym interfejsie.</string>
     <string name="prefSummaryPubKeyAuth_v2">Po włączeniu umieść swój klucz publiczny ssh2 w %s. Musi to być plik zawierający jeden klucz w każdej linii. Tylko SFTP.</string>
     <string name="prefRootCopyFiles">Root: skopiuj pliki do katalogu tmp w celu przesłania/pobrania</string>
-    <string name="storageTypePlainV2">Zwykły stary system plików
-\nMasz dostęp tylko do odczytu? Zobacz naszą &lt;a href=\"https://www.github.com/wolpi/prim-ftpd/\"&gt;stronę GitHub&lt;/a&gt;.</string>
+    <string name="storageTypePlainV2">Zwykły stary system plików\nMasz dostęp tylko do odczytu? Zobacz naszą <a href="https://www.github.com/wolpi/prim-ftpd/">stronę GitHub</a>.</string>
     <string name="storageTypeVirtual">Foldery wirtualne (zapewniają wszystkie typy przechowywania)</string>
     <string name="hasAccessToMediaLocation">Ma dostęp do lokalizacji multimediów (dane geograficzne): %1$b</string>
     <string name="rootTmpFiles">Pliki tymczasowe dostępu do konta root:</string>
@@ -155,4 +152,5 @@
     <string name="iconCleanSpace">Czyste miejsce</string>
     <string name="quickShareInfoActivityV2">Uruchamianie w trybie QuickShare dla %1d pliku(ów)</string>
     <string name="quickShareFiles">Pliki QuickShare:</string>
+    <string name="safExplainV2">Android poprosi Cię o wybranie katalogu. Będzie on dostępny za pośrednictwem jednego lub większej liczby serwerów. Jeśli uprawnienia dostępu do katalogu są czasami cofane, zobacz naszą <a href="https://www.github.com/wolpi/prim-ftpd/">stronę GitHub</a>.</string>
 </resources>

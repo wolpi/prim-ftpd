@@ -69,7 +69,7 @@
     <string name="mobileUiShort">Mobilmodus</string>
     <string name="portLabel">Port</string>
     <string name="prefs">Innstillinger</string>
-  <string name="ifacesLabel">Nettverksgrensesnitt</string>
+    <string name="ifacesLabel">Nettverksgrensesnitt</string>
     <string name="prefTitleSshowIpv4InNotification">Vis IPv4-adresser i merknad</string>
     <string name="filepickerName">Navn</string>
     <string name="startService">Start tjener</string>

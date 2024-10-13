@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Sare interfazea</string>
     <string name="ipAddrLabel">IP helbidea</string>
-    <string name="ifacesError">Akatsa: </string>
+    <string name="ifacesError">Akatsa:</string>
     <string name="protocolLabel">Protokoloa</string>
     <string name="portLabel">Ataka</string>
     <string name="fingerprintsLabel">Gakoaren hatz-marka</string>
     <string name="generateKeysMessage">Gakoak sortu?</string>
-    <string name="generatingKeysMessage">Gakoak sortzen&#8230;</string>
+    <string name="generatingKeysMessage">Gakoak sortzen…</string>
     <string name="generate">Sortu</string>
     <string name="cancel">Utzi</string>
     <string name="state">Egoera</string>
-    <string name="serverStarted">Exekutatzen&#8230;</string>
+    <string name="serverStarted">Exekutatzen…</string>
     <string name="serverStopped">Geldituta</string>
-        
     <string name="startService">Zerbitzaria hasi</string>
     <string name="stopService">Zerbitzaria gelditu</string>
     <string name="notificationTitle">FTP zerbitzaria</string>
-
     <string name="serverRunning">FTP zerbitzaria abian dago</string>
-    <string name="serverCouldNotBeStarted">Zerbitzaria ezin izan da abiarazi! Akats mezua: </string>
+    <string name="serverCouldNotBeStarted">Zerbitzaria ezin izan da abiarazi! Akats mezua:</string>
     <string name="portInvalid_v2">Atakaren balioa ez da baliozkoa. 1024 eta 64000 tartean egon behar da.</string>
     <string name="portsEqual_v2">Atakak berdinak dira. Honek ezin du funtzionatu.</string>
     <string name="restartServer">Zerbitzaria berrabiarazi behar duzu aldaketak eragina izan dezaten.</string>
     <string name="couldNotReadKeyAuthKey">Baimena emateko gako publikoa ezin izan da irakurri. Erregistroak begiratu.</string>
-
     <string name="prefs">Hobespenak</string>
     <string name="prefTitleUser">Erabiltzaile izena</string>
     <string name="prefSummaryUser">FTP zerbitzariaren erabiltzaile izena</string>
@@ -48,23 +44,18 @@
     <string name="prefSummaryStartOnBoot">Zerbitzaria abiarazi sistemaren abioan.</string>
     <string name="prefTitlePubKeyAuth">Baimentzeko gako publiko</string>
     <string name="prefTitleLogging">Erregistroa</string>
-
     <string name="licence">Lizentzia</string>
     <string name="reset">Berrezarri</string>
-
     <string name="widgetTextStart">(s)ftpd abiarazi</string>
     <string name="widgetTextStop">(s)ftpd gelditu</string>
-    
     <string-array name="prefWhichServerToStartNames">
         <item>FTP eta SFTP</item>
         <item>FTP soilik</item>
         <item>SFTP soilik</item>
     </string-array>
-
     <string-array name="prefLoggingNames">
         <item>Erregistrorik ez</item>
         <item>Testu fitxategi batera erregistratu</item>
         <item>Androidera erregistratu</item>
     </string-array>
-
 </resources>

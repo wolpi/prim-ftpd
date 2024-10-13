@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Netzwerkschnittstelle</string>
     <string name="ipAddrLabel">IP-Adresse</string>
-    <string name="ifacesError">Fehler: </string>
+    <string name="ifacesError">Fehler:</string>
     <string name="protocolLabel">Protokoll</string>
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Schlüssel-Fingerabdrücke</string>
@@ -26,7 +26,7 @@
     <string name="notificationTitle">FTP-Server</string>
     <string name="haveToSetAuthMechanism">Sie müssen erst einen Authentifizierungs-Mechanismus festlegen</string>
     <string name="serverRunning">FTP-Server läuft</string>
-    <string name="serverCouldNotBeStarted">Server konnte nicht gestartet werden! Fehlermeldung: </string>
+    <string name="serverCouldNotBeStarted">Server konnte nicht gestartet werden! Fehlermeldung:</string>
     <string name="portInvalid_v2">Port ist ungültig. Er muss zwischen 1024 und 64000 liegen.</string>
     <string name="portsEqual_v2">Ports sind gleich. Das kann nicht funktionieren.</string>
     <string name="restartServer">Sie müssen den Server neu starten, damit die Änderungen wirksam werden.</string>
@@ -92,8 +92,7 @@
     <string name="storageType">Art des Speichers</string>
     <string name="storageTypePlainV2">Gutes, altes Dateisystem\nNur lesenden Zugriff? Siehe unsere <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub Seite</a>.</string>
     <string name="storageTypeRoot">Super user (Gerät muss gerooted sein)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
-\n(z.B. für SD-Karte)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(z.B. für SD-Karte)</string>
     <string name="storageTypeRoSaf">Nur-Lesen SAF (schneller!)</string>
     <string name="storageTypeVirtual">Virtuelle Ordner (bietet alle Speicher-Arten)</string>
     <string name="safExplainHeading">Wie SAF funktioniert</string>
@@ -105,10 +104,10 @@
     <string name="quickShareServerStarted">Server wurde gestartet, stellt eine Datei bereit</string>
     <string name="filepickerCreateFolderError">Ordner konnte nicht erstellt werden</string>
     <string name="filepickerNewFolder">Neuer Ordner</string>
-    <string name="filepickerNewFolderOk">@android:string/ok</string>
-    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
-    <string name="filepickerListOk">@android:string/ok</string>
-    <string name="filepickerListCancel">@android:string/cancel</string>
+    <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="filepickerNewFolderCancel">\@android:string/cancel</string>
+    <string name="filepickerListOk">\@android:string/ok</string>
+    <string name="filepickerListCancel">\@android:string/cancel</string>
     <string name="filepickerName">Name</string>
     <string name="filepickerFilename">Dateiname</string>
     <string name="filepickerSelectSomethingFirst">Bitte erst etwas ausählen</string>
@@ -124,7 +123,7 @@
     </string-array>
     <string name="prefTitleAnonymousLogin">anonymer Login</string>
     <string name="prefTitlePubKeyAuth">Public-Key-Authentifizierung</string>
-    <string name="isServerRunning">Läuft der Server\?</string>
+    <string name="isServerRunning">Läuft der Server?</string>
     <string name="widgetTextStop">stoppe (s)ftpd</string>
     <string name="widgetTextStart">starte (s)ftpd</string>
     <string name="clientActionsLabel">Client Action Log</string>

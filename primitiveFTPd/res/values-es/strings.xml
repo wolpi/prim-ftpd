@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Interfaz de red</string>
     <string name="ipAddrLabel">Dirección IP</string>
-    <string name="ifacesError">Error: </string>
+    <string name="ifacesError">Error:</string>
     <string name="protocolLabel">Protocolo</string>
     <string name="portLabel">Puerto</string>
     <string name="fingerprintsLabel">Huellas de las claves</string>
@@ -26,7 +26,7 @@
     <string name="notificationTitle">Servidor FTP</string>
     <string name="haveToSetAuthMechanism">Primero debe establecer un método de autenticación</string>
     <string name="serverRunning">El servidor FTP se está ejecutando</string>
-    <string name="serverCouldNotBeStarted">No se ha podido iniciar el servidor. Error: </string>
+    <string name="serverCouldNotBeStarted">No se ha podido iniciar el servidor. Error:</string>
     <string name="portInvalid_v2">El puerto no es válido. Debe ser un valor de 1024 a 64000.</string>
     <string name="portsEqual_v2">Ambos puertos son iguales, esto no es posible.</string>
     <string name="restartServer">Reinicie el servidor para que los cambios surtan efecto.</string>
@@ -97,8 +97,7 @@
     <string name="storageType">Tipo de almacenamiento</string>
     <string name="storageTypePlainV2">Sistema de archivos\n¿Acceso solo de lectura? Vea <a href="https://www.github.com/wolpi/prim-ftpd/">página GitHub</a>.</string>
     <string name="storageTypeRoot">Superusuario («root» debe ser accesible)</string>
-    <string name="storageTypeSaf">Marco de acceso al almacenamiento de Android (SAF)
-\n(por ejemplo, para tarjeta SD externa)</string>
+    <string name="storageTypeSaf">Marco de acceso al almacenamiento de Android (SAF)\n(por ejemplo, para tarjeta SD externa)</string>
     <string name="storageTypeRoSaf">SAF de solo lectura (¡más rápido!)</string>
     <string name="storageTypeVirtual">Carpetas virtuales (admite todos los tipos)</string>
     <string name="safExplainHeading">Funcionamiento de SAF</string>
@@ -108,10 +107,10 @@
     <string name="saveToTextFile">Guardar</string>
     <string name="filepickerCreateFolderError">No se pudo crear la carpeta</string>
     <string name="filepickerNewFolder">Nueva carpeta</string>
-    <string name="filepickerNewFolderOk">@android:string/ok</string>
-    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
-    <string name="filepickerListOk">@android:string/ok</string>
-    <string name="filepickerListCancel">@android:string/cancel</string>
+    <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="filepickerNewFolderCancel">\@android:string/cancel</string>
+    <string name="filepickerListOk">\@android:string/ok</string>
+    <string name="filepickerListCancel">\@android:string/cancel</string>
     <string name="filepickerName">Nombre</string>
     <string name="filepickerFilename">Nombre del archivo</string>
     <string name="filepickerSelectSomethingFirst">Debe seleccionar algo primero</string>

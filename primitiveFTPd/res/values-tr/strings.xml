@@ -159,15 +159,13 @@
     <string name="prefHostkeyAlgos">SFTP sunucu anahtarı algoritmaları</string>
     <string name="licence">Lisans</string>
     <string name="selectServerAction">Sunucu Eylemini Seç</string>
-    <string name="storageTypePlainV2">Düz dosya sistemi
-\nSalt okunur erişiminiz mi var? <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub sayfamıza</a> bakın.</string>
+    <string name="storageTypePlainV2">Düz dosya sistemi \nSalt okunur erişiminiz mi var? <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub sayfamıza</a> bakın.</string>
     <string name="storageTypeVirtual">Sanal Klasörler (tüm depolama türlerini sağlar)</string>
     <string name="safExplainHeading">SAF nasıl çalışır</string>
     <string name="safExplainV2">Android sizden bir dizin seçmenizi isteyecektir. Bu, sunucu(lar) aracılığıyla kullanılabilecektir. İzin iptal ediliyor ve düzenli olarak yeniden seçmeniz mi gerekiyor? <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub sayfamıza</a> bakın.</string>
     <string name="hasAccessToMediaLocation">Ortam konumuna (coğrafi veri) erişim var: %1$b</string>
     <string name="isServerRunning">Sunucu çalışıyor mu?</string>
-    <string name="storageTypeSaf">Android Depolama Erişim Çerçevesi (SAF)
-\n(örn. harici SD kart için)</string>
+    <string name="storageTypeSaf">Android Depolama Erişim Çerçevesi (SAF)\n(örn. harici SD kart için)</string>
     <string name="storageTypeRoSaf">Salt okunur SAF (daha hızlı!)</string>
     <string name="startServerAndExit">yalnızca sunucuyu başlat</string>
     <string name="hasNotificationPermission">Bildirimleri gösterme izni var: %1$b</string>

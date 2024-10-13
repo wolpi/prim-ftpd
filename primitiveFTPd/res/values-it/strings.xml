@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Primitive FTPd</string>
+    <string name="app_name" translatable="false">Primitive FTPd</string>
     <string name="ifacesLabel">Interfaccia di rete</string>
     <string name="ipAddrLabel">Indirizzo IP</string>
-    <string name="ifacesError">Errore: </string>
+    <string name="ifacesError">Errore:</string>
     <string name="protocolLabel">Protocollo</string>
     <string name="portLabel">Porta</string>
     <string name="fingerprintsLabel">Fingerprint chiavi</string>
@@ -26,7 +26,7 @@
     <string name="notificationTitle">Server FTP</string>
     <string name="haveToSetAuthMechanism">Devi prima impostare una modalità di autenticazione</string>
     <string name="serverRunning">Server FTP attivo</string>
-    <string name="serverCouldNotBeStarted">Il server non può essere avviato! Errore: </string>
+    <string name="serverCouldNotBeStarted">Il server non può essere avviato! Errore:</string>
     <string name="portInvalid_v2">Il valore della porta non é valido. Deve stare tra 1024 e 64000.</string>
     <string name="portsEqual_v2">Non é possibile utilizzare porte uguali.</string>
     <string name="restartServer">Devi riavviare il Server perché le modifiche abbiano effetto.</string>
@@ -97,8 +97,7 @@
     <string name="storageType">Tipo di memoria</string>
     <string name="storageTypePlainV2">Filesystem classico\nHai l\'accesso in sola lettura? Vedi la nostra <a href="https://www.github.com/wolpi/prim-ftpd/">pagina GitHub</a>.</string>
     <string name="storageTypeRoot">Super user (richiede permessi root)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
-\n(es. per SD card)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(es. per SD card)</string>
     <string name="storageTypeRoSaf">SAF in sola lettura (più veloce!)</string>
     <string name="storageTypeVirtual">Cartelle virtuali (fornisce tutti i tipi di memoria)</string>
     <string name="safExplainHeading">Come funziona SAF</string>
@@ -108,10 +107,10 @@
     <string name="saveToTextFile">Salva su file di testo</string>
     <string name="filepickerCreateFolderError">Impossibile creare cartella</string>
     <string name="filepickerNewFolder">Nuova cartella</string>
-    <string name="filepickerNewFolderOk">@android:string/ok</string>
-    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
-    <string name="filepickerListOk">@android:string/ok</string>
-    <string name="filepickerListCancel">@android:string/cancel</string>
+    <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="filepickerNewFolderCancel">\@android:string/cancel</string>
+    <string name="filepickerListOk">\@android:string/ok</string>
+    <string name="filepickerListCancel">\@android:string/cancel</string>
     <string name="filepickerName">Nome</string>
     <string name="filepickerFilename">Nome file</string>
     <string name="filepickerSelectSomethingFirst">Devi prima selezionare qualcosa</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">網路介面</string>
     <string name="ipAddrLabel">IP 位置</string>
     <string name="ifacesError">錯誤：</string>
@@ -68,8 +68,7 @@
     <string name="isServerRunning">伺服器正在執行嗎？</string>
     <string name="storageType">儲存類型</string>
     <string name="storageTypeRoot">超級使用者（裝置必須 root）</string>
-    <string name="storageTypeSaf">Android 儲存空間存取架構 (SAF)
-\n（例如用於 SD 卡）</string>
+    <string name="storageTypeSaf">Android 儲存空間存取架構 (SAF)\n（例如用於 SD 卡）</string>
     <string name="storageTypeRoSaf">唯讀 SAF（比較快！）</string>
     <string name="safExplainHeading">SAF 如何運作</string>
     <string name="selectedSafUri">選擇的 SAF URI：</string>

@@ -1,6 +1,6 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="app_name">primiti
-\nve ftpd</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">primiti\nve ftpd</string>
     <string name="ifacesLabel">Netwerkinterface</string>
     <string name="ipAddrLabel">IP-adres</string>
     <string name="ifacesError">Fout:</string>
@@ -19,10 +19,8 @@
     <string name="quickSettingsServerStarted">pFTPd draait …</string>
     <string name="quickSettingsServerStopped">pFTPd is gestopt</string>
     <string name="saveAs">Opslaan als</string>
-
     <string name="startService">Start server</string>
     <string name="stopService">Stop server</string>
     <string name="toggleService">"Server snel starten/stoppen "</string>
     <string name="notificationTitle">FTP server</string>
-
 </resources>

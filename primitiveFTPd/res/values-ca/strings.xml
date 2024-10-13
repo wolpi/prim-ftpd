@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Interfície xarxa</string>
     <string name="ipAddrLabel">Adreça IP</string>
-    <string name="ifacesError">Error: </string>
+    <string name="ifacesError">Error:</string>
     <string name="protocolLabel">Protocol</string>
     <string name="portLabel">Port</string>
     <string name="fingerprintsLabel">Empremtes de les claus</string>
@@ -26,7 +26,7 @@
     <string name="notificationTitle">Servidor FTP</string>
     <string name="haveToSetAuthMechanism">Primer heu de definir un mètode d\'autenticació</string>
     <string name="serverRunning">El servidor FTP s\'està executant</string>
-    <string name="serverCouldNotBeStarted">No s\'ha pogut iniciar el servidor. Error: </string>
+    <string name="serverCouldNotBeStarted">No s\'ha pogut iniciar el servidor. Error:</string>
     <string name="portInvalid_v2">Port no vàlid: ha d\'ésser des de 1024 a 64000.</string>
     <string name="portsEqual_v2">Ambdós ports són iguals, això no és possible.</string>
     <string name="restartServer">Reinicieu el servidor per a aplicar els canvis.</string>
@@ -97,8 +97,7 @@
     <string name="storageType">Tipus d\'emmagatzematge</string>
     <string name="storageTypePlainV2">Sistema de fitxers\nAccés només de lectura? Vegeu <a href="https://www.github.com/wolpi/prim-ftpd/">GitHub</a>.</string>
     <string name="storageTypeRoot">Superusuari (requereix «root» accessible)</string>
-    <string name="storageTypeSaf">Entorn Android d\'accés
-\na l\'emmagatzematge (SAF). (P. ex. per a targetes SD)</string>
+    <string name="storageTypeSaf">Entorn Android d\'accés\na l\'emmagatzematge (SAF). (P. ex. per a targetes SD)</string>
     <string name="storageTypeRoSaf">SAF només de lectura (més ràpid)</string>
     <string name="storageTypeVirtual">Carpetes virtuals (admet tots els tipus)</string>
     <string name="safExplainHeading">Funcionament del SAF</string>
@@ -108,10 +107,10 @@
     <string name="saveToTextFile">Desa</string>
     <string name="filepickerCreateFolderError">Error en crear la carpeta</string>
     <string name="filepickerNewFolder">Carpeta nova</string>
-    <string name="filepickerNewFolderOk">@android:string/ok</string>
-    <string name="filepickerNewFolderCancel">@android:string/cancel</string>
-    <string name="filepickerListOk">@android:string/ok</string>
-    <string name="filepickerListCancel">@android:string/cancel</string>
+    <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="filepickerNewFolderCancel">\@android:string/cancel</string>
+    <string name="filepickerListOk">\@android:string/ok</string>
+    <string name="filepickerListCancel">\@android:string/cancel</string>
     <string name="filepickerName">Nom</string>
     <string name="filepickerFilename">Nom del fitxer</string>
     <string name="filepickerSelectSomethingFirst">Primer heu de triar quelcom</string>

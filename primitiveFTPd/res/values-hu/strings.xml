@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">primitív ftpd</string>
+    <string name="app_name" translatable="false">primitív ftpd</string>
     <string name="ifacesLabel">Hálózati felület</string>
     <string name="ipAddrLabel">IP cím</string>
     <string name="ifacesError">Hiba:</string>
@@ -56,7 +56,7 @@
     <string name="prefSummaryAnnounce">FTP-kiszolgáló megjelenítése a LAN-on DNS-SD (Bonjour) segítségével. Egyes eszközökön összeomlást okozhat.</string>
     <string name="prefTitleAnnounce">A szerver legyen látható a LAN-on</string>
     <string name="filepickerName">Név</string>
-    <string name="isServerRunning">Fut a szerver\?</string>
+    <string name="isServerRunning">Fut a szerver?</string>
     <string name="selectServerAction">Szerver viselkedés kiválasztása</string>
     <string name="pubKeyAuth">Nyilvános kulcs: %1$b</string>
     <string name="passwordPresent">Jelenlegi jelszó: %1$b</string>
@@ -90,8 +90,7 @@
     <string name="filepickerCreateFolderError">Hiba a mappa létrehozásakor</string>
     <string name="selectedSafUri">Kiválasztott SAF URI:</string>
     <string name="storageTypeRoSaf">Csak olvasható SAF (gyorsabb!)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
-\n(pl. SD kártyához)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(pl. SD kártyához)</string>
     <string name="storageTypeRoot">Super user (root)</string>
     <string name="storageType">Tároló típus</string>
     <string name="isAnonymous">Névtelen belépés: %1$b</string>
@@ -123,8 +122,7 @@
     <string name="prefTitleIdleTimeoutServerStop">Időtúllépés a szerver leállítására</string>
     <string name="downloadOrSaveUrlToFile">URL letöltése vagy mentése file-ba?</string>
     <string name="saveToTextFile">Mentés szövegfájlba</string>
-    <string name="storageTypePlainV2">Hagyományos file-rendszer
-\nCsak olvasható a hozzáférése? Olvassa el a <a href="https://www.github.com/wolpi/prim-ftpd/">Github oldalunkat</a>.</string>
+    <string name="storageTypePlainV2">Hagyományos file-rendszer \nCsak olvasható a hozzáférése? Olvassa el a <a href="https://www.github.com/wolpi/prim-ftpd/">Github oldalunkat</a>.</string>
     <string name="storageTypeVirtual">Virtuális mappák (az összes Tároló típus elérhető)</string>
     <string name="download">Letölt</string>
     <string name="statsSentPerSec">Másodpercenként küldött</string>

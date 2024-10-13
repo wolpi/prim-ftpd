@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">primitive ftpd</string>
+    <string name="app_name" translatable="false">primitive ftpd</string>
     <string name="ifacesLabel">Interface réseau</string>
     <string name="ipAddrLabel">Adresse IP</string>
     <string name="ifacesError">Erreur :</string>
@@ -10,7 +10,7 @@
     <string name="stopService">Arrêter le serveur</string>
     <string name="notificationTitle">Serveur FTP</string>
     <string name="serverRunning">Serveur FTP en cours d’exécution</string>
-    <string name="serverCouldNotBeStarted">Impossible de démarrer le serveur ! Erreur : </string>
+    <string name="serverCouldNotBeStarted">Impossible de démarrer le serveur ! Erreur :</string>
     <string name="restartServer">Vous devez redémarrer le serveur pour que les changements soient pris en compte.</string>
     <string name="prefs">Préférences</string>
     <string name="prefTitleUser">Nom d\'utilisateur</string>
@@ -81,8 +81,7 @@
     <string name="prefTitleIdleTimeout">Délai d\'inactivité du serveur</string>
     <string name="pubKeyAuth">Authtification par clé publique : %1$b</string>
     <string name="selectServerAction">Sélectionner l\'action du serveur</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)
-\n(ex. pour une carte SD)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(ex. pour une carte SD)</string>
     <string name="storageTypeRoSaf">SAF en lecture seule (plus rapide !)</string>
     <string name="selectedSafUri">Sélectionné SAF URI :</string>
     <string name="filepickerCreateFolderError">Création du répertoire : erreur</string>
@@ -104,7 +103,7 @@
     <string name="quickShare">Partage rapide</string>
     <string name="saveToTextFile">Sauvegarder dans un fichier texte</string>
     <string name="download">Télécharger</string>
-    <string name="downloadOrSaveUrlToFile">Télécharger ou sauvegarder l\'URL vers un fichier texte \?</string>
+    <string name="downloadOrSaveUrlToFile">Télécharger ou sauvegarder l\'URL vers un fichier texte ?</string>
     <string name="prefSummaryQuickSettingsRequiresUnlock">"Le clic sur Vignettes rapides nécessite de déverrouillage de  équipement pour démarrer / arrêter le serveur. Quand actif, une demande de déverrouillage sera affiché si l\'équipement est verrouillé. "</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Déverrouillage nécessaire pour Vignettes Rapides</string>
     <string name="prefSummaryIdleTimeoutV2">Le serveur va couper les connexions inactives après ce délai en secondes. Réglez-le sur 0 pour désactiver.</string>
@@ -115,11 +114,11 @@
     <string name="hasFullAccessToStorage">A un accès complet au stockage : %1$b</string>
     <string name="Request">Demander</string>
     <string name="delete">Supprimer</string>
-  <string name="mobileUiShort">Mode mobile</string>
+    <string name="mobileUiShort">Mode mobile</string>
     <string name="mobileUiLong">Mode appareil mobile</string>
     <string name="tvUiShort">Mode TV</string>
     <string name="tvUiLong">Mode téléviseur</string>
-  <string name="iconKeysFingerprints">Empreintes des clés</string>
+    <string name="iconKeysFingerprints">Empreintes des clés</string>
     <string name="iconAbout">À propos</string>
     <string name="prefSummaryBindIp">Si vous voulez que les serveurs écoutent sur une seule interface.</string>
 </resources>
