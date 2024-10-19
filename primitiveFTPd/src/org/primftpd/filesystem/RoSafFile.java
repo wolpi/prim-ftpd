@@ -26,6 +26,7 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
     private boolean writable;
     private boolean deletable;
 
+    static final int CURSOR_INDEX_ID = 0;
     static final int CURSOR_INDEX_NAME = 1;
     static final String[] SAF_QUERY_COLUMNS = {
             DocumentsContract.Document.COLUMN_DOCUMENT_ID,
