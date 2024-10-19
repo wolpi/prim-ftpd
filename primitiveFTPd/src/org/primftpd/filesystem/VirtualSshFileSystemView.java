@@ -41,11 +41,6 @@ public class VirtualSshFileSystemView extends VirtualFileSystemView<
     }
 
     @Override
-    public VirtualSshConfigFile getConfigFile() {
-        return new VirtualSshConfigFile(this, session);
-    }
-
-    @Override
     protected String absolute(String file) {
         return Utils.absoluteOrHome(file, "/" + PREFIX_FS + homeDir.getAbsolutePath());
     }
