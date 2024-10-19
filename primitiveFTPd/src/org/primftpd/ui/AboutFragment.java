@@ -23,11 +23,6 @@ public class AboutFragment extends Fragment
         "https://github.com/wolpi/prim-ftpd";
     public static final String URL_FDROID =
         "https://f-droid.org/repository/browse/?fdid=org.primftpd";
-    public static final String URL_GOOGLE_PLAY =
-        "https://play.google.com/store/apps/details?id=org.primftpd";
-    public static final String URL_AMAZON =
-        "http://www.amazon.com/wolpi-primitive-FTPd/dp/B00KERCPNY/ref=sr_1_1";
-
     public static final String URL_MINA = "https://mina.apache.org";
     public static final String URL_BC = "https://bouncycastle.org/";
     public static final String URL_SLF4J = "https://www.slf4j.org/";
@@ -82,12 +77,6 @@ public class AboutFragment extends Fragment
 
         ((TextView)view.findViewById(R.id.fdroidLabel)).setText("F-Droid");
         ((TextView)view.findViewById(R.id.fdroidTextView)).setText(URL_FDROID);
-
-        ((TextView)view.findViewById(R.id.googlePlayLabel)).setText("Google Play");
-        ((TextView)view.findViewById(R.id.googlePlayTextView)).setText(URL_GOOGLE_PLAY);
-
-        ((TextView)view.findViewById(R.id.amazonLabel)).setText("Amazon");
-        ((TextView)view.findViewById(R.id.amazonTextView)).setText(URL_AMAZON);
 
         ((TextView)view.findViewById(R.id.minaTextView)).setText(URL_MINA);
         ((TextView)view.findViewById(R.id.bouncyCastleTextView)).setText(URL_BC);
