@@ -30,6 +30,10 @@ public abstract class SafFileSystemView<TFile extends SafFile<TMina, ? extends S
         this.timeResolution = StorageManagerUtil.getFilesystemTimeResolutionForTreeUri(startUrl);
     }
 
+    public final Uri getStartUrl() {
+        return startUrl;
+    }
+
     protected abstract TFile createFile(
             String absPath,
             DocumentFile parentDocumentFile,
