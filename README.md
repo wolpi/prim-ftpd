@@ -13,11 +13,11 @@ FTP and SFTP server app for Android with external SD-card access.
 How can you use this server on your device to access your files (see discussion regarding permission and restriction below in terms of Google and Play)?
 * Install from F-Droid
 * Download from GitHub releases
-* Use SAF
-* Use QuickShare
+* Use SAF (if you don't grant full filesystem access)
+* Use QuickShare (if you don't grant full filesystem access)
 
-| [<img alt="Get it on F-Droid" height="60" src="https://f-droid.org/badge/get-it-on.png" />](https://f-droid.org/app/org.primftpd) | [<img alt="Get it on Google Play" height="60" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />](https://play.google.com/store/apps/details?id=org.primftpd) | [<img alt="Get it on Amazon" height="45" style="margin-left: 8px;" src="https://images-na.ssl-images-amazon.com/images/G/01/AmazonMobileApps/amazon-apps-store-us-black.png" />](http://www.amazon.com/wolpi-primitive-FTPd/dp/B00KERCPNY/ref=sr_1_1) |
-| --- | --- | --- |
+[<img alt="Get it on F-Droid" height="60" src="https://f-droid.org/badge/get-it-on.png" />](https://f-droid.org/app/org.primftpd)
+
 
 You may download latest development snapshot from [GitHub packages](https://github.com/wolpi/prim-ftpd/packages/).
 
@@ -74,8 +74,8 @@ your files through this server you might have to grant it 'all files access' per
 
 To be able to allow 'All files access' an app must declare `android.permission.MANAGE_EXTERNAL_STORAGE` in it's manifest file.
 Google has a policy wether an app is allowed to declare that permission and be published on Google Play.
-As you can see below this app is considered as not compliant.
+As you can see below this app is considered as not compliant (which is not relevant anymore).
 
-Mail from Google:
+Mail from Google (has been relevant as long as the app has been available on Google Play):
 
 ![google play policy mail](fastlane/img/google-play-policy-mail.png)
