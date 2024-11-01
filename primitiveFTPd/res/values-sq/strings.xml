@@ -14,4 +14,21 @@
     <string name="fingerprintsLabel">Gjurmët e gishtërinjve</string>
     <string name="generate">Gjeneroni</string>
     <string name="serverStopped">Ndaloi</string>
+    <string name="toggleService">Ndrysho fillimin/ndalimin e serverit</string>
+    <string name="notificationTitle">FTP Server</string>
+    <string name="haveToSetAuthMechanism">Së pari ju duhet të vendosni një mekanizëm vërtetimi</string>
+    <string name="serverRunning">Serveri FTP është aktiv</string>
+    <string name="pubkeyAuthKeysHeading">Çelësat për auth çelësin publik</string>
+    <string name="addPubkeyForAuth">Shto çelës publik për auth</string>
+    <string name="pubkeyInvalid">Hyrja nuk është një çelës i vlefshëm, është injoruar.</string>
+    <string name="permissionRequired">Kërkohet leja \"%1$s\" që ky aplikacion të funksionojë!</string>
+    <string name="permissionNameStorage">Ruajtje</string>
+    <string name="quickSettingsServerStarted">pFTPd Po ekzekuton…</string>
+    <string name="quickSettingsServerStopped">pFTPd U ndal</string>
+    <string name="saveAs">Ruaj si</string>
+    <string name="startService">Filloni serverin</string>
+    <string name="stopService">Ndalo serverin</string>
+    <string name="serverCouldNotBeStarted">Serveri nuk mund të nisej! Mesazh gabimi:</string>
+    <string name="portInvalid_v2">Vlera e portit është e pavlefshme. Duhet të jetë midis 1024 dhe 64000.</string>
+    <string name="noKeysPresent">Nuk ka çelësa të pranishëm.</string>
 </resources>
