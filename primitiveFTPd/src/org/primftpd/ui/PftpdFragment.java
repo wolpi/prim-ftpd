@@ -23,7 +23,6 @@ import android.provider.DocumentsContract;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.UnderlineSpan;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -468,7 +467,6 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 			TextView textView = new TextView(container.getContext());
 			container.addView(textView);
 			textView.setText(displayText);
-			textView.setGravity(Gravity.CENTER_HORIZONTAL);
 			textView.setTextIsSelectable(true);
 		}
 
