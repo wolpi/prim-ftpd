@@ -113,7 +113,6 @@ public class FtpServerService extends AbstractServerService
 					case PLAIN:
 						return new FsFtpFileSystemView(
 								FtpServerService.this,
-								Uri.parse(prefsBean.getSafUrl()),
 								prefsBean.getStartDir(),
 								user);
 					case ROOT:
@@ -137,7 +136,6 @@ public class FtpServerService extends AbstractServerService
 								FtpServerService.this,
 								new FsFtpFileSystemView(
 										FtpServerService.this,
-										Uri.parse(prefsBean.getSafUrl()),
 										prefsBean.getStartDir(),
 										user),
 								new RootFtpFileSystemView(

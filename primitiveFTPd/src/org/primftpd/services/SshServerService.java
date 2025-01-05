@@ -193,7 +193,6 @@ public class SshServerService extends AbstractServerService
 					case PLAIN:
 						return new FsSshFileSystemView(
 								SshServerService.this,
-								Uri.parse(prefsBean.getSafUrl()),
 								prefsBean.getStartDir(),
 								session);
 					case ROOT:
@@ -217,7 +216,6 @@ public class SshServerService extends AbstractServerService
 								SshServerService.this,
 								new FsSshFileSystemView(
 										SshServerService.this,
-										Uri.parse(prefsBean.getSafUrl()),
 										prefsBean.getStartDir(),
 										session),
 								new RootSshFileSystemView(

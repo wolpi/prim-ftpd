@@ -68,6 +68,11 @@ public final class StorageManagerUtil {
         return volumePath;
     }
 
+    public static int getFilesystemTimeResolutionForTreeUri(Uri startUrl) {
+        String volumeId = getVolumeIdFromTreeUri(startUrl);
+        return getFilesystemTimeResolutionForVolumeId(volumeId);
+    }
+
     private final static Map<String, Integer> CACHED_FILESYSTEM_TIME_RESOLUTIONS = new HashMap<>();
 
     /**
@@ -81,13 +86,12 @@ public final class StorageManagerUtil {
      *    the used sdcardfs has another bug, it provides the same 2s resolution even for the exfat file-system,
      *    so in this case we have to modify the resolution even for the exfat file-system to 2s.
      *
-     * @param  startUrl SAF startUrl
-     * @return          SAF file system's time resolution measured in milliseconds
+     * @param  volumeId volume id, eg. "1234-ABCD"
+     * @return          file system's time resolution measured in milliseconds
      */
-    public static int getFilesystemTimeResolutionForTreeUri(Uri startUrl) {
-        LOGGER.trace("getFilesystemTimeResolutionForTreeUri({})", startUrl);
+    public static int getFilesystemTimeResolutionForVolumeId(String volumeId) {
+        LOGGER.trace("getFilesystemTimeResolutionForVolumeId({})", volumeId);
         int timeResolution = 1; // use 1ms by default
-        String volumeId = getVolumeIdFromTreeUri(startUrl);
         if (volumeId != null) {
             Integer cachedTimeResolution = CACHED_FILESYSTEM_TIME_RESOLUTIONS.get(volumeId);
             if (cachedTimeResolution != null) {
@@ -151,11 +155,11 @@ public final class StorageManagerUtil {
                     timeResolution = Math.max(timeResolution, Math.max(mediaTimeResolution, storageTimeResolution));
                     CACHED_FILESYSTEM_TIME_RESOLUTIONS.put(volumeId, timeResolution);
                 } catch (Exception e) {
-                    LOGGER.error("getFilesystemTimeResolutionForTreeUri()", e);
+                    LOGGER.error("getFilesystemTimeResolutionForVolumeId()", e);
                 }
             }
         }
-        LOGGER.trace("  getFilesystemTimeResolutionForTreeUri({}) -> {}", startUrl, timeResolution);
+        LOGGER.trace("  getFilesystemTimeResolutionForVolumeId({}) -> {}", volumeId, timeResolution);
         return timeResolution;
     }
 

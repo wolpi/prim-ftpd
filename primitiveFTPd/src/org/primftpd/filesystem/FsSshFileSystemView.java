@@ -1,7 +1,5 @@
 package org.primftpd.filesystem;
 
-import android.net.Uri;
-
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.FileSystemView;
 import org.apache.sshd.common.file.SshFile;
@@ -14,8 +12,8 @@ public class FsSshFileSystemView extends FsFileSystemView<FsSshFile, SshFile> im
 	private final File homeDir;
 	private final Session session;
 
-	public FsSshFileSystemView(PftpdService pftpdService, Uri safStartUrl, File homeDir, Session session) {
-		super(pftpdService, safStartUrl);
+	public FsSshFileSystemView(PftpdService pftpdService, File homeDir, Session session) {
+		super(pftpdService);
 		this.homeDir = homeDir;
 		this.session = session;
 	}
