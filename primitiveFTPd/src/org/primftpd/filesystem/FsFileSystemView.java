@@ -25,20 +25,22 @@ public abstract class FsFileSystemView<
 		return mediaScannerClient;
 	}
 
-	private final static Pattern getVolumeIdRegex;
+	private final static Pattern isVolumeIdRegex;
 	static {
-		getVolumeIdRegex = Pattern.compile("^\\/storage\\/([\\dA-F]{4}-[\\dA-F]{4})");
+		// Android regex is completely broken, the below pattern is not matched if the string is longer, this is against even the ICU regex spec
+		// getVolumeIdRegex = Pattern.compile("^\\/storage\\/([\\dA-F]{4}-[\\dA-F]{4})");
+		isVolumeIdRegex = Pattern.compile("^[\\dA-F]{4}-[\\dA-F]{4}$");
 	}
 
 	public long getCorrectedTime(String abs, long time) {
-		Matcher matcher = getVolumeIdRegex.matcher(abs);
-		if (matcher.matches()) {
-			String volumeId = matcher.group(1);
-			int timeResolution = StorageManagerUtil.getFilesystemTimeResolutionForVolumeId(volumeId);
-			return (time / timeResolution) * timeResolution;
-		} else {
-			return time;
+		if (18 <= abs.length() && abs.startsWith("/storage/")) {
+			String volumeId = abs.substring(9, 18);
+			if (isVolumeIdRegex.matcher(volumeId).matches()) {
+				int timeResolution = StorageManagerUtil.getFilesystemTimeResolutionForVolumeId(volumeId);
+				return (time / timeResolution) * timeResolution;
+			}
 		}
+		return time;
 	}
 
 	public TFile getFile(String file) {
