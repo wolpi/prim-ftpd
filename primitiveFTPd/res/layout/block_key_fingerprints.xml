@@ -1,11 +1,12 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <!-- key fingerprints -->
     <TextView
         android:id="@+id/keyFingerprintsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:textStyle="bold"
         android:layout_marginTop="16dp"
         android:text="@string/fingerprintsLabel"
@@ -25,7 +26,6 @@
         android:id="@+id/allKeysFingerprintsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/allKeysFingerprintsLabel"
@@ -44,56 +44,56 @@
         android:id="@+id/keyFingerprintMd5Label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:focusable="false"
+        tools:text="MD5 (ed25519)"
         />
     <TextView
         android:id="@+id/keyFingerprintMd5TextView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:typeface="monospace"
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
         android:focusable="false"
+        tools:text="00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00\nBase 64\nOyaoinjnvjwnoijjoiejijiewj"
         />
     <!-- SHA 1 -->
     <TextView
         android:id="@+id/keyFingerprintSha1Label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:focusable="false"
+        tools:text="SHA1 (ed25519)"
         />
     <TextView
         android:id="@+id/keyFingerprintSha1TextView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:typeface="monospace"
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
         android:focusable="false"
+        tools:text="00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00\nBase 64\nOyaoinjnvjwnoijjoiejijiewj"
         />
     <!-- SHA 256 -->
     <TextView
         android:id="@+id/keyFingerprintSha256Label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:focusable="false"
+        tools:text="SHA256 (ed25519)"
         />
     <TextView
         android:id="@+id/keyFingerprintSha256TextView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:typeface="monospace"
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
         android:focusable="false"
+        tools:text="00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00\nBase 64\nOyaoinjnvjwnoijjoiejijiewj"
         />
 
 </merge>
