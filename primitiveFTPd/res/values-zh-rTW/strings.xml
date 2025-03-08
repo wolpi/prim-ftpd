@@ -7,7 +7,7 @@
     <string name="protocolLabel">協定</string>
     <string name="portLabel">連接埠</string>
     <string name="fingerprintsLabel">金鑰指紋</string>
-    <string name="generateKeysMessage">產生金鑰嗎？</string>
+    <string name="generateKeysMessage">要產生金鑰嗎？</string>
     <string name="generatingKeysMessage">正在產生金鑰…</string>
     <string name="generate">產生</string>
     <string name="cancel">取消</string>
@@ -27,7 +27,7 @@
     <string name="serverCouldNotBeStarted">伺服器無法啟動！錯誤訊息：</string>
     <string name="portInvalid_v2">連接埠的值無效。必須介於 1024 和 64000。</string>
     <string name="portsEqual_v2">連接埠相同。這樣無法運作。</string>
-    <string name="restartServer">你必須重新啟動伺服器，變更才能生效。</string>
+    <string name="restartServer">請重新啟動伺服器變更才能生效。</string>
     <string name="couldNotReadKeyAuthKey">無法讀取用來金鑰驗證的公開金鑰。請檢查記錄。</string>
     <string name="prefs">偏好設定</string>
     <string name="prefTitleUser">使用者名稱</string>
@@ -103,4 +103,11 @@
     <string name="filepickerName">名稱</string>
     <string name="filepickerNewFolderCancel">\@android:string/cancel</string>
     <string name="filepickerNewFolderOk">\@android:string/ok</string>
+    <string name="allKeysFingerprintsLabel">顯示所有金鑰的指紋</string>
+    <string name="storageTypeVirtual">虛擬資料夾 (提供給所有儲存類型)</string>
+    <string name="pubkeyAuthKeysHeading">公鑰身份驗證的密鑰</string>
+    <string name="addPubkeyForAuth">添加公鑰以進行身份驗證</string>
+    <string name="pubkeyInvalid">輸入的內容不是有效的密鑰，已被忽略。</string>
+    <string name="noKeysPresent">沒有可用的密鑰。</string>
+    <string name="prefBindIp">要綁定的 IP 地址</string>
 </resources>
