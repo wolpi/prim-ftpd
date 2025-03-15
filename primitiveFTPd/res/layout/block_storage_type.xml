@@ -5,13 +5,11 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         >
         <TextView
             android:id="@+id/storageTypeLabel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
             android:text="@string/storageType"
@@ -65,7 +63,6 @@
         android:id="@+id/safExplainHeading"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:text="@string/safExplainHeading"
         android:textStyle="bold"
         />
@@ -73,14 +70,12 @@
         android:id="@+id/safExplain"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:text="@string/safExplainV2"
         />
     <TextView
         android:id="@+id/safUriLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:text="@string/selectedSafUri"
         android:textStyle="bold"
         android:visibility="gone"
@@ -89,7 +84,6 @@
         android:id="@+id/safUri"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:visibility="gone"
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
