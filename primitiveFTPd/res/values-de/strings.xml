@@ -148,4 +148,10 @@
     <string name="tvUiShort">TV-Modus</string>
     <string name="tvUiLong">Fernsehmodus</string>
     <string name="iconAbout">Über</string>
+    <string name="pubkeyAuthKeysHeading">Schlüssel für die Authentifizierung mit öffentlichem Schlüssel</string>
+    <string name="addPubkeyForAuth">Öffentlichen Schlüssel für die Authentifizierung hinzufügen</string>
+    <string name="prefSummaryShowTabNames">Reiternamen in der Hauptoberfläche anzeigen</string>
+    <string name="noKeysPresent">Kein Schlüssel vorhanden.</string>
+    <string name="pubkeyInvalid">Kein gültiger Schlüssel eingegeben, wurde ignoriert.</string>
+    <string name="prefShowTabNames">Reiternamen anzeigen</string>
 </resources>
