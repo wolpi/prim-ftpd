@@ -4,7 +4,7 @@
     <string name="prefTitlePubKeyAuth">பொது விசை ஏற்பு</string>
     <string name="storageTypeRoSaf">SAF ஐ மட்டும் படிக்கவும் (வேகமாக!)</string>
     <string name="quickShareServerStarted">சேவையகம் ஒற்றை கோப்பைப் பகிரத் தொடங்கப்பட்டது</string>
-    <string name="quickShareInfoNotificationV2">%1D கோப்பு (கள்) உடன் விரைவுசேர்</string>
+    <string name="quickShareInfoNotificationV2">%1d கோப்பு (கள்) உடன் விரைவுசேர்</string>
     <string name="quickShareInfoActivityV2">%1d கோப்பு (கள்) க்கான குயிக்சேர் பயன்முறையில் இயங்குகிறது</string>
     <string name="iconAbout">பற்றி</string>
     <string name="qrFallback">பிணைய இடைமுகங்கள் இல்லை, ஐபி முகவரிகள் இல்லை, QR குறியீடு இல்லை</string>
@@ -33,10 +33,10 @@
     <string name="statsTotalReceived">மொத்தம் பெறப்பட்டது</string>
     <string name="statsSentPerSec">ஒரு நொடிக்கு அனுப்பப்பட்டது</string>
     <string name="statsReceivedPerSec">ஒரு நொடிக்கு பெறப்பட்டது</string>
-    <string name="hasFullAccessToStorage">சேமிப்பகத்திற்கான முழு அணுகல் உள்ளது: %1 $ b</string>
-    <string name="hasNormalAccessToStorage">சேமிப்பிற்கான (இயல்பான) அணுகல் உள்ளது: %1 $ b</string>
-    <string name="hasAccessToMediaLocation">மீடியா இருப்பிடத்திற்கான அணுகல் உள்ளது (சியோ தரவு): %1 $ b</string>
-    <string name="hasNotificationPermission">அறிவிப்புகளைக் காட்ட இசைவு உள்ளது: %1 $ b</string>
+    <string name="hasFullAccessToStorage">சேமிப்பகத்திற்கான முழு அணுகல் உள்ளது: %1$b</string>
+    <string name="hasNormalAccessToStorage">சேமிப்பிற்கான (இயல்பான) அணுகல் உள்ளது: %1$b</string>
+    <string name="hasAccessToMediaLocation">மீடியா இருப்பிடத்திற்கான அணுகல் உள்ளது (சியோ தரவு): %1$b</string>
+    <string name="hasNotificationPermission">அறிவிப்புகளைக் காட்ட இசைவு உள்ளது: %1$b</string>
     <string name="Request">கோரிக்கை</string>
     <string name="quickShareFiles">குயிக்சேர் கோப்புகள்:</string>
     <string name="logFiles">பதிவு கோப்புகள்:</string>
@@ -144,12 +144,12 @@
     <string name="reset">மீட்டமை</string>
     <string name="widgetTextStart">தொடக்க (கள்) ftpd</string>
     <string name="widgetTextStop">நிறுத்து (கள்) ftpd</string>
-    <string name="isAnonymous">அநாமதேய உள்நுழைவு: %1 $ b</string>
-    <string name="passwordPresent">கடவுச்சொல் தற்போது: %1 $ b</string>
-    <string name="pubKeyAuth">பொது விசை அங்கீகாரம்: %1 $ b</string>
+    <string name="isAnonymous">அநாமதேய உள்நுழைவு: %1$b</string>
+    <string name="passwordPresent">கடவுச்சொல் தற்போது:%1$b</string>
+    <string name="pubKeyAuth">பொது விசை அங்கீகாரம்: %1$b</string>
     <string name="selectServerAction">சேவையக செயலைத் தேர்ந்தெடுக்கவும்</string>
     <string name="isServerRunning">சேவையகம் இயங்குகிறதா?</string>
     <string name="storageType">சேமிப்பக வகை</string>
-    <string name="storageTypePlainV2">பழைய பழைய கோப்பு முறைமை\n படிக்க மட்டும் அணுகல் கிடைத்ததா? எங்கள் <a href="https://www.github.com/wolpi/prim-ftpd/"> அறிவிலிமையம் பக்கம் </a> ஐப் பார்க்கவும்.</string>
+    <string name="storageTypePlainV2">பழைய எளிய கோப்பு முறைமை\n படிக்க மட்டும் அணுகல் கிடைத்ததா? எங்கள் <a href="https://www.github.com/wolpi/prim-ftpd/"> அறிவிலிமையம் பக்கம் </a> ஐப் பார்க்கவும்.</string>
     <string name="storageTypeRoot">சூப்பர் பயனர் (சாதனம் வேரூன்ற வேண்டும்)</string>
 </resources>
