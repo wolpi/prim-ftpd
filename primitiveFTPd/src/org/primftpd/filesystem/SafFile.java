@@ -39,7 +39,7 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
 
     private DocumentFile parentDocumentFile;
     private List<String> parentNonexistentDirs;
-    private DocumentFile documentFile;
+    protected DocumentFile documentFile;
 
     public SafFile(
             TFileSystemView fileSystemView,

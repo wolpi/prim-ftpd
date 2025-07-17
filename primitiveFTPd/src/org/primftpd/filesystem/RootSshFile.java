@@ -116,6 +116,12 @@ public class RootSshFile extends RootFile<SshFile, RootSshFileSystemView> implem
     }
 
     @Override
+    public void truncate() {
+        boolean result = runCommand("truncate -c -s 0" + " " + escapePath(absPath));
+        logger.trace("[{}] truncate() -> {}", name, result);
+    }
+
+    @Override
     public boolean create() throws IOException {
         // This call is required by SSHFS, because it calls STAT on created new files.
         // This call is not required by normal clients who simply open, write and close the file.
