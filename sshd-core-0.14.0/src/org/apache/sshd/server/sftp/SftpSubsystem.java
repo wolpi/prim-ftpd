@@ -106,7 +106,7 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
         public ExecutorService getExecutorService() {
         	return executors;
         }
-        
+
         public boolean isShutdownOnExit() {
         	return shutdownExecutor;
         }
@@ -514,6 +514,13 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                             sendStatus(id, SSH_FX_FAILURE, path);
                             return;
                         }
+                        if ((pflags & SSH_FXF_TRUNC) != 0) {
+                            if (!file.isWritable()) {
+                                sendStatus(id, SSH_FX_PERMISSION_DENIED, "Can not truncate " + path);
+                                return;
+                            }
+                            file.truncate();
+                        }
                     } else {
                         if (((pflags & SSH_FXF_CREAT) != 0)) {
                             if (!file.isWritable()) {
@@ -528,13 +535,6 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                             sendStatus(id, SSH_FX_NO_SUCH_FILE, "No such file " + path);
                             return;
                         }
-                    }
-                    if ((pflags & SSH_FXF_TRUNC) != 0) {
-                        if (!file.isWritable()) {
-                            sendStatus(id, SSH_FX_PERMISSION_DENIED, "Can not truncate " + path);
-                            return;
-                        }
-                        file.truncate();
                     }
                     if ((pflags & SSH_FXF_CREAT) != 0) {
                         file.setAttributes(attrs);
