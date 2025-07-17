@@ -4,7 +4,9 @@ import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.List;
 
 public class FsSshFile extends FsFile<SshFile, FsSshFileSystemView> implements SshFile {
@@ -37,9 +39,17 @@ public class FsSshFile extends FsFile<SshFile, FsSshFileSystemView> implements S
 	}
 
 	@Override
+	public void truncate() throws IOException {
+		logger.trace("[{}] truncate()", name);
+		try (FileChannel outChannel = new FileOutputStream(file, true).getChannel()) {
+			outChannel.truncate(0);
+		}
+	}
+
+	@Override
 	public boolean create() throws IOException {
-        // This call is required by SSHFS, because it calls STAT on created new files.
-        // This call is not required by normal clients who simply open, write and close the file.
+		// This call is required by SSHFS, because it calls STAT on created new files.
+		// This call is not required by normal clients who simply open, write and close the file.
 		boolean result = file.createNewFile();
 		logger.trace("[{}] create() -> {}", name, result);
 		return result;

@@ -58,6 +58,15 @@ public class SafSshFile extends SafFile<SshFile, SafSshFileSystemView> implement
     }
 
     @Override
+    public void truncate() throws IOException {
+        logger.trace("[{}] truncate()", name);
+        if (documentFile != null) {
+            // We can't use "wt" in SafFile.createOutputStream(), in case of zero new size, no output stream will be created.
+            getPftpdService().getContext().getContentResolver().openOutputStream(documentFile.getUri(), "wt").close();
+        }
+    }
+
+    @Override
     public boolean create() throws IOException {
         // This call is required by SSHFS, because it calls STAT on created new files.
         // This call is not required by normal clients who simply open, write and close the file.

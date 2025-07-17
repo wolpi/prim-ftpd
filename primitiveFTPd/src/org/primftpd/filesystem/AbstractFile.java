@@ -125,8 +125,7 @@ public abstract class AbstractFile<TFileSystemView extends AbstractFileSystemVie
         logger.trace("[{}] handleClose()", name);
     }
 
-    public void truncate() {
-        // TODO ssh truncate
+    public void truncate() throws IOException {
         logger.trace("[{}] truncate()", name);
     }
 

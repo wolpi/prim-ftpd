@@ -4,6 +4,7 @@ import org.apache.sshd.common.Session;
 import org.apache.sshd.common.file.SshFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class QuickShareSshFile extends QuickShareFile<SshFile, QuickShareSshFileSystemView> implements SshFile {
@@ -43,6 +44,12 @@ public class QuickShareSshFile extends QuickShareFile<SshFile, QuickShareSshFile
     public String getOwner() {
         logger.trace("[{}] getOwner()", name);
         return session.getUsername();
+    }
+
+    @Override
+    public void truncate() throws IOException {
+        logger.trace("[{}] truncate()", name);
+        throw new IOException(String.format("Can not truncate file '%s'", absPath));
     }
 
     @Override
