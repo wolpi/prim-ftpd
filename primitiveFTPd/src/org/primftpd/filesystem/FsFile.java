@@ -225,7 +225,12 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView>
 	}
 
 	public OutputStream createOutputStream(long offset) throws IOException {
-		logger.trace("[{}] createOutputStream({})", name, offset);
+		logger.trace("[{}] createOutputStream(offset: {}), file: {}",
+				new Object []{
+						name,
+						offset,
+						file.getAbsolutePath()
+		});
 		postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
 		// may be necessary to create dirs
@@ -269,7 +274,7 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView>
 	}
 
 	public InputStream createInputStream(long offset) throws IOException {
-		logger.trace("[{}] createInputStream(), offset: {}, file: {}",
+		logger.trace("[{}] createInputStream(offset: {}), file: {}",
 				new Object []{
 						name,
 						offset,
