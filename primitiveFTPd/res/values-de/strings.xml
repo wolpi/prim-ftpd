@@ -148,4 +148,6 @@
     <string name="tvUiShort">TV-Modus</string>
     <string name="tvUiLong">Fernsehmodus</string>
     <string name="iconAbout">Über</string>
+    <string name="fingerprintsCreationTimeLabel">Erzeugungs-Zeit</string>
+    <string name="unknown">unbekannt</string>
 </resources>

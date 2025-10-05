@@ -12,9 +12,15 @@ import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.util.KeyFingerprintBean;
 import org.primftpd.util.KeyFingerprintProvider;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import androidx.fragment.app.Fragment;
 
 public class KeysFingerprintsFragment extends Fragment {
+
+    private final static DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -25,6 +31,14 @@ public class KeysFingerprintsFragment extends Fragment {
 
         KeyFingerprintProvider keyFingerprintProvider = new KeyFingerprintProvider();
         keyFingerprintProvider.calcPubkeyFingerprints(getContext());
+
+        Date creationDate = keyFingerprintProvider.findCreationDate(getContext());
+        TextView creationTimeView = (TextView) view.findViewById(R.id.keyFingerprintsCreationTime);
+        if (creationDate != null) {
+            creationTimeView.setText(DATE_FORMAT.format(creationDate));
+        } else {
+            creationTimeView.setText(R.string.unknown);
+        }
 
         HostKeyAlgorithm algo = HostKeyAlgorithm.ED_25519;
         ((TextView) view.findViewById(R.id.keyFingerprintEd25519Md5Label))

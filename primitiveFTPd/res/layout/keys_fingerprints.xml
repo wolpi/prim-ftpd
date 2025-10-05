@@ -21,6 +21,28 @@
             android:drawablePadding="4dp"
             />
 
+        <!-- creation time label -->
+        <TextView
+            android:id="@+id/keyFingerprintsCreationTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:text="@string/fingerprintsCreationTimeLabel"
+            android:drawablePadding="4dp"
+            />
+        <TextView
+            android:id="@+id/keyFingerprintsCreationTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawablePadding="4dp"
+            android:layout_marginBottom="16dp"
+            android:textIsSelectable="true"
+            android:selectAllOnFocus="true"
+            />
+
         <!-- ed25519 MD 5 -->
         <TextView
             android:id="@+id/keyFingerprintEd25519Md5Label"
