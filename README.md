@@ -49,6 +49,10 @@ You may help translate this app in [hosted weblate](https://hosted.weblate.org/p
 
 When accessing this app's server via scp, it might be necessary for some clients (specific versions of ssh coming with linux distros), to specify option -O. 
 
+```
+scp -O ...
+```
+
 ## Running in the background
 
 Depending your Android version, Android keeps closing apps running in the background. Even if you think you configured explicitly not do this. Please visit https://dontkillmyapp.com/ on more information about battery saving options.
