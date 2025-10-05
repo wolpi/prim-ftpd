@@ -8,6 +8,7 @@ import org.primftpd.crypto.HostKeyAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -29,6 +31,34 @@ public class KeyFingerprintProvider implements Serializable {
     private boolean keyPresent = false;
 
     private final Map<HostKeyAlgorithm, KeyFingerprintBean> fingerprints = new HashMap<>();
+
+    public Date findCreationDate(Context ctxt) {
+        File[] keyFiles = null;
+        if (ctxt != null) {
+            File filesDir = ctxt.getFilesDir();
+            keyFiles = filesDir.listFiles(pathname -> {
+                for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
+                    if (hka.getFilenamePrivateKey().equals(pathname.getName())) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+        Date date = null;
+        if (keyFiles != null) {
+            for (File keyFile : keyFiles) {
+                Date lastModified = new Date(keyFile.lastModified());
+                if (date == null) {
+                    date = lastModified;
+                }
+                if (lastModified.after(date)) {
+                    date = lastModified;
+                }
+            }
+        }
+        return date;
+    }
 
     public FileInputStream buildPublickeyInStream(Context ctxt, HostKeyAlgorithm hka) throws IOException {
         return ctxt.openFileInput(hka.getFilenamePublicKey());
