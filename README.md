@@ -53,6 +53,9 @@ When accessing this app's server via scp, it might be necessary for some clients
 scp -O ...
 ```
 
+Probably you should generate new hostkeys for pftpd in such a case. Since version 7.4 the app shows at which time hostkeys had been generated. That gives you an indication if they grew too old.
+
+
 ## Running in the background
 
 Depending your Android version, Android keeps closing apps running in the background. Even if you think you configured explicitly not do this. Please visit https://dontkillmyapp.com/ on more information about battery saving options.
