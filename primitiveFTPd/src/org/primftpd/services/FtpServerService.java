@@ -92,7 +92,7 @@ public class FtpServerService extends AbstractServerService
 
 		listenerFactory.setSessionFilter(session -> {
 			SocketAddress remoteAddress = session.getRemoteAddress();
-			return RemoteIpChecker.ipAllowed(remoteAddress, prefsBean, logger);
+			return RemoteIpChecker.ipAllowed(remoteAddress, this, logger);
 		});
 		listenerFactory.setDataConnectionConfiguration(dataConConfigFactory.createDataConnectionConfiguration());
 

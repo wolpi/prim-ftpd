@@ -1,6 +1,7 @@
 package org.primftpd.util;
 
-import org.primftpd.prefs.PrefsBean;
+import org.primftpd.events.ClientActionEvent;
+import org.primftpd.services.PftpdService;
 import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
@@ -8,16 +9,24 @@ import java.net.SocketAddress;
 
 public class RemoteIpChecker {
 
-    public static boolean ipAllowed(SocketAddress remoteAddress, PrefsBean prefs, Logger logger) {
-        String pattern = prefs.getAllowedIpsPattern();
+    public static boolean ipAllowed(SocketAddress remoteAddress, PftpdService service, Logger logger) {
+        String pattern = service.getPrefsBean().getAllowedIpsPattern();
         if (StringUtils.isNotBlank(pattern)) {
             if (remoteAddress instanceof InetSocketAddress) {
                 InetSocketAddress inetSock = (InetSocketAddress) remoteAddress;
-                String ip = inetSock.getAddress().toString();
-                ip = IpAddressProvider.extractIp(ip);
+                String origIp = inetSock.getAddress().toString();
+                String ip = IpAddressProvider.extractIp(origIp);
                 boolean allowed = doCheck(ip, pattern);
                 logger.info("[checking whether remote ip is allowed] remote ip: '{}', pattern: '{}', allowed? '{}'",
                         new Object[]{ip, pattern, allowed});
+                if (!allowed) {
+                    service.postClientAction(
+                            ClientActionEvent.getStorage(service),
+                            ClientActionEvent.ClientAction.CONNECT,
+                            ip,
+                            "",
+                            "forbidden (system ip string: " + origIp + ")");
+                }
                 return allowed;
             } else {
                 logger.warn("cannot check remote IP, bad class. remote addr: {}, class: {}",

@@ -133,11 +133,12 @@ public class SshServerService extends AbstractServerService
 		// causes exception when not set
 		sshServer.setIoServiceFactoryFactory(new MinaServiceFactoryFactory());
 
+		PftpdService pftpdService = this;
 		sshServer.setSessionFactory(new SessionFactory() {
 			@Override
 			protected AbstractSession createSession(IoSession ioSession) throws Exception {
 				SocketAddress remoteAddress = ioSession.getRemoteAddress();
-				boolean ipAllowed = RemoteIpChecker.ipAllowed(remoteAddress, prefsBean, logger);
+				boolean ipAllowed = RemoteIpChecker.ipAllowed(remoteAddress, pftpdService, logger);
 				return ipAllowed ? super.createSession(ioSession) : null;
 			}
 		});
