@@ -20,9 +20,25 @@ public class IpAddressProvider {
 
     public static String extractIp(String remoteAddress) {
         String ip = remoteAddress;
+
+        // in some cases we get ip-address with leading /, just cut it off
         if (remoteAddress.charAt(0) == '/') {
             ip = remoteAddress.substring(1);
         }
+
+        // if square brackets are present we can reliably say it is IPv6
+        if (ip.charAt(0) == '[') {
+            int index = ip.indexOf(']');
+            ip = ip.substring(0, index + 1);
+            return ip;
+        }
+
+        // if length is more than IPv4 dotted quad notation, we guess it would be IPv6
+        if (ip.length() > (4*3+3)) {
+            return ip;
+        }
+
+        // remove port for IPv4
         int indexOfColon = ip.indexOf(':');
         if (indexOfColon > 0) {
             ip = ip.substring(0, indexOfColon);
@@ -43,6 +59,9 @@ public class IpAddressProvider {
                 while (inetAddrs.hasMoreElements()) {
                     InetAddress inetAddr = inetAddrs.nextElement();
                     String hostAddr = inetAddr.getHostAddress();
+                    if (hostAddr == null) {
+                        hostAddr = "";
+                    }
 
                     logger.debug("addr: '{}', iface name: '{}', disp name: '{}', loopback: '{}'",
                             new Object[]{

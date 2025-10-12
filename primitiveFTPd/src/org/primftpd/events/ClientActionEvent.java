@@ -1,5 +1,8 @@
 package org.primftpd.events;
 
+import org.primftpd.prefs.StorageType;
+import org.primftpd.services.PftpdService;
+
 import java.util.Date;
 
 import androidx.annotation.NonNull;
@@ -10,7 +13,8 @@ public class ClientActionEvent {
         ROOT,
         SAF,
         ROSAF,
-        QUICKSHARE
+        QUICKSHARE,
+        VIRTUAL
     }
 
     public enum Protocol {
@@ -25,8 +29,25 @@ public class ClientActionEvent {
         DELETE,
         DOWNLOAD,
         UPLOAD,
-
+        CONNECT,
         ERROR,
+    }
+
+    public static Storage getStorage(PftpdService service) {
+        StorageType storageType = service.getPrefsBean().getStorageType();
+        switch (storageType) {
+            case PLAIN:
+                return Storage.FS;
+            case ROOT:
+                return Storage.ROOT;
+            case SAF:
+                return Storage.SAF;
+            case RO_SAF:
+                return Storage.ROSAF;
+            case VIRTUAL:
+                return Storage.VIRTUAL;
+        }
+        return Storage.VIRTUAL;
     }
 
     private final Storage storage;
