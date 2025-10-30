@@ -136,7 +136,7 @@
     <string name="clientActionsLabel">Journal des actions du client</string>
     <string name="statsLabel">Statistiques</string>
     <string name="statsTotalSent">Total envoyé</string>
-    <string name="qrFallback">pas d\'interfaces réseau, pas d\'adresses IP, pas de QRcode</string>
+    <string name="qrFallback">pas d\'interfaces réseau, pas d\'adresses IP, pas de QR code</string>
     <string name="pubkeyAuthKeysHeading">Clés pour l\'authentification par clé publique</string>
     <string name="addPubkeyForAuth">Ajouter une clé publique pour l\'authentification</string>
     <string name="noKeysPresent">Aucune clé présente.</string>
