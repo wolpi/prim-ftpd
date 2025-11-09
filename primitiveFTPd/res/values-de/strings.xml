@@ -154,4 +154,6 @@
     <string name="noKeysPresent">Kein Schlüssel vorhanden.</string>
     <string name="pubkeyInvalid">Kein gültiger Schlüssel eingegeben, wurde ignoriert.</string>
     <string name="prefShowTabNames">Reiternamen anzeigen</string>
+    <string name="fingerprintsCreationTimeLabel">Erzeugungs-Zeit</string>
+    <string name="unknown">unbekannt</string>
 </resources>
