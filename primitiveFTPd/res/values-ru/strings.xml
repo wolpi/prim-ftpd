@@ -49,7 +49,7 @@
     <string name="quickSettingsServerStarted">pFTPd запущен…</string>
     <string name="quickSettingsServerStopped">pFTPd остановлен</string>
     <string name="reset">Сбросить</string>
-    <string name="restartServer">Изменения применятся после перезапуска сервера.</string>
+    <string name="restartServer">Перезапустите сервер чтобы применить изменения.</string>
     <string name="safExplainHeading">Как работает SAF</string>
     <string name="saveAs">Сохранить как</string>
     <string name="selectServerAction">Выберите действие сервера</string>
@@ -64,7 +64,7 @@
     <string name="storageType">Тип хранилища</string>
     <string name="storageTypeRoSaf">SAF только для чтения (работает быстрее!)</string>
     <string name="storageTypeRoot">Суперпользователь (необходим root на устройстве)</string>
-    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(например, для SD-карты)</string>
+    <string name="storageTypeSaf">Android Storage Access Framework (SAF)\n(например, для внешней SD-карты)</string>
     <string name="toggleService">Запуск/остановка сервера</string>
     <string name="widgetTextStart">Запустить ftpd</string>
     <string name="widgetTextStop">Остановить ftpd</string>
@@ -123,4 +123,44 @@
     <string name="statsReceivedPerSec">Получено в секунду</string>
     <string name="clientActionsLabel">Журнал действий клиента</string>
     <string name="quickShareServerStarted">Сервер запущен для быстрого обмена одним файлом</string>
+    <string name="allKeysFingerprintsLabel">Показывать отпечатки всех ключей</string>
+    <string name="pubkeyAuthKeysHeading">Ключи для аутентификации по открытому ключу</string>
+    <string name="addPubkeyForAuth">Добавить открытый ключ для аутентификации</string>
+    <string name="pubkeyInvalid">Введённый ключ недействителен, проигнорирован.</string>
+    <string name="noKeysPresent">Нет ключей.</string>
+    <string name="permissionNameStorage">Хранилище</string>
+    <string name="prefBindIp">IP-адрес для привязки</string>
+    <string name="prefSummaryBindIp">Если вы хотите, чтобы серверы прослушивали только один интерфейс.</string>
+    <string name="prefShowTabNames">Показывать названия вкладок</string>
+    <string name="prefSummaryShowTabNames">Показывать названия вкладок в главном интерфейсе</string>
+    <string name="prefSummaryPubKeyAuth_v2">Если включено, поместите открытый ключ SSH2 в %s. Это должен быть файл, содержащий по одному ключу на строку. Только SFTP.</string>
+    <string name="prefTitleIdleTimeoutServerStop">Тайм-аут простоя для остановки сервера</string>
+    <string name="prefSummaryIdleTimeoutServerStop">Сервер(ы) будут остановлены по истечении указанного времени в минутах при отсутствии активности клиента. Установите 0 для отключения.</string>
+    <string name="prefRootCopyFiles">Корневой доступ: копировать файлы в каталог tmp для закачки/скачки</string>
+    <string name="prefSummaryRootCopyFiles">На некоторых устройствах возникают проблемы с доступом к файлам с помощью dd. При использовании этой настройки файлы сначала копируются в каталог tmp, а затем к ним обращаются с помощью механизмов файловой системы. Для больших файлов следует отключить эту функцию.</string>
+    <string name="prefHostkeyAlgos">Алгоритмы ключей хоста SFTP</string>
+    <string name="prefSummaryHostkeyAlgos">Алгоритмы генерации ключей сервера SFTP (ключей хоста) для</string>
+    <string name="storageTypePlainV2">Обычной файловой системы.\nЕсть доступ только для чтения? См. нашу <a href="https://www.github.com/wolpi/prim-ftpd/">страницу на GitHub</a>.</string>
+    <string name="storageTypeVirtual">Виртуальные папки (все типы хранилищ)</string>
+    <string name="safExplainV2">Android предложит вам выбрать каталог. Он будет доступен через сервер(ы). Разрешение будет отозвано, и вам придётся регулярно выбирать заново? См. нашу <a href="https://www.github.com/wolpi/prim-ftpd/">страницу на GitHub</a>.</string>
+    <string name="add">Добавить</string>
+    <string name="quickShareInfoNotificationV2">QuickShare с %1d файлом(ами)</string>
+    <string name="quickShareInfoActivityV2">Работает в режиме QuickShare для %1d файла(ов)</string>
+    <string name="hasFullAccessToStorage">Имеет полный доступ к хранилищу: %1$b</string>
+    <string name="hasNormalAccessToStorage">Имеет (обычный) доступ к хранилищу: %1$b</string>
+    <string name="hasAccessToMediaLocation">Имеет доступ к местоположению медиафайлов (геоданным): %1$b</string>
+    <string name="hasNotificationPermission">Имеет разрешение на показ уведомлений: %1$b</string>
+    <string name="Request">Запросить</string>
+    <string name="quickShareFiles">Файлы QuickShare:</string>
+    <string name="logFiles">Файлы журнала:</string>
+    <string name="rootTmpFiles">Временные файлы root-доступа:</string>
+    <string name="delete">Удалить</string>
+    <string name="mobileUiShort">Мобильный режим</string>
+    <string name="mobileUiLong">Режим мобильного устройства</string>
+    <string name="tvUiShort">Режим ТВ</string>
+    <string name="tvUiLong">Режим телевизора</string>
+    <string name="iconKeysFingerprints">Отпечатки ключей</string>
+    <string name="iconCleanSpace">Очистить пространство</string>
+    <string name="iconAbout">О программе</string>
+    <string name="qrFallback">Без сетевых интерфейсов, без IP-адресов, без QR-кода</string>
 </resources>
