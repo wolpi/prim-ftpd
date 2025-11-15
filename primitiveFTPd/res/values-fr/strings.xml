@@ -153,4 +153,6 @@
     <string name="quickShareFiles">Fichiers QuickShare :</string>
     <string name="logFiles">Fichiers journaux :</string>
     <string name="rootTmpFiles">Fichiers temporaires d\'accès root :</string>
+    <string name="fingerprintsCreationTimeLabel">Heure de création</string>
+    <string name="unknown">inconnu</string>
 </resources>
