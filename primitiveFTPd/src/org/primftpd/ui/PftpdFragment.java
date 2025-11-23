@@ -518,7 +518,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		}
 
 		TextView usernameView = view.findViewById(R.id.usernameTextView);
-		usernameView.setText(prefsBean.getUserName());
+		usernameView.setText(getString(R.string.usernameLabel, prefsBean.getUserName()));
 
 		TextView anonymousView = view.findViewById(R.id.anonymousLoginTextView);
 		anonymousView.setText(getString(R.string.isAnonymous, prefsBean.isAnonymousLogin()));

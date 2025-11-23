@@ -159,7 +159,11 @@ public class ServerServiceHandler extends Handler
 	private synchronized void shellClose() {
 		if (shell != null) {
 			logger.debug("closing root shell ({})", logName);
-			shell.close();
+			try {
+				shell.close();
+			} catch (Exception e) {
+				logger.warn("error on closing shell", e);
+			}
 			shell = null;
 		}
 	}

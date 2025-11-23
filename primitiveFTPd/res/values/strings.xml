@@ -6,6 +6,7 @@
     <string name="ifacesError">Error: </string>
     <string name="protocolLabel">Protocol</string>
     <string name="portLabel">Port</string>
+    <string name="usernameLabel">Username: %s</string>
     <string name="fingerprintsLabel">Key Fingerprints</string>
     <string name="allKeysFingerprintsLabel">Show fingerprints of all keys</string>
     <string name="generateKeysMessage">Generate Keys?</string>

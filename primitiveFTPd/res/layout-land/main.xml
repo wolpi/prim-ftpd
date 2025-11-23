@@ -20,6 +20,7 @@
 
             <include layout="@layout/block_connect_data"  />
             <include layout="@layout/block_storage_type"  />
+            <include layout="@layout/block_permission_info"  />
 
         </LinearLayout>
 

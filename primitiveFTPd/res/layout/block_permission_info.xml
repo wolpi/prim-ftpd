@@ -1,0 +1,36 @@
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <TextView
+        android:id="@+id/hasNormalStorageAccessTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:focusable="false"
+    />
+
+    <TextView
+        android:id="@+id/hasFullStorageAccessTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:focusable="false"
+    />
+
+    <TextView
+        android:id="@+id/hasMediaLocationAccessTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:focusable="false"
+    />
+
+    <TextView
+        android:id="@+id/hasNotificationPermissionTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:focusable="false"
+    />
+</merge>
