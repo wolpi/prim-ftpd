@@ -130,4 +130,6 @@
     <string name="logFiles">Napló fájlok:</string>
     <string name="mobileUiShort">Mobil mód</string>
     <string name="iconKeysFingerprints">Kulcs ujjlenyomatok</string>
+    <string name="unknown">ismeretlen</string>
+    <string name="fingerprintsCreationTimeLabel">Létrehozás ideje</string>
 </resources>
