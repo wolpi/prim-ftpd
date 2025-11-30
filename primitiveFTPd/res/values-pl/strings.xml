@@ -155,4 +155,7 @@
     <string name="safExplainV2">Android poprosi Cię o wybranie katalogu. Będzie on dostępny za pośrednictwem jednego lub większej liczby serwerów. Jeśli uprawnienia dostępu do katalogu są czasami cofane, zobacz naszą <a href="https://www.github.com/wolpi/prim-ftpd/">stronę GitHub</a>.</string>
     <string name="fingerprintsCreationTimeLabel">Czas utworzenia</string>
     <string name="unknown">nieznany</string>
+    <string name="prefSummaryChooseBindIp">Wyświetla przyciski opcji w głównym interfejsie użytkownika, umożliwiające wybór adresu IP, z którym ma zostać powiązane połączenie przy uruchomieniu serwera. Ma wyższy priorytet niż powyższa preferencja powiązania adresu IP. Nie działa, jeśli serwer zostanie uruchomiony przez inny mechanizm.</string>
+    <string name="usernameLabel">Użytkownik: %s</string>
+    <string name="prefChooseBindIp">Wybierz adres IP,   którym chcesz się połączyć w głównym interfejsie użytkownika</string>
 </resources>
