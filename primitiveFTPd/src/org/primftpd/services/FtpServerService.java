@@ -75,7 +75,7 @@ public class FtpServerService extends AbstractServerService
 	protected boolean launchServer(final Shell.Interactive shell) {
 		ListenerFactory listenerFactory = new ListenerFactory();
 		listenerFactory.setPort(prefsBean.getPort());
-		String bindIp = prefsBean.getBindIp();
+		String bindIp = getBindIp();
 		if (bindIp != null) {
 			listenerFactory.setServerAddress(bindIp);
 		}

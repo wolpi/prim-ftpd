@@ -185,7 +185,8 @@ public class NotificationUtil
             Context ctxt,
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider,
-			QuickShareBean quickShareBean) {
+			QuickShareBean quickShareBean,
+			String chosenIp) {
 		LOGGER.debug("createStatusbarNotification()");
 
 		Notification.Builder builder = createStubNotification(
@@ -198,7 +199,7 @@ public class NotificationUtil
 		Notification notification;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			if (prefsBean.showConnectionInfoInNotification()) {
-				String longText = buildLongText(ctxt, prefsBean, keyFingerprintProvider);
+				String longText = buildLongText(ctxt, prefsBean, keyFingerprintProvider, chosenIp);
 				builder.setStyle(new Notification.BigTextStyle().bigText(longText));
 			}
 
@@ -215,7 +216,8 @@ public class NotificationUtil
 	private static String buildLongText(
 			Context ctxt,
 			PrefsBean prefsBean,
-			KeyFingerprintProvider keyFingerprintProvider) {
+			KeyFingerprintProvider keyFingerprintProvider,
+			String chosenIp) {
 		LOGGER.trace("buildLongText()");
 
 		boolean isLeftToRight = true;
@@ -226,28 +228,26 @@ public class NotificationUtil
 
 		StringBuilder str = new StringBuilder();
 		IpAddressProvider ipAddressProvider = new IpAddressProvider();
-		List<String> ipAddressTexts = ipAddressProvider.ipAddressTexts(ctxt, false, isLeftToRight);
+		if (chosenIp != null) {
+			boolean ipv6 = ipAddressProvider.isIpv6(chosenIp);
+			addUrl(str, chosenIp, ipv6, prefsBean);
+		} else {
+			List<IpAddressBean> ipAddressBeans = ipAddressProvider.ipAddressTexts(ctxt, false, isLeftToRight);
 
-		SharedPreferences prefs = LoadPrefsUtil.getPrefs(ctxt);
-		Boolean showIpv4 = LoadPrefsUtil.showIpv4InNotification(prefs);
-		Boolean showIpv6 = LoadPrefsUtil.showIpv6InNotification(prefs);
+			SharedPreferences prefs = LoadPrefsUtil.getPrefs(ctxt);
+			Boolean showIpv4 = LoadPrefsUtil.showIpv4InNotification(prefs);
+			Boolean showIpv6 = LoadPrefsUtil.showIpv6InNotification(prefs);
 
-		for (String ipAddressText : ipAddressTexts) {
-			boolean ipv6 = ipAddressProvider.isIpv6(ipAddressText);
-			if (!ipv6 && !showIpv4) {
-				continue;
-			}
-			if (ipv6 && !showIpv6) {
-				continue;
-			}
-
-			if (prefsBean.getServerToStart().startFtp()) {
-				buildUrl(str, ipv6, "ftp", ipAddressText, prefsBean.getPortStr());
-				str.append("\n");
-			}
-			if (prefsBean.getServerToStart().startSftp()) {
-				buildUrl(str, ipv6, "sftp", ipAddressText, prefsBean.getSecurePortStr());
-				str.append("\n");
+			for (IpAddressBean ipAddressBean : ipAddressBeans) {
+				String ipAddressText = ipAddressBean.getIpAddress();
+				boolean ipv6 = ipAddressProvider.isIpv6(ipAddressText);
+				if (!ipv6 && !showIpv4) {
+					continue;
+				}
+				if (ipv6 && !showIpv6) {
+					continue;
+				}
+				addUrl(str, ipAddressText, ipv6, prefsBean);
 			}
 		}
 
@@ -274,6 +274,21 @@ public class NotificationUtil
 		}
 
 		return str.toString();
+	}
+
+	public static void addUrl(
+			StringBuilder notificationText,
+			String ipAddressText,
+			boolean ipv6,
+			PrefsBean prefsBean) {
+		if (prefsBean.getServerToStart().startFtp()) {
+			buildUrl(notificationText, ipv6, "ftp", ipAddressText, prefsBean.getPortStr());
+			notificationText.append("\n");
+		}
+		if (prefsBean.getServerToStart().startSftp()) {
+			buildUrl(notificationText, ipv6, "sftp", ipAddressText, prefsBean.getSecurePortStr());
+			notificationText.append("\n");
+		}
 	}
 
 	public static void buildUrl(StringBuilder str, boolean ipv6, String scheme, String ipAddressText, String port) {

@@ -38,6 +38,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_LOGGING = "loggingPref";
 	public static final String PREF_KEY_FTP_PASSIVE_PORTS = "ftpPassivePortsPref";
 	public static final String PREF_KEY_BIND_IP = "bindIpPref";
+	public static final String PREF_KEY_CHOOSE_BIND_IP = "chooseIpToBindToPref";
 	public static final String PREF_KEY_IDLE_TIMEOUT = "idleTimeoutPref";
 
 	public static final String PREF_KEY_IDLE_TIMEOUT_SERVER_STOP = "idleTimeoutServerStopPref";
@@ -181,6 +182,12 @@ public class LoadPrefsUtil
 		return StringUtils.trimToNull(prefs.getString(
 				LoadPrefsUtil.PREF_KEY_BIND_IP,
 				null));
+	}
+
+	public static boolean chooseBindIp(SharedPreferences prefs) {
+		return prefs.getBoolean(
+				LoadPrefsUtil.PREF_KEY_BIND_IP,
+				Boolean.FALSE);
 	}
 
 	public static Integer idleTimeout(SharedPreferences prefs) {
@@ -331,6 +338,9 @@ public class LoadPrefsUtil
 		String bindIp = bindIp(prefs);
 		logger.debug("got bindIp: {}", bindIp);
 
+		boolean chooseBindIp = chooseBindIp(prefs);
+		logger.debug("got chooseBindIp: {}", chooseBindIp);
+
 		Integer idleTimeout = idleTimeout(prefs);
 		logger.debug("got idleTimeout: {}", idleTimeout);
 
@@ -370,6 +380,7 @@ public class LoadPrefsUtil
 				serverToStart,
 				ftpPassivePorts,
 				bindIp,
+				chooseBindIp,
 				idleTimeout,
 				showConnectionInfo,
 				storageType,

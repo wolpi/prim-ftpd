@@ -106,6 +106,14 @@
 			android:summary="@string/prefSummaryBindIp"
 			app:iconSpaceReserved="false"
 			/>
+		<SwitchPreference
+			android:name="chooseIpToBindTo"
+			android:key="chooseIpToBindToPref"
+			android:defaultValue="false"
+			android:title="@string/prefChooseBindIp"
+			android:summary="@string/prefSummaryChooseBindIp"
+			app:iconSpaceReserved="false"
+			/>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/prefsCategoryTitleUi" android:key="ftpPrefCatUi" app:iconSpaceReserved="false">

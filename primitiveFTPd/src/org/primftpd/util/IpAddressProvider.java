@@ -46,8 +46,8 @@ public class IpAddressProvider {
         return ip;
     }
 
-    public List<String> ipAddressTexts(Context ctxt, boolean verbose, boolean isLeftToRight) {
-        List<String> result = new ArrayList<>();
+    public List<IpAddressBean> ipAddressTexts(Context ctxt, boolean verbose, boolean isLeftToRight) {
+        List<IpAddressBean> result = new ArrayList<>();
         try {
             Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
             while (ifaces.hasMoreElements()) {
@@ -88,16 +88,14 @@ public class IpAddressProvider {
                     }
 
                     String displayText = hostAddr;
-                    if (verbose) {
-                        String verboseText =  "(" + ifaceDispName + ")";
-                        if (isLeftToRight) {
-                            displayText += " " + verboseText;
-                        } else {
-                            displayText = verboseText + " " + displayText;
-                        }
+                    String verboseText =  "(" + ifaceDispName + ")";
+                    if (isLeftToRight) {
+                        displayText += " " + verboseText;
+                    } else {
+                        displayText = verboseText + " " + displayText;
                     }
 
-                    result.add(displayText);
+                    result.add(new IpAddressBean(hostAddr, ifaceDispName, displayText));
                 }
             }
         } catch (SocketException e) {

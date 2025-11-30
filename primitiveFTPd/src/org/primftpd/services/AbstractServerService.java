@@ -63,6 +63,7 @@ public abstract class AbstractServerService
 	PrefsBean prefsBean;
 	KeyFingerprintProvider keyFingerprintProvider;
 	QuickShareBean quickShareBean;
+	String chosenIp;
 	private NsdManager.RegistrationListener nsdRegistrationListener;
 
 	private Handler timerHandler;
@@ -82,6 +83,12 @@ public abstract class AbstractServerService
 	protected abstract int getPort();
 	protected abstract String getServiceName();
 	protected abstract ClientActionEvent.Protocol getProtocol();
+
+	protected String getBindIp() {
+		return chosenIp != null
+				? chosenIp
+				: prefsBean.getBindIp();
+	}
 
 	protected void handleServerStartError(Throwable e)
 	{
@@ -127,6 +134,7 @@ public abstract class AbstractServerService
 		keyFingerprintProvider = (KeyFingerprintProvider)extras.get(
 				ServicesStartStopUtil.EXTRA_FINGERPRINT_PROVIDER);
 		quickShareBean = (QuickShareBean)extras.get(ServicesStartStopUtil.EXTRA_QUICK_SHARE_BEAN);
+		chosenIp = extras.getString(ServicesStartStopUtil.EXTRA_CHOSEN_IP);
 
 		// send start message (to handler)
 		Message msg = serviceHandler.obtainMessage();

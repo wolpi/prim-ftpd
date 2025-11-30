@@ -52,6 +52,8 @@
     <string name="prefSummaryPortSecure">FTP server port (encrypted)</string>
     <string name="prefBindIp">IP to bind to</string>
     <string name="prefSummaryBindIp">If you want servers to listen on one interface only.</string>
+    <string name="prefChooseBindIp">Choose IP to bind to in main UI</string>
+    <string name="prefSummaryChooseBindIp">Shows radio buttons in main UI to choose IP to bind to on server start. Has higher precedence than above bind IP preference. Does not take effect if server is started by some other mechanism.</string>
     <string name="prefTitleStartDir">Server Start Directory</string>
     <string name="prefSummaryStartDir">First directory after login</string>
     <string name="prefTitleAnnounce">Announce server in LAN</string>

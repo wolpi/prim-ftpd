@@ -43,12 +43,14 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
 import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.events.ClientActionEvent;
+import org.primftpd.events.RedrawAddresses;
 import org.primftpd.events.ServerInfoRequestEvent;
 import org.primftpd.events.ServerInfoResponseEvent;
 import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.PrefsBean;
 import org.primftpd.prefs.StorageType;
+import org.primftpd.util.IpAddressBean;
 import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.KeyFingerprintBean;
 import org.primftpd.util.KeyFingerprintProvider;
@@ -60,7 +62,9 @@ import org.primftpd.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -98,6 +102,8 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 	private TextView clientActionView3;
 
 	private boolean onStartOngoing = false;
+
+	private String chosenIp;
 
 	protected int getLayoutId() {
 		return R.layout.main;
@@ -453,6 +459,17 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 	 * Creates table containing network interfaces.
 	 */
 	protected void showAddresses() {
+		showAddresses(null);
+	}
+
+	/**
+	 * Creates table containing network interfaces.
+	 *
+	 * @param tmpChooseBindIp Temporary value (non present in persistent preferences) indicating if
+	 *                        selection of IP shall be shown. If null the persistent value will be
+	 *                        used.
+	 */
+	protected void showAddresses(Boolean tmpChooseBindIp) {
 		View view = getView();
 		if (view == null) {
 			return;
@@ -462,16 +479,44 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		// clear old entries
 		container.removeAllViews();
 
-		boolean isLeftToRight = isLeftToRight();
-		List<String> displayTexts = ipAddressProvider.ipAddressTexts(getContext(), true, isLeftToRight);
-		for (String displayText : displayTexts) {
-			TextView textView = new TextView(container.getContext());
-			container.addView(textView);
-			textView.setText(displayText);
-			textView.setGravity(Gravity.CENTER_HORIZONTAL);
-			textView.setTextIsSelectable(true);
+		boolean chooseBindIp = tmpChooseBindIp == null
+				? prefsBean.isChooseBindIp()
+				: tmpChooseBindIp;
+
+		RadioGroup radioGroup = null;
+		final Map<Integer, String> radioButtonIdToIpaddr = new HashMap<>();
+		if (chooseBindIp) {
+			radioGroup = new RadioGroup(this.getContext());
 		}
 
+		boolean isLeftToRight = isLeftToRight();
+		List<IpAddressBean> ipAddressBeans = ipAddressProvider.ipAddressTexts(getContext(), true, isLeftToRight);
+		int idx = 42;
+		for (IpAddressBean ipAddressBean : ipAddressBeans) {
+			if (chooseBindIp) {
+				RadioButton radio = new RadioButton(this.getContext());
+				radioGroup.addView(radio);
+				radio.setText(ipAddressBean.getDisplayName());
+				radio.setId(idx);
+				radioButtonIdToIpaddr.put(idx, ipAddressBean.getIpAddress());
+				idx = idx +1;
+			} else {
+				TextView textView = new TextView(container.getContext());
+				container.addView(textView);
+				textView.setText(ipAddressBean.getDisplayName());
+				textView.setGravity(Gravity.CENTER_HORIZONTAL);
+				textView.setTextIsSelectable(true);
+			}
+		}
+
+		if (chooseBindIp) {
+			container.addView(radioGroup);
+
+			PftpdFragment fragment = this;
+			radioGroup.setOnCheckedChangeListener((group, checkedId) ->
+				fragment.chosenIp = radioButtonIdToIpaddr.get(checkedId)
+			);
+		}
 	}
 
 	@SuppressLint("SetTextI18n")
@@ -739,6 +784,13 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		clientActionView3.setText(clientAction);
 	}
 
+	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+	public void onEvent(RedrawAddresses event) {
+		// in theory we should re-load prefs, but they might not be persisted yet
+		//loadPrefs();
+		showAddresses(event.isChooseBindIp());
+	}
+
 	protected void displayServersState() {
 		logger.debug("displayServersState()");
 
@@ -823,5 +875,9 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 	@Override
 	public void recreateLogger() {
 		this.logger = LoggerFactory.getLogger(getClass());
+	}
+
+	public String getChosenIp() {
+		return chosenIp;
 	}
 }

@@ -38,6 +38,7 @@ public class ServicesStartStopUtil {
     public static final String EXTRA_PREFS_BEAN = "prefs.bean";
     public static final String EXTRA_FINGERPRINT_PROVIDER = "fingerprint.provider";
     public static final String EXTRA_QUICK_SHARE_BEAN = "quick.share.bean";
+    public static final String EXTRA_CHOSEN_IP = "chosen.ip";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServicesStartStopUtil.class);
 
@@ -85,6 +86,7 @@ public class ServicesStartStopUtil {
                 keyFingerprintProvider = new KeyFingerprintProvider();
             }
         }
+        String chosenIp = fragment != null ? fragment.getChosenIp() : null;
 
         if (!isPasswordOk(prefsBean)) {
             Toast.makeText(
@@ -114,7 +116,12 @@ public class ServicesStartStopUtil {
                 if (keyPresent) {
                     LOGGER.debug("going to start sshd");
                     try {
-                        Intent intent = createSshServiceIntent(context, prefsBean, keyFingerprintProvider, quickShareBean);
+                        Intent intent = createSshServiceIntent(
+                                context,
+                                prefsBean,
+                                keyFingerprintProvider,
+                                quickShareBean,
+                                chosenIp);
                         startServerByIntent(intent, context);
                     } catch (Exception e) {
                         LOGGER.error("could not start sftp server", e);
@@ -129,7 +136,12 @@ public class ServicesStartStopUtil {
                 if (prefsBean.getServerToStart().startFtp()) {
                     LOGGER.debug("going to start ftpd");
                     try {
-                        Intent intent = createFtpServiceIntent(context, prefsBean, keyFingerprintProvider, quickShareBean);
+                        Intent intent = createFtpServiceIntent(
+                                context,
+                                prefsBean,
+                                keyFingerprintProvider,
+                                quickShareBean,
+                                chosenIp);
                         startServerByIntent(intent, context);
                     } catch (Exception e) {
                         LOGGER.error("could not start ftp server", e);
@@ -185,19 +197,21 @@ public class ServicesStartStopUtil {
 
     public static void stopServers(Context context) {
         LOGGER.trace("stopServers()");
-        context.stopService(createFtpServiceIntent(context, null, null, null));
-        context.stopService(createSshServiceIntent(context, null, null, null));
+        context.stopService(createFtpServiceIntent(context, null, null, null, null));
+        context.stopService(createSshServiceIntent(context, null, null, null, null));
     }
 
     protected static Intent createFtpServiceIntent(
             Context context,
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider,
-            QuickShareBean quickShareBean) {
+            QuickShareBean quickShareBean,
+            String chosenIp) {
         Intent intent = new Intent(context, FtpServerService.class);
         putPrefsInIntent(intent, prefsBean);
         putKeyFingerprintProviderInIntent(intent, keyFingerprintProvider);
         putQuickShareBeanInIntent(intent, quickShareBean);
+        putChosenIpInIntent(intent, chosenIp);
         return intent;
     }
 
@@ -205,11 +219,13 @@ public class ServicesStartStopUtil {
             Context context,
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider,
-            QuickShareBean quickShareBean) {
+            QuickShareBean quickShareBean,
+            String chosenIp) {
         Intent intent = new Intent(context, SshServerService.class);
         putPrefsInIntent(intent, prefsBean);
         putKeyFingerprintProviderInIntent(intent, keyFingerprintProvider);
         putQuickShareBeanInIntent(intent, quickShareBean);
+        putChosenIpInIntent(intent, chosenIp);
         return intent;
     }
 
@@ -228,6 +244,12 @@ public class ServicesStartStopUtil {
     protected static void putQuickShareBeanInIntent(Intent intent, QuickShareBean quickShareBean) {
         if (quickShareBean != null) {
             intent.putExtra(EXTRA_QUICK_SHARE_BEAN, quickShareBean);
+        }
+    }
+
+    protected static void putChosenIpInIntent(Intent intent, String chosenIp) {
+        if (chosenIp != null) {
+            intent.putExtra(EXTRA_CHOSEN_IP, chosenIp);
         }
     }
 
@@ -296,7 +318,8 @@ public class ServicesStartStopUtil {
             boolean serverRunning,
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider,
-            QuickShareBean quickShareBean) {
+            QuickShareBean quickShareBean,
+            String chosenIp) {
         LOGGER.trace("updateNonActivityUI()");
         Notification notification = null;
         updateWidget(ctxt, serverRunning);
@@ -305,7 +328,8 @@ public class ServicesStartStopUtil {
                     ctxt,
                     prefsBean,
                     keyFingerprintProvider,
-                    quickShareBean);
+                    quickShareBean,
+                    chosenIp);
         } else {
             LOGGER.debug("removeStatusbarNotification()");
             NotificationUtil.removeStatusbarNotification(ctxt);

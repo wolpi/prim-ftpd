@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
+import org.primftpd.events.RedrawAddresses;
 import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.log.PrimFtpdLoggerBinder;
 import org.primftpd.prefs.FtpPrefsFragment;
@@ -24,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +37,8 @@ import androidx.viewpager.widget.ViewPager;
 public class MainTabsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     protected static int INDEX_FINGERPRINTS = 0;
+    protected static final String TAB_NAME_MAIN_UI = "pftpd";
+    protected static final String TAB_NAME_QR = "QR";
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     protected MenuItem startIcon;
@@ -42,6 +46,9 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
 
     protected PftpdFragment pftpdFragment;
     protected MainAdapter adapter;
+
+    private boolean needToUpdateAddressesInMainUi;
+    private boolean chooseBindIp;
 
     protected PftpdFragment createPftpdFragment() {
         return new PftpdFragment();
@@ -77,6 +84,40 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
 
         SharedPreferences prefs = LoadPrefsUtil.getPrefs(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String tabText = tab.getText().toString();
+                if (TAB_NAME_MAIN_UI.equals(tabText) && needToUpdateAddressesInMainUi) {
+                    needToUpdateAddressesInMainUi = false;
+                    fireChooseIpEventAsync(null);
+                } else if (TAB_NAME_QR.equals(tabText)) {
+                    String chosenIp = pftpdFragment.getChosenIp();
+                    fireChooseIpEventAsync(chosenIp);
+                }
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+    }
+
+    protected void fireChooseIpEventAsync(String chosenIp) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            // at this point in time the main fragment has no view assigned and
+            // thus cannot draw the ip-addresses table
+            // need to post a delayed event for that
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                // never mind
+            }
+            EventBus.getDefault().post(new RedrawAddresses(chooseBindIp, chosenIp));
+        });
     }
 
     protected boolean isLeanback() {
@@ -98,8 +139,8 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
                 LoadPrefsUtil.PREF_KEY_SHOW_TAB_NAMES,
                 false);
         adapter.clearTitles();
-        adapter.addTitle("pftpd");
-        adapter.addTitle("QR");
+        adapter.addTitle(TAB_NAME_MAIN_UI);
+        adapter.addTitle(TAB_NAME_QR);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         if (tabNames) {
@@ -224,7 +265,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     public void handleStart() {
         logger.trace("handleStart()");
 
-        ServicesStartStopUtil.startServers(this);
+        ServicesStartStopUtil.startServers(pftpdFragment);
     }
 
     protected void handleStop() {
@@ -256,6 +297,12 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         if (LoadPrefsUtil.PREF_KEY_HOSTKEY_ALGOS.equals(key)) {
             GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment(pftpdFragment);
             askDiag.show(getSupportFragmentManager(), PftpdFragment.DIALOG_TAG);
+        }
+        if (LoadPrefsUtil.PREF_KEY_CHOOSE_BIND_IP.equals(key)) {
+            this.needToUpdateAddressesInMainUi = true;
+            this.chooseBindIp = sharedPreferences.getBoolean(
+                    LoadPrefsUtil.PREF_KEY_CHOOSE_BIND_IP,
+                    false);
         }
     }
 

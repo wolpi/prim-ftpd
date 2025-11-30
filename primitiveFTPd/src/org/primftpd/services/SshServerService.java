@@ -125,7 +125,7 @@ public class SshServerService extends AbstractServerService
 	{
 		sshServer = SshServer.setUpDefaultServer();
 		sshServer.setPort(prefsBean.getSecurePort());
-		String bindIp = prefsBean.getBindIp();
+		String bindIp = getBindIp();
 		if (bindIp != null) {
 			sshServer.setHost(bindIp);
 		}
