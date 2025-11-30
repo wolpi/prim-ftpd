@@ -47,9 +47,6 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     protected PftpdFragment pftpdFragment;
     protected MainAdapter adapter;
 
-    private boolean needToUpdateAddressesInMainUi;
-    private boolean chooseBindIp;
-
     protected PftpdFragment createPftpdFragment() {
         return new PftpdFragment();
     }
@@ -89,10 +86,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 String tabText = tab.getText().toString();
-                if (TAB_NAME_MAIN_UI.equals(tabText) && needToUpdateAddressesInMainUi) {
-                    needToUpdateAddressesInMainUi = false;
-                    fireChooseIpEventAsync(null);
-                } else if (TAB_NAME_QR.equals(tabText)) {
+                if (TAB_NAME_QR.equals(tabText)) {
                     String chosenIp = pftpdFragment.getChosenIp();
                     fireChooseIpEventAsync(chosenIp);
                 }
@@ -116,7 +110,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
             } catch (Exception e) {
                 // never mind
             }
-            EventBus.getDefault().post(new RedrawAddresses(chooseBindIp, chosenIp));
+            EventBus.getDefault().post(new RedrawAddresses(chosenIp));
         });
     }
 
@@ -297,12 +291,6 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         if (LoadPrefsUtil.PREF_KEY_HOSTKEY_ALGOS.equals(key)) {
             GenKeysAskDialogFragment askDiag = new GenKeysAskDialogFragment(pftpdFragment);
             askDiag.show(getSupportFragmentManager(), PftpdFragment.DIALOG_TAG);
-        }
-        if (LoadPrefsUtil.PREF_KEY_CHOOSE_BIND_IP.equals(key)) {
-            this.needToUpdateAddressesInMainUi = true;
-            this.chooseBindIp = sharedPreferences.getBoolean(
-                    LoadPrefsUtil.PREF_KEY_CHOOSE_BIND_IP,
-                    false);
         }
     }
 

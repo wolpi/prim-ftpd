@@ -459,17 +459,6 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 	 * Creates table containing network interfaces.
 	 */
 	protected void showAddresses() {
-		showAddresses(null);
-	}
-
-	/**
-	 * Creates table containing network interfaces.
-	 *
-	 * @param tmpChooseBindIp Temporary value (non present in persistent preferences) indicating if
-	 *                        selection of IP shall be shown. If null the persistent value will be
-	 *                        used.
-	 */
-	protected void showAddresses(Boolean tmpChooseBindIp) {
 		View view = getView();
 		if (view == null) {
 			return;
@@ -479,9 +468,10 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		// clear old entries
 		container.removeAllViews();
 
-		boolean chooseBindIp = tmpChooseBindIp == null
-				? prefsBean.isChooseBindIp()
-				: tmpChooseBindIp;
+		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
+		boolean chooseBindIp = prefs.getBoolean(
+				LoadPrefsUtil.PREF_KEY_CHOOSE_BIND_IP,
+				Boolean.FALSE);
 
 		RadioGroup radioGroup = null;
 		final Map<Integer, String> radioButtonIdToIpaddr = new HashMap<>();
@@ -499,6 +489,13 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 				radio.setText(ipAddressBean.getDisplayName());
 				radio.setId(idx);
 				radioButtonIdToIpaddr.put(idx, ipAddressBean.getIpAddress());
+				if (this.chosenIp != null) {
+					if (ipAddressBean.getIpAddress().equals(this.chosenIp)) {
+						radio.setChecked(true);
+					}
+				} else if (ipAddressBean.getIpAddress().equals(prefsBean.getBindIp())) {
+					radio.setChecked(true);
+				}
 				idx = idx +1;
 			} else {
 				TextView textView = new TextView(container.getContext());
@@ -782,13 +779,6 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		clientActionView1.setText(clientActionView2.getText());
 		clientActionView2.setText(clientActionView3.getText());
 		clientActionView3.setText(clientAction);
-	}
-
-	@Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-	public void onEvent(RedrawAddresses event) {
-		// in theory we should re-load prefs, but they might not be persisted yet
-		//loadPrefs();
-		showAddresses(event.isChooseBindIp());
 	}
 
 	protected void displayServersState() {

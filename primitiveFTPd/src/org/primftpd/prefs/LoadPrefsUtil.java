@@ -184,12 +184,6 @@ public class LoadPrefsUtil
 				null));
 	}
 
-	public static boolean chooseBindIp(SharedPreferences prefs) {
-		return prefs.getBoolean(
-				LoadPrefsUtil.PREF_KEY_BIND_IP,
-				Boolean.FALSE);
-	}
-
 	public static Integer idleTimeout(SharedPreferences prefs) {
 		String str = prefs.getString(PREF_KEY_IDLE_TIMEOUT, IDLE_TIMEOUT_DEFAULT_VAL_STR);
 		Integer val = IDLE_TIMEOUT_DEFAULT_VAL;
@@ -338,9 +332,6 @@ public class LoadPrefsUtil
 		String bindIp = bindIp(prefs);
 		logger.debug("got bindIp: {}", bindIp);
 
-		boolean chooseBindIp = chooseBindIp(prefs);
-		logger.debug("got chooseBindIp: {}", chooseBindIp);
-
 		Integer idleTimeout = idleTimeout(prefs);
 		logger.debug("got idleTimeout: {}", idleTimeout);
 
@@ -380,7 +371,6 @@ public class LoadPrefsUtil
 				serverToStart,
 				ftpPassivePorts,
 				bindIp,
-				chooseBindIp,
 				idleTimeout,
 				showConnectionInfo,
 				storageType,
