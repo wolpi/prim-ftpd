@@ -477,6 +477,9 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		final Map<Integer, String> radioButtonIdToIpaddr = new HashMap<>();
 		if (chooseBindIp) {
 			radioGroup = new RadioGroup(this.getContext());
+		} else {
+			// reset chosenIp, if user has diabled the preference again
+			this.chosenIp = null;
 		}
 
 		boolean isLeftToRight = isLeftToRight();
