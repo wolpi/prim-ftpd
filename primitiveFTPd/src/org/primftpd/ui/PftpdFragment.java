@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -43,7 +44,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
 import org.primftpd.crypto.HostKeyAlgorithm;
 import org.primftpd.events.ClientActionEvent;
-import org.primftpd.events.RedrawAddresses;
 import org.primftpd.events.ServerInfoRequestEvent;
 import org.primftpd.events.ServerInfoResponseEvent;
 import org.primftpd.events.ServerStateChangedEvent;
@@ -65,6 +65,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -97,6 +98,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 	private ServersRunningBean serversRunning;
 	private long timestampOfLastEvent = 0;
 
+	private ProgressBar addressesLoading;
 	private TextView clientActionView1;
 	private TextView clientActionView2;
 	private TextView clientActionView3;
@@ -165,7 +167,8 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 			ServicesStartStopUtil.startServers(this);
 		}
 
-		// init client action views
+		// init views (laoding & client action texts)
+		addressesLoading = view.findViewById(R.id.addressesLoading);
 		clientActionView1 = view.findViewById(R.id.clientActionsLine1);
 		clientActionView2 = view.findViewById(R.id.clientActionsLine2);
 		clientActionView3 = view.findViewById(R.id.clientActionsLine3);
@@ -194,7 +197,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
         super.onStart();
 
         logger.debug("onStart()");
-		onStartOngoing = true;
+        onStartOngoing = true;
 
         loadPrefs();
         showLogindata();
@@ -237,7 +240,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
             }
         }
 
-		onStartOngoing = false;
+        onStartOngoing = false;
     }
 
 	@Override
@@ -258,11 +261,19 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		checkSafAccess();
 
 		// validate bind IP
-		if (!ipAddressProvider.isIpAvail(prefsBean.getBindIp())) {
-			String msg = "IP " + prefsBean.getBindIp() +
-					" is currently not assigned to an interface. May lead to a crash.";
-			Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+		View view = getView();
+		if (view == null) {
+			return;
 		}
+		Executors.newSingleThreadExecutor().execute(() -> {
+			if (!ipAddressProvider.isIpAvail(prefsBean.getBindIp())) {
+				String msg = "IP " + prefsBean.getBindIp() +
+						" is currently not assigned to an interface. May lead to a crash.";
+				view.post(() -> {
+					Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+				});
+			}
+		});
 	}
 
 	@Override
@@ -463,16 +474,26 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		if (view == null) {
 			return;
 		}
-		LinearLayout container = view.findViewById(R.id.addressesContainer);
 
 		// clear old entries
+		LinearLayout container = view.findViewById(R.id.addressesContainer);
 		container.removeAllViews();
 
+		// show spinner
+		addressesLoading.setVisibility(View.VISIBLE);
+
+		Executors.newSingleThreadExecutor().execute(() -> {
+			doShowAddresses(view, container);
+		});
+	}
+
+	protected void doShowAddresses(View view, LinearLayout container) {
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
 		boolean chooseBindIp = prefs.getBoolean(
 				LoadPrefsUtil.PREF_KEY_CHOOSE_BIND_IP,
 				Boolean.FALSE);
 
+		final RadioGroup[] radioGroupHolder = new RadioGroup[1];
 		RadioGroup radioGroup = null;
 		final Map<Integer, String> radioButtonIdToIpaddr = new HashMap<>();
 		if (chooseBindIp) {
@@ -481,42 +502,48 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 			// reset chosenIp, if user has diabled the preference again
 			this.chosenIp = null;
 		}
+		radioGroupHolder[0] = radioGroup;
 
 		boolean isLeftToRight = isLeftToRight();
 		List<IpAddressBean> ipAddressBeans = ipAddressProvider.ipAddressTexts(getContext(), true, isLeftToRight);
-		int idx = 42;
-		for (IpAddressBean ipAddressBean : ipAddressBeans) {
-			if (chooseBindIp) {
-				RadioButton radio = new RadioButton(this.getContext());
-				radioGroup.addView(radio);
-				radio.setText(ipAddressBean.getDisplayName());
-				radio.setId(idx);
-				radioButtonIdToIpaddr.put(idx, ipAddressBean.getIpAddress());
-				if (this.chosenIp != null) {
-					if (ipAddressBean.getIpAddress().equals(this.chosenIp)) {
+
+		view.post(() -> {
+			addressesLoading.setVisibility(View.GONE);
+
+			int idx = 42;
+			for (IpAddressBean ipAddressBean : ipAddressBeans) {
+				if (chooseBindIp) {
+					RadioButton radio = new RadioButton(this.getContext());
+					radioGroupHolder[0].addView(radio);
+					radio.setText(ipAddressBean.getDisplayName());
+					radio.setId(idx);
+					radioButtonIdToIpaddr.put(idx, ipAddressBean.getIpAddress());
+					if (this.chosenIp != null) {
+						if (ipAddressBean.getIpAddress().equals(this.chosenIp)) {
+							radio.setChecked(true);
+						}
+					} else if (ipAddressBean.getIpAddress().equals(prefsBean.getBindIp())) {
 						radio.setChecked(true);
 					}
-				} else if (ipAddressBean.getIpAddress().equals(prefsBean.getBindIp())) {
-					radio.setChecked(true);
+					idx = idx + 1;
+				} else {
+					TextView textView = new TextView(container.getContext());
+					container.addView(textView);
+					textView.setText(ipAddressBean.getDisplayName());
+					textView.setGravity(Gravity.CENTER_HORIZONTAL);
+					textView.setTextIsSelectable(true);
 				}
-				idx = idx +1;
-			} else {
-				TextView textView = new TextView(container.getContext());
-				container.addView(textView);
-				textView.setText(ipAddressBean.getDisplayName());
-				textView.setGravity(Gravity.CENTER_HORIZONTAL);
-				textView.setTextIsSelectable(true);
 			}
-		}
 
-		if (chooseBindIp) {
-			container.addView(radioGroup);
+			if (chooseBindIp) {
+				container.addView(radioGroupHolder[0]);
 
-			PftpdFragment fragment = this;
-			radioGroup.setOnCheckedChangeListener((group, checkedId) ->
-				fragment.chosenIp = radioButtonIdToIpaddr.get(checkedId)
-			);
-		}
+				PftpdFragment fragment = this;
+				radioGroupHolder[0].setOnCheckedChangeListener((group, checkedId) ->
+						fragment.chosenIp = radioButtonIdToIpaddr.get(checkedId)
+				);
+			}
+		});
 	}
 
 	@SuppressLint("SetTextI18n")

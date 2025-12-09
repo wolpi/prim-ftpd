@@ -31,6 +31,13 @@
             android:focusable="false"
         />
 
+        <ProgressBar
+            android:id="@+id/addressesLoading"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" />
+
         <LinearLayout
             android:id="@+id/addressesContainer"
             android:orientation="vertical"

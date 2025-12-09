@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -50,6 +52,7 @@ public class QrFragment extends Fragment implements RecreateLogger {
     private int width;
     private int height;
     private TextView fallbackTextView;
+    private ProgressBar qrLoading;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -62,6 +65,7 @@ public class QrFragment extends Fragment implements RecreateLogger {
         urlsParent = view.findViewById(R.id.qrUrlsParent);
         qrImage = view.findViewById(R.id.qrImage);
         fallbackTextView = view.findViewById(R.id.qrFallbackTextView);
+        qrLoading = view.findViewById(R.id.qrLoading);
 
         width = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
         height = getResources().getDisplayMetrics().heightPixels / 2;
@@ -88,6 +92,13 @@ public class QrFragment extends Fragment implements RecreateLogger {
     }
 
     protected void draw(String chosenIp) {
+        qrLoading.setVisibility(View.VISIBLE);
+        Executors.newSingleThreadExecutor().execute(() -> {
+            doDraw(chosenIp);
+        });
+    }
+
+    protected void doDraw(String chosenIp) {
         View view = getView();
         if (view == null) {
             return;
@@ -110,11 +121,15 @@ public class QrFragment extends Fragment implements RecreateLogger {
 
         List<String> urls = new ArrayList<>();
 
-        if (ipAddressBeans.isEmpty() && chosenIp == null) {
-            fallbackTextView.setVisibility(View.VISIBLE);
-        } else {
-            fallbackTextView.setVisibility(View.GONE);
-        }
+        view.post(() -> {
+            qrLoading.setVisibility(View.GONE);
+            if (ipAddressBeans.isEmpty() && chosenIp == null) {
+                fallbackTextView.setVisibility(View.VISIBLE);
+            } else {
+                fallbackTextView.setVisibility(View.GONE);
+            }
+
+        });
 
         if (chosenIp != null) {
             boolean ipv6 = ipAddressProvider.isIpv6(chosenIp);
@@ -135,27 +150,29 @@ public class QrFragment extends Fragment implements RecreateLogger {
             }
         }
 
-        final boolean darkMode = UiModeUtil.isDarkMode(getResources());
-        RadioGroup radioGroup = new RadioGroup(getContext());
-        radioGroup.setOrientation(RadioGroup.VERTICAL);
-        for (final String url : urls) {
-            logger.debug("showing url: {}", url);
-            RadioButton radioButton = new RadioButton(getContext());
-            radioButton.setText(url);
-            radioGroup.addView(radioButton);
-            final QrFragment fragment = this;
-            radioButton.setOnClickListener(v -> {
-                Bitmap qr = fragment.generateQr(url, darkMode);
-                fragment.qrImage.setImageBitmap(qr);
-            });
-        }
-        urlsParent.removeAllViewsInLayout();
-        urlsParent.addView(radioGroup);
-        if (!urls.isEmpty()) {
-            View firstRadio = radioGroup.getChildAt(0);
-            firstRadio.callOnClick();
-            ((RadioButton)firstRadio).setChecked(true);
-        }
+        view.post(() -> {
+            final boolean darkMode = UiModeUtil.isDarkMode(getResources());
+            RadioGroup radioGroup = new RadioGroup(getContext());
+            radioGroup.setOrientation(RadioGroup.VERTICAL);
+            for (final String url : urls) {
+                logger.debug("showing url: {}", url);
+                RadioButton radioButton = new RadioButton(getContext());
+                radioButton.setText(url);
+                radioGroup.addView(radioButton);
+                final QrFragment fragment = this;
+                radioButton.setOnClickListener(v -> {
+                    Bitmap qr = fragment.generateQr(url, darkMode);
+                    fragment.qrImage.setImageBitmap(qr);
+                });
+            }
+            urlsParent.removeAllViewsInLayout();
+            urlsParent.addView(radioGroup);
+            if (!urls.isEmpty()) {
+                View firstRadio = radioGroup.getChildAt(0);
+                firstRadio.callOnClick();
+                ((RadioButton) firstRadio).setChecked(true);
+            }
+        });
     }
 
     protected void addUrl(List<String> urls, String ipAddressText, boolean ipv6, PrefsBean prefsBean) {
