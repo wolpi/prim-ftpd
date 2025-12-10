@@ -132,4 +132,5 @@
     <string name="iconKeysFingerprints">Kulcs ujjlenyomatok</string>
     <string name="unknown">ismeretlen</string>
     <string name="fingerprintsCreationTimeLabel">Létrehozás ideje</string>
+    <string name="usernameLabel">Felhasználónév: %s</string>
 </resources>
