@@ -3,9 +3,11 @@
 import os
 import sys
 import subprocess
+from subprocess import Popen, PIPE, STDOUT
 from enum import Enum
 import re
 import shutil
+import time
 
 ARG_STORAGE_TYPE = "storage"
 ARG_READ_ONLY = "ro"
@@ -18,7 +20,10 @@ STORAGE_TYPE_VIRTUAL = "virtual"
 
 VALID_STORAGE_TYPES = [STORAGE_TYPE_FS, STORAGE_TYPE_ROOT, STORAGE_TYPE_SAF, STORAGE_TYPE_SAFRO, STORAGE_TYPE_VIRTUAL]
 
+USERNAME = "user"
 HOSTNAME = "localhost"
+USER_AT_HOST = USERNAME + "@" + HOSTNAME
+PASSWORD = "test"
 PORT_SFTP = "1234"
 PORT_FTP = "12345"
 PORT_FTP_PASSIVE = "5678"
@@ -57,6 +62,7 @@ KEY_PATH_DSA = KEY_DIR + "/" + KEY_FILE_DSA
 KEY_PATH_ECDSA = KEY_DIR + "/" + KEY_FILE_ECDSA
 KEY_PATH_ECDSA_384 = KEY_DIR + "/" + KEY_FILE_ECDSA_384
 KEY_PATH_ECDSA_521 = KEY_DIR + "/" + KEY_FILE_ECDSA_521
+KEY_PATH_ED25519 = KEY_DIR + "/" + KEY_FILE_ED25519
 KEY_PATH_RSA_BAD = KEY_DIR + "/" + KEY_FILE_RSA_BAD
 KEY_PATH_ED25519_BAD = KEY_DIR + "/" + KEY_FILE_ED25519_BAD
 
@@ -64,7 +70,7 @@ DEFAULT_TIMEOUT = " --max-time 5"
 OPTS_SFTP_BASE = "-vk" + DEFAULT_TIMEOUT
 OPTS_SFTP_NO_KEY = OPTS_SFTP_BASE + " --key "
 DEFAULT_OPTS_SFTP = OPTS_SFTP_NO_KEY + KEY_PATH
-OPTS_USER_PASS = "--user user:test"
+OPTS_USER_PASS = "--user " + USERNAME + ":" + PASSWORD
 DEFAULT_OPTS_FTP = "-v " + OPTS_USER_PASS + DEFAULT_TIMEOUT
 DEFAULT_OPTS_SCP = "-i " + KEY_PATH + " -P " + PORT_SFTP + " -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PreferredAuthentications=publickey"
 
@@ -243,70 +249,187 @@ def sendCommand(baseUrl, remoteCmd, protocol):
     cmd = "curl " + opts + " " + baseUrl + " " + remoteCmd
     return runCommand(cmd)
 
+def removeBatchfile():
+    print("remove old batch file")
+    if os.path.exists("batchfile"):
+        os.remove("batchfile")
+
+def runScript():
+    proc = Popen(["sh", "script.sh"], stdout=PIPE, stdin=PIPE, stderr=PIPE, text=True)
+    time.sleep(1)
+    stdout, stderr = proc.communicate()
+    print(stdout)
+    return stdout
+
+def generateAndRunSftpScriptfile(remotePath):
+    # generating a script file makes debugging easier
+    print("remove old script file")
+    if os.path.exists("script.sh"):
+        os.remove("script.sh")
+    print("generate script file")
+    with open("script.sh", "a") as scriptfile:
+        scriptfile.write('#!/bin/sh\n')
+        scriptfile.write('echo "running sshpass with batchfile"\n')
+        scriptfile.write("sshpass -p " + PASSWORD + " sftp -oPort=" + PORT_SFTP + " -oBatchMode=no -b batchfile " + USER_AT_HOST + ':' + remotePath + '\n')
+    print("open sftp sub process at path: " + remotePath)
+    return runScript()
+
+def generateAndRunFtpScriptfile(remotePath, command):
+    with open("script.sh", "w") as scriptfile:
+        scriptfile.write('#!/bin/sh\n')
+        scriptfile.write('echo "running ftp script"\n')
+        scriptfile.write("ftp -n " + HOSTNAME + " " + PORT_FTP +  " <<EOF" + '\n')
+        scriptfile.write("quote USER " + USERNAME + '\n')
+        scriptfile.write("quote PASS " + PASSWORD + '\n')
+        scriptfile.write("epsv " + '\n')
+        scriptfile.write("passive " + '\n')
+        scriptfile.write("cd " + remotePath + '\n')
+        scriptfile.write(command + '\n')
+        scriptfile.write("quit" + '\n')
+        scriptfile.write("EOF" + '\n')
+        scriptfile.write("exit 0" + '\n')
+    print("open ftp sub process at path: " + remotePath + ", with command:")
+    print(command)
+    return runScript()
+
+def createDirNoCurl(baseUrl, remoteBasePath, dirs, protocol):
+    numOfDirs = len(dirs)
+    if numOfDirs == 1:
+        path = remoteBasePath
+        newDir = dirs[0]
+    else:
+        newDir = dirs[numOfDirs - 1]
+        path = remoteBasePath
+        for i in range(numOfDirs - 1):
+            path = path + "/" + dirs[i]
+
+    if protocol == Protocol.SFTP:
+        removeBatchfile()
+        print("generate batch file (mkdir " + newDir + ")")
+        with open("batchfile", "a") as batchfile:
+            batchfile.write('mkdir ' + newDir + '\n')
+            batchfile.write('ls -l\n')
+        return generateAndRunSftpScriptfile(path)
+    else:
+        return generateAndRunFtpScriptfile(path, "mkdir " + newDir)
+
+def renameNoCurl(baseUrl, remoteBasePath, dirs, oldName, newName, protocol):
+    path = buildSubPath(dirs)
+    if "/" == path or "" == path:
+        path = remoteBasePath
+    if protocol == Protocol.SFTP:
+        removeBatchfile()
+        print("generate batch file (rename " + oldName + " " + newName + ")")
+        with open("batchfile", "a") as batchfile:
+            batchfile.write("rename " + oldName + " " + newName + '\n')
+            batchfile.write('ls -l\n')
+        return generateAndRunSftpScriptfile(path)
+    else:
+        if len(path) == 0:
+            path = '/'
+        return generateAndRunFtpScriptfile(path, "rename " + oldName + " " + newName)
+
+def removeDirNoCurl(baseUrl, remoteBasePath, dirs, protocol):
+    path = buildSubPath(dirs)
+    if "/" == path:
+        path = remoteBasePath
+    else:
+        path = remoteBasePath + path
+    if protocol == Protocol.SFTP:
+        removeBatchfile()
+        print("generate batch file (rmdir " + path + ")")
+        with open("batchfile", "a") as batchfile:
+            batchfile.write("rmdir " + path + '\n')
+            batchfile.write('ls -l\n')
+        return generateAndRunSftpScriptfile("/")
+    else:
+        return generateAndRunFtpScriptfile("/", "rmdir " + path)
+
+def removeFileNoCurl(baseUrl, remoteBasePath, dirs, filename, protocol):
+    path = buildSubPath(dirs)
+    if "/" == path:
+        path = remoteBasePath
+    if protocol == Protocol.SFTP:
+        removeBatchfile()
+        print("generate batch file (rm " + path + "/" + filename + ")")
+        with open("batchfile", "a") as batchfile:
+            batchfile.write("rm " + filename + '\n')
+            batchfile.write('ls -l\n')
+        return generateAndRunSftpScriptfile(path)
+    else:
+        return generateAndRunFtpScriptfile(path, "delete " + filename)
+
 def createDir(baseUrl, remoteBasePath, newDir, protocol):
     log("creating dir: " + baseUrl + remoteBasePath + " " + newDir)
-    remoteCmd = ""
-    if protocol == Protocol.SFTP:
-        remoteCmd = "-Q \"MKDIR " + newDir + "\""
-    else:
-        remoteCmd = "-Q \"MKD " + newDir + "\""
-    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    #remoteCmd = ""
+    #if protocol == Protocol.SFTP:
+    #    remoteCmd = "-Q \"MKDIR " + newDir + "\""
+    #else:
+    #    remoteCmd = "-Q \"MKD " + newDir + "\""
+    #remoteCmd += " --ftp-create-dirs"
+    #return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    return createDirNoCurl(baseUrl, remoteBasePath, [newDir], protocol)
 
 def createSubDir(baseUrl, remoteBasePath, dirs, protocol):
     log("creating sub dir: " + baseUrl + remoteBasePath + " " + str(dirs))
-    remoteCmd = ""
-    path = buildSubPath(dirs)
-    if protocol == Protocol.SFTP:
-        remoteCmd = "-Q \"MKDIR " + path + "\""
-    else:
-        remoteCmd = "-Q \"MKD " + path + "\""
-    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    #remoteCmd = ""
+    #path = buildSubPath(dirs)
+    #if protocol == Protocol.SFTP:
+    #    remoteCmd = "-Q \"MKDIR " + path + "\""
+    #else:
+    #    remoteCmd = "-Q \"MKD " + path + "\""
+    #return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    return createDirNoCurl(baseUrl, remoteBasePath, dirs, protocol)
 
 def removeDir(baseUrl, remoteBasePath, dir, protocol):
     log("removing dir: " + baseUrl + remoteBasePath + " " + dir)
-    remoteCmd = ""
-    if protocol == Protocol.SFTP:
-        remoteCmd = "-Q \"RMDIR " + dir + "\""
-    else:
-        remoteCmd = "-Q \"RMD " + dir + "\""
-    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    #remoteCmd = ""
+    #if protocol == Protocol.SFTP:
+    #    remoteCmd = "-Q \"RMDIR " + dir + "\""
+    #else:
+    #    remoteCmd = "-Q \"RMD " + dir + "\""
+    #return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    return removeDirNoCurl(baseUrl, remoteBasePath, [dir], protocol)
 
 def removeSubDir(baseUrl, remoteBasePath, dirs, protocol):
     log("removing sub dir: " + baseUrl + remoteBasePath + " " + str(dirs))
-    remoteCmd = ""
-    path = buildSubPath(dirs)
-    if protocol == Protocol.SFTP:
-        remoteCmd = "-Q \"RMDIR " + path + "\""
-    else:
-        remoteCmd = "-Q \"RMD " + path + "\""
-    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    #remoteCmd = ""
+    #path = buildSubPath(dirs)
+    #if protocol == Protocol.SFTP:
+    #    remoteCmd = "-Q \"RMDIR " + path + "\""
+    #else:
+    #    remoteCmd = "-Q \"RMD " + path + "\""
+    #return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    return removeDirNoCurl(baseUrl, remoteBasePath, dirs, protocol)
 
 def removeFile(baseUrl, remoteBasePath, dirs, filename, protocol):
     log("removing file: " + baseUrl + remoteBasePath + " " + str(dirs) + " " + filename)
-    remoteCmd = ""
-    path = buildSubPath(dirs)
-    path += "/" + filename
-    if protocol == Protocol.SFTP:
-        remoteCmd = "-Q \"RM " + path + "\""
-    else:
-        remoteCmd = "-Q \"DELE " + path + "\""
-    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    #remoteCmd = ""
+    #path = buildSubPath(dirs)
+    #path += "/" + filename
+    #if protocol == Protocol.SFTP:
+    #    remoteCmd = "-Q \"RM " + path + "\""
+    #else:
+    #    remoteCmd = "-Q \"DELE " + path + "\""
+    #return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    return removeFileNoCurl(baseUrl, remoteBasePath, dirs, filename, protocol)
 
 def rename(baseUrl, remoteBasePath, dirs, oldName, newName, protocol):
     log("renaming file: " + baseUrl + remoteBasePath + " " + str(dirs) + " " + oldName + " to " + newName)
-    remoteCmd = ""
-    path = buildSubPath(dirs)
-    print("  path: " + path + ", len: " + str(len(path)))
-    if len(path) > 0:
-        path += "/"
-    oldPath = path + oldName
-    newPath = path + newName
-    if protocol == Protocol.SFTP:
-        remoteCmd = "-Q \"RENAME " + oldPath + " " + newPath + "\""
-    else:
-        remoteCmd = "-Q \"RNFR " + oldPath + "\""
-        remoteCmd += " -Q \"RNTO " + newPath + "\""
-    return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    #remoteCmd = ""
+    #path = buildSubPath(dirs)
+    #print("  path: " + path + ", len: " + str(len(path)))
+    #if len(path) > 0:
+    #    path += "/"
+    #oldPath = path + oldName
+    #newPath = path + newName
+    #if protocol == Protocol.SFTP:
+    #    remoteCmd = "-Q \"RENAME " + oldPath + " " + newPath + "\""
+    #else:
+    #    remoteCmd = "-Q \"RNFR " + oldPath + "\""
+    #    remoteCmd += " -Q \"RNTO " + newPath + "\""
+    #return sendCommand(baseUrl + remoteBasePath, remoteCmd, protocol)
+    return renameNoCurl(baseUrl, remoteBasePath, dirs, oldName, newName, protocol)
 
 def buildSubPath(dirs):
     path = ""
@@ -341,6 +464,8 @@ def testCycle(baseUrl, remoteBasePath, errorTag, errors, protocol, storageType):
 
     # create dir
     output = createDir(baseUrl, remoteBasePath, NEW_DIR, protocol)
+    # no-curl impl does not return listing, download it again
+    output = downloadListing(baseUrl + remoteBasePath, protocol)
     checkHomeListing(errors, output, errorTag, storageType, newDirPresent = True)
 
     # create sub-dir
@@ -390,6 +515,8 @@ def testCycle(baseUrl, remoteBasePath, errorTag, errors, protocol, storageType):
 
     # delete dir
     output = removeDir(baseUrl, remoteBasePath, NEW_DIR_RENAMED, protocol)
+    # no-curl impl does not return listing, download it again
+    output = downloadListing(baseUrl + remoteBasePath, protocol)
     checkHomeListing(errors, output, errorTag, storageType)
 
 
@@ -443,20 +570,31 @@ def scpDownload(remoteBasePath, errorTag, errors):
 
 def testKeys(baseUrl, errors):
     protocol = Protocol.SFTP
-    output = downloadListing(baseUrl, protocol, key = KEY_PATH_DSA)
-    checkHomeListing(errors, output, "[key dsa]", storageType)
+    # DSA is not supported by SSH client anymore
+    #log("public key auth DSA")
+    #output = downloadListing(baseUrl, protocol, key = KEY_PATH_DSA)
+    #checkHomeListing(errors, output, "[key dsa]", storageType)
+    log("public key auth RSA")
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_RSA)
     checkHomeListing(errors, output, "[key rsa]", storageType)
+    log("public key auth ECDSA")
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_ECDSA)
     checkHomeListing(errors, output, "[key ecdsa]", storageType)
+    log("public key auth ECDSA_384")
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_ECDSA_384)
     checkHomeListing(errors, output, "[key ecdsa 384]", storageType)
+    log("public key auth ed25519")
+    output = downloadListing(baseUrl, protocol, key = KEY_PATH_ED25519)
+    checkHomeListing(errors, output, "[key ed25519]", storageType)
     # check bad keys
+    log("public key auth BAD key RSA")
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_RSA_BAD, check = False)
     checkEmpty(errors, output, "[key bad rsa]")
+    log("public key auth BAD key ed25519")
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_ED25519_BAD, check = False)
     checkEmpty(errors, output, "[key bad ed25519]")
     # check username & password for sftp
+    log("password auth sftp")
     output = downloadListingSftpPassword(baseUrl)
     checkHomeListing(errors, output, "[sftp password]", storageType)
 
