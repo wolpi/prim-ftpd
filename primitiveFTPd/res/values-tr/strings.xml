@@ -170,4 +170,9 @@
     <string name="startServerAndExit">yalnızca sunucuyu başlat</string>
     <string name="hasNotificationPermission">Bildirimleri gösterme izni var: %1$b</string>
     <string name="permWriteLabelServerstatus">sunucuyu başlat ve durdur</string>
+    <string name="usernameLabel">Kullanıcı Adı: %s</string>
+    <string name="prefChooseBindIp">Ana kullanıcı arayüzünde bağlanılacak IP adresini seç</string>
+    <string name="prefSummaryChooseBindIp">Sunucu başlatıldığında bağlanılacak IP adresini seçmek için ana kullanıcı arayüzünde radyo düğmeleri gösterir. Yukarıdaki IP adresi tercihinden daha yüksek önceliğe sahiptir. Sunucu başka bir yöntemle başlatılırsa etkili olmaz.</string>
+    <string name="fingerprintsCreationTimeLabel">Oluşturulma Zamanı</string>
+    <string name="unknown">bilinmiyor</string>
 </resources>
