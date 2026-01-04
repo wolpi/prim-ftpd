@@ -243,14 +243,11 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         logger.debug("onOptionsItemSelected()");
-        Intent intent;
-        switch (item.getItemId()) {
-            case R.id.menu_start:
-                handleStart();
-                break;
-            case R.id.menu_stop:
-                handleStop();
-                break;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_start) {
+            handleStart();
+        } else if (itemId == R.id.menu_stop) {
+            handleStop();
         }
 
         return super.onOptionsItemSelected(item);

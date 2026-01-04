@@ -304,38 +304,32 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 					Intent.FLAG_GRANT_READ_URI_PERMISSION
 							| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-			int checkedRadioButtonId = group.getCheckedRadioButtonId();
-			try {
-				switch (checkedRadioButtonId) {
-					case R.id.radioStoragePlain:
-						storageType = StorageType.PLAIN;
-						break;
-					case R.id.radioStorageRoot:
-						storageType = StorageType.ROOT;
-						break;
-					case R.id.radioStorageSaf:
-						storageType = StorageType.SAF;
-						if (!onStartOngoing) {
-							startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
-						}
-						break;
-					case R.id.radioStorageRoSaf:
-						storageType = StorageType.RO_SAF;
-						if (!onStartOngoing) {
-							startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
-						}
-						break;
-					case R.id.radioStorageVirtual:
-						storageType = StorageType.VIRTUAL;
-						if (!onStartOngoing) {
-							startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
-						}
-						break;
-				}
-			} catch (ActivityNotFoundException e) {
-				Toast.makeText(getContext(), "SAF seems to be broken on your device :(", Toast.LENGTH_SHORT).show();
+        int crb = group.getCheckedRadioButtonId();
+        try {
+			if (crb == R.id.radioStoragePlain) {
 				storageType = StorageType.PLAIN;
+			} else if (crb == R.id.radioStorageRoot) {
+				storageType = StorageType.ROOT;
+			} else if (crb == R.id.radioStorageSaf) {
+				storageType = StorageType.SAF;
+				if (!onStartOngoing) {
+					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+				}
+			} else if (crb == R.id.radioStorageRoSaf) {
+				storageType = StorageType.RO_SAF;
+				if (!onStartOngoing) {
+					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+				}
+			} else if (crb == R.id.radioStorageVirtual) {
+				storageType = StorageType.VIRTUAL;
+				if (!onStartOngoing) {
+					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+				}
 			}
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), "SAF seems to be broken on your device :(", Toast.LENGTH_SHORT).show();
+            storageType = StorageType.PLAIN;
+        }
 
 			if (storageType != null) {
 				SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
