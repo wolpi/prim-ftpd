@@ -1,17 +1,21 @@
 package org.primftpd;
 
 import android.app.Application;
-import android.content.Context;
 
-import org.primftpd.log.CsvLoggerFactory;
+import org.primftpd.log.LogController;
+import java.security.Security;
 
 public class PftpdApp extends Application {
+
+    static {
+        Security.removeProvider("BC");
+        Security.insertProviderAt(new org.bouncycastle.jce.provider.BouncyCastleProvider(), 1);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        // init static context to be able to create log file in scoped dir
-        Context context = getApplicationContext();
-        CsvLoggerFactory.CONTEXT = context;
+        LogController.init(getApplicationContext());
     }
 }
