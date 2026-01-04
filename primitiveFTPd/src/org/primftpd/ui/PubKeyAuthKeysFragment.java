@@ -1,7 +1,6 @@
 package org.primftpd.ui;
 
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -144,9 +143,7 @@ public class PubKeyAuthKeysFragment extends Fragment {
     protected boolean validateKey(CharSequence key) {
         PublicKey pubKey = null;
         try {
-            pubKey = KeyParser.parseKeyLine(
-                    key.toString(),
-                    str -> Base64.decode(str, Base64.DEFAULT));
+            pubKey = KeyParser.parseKeyLine(key.toString());
         } catch (Exception e) {
             // handled by having pubKey equal null
         }

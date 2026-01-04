@@ -25,6 +25,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +62,7 @@ public class KeyParser {
         EC_NAME_TO_CURVE_NAME = Collections.unmodifiableMap(tmpCurveName);
     }
 
-    public static List<PublicKey> parsePublicKeys(InputStream is, Base64Decoder base64Decoder, List<String> errors)
+    public static List<PublicKey> parsePublicKeys(InputStream is, List<String> errors)
             throws IOException {
         if (is == null) {
             throw new IllegalArgumentException("input stream cannot be null");
@@ -73,7 +74,7 @@ public class KeyParser {
             try {
                 String keyLine = reader.readLine();
                 lineCounter++;
-                PublicKey key = parseKeyLine(keyLine, base64Decoder);
+                PublicKey key = parseKeyLine(keyLine);
                 if (key != null) {
                     keys.add(key);
                 }
@@ -85,7 +86,7 @@ public class KeyParser {
         return keys;
     }
 
-    public static PublicKey parseKeyLine(String keyLine, Base64Decoder base64Decoder) throws Exception {
+    public static PublicKey parseKeyLine(String keyLine) throws Exception {
         PublicKey key = null;
         String[] parts = keyLine.split(" ");
 
@@ -97,7 +98,7 @@ public class KeyParser {
         }
 
         if (keyEncoded != null) {
-            byte[] keyBytes = base64Decoder.decode(keyEncoded);
+            byte[] keyBytes = Base64.getDecoder().decode(keyEncoded);
 
             if (NAME_RSA.equals(name)) {
                 key = parsePublicKeyRsa(keyBytes);
