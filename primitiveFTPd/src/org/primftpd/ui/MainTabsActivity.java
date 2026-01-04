@@ -1,12 +1,13 @@
 package org.primftpd.ui;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,8 +28,12 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -53,13 +58,40 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         logger.trace("onCreate()");
-        setContentView(R.layout.tabs_activity);
 
+        // EdgeToEdge on Android pre-15
+        // There are some serious insets listener issues on API 28/29,
+        // ViewPager2 also documents a serious bug when using API < 30.
+        // I haven't checked ViewPager v1... but migration to ViewPager2 is a TODO
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            EdgeToEdge.enable(this);
+        }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.tabs_activity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setNavigationBarContrastEnforced(false);
+        }
+
+        AppBarLayout appBarLayout = findViewById(R.id.app_bar);
         TabLayout tabLayout = findViewById(R.id.tabs);
         ViewPager viewPager = findViewById(R.id.view_pager);
         tabLayout.setupWithViewPager(viewPager);
+
+        ViewCompat.setOnApplyWindowInsetsListener(viewPager, (v, insets) -> {
+            final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(0, 0, 0, systemBars.bottom);
+            // ViewPager is V1: dispatch manually!
+            for (int i = 0; i < viewPager.getChildCount(); i++) {
+                ViewCompat.dispatchApplyWindowInsets(viewPager.getChildAt(i), insets);
+            }
+            return insets;
+        });
+        ViewCompat.setOnApplyWindowInsetsListener(appBarLayout, (v, insets) -> {
+            final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(0, systemBars.top, 0, 0);
+            return insets;
+        });
 
         adapter = new MainAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
