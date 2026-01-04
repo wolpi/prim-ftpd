@@ -84,15 +84,6 @@ public interface ClientSession extends Session {
     AuthFuture auth() throws IOException;
 
     /**
-     * Authenticate the session with the given username using an ssh agent.
-     *
-     * @deprecated Use {@link #auth()} instead
-     * @see #auth()
-     */
-    @Deprecated
-    AuthFuture authAgent(String username) throws IOException;
-
-    /**
      * Authenticate the session with the given username and password.
      *
      * @deprecated Use {@link #auth()} instead

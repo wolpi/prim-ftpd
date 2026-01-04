@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 
-import org.apache.sshd.agent.SshAgentFactory;
 import org.apache.sshd.common.file.FileSystemFactory;
 import org.apache.sshd.common.io.IoServiceFactory;
 import org.apache.sshd.common.session.ConnectionService;
@@ -209,27 +208,11 @@ public interface FactoryManager {
     List<NamedFactory<Channel>> getChannelFactories();
 
     /**
-     * Retrieve the agent factory for creating <code>SshAgent</code> objects.
-     *
-     * @return the factory
-     */
-    SshAgentFactory getAgentFactory();
-
-    /**
      * Retrieve the <code>ScheduledExecutorService</code> to be used.
      *
      * @return the <code>ScheduledExecutorService</code>, never <code>null</code>
      */
     ScheduledExecutorService getScheduledExecutorService();
-
-    /**
-     * Retrieve the <code>ForwardingFilter</code> to be used by the SSH server.
-     * If no filter has been configured (i.e. this method returns
-     * <code>null</code>), then all forwarding requests will be rejected.
-     *
-     * @return the <code>ForwardingFilter</code> or <code>null</code>
-     */
-    ForwardingFilter getTcpipForwardingFilter();
 
     /**
      * Retrieve the tcpip forwarder factory used to support tcpip forwarding.

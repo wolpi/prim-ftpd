@@ -116,22 +116,12 @@ public class SshBuilder {
                 if (randomFactory == null) {
                     randomFactory = new SingletonRandomFactory(new BouncyCastleRandom.Factory());
                 }
-                // EC keys are not supported until OpenJDK 7
-            } else if (SecurityUtils.hasEcc()) {
+            } else {
                 if (signatureFactories == null) {
                     signatureFactories = Arrays.asList(
                             new SignatureECDSA.NISTP256Factory(),
                             new SignatureECDSA.NISTP384Factory(),
                             new SignatureECDSA.NISTP521Factory(),
-                            new SignatureDSA.Factory(),
-                            new SignatureRSA.Factory());
-                }
-                if (randomFactory == null) {
-                    randomFactory = new SingletonRandomFactory(new JceRandom.Factory());
-                }
-            } else {
-                if (signatureFactories == null) {
-                    signatureFactories = Arrays.asList(
                             new SignatureDSA.Factory(),
                             new SignatureRSA.Factory());
                 }
@@ -316,7 +306,7 @@ public class SshBuilder {
                             new org.apache.sshd.client.kex.DHG1.Factory());
                 }
             // EC keys are not supported until OpenJDK 7
-            } else if (SecurityUtils.hasEcc()) {
+            } else {
                 if (keyExchangeFactories == null) {
                     keyExchangeFactories = Arrays.asList(
                             new org.apache.sshd.client.kex.DHGEX256.Factory(),
@@ -324,13 +314,6 @@ public class SshBuilder {
                             new org.apache.sshd.client.kex.ECDHP256.Factory(),
                             new org.apache.sshd.client.kex.ECDHP384.Factory(),
                             new org.apache.sshd.client.kex.ECDHP521.Factory(),
-                            new org.apache.sshd.client.kex.DHG1.Factory());
-                }
-            } else {
-                if (keyExchangeFactories == null) {
-                    keyExchangeFactories = Arrays.asList(
-                            new org.apache.sshd.client.kex.DHGEX256.Factory(),
-                            new org.apache.sshd.client.kex.DHGEX.Factory(),
                             new org.apache.sshd.client.kex.DHG1.Factory());
                 }
             }
@@ -375,7 +358,7 @@ public class SshBuilder {
                             new org.apache.sshd.server.kex.DHG1.Factory());
                 }
             // EC keys are not supported until OpenJDK 7
-            } else if (SecurityUtils.hasEcc()) {
+            } else {
                 if (keyExchangeFactories == null) {
                     keyExchangeFactories = Arrays.asList(
                             new org.apache.sshd.server.kex.DHGEX256.Factory(),
@@ -383,13 +366,6 @@ public class SshBuilder {
                             new org.apache.sshd.server.kex.ECDHP256.Factory(),
                             new org.apache.sshd.server.kex.ECDHP384.Factory(),
                             new org.apache.sshd.server.kex.ECDHP521.Factory(),
-                            new org.apache.sshd.server.kex.DHG1.Factory());
-                }
-            } else {
-                if (keyExchangeFactories == null) {
-                    keyExchangeFactories = Arrays.asList(
-                            new org.apache.sshd.server.kex.DHGEX256.Factory(),
-                            new org.apache.sshd.server.kex.DHGEX.Factory(),
                             new org.apache.sshd.server.kex.DHG1.Factory());
                 }
             }

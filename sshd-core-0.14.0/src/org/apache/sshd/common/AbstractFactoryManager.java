@@ -27,7 +27,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.sshd.agent.SshAgentFactory;
 import org.apache.sshd.common.file.FileSystemFactory;
 import org.apache.sshd.common.io.IoServiceFactory;
 import org.apache.sshd.common.io.IoServiceFactoryFactory;
@@ -55,11 +54,9 @@ public abstract class AbstractFactoryManager extends CloseableUtils.AbstractInne
     protected KeyPairProvider keyPairProvider;
     protected String version;
     protected List<NamedFactory<Channel>> channelFactories;
-    protected SshAgentFactory agentFactory;
     protected ScheduledExecutorService executor;
     protected boolean shutdownExecutor;
     protected TcpipForwarderFactory tcpipForwarderFactory;
-    protected ForwardingFilter tcpipForwardingFilter;
     protected FileSystemFactory fileSystemFactory;
     protected List<ServiceFactory> serviceFactories;
     protected List<RequestHandler<ConnectionService>> globalRequestHandlers;
@@ -198,14 +195,6 @@ public abstract class AbstractFactoryManager extends CloseableUtils.AbstractInne
         }
     }
 
-    public SshAgentFactory getAgentFactory() {
-        return agentFactory;
-    }
-
-    public void setAgentFactory(SshAgentFactory agentFactory) {
-        this.agentFactory = agentFactory;
-    }
-
     public ScheduledExecutorService getScheduledExecutorService() {
         return executor;
     }
@@ -225,14 +214,6 @@ public abstract class AbstractFactoryManager extends CloseableUtils.AbstractInne
 
     public void setTcpipForwarderFactory(TcpipForwarderFactory tcpipForwarderFactory) {
         this.tcpipForwarderFactory = tcpipForwarderFactory;
-    }
-
-    public ForwardingFilter getTcpipForwardingFilter() {
-        return tcpipForwardingFilter;
-    }
-
-    public void setTcpipForwardingFilter(ForwardingFilter tcpipForwardingFilter) {
-        this.tcpipForwardingFilter = tcpipForwardingFilter;
     }
 
     public FileSystemFactory getFileSystemFactory() {

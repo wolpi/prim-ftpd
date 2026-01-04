@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.sshd.ClientSession;
-import org.apache.sshd.agent.SshAgent;
-import org.apache.sshd.agent.SshAgentFactory;
 import org.apache.sshd.client.UserAuth;
 import org.apache.sshd.client.session.ClientUserAuthServiceNew;
 import org.apache.sshd.common.FactoryManager;
@@ -60,7 +58,6 @@ public class UserAuthPublicKey implements UserAuth {
     protected final Logger log = LoggerFactory.getLogger(getClass());
     private ClientSession session;
     private String service;
-    private SshAgent agent;
     private Iterator<PublicKeyIdentity> keys;
     private PublicKeyIdentity current;
 
@@ -72,15 +69,6 @@ public class UserAuthPublicKey implements UserAuth {
             if (o instanceof KeyPair) {
                 ids.add(new KeyPairIdentity(session.getFactoryManager(), (KeyPair) o));
             }
-        }
-        SshAgentFactory factory = session.getFactoryManager().getAgentFactory();
-        if (factory != null) {
-            this.agent = factory.createClient(session.getFactoryManager());
-            for (SshAgent.Pair<PublicKey, String> pair : agent.getIdentities()) {
-                ids.add(new KeyAgentIdentity(agent, pair.getFirst()));
-            }
-        } else {
-            this.agent = null;
         }
         KeyPairProvider provider = session.getFactoryManager().getKeyPairProvider();
         if (provider != null) {
@@ -148,32 +136,11 @@ public class UserAuthPublicKey implements UserAuth {
     }
 
     public void destroy() {
-        if (agent != null) {
-            agent.close();
-        }
     }
 
     interface PublicKeyIdentity {
         PublicKey getPublicKey();
         byte[] sign(byte[] data) throws Exception;
-    }
-
-    static class KeyAgentIdentity implements PublicKeyIdentity {
-        private final SshAgent agent;
-        private final PublicKey key;
-
-        KeyAgentIdentity(SshAgent agent, PublicKey key) {
-            this.agent = agent;
-            this.key = key;
-        }
-
-        public PublicKey getPublicKey() {
-            return key;
-        }
-
-        public byte[] sign(byte[] data) throws Exception {
-            return agent.sign(key, data);
-        }
     }
 
     static class KeyPairIdentity implements PublicKeyIdentity {
