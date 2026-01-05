@@ -53,7 +53,6 @@ import org.primftpd.util.IpAddressBean;
 import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.KeyFingerprintBean;
 import org.primftpd.util.KeyFingerprintProvider;
-import org.primftpd.util.PrngFixes;
 import org.primftpd.util.SampleAuthKeysFileCreator;
 import org.primftpd.util.ServersRunningBean;
 import org.primftpd.util.ServicesStartStopUtil;
@@ -118,9 +117,6 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		logger.debug("onCreateView()");
-
-		// fixes/workarounds for android security issue below 4.3 regarding key generation
-		PrngFixes.apply();
 
 		// layout
 		View view = inflater.inflate(getLayoutId(), container, false);
