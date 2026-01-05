@@ -11,7 +11,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
-import android.os.Build;
 import android.view.View;
 
 import org.primftpd.R;
@@ -122,21 +121,17 @@ public class NotificationUtil
 	}
 
 	private static void createChannel(Context ctxt, String channelId) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			NotificationChannel channel = new NotificationChannel(
-					channelId,
-					channelId,
-					NotificationManager.IMPORTANCE_LOW);
-			NotificationManager notificationManager = ctxt.getSystemService(NotificationManager.class);
-			notificationManager.createNotificationChannel(channel);
-		}
-	}
+        NotificationChannel channel = new NotificationChannel(
+                channelId,
+                channelId,
+                NotificationManager.IMPORTANCE_LOW);
+        NotificationManager notificationManager = ctxt.getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
 
 	private static void addChannel(Notification.Builder builder, String channelId) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			builder.setChannelId(channelId);
-		}
-	}
+        builder.setChannelId(channelId);
+    }
 
 	private static void addAction(
 			Context ctxt,
@@ -144,21 +139,13 @@ public class NotificationUtil
 			PendingIntent pendingIntent,
 			int text,
 			int iconId) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			// TODO check icon for android 7
-			Icon icon = Icon.createWithResource(ctxt, iconId);
-			Notification.Action stopAction = new Notification.Action.Builder(
-					icon,
-					ctxt.getString(text),
-					pendingIntent).build();
-			builder.addAction(stopAction);
-		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			builder.addAction(
-					iconId,
-					ctxt.getString(text),
-					pendingIntent);
-		}
-	}
+        Icon icon = Icon.createWithResource(ctxt, iconId);
+        Notification.Action stopAction = new Notification.Action.Builder(
+                icon,
+                ctxt.getString(text),
+                pendingIntent).build();
+        builder.addAction(stopAction);
+    }
 
 	public static void createStartStopNotification(Context ctxt) {
 		LOGGER.debug("createStartStopNotification()");
@@ -170,13 +157,8 @@ public class NotificationUtil
 				START_STOP_CHANNEL_ID,
 				null);
 
-		Notification notification;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			notification = builder.build();
-		} else {
-			notification = builder.getNotification();
-		}
-		notification.flags |= Notification.FLAG_NO_CLEAR;
+		Notification notification = builder.build();
+        notification.flags |= Notification.FLAG_NO_CLEAR;
 
 		createStatusbarNotification(ctxt, notification, START_STOP_ID);
 	}
@@ -197,17 +179,13 @@ public class NotificationUtil
 				quickShareBean);
 
 		Notification notification;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			if (prefsBean.showConnectionInfoInNotification()) {
-				String longText = buildLongText(ctxt, prefsBean, keyFingerprintProvider, chosenIp);
-				builder.setStyle(new Notification.BigTextStyle().bigText(longText));
-			}
+        if (prefsBean.showConnectionInfoInNotification()) {
+            String longText = buildLongText(ctxt, prefsBean, keyFingerprintProvider, chosenIp);
+            builder.setStyle(new Notification.BigTextStyle().bigText(longText));
+        }
 
-			notification = builder.build();
-		} else {
-			notification = builder.getNotification();
-		}
-		notification.flags |= Notification.FLAG_NO_CLEAR;
+        notification = builder.build();
+        notification.flags |= Notification.FLAG_NO_CLEAR;
 
 		createStatusbarNotification(ctxt, notification, NOTIFICATION_ID);
 		return notification;
@@ -221,12 +199,10 @@ public class NotificationUtil
 		LOGGER.trace("buildLongText()");
 
 		boolean isLeftToRight = true;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-			Configuration config = ctxt.getResources().getConfiguration();
-			isLeftToRight = config.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR;
-		}
+        Configuration config = ctxt.getResources().getConfiguration();
+        isLeftToRight = config.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR;
 
-		StringBuilder str = new StringBuilder();
+        StringBuilder str = new StringBuilder();
 		IpAddressProvider ipAddressProvider = new IpAddressProvider();
 		if (chosenIp != null) {
 			boolean ipv6 = ipAddressProvider.isIpv6(chosenIp);
@@ -378,14 +354,8 @@ public class NotificationUtil
 			addAction(ctxt, builder, pendingStopIntent, R.string.cancel, stopIconId);
 		}
 
-		Notification notification;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			notification = builder.build();
-		} else {
-			notification = builder.getNotification();
-		}
-
-		NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
+		Notification notification = builder.build();
+        NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
 				Context.NOTIFICATION_SERVICE);
 		notiMgr.notify(DOWNLOAD_ID, notification);
 	}

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 import org.primftpd.R;
 import org.primftpd.filepicker.nononsenseapps.Utils;
 import org.primftpd.ui.DownloadOrSaveDialogFragment;
-import org.primftpd.util.Defaults;
 import org.primftpd.util.FilenameUnique;
 
 import java.io.File;
@@ -119,23 +117,12 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
 
     public void prepareSaveToIntent() {
         if (uris != null || contents != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                logger.debug("trying to create SAF intent");
-                Intent safIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-                safIntent.addFlags(
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                startActivityForResult(safIntent, 1);
-            } else {
-                logger.debug("trying to create custom filepicker intent");
-                try {
-                    Intent dirPickerIntent = Defaults.createDefaultDirPicker(getBaseContext());
-                    logger.debug("got intent: {}", dirPickerIntent);
-                    startActivityForResult(dirPickerIntent, 0);
-                } catch (Exception e) {
-                    logger.debug("could not create intent", e);
-                }
-            }
+            logger.debug("trying to create SAF intent");
+            Intent safIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            safIntent.addFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            startActivityForResult(safIntent, 1);
         }
     }
 

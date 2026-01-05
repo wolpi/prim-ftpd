@@ -3,7 +3,6 @@ package org.primftpd.filesystem;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.DocumentsContract;
 import android.widget.Toast;
 
@@ -166,24 +165,24 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
     public boolean setLastModified(long time) {
         logger.trace("[{}] setLastModified({})", name, time);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        try {
+            Uri docUri = documentFile.getUri();
+            Path filePath = Paths.get(StorageManagerUtil.getFullDocIdPathFromTreeUri(docUri,
+                                                                                     getPftpdService().getContext()));
+            long correctedTime = getFileSystemView().getCorrectedTime(time);
+            Files.getFileAttributeView(filePath, BasicFileAttributeView.class)
+                 .setTimes(FileTime.fromMillis(correctedTime), null, null);
+            return true;
+        } catch (Exception e) {
+            String baseMsg = "could not set last modified time";
+            logger.error(baseMsg, e);
+            String clientActionMsg = baseMsg + ", error: " + e.getClass().getName();
+            postClientActionError(clientActionMsg);
+            String toastMsg = baseMsg + ", file: " + name + ", error: " + e.getClass().getName();
             try {
-                Uri docUri = documentFile.getUri();
-                Path filePath = Paths.get(StorageManagerUtil.getFullDocIdPathFromTreeUri(docUri, getPftpdService().getContext()));
-                long correctedTime = getFileSystemView().getCorrectedTime(time);
-                Files.getFileAttributeView(filePath, BasicFileAttributeView.class).setTimes(FileTime.fromMillis(correctedTime), null, null);
-                return true;
-            } catch (Exception e) {
-                String baseMsg = "could not set last modified time";
-                logger.error(baseMsg, e);
-                String clientActionMsg = baseMsg + ", error: " + e.getClass().getName();
-                postClientActionError(clientActionMsg);
-                String toastMsg = baseMsg + ", file: " + name + ", error: " + e.getClass().getName();
-                try {
-                    Toast.makeText(getPftpdService().getContext(), toastMsg, Toast.LENGTH_SHORT).show();
-                } catch (Exception e2) {
-                    logger.error("cannot show toast: {}: {}", e2.getClass(), e2.getMessage());
-                }
+                Toast.makeText(getPftpdService().getContext(), toastMsg, Toast.LENGTH_SHORT).show();
+            } catch (Exception e2) {
+                logger.error("cannot show toast: {}: {}", e2.getClass(), e2.getMessage());
             }
         }
         return false;
@@ -234,37 +233,35 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
 //        }
 
         List<TMina> result = new ArrayList<>();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            Uri startUrl = getStartUrl();
-            Context context = getPftpdService().getContext();
+        Uri startUrl = getStartUrl();
+        Context context = getPftpdService().getContext();
 
-            Cursor childCursor = null;
-            try {
-                String documentId = DocumentsContract.getDocumentId(documentFile.getUri());
-                Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
-                        startUrl,
-                        documentId);
-                childCursor = context.getContentResolver().query(
-                        childrenUri,
-                        RoSafFile.SAF_QUERY_COLUMNS,
-                        null,
-                        null,
-                        null);
-                while (childCursor.moveToNext()) {
-                    String absPath = this.absPath.endsWith("/")
-                            ? this.absPath + childCursor.getString(RoSafFile.CURSOR_INDEX_NAME)
-                            : this.absPath + "/" + childCursor.getString(RoSafFile.CURSOR_INDEX_NAME);
-                    String childId = childCursor.getString(RoSafFile.CURSOR_INDEX_ID);
-                    Uri childUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, childId);
-                    DocumentFile childDocFile = DocumentFile.fromTreeUri(context, childUri);
-                    result.add(createFile(absPath, documentFile, childDocFile));
-                }
-            } catch (Exception e) {
-                logger.error("", e);
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-            } finally {
-                closeQuietly(childCursor);
+        Cursor childCursor = null;
+        try {
+            String documentId = DocumentsContract.getDocumentId(documentFile.getUri());
+            Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
+                    startUrl,
+                    documentId);
+            childCursor = context.getContentResolver().query(
+                    childrenUri,
+                    RoSafFile.SAF_QUERY_COLUMNS,
+                    null,
+                    null,
+                    null);
+            while (childCursor.moveToNext()) {
+                String absPath = this.absPath.endsWith("/")
+                        ? this.absPath + childCursor.getString(RoSafFile.CURSOR_INDEX_NAME)
+                        : this.absPath + "/" + childCursor.getString(RoSafFile.CURSOR_INDEX_NAME);
+                String childId = childCursor.getString(RoSafFile.CURSOR_INDEX_ID);
+                Uri childUri = DocumentsContract.buildDocumentUriUsingTree(startUrl, childId);
+                DocumentFile childDocFile = DocumentFile.fromTreeUri(context, childUri);
+                result.add(createFile(absPath, documentFile, childDocFile));
             }
+        } catch (Exception e) {
+            logger.error("", e);
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        } finally {
+            closeQuietly(childCursor);
         }
 
         logger.trace("  [{}] listFiles(): num children: {}", name, result.size());

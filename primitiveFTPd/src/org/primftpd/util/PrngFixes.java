@@ -18,11 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
-import java.security.SecureRandom;
 import java.security.SecureRandomSpi;
-import java.security.Security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +43,6 @@ public final class PrngFixes {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrngFixes.class);
 
-	private static final int VERSION_CODE_JELLY_BEAN = 16;
-    private static final int VERSION_CODE_JELLY_BEAN_MR2 = 18;
     private static final byte[] BUILD_FINGERPRINT_AND_DEVICE_SERIAL =
         getBuildFingerprintAndDeviceSerial();
 
@@ -71,34 +66,8 @@ public final class PrngFixes {
      * @throws SecurityException if the fix is needed but could not be applied.
      */
     private static void applyOpenSSLFix() throws SecurityException {
-        if ((Build.VERSION.SDK_INT < VERSION_CODE_JELLY_BEAN)
-                || (Build.VERSION.SDK_INT > VERSION_CODE_JELLY_BEAN_MR2)) {
-            // No need to apply the fix
-        	LOGGER.info("not applying OpenSSL fix as not necessary");
-            return;
-        }
-
-        try {
-        	LOGGER.info("applying OpenSSL fix");
-
-        	// Mix in the device- and invocation-specific seed.
-            Class.forName("org.apache.harmony.xnet.provider.jsse.NativeCrypto")
-                    .getMethod("RAND_seed", byte[].class)
-                    .invoke(null, generateSeed());
-
-            // Mix output of Linux PRNG into OpenSSL's PRNG
-            int bytesRead = (Integer) Class.forName(
-                    "org.apache.harmony.xnet.provider.jsse.NativeCrypto")
-                    .getMethod("RAND_load_file", String.class, long.class)
-                    .invoke(null, "/dev/urandom", 1024);
-            if (bytesRead != 1024) {
-                throw new IOException(
-                        "Unexpected number of bytes read from Linux PRNG: "
-                                + bytesRead);
-            }
-        } catch (Exception e) {
-            throw new SecurityException("Failed to seed OpenSSL PRNG", e);
-        }
+        // No need to apply the fix
+        LOGGER.info("not applying OpenSSL fix as not necessary");
     }
 
     /**
@@ -110,48 +79,8 @@ public final class PrngFixes {
      */
     private static void installLinuxPRNGSecureRandom()
             throws SecurityException {
-        if (Build.VERSION.SDK_INT > VERSION_CODE_JELLY_BEAN_MR2) {
-            // No need to apply the fix
-        	LOGGER.info("not applying PRNG fix as not necessary");
-            return;
-        }
-
-    	LOGGER.info("applying PRNG fix");
-
-        // Install a Linux PRNG-based SecureRandom implementation as the
-        // default, if not yet installed.
-        Provider[] secureRandomProviders =
-                Security.getProviders("SecureRandom.SHA1PRNG");
-        if ((secureRandomProviders == null)
-                || (secureRandomProviders.length < 1)
-                || (!LinuxPRNGSecureRandomProvider.class.equals(
-                        secureRandomProviders[0].getClass()))) {
-            Security.insertProviderAt(new LinuxPRNGSecureRandomProvider(), 1);
-        }
-
-        // Assert that new SecureRandom() and
-        // SecureRandom.getInstance("SHA1PRNG") return a SecureRandom backed
-        // by the Linux PRNG-based SecureRandom implementation.
-        SecureRandom rng1 = new SecureRandom();
-        if (!LinuxPRNGSecureRandomProvider.class.equals(
-                rng1.getProvider().getClass())) {
-            throw new SecurityException(
-                    "new SecureRandom() backed by wrong Provider: "
-                            + rng1.getProvider().getClass());
-        }
-
-        SecureRandom rng2;
-        try {
-            rng2 = SecureRandom.getInstance("SHA1PRNG");
-        } catch (NoSuchAlgorithmException e) {
-            throw new SecurityException("SHA1PRNG not available", e);
-        }
-        if (!LinuxPRNGSecureRandomProvider.class.equals(
-                rng2.getProvider().getClass())) {
-            throw new SecurityException(
-                    "SecureRandom.getInstance(\"SHA1PRNG\") backed by wrong"
-                    + " Provider: " + rng2.getProvider().getClass());
-        }
+        // No need to apply the fix
+        LOGGER.info("not applying PRNG fix as not necessary");
     }
 
     /**
