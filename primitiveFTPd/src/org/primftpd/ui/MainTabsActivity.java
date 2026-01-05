@@ -15,7 +15,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
 import org.primftpd.events.RedrawAddresses;
 import org.primftpd.events.ServerStateChangedEvent;
-import org.primftpd.log.PrimFtpdLoggerBinder;
+import org.primftpd.log.LogController;
 import org.primftpd.prefs.FtpPrefsFragment;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
@@ -295,20 +295,16 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     }
 
     protected void handleLoggingPref() {
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(this);
-        String loggingStr = prefs.getString(
-                LoadPrefsUtil.PREF_KEY_LOGGING,
-                Logging.NONE.xmlValue());
-        Logging logging = Logging.byXmlVal(loggingStr);
+        Logging logging = LogController.readPrefs(this);
         logger.debug("got 'logging': {}", logging);
 
-        Logging activeLogging = PrimFtpdLoggerBinder.getLoggingPref();
+        Logging activeLogging = LogController.getActiveConfig();
 
         boolean recreateLogger = activeLogging != logging;
 
         if (recreateLogger) {
             // re-create own log and log of relevant fragments, don't care about other classes
-            PrimFtpdLoggerBinder.setLoggingPref(logging);
+            LogController.setActiveConfig(this, logging);
             this.logger = LoggerFactory.getLogger(getClass());
             logger.debug("changed logging");
 

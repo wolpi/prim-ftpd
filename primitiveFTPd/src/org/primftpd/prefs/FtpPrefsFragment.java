@@ -8,7 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import org.primftpd.R;
-import org.primftpd.log.CsvLoggerFactory;
+import org.primftpd.log.LogController;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.NotificationUtil;
 import org.slf4j.Logger;
@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
 public class FtpPrefsFragment extends PreferenceFragmentCompat
@@ -66,7 +65,8 @@ public class FtpPrefsFragment extends PreferenceFragmentCompat
             }
 
             // text parameter for logging pref
-            String textLogsPath = Defaults.homeDirScoped(context) + "/" + CsvLoggerFactory.LOGFILE_BASENAME + "*";
+            String textLogsPath = Defaults.homeDirScoped(context).getAbsolutePath()
+                                  + '/' + LogController.LOGFILE_BASENAME + '*';
             if (textLogsPath.contains("//")) {
                 textLogsPath = textLogsPath.replaceAll("//", "/");
             }
