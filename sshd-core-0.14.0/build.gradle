@@ -36,6 +36,7 @@ dependencies {
 
     implementation(libs.bouncycastle.bcprov)
     implementation(libs.bouncycastle.bcpkix)
+    implementation(libs.bouncycastle.bcutil)
 
     compileOnly(libs.slf4j.api)
     compileOnly(libs.mina.core)

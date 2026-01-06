@@ -98,6 +98,7 @@ dependencies {
 
     implementation(libs.bouncycastle.bcprov)
     implementation(libs.bouncycastle.bcpkix)
+    implementation(libs.bouncycastle.bcutil)
 
     implementation(libs.logback.android)
     implementation(libs.mina.core)

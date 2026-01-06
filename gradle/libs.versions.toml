@@ -11,7 +11,7 @@ androidxRecyclerview = "1.4.0"
 material = "1.13.0"
 desugar = "2.1.5"
 
-bouncycastle = "1.70"
+bouncycastle = "1.83"
 eventbus = "3.3.1"
 httpclient5 = "5.6"
 junit = "4.13.2"
@@ -37,8 +37,10 @@ androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview"
 google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 google-desugar = { group = "com.android.tools", name = "desugar_jdk_libs_nio", version.ref = "desugar" }
 
-bouncycastle-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk15on", version.ref = "bouncycastle" }
-bouncycastle-bcprov = { group = "org.bouncycastle", name = "bcprov-jdk15on", version.ref = "bouncycastle" }
+bouncycastle-bcprov = { group = "org.bouncycastle", name = "bcprov-jdk18on", version.ref = "bouncycastle" }
+bouncycastle-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk18on", version.ref = "bouncycastle" }
+bouncycastle-bcutil = { group = "org.bouncycastle", name = "bcutil-jdk18on", version.ref = "bouncycastle" }
+
 eventbus = { group = "org.greenrobot", name = "eventbus", version.ref = "eventbus" }
 ftpserver-api = { group = "org.apache.ftpserver", name = "ftplet-api", version.ref = "ftpserver" }
 ftpserver-core = { group = "org.apache.ftpserver", name = "ftpserver-core", version.ref = "ftpserver" }
