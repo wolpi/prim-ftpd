@@ -1,22 +1,21 @@
-package org.apache.ftpserver.listener.nio;
+package org.primftpd.io;
 
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.FtpServerContext;
 import org.apache.ftpserver.impl.IODataConnectionFactory;
 import org.apache.ftpserver.impl.ServerDataConnectionFactory;
 import org.apache.mina.core.session.IoSession;
-import org.primftpd.io.AndroidIoDataConnectionFactory;
 
 import java.net.InetSocketAddress;
 
-public class AndroidFtpIoSession extends FtpIoSession {
+public class PrimFtpIoSession extends FtpIoSession {
 
     private static final String ATTRIBUTE_DATA_CONNECTION = ATTRIBUTE_PREFIX
             + "data-connection";
 
     private final FtpServerContext context;
 
-    public AndroidFtpIoSession(IoSession wrappedSession, FtpServerContext context) {
+    public PrimFtpIoSession(IoSession wrappedSession, FtpServerContext context) {
         super(wrappedSession, context);
         this.context = context;
    }

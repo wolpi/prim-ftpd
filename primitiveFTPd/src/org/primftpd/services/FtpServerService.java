@@ -3,10 +3,13 @@ package org.primftpd.services;
 import android.net.Uri;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
+
 import org.apache.ftpserver.ConnectionConfigFactory;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.listener.Listener;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.filesystem.FsFtpFileSystemView;
@@ -15,6 +18,7 @@ import org.primftpd.filesystem.RoSafFtpFileSystemView;
 import org.primftpd.filesystem.RootFtpFileSystemView;
 import org.primftpd.filesystem.SafFtpFileSystemView;
 import org.primftpd.filesystem.VirtualFtpFileSystemView;
+import org.primftpd.io.PrimNioListener;
 import org.primftpd.util.RemoteIpChecker;
 import org.primftpd.util.StringUtils;
 
@@ -97,7 +101,7 @@ public class FtpServerService extends AbstractServerService
 		listenerFactory.setDataConnectionConfiguration(dataConConfigFactory.createDataConnectionConfiguration());
 
 		FtpServerFactory serverFactory = new FtpServerFactory();
-		serverFactory.addListener("default", listenerFactory.createListener());
+		serverFactory.addListener("default", createListener(listenerFactory));
 
 		// user manager & file system
 		serverFactory.setUserManager(new AndroidPrefsUserManager(prefsBean));
@@ -177,5 +181,17 @@ public class FtpServerService extends AbstractServerService
 			handleServerStartError(e);
 			return false;
 		}
+	}
+
+	private Listener createListener(@NonNull ListenerFactory listenerFactory) {
+		return new PrimNioListener(
+				listenerFactory.getServerAddress(),
+				listenerFactory.getPort(),
+				listenerFactory.isImplicitSsl(),
+				listenerFactory.getSslConfiguration(),
+				listenerFactory.getDataConnectionConfiguration(),
+				listenerFactory.getIdleTimeout(),
+				listenerFactory.getSessionFilter()
+		);
 	}
 }
