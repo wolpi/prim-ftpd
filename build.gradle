@@ -4,4 +4,7 @@ ext {
 
     targetSdkVersion = 36
     compileSdkVersion = 36
+
+    // JDK used by gradle
+    toolChain = 21
 }

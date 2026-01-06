@@ -3,6 +3,12 @@ plugins {
     alias libs.plugins.maven.publish
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(rootProject.ext.toolChain)
+    }
+}
+
 android {
     namespace = "org.primftpd"
     compileSdk = rootProject.ext.compileSdkVersion

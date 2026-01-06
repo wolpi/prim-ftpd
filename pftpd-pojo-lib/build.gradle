@@ -3,6 +3,10 @@ plugins {
 }
 
 java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(rootProject.ext.toolChain)
+    }
+
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
