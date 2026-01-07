@@ -570,7 +570,8 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 				isGranted -> showLogindata());
 
 	private void displayNormalStorageAccess() {
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+		// Android 10 and lower
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
 			displayPermission(
 					R.id.hasNormalStorageAccessTextView,
 					R.string.hasNormalAccessToStorage,
@@ -579,6 +580,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 	}
 
 	private void displayFullStorageAccess() {
+		// Android 11+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 			View view = getView();
 			if (view == null) {

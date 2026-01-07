@@ -57,9 +57,14 @@ public class FilePickerFragment extends AbstractFilePickerFragment<File> {
      */
     @Override
     protected boolean hasPermission(@NonNull File path) {
-        return PackageManager.PERMISSION_GRANTED ==
-                ContextCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            return PackageManager.PERMISSION_GRANTED ==
+                   ContextCompat.checkSelfPermission(getContext(),
+                                                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        } else {
+            // we will never get here
+            return true;
+        }
     }
 
     /**
@@ -73,9 +78,11 @@ public class FilePickerFragment extends AbstractFilePickerFragment<File> {
 //             Explain to the user why we need permission
 //        }
 
-        mRequestedPath = path;
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            mRequestedPath = path;
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                               PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
     }
 
     /**

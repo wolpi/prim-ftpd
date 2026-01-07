@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"
@@ -12,6 +11,10 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Force/limit this up-to/including Android 10 (API-29). -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="29" />
     <!--
     See this article:
     https://developer.android.com/training/data-storage#permissions -->
@@ -39,6 +42,9 @@
     <!--
     to enable adaptive icon use:
     android:icon="@mipmap/ic_launcher"
+
+    android:requestLegacyExternalStorage="true"
+      This is used in combination with WRITE_EXTERNAL_STORAGE up-to/including Android 10 (API-29)
     -->
     <application
         android:icon="@drawable/ic_launcher"
