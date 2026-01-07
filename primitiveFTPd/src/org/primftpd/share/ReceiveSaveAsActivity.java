@@ -4,9 +4,15 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import org.primftpd.R;
 import org.primftpd.filepicker.nononsenseapps.Utils;
@@ -42,8 +48,24 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
         super.onCreate(savedInstanceState);
         logger.debug("onCreate()");
 
+        // EdgeToEdge on Android pre-15
+        // There are some serious insets listener issues on API 28/29,
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            EdgeToEdge.enable(this);
+        }
         // set layout
         setContentView(R.layout.receive_share);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setNavigationBarContrastEnforced(false);
+        }
+
+        ListView listView = findViewById(R.id.list);
+        ViewCompat.setOnApplyWindowInsetsListener(listView, (v, insetsCompat) -> {
+            final Insets insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars()
+                                                         | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return insetsCompat;
+        });
 
         // read intent
         Intent intent = getIntent();
@@ -80,7 +102,6 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
         }
 
         // display uris
-        ListView listView = findViewById(R.id.list);
         if (uris != null) {
             listView.setAdapter(new ArrayAdapter<>(
                     this,
