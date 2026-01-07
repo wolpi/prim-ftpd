@@ -78,19 +78,21 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         ViewPager viewPager = findViewById(R.id.view_pager);
         tabLayout.setupWithViewPager(viewPager);
 
-        ViewCompat.setOnApplyWindowInsetsListener(viewPager, (v, insets) -> {
-            final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(0, 0, 0, systemBars.bottom);
+        ViewCompat.setOnApplyWindowInsetsListener(viewPager, (v, insetsCompat) -> {
+            final Insets insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars()
+                                                         | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
             // ViewPager is V1: dispatch manually!
             for (int i = 0; i < viewPager.getChildCount(); i++) {
-                ViewCompat.dispatchApplyWindowInsets(viewPager.getChildAt(i), insets);
+                ViewCompat.dispatchApplyWindowInsets(viewPager.getChildAt(i), insetsCompat);
             }
-            return insets;
+            return insetsCompat;
         });
-        ViewCompat.setOnApplyWindowInsetsListener(appBarLayout, (v, insets) -> {
-            final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(0, systemBars.top, 0, 0);
-            return insets;
+        ViewCompat.setOnApplyWindowInsetsListener(appBarLayout, (v, insetsCompat) -> {
+            final Insets insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars()
+                                                         | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return insetsCompat;
         });
 
         adapter = new MainAdapter(getSupportFragmentManager());

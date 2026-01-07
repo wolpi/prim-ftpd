@@ -170,10 +170,11 @@ public abstract class AbstractFilePickerFragment<T> extends Fragment
         }
 
         final View buttonContainer = view.findViewById(R.id.filepicker_buttons_container);
-        ViewCompat.setOnApplyWindowInsetsListener(buttonContainer, (v, insets) -> {
-            final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(0, systemBars.top, 0, systemBars.bottom);
-            return insets;
+        ViewCompat.setOnApplyWindowInsetsListener(buttonContainer, (v, insetsCompat) -> {
+            final Insets insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars()
+                                                         | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return insetsCompat;
         });
 
         recyclerView = (RecyclerView) view.findViewById(android.R.id.list);
@@ -379,10 +380,11 @@ public abstract class AbstractFilePickerFragment<T> extends Fragment
     protected void setupToolbar(@NonNull Toolbar toolbar) {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, insets) -> {
-            final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(0, systemBars.top, 0, 0);
-            return insets;
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, insetsCompat) -> {
+            final Insets insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars()
+                                                         | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return insetsCompat;
         });
     }
 
