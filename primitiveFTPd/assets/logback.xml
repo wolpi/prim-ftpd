@@ -1,0 +1,40 @@
+<configuration>
+    <appender name="LOGCAT"
+              class="ch.qos.logback.classic.android.LogcatAppender">
+        <tagEncoder>
+            <pattern>%logger{12}</pattern>
+        </tagEncoder>
+        <encoder>
+            <pattern>[%thread] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CSV_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- name matches LoggingController#LOGFILE_BASENAME -->
+        <file>${EXT_DIR}/prim-ftpd-log.csv</file>
+
+        <encoder class="org.primftpd.log.CsvEncoder" />
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${EXT_DIR}/prim-ftpd-log-%d{yyyy-MM-dd-HH-mm-ss}.csv</fileNamePattern>
+            <maxHistory>3</maxHistory>
+            <!-- arbitrarily chosen due to paranoia... -->
+            <maxFileSize>5MB</maxFileSize>
+            <totalSizeCap>50MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <root level="ERROR">
+        <appender-ref ref="LOGCAT" />
+        <appender-ref ref="CSV_FILE" />
+    </root>
+
+    <!-- Reduce noise -->
+    <logger name="org.apache"
+            level="INFO" />
+    <logger name="org.slf4j"
+            level="WARN" />
+    <logger name="ch.qos.logback"
+            level="WARN" />
+</configuration>

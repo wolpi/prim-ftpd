@@ -25,7 +25,6 @@ import java.net.ConnectException;
 import org.apache.sshd.client.future.DefaultOpenFuture;
 import org.apache.sshd.client.future.OpenFuture;
 import org.apache.sshd.common.Channel;
-import org.apache.sshd.common.ForwardingFilter;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.SshConstants;
 import org.apache.sshd.common.SshdSocketAddress;
@@ -100,12 +99,6 @@ public class TcpipServerChannel extends AbstractServerChannel {
         switch (type) {
             case Direct:    address = new SshdSocketAddress(hostToConnect, portToConnect); break;
             case Forwarded: address = service.getTcpipForwarder().getForwardedPort(portToConnect); break;
-        }
-        final ForwardingFilter filter = getSession().getFactoryManager().getTcpipForwardingFilter();
-        if (address == null || filter == null || !filter.canConnect(address, getSession())) {
-            super.close(true);
-            f.setException(new OpenChannelException(SshConstants.SSH_OPEN_ADMINISTRATIVELY_PROHIBITED, "Connection denied"));
-            return f;
         }
 
         // TODO: revisit for better threading. Use async io ?

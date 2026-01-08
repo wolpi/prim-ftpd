@@ -1,13 +1,10 @@
 package org.primftpd.filesystem;
 
-import android.os.Build;
-
 import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.pojo.LsOutputBean;
 import org.primftpd.pojo.LsOutputParser;
 import org.primftpd.util.Defaults;
-import org.primftpd.util.StringUtils;
 import org.primftpd.util.TmpDirType;
 
 import java.io.BufferedInputStream;
@@ -235,12 +232,7 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "dd", "of=" + escapePath(absPath));
 
-        String ddCommand;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ddCommand = String.join(" ", processBuilder.command());
-        } else {
-            ddCommand = StringUtils.join(processBuilder.command(), ' ');
-        }
+        String ddCommand = String.join(" ", processBuilder.command());
         logger.trace("dd command: {}", ddCommand);
         ddProcess = processBuilder.start();
 
@@ -251,12 +243,7 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.command("su", "-c", "dd", "if=" + escapePath(absPath));
 
-        String ddCommand;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ddCommand = String.join(" ", processBuilder.command());
-        } else {
-            ddCommand = StringUtils.join(processBuilder.command(), ' ');
-        }
+        String ddCommand = String.join(" ", processBuilder.command());
         logger.trace("dd command: {}", ddCommand);
         ddProcess = processBuilder.start();
 

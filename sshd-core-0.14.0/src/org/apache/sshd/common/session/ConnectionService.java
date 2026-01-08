@@ -20,10 +20,8 @@ package org.apache.sshd.common.session;
 
 import java.io.IOException;
 
-import org.apache.sshd.agent.local.AgentForwardedChannel;
 import org.apache.sshd.common.Channel;
 import org.apache.sshd.common.Service;
-import org.apache.sshd.common.Session;
 import org.apache.sshd.common.TcpipForwarder;
 
 /**
@@ -54,9 +52,6 @@ public interface ConnectionService extends Service {
      * @return
      */
     TcpipForwarder getTcpipForwarder();
-
-    // TODO: remove from interface, it's server side only
-    String initAgentForward() throws IOException;
 
     // TODO: remove from interface, it's server side only
     String createX11Display(boolean singleConnection, String authenticationProtocol, String authenticationCookie, int screen) throws IOException;

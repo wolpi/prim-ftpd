@@ -1,13 +1,11 @@
 package org.primftpd.services;
 
-import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -241,58 +239,54 @@ public abstract class AbstractServerService
 	/**
 	 * Register a DNS-SD service (to be discoverable through Bonjour/Avahi).
 	 */
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	protected void announceService () {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			nsdRegistrationListener = new NsdManager.RegistrationListener() {
-				@Override
-				public void onServiceRegistered(NsdServiceInfo serviceInfo) {
-					logger.debug("onServiceRegistered()");
-				}
+        nsdRegistrationListener = new NsdManager.RegistrationListener() {
+            @Override
+            public void onServiceRegistered(NsdServiceInfo serviceInfo) {
+                logger.debug("onServiceRegistered()");
+            }
 
-				@Override
-				public void onRegistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
-					logger.debug("onRegistrationFailed()");
-				}
+            @Override
+            public void onRegistrationFailed(NsdServiceInfo serviceInfo,
+                                             int errorCode) {
+                logger.debug("onRegistrationFailed()");
+            }
 
-				@Override
-				public void onServiceUnregistered(NsdServiceInfo serviceInfo) {
-					logger.debug("onServiceUnregistered()");
-				}
+            @Override
+            public void onServiceUnregistered(NsdServiceInfo serviceInfo) {
+                logger.debug("onServiceUnregistered()");
+            }
 
-				@Override
-				public void onUnregistrationFailed(NsdServiceInfo serviceInfo, int errorCode) {
-					logger.debug("onUnregistrationFailed()");
-				}
-			};
+            @Override
+            public void onUnregistrationFailed(NsdServiceInfo serviceInfo,
+                                               int errorCode) {
+                logger.debug("onUnregistrationFailed()");
+            }
+        };
 
-			NsdServiceInfo serviceInfo = new NsdServiceInfo();
-			String servicename = "primitive ftpd";
-			if (prefsBean != null) {
-				servicename = prefsBean.getAnnounceName();
-			} else {
-				logger.error("prefsBean is null, falling back to default service name");
-			}
-			serviceInfo.setServiceName(servicename);
-			serviceInfo.setServiceType("_" + getServiceName() + "._tcp.");
-			serviceInfo.setPort(getPort());
+        NsdServiceInfo serviceInfo = new NsdServiceInfo();
+        String servicename = "primitive ftpd";
+        if (prefsBean != null) {
+            servicename = prefsBean.getAnnounceName();
+        } else {
+            logger.error("prefsBean is null, falling back to default service name");
+        }
+        serviceInfo.setServiceName(servicename);
+        serviceInfo.setServiceType("_" + getServiceName() + "._tcp.");
+        serviceInfo.setPort(getPort());
 
-			NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+        NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
 
-			nsdManager.registerService(
-					serviceInfo,
-					NsdManager.PROTOCOL_DNS_SD,
-					nsdRegistrationListener);
-		}
-	}
+        nsdManager.registerService(
+                serviceInfo,
+                NsdManager.PROTOCOL_DNS_SD,
+                nsdRegistrationListener);
+    }
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	protected void unannounceService () {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
-			nsdManager.unregisterService(nsdRegistrationListener);
-		}
-	}
+        NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
+        nsdManager.unregisterService(nsdRegistrationListener);
+    }
 
 	protected void cleanQuickShareTmpDir() {
 		if (quickShareBean != null) {

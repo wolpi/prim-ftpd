@@ -1,10 +1,7 @@
 package org.primftpd.filesystem;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 import android.os.storage.StorageManager;
 import android.provider.DocumentsContract;
 
@@ -79,7 +76,7 @@ public final class StorageManagerUtil {
      * This function is to handle 2 Android bugs.
      * <p>
      * 1. Android caches the modification times for files, ie. when we read back the modification time of a freshly created file,
-     *    Andorid will lie and return the value the file was asked to be saved, and not the value the real file-system was able to store,
+     *    Android will lie and return the value the file was asked to be saved, and not the value the real file-system was able to store,
      *    so we have to figure out whether the underlying file-system is an SD-card related and use the file-system specific resolution.
      * <p>
      * 2. Even when the SD-card is mounted at /mnt/media_rw/XXXX-XXXX with the proper file-system, when it is mounted at /storage/XXXX-XXXX,
@@ -163,13 +160,10 @@ public final class StorageManagerUtil {
         return timeResolution;
     }
 
-    @SuppressLint("ObsoleteSdkInt")
     private static String getVolumePath(final String volumeId, Context context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return null;
-        }
         try {
-            StorageManager mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+            StorageManager mStorageManager = (StorageManager) context.getSystemService(
+                    Context.STORAGE_SERVICE);
             Class<?> storageVolumeClass = Class.forName("android.os.storage.StorageVolume");
             Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");
             Method getUuid = storageVolumeClass.getMethod("getUuid");
@@ -200,7 +194,6 @@ public final class StorageManagerUtil {
         return null;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static String getVolumeIdFromTreeUri(final Uri treeUri) {
         try {
             final String docId = DocumentsContract.getTreeDocumentId(treeUri);
@@ -214,7 +207,6 @@ public final class StorageManagerUtil {
         return null;
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static String getDocumentPathFromTreeUri(final Uri treeUri) {
         try {
             final String docId = DocumentsContract.getDocumentId(treeUri);
