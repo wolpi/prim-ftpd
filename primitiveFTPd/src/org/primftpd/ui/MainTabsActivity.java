@@ -78,16 +78,6 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         ViewPager viewPager = findViewById(R.id.view_pager);
         tabLayout.setupWithViewPager(viewPager);
 
-        ViewCompat.setOnApplyWindowInsetsListener(viewPager, (v, insetsCompat) -> {
-            final Insets insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars()
-                                                         | WindowInsetsCompat.Type.displayCutout());
-            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
-            // ViewPager is V1: dispatch manually!
-            for (int i = 0; i < viewPager.getChildCount(); i++) {
-                ViewCompat.dispatchApplyWindowInsets(viewPager.getChildAt(i), insetsCompat);
-            }
-            return insetsCompat;
-        });
         ViewCompat.setOnApplyWindowInsetsListener(appBarLayout, (v, insetsCompat) -> {
             final Insets insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars()
                                                          | WindowInsetsCompat.Type.displayCutout());
