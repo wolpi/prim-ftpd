@@ -31,8 +31,6 @@
     </root>
 
     <!-- Reduce noise -->
-    <logger name="org.apache"
-            level="INFO" />
     <logger name="org.slf4j"
             level="WARN" />
     <logger name="ch.qos.logback"
