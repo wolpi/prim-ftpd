@@ -1,10 +1,1 @@
-ext {
-    // Android 8.0
-    minSdkVersion = 26
-
-    targetSdkVersion = 36
-    compileSdkVersion = 36
-
-    // JDK used by gradle
-    toolChain = 21
-}
+// nothing here

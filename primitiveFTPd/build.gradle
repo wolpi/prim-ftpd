@@ -5,20 +5,21 @@ plugins {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(rootProject.ext.toolChain)
+        languageVersion = JavaLanguageVersion.of(libs.versions.java.toolchain.get())
     }
 }
 
 android {
     namespace = "org.primftpd"
-    compileSdk = rootProject.ext.compileSdkVersion
+    compileSdk = libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
         applicationId = "org.primftpd"
-        minSdk = rootProject.ext.minSdkVersion
-        targetSdk = rootProject.ext.targetSdkVersion
         versionCode = 69
         versionName = "8.0-SNAPSHOT"
+
+        minSdk = libs.versions.minSdk.get().toInteger()
+        targetSdk = libs.versions.targetSdk.get().toInteger()
     }
 
     buildTypes {
@@ -46,14 +47,15 @@ android {
             }
         }
     }
-
     packagingOptions {
-        // required due to jars
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/BCKEY.SF'
-        exclude 'META-INF/BCKEY.DSA'
+        resources {
+            // required due to jars
+            excludes += ['META-INF/LICENSE',
+                         'META-INF/NOTICE',
+                         'META-INF/DEPENDENCIES',
+                         'META-INF/BCKEY.SF',
+                         'META-INF/BCKEY.DSA']
+        }
     }
 
     lint {

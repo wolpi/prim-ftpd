@@ -1,5 +1,14 @@
 [versions]
-androidGradlePlugin = "8.13.2"
+# Android 8.0
+minSdk = "26"
+# Android 16.0
+targetSdk = "36"
+compileSdk = "36"
+
+# JDK used by Gradle
+java-toolchain = "21"
+
+androidGradlePlugin = "9.0.0"
 
 androidxAppcompat = "1.7.1"
 androidxCoordinatorlayout = "1.3.0"
