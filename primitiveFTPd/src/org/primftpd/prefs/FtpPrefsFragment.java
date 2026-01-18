@@ -4,11 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 
 import org.primftpd.R;
-import org.primftpd.log.CsvLoggerFactory;
+import org.primftpd.log.LogController;
 import org.primftpd.util.Defaults;
 import org.primftpd.util.NotificationUtil;
 import org.slf4j.Logger;
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
 public class FtpPrefsFragment extends PreferenceFragmentCompat
@@ -29,30 +27,6 @@ public class FtpPrefsFragment extends PreferenceFragmentCompat
         logger.debug("onCreatePreferences()");
         addPreferencesFromResource(R.xml.preferences);
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            logger.debug("disabling announce prefs, sdk: {}", Build.VERSION.SDK_INT);
-            PreferenceCategory prefCat = getPreferenceManager().findPreference("ftpPrefCatSystem");
-
-            if (prefCat != null) {
-                Preference announcePref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_ANNOUNCE);
-                if (announcePref != null) {
-                    prefCat.removePreference(announcePref);
-                }
-
-                Preference announceNamePref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_ANNOUNCE_NAME);
-                if (announceNamePref != null) {
-                    prefCat.removePreference(announceNamePref);
-                }
-
-                prefCat = getPreferenceManager().findPreference("ftpPrefCatUi");
-                if (prefCat != null) {
-                    Preference showConnInfoPref = getPreferenceManager().findPreference(LoadPrefsUtil.PREF_KEY_SHOW_CONN_INFO);
-                    if (showConnInfoPref != null) {
-                        prefCat.removePreference(showConnInfoPref);
-                    }
-                }
-            }
-        }
         final Context context = getContext();
         if (context != null) {
             // text parameter for pub key auth pref
@@ -66,7 +40,8 @@ public class FtpPrefsFragment extends PreferenceFragmentCompat
             }
 
             // text parameter for logging pref
-            String textLogsPath = Defaults.homeDirScoped(context) + "/" + CsvLoggerFactory.LOGFILE_BASENAME + "*";
+            String textLogsPath = Defaults.homeDirScoped(context).getAbsolutePath()
+                                  + '/' + LogController.LOGFILE_BASENAME + '*';
             if (textLogsPath.contains("//")) {
                 textLogsPath = textLogsPath.replaceAll("//", "/");
             }

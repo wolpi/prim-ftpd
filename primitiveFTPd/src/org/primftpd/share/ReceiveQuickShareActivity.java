@@ -3,12 +3,18 @@ package org.primftpd.share;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import org.primftpd.R;
 import org.primftpd.util.Defaults;
@@ -35,8 +41,24 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
         super.onCreate(savedInstanceState);
         logger.debug("onCreate()");
 
+        // EdgeToEdge on Android pre-15
+        // There are some serious insets listener issues on API 28/29,
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            EdgeToEdge.enable(this);
+        }
         // set layout
         setContentView(R.layout.receive_share);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setNavigationBarContrastEnforced(false);
+        }
+
+        ListView listView = findViewById(R.id.list);
+        ViewCompat.setOnApplyWindowInsetsListener(listView, (v, insetsCompat) -> {
+            final Insets insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars()
+                                                         | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return insetsCompat;
+        });
 
         // read intent
         Intent intent = getIntent();
