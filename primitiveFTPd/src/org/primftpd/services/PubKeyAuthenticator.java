@@ -5,7 +5,7 @@ import org.apache.sshd.server.session.ServerSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.KeyFactory;
+import java.security.MessageDigest;
 import java.security.PublicKey;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class PubKeyAuthenticator implements PublickeyAuthenticator {
         return false;
     }
 
-    private static boolean keysEqual(PublicKey serverKey, PublicKey clientKey) {
+    private boolean keysEqual(PublicKey serverKey, PublicKey clientKey) {
         // Quick sanity checks
         if (serverKey == clientKey) {
             return true;
@@ -43,21 +43,12 @@ public class PubKeyAuthenticator implements PublickeyAuthenticator {
         if (serverKey == null || clientKey == null) {
             return false;
         }
-        // serverKey is an object from bouncy castle, see org.primftpd.pojo.KeyParser
-        // clientKey is often another vendor. So we can't do a simple equals (at least not always).
-
         // Sanity check: their algorithms must match
-        if (!serverKey.getAlgorithm().equals(clientKey.getAlgorithm())) {
+        if (!serverKey.getAlgorithm().equalsIgnoreCase(clientKey.getAlgorithm())) {
             return false;
         }
 
-        try {
-            // Translate BOTH keys and THAN compare
-            KeyFactory factory = KeyFactory.getInstance(serverKey.getAlgorithm());
-            return factory.translateKey(serverKey).equals(factory.translateKey(clientKey));
-
-        } catch (Exception e) {
-            return false;
-        }
+        // use constant-time compare
+        return MessageDigest.isEqual(serverKey.getEncoded(), clientKey.getEncoded());
     }
 }

@@ -268,24 +268,19 @@ public final class Buffer implements Readable {
                 KeyFactory keyFactory = SecurityUtils.getKeyFactory("DSA");
                 key = keyFactory.generatePublic(new DSAPublicKeySpec(y, p, q, g));
             } else if (KeyPairProvider.ECDSA_SHA2_NISTP256.equals(keyAlg)) {
-                key = getRawECKey("nistp256", ECCurves.EllipticCurves.nistp256);
+                key = getRawECKey(ECCurves.NISTP256, keyAlg);
             } else if (KeyPairProvider.ECDSA_SHA2_NISTP384.equals(keyAlg)) {
-                key = getRawECKey("nistp384", ECCurves.EllipticCurves.nistp384);
+                key = getRawECKey(ECCurves.NISTP384, keyAlg);
             } else if (KeyPairProvider.ECDSA_SHA2_NISTP521.equals(keyAlg)) {
-                key = getRawECKey("nistp521", ECCurves.EllipticCurves.nistp521);
+                key = getRawECKey(ECCurves.NISTP521, keyAlg);
+            } else if (KeyParser.NAME_ED25519.equals(keyAlg)) {
+                key = KeyParser.parsePublicKeyEd25519(getBytes());
             } else {
-                if (KeyParser.NAME_ED25519.equals(keyAlg)) {
-                    try {
-                        byte[] keyBytes = getBytes();
-                        key = KeyParser.parsePublicKeyEd25519(keyBytes);
-                    } catch (IOException e) {
-                        throw new SshException(e);
-                    }
-                } else {
-                    throw new IllegalStateException("Unsupported algorithm: " + keyAlg);
-                }
+                throw new IllegalStateException("Unsupported algorithm: " + keyAlg);
             }
             return key;
+        } catch (IOException e) {
+            throw new SshException(e);
         } catch (InvalidKeySpecException e) {
             throw new SshException(e);
         } catch (NoSuchAlgorithmException e) {
@@ -293,6 +288,16 @@ public final class Buffer implements Readable {
         } catch (NoSuchProviderException e) {
             throw new SshException(e);
         }
+    }
+
+    private PublicKey getRawECKey(String expectedCurve, String keyAlg)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
+        String curveName = getString();
+        if (!expectedCurve.equals(curveName)) {
+            throw new InvalidKeySpecException("Curve name does not match expected: " + curveName + " vs "
+                                              + expectedCurve);
+        }
+        return KeyParser.parsePublicKeyEcdsa(keyAlg, getBytes());
     }
 
     private PublicKey getRawECKey(String expectedCurve, ECParameterSpec spec) throws InvalidKeySpecException,
