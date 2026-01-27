@@ -191,17 +191,6 @@ public class SshClient extends AbstractFactoryManager implements ClientFactoryMa
         if (getServerKeyVerifier() == null) {
             throw new IllegalArgumentException("ServerKeyVerifier not set");
         }
-        // Register the additional agent forwarding channel if needed
-        if (getAgentFactory() != null) {
-            List<NamedFactory<Channel>> factories = getChannelFactories();
-            if (factories == null) {
-                factories = new ArrayList<NamedFactory<Channel>>();
-            } else {
-                factories = new ArrayList<NamedFactory<Channel>>(factories);
-            }
-            factories.add(getAgentFactory().getChannelForwardingFactory());
-            setChannelFactories(factories);
-        }
         if (getIoServiceFactoryFactory() == null) {
             setIoServiceFactoryFactory(new DefaultIoServiceFactoryFactory());
         }

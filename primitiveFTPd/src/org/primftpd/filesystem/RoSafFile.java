@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.DocumentsContract;
 
 import org.primftpd.events.ClientActionEvent;
@@ -85,23 +84,21 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
 
         this.exists = exists;
         if (exists) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Uri uri = DocumentsContract.buildDocumentUriUsingTree(
-                        getStartUrl(),
-                        docId);
+            Uri uri = DocumentsContract.buildDocumentUriUsingTree(
+                    getStartUrl(),
+                    docId);
 
-                Cursor cursor = getPftpdService().getContext().getContentResolver().query(
-                        uri,
-                        SAF_QUERY_COLUMNS,
-                        null,
-                        null,
-                        null);
-                cursor.moveToNext();
-                try {
-                    initByCursor(cursor);
-                } finally {
-                    closeQuietly(cursor);
-                }
+            Cursor cursor = getPftpdService().getContext().getContentResolver().query(
+                    uri,
+                    SAF_QUERY_COLUMNS,
+                    null,
+                    null,
+                    null);
+            cursor.moveToNext();
+            try {
+                initByCursor(cursor);
+            } finally {
+                closeQuietly(cursor);
             }
         } else {
             name = docId;
@@ -208,21 +205,19 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
 
     public boolean mkdir() {
         logger.trace("[{}] mkdir()", name);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Uri parentUri;
-            if (documentId != null) {
-                parentUri = DocumentsContract.buildDocumentUriUsingTree(getStartUrl(), documentId);
-            } else {
-                parentUri = getStartUrl();
-            }
-            logger.trace("mkdir(): parent uri: '{}'", parentUri);
-            try {
-                Uri newDirUri = DocumentsContract.createDocument(getPftpdService().getContext().getContentResolver(),
-                    parentUri, DocumentsContract.Document.MIME_TYPE_DIR, name);
-                return newDirUri != null;
-            } catch (FileNotFoundException e) {
-                logger.error("could not create dir " + name, e);
-            }
+        Uri parentUri;
+        if (documentId != null) {
+            parentUri = DocumentsContract.buildDocumentUriUsingTree(getStartUrl(), documentId);
+        } else {
+            parentUri = getStartUrl();
+        }
+        logger.trace("mkdir(): parent uri: '{}'", parentUri);
+        try {
+            Uri newDirUri = DocumentsContract.createDocument(getPftpdService().getContext().getContentResolver(),
+                parentUri, DocumentsContract.Document.MIME_TYPE_DIR, name);
+            return newDirUri != null;
+        } catch (FileNotFoundException e) {
+            logger.error("could not create dir " + name, e);
         }
         return false;
     }
@@ -230,14 +225,12 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
     public boolean delete() {
         logger.trace("[{}] delete()", name);
         // TODO writing with SAF cursor/uri api
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            Uri docUri = DocumentsContract.buildDocumentUriUsingTree(getStartUrl(), documentId);
-//            logger.trace("delete(): docUri: '{}'", docUri);
-//            try {
-//                return DocumentsContract.deleteDocument(getPftpdService().getContext().getContentResolver(), docUri);
-//            } catch (FileNotFoundException e) {
-//                logger.error("could not delete " + name, e);
-//            }
+//        Uri docUri = DocumentsContract.buildDocumentUriUsingTree(getStartUrl(), documentId);
+//        logger.trace("delete(): docUri: '{}'", docUri);
+//        try {
+//            return DocumentsContract.deleteDocument(getPftpdService().getContext().getContentResolver(), docUri);
+//        } catch (FileNotFoundException e) {
+//            logger.error("could not delete " + name, e);
 //        }
         return false;
     }
@@ -245,15 +238,13 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
     public boolean move(AbstractFile<TFileSystemView> destination) {
         logger.trace("[{}] move({})", name, destination.getAbsolutePath());
         // TODO writing with SAF cursor/uri api
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            Uri docUri = DocumentsContract.buildDocumentUriUsingTree(getStartUrl(), documentId);
-//            logger.trace("move(): docUri: '{}'", docUri);
-//            try {
-//                Uri newNameUri = DocumentsContract.renameDocument(getPftpdService().getContext().getContentResolver(), docUri, destination.getName());
-//                return newNameUri != null;
-//            } catch (FileNotFoundException e) {
-//                logger.error("could not rename " + name, e);
-//            }
+//        Uri docUri = DocumentsContract.buildDocumentUriUsingTree(getStartUrl(), documentId);
+//        logger.trace("move(): docUri: '{}'", docUri);
+//        try {
+//            Uri newNameUri = DocumentsContract.renameDocument(getPftpdService().getContext().getContentResolver(), docUri, destination.getName());
+//            return newNameUri != null;
+//        } catch (FileNotFoundException e) {
+//            logger.error("could not rename " + name, e);
 //        }
         return false;
     }
@@ -263,36 +254,34 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
         postClientAction(ClientActionEvent.ClientAction.LIST_DIR);
 
         List<TMina> result = new ArrayList<>();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Uri startUrl = getStartUrl();
-            String parentId;
-            if (documentId != null) {
-                parentId = documentId;
-            } else {
-                parentId = DocumentsContract.getTreeDocumentId(startUrl);
-                logger.trace("  got parentId: {}, for startURL: {}", parentId, startUrl);
-            }
+        Uri startUrl = getStartUrl();
+        String parentId;
+        if (documentId != null) {
+            parentId = documentId;
+        } else {
+            parentId = DocumentsContract.getTreeDocumentId(startUrl);
+            logger.trace("  got parentId: {}, for startURL: {}", parentId, startUrl);
+        }
 
-            logger.trace("  building children uri for doc: {}, parent: {}", documentId, parentId);
-            Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
-                    startUrl,
-                    parentId);
-            Cursor childCursor = getPftpdService().getContext().getContentResolver().query(
-                    childrenUri,
-                    SAF_QUERY_COLUMNS,
-                    null,
-                    null,
-                    null);
-            try {
-                while (childCursor.moveToNext()) {
-                    String absPath = this.absPath.endsWith("/")
-                            ? this.absPath + childCursor.getString(CURSOR_INDEX_NAME)
-                            : this.absPath + "/" + childCursor.getString(CURSOR_INDEX_NAME);
-                    result.add(createFile(absPath, childCursor));
-                }
-            } finally {
-                closeQuietly(childCursor);
+        logger.trace("  building children uri for doc: {}, parent: {}", documentId, parentId);
+        Uri childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
+                startUrl,
+                parentId);
+        Cursor childCursor = getPftpdService().getContext().getContentResolver().query(
+                childrenUri,
+                SAF_QUERY_COLUMNS,
+                null,
+                null,
+                null);
+        try {
+            while (childCursor.moveToNext()) {
+                String absPath = this.absPath.endsWith("/")
+                        ? this.absPath + childCursor.getString(CURSOR_INDEX_NAME)
+                        : this.absPath + "/" + childCursor.getString(CURSOR_INDEX_NAME);
+                result.add(createFile(absPath, childCursor));
             }
+        } finally {
+            closeQuietly(childCursor);
         }
         // log result
         for (TMina obj : result) {
@@ -313,30 +302,24 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
         postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Uri uri = DocumentsContract.buildDocumentUriUsingTree(
-                    getStartUrl(),
-                    documentId);
-            return new TracingBufferedOutputStream(getPftpdService().getContext().getContentResolver().openOutputStream(uri), logger);
-        }
+        Uri uri = DocumentsContract.buildDocumentUriUsingTree(
+                getStartUrl(),
+                documentId);
+        return new TracingBufferedOutputStream(getPftpdService().getContext().getContentResolver().openOutputStream(uri), logger);
         // TODO no null, throw IOException
-        return null;
     }
 
     public InputStream createInputStream(long offset) throws IOException {
         logger.trace("[{}] createInputStream(offset: {})", name, offset);
         postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Uri uri = DocumentsContract.buildDocumentUriUsingTree(
-                    getStartUrl(),
-                    documentId);
-            BufferedInputStream bis = new BufferedInputStream(getPftpdService().getContext().getContentResolver().openInputStream(uri));
-            bis.skip(offset);
-            return bis;
-        }
+        Uri uri = DocumentsContract.buildDocumentUriUsingTree(
+                getStartUrl(),
+                documentId);
+        BufferedInputStream bis = new BufferedInputStream(getPftpdService().getContext().getContentResolver().openInputStream(uri));
+        bis.skip(offset);
+        return bis;
         // TODO no null, throw IOException
-        return null;
     }
 
     private void closeQuietly(Cursor cursor) {

@@ -3,7 +3,6 @@ package org.primftpd.filesystem;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.widget.Toast;
@@ -58,8 +57,7 @@ public abstract class SafFileSystemView<TFile extends SafFile<TMina, ? extends S
 
         Context context = pftpdService.getContext();
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                    && !ROOT_PATH.equals(abs)) {
+            if (!ROOT_PATH.equals(abs)) {
                 String parentId = DocumentsContract.getTreeDocumentId(startUrl);
 
                 List<String> parts = Utils.normalizePath(abs);

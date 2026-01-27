@@ -30,11 +30,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.sshd.agent.SshAgent;
-import org.apache.sshd.agent.SshAgentFactory;
 import org.apache.sshd.common.Channel;
 import org.apache.sshd.common.Closeable;
-import org.apache.sshd.common.ForwardingFilter;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.PtyMode;
 import org.apache.sshd.common.RequestHandler;
@@ -323,12 +320,6 @@ public class ChannelSession extends AbstractServerChannel {
                 return false;
             }
         }
-        if ("auth-agent-req@openssh.com".equals(type)) {
-            return handleAgentForwarding(buffer);
-        }
-        if ("x11-req".equals(type)) {
-            return handleX11Forwarding(buffer);
-        }
         return null;
     }
 
@@ -546,36 +537,6 @@ public class ChannelSession extends AbstractServerChannel {
     protected int getPtyModeValue(PtyMode mode) {
         Integer v = getEnvironment().getPtyModes().get(mode);
         return v != null ? v : 0;
-    }
-
-    protected boolean handleAgentForwarding(Buffer buffer) throws IOException {
-        final ServerSession server = (ServerSession) session;
-        final ForwardingFilter filter = server.getFactoryManager().getTcpipForwardingFilter();
-        final SshAgentFactory factory = server.getFactoryManager().getAgentFactory();
-        if (factory == null || (filter != null && !filter.canForwardAgent(server))) {
-            return false;
-        }
-
-        String authSocket = service.initAgentForward();
-        addEnvVariable(SshAgent.SSH_AUTHSOCKET_ENV_NAME, authSocket);
-        return true;
-    }
-
-    protected boolean handleX11Forwarding(Buffer buffer) throws IOException {
-        final ServerSession server = (ServerSession) session;
-        final ForwardingFilter filter = server.getFactoryManager().getTcpipForwardingFilter();
-        if (filter == null || !filter.canForwardX11(server)) {
-            return false;
-        }
-
-        String display = service.createX11Display(buffer.getBoolean(), buffer.getString(),
-                                                                    buffer.getString(), buffer.getInt());
-        if (display == null) {
-            return false;
-        }
-
-        addEnvVariable(X11ForwardSupport.ENV_DISPLAY, display);
-        return true;
     }
 
     protected void addEnvVariable(String name, String value) {

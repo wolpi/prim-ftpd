@@ -24,165 +24,66 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Signature;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyAgreement;
 import javax.crypto.Mac;
 import javax.crypto.NoSuchPaddingException;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * TODO Add javadoc
- *
- * @author <a href="mailto:dev@mina.apache.org">Apache MINA SSHD Project</a>
- */
 public class SecurityUtils {
-
-    public static final String BOUNCY_CASTLE = "BC";
 
     private static final Logger LOG = LoggerFactory.getLogger(SecurityUtils.class);
 
-    private static String securityProvider = null;
-    private static Boolean registerBouncyCastle;
-    private static boolean registrationDone;
-    private static Boolean hasEcc;
-
-    public static boolean hasEcc() {
-        if (hasEcc == null) {
-            try {
-                getKeyPairGenerator("EC");
-                hasEcc = true;
-            } catch (Throwable t) {
-                hasEcc = false;
-            }
-        }
-        return hasEcc;
+    public static boolean isBouncyCastleRegistered() {
+        return true;
     }
 
-    public static synchronized void setSecurityProvider(String securityProvider) {
-        SecurityUtils.securityProvider = securityProvider;
-        registrationDone = false;
-    }
-
-    public static synchronized void setRegisterBouncyCastle(boolean registerBouncyCastle) {
-        SecurityUtils.registerBouncyCastle = registerBouncyCastle;
-        registrationDone = false;
-    }
-
-    public static synchronized String getSecurityProvider() {
-        register();
-        return securityProvider;
-    }
-
-    public static synchronized boolean isBouncyCastleRegistered() {
-        register();
-        return BOUNCY_CASTLE.equals(securityProvider);
-    }
-
-    private static void register() {
-        if (!registrationDone) {
-            if (registerBouncyCastle == null) {
-                String prop = System.getProperty("org.apache.sshd.registerBouncyCastle");
-                if (prop != null) {
-                    registerBouncyCastle = Boolean.parseBoolean(prop);
-                }
-            }
-            if (securityProvider == null && (registerBouncyCastle == null || registerBouncyCastle)) {
-                // Use an inner class to avoid a strong dependency from SshServer on BouncyCastle
-                try {
-                    new BouncyCastleRegistration().run();
-                } catch (Throwable t) {
-                    if (registerBouncyCastle == null) {
-                        LOG.info("BouncyCastle not registered, using the default JCE provider");
-                    } else {
-                        LOG.error("Failed to register BouncyCastle as the defaut JCE provider");
-                        throw new RuntimeException("Failed to register BouncyCastle as the defaut JCE provider", t);
-                    }
-                }
-            }
-            registrationDone = true;
-        }
-    }
-
-    private static class BouncyCastleRegistration {
-        public void run() throws Exception {
-            if (java.security.Security.getProvider(BOUNCY_CASTLE) == null) {
-                LOG.info("Trying to register BouncyCastle as a JCE provider");
-                java.security.Security.addProvider(new BouncyCastleProvider());
-                MessageDigest.getInstance("MD5", BOUNCY_CASTLE);
-                KeyAgreement.getInstance("DH", BOUNCY_CASTLE);
-                LOG.info("Registration succeeded");
-            } else {
-                LOG.info("BouncyCastle already registered as a JCE provider");
-            }
-            securityProvider = BOUNCY_CASTLE;
-        }
+    private static String safeClassname(Object obj) {
+        return obj != null ? obj.getClass().getName() : "null";
     }
 
     public static synchronized KeyFactory getKeyFactory(String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException {
-        register();
-        if (getSecurityProvider() == null) {
-            return KeyFactory.getInstance(algorithm);
-        } else {
-            return KeyFactory.getInstance(algorithm, getSecurityProvider());
-        }
+        KeyFactory result = KeyFactory.getInstance(algorithm);
+        LOG.trace("getKeyFactory({}) -> {}", algorithm, safeClassname(result));
+        return (KeyFactory)result;
     }
 
     public static synchronized Cipher getCipher(String transformation) throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
-        register();
-        if (getSecurityProvider() == null) {
-            return Cipher.getInstance(transformation);
-        } else {
-            return Cipher.getInstance(transformation, getSecurityProvider());
-        }
+        Cipher result = Cipher.getInstance(transformation);
+        LOG.trace("getCipher({}) -> {}", transformation, safeClassname(result));
+        return result;
     }
 
     public static synchronized MessageDigest getMessageDigest(String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException {
-        register();
-        if (getSecurityProvider() == null) {
-            return MessageDigest.getInstance(algorithm);
-        } else {
-            return MessageDigest.getInstance(algorithm, getSecurityProvider());
-        }
+        MessageDigest result = MessageDigest.getInstance(algorithm);
+        LOG.trace("getMessageDigest({}) -> {}", algorithm, safeClassname(result));
+        return result;
     }
 
     public static synchronized KeyPairGenerator getKeyPairGenerator(String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException {
-        register();
-        if (getSecurityProvider() == null) {
-            return KeyPairGenerator.getInstance(algorithm);
-        } else {
-            return KeyPairGenerator.getInstance(algorithm, getSecurityProvider());
-        }
+        KeyPairGenerator result = KeyPairGenerator.getInstance(algorithm);
+        LOG.trace("KeyPairGenerator({}) -> {}", algorithm, safeClassname(result));
+        return result;
     }
 
     public static synchronized KeyAgreement getKeyAgreement(String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException {
-        register();
-        if (getSecurityProvider() == null) {
-            return KeyAgreement.getInstance(algorithm);
-        } else {
-            return KeyAgreement.getInstance(algorithm, getSecurityProvider());
-        }
+        KeyAgreement result = KeyAgreement.getInstance(algorithm);
+        LOG.trace("getKeyAgreement({}) -> {}", algorithm, safeClassname(result));
+        return result;
     }
 
     public static synchronized Mac getMac(String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException {
-        register();
-        if (getSecurityProvider() == null) {
-            return Mac.getInstance(algorithm);
-        } else {
-            return Mac.getInstance(algorithm, getSecurityProvider());
-        }
+        Mac result = Mac.getInstance(algorithm);
+        LOG.trace("getMac({}) -> {}", algorithm, safeClassname(result));
+        return result;
     }
 
     public static synchronized Signature getSignature(String algorithm) throws NoSuchAlgorithmException, NoSuchProviderException {
-        register();
-        if (getSecurityProvider() == null) {
-            return Signature.getInstance(algorithm);
-        } else {
-            return Signature.getInstance(algorithm, getSecurityProvider());
-        }
+        Signature result = Signature.getInstance(algorithm);
+        LOG.trace("getSignature({}) -> {}", algorithm, safeClassname(result));
+        return result;
     }
 
 }

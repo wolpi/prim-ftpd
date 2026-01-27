@@ -1,6 +1,5 @@
 package org.primftpd.filepicker.nononsenseapps;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
@@ -10,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -81,7 +81,15 @@ public abstract class AbstractFilePickerActivity<T> extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // EdgeToEdge on Android pre-15
+        // There are some serious insets listener issues on API 28/29,
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            EdgeToEdge.enable(this);
+        }
         setContentView(R.layout.filepicker_activity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setNavigationBarContrastEnforced(false);
+        }
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -140,7 +148,6 @@ public abstract class AbstractFilePickerActivity<T> extends AppCompatActivity
         finish();
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onFilesPicked(@NonNull final List<Uri> files) {
         Intent i = new Intent();
@@ -153,19 +160,16 @@ public abstract class AbstractFilePickerActivity<T> extends AppCompatActivity
         }
         i.putStringArrayListExtra(EXTRA_PATHS, paths);
 
-        // Set as Clip Data for Jelly bean and above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            ClipData clip = null;
-            for (Uri file : files) {
-                if (clip == null) {
-                    clip = new ClipData("Paths", new String[]{},
-                            new ClipData.Item(file));
-                } else {
-                    clip.addItem(new ClipData.Item(file));
-                }
+        ClipData clip = null;
+        for (Uri file : files) {
+            if (clip == null) {
+                clip = new ClipData("Paths", new String[]{},
+                        new ClipData.Item(file));
+            } else {
+                clip.addItem(new ClipData.Item(file));
             }
-            i.setClipData(clip);
         }
+        i.setClipData(clip);
 
         setResult(Activity.RESULT_OK, i);
         finish();

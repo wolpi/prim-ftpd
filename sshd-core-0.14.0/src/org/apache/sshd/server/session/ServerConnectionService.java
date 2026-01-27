@@ -56,10 +56,6 @@ public class ServerConnectionService extends AbstractConnectionService {
         }
     }
 
-    public String initAgentForward() throws IOException {
-        return agentForward.initialize();
-    }
-
     public String createX11Display(boolean singleConnection, String authenticationProtocol, String authenticationCookie, int screen) throws IOException {
         return x11Forward.createDisplay(singleConnection, authenticationProtocol, authenticationCookie, screen);
     }

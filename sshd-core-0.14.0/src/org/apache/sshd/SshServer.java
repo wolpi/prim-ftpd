@@ -32,7 +32,6 @@ import java.util.Map;
 import org.apache.sshd.common.AbstractFactoryManager;
 import org.apache.sshd.common.Closeable;
 import org.apache.sshd.common.Factory;
-import org.apache.sshd.common.ForwardingFilter;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.SshdSocketAddress;
@@ -55,8 +54,6 @@ import org.apache.sshd.server.UserAuth;
 import org.apache.sshd.server.auth.UserAuthKeyboardInteractive;
 import org.apache.sshd.server.auth.UserAuthPassword;
 import org.apache.sshd.server.auth.UserAuthPublicKey;
-import org.apache.sshd.server.auth.gss.GSSAuthenticator;
-import org.apache.sshd.server.auth.gss.UserAuthGSS;
 import org.apache.sshd.server.command.ScpCommandFactory;
 import org.apache.sshd.server.keyprovider.PEMGeneratorHostKeyProvider;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
@@ -108,7 +105,6 @@ public class SshServer extends AbstractFactoryManager implements ServerFactoryMa
     protected List<NamedFactory<Command>> subsystemFactories;
     protected PasswordAuthenticator passwordAuthenticator;
     protected PublickeyAuthenticator publickeyAuthenticator;
-    protected GSSAuthenticator gssAuthenticator;
 
     public SshServer() {
     }
@@ -190,18 +186,6 @@ public class SshServer extends AbstractFactoryManager implements ServerFactoryMa
         this.publickeyAuthenticator = publickeyAuthenticator;
     }
 
-    public GSSAuthenticator getGSSAuthenticator() {
-      return gssAuthenticator;
-    }
-
-    public void setGSSAuthenticator(GSSAuthenticator gssAuthenticator) {
-      this.gssAuthenticator = gssAuthenticator;
-    }
-
-    public void setTcpipForwardingFilter(ForwardingFilter forwardingFilter) {
-        this.tcpipForwardingFilter = forwardingFilter;
-    }
-
     protected void checkConfig() {
         if (getPort() < 0) {
             throw new IllegalArgumentException("Bad port number: " + port);
@@ -217,9 +201,6 @@ public class SshServer extends AbstractFactoryManager implements ServerFactoryMa
             }
             if (getPublickeyAuthenticator() != null) {
                 factories.add(new UserAuthPublicKey.Factory());
-            }
-            if (getGSSAuthenticator() != null) {
-              factories.add(new UserAuthGSS.Factory());
             }
             if (factories.size() > 0) {
                 setUserAuthFactories(factories);
@@ -452,23 +433,6 @@ public class SshServer extends AbstractFactoryManager implements ServerFactoryMa
         sshd.setPublickeyAuthenticator(new PublickeyAuthenticator() {
             public boolean authenticate(String username, PublicKey key, ServerSession session) {
                 //File f = new File("/Users/" + username + "/.ssh/authorized_keys");
-                return true;
-            }
-        });
-        sshd.setTcpipForwardingFilter(new ForwardingFilter() {
-            public boolean canForwardAgent(Session session) {
-                return true;
-            }
-
-            public boolean canForwardX11(Session session) {
-                return true;
-            }
-
-            public boolean canListen(SshdSocketAddress address, Session session) {
-                return true;
-            }
-
-            public boolean canConnect(SshdSocketAddress address, Session session) {
                 return true;
             }
         });

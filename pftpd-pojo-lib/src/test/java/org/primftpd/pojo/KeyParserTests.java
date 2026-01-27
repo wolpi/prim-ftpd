@@ -1,6 +1,5 @@
 package org.primftpd.pojo;
 
-import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,7 +22,7 @@ public class KeyParserTests {
         InputStream is = new ByteArrayInputStream(key.getBytes("UTF8"));
 
         List<String> errors = new ArrayList<>();
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, errors);
 
         Assert.assertTrue(keys.isEmpty());
         Assert.assertTrue(errors.isEmpty());
@@ -34,7 +33,7 @@ public class KeyParserTests {
         InputStream is = getClass().getResourceAsStream("/keys/rsa.key.pub");
 
         List<String> errors = new ArrayList<>();
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, errors);
 
         assertsRsaKey((RSAPublicKey)keys.get(0));
         Assert.assertTrue(errors.isEmpty());
@@ -45,7 +44,7 @@ public class KeyParserTests {
         InputStream is = getClass().getResourceAsStream("/keys/dsa.key.pub");
 
         List<String> errors = new ArrayList<>();
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, errors);
 
         assertsDsaKey((DSAPublicKey)keys.get(0));
         Assert.assertTrue(errors.isEmpty());
@@ -56,7 +55,7 @@ public class KeyParserTests {
         InputStream is = getClass().getResourceAsStream("/keys/ecdsa.key.pub");
 
         List<String> errors = new ArrayList<>();
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, errors);
 
         assertsEcdsaKey((ECPublicKey)keys.get(0));
         Assert.assertTrue(errors.isEmpty());
@@ -67,7 +66,7 @@ public class KeyParserTests {
         InputStream is = getClass().getResourceAsStream("/keys/ecdsa.key.pub.384");
 
         List<String> errors = new ArrayList<>();
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, errors);
 
         assertsEcdsaKey384((ECPublicKey)keys.get(0));
         Assert.assertTrue(errors.isEmpty());
@@ -78,7 +77,7 @@ public class KeyParserTests {
         InputStream is = getClass().getResourceAsStream("/keys/ecdsa.key.pub.521");
 
         List<String> errors = new ArrayList<>();
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, errors);
 
         assertsEcdsaKey521((ECPublicKey)keys.get(0));
         Assert.assertTrue(errors.isEmpty());
@@ -89,7 +88,7 @@ public class KeyParserTests {
         InputStream is = getClass().getResourceAsStream("/keys/ed25519.key.pub");
 
         List<String> errors = new ArrayList<>();
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, errors);
 
         for (PublicKey key : keys) {
             System.out.println("key type: " + key.getClass().getName());
@@ -103,7 +102,7 @@ public class KeyParserTests {
         InputStream is = getClass().getResourceAsStream("/keys/authorized_keys");
 
         List<String> errors = new ArrayList<>();
-        List<PublicKey> keys = KeyParser.parsePublicKeys(is, new CommonsBase64Decoder(), errors);
+        List<PublicKey> keys = KeyParser.parsePublicKeys(is, errors);
 
         Assert.assertEquals(6, keys.size());
         assertsRsaKey((RSAPublicKey)keys.get(0));
@@ -193,12 +192,5 @@ public class KeyParserTests {
         byte[] encoded = pubKey.getEncoded();
 
         Assert.assertArrayEquals(expectedKey, encoded);
-    }
-
-    public static class CommonsBase64Decoder implements Base64Decoder {
-        @Override
-        public byte[] decode(String str) {
-            return Base64.decodeBase64(str);
-        }
     }
 }
