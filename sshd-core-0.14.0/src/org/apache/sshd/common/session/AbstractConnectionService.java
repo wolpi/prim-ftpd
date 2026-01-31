@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.sshd.agent.common.AgentForwardSupport;
 import org.apache.sshd.client.channel.AbstractClientChannel;
 import org.apache.sshd.client.future.OpenFuture;
 import org.apache.sshd.common.Channel;
@@ -72,13 +71,11 @@ public abstract class AbstractConnectionService extends CloseableUtils.AbstractI
 
     /** The tcpip forwarder */
     protected final TcpipForwarder tcpipForwarder;
-    protected final AgentForwardSupport agentForward;
     protected final X11ForwardSupport x11Forward;
     protected boolean allowMoreSessions = true;
 
     protected AbstractConnectionService(Session session) {
         this.session = session;
-        agentForward = new AgentForwardSupport(this);
         x11Forward = new X11ForwardSupport(this);
         tcpipForwarder = session.getFactoryManager().getTcpipForwarderFactory().create(this);
     }
@@ -101,7 +98,7 @@ public abstract class AbstractConnectionService extends CloseableUtils.AbstractI
     @Override
     protected Closeable getInnerCloseable() {
         return builder()
-                .sequential(tcpipForwarder, agentForward, x11Forward)
+                .sequential(tcpipForwarder, x11Forward)
                 .parallel(channels.values())
                 .build();
     }

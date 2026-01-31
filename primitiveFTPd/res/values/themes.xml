@@ -16,7 +16,7 @@
         <item name="colorSecondaryVariant">@color/blueIcon</item>
         <item name="colorOnSecondary">@color/black</item>
 
-        <item name="android:statusBarColor" tools:targetApi="21">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
 
         <item name="iconStart">@drawable/ic_play_white_36dp</item>
         <item name="iconStop">@drawable/ic_stop_white_36dp</item>

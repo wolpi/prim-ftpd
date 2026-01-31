@@ -27,7 +27,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -54,7 +53,6 @@ import org.primftpd.util.IpAddressBean;
 import org.primftpd.util.IpAddressProvider;
 import org.primftpd.util.KeyFingerprintBean;
 import org.primftpd.util.KeyFingerprintProvider;
-import org.primftpd.util.PrngFixes;
 import org.primftpd.util.SampleAuthKeysFileCreator;
 import org.primftpd.util.ServersRunningBean;
 import org.primftpd.util.ServicesStartStopUtil;
@@ -120,9 +118,6 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 
 		logger.debug("onCreateView()");
 
-		// fixes/workarounds for android security issue below 4.3 regarding key generation
-		PrngFixes.apply();
-
 		// layout
 		View view = inflater.inflate(getLayoutId(), container, false);
 
@@ -144,22 +139,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		// listen for events
 		EventBus.getDefault().register(this);
 
-		// hide SAF storage type radios and texts for old androids
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-			View radioStorageSaf = view.findViewById(R.id.radioStorageSaf);
-			((ViewManager)radioStorageSaf.getParent()).removeView(radioStorageSaf);
-
-			View radioStorageRoSaf = view.findViewById(R.id.radioStorageRoSaf);
-			((ViewManager)radioStorageRoSaf.getParent()).removeView(radioStorageRoSaf);
-
-			View safExplainHeading = view.findViewById(R.id.safExplainHeading);
-			((ViewManager)safExplainHeading.getParent()).removeView(safExplainHeading);
-
-			View safExplain = view.findViewById(R.id.safExplain);
-			((ViewManager)safExplain.getParent()).removeView(safExplain);
-		}
-
-		// start on open ?
+        // start on open ?
 		SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
 		Boolean startOnOpen = LoadPrefsUtil.startOnOpen(prefs);
 		if (startOnOpen) {
@@ -208,36 +188,25 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
             return;
         }
         ((RadioGroup)view.findViewById(R.id.radioGroupStorage)).setOnCheckedChangeListener(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            switch (prefsBean.getStorageType()) {
-                case PLAIN:
-                    ((RadioButton) view.findViewById(R.id.radioStoragePlain)).setChecked(true);
-                    break;
-                case ROOT:
-                    ((RadioButton) view.findViewById(R.id.radioStorageRoot)).setChecked(true);
-                    break;
-                case SAF:
-                    ((RadioButton) view.findViewById(R.id.radioStorageSaf)).setChecked(true);
-                    showSafUrl(prefsBean.getSafUrl());
-                    break;
-                case RO_SAF:
-                    ((RadioButton) view.findViewById(R.id.radioStorageRoSaf)).setChecked(true);
-                    showSafUrl(prefsBean.getSafUrl());
-                    break;
-                case VIRTUAL:
-                    ((RadioButton) view.findViewById(R.id.radioStorageVirtual)).setChecked(true);
-                    showSafUrl(prefsBean.getSafUrl());
-                    break;
-            }
-        } else {
-            switch (prefsBean.getStorageType()) {
-                case PLAIN:
-                    ((RadioButton) view.findViewById(R.id.radioStoragePlain)).setChecked(true);
-                    break;
-                case ROOT:
-                    ((RadioButton) view.findViewById(R.id.radioStorageRoot)).setChecked(true);
-                    break;
-            }
+        switch (prefsBean.getStorageType()) {
+            case PLAIN:
+                ((RadioButton) view.findViewById(R.id.radioStoragePlain)).setChecked(true);
+                break;
+            case ROOT:
+                ((RadioButton) view.findViewById(R.id.radioStorageRoot)).setChecked(true);
+                break;
+            case SAF:
+                ((RadioButton) view.findViewById(R.id.radioStorageSaf)).setChecked(true);
+                showSafUrl(prefsBean.getSafUrl());
+                break;
+            case RO_SAF:
+                ((RadioButton) view.findViewById(R.id.radioStorageRoSaf)).setChecked(true);
+                showSafUrl(prefsBean.getSafUrl());
+                break;
+            case VIRTUAL:
+                ((RadioButton) view.findViewById(R.id.radioStorageVirtual)).setChecked(true);
+                showSafUrl(prefsBean.getSafUrl());
+                break;
         }
 
         onStartOngoing = false;
@@ -293,177 +262,165 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		if (view == null) {
 			return;
 		}
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			view.findViewById(R.id.safUriLabel).setVisibility(View.GONE);
-			view.findViewById(R.id.safUri).setVisibility(View.GONE);
+        view.findViewById(R.id.safUriLabel).setVisibility(View.GONE);
+        view.findViewById(R.id.safUri).setVisibility(View.GONE);
 
-			StorageType storageType = null;
+        StorageType storageType = null;
 
-			Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-			intent.addFlags(
-					Intent.FLAG_GRANT_READ_URI_PERMISSION
-							| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        intent.addFlags(
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-			int checkedRadioButtonId = group.getCheckedRadioButtonId();
-			try {
-				switch (checkedRadioButtonId) {
-					case R.id.radioStoragePlain:
-						storageType = StorageType.PLAIN;
-						break;
-					case R.id.radioStorageRoot:
-						storageType = StorageType.ROOT;
-						break;
-					case R.id.radioStorageSaf:
-						storageType = StorageType.SAF;
-						if (!onStartOngoing) {
-							startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
-						}
-						break;
-					case R.id.radioStorageRoSaf:
-						storageType = StorageType.RO_SAF;
-						if (!onStartOngoing) {
-							startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
-						}
-						break;
-					case R.id.radioStorageVirtual:
-						storageType = StorageType.VIRTUAL;
-						if (!onStartOngoing) {
-							startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
-						}
-						break;
-				}
-			} catch (ActivityNotFoundException e) {
-				Toast.makeText(getContext(), "SAF seems to be broken on your device :(", Toast.LENGTH_SHORT).show();
+        int crb = group.getCheckedRadioButtonId();
+        try {
+			if (crb == R.id.radioStoragePlain) {
 				storageType = StorageType.PLAIN;
+			} else if (crb == R.id.radioStorageRoot) {
+				storageType = StorageType.ROOT;
+			} else if (crb == R.id.radioStorageSaf) {
+				storageType = StorageType.SAF;
+				if (!onStartOngoing) {
+					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+				}
+			} else if (crb == R.id.radioStorageRoSaf) {
+				storageType = StorageType.RO_SAF;
+				if (!onStartOngoing) {
+					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+				}
+			} else if (crb == R.id.radioStorageVirtual) {
+				storageType = StorageType.VIRTUAL;
+				if (!onStartOngoing) {
+					startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+				}
 			}
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), "SAF seems to be broken on your device :(", Toast.LENGTH_SHORT).show();
+            storageType = StorageType.PLAIN;
+        }
 
-			if (storageType != null) {
-				SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
-				LoadPrefsUtil.storeStorageType(prefs, storageType);
-			}
+        if (storageType != null) {
+            SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
+            LoadPrefsUtil.storeStorageType(prefs, storageType);
+        }
 
-			if (storageType == StorageType.PLAIN || storageType == StorageType.ROOT) {
-				loadPrefs();
-				checkSafAccess();
-			}
-		}
-	}
+        if (storageType == StorageType.PLAIN || storageType == StorageType.ROOT) {
+            loadPrefs();
+            checkSafAccess();
+        }
+    }
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		logger.debug("onActivityResult()");
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			if (requestCode == REQUEST_CODE_SAF_PERM && resultCode == Activity.RESULT_OK) {
-				if (intent != null) {
-					Uri uri = intent.getData();
-					String uriStr = uri.toString();
-					logger.debug("got uri: '{}'", uriStr);
+        if (requestCode == REQUEST_CODE_SAF_PERM && resultCode == Activity.RESULT_OK) {
+            if (intent != null) {
+                Uri uri = intent.getData();
+                String uriStr = uri.toString();
+                logger.debug("got uri: '{}'", uriStr);
 
-					int modeFlags =
-							(Intent.FLAG_GRANT_READ_URI_PERMISSION
-							| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                int modeFlags =
+                        (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                         | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-					// release old permissions
-					FragmentActivity activity = requireActivity();
-					String oldUrl = prefsBean.getSafUrl();
-					if (!StringUtils.isBlank(oldUrl)) {
-						try {
-							activity.getContentResolver().releasePersistableUriPermission(Uri.parse(oldUrl), modeFlags);
-						} catch (SecurityException e) {
-							logger.info("SecurityException while calling releasePersistableUriPermission()");
-							logger.trace("", e);
-						}
-					}
+// release old permissions
+                FragmentActivity activity = requireActivity();
+                String oldUrl = prefsBean.getSafUrl();
+                if (!StringUtils.isBlank(oldUrl)) {
+                    try {
+                        activity.getContentResolver()
+                                .releasePersistableUriPermission(Uri.parse(oldUrl), modeFlags);
+                    } catch (SecurityException e) {
+                        logger.info(
+                                "SecurityException while calling releasePersistableUriPermission()");
+                        logger.trace("", e);
+                    }
+                }
 
-					// persist permissions
-					try {
-						activity.grantUriPermission(activity.getPackageName(), uri, modeFlags);
-						activity.getContentResolver().takePersistableUriPermission(uri, modeFlags);
-					} catch (SecurityException e) {
-						logger.info("SecurityException while calling takePersistableUriPermission()");
-						logger.trace("", e);
-					}
+// persist permissions
+                try {
+                    activity.grantUriPermission(activity.getPackageName(), uri, modeFlags);
+                    activity.getContentResolver().takePersistableUriPermission(uri, modeFlags);
+                } catch (SecurityException e) {
+                    logger.info("SecurityException while calling takePersistableUriPermission()");
+                    logger.trace("", e);
+                }
 
-					// store uri
-					SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
-					LoadPrefsUtil.storeSafUrl(prefs, uriStr);
+// store uri
+                SharedPreferences prefs = LoadPrefsUtil.getPrefs(getContext());
+                LoadPrefsUtil.storeSafUrl(prefs, uriStr);
 
-					// display uri
-					showSafUrl(uriStr);
+// display uri
+                showSafUrl(uriStr);
 
-					// update prefs
-					loadPrefs();
+// update prefs
+                loadPrefs();
 
-					// note: onResume() is about to be called
-				}
-			}
-		}
-	}
+// note: onResume() is about to be called
+            }
+        }
+    }
 
 	protected void checkSafAccess() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			boolean hideWarning = true;
-			View view = getView();
-			if (view == null) {
-				return;
-			}
-			RadioButton safRadio = view.findViewById(R.id.radioStorageSaf);
-			if (prefsBean.getStorageType() == StorageType.SAF || prefsBean.getStorageType() == StorageType.RO_SAF) {
-				// let's see if the OS has persisted something for us
-				List<UriPermission> persistedUriPermissions = requireActivity().getContentResolver().getPersistedUriPermissions();
-				for (UriPermission uriPerm : persistedUriPermissions) {
-					logger.debug("persisted uri perm: '{}', pref uri: '{}'", uriPerm.getUri(), prefsBean.getSafUrl());
-				}
-				if (persistedUriPermissions.isEmpty()) {
-					logger.debug("no persisted uri perm");
-				}
+        boolean hideWarning = true;
+        View view = getView();
+        if (view == null) {
+            return;
+        }
+        RadioButton safRadio = view.findViewById(R.id.radioStorageSaf);
+        if (prefsBean.getStorageType() == StorageType.SAF || prefsBean.getStorageType() == StorageType.RO_SAF) {
+            // let's see if the OS has persisted something for us
+            List<UriPermission> persistedUriPermissions = requireActivity().getContentResolver().getPersistedUriPermissions();
+            for (UriPermission uriPerm : persistedUriPermissions) {
+                logger.debug("persisted uri perm: '{}', pref uri: '{}'", uriPerm.getUri(), prefsBean.getSafUrl());
+            }
+            if (persistedUriPermissions.isEmpty()) {
+                logger.debug("no persisted uri perm");
+            }
 
-				Cursor cursor = null;
-				try {
-					String url = prefsBean.getSafUrl();
-					Uri uri = Uri.parse(url);
-					cursor = requireActivity().getContentResolver().query(
-							uri,
-							new String[]{DocumentsContract.Document.COLUMN_DOCUMENT_ID},
-							null,
-							null,
-							null,
-							null);
-					cursor.moveToFirst();
+            Cursor cursor = null;
+            try {
+                String url = prefsBean.getSafUrl();
+                Uri uri = Uri.parse(url);
+                cursor = requireActivity().getContentResolver().query(
+                        uri,
+                        new String[]{DocumentsContract.Document.COLUMN_DOCUMENT_ID},
+                        null,
+                        null,
+                        null,
+                        null);
+                cursor.moveToFirst();
 
-				} catch (UnsupportedOperationException e) {
-					// this seems to be the normal case for directory uris
-				} catch (SecurityException | NullPointerException e) {
-					logger.debug("checkSafAccess failed: {}", e.toString());
-					logger.trace("", e);
-					hideWarning = false;
-				} finally {
-					if (cursor != null) {
-						cursor.close();
-					}
-				}
-			}
-			if (hideWarning) {
-				// remove warning if it was present
-				safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-			} else {
-				final boolean darkMode = UiModeUtil.isDarkMode(getResources());
-				int icon = darkMode
-						? R.drawable.ic_warning_white_36dp
-						: R.drawable.ic_warning_black_36dp;
-				safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0);
-			}
-		}
-	}
+            } catch (UnsupportedOperationException e) {
+                // this seems to be the normal case for directory uris
+            } catch (SecurityException | NullPointerException e) {
+                logger.debug("checkSafAccess failed: {}", e.toString());
+                logger.trace("", e);
+                hideWarning = false;
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+        if (hideWarning) {
+            // remove warning if it was present
+            safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        } else {
+            final boolean darkMode = UiModeUtil.isDarkMode(getResources());
+            int icon = darkMode
+                    ? R.drawable.ic_warning_white_36dp
+                    : R.drawable.ic_warning_black_36dp;
+            safRadio.setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0);
+        }
+    }
 
 	protected boolean isLeftToRight() {
 		boolean isLeftToRight = true;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-			Configuration config = getResources().getConfiguration();
-			isLeftToRight = config.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR;
-		}
-		return isLeftToRight;
+        Configuration config = getResources().getConfiguration();
+        isLeftToRight = config.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR;
+        return isLeftToRight;
 	}
 
 	/**
@@ -613,7 +570,8 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 				isGranted -> showLogindata());
 
 	private void displayNormalStorageAccess() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+		// Android 10 and lower
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
 			displayPermission(
 					R.id.hasNormalStorageAccessTextView,
 					R.string.hasNormalAccessToStorage,
@@ -622,6 +580,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 	}
 
 	private void displayFullStorageAccess() {
+		// Android 11+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 			View view = getView();
 			if (view == null) {
@@ -692,7 +651,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 
 	protected boolean hasPermission(String permission) {
 		Context context = getContext();
-		if (context != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+		if (context != null) {
 			logger.trace("hasPermission({})", permission);
 			return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
 		}

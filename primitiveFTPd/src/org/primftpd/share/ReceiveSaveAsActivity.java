@@ -9,10 +9,14 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.activity.EdgeToEdge;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import org.primftpd.R;
 import org.primftpd.filepicker.nononsenseapps.Utils;
 import org.primftpd.ui.DownloadOrSaveDialogFragment;
-import org.primftpd.util.Defaults;
 import org.primftpd.util.FilenameUnique;
 
 import java.io.File;
@@ -44,8 +48,24 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
         super.onCreate(savedInstanceState);
         logger.debug("onCreate()");
 
+        // EdgeToEdge on Android pre-15
+        // There are some serious insets listener issues on API 28/29,
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            EdgeToEdge.enable(this);
+        }
         // set layout
         setContentView(R.layout.receive_share);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setNavigationBarContrastEnforced(false);
+        }
+
+        ListView listView = findViewById(R.id.list);
+        ViewCompat.setOnApplyWindowInsetsListener(listView, (v, insetsCompat) -> {
+            final Insets insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars()
+                                                         | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return insetsCompat;
+        });
 
         // read intent
         Intent intent = getIntent();
@@ -82,7 +102,6 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
         }
 
         // display uris
-        ListView listView = findViewById(R.id.list);
         if (uris != null) {
             listView.setAdapter(new ArrayAdapter<>(
                     this,
@@ -119,23 +138,12 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
 
     public void prepareSaveToIntent() {
         if (uris != null || contents != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                logger.debug("trying to create SAF intent");
-                Intent safIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-                safIntent.addFlags(
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                startActivityForResult(safIntent, 1);
-            } else {
-                logger.debug("trying to create custom filepicker intent");
-                try {
-                    Intent dirPickerIntent = Defaults.createDefaultDirPicker(getBaseContext());
-                    logger.debug("got intent: {}", dirPickerIntent);
-                    startActivityForResult(dirPickerIntent, 0);
-                } catch (Exception e) {
-                    logger.debug("could not create intent", e);
-                }
-            }
+            logger.debug("trying to create SAF intent");
+            Intent safIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            safIntent.addFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            startActivityForResult(safIntent, 1);
         }
     }
 

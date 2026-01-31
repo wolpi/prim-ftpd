@@ -13,8 +13,6 @@ import org.bouncycastle.crypto.util.PrivateKeyInfoFactory;
 import org.bouncycastle.crypto.util.PublicKeyFactory;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.KeyFactorySpi;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.KeyPairGeneratorSpi;
-import org.bouncycastle.util.encoders.Base64;
-import org.primftpd.pojo.Base64Decoder;
 import org.primftpd.pojo.KeyParser;
 
 import java.io.ByteArrayOutputStream;
@@ -38,6 +36,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public enum HostKeyAlgorithm {
@@ -307,7 +306,7 @@ public enum HostKeyAlgorithm {
         Ed25519PrivateKeyParameters ed25519PrivateKeyParameters =
                 (Ed25519PrivateKeyParameters) PrivateKeyFactory.createKey(privateKey.getEncoded());
         byte[] contentPriv = OpenSSHPrivateKeyUtil.encodePrivateKey(ed25519PrivateKeyParameters);
-        byte[] privKeyBase64 = Base64.encode(contentPriv);
+        byte[] privKeyBase64 = Base64.getEncoder().encode(contentPriv);
         privKeyFos.write(privKeyBase64);
 
         PublicKey publicKey = keyPair.getPublic();
@@ -315,19 +314,13 @@ public enum HostKeyAlgorithm {
                 (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(publicKey.getEncoded());
         byte[] contentPub = OpenSSHPublicKeyUtil.encodePublicKey(publicKeyParameters);
         pubKeyFos.write("ssh-ed25519 ".getBytes(Charset.forName("utf8")));
-        pubKeyFos.write(Base64.encode(contentPub));
+        pubKeyFos.write(Base64.getEncoder().encode(contentPub));
     }
 
     PublicKey readPublicKeyEd25519(FileInputStream fis) throws IOException
     {
         List<String> parserErrors = new ArrayList<>();
-        List<PublicKey> keys = KeyParser.parsePublicKeys(fis, new Base64Decoder() {
-                @Override
-                public byte[] decode(String str) {
-                    return android.util.Base64.decode(str, android.util.Base64.DEFAULT);
-                }
-            },
-            parserErrors);
+        List<PublicKey> keys = KeyParser.parsePublicKeys(fis, parserErrors);
         return !keys.isEmpty() ? keys.get(0) : null;
     }
 
@@ -337,7 +330,7 @@ public enum HostKeyAlgorithm {
         copyStream(fis, bos);
         byte[] keyBytesBase64 = bos.toByteArray();
 
-        byte[] keyBytes = Base64.decode(keyBytesBase64);
+        byte[] keyBytes = Base64.getDecoder().decode(keyBytesBase64);
         AsymmetricKeyParameter keyParameter = OpenSSHPrivateKeyUtil.parsePrivateKeyBlob(keyBytes);
 
         PrivateKeyInfo privateKeyInfo = PrivateKeyInfoFactory.createPrivateKeyInfo(keyParameter);

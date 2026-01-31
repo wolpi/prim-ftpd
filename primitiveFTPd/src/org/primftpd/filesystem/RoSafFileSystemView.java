@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.DocumentsContract;
 
 import org.primftpd.services.PftpdService;
@@ -47,8 +46,7 @@ public abstract class RoSafFileSystemView<TFile extends RoSafFile<TMina, ? exten
         String abs = absolute(file);
         logger.trace("  getFile(abs: {})", abs);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                && !ROOT_PATH.equals(abs)) {
+        if (!ROOT_PATH.equals(abs)) {
             String parentId = DocumentsContract.getTreeDocumentId(startUrl);
 
             List<String> parts = Utils.normalizePath(abs);

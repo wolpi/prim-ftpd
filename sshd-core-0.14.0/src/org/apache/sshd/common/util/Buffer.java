@@ -18,6 +18,7 @@
  */
 package org.apache.sshd.common.util;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -42,9 +43,11 @@ import java.security.spec.RSAPrivateCrtKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 
 import org.apache.sshd.common.KeyPairProvider;
-import org.apache.sshd.common.SshConstants;
 import org.apache.sshd.common.SshException;
 import org.apache.sshd.common.cipher.ECCurves;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.util.PublicKeyFactory;
+import org.primftpd.pojo.KeyParser;
 
 /**
  * TODO Add javadoc
@@ -169,23 +172,23 @@ public final class Buffer implements Readable {
     {
         ensureAvailable(4);
         long l = ((data[rpos++] << 24) & 0xff000000L)|
-                 ((data[rpos++] << 16) & 0x00ff0000L)|
-                 ((data[rpos++] <<  8) & 0x0000ff00L)|
-                 ((data[rpos++]      ) & 0x000000ffL);
-        return l;        
+                ((data[rpos++] << 16) & 0x00ff0000L)|
+                ((data[rpos++] <<  8) & 0x0000ff00L)|
+                ((data[rpos++]      ) & 0x000000ffL);
+        return l;
     }
 
     public long getLong()
     {
         ensureAvailable(8);
         long l = (((long) data[rpos++] << 56) & 0xff00000000000000L)|
-                 (((long) data[rpos++] << 48) & 0x00ff000000000000L)|
-                 (((long) data[rpos++] << 40) & 0x0000ff0000000000L)|
-                 (((long) data[rpos++] << 32) & 0x000000ff00000000L)|
-                 (((long) data[rpos++] << 24) & 0x00000000ff000000L)|
-                 (((long) data[rpos++] << 16) & 0x0000000000ff0000L)|
-                 (((long) data[rpos++] <<  8) & 0x000000000000ff00L)|
-                 (((long) data[rpos++]      ) & 0x00000000000000ffL);
+                (((long) data[rpos++] << 48) & 0x00ff000000000000L)|
+                (((long) data[rpos++] << 40) & 0x0000ff0000000000L)|
+                (((long) data[rpos++] << 32) & 0x000000ff00000000L)|
+                (((long) data[rpos++] << 24) & 0x00000000ff000000L)|
+                (((long) data[rpos++] << 16) & 0x0000000000ff0000L)|
+                (((long) data[rpos++] <<  8) & 0x000000000000ff00L)|
+                (((long) data[rpos++]      ) & 0x00000000000000ffL);
         return l;
     }
 
@@ -265,15 +268,19 @@ public final class Buffer implements Readable {
                 KeyFactory keyFactory = SecurityUtils.getKeyFactory("DSA");
                 key = keyFactory.generatePublic(new DSAPublicKeySpec(y, p, q, g));
             } else if (KeyPairProvider.ECDSA_SHA2_NISTP256.equals(keyAlg)) {
-                key = getRawECKey("nistp256", ECCurves.EllipticCurves.nistp256);
+                key = getRawECKey(ECCurves.NISTP256, keyAlg);
             } else if (KeyPairProvider.ECDSA_SHA2_NISTP384.equals(keyAlg)) {
-                key = getRawECKey("nistp384", ECCurves.EllipticCurves.nistp384);
+                key = getRawECKey(ECCurves.NISTP384, keyAlg);
             } else if (KeyPairProvider.ECDSA_SHA2_NISTP521.equals(keyAlg)) {
-                key = getRawECKey("nistp521", ECCurves.EllipticCurves.nistp521);
+                key = getRawECKey(ECCurves.NISTP521, keyAlg);
+            } else if (KeyParser.NAME_ED25519.equals(keyAlg)) {
+                key = KeyParser.parsePublicKeyEd25519(getBytes());
             } else {
                 throw new IllegalStateException("Unsupported algorithm: " + keyAlg);
             }
             return key;
+        } catch (IOException e) {
+            throw new SshException(e);
         } catch (InvalidKeySpecException e) {
             throw new SshException(e);
         } catch (NoSuchAlgorithmException e) {
@@ -281,6 +288,16 @@ public final class Buffer implements Readable {
         } catch (NoSuchProviderException e) {
             throw new SshException(e);
         }
+    }
+
+    private PublicKey getRawECKey(String expectedCurve, String keyAlg)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
+        String curveName = getString();
+        if (!expectedCurve.equals(curveName)) {
+            throw new InvalidKeySpecException("Curve name does not match expected: " + curveName + " vs "
+                                              + expectedCurve);
+        }
+        return KeyParser.parsePublicKeyEcdsa(keyAlg, getBytes());
     }
 
     private PublicKey getRawECKey(String expectedCurve, ECParameterSpec spec) throws InvalidKeySpecException,
@@ -496,7 +513,20 @@ public final class Buffer implements Readable {
             putString(curveName);
             putBytes(ECCurves.encodeECPoint(ecKey.getW(), ecParams.getCurve()));
         } else {
-            throw new IllegalStateException("Unsupported algorithm: " + key.getAlgorithm());
+            if ("Ed25519".equals(key.getAlgorithm())) {
+                try {
+                    Ed25519PublicKeyParameters publicKeyParameters =
+                            (Ed25519PublicKeyParameters) PublicKeyFactory.createKey(key.getEncoded());
+                    byte[] contentPub = publicKeyParameters.getEncoded();
+                    //logger.debug("sending encoded key (length: {}): {}", contentPub.length, new String(contentPub));
+                    putString("ssh-ed25519");
+                    putBytes(contentPub);
+                } catch (Exception e) {
+                    throw new IllegalStateException(e);
+                }
+            } else {
+                throw new IllegalStateException("Unsupported algorithm: " + key.getAlgorithm());
+            }
         }
     }
 

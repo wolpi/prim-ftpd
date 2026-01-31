@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.primftpd">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"
+                     tools:ignore="ForegroundServicesPolicy" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+    <!-- Force/limit this up-to/including Android 10 (API-29). -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="29" />
+    <!--
+    See this article:
+    https://developer.android.com/training/data-storage#permissions -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+                     tools:ignore="AllFilesAccessPolicy,ScopedStorage"/>
 
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
@@ -33,6 +42,9 @@
     <!--
     to enable adaptive icon use:
     android:icon="@mipmap/ic_launcher"
+
+    android:requestLegacyExternalStorage="true"
+      This is used in combination with WRITE_EXTERNAL_STORAGE up-to/including Android 10 (API-29)
     -->
     <application
         android:icon="@drawable/ic_launcher"
@@ -297,19 +309,33 @@
             </intent-filter>
         </activity>
 
-        <service android:name="org.primftpd.services.FtpServerService" />
-        <service android:name="org.primftpd.services.SshServerService" />
+        <service
+            android:name="org.primftpd.services.FtpServerService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            />
+        <service android:name="org.primftpd.services.SshServerService"
+                 android:enabled="true"
+                 android:exported="false"
+                 android:foregroundServiceType="specialUse"
+            />
         <service
             android:name=".services.QuickSettingsService"
             android:icon="@drawable/ic_notification"
             android:label="@string/quickSettingsServerStopped"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:foregroundServiceType="specialUse"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-        <service android:name="org.primftpd.services.DownloadsService" />
+        <service android:name="org.primftpd.services.DownloadsService"
+                 android:enabled="true"
+                 android:exported="false"
+                 android:foregroundServiceType="specialUse"
+            />
 	</application>
 
 </manifest>

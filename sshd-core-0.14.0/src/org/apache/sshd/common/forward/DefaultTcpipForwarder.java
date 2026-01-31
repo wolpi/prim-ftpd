@@ -29,7 +29,6 @@ import java.util.Set;
 import org.apache.sshd.ClientChannel;
 import org.apache.sshd.client.future.OpenFuture;
 import org.apache.sshd.common.Closeable;
-import org.apache.sshd.common.ForwardingFilter;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.SshConstants;
 import org.apache.sshd.common.SshException;
@@ -159,10 +158,6 @@ public class DefaultTcpipForwarder extends CloseableUtils.AbstractInnerCloseable
         }
         if (local.getPort() < 0) {
             throw new IllegalArgumentException("Invalid local port: " + local.getPort());
-        }
-        final ForwardingFilter filter = session.getFactoryManager().getTcpipForwardingFilter();
-        if (filter == null || !filter.canListen(local, session)) {
-            throw new IOException("Rejected address: " + local);
         }
         SshdSocketAddress bound = doBind(local, new StaticIoHandler());
         localForwards.add(bound);

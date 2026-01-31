@@ -1,8 +1,6 @@
 package org.primftpd.services;
 
-import android.annotation.TargetApi;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
@@ -17,10 +15,6 @@ import org.primftpd.util.ServicesStartStopUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * QuickSettings tile support for Android N.
- */
-@TargetApi(Build.VERSION_CODES.N)
 public class QuickSettingsService extends TileService {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());

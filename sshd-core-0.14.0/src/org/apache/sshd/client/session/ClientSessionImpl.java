@@ -35,7 +35,6 @@ import org.apache.sshd.client.ServerKeyVerifier;
 import org.apache.sshd.client.SftpClient;
 import org.apache.sshd.client.UserInteraction;
 import org.apache.sshd.client.auth.deprecated.UserAuth;
-import org.apache.sshd.client.auth.deprecated.UserAuthAgent;
 import org.apache.sshd.client.auth.deprecated.UserAuthKeyboardInteractive;
 import org.apache.sshd.client.auth.deprecated.UserAuthPassword;
 import org.apache.sshd.client.auth.deprecated.UserAuthPublicKey;
@@ -149,10 +148,6 @@ public class ClientSessionImpl extends AbstractSession implements ClientSession 
         synchronized (lock) {
             return authFuture = getUserAuthService().auth(identities, nextServiceName());
         }
-    }
-
-    public AuthFuture authAgent(String user) throws IOException {
-        return tryAuth(user, new UserAuthAgent(this, nextServiceName()));
     }
 
     public AuthFuture authPassword(String user, String password) throws IOException {

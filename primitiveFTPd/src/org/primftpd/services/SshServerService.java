@@ -2,7 +2,6 @@ package org.primftpd.services;
 
 import android.net.Uri;
 import android.os.Looper;
-import android.util.Base64;
 import android.widget.Toast;
 
 import org.apache.ftpserver.ftplet.Authentication;
@@ -362,10 +361,7 @@ public class SshServerService extends AbstractServerService
 			logger.debug("trying authorized keys file {}", path);
 			fis = new FileInputStream(path);
 			List<String> parserErrors = new ArrayList<>();
-			keys = KeyParser.parsePublicKeys(
-					fis,
-					str -> Base64.decode(str, Base64.DEFAULT),
-					parserErrors);
+			keys = KeyParser.parsePublicKeys(fis, parserErrors);
 
 			for (String parserError : parserErrors) {
 				logger.debug("{}", parserError);

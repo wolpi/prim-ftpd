@@ -5,6 +5,7 @@ import org.apache.sshd.server.session.ServerSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.MessageDigest;
 import java.security.PublicKey;
 import java.util.List;
 
@@ -33,10 +34,21 @@ public class PubKeyAuthenticator implements PublickeyAuthenticator {
         }
         return false;
     }
+
     private boolean keysEqual(PublicKey serverKey, PublicKey clientKey) {
-        // serverKey is an object from bouncy castle, see org.primftpd.pojo.KeyParser
-        // clientKey is an object from conscrypt (at least since api-level 28)
-        // fortunately conscrypt's equals() method supports comparision with bouncy castle objects
-        return clientKey.equals(serverKey);
+        // Quick sanity checks
+        if (serverKey == clientKey) {
+            return true;
+        }
+        if (serverKey == null || clientKey == null) {
+            return false;
+        }
+        // Sanity check: their algorithms must match
+        if (!serverKey.getAlgorithm().equalsIgnoreCase(clientKey.getAlgorithm())) {
+            return false;
+        }
+
+        // use constant-time compare
+        return MessageDigest.isEqual(serverKey.getEncoded(), clientKey.getEncoded());
     }
 }

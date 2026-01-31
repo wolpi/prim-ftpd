@@ -1,12 +1,13 @@
 package org.primftpd.ui;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -15,7 +16,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
 import org.primftpd.events.RedrawAddresses;
 import org.primftpd.events.ServerStateChangedEvent;
-import org.primftpd.log.PrimFtpdLoggerBinder;
+import org.primftpd.log.LogController;
 import org.primftpd.prefs.FtpPrefsFragment;
 import org.primftpd.prefs.LoadPrefsUtil;
 import org.primftpd.prefs.Logging;
@@ -27,8 +28,12 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -53,13 +58,32 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         logger.trace("onCreate()");
-        setContentView(R.layout.tabs_activity);
 
+        // EdgeToEdge on Android pre-15
+        // There are some serious insets listener issues on API 28/29,
+        // ViewPager2 also documents a serious bug when using API < 30.
+        // I haven't checked ViewPager v1... but migration to ViewPager2 is a TODO
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            EdgeToEdge.enable(this);
+        }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.tabs_activity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setNavigationBarContrastEnforced(false);
+        }
+
+        AppBarLayout appBarLayout = findViewById(R.id.app_bar);
         TabLayout tabLayout = findViewById(R.id.tabs);
         ViewPager viewPager = findViewById(R.id.view_pager);
         tabLayout.setupWithViewPager(viewPager);
+
+        ViewCompat.setOnApplyWindowInsetsListener(appBarLayout, (v, insetsCompat) -> {
+            final Insets insets = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars()
+                                                         | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return insetsCompat;
+        });
 
         adapter = new MainAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
@@ -243,14 +267,11 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         logger.debug("onOptionsItemSelected()");
-        Intent intent;
-        switch (item.getItemId()) {
-            case R.id.menu_start:
-                handleStart();
-                break;
-            case R.id.menu_stop:
-                handleStop();
-                break;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_start) {
+            handleStart();
+        } else if (itemId == R.id.menu_stop) {
+            handleStop();
         }
 
         return super.onOptionsItemSelected(item);
@@ -295,20 +316,16 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     }
 
     protected void handleLoggingPref() {
-        SharedPreferences prefs = LoadPrefsUtil.getPrefs(this);
-        String loggingStr = prefs.getString(
-                LoadPrefsUtil.PREF_KEY_LOGGING,
-                Logging.NONE.xmlValue());
-        Logging logging = Logging.byXmlVal(loggingStr);
+        Logging logging = LogController.readPrefs(this);
         logger.debug("got 'logging': {}", logging);
 
-        Logging activeLogging = PrimFtpdLoggerBinder.getLoggingPref();
+        Logging activeLogging = LogController.getActiveConfig();
 
         boolean recreateLogger = activeLogging != logging;
 
         if (recreateLogger) {
             // re-create own log and log of relevant fragments, don't care about other classes
-            PrimFtpdLoggerBinder.setLoggingPref(logging);
+            LogController.setActiveConfig(this, logging);
             this.logger = LoggerFactory.getLogger(getClass());
             logger.debug("changed logging");
 
