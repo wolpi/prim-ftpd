@@ -13,6 +13,7 @@
         <include layout="@layout/block_fallback_buttons"  />
         <include layout="@layout/block_connect_data"  />
         <include layout="@layout/block_storage_type"  />
+        <include layout="@layout/block_permission_info"  />
         <include layout="@layout/block_client_action"  />
         <include layout="@layout/block_key_fingerprints"  />
 
