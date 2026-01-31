@@ -22,9 +22,15 @@ public class SampleAuthKeysFileCreator
 			File file = new File(path);
 			if (!file.exists()) {
 				File dir = file.getParentFile();
+				if (dir == null) {
+					logger.debug("expected dir missing: {}", file.getParent());
+					return;
+				}
 				if (!dir.exists()) {
 					logger.debug("trying to create dir: {}", dir.getAbsolutePath());
-					dir.mkdirs();
+					if (!dir.mkdirs()) {
+						logger.debug("dir creation failed: {}", dir.getAbsolutePath());
+					}
 				}
 				if (dir.exists()) {
 					logger.debug("trying to create sample authorized keys file: {}", file.getAbsolutePath());
@@ -39,7 +45,7 @@ public class SampleAuthKeysFileCreator
 						ps.println("# ssh-rsa AAAAB3NzaC1yc2EAAAAD....");
 					} catch (Exception e) {
 						logger.debug("creation of sample file failed ({}): {}, {}",
-								new String[]{file.getAbsolutePath(), e.getClass().getName(), e.getMessage()});
+								file.getAbsolutePath(), e.getClass().getName(), e.getMessage());
 					}
 				} else {
 					logger.debug("creation of dir failed ({})", dir.getAbsolutePath());
