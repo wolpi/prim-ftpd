@@ -46,7 +46,7 @@ public abstract class QuickShareFile<TMina, TFileSystemView extends QuickShareFi
     }
 
     public boolean isDirectory() {
-        boolean result = realFile == null;
+        boolean result = name.equals(realFile.getName());
         logger.trace("[{}] isDirectory() -> {}", name, result);
         return result;
     }
