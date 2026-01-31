@@ -300,7 +300,7 @@ with open(pathBuildFile, "r") as file:
     index = content.find("versionCode")
     endIndex = content.find("\n", index)
     line = content[index:endIndex]
-    oldVersionCode = line[line.find(" ")+1:len(line)]
+    oldVersionCode = line[line.find("= ")+2:len(line)]
 
     index = content.find("versionName")
     endIndex = content.find("\n", index)
