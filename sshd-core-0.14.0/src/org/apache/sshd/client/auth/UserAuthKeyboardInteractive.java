@@ -107,7 +107,7 @@ public class UserAuthKeyboardInteractive implements UserAuth {
                 prompt[i] = buffer.getString();
                 echo[i] = (buffer.getByte() != 0);
             }
-            log.debug("Promt: {}", prompt);
+            log.debug("Promt: {}", (Object[])prompt);
             log.debug("Echo: {}", echo);
 
             String[] rep = null;
