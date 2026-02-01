@@ -112,7 +112,8 @@ public class NotificationUtil
 				.setSmallIcon(iconId)
 				.setLargeIcon(largeIcon)
 				.setContentIntent(contentIntent)
-				.setWhen(when);
+				.setWhen(when)
+				.setVisibility(Notification.VISIBILITY_PUBLIC);
 		addChannel(builder, channelId);
 
 		// notification action
