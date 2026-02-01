@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
@@ -18,7 +19,7 @@ public class KeyParserTests {
     @Test
     public void noSpaceInKey() throws Exception {
         String key = "no-space";
-        InputStream is = new ByteArrayInputStream(key.getBytes("UTF8"));
+        InputStream is = new ByteArrayInputStream(key.getBytes(StandardCharsets.UTF_8));
 
         List<String> errors = new ArrayList<>();
         List<PublicKey> keys = KeyParser.parsePublicKeys(is, errors);
