@@ -95,10 +95,10 @@ public class KeyParserTests {
 
         Assert.assertEquals(5, keys.size());
         assertsRsaKey((RSAPublicKey)keys.get(0));
-        assertsEcdsaKey((ECPublicKey)keys.get(2));
-        assertsEcdsaKey384((ECPublicKey)keys.get(3));
-        assertsEcdsaKey521((ECPublicKey)keys.get(4));
-        assertsEd25519((BCEdDSAPublicKey)keys.get(5));
+        assertsEcdsaKey((ECPublicKey)keys.get(1));
+        assertsEcdsaKey384((ECPublicKey)keys.get(2));
+        assertsEcdsaKey521((ECPublicKey)keys.get(3));
+        assertsEd25519((BCEdDSAPublicKey)keys.get(4));
 
         Assert.assertEquals(1, errors.size());
         System.out.println(errors.get(0));
@@ -119,21 +119,29 @@ public class KeyParserTests {
     }
 
     protected void assertsEcdsaKey(ECPublicKey pubKey) {
-        final String x = "48439561293906451759052585252797914202762949526041747995844080717082404635286";
-        final String y = "36134250956749795798585127919587881956611106672985015071877198253568414405109";
+        final BigInteger val1 = new BigInteger(
+                "48439561293906451759052585252797914202762949526041747995844080717082404635286");
+        final BigInteger val2 = new BigInteger(
+                "36134250956749795798585127919587881956611106672985015071877198253568414405109");
 
-        Assert.assertEquals(new BigInteger(x), pubKey.getParams().getGenerator().getAffineX());
-        Assert.assertEquals(new BigInteger(y), pubKey.getParams().getGenerator().getAffineY());
+        final BigInteger keyX = pubKey.getParams().getGenerator().getAffineX();
+        final BigInteger keyY = pubKey.getParams().getGenerator().getAffineY();
+
+        Assert.assertEquals(val1, keyX);
+        Assert.assertEquals(val2, keyY);
     }
 
     protected void assertsEcdsaKey384(ECPublicKey pubKey) {
-        final String x = "26247035095799689268623156744566981891852923491109213387815615900925" +
-                "518854738050089022388053975719786650872476732087";
-        final String y = "83257109614890299855467512895201081792878530488613155947092059024805" +
-                "03199884419224438643760392947333078086511627871";
+        final BigInteger val1 = new BigInteger("26247035095799689268623156744566981891852923491" +
+                "109213387815615900925518854738050089022388053975719786650872476732087");
+        final BigInteger val2 = new BigInteger("83257109614890299855467512895201081792878530488" +
+                "61315594709205902480503199884419224438643760392947333078086511627871");
 
-        Assert.assertEquals(new BigInteger(x), pubKey.getParams().getGenerator().getAffineX());
-        Assert.assertEquals(new BigInteger(y), pubKey.getParams().getGenerator().getAffineY());
+        final BigInteger keyX = pubKey.getParams().getGenerator().getAffineX();
+        final BigInteger keyY = pubKey.getParams().getGenerator().getAffineY();
+
+        Assert.assertEquals(val1, keyX);
+        Assert.assertEquals(val2, keyY);
     }
 
     protected void assertsEcdsaKey521(ECPublicKey pubKey) {
