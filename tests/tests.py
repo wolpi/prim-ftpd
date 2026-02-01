@@ -46,7 +46,6 @@ DEFAULT_PATH_VIRTUAL_SAF = "/saf" + DEFAULT_PATH_SAF
 DEFAULT_PATH_VIRTUAL_ROSAF = "/rosaf" + DEFAULT_PATH_ROSAF
 
 KEY_FILE_RSA = "rsa.key"
-KEY_FILE_DSA = "dsa.key"
 KEY_FILE_ECDSA = "ecdsa.key"
 KEY_FILE_ECDSA_384 = "ecdsa.key.384"
 KEY_FILE_ECDSA_521 = "ecdsa.key.521"
@@ -58,7 +57,6 @@ CURRENT_DIR = os.path.dirname(__file__)
 KEY_DIR = os.path.join(CURRENT_DIR, "../pftpd-pojo-lib/src/test/resources/keys")
 KEY_PATH = KEY_DIR + "/" + KEY_FILE_ED25519
 KEY_PATH_RSA = KEY_DIR + "/" + KEY_FILE_RSA
-KEY_PATH_DSA = KEY_DIR + "/" + KEY_FILE_DSA
 KEY_PATH_ECDSA = KEY_DIR + "/" + KEY_FILE_ECDSA
 KEY_PATH_ECDSA_384 = KEY_DIR + "/" + KEY_FILE_ECDSA_384
 KEY_PATH_ECDSA_521 = KEY_DIR + "/" + KEY_FILE_ECDSA_521
@@ -570,10 +568,6 @@ def scpDownload(remoteBasePath, errorTag, errors):
 
 def testKeys(baseUrl, errors):
     protocol = Protocol.SFTP
-    # DSA is not supported by SSH client anymore
-    #log("public key auth DSA")
-    #output = downloadListing(baseUrl, protocol, key = KEY_PATH_DSA)
-    #checkHomeListing(errors, output, "[key dsa]", storageType)
     log("public key auth RSA")
     output = downloadListing(baseUrl, protocol, key = KEY_PATH_RSA)
     checkHomeListing(errors, output, "[key rsa]", storageType)

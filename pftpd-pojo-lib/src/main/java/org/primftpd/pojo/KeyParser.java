@@ -18,7 +18,6 @@ import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
 import java.security.spec.ECPublicKeySpec;
@@ -38,7 +37,6 @@ public class KeyParser {
     // http://blog.oddbit.com/2011/05/08/converting-openssh-public-keys/
 
     public static final String NAME_RSA = "ssh-rsa";
-    public static final String NAME_DSA = "ssh-dss";
     public static final String NAME_ECDSA_256 = "ecdsa-sha2-nistp256";
     public static final String NAME_ECDSA_384 = "ecdsa-sha2-nistp384";
     public static final String NAME_ECDSA_521 = "ecdsa-sha2-nistp521";
@@ -103,8 +101,6 @@ public class KeyParser {
 
             if (NAME_RSA.equals(name)) {
                 key = parsePublicKeyRsa(keyBytes);
-            } else if (NAME_DSA.equals(name)) {
-                key = parsePublicKeyDsa(keyBytes);
             } else if (NAME_ECDSA_256.equals(name)) {
                 key = parsePublicKeyEcdsa(name, keyBytes);
             } else if (NAME_ECDSA_384.equals(name)) {
@@ -132,22 +128,6 @@ public class KeyParser {
         return createPubKeyRsa(exponent, modulus);
     }
 
-    protected static PublicKey parsePublicKeyDsa(byte[] keyBytes)
-            throws InvalidKeySpecException, NoSuchAlgorithmException {
-        // name is also included in bytes
-        ByteBuffer byteBuffer = ByteBuffer.wrap(keyBytes);
-        int nameLength = byteBuffer.getInt();
-        // cast to Buffer to avoid issue with java 8, see GH #226
-        ((Buffer)byteBuffer).position(nameLength + LENGTH_LENGTH);
-
-        BigInteger p = readNext(byteBuffer);
-        BigInteger q = readNext(byteBuffer);
-        BigInteger g = readNext(byteBuffer);
-        BigInteger y = readNext(byteBuffer);
-
-        return createPubKeyDsa(y, p, q, g);
-    }
-
     protected static BigInteger readNext(ByteBuffer byteBuffer) {
         int nextLength = byteBuffer.getInt();
         byte[] nextBytes = new byte[nextLength];
@@ -159,14 +139,6 @@ public class KeyParser {
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         RSAPublicKeySpec keySpec = new RSAPublicKeySpec(modulus, exponent);
         KeyFactory kf = KeyFactory.getInstance("RSA");
-        return kf.generatePublic(keySpec);
-    }
-
-    protected static PublicKey createPubKeyDsa(
-            BigInteger y, BigInteger p, BigInteger q, BigInteger g)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
-        DSAPublicKeySpec keySpec = new DSAPublicKeySpec(y, p, q, g);
-        KeyFactory kf = KeyFactory.getInstance("DSA");
         return kf.generatePublic(keySpec);
     }
 
