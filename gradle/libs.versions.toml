@@ -30,10 +30,8 @@ slf4jApi = "2.0.17"
 zxing = "1.9.8"
 
 # Don't upgrade these any higher without migrating away from sshd-core 0.14
-#noinspection NewerVersionAvailable
-ftpserver = "1.1.4"
-#noinspection NewerVersionAvailable
-minaCore = "2.1.10"
+ftpserver = "1.2.1"
+minaCore = "2.2.5"
 
 [libraries]
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppcompat" }
