@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
@@ -92,9 +93,11 @@ public class QrFragment extends Fragment implements RecreateLogger {
 
     protected void draw(String chosenIp) {
         qrLoading.setVisibility(View.VISIBLE);
-        Executors.newSingleThreadExecutor().execute(() -> {
-            doDraw(chosenIp);
-        });
+        try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
+            executorService.execute(() -> {
+                doDraw(chosenIp);
+            });
+        }
     }
 
     protected void doDraw(String chosenIp) {

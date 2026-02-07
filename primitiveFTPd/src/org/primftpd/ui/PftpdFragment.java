@@ -65,6 +65,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -236,15 +237,17 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		if (view == null) {
 			return;
 		}
-		Executors.newSingleThreadExecutor().execute(() -> {
-			if (!ipAddressProvider.isIpAvail(prefsBean.getBindIp())) {
-				String msg = "IP " + prefsBean.getBindIp() +
+		try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
+			executorService.execute(() -> {
+				if (!ipAddressProvider.isIpAvail(prefsBean.getBindIp())) {
+					String msg = "IP " + prefsBean.getBindIp() +
 						" is currently not assigned to an interface. May lead to a crash.";
-				view.post(() -> {
-					Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-				});
-			}
-		});
+					view.post(() -> {
+						Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+					});
+				}
+			});
+		}
 	}
 
 	@Override
@@ -441,9 +444,11 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		// show spinner
 		addressesLoading.setVisibility(View.VISIBLE);
 
-		Executors.newSingleThreadExecutor().execute(() -> {
-			doShowAddresses(view, container);
-		});
+		try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
+			executorService.execute(() -> {
+				doShowAddresses(view, container);
+			});
+		}
 	}
 
 	protected void doShowAddresses(View view, LinearLayout container) {
