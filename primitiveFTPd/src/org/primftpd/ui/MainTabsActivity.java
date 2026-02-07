@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import androidx.activity.EdgeToEdge;
@@ -50,7 +51,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     protected MenuItem stopIcon;
 
     protected PftpdFragment pftpdFragment;
-    protected MainAdapter adapter;
+    private MainAdapter adapter;
 
     protected PftpdFragment createPftpdFragment() {
         return new PftpdFragment();
@@ -109,10 +110,13 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                String tabText = tab.getText().toString();
-                if (TAB_NAME_QR.equals(tabText)) {
-                    String chosenIp = pftpdFragment.getChosenIp();
-                    fireChooseIpEventAsync(chosenIp);
+                CharSequence tabCharSeq = tab.getText();
+                if (tabCharSeq != null) {
+                    String tabText = tabCharSeq.toString();
+                    if (TAB_NAME_QR.equals(tabText)) {
+                        String chosenIp = pftpdFragment.getChosenIp();
+                        fireChooseIpEventAsync(chosenIp);
+                    }
                 }
             }
             @Override
@@ -125,17 +129,19 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     }
 
     protected void fireChooseIpEventAsync(String chosenIp) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            // at this point in time the main fragment has no view assigned and
-            // thus cannot draw the ip-addresses table
-            // need to post a delayed event for that
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-                // never mind
-            }
-            EventBus.getDefault().post(new RedrawAddresses(chosenIp));
-        });
+        try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
+            executor.execute(() -> {
+                // at this point in time the main fragment has no view assigned and
+                // thus cannot draw the ip-addresses table
+                // need to post a delayed event for that
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    // never mind
+                }
+                EventBus.getDefault().post(new RedrawAddresses(chosenIp));
+            });
+        }
     }
 
     protected boolean isLeanback() {
