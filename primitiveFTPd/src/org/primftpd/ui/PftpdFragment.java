@@ -13,6 +13,7 @@ import android.content.UriPermission;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,6 +24,7 @@ import android.provider.DocumentsContract;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.UnderlineSpan;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -575,7 +577,8 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 			displayPermission(
 					R.id.hasNormalStorageAccessTextView,
 					R.string.hasNormalAccessToStorage,
-					Manifest.permission.WRITE_EXTERNAL_STORAGE);
+					Manifest.permission.WRITE_EXTERNAL_STORAGE,
+					false);
 		}
 	}
 
@@ -607,7 +610,8 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 			displayPermission(
 					R.id.hasMediaLocationAccessTextView,
 					R.string.hasAccessToMediaLocation,
-					Manifest.permission.ACCESS_MEDIA_LOCATION);
+					Manifest.permission.ACCESS_MEDIA_LOCATION,
+					false);
 		}
 	}
 
@@ -616,17 +620,35 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 			displayPermission(
 					R.id.hasNotificationPermissionTextView,
 					R.string.hasNotificationPermission,
-					Manifest.permission.POST_NOTIFICATIONS);
+					Manifest.permission.POST_NOTIFICATIONS,
+					true);
 		}
 	}
 
-	private void displayPermission(int textViewId, int textId, String permission) {
+	private void displayPermission(int textViewId, int textId, String permission,
+                                   boolean highlightMissing) {
 		View view = getView();
 		if (view == null) {
 			return;
 		}
 		boolean hasPermission = hasPermission(permission);
 		TextView textView = view.findViewById(textViewId);
+		if (highlightMissing) {
+			if (!hasPermission) {
+				textView.setBackgroundColor(Color.parseColor("#FF0000"));
+			} else {
+				Context context = getContext();
+				if (context != null) {
+					TypedValue typedVal = new TypedValue();
+					context.getTheme().resolveAttribute(
+						android.R.attr.windowBackground,
+						typedVal,
+						true);
+					int bgColor = typedVal.data;
+					textView.setBackgroundColor(bgColor);
+				}
+			}
+		}
 		String hasPermissionStr = getString(textId, hasPermission);
 		if (!hasPermission) {
 			buildPermissionRequestLink(
