@@ -260,6 +260,14 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		requireActivity().unregisterReceiver(this.networkStateReceiver);
 	}
 
+	Intent buildSafIntend() {
+		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+		intent.addFlags(
+			Intent.FLAG_GRANT_READ_URI_PERMISSION
+			| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+		return intent;
+	}
+
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		logger.debug("onCheckedChanged()");
@@ -272,10 +280,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 
         StorageType storageType = null;
 
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-        intent.addFlags(
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        Intent intent = buildSafIntend();
 
         int crb = group.getCheckedRadioButtonId();
         try {
@@ -694,6 +699,14 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
 		TextView safUriView = view.findViewById(R.id.safUri);
 		safUriView.setVisibility(View.VISIBLE);
 		safUriView.setText(url);
+
+		safUriView.setOnClickListener(v -> {
+			logger.trace("SAF URL refreshButton OnClickListener");
+			Intent intent = buildSafIntend();
+			if (!onStartOngoing) {
+				startActivityForResult(intent, REQUEST_CODE_SAF_PERM);
+			}
+		});
 	}
 
 	@SuppressLint("SetTextI18n")
