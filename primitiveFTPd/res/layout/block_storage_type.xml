@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:visibility="gone"
-        android:textIsSelectable="true"
+        android:textIsSelectable="false"
         android:selectAllOnFocus="true"
         app:drawableRightCompat="?attr/iconRefresh"
         />
