@@ -96,6 +96,7 @@
         android:textIsSelectable="true"
         android:selectAllOnFocus="true"
         android:focusable="false"
+        android:layout_marginBottom="5dp"
         />
 
 </merge>
