@@ -26,102 +26,102 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class NotificationUtil
-{
-	public static final String NOTIFICATION_CHANNEL_ID = "pftpd running";
-	public static final String START_STOP_CHANNEL_ID = "pftpd start/stop";
-	public static final String DOWNLOAD_CHANNEL_ID = "pftpd download";
+public class NotificationUtil {
+    public static final String NOTIFICATION_CHANNEL_ID = "pftpd running";
+    public static final String START_STOP_CHANNEL_ID = "pftpd start/stop";
+    public static final String DOWNLOAD_CHANNEL_ID = "pftpd download";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotificationUtil.class);
 
-	public static final int NOTIFICATION_ID = 1;
-	public static final int START_STOP_ID = 2;
-	public static final int DOWNLOAD_ID = 3;
+    public static final int NOTIFICATION_ID = 1;
+    public static final int START_STOP_ID = 2;
+    public static final int DOWNLOAD_ID = 3;
 
-	public static void createStatusbarNotification(
-			Context ctxt,
-			Notification notification,
-			int id)
-	{
-		NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
-			Context.NOTIFICATION_SERVICE);
-		notiMgr.notify(id, notification);
-	}
+    public static void createStatusbarNotification(
+            Context ctxt,
+            Notification notification,
+            int id) {
+        NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
+                Context.NOTIFICATION_SERVICE);
+        notiMgr.notify(id, notification);
+    }
 
-	public static void removeStatusbarNotification(Context ctxt) {
-		NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
-			Context.NOTIFICATION_SERVICE);
-		notiMgr.cancel(NOTIFICATION_ID);
-	}
+    public static void removeStatusbarNotification(Context ctxt) {
+        NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
+                Context.NOTIFICATION_SERVICE);
+        notiMgr.cancel(NOTIFICATION_ID);
+    }
 
-	public static void removeStartStopNotification(Context ctxt) {
-		NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
-				Context.NOTIFICATION_SERVICE);
-		notiMgr.cancel(START_STOP_ID);
-	}
+    public static void removeStartStopNotification(Context ctxt) {
+        NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
+                Context.NOTIFICATION_SERVICE);
+        notiMgr.cancel(START_STOP_ID);
+    }
 
-	public static void removeDownloadNotification(Context ctxt) {
-		NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
-				Context.NOTIFICATION_SERVICE);
-		notiMgr.cancel(DOWNLOAD_ID);
-	}
+    public static void removeDownloadNotification(Context ctxt) {
+        NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
+                Context.NOTIFICATION_SERVICE);
+        notiMgr.cancel(DOWNLOAD_ID);
+    }
 
-	private static Notification.Builder createStubNotification(
-			Context ctxt,
-			int text,
-			int actionText,
-			String channelId,
-			QuickShareBean quickShareBean) {
-		// create pending intent
-		Intent notificationIntent = new Intent(ctxt, MainTabsActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(
-				ctxt,
-				0,
-				notificationIntent,
-				PendingIntent.FLAG_IMMUTABLE);
+    private static Notification.Builder createStubNotification(
+            Context ctxt,
+            int text,
+            int actionText,
+            String channelId,
+            QuickShareBean quickShareBean) {
+        // create pending intent
+        Intent notificationIntent = new Intent(ctxt, MainTabsActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                ctxt,
+                0,
+                notificationIntent,
+                PendingIntent.FLAG_IMMUTABLE);
 
-		Intent stopIntent = StartStopWidgetProvider.buildServerStartStopIntent(ctxt);
-		PendingIntent pendingStopIntent = PendingIntent.getBroadcast(
-				ctxt,
-				0,
-				stopIntent,
-				PendingIntent.FLAG_IMMUTABLE);
+        Intent stopIntent = StartStopWidgetProvider.buildServerStartStopIntent(ctxt);
+        PendingIntent pendingStopIntent = PendingIntent.getBroadcast(
+                ctxt,
+                0,
+                stopIntent,
+                PendingIntent.FLAG_IMMUTABLE);
 
-		// create channel
-		createChannel(ctxt, channelId);
+        // create channel
+        createChannel(ctxt, channelId);
 
-		// create notification
-		int iconId = R.drawable.ic_notification;
-		int stopIconId = R.drawable.ic_stop_white_24dp;
-		CharSequence tickerText = ctxt.getText(text);
-		CharSequence contentTitle = quickShareBean != null
-			? String.format(ctxt.getResources().getString(R.string.quickShareInfoNotificationV2), quickShareBean.numberOfFiles())
-			: ctxt.getText(R.string.notificationTitle);
+        // create notification
+        int iconId = R.drawable.ic_notification;
+        int stopIconId = R.drawable.ic_stop_white_24dp;
+        CharSequence tickerText = ctxt.getText(text);
+        CharSequence contentTitle = quickShareBean != null
+                ? String.format(
+                    ctxt.getResources().getString(R.string.quickShareInfoNotificationV2),
+                    quickShareBean.numberOfFiles())
+                : ctxt.getText(R.string.notificationTitle);
 
-		// use main icon as large one
-		Bitmap largeIcon = BitmapFactory.decodeResource(
-				ctxt.getResources(),
-				R.drawable.ic_launcher);
+        // use main icon as large one
+        Bitmap largeIcon = BitmapFactory.decodeResource(
+                ctxt.getResources(),
+                R.drawable.ic_launcher);
 
-		long when = System.currentTimeMillis();
+        long when = System.currentTimeMillis();
 
-		Notification.Builder builder = new Notification.Builder(ctxt)
-				.setTicker(tickerText)
-				.setContentTitle(contentTitle)
-				.setContentText(tickerText)
-				.setSmallIcon(iconId)
-				.setLargeIcon(largeIcon)
-				.setContentIntent(contentIntent)
-				.setWhen(when)
-				.setVisibility(Notification.VISIBILITY_PUBLIC);
-		addChannel(builder, channelId);
+        Notification.Builder builder = new Notification.Builder(ctxt, channelId)
+                .setTicker(tickerText)
+                .setContentTitle(contentTitle)
+                .setContentText(tickerText)
+                .setSmallIcon(iconId)
+                .setLargeIcon(largeIcon)
+                .setContentIntent(contentIntent)
+                .setWhen(when)
+                .setVisibility(Notification.VISIBILITY_PUBLIC);
+        addChannel(builder, channelId);
 
-		// notification action
-		addAction(ctxt, builder, pendingStopIntent, actionText, stopIconId);
-		return builder;
-	}
+        // notification action
+        addAction(ctxt, builder, pendingStopIntent, actionText, stopIconId);
+        return builder;
+    }
 
-	private static void createChannel(Context ctxt, String channelId) {
+    private static void createChannel(Context ctxt, String channelId) {
         NotificationChannel channel = new NotificationChannel(
                 channelId,
                 channelId,
@@ -130,16 +130,16 @@ public class NotificationUtil
         notificationManager.createNotificationChannel(channel);
     }
 
-	private static void addChannel(Notification.Builder builder, String channelId) {
+    private static void addChannel(Notification.Builder builder, String channelId) {
         builder.setChannelId(channelId);
     }
 
-	private static void addAction(
-			Context ctxt,
-			Notification.Builder builder,
-			PendingIntent pendingIntent,
-			int text,
-			int iconId) {
+    private static void addAction(
+            Context ctxt,
+            Notification.Builder builder,
+            PendingIntent pendingIntent,
+            int text,
+            int iconId) {
         Icon icon = Icon.createWithResource(ctxt, iconId);
         Notification.Action stopAction = new Notification.Action.Builder(
                 icon,
@@ -148,38 +148,38 @@ public class NotificationUtil
         builder.addAction(stopAction);
     }
 
-	public static void createStartStopNotification(Context ctxt) {
-		LOGGER.debug("createStartStopNotification()");
+    public static void createStartStopNotification(Context ctxt) {
+        LOGGER.debug("createStartStopNotification()");
 
-		Notification.Builder builder = createStubNotification(
-				ctxt,
-				R.string.toggleService,
-				R.string.toggleService,
-				START_STOP_CHANNEL_ID,
-				null);
+        Notification.Builder builder = createStubNotification(
+                ctxt,
+                R.string.toggleService,
+                R.string.toggleService,
+                START_STOP_CHANNEL_ID,
+                null);
 
-		Notification notification = builder.build();
+        Notification notification = builder.build();
         notification.flags |= Notification.FLAG_NO_CLEAR;
 
-		createStatusbarNotification(ctxt, notification, START_STOP_ID);
-	}
+        createStatusbarNotification(ctxt, notification, START_STOP_ID);
+    }
 
-	public static Notification createStatusbarNotification(
+    public static Notification createStatusbarNotification(
             Context ctxt,
             PrefsBean prefsBean,
             KeyFingerprintProvider keyFingerprintProvider,
-			QuickShareBean quickShareBean,
-			String chosenIp) {
-		LOGGER.debug("createStatusbarNotification()");
+            QuickShareBean quickShareBean,
+            String chosenIp) {
+        LOGGER.debug("createStatusbarNotification()");
 
-		Notification.Builder builder = createStubNotification(
-				ctxt,
-				R.string.serverRunning,
-				R.string.stopService,
-				NOTIFICATION_CHANNEL_ID,
-				quickShareBean);
+        Notification.Builder builder = createStubNotification(
+                ctxt,
+                R.string.serverRunning,
+                R.string.stopService,
+                NOTIFICATION_CHANNEL_ID,
+                quickShareBean);
 
-		Notification notification;
+        Notification notification;
         if (prefsBean.showConnectionInfoInNotification()) {
             String longText = buildLongText(ctxt, prefsBean, keyFingerprintProvider, chosenIp);
             builder.setStyle(new Notification.BigTextStyle().bigText(longText));
@@ -188,176 +188,176 @@ public class NotificationUtil
         notification = builder.build();
         notification.flags |= Notification.FLAG_NO_CLEAR;
 
-		createStatusbarNotification(ctxt, notification, NOTIFICATION_ID);
-		return notification;
-	}
+        createStatusbarNotification(ctxt, notification, NOTIFICATION_ID);
+        return notification;
+    }
 
-	private static String buildLongText(
-			Context ctxt,
-			PrefsBean prefsBean,
-			KeyFingerprintProvider keyFingerprintProvider,
-			String chosenIp) {
-		LOGGER.trace("buildLongText()");
+    private static String buildLongText(
+            Context ctxt,
+            PrefsBean prefsBean,
+            KeyFingerprintProvider keyFingerprintProvider,
+            String chosenIp) {
+        LOGGER.trace("buildLongText()");
 
-		boolean isLeftToRight = true;
         Configuration config = ctxt.getResources().getConfiguration();
-        isLeftToRight = config.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR;
+        boolean isLeftToRight = config.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR;
 
         StringBuilder str = new StringBuilder();
-		IpAddressProvider ipAddressProvider = new IpAddressProvider();
-		if (chosenIp != null) {
-			boolean ipv6 = ipAddressProvider.isIpv6(chosenIp);
-			addUrl(str, chosenIp, ipv6, prefsBean);
-		} else {
-			List<IpAddressBean> ipAddressBeans = ipAddressProvider.ipAddressTexts(ctxt, false, isLeftToRight);
+        IpAddressProvider ipAddressProvider = new IpAddressProvider();
+        if (chosenIp != null) {
+            boolean ipv6 = ipAddressProvider.isIpv6(chosenIp);
+            addUrl(str, chosenIp, ipv6, prefsBean);
+        } else {
+            List<IpAddressBean> ipAddressBeans = ipAddressProvider.ipAddressTexts(
+                    ctxt, false, isLeftToRight);
 
-			SharedPreferences prefs = LoadPrefsUtil.getPrefs(ctxt);
-			Boolean showIpv4 = LoadPrefsUtil.showIpv4InNotification(prefs);
-			Boolean showIpv6 = LoadPrefsUtil.showIpv6InNotification(prefs);
+            SharedPreferences prefs = LoadPrefsUtil.getPrefs(ctxt);
+            Boolean showIpv4 = LoadPrefsUtil.showIpv4InNotification(prefs);
+            Boolean showIpv6 = LoadPrefsUtil.showIpv6InNotification(prefs);
 
-			for (IpAddressBean ipAddressBean : ipAddressBeans) {
-				String ipAddressText = ipAddressBean.getIpAddress();
-				boolean ipv6 = ipAddressProvider.isIpv6(ipAddressText);
-				if (!ipv6 && !showIpv4) {
-					continue;
-				}
-				if (ipv6 && !showIpv6) {
-					continue;
-				}
-				addUrl(str, ipAddressText, ipv6, prefsBean);
-			}
-		}
+            for (IpAddressBean ipAddressBean : ipAddressBeans) {
+                String ipAddressText = ipAddressBean.getIpAddress();
+                boolean ipv6 = ipAddressProvider.isIpv6(ipAddressText);
+                if (!ipv6 && !showIpv4) {
+                    continue;
+                }
+                if (ipv6 && !showIpv6) {
+                    continue;
+                }
+                addUrl(str, ipAddressText, ipv6, prefsBean);
+            }
+        }
 
-		if (prefsBean.getServerToStart().startSftp()) {
-			if (!keyFingerprintProvider.areFingerprintsGenerated()) {
-				keyFingerprintProvider.calcPubkeyFingerprints(ctxt);
-			}
-			HostKeyAlgorithm chosenAlgo = keyFingerprintProvider.findPreferredHostKeyAlog(ctxt);
-			KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(chosenAlgo);
+        if (prefsBean.getServerToStart().startSftp()) {
+            if (!keyFingerprintProvider.areFingerprintsGenerated()) {
+                keyFingerprintProvider.calcPubkeyFingerprints(ctxt);
+            }
+            HostKeyAlgorithm chosenAlgo = keyFingerprintProvider.findPreferredHostKeyAlog(ctxt);
+            KeyFingerprintBean keyFingerprintBean = keyFingerprintProvider.getFingerprints().get(chosenAlgo);
 
-			if (keyFingerprintBean != null) {
-				str.append("\n");
-				str.append("Key Fingerprints (");
-				str.append(chosenAlgo.getDisplayName());
-				str.append(")");
-				str.append("\n");
-				// show md5-bytes and sha256-base64 (no sha1) as that is what clients usually show
-				str.append("SHA256: ");
-				str.append(keyFingerprintBean.getBase64Sha256());
-				str.append("\n");
-				str.append("MD5: ");
-				str.append(keyFingerprintBean.getBytesMd5());
-			}
-		}
+            if (keyFingerprintBean != null) {
+                str.append("\n");
+                str.append("Key Fingerprints (");
+                str.append(chosenAlgo.getDisplayName());
+                str.append(")");
+                str.append("\n");
+                // show md5-bytes and sha256-base64 (no sha1) as that is what clients usually show
+                str.append("SHA256: ");
+                str.append(keyFingerprintBean.getBase64Sha256());
+                str.append("\n");
+                str.append("MD5: ");
+                str.append(keyFingerprintBean.getBytesMd5());
+            }
+        }
 
-		return str.toString();
-	}
+        return str.toString();
+    }
 
-	public static void addUrl(
-			StringBuilder notificationText,
-			String ipAddressText,
-			boolean ipv6,
-			PrefsBean prefsBean) {
-		if (prefsBean.getServerToStart().startFtp()) {
-			buildUrl(notificationText, ipv6, "ftp", ipAddressText, prefsBean.getPortStr());
-			notificationText.append("\n");
-		}
-		if (prefsBean.getServerToStart().startSftp()) {
-			buildUrl(notificationText, ipv6, "sftp", ipAddressText, prefsBean.getSecurePortStr());
-			notificationText.append("\n");
-		}
-	}
+    public static void addUrl(
+            StringBuilder notificationText,
+            String ipAddressText,
+            boolean ipv6,
+            PrefsBean prefsBean) {
+        if (prefsBean.getServerToStart().startFtp()) {
+            buildUrl(notificationText, ipv6, "ftp", ipAddressText, prefsBean.getPortStr());
+            notificationText.append("\n");
+        }
+        if (prefsBean.getServerToStart().startSftp()) {
+            buildUrl(notificationText, ipv6, "sftp", ipAddressText, prefsBean.getSecurePortStr());
+            notificationText.append("\n");
+        }
+    }
 
-	public static void buildUrl(StringBuilder str, boolean ipv6, String scheme, String ipAddressText, String port) {
-		str.append(scheme);
-		str.append("://");
-		if (ipv6) {
-			str.append("[");
-		}
-		str.append(ipAddressText);
-		if (ipv6) {
-			str.append("]");
-		}
-		str.append(":");
-		str.append(port);
-	}
+    public static void buildUrl(StringBuilder str, boolean ipv6, String scheme, String ipAddressText, String port) {
+        str.append(scheme);
+        str.append("://");
+        if (ipv6) {
+            str.append("[");
+        }
+        str.append(ipAddressText);
+        if (ipv6) {
+            str.append("]");
+        }
+        str.append(":");
+        str.append(port);
+    }
 
-	public static void createDownloadNotification(
-			Context ctxt,
-			String filename,
-			boolean canceled,
-			boolean finished,
-			long currentBytes,
-			long size) {
+    public static void createDownloadNotification(
+            Context ctxt,
+            String filename,
+            boolean canceled,
+            boolean finished,
+            long currentBytes,
+            long size) {
 
-		// create channel
-		createChannel(ctxt, DOWNLOAD_CHANNEL_ID);
+        // create channel
+        createChannel(ctxt, DOWNLOAD_CHANNEL_ID);
 
-		// create notification
-		int iconId = R.drawable.outline_cloud_download_black_18;
-		int stopIconId = R.drawable.ic_stop_white_24dp;
-		CharSequence tickerText;
-		if (canceled) {
-			tickerText = "canceled";
-		} else if (finished) {
-			tickerText = "finished";
-		} else {
-			String sizeStr = size != 0 ? String.valueOf(size) : "unknown";
-			tickerText = "downloading ... (" +
-					currentBytes +
-					" / " +
-					sizeStr +
-					")" +
-					"\n" +
-					"to " +
-					filename;
-		}
+        // create notification
+        int iconId = R.drawable.outline_cloud_download_black_18;
+        int stopIconId = R.drawable.ic_stop_white_24dp;
+        CharSequence tickerText;
+        if (canceled) {
+            tickerText = "canceled";
+        } else if (finished) {
+            tickerText = "finished";
+        } else {
+            String sizeStr = size != 0 ? String.valueOf(size) : "unknown";
+            tickerText = "downloading ... (" +
+                    currentBytes +
+                    " / " +
+                    sizeStr +
+                    ")" +
+                    "\n" +
+                    "to " +
+                    filename;
+        }
 
-		// use main icon as large one
-		Bitmap largeIcon = BitmapFactory.decodeResource(
-				ctxt.getResources(),
-				R.drawable.outline_cloud_download_black_48);
+        // use main icon as large one
+        Bitmap largeIcon = BitmapFactory.decodeResource(
+                ctxt.getResources(),
+                R.drawable.outline_cloud_download_black_48);
 
-		long when = System.currentTimeMillis();
+        long when = System.currentTimeMillis();
 
-		Notification.Builder builder = new Notification.Builder(ctxt)
-				.setTicker(tickerText)
-				.setContentTitle(filename)
-				.setContentText(tickerText)
-				.setSmallIcon(iconId)
-				.setLargeIcon(largeIcon)
-				.setWhen(when)
-				.setProgress((int)size, (int)currentBytes, false);
-		addChannel(builder, DOWNLOAD_CHANNEL_ID);
+        Notification.Builder builder = new Notification.Builder(ctxt, DOWNLOAD_CHANNEL_ID)
+                .setTicker(tickerText)
+                .setContentTitle(filename)
+                .setContentText(tickerText)
+                .setSmallIcon(iconId)
+                .setLargeIcon(largeIcon)
+                .setWhen(when)
+                .setProgress((int) size, (int) currentBytes, false);
+        addChannel(builder, DOWNLOAD_CHANNEL_ID);
 
-		// intent to open file
-		// -> security exception
+        // intent to open file
+        // -> security exception
 //		Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
 //		openFileIntent.setData(Uri.fromFile(new File(path)));
 //		openFileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //		Intent chooserIntent = Intent.createChooser(openFileIntent, "");
 //		PendingIntent pendingChooserIntent = PendingIntent.getBroadcast(ctxt, 0, chooserIntent, 0);
 
-		// intent to stop download
-		if (!canceled && !finished) {
-			// note: need to route stop intent through WidgetProvider to avoid creating another service instance
-			//Intent stopIntent = new Intent(ctxt, DownloadsService.class);
-			Intent stopIntent = new Intent(ctxt, StartStopWidgetProvider.class);
-			stopIntent.setAction(DownloadsService.ACTION_STOP);
-			PendingIntent pendingStopIntent = PendingIntent.getBroadcast(
-					ctxt,
-					0,
-					stopIntent,
-					PendingIntent.FLAG_IMMUTABLE);
+        // intent to stop download
+        if (!canceled && !finished) {
+            // note: need to route stop intent through WidgetProvider to avoid creating another service instance
+            //Intent stopIntent = new Intent(ctxt, DownloadsService.class);
+            Intent stopIntent = new Intent(ctxt, StartStopWidgetProvider.class);
+            stopIntent.setAction(DownloadsService.ACTION_STOP);
+            PendingIntent pendingStopIntent = PendingIntent.getBroadcast(
+                    ctxt,
+                    0,
+                    stopIntent,
+                    PendingIntent.FLAG_IMMUTABLE);
 
-			// notification action
-			//addAction(ctxt, builder, pendingChooserIntent, R.string.open, stopIconId);
-			addAction(ctxt, builder, pendingStopIntent, R.string.cancel, stopIconId);
-		}
+            // notification action
+            //addAction(ctxt, builder, pendingChooserIntent, R.string.open, stopIconId);
+            addAction(ctxt, builder, pendingStopIntent, R.string.cancel, stopIconId);
+        }
 
-		Notification notification = builder.build();
+        Notification notification = builder.build();
         NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
-				Context.NOTIFICATION_SERVICE);
-		notiMgr.notify(DOWNLOAD_ID, notification);
-	}
+                Context.NOTIFICATION_SERVICE);
+        notiMgr.notify(DOWNLOAD_ID, notification);
+    }
 }
