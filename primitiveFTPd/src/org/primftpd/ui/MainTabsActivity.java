@@ -14,7 +14,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.primftpd.R;
-import org.primftpd.events.RedrawAddresses;
 import org.primftpd.events.ServerStateChangedEvent;
 import org.primftpd.log.LogController;
 import org.primftpd.prefs.FtpPrefsFragment;
@@ -26,8 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -51,6 +48,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
     protected MenuItem stopIcon;
 
     protected PftpdFragment pftpdFragment;
+    protected QrFragment qrFragment;
     private MainAdapter adapter;
 
     protected PftpdFragment createPftpdFragment() {
@@ -90,8 +88,9 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
         viewPager.setAdapter(adapter);
 
         this.pftpdFragment = createPftpdFragment();
+        this.qrFragment = new QrFragment(pftpdFragment);
         adapter.addFragment(pftpdFragment);
-        adapter.addFragment(new QrFragment());
+        adapter.addFragment(qrFragment);
         adapter.addFragment(new CleanSpaceFragment());
         adapter.addFragment(new ClientActionFragment());
         adapter.addFragment(new KeysFingerprintsFragment());
@@ -114,8 +113,7 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
                 if (tabCharSeq != null) {
                     String tabText = tabCharSeq.toString();
                     if (TAB_NAME_QR.equals(tabText)) {
-                        String chosenIp = pftpdFragment.getChosenIp();
-                        fireChooseIpEventAsync(chosenIp);
+                        qrFragment.drawIfChanged();
                     }
                 }
             }
@@ -126,22 +124,6 @@ public class MainTabsActivity extends AppCompatActivity implements SharedPrefere
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-    }
-
-    protected void fireChooseIpEventAsync(String chosenIp) {
-        try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
-            executor.execute(() -> {
-                // at this point in time the main fragment has no view assigned and
-                // thus cannot draw the ip-addresses table
-                // need to post a delayed event for that
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                    // never mind
-                }
-                EventBus.getDefault().post(new RedrawAddresses(chosenIp));
-            });
-        }
     }
 
     protected boolean isLeanback() {
