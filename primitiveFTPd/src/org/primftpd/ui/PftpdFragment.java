@@ -248,9 +248,9 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
                 if (!ipAddressProvider.isIpAvail(prefsBean.getBindIp())) {
                     String msg = "IP " + prefsBean.getBindIp() +
                             " is currently not assigned to an interface. May lead to a crash.";
-                    view.post(() -> {
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-                    });
+                    view.post(() ->
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show()
+                    );
                 }
             });
         }
@@ -444,10 +444,8 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
     }
 
     protected boolean isLeftToRight() {
-        boolean isLeftToRight = true;
         Configuration config = getResources().getConfiguration();
-        isLeftToRight = config.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR;
-        return isLeftToRight;
+        return config.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR;
     }
 
     /**
@@ -467,9 +465,9 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
         addressesLoading.setVisibility(View.VISIBLE);
 
         try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
-            executorService.execute(() -> {
-                doShowAddresses(view, container);
-            });
+            executorService.execute(() ->
+                doShowAddresses(view, container)
+            );
         }
     }
 
@@ -795,6 +793,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @SuppressWarnings("never used")
     public void onEvent(ServerStateChangedEvent event) {
         logger.debug("got ServerStateChangedEvent");
         if (isEventInTime(event)) {
@@ -803,6 +802,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @SuppressWarnings("never used")
     public void onEvent(ServerInfoResponseEvent event) {
         int numberOfFiles = event.getQuickShareNumberOfFiles();
         logger.debug("got ServerInfoResponseEvent, QuickShare numberOfFiles: {}", numberOfFiles);
@@ -821,6 +821,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @SuppressWarnings("never used")
     public void onEvent(ClientActionEvent event) {
         String clientAction = ClientActionFragment.format(event);
 
