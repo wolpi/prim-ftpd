@@ -1,9 +1,7 @@
 package org.primftpd.ui;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,12 +27,6 @@ public class CleanSpaceFragment extends Fragment implements RecreateLogger {
     private TextView quickShareSpaceTextView;
     private TextView logsSpaceTextView;
     private TextView rootTmpSpaceTextView;
-
-    private static class DialogHandler extends Handler {
-        DialogHandler() {
-            super();
-        }
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -64,14 +58,33 @@ public class CleanSpaceFragment extends Fragment implements RecreateLogger {
     }
 
     private void onButtonClick(CleanSpaceFragment fragment, File dir, boolean includeChildren) {
+        View view = fragment.getView();
+        if (view == null) {
+            logger.warn("view is null");
+            return;
+        }
         int numberOfFiles = collectNumberOfFiles(dir, includeChildren);
         if (numberOfFiles > 0) {
-            final ProgressDialog progressDialog = createProgressDialog(numberOfFiles);
-            DeleteTask deleteTask = new DeleteTask(fragment, progressDialog, dir, includeChildren);
-            deleteTask.execute();
+            final AlertDialog progressDialog = createProgressDialog();
+            try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
+                executorService.execute(() -> {
+                    int counter = 0;
+                    delete(dir, includeChildren, counter);
 
-            new DialogHandler();
+                    view.post(() -> {
+                        progressDialog.dismiss();
+                        fragment.updateView();
+                    });
+                });
+            }
         }
+    }
+
+    protected AlertDialog createProgressDialog() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this.getContext());
+        dialogBuilder.setMessage("deleting ...");
+
+        return dialogBuilder.create();
     }
 
     protected File quickShareDir() {
@@ -139,74 +152,31 @@ public class CleanSpaceFragment extends Fragment implements RecreateLogger {
         return  number;
     }
 
-    protected ProgressDialog createProgressDialog(int maxProgress) {
-        final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
-        progressDialog.setMax(maxProgress);
-        progressDialog.setMessage("delete ...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+    private int delete(File dir, boolean includeChildren, int counter) {
+        if (dir != null && dir.exists()) {
+            File[] children = dir.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    if (child.isFile()) {
+                        boolean deleted = child.delete();
+                        if (!deleted) {
+                            logger.info("could not delete file: {}", child.getAbsolutePath());
+                        }
+                        counter++;
 
-        progressDialog.show();
-
-        return progressDialog;
-    }
-
-    private static class DeleteTask extends AsyncTask<Void, Void, Void> {
-
-        protected Logger logger = LoggerFactory.getLogger(getClass());
-
-        private final CleanSpaceFragment fragment;
-        private final ProgressDialog progressDiag;
-        private final File dir;
-        private final boolean includeChildren;
-
-        DeleteTask(CleanSpaceFragment fragment,
-                 ProgressDialog progressDiag,
-                 File dir,
-                 boolean includeChildren) {
-            super();
-            this.fragment = fragment;
-            this.progressDiag = progressDiag;
-            this.dir = dir;
-            this.includeChildren = includeChildren;
-        }
-
-        @Override
-        protected java.lang.Void doInBackground(java.lang.Void[] objects) {
-            int counter = 0;
-            delete(dir, includeChildren, counter);
-            return null;
-        }
-
-        private int delete(File dir, boolean includeChildren, int counter) {
-            if (dir != null && dir.exists()) {
-                File[] children = dir.listFiles();
-                if (children != null) {
-                    for (File child : children) {
-                        if (child.isFile()) {
-                            boolean deleted = child.delete();
-                            if (!deleted) {
-                                logger.info("could not delete file: {}", child.getAbsolutePath());
-                            }
-                            counter++;
-                            progressDiag.setProgress(counter);
-                        } else if (child.isDirectory() && includeChildren) {
-                            counter = delete(child, true, counter);
-                            boolean deleted = child.delete();
-                            if (!deleted) {
-                                logger.info("could not delete dir: {}", child.getAbsolutePath());
-                            }
+                        // in previous android versions we had a progress dialog
+                        //progressDiag.setProgress(counter);
+                    } else if (child.isDirectory() && includeChildren) {
+                        counter = delete(child, true, counter);
+                        boolean deleted = child.delete();
+                        if (!deleted) {
+                            logger.info("could not delete dir: {}", child.getAbsolutePath());
                         }
                     }
                 }
             }
-            return counter;
         }
-
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            progressDiag.dismiss();
-            fragment.updateView();
-        }
+        return counter;
     }
 
     @Override

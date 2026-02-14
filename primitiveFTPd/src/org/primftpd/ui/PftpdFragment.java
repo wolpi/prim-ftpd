@@ -16,7 +16,6 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -127,8 +126,14 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
         View view = inflater.inflate(getLayoutId(), container, false);
 
         // calc keys fingerprints
-        AsyncTask<Void, Void, Void> task = new CalcPubkeyFinterprintsTask(keyFingerprintProvider, this);
-        task.execute();
+        PftpdFragment fragment = this;
+        try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
+            executorService.execute(() -> {
+                logger.trace("CalcPubkeyFinterprintsTask()");
+                keyFingerprintProvider.calcPubkeyFingerprints(fragment.getContext());
+                view.post(fragment::showKeyFingerprints);
+            });
+        }
 
         // create addresses label
         ((TextView) view.findViewById(R.id.addressesLabel)).setText(
