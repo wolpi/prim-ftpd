@@ -82,14 +82,14 @@ public class PubKeyAuthKeysFragment extends Fragment {
                 BufferedReader reader = new BufferedReader(filereader);
                 while (reader.ready()) {
                     String line = reader.readLine();
-                    if (!line.startsWith("#") && line.length() > 0) {
+                    if (!line.startsWith("#") && !line.isEmpty()) {
                         keys.add(line);
                     }
                 }
             }
         } catch (IOException e) {
             logger.info("could not load key of path '{}': {}, {}",
-                    new Object[]{path, e.getClass().getName(), e.getMessage()});
+                    path, e.getClass().getName(), e.getMessage());
         }
         return keys;
     }
@@ -133,7 +133,7 @@ public class PubKeyAuthKeysFragment extends Fragment {
                 }
             } catch (IOException e) {
                 logger.info("could not store key in file '{}': {}, {}",
-                        new Object[]{path, e.getClass().getName(), e.getMessage()});
+                        path, e.getClass().getName(), e.getMessage());
             }
         } else {
             Toast.makeText(getContext(), R.string.pubkeyInvalid, Toast.LENGTH_SHORT).show();

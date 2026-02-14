@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 public class ClientActionFragment extends Fragment {
@@ -55,34 +56,29 @@ public class ClientActionFragment extends Fragment {
         }
 
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NonNull Message msg) {
             logger.trace("handleMessage(), num events: {}", DATA_TRANSFERRED_EVENTS.size());
             TIMESTAMP_LAST_STAT_UPDATE = System.currentTimeMillis();
             if (updateStats) {
-                switch (msg.what) {
-                    case EVENT_UPDATE_STATS:
-                        long bytesRead = 0;
-                        long bytesWritten = 0;
-                        for (DataTransferredEvent event : DATA_TRANSFERRED_EVENTS) {
-                            if (event.getTimestamp() > TIMESTAMP_LAST_STAT_UPDATE - INTERVAL_UPDATE_STATS) {
-                                if (event.isWrite()) {
-                                    bytesWritten += event.getBytes();
-                                } else {
-                                    bytesRead += event.getBytes();
-                                }
+                if (msg.what == EVENT_UPDATE_STATS) {
+                    long bytesRead = 0;
+                    long bytesWritten = 0;
+                    for (DataTransferredEvent event : DATA_TRANSFERRED_EVENTS) {
+                        if (event.getTimestamp() > TIMESTAMP_LAST_STAT_UPDATE - INTERVAL_UPDATE_STATS) {
+                            if (event.isWrite()) {
+                                bytesWritten += event.getBytes();
+                            } else {
+                                bytesRead += event.getBytes();
                             }
                         }
-                        bytesRead *= FACTOR_1S;
-                        bytesWritten *= FACTOR_1S;
+                    }
+                    bytesRead *= FACTOR_1S;
+                    bytesWritten *= FACTOR_1S;
 
-                        sentTotal.setText(FileSizeUtils.humanReadableByteCountSI(TOTAL_BYTES_READ));
-                        receivedTotal.setText(FileSizeUtils.humanReadableByteCountSI(TOTAL_BYTES_WRITTEN));
-                        sentPerSec.setText(FileSizeUtils.humanReadableByteCountSI(bytesRead, "/s"));
-                        receivedPerSec.setText(FileSizeUtils.humanReadableByteCountSI(bytesWritten, "/s"));
-                        break;
-
-                    default:
-                        break;
+                    sentTotal.setText(FileSizeUtils.humanReadableByteCountSI(TOTAL_BYTES_READ));
+                    receivedTotal.setText(FileSizeUtils.humanReadableByteCountSI(TOTAL_BYTES_WRITTEN));
+                    sentPerSec.setText(FileSizeUtils.humanReadableByteCountSI(bytesRead, "/s"));
+                    receivedPerSec.setText(FileSizeUtils.humanReadableByteCountSI(bytesWritten, "/s"));
                 }
                 Message nextMsg = this.obtainMessage(EVENT_UPDATE_STATS);
                 this.sendMessageDelayed(nextMsg, INTERVAL_UPDATE_STATS);
@@ -116,7 +112,7 @@ public class ClientActionFragment extends Fragment {
     private ScrollView scrollView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);

@@ -33,7 +33,7 @@ public class KeysFingerprintsFragment extends Fragment {
         keyFingerprintProvider.calcPubkeyFingerprints(getContext());
 
         Date creationDate = keyFingerprintProvider.findCreationDate(getContext());
-        TextView creationTimeView = (TextView) view.findViewById(R.id.keyFingerprintsCreationTime);
+        TextView creationTimeView = view.findViewById(R.id.keyFingerprintsCreationTime);
         if (creationDate != null) {
             creationTimeView.setText(DATE_FORMAT.format(creationDate));
         } else {

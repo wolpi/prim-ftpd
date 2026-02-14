@@ -1,5 +1,6 @@
 package org.primftpd.ui;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -13,6 +14,7 @@ import org.primftpd.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 public class AboutFragment extends Fragment
@@ -33,7 +35,7 @@ public class AboutFragment extends Fragment
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -45,27 +47,29 @@ public class AboutFragment extends Fragment
         versionLabel.setText("Version");
 
         TextView versionView = view.findViewById(R.id.versionTextView);
-        String pkgName = getContext().getPackageName();
-        PackageManager pkgMgr = getContext().getPackageManager();
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = pkgMgr.getPackageInfo(
-                pkgName,
-                0);
-        } catch (NameNotFoundException e) {
-            logger.error("could not get version", e);
-        }
-        String version = packageInfo != null
-            ? packageInfo.versionName
-            : "unknown";
-        if (packageInfo != null) {
-            version += " (code: " + packageInfo.versionCode + ")";
-        }
+        Context context = getContext();
+        if (context != null) {
+            String pkgName = context.getPackageName();
+            PackageManager pkgMgr = context.getPackageManager();
+            PackageInfo packageInfo = null;
+            try {
+                packageInfo = pkgMgr.getPackageInfo(
+                        pkgName,
+                        0);
+            } catch (NameNotFoundException e) {
+                logger.error("could not get version", e);
+            }
+            String version = packageInfo != null
+                    ? packageInfo.versionName
+                    : "unknown";
+            if (packageInfo != null) {
+                version += " (code: " + packageInfo.versionCode + ")";
+            }
+            logger.debug("pkgName: '{}'", pkgName);
+            logger.debug("versionName: '{}'", version);
 
-        logger.debug("pkgName: '{}'", pkgName);
-        logger.debug("versionName: '{}'", version);
-
-        versionView.setText(version);
+            versionView.setText(version);
+        }
 
         // show licence
         TextView lisenseView = view.findViewById(R.id.licenceTextView);
