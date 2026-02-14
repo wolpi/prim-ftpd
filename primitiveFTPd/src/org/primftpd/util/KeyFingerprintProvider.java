@@ -3,7 +3,6 @@ package org.primftpd.util;
 import android.content.Context;
 import android.util.Base64;
 
-import org.apache.ftpserver.util.IoUtils;
 import org.primftpd.crypto.HostKeyAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +89,6 @@ public class KeyFingerprintProvider implements Serializable {
         fingerprintsGenerated = true;
         keyPresent = false;
         fingerprints.clear();
-        FileInputStream fis = null;
         for (HostKeyAlgorithm hka : HostKeyAlgorithm.values()) {
             String fingerprintMd5 = " - ";
             String fingerprintSha1 = " - ";
@@ -102,8 +100,7 @@ public class KeyFingerprintProvider implements Serializable {
             String bytesSha1 = "";
             String bytesSha256 = "";
 
-            try {
-                fis = buildPublickeyInStream(ctxt, hka);
+            try (FileInputStream fis = buildPublickeyInStream(ctxt, hka)) {
                 PublicKey pubKey = hka.readPublicKey(fis);
                 if (pubKey != null) {
                     keyPresent = true;
@@ -136,10 +133,6 @@ public class KeyFingerprintProvider implements Serializable {
             } catch (Exception e) {
                 logger.info("key does probably not exist");
                 logger.debug("tried to load key", e);
-            } finally {
-                if (fis != null) {
-                    IoUtils.close(fis);
-                }
             }
             fingerprints.put(hka, new KeyFingerprintBean(
                     fingerprintMd5,
@@ -173,8 +166,7 @@ public class KeyFingerprintProvider implements Serializable {
             String hexString = Integer.toHexString(b);
             if (hexString.length() > 2) {
                 hexString = hexString.substring(
-                        hexString.length() - 2,
-                        hexString.length());
+                        hexString.length() - 2);
             } else if (hexString.length() < 2) {
                 hexString = "0" + hexString;
             }

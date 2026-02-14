@@ -35,7 +35,7 @@ public class FilenameUnique {
                 DocumentFile documentFile = DocumentFile.fromSingleUri(context, uri);
                 filename = documentFile.getName();
             } catch (Exception e) {
-                logger.error("could not resolve content url: " + uri, e);
+                logger.error("could not resolve content url: {}", uri, e);
 
                 // 2nd: use last segment of url
                 filename = uri.getLastPathSegment();
@@ -57,7 +57,7 @@ public class FilenameUnique {
             // try to add extension base on given mime type
             if (type != null) {
                 fileExt = type.contains("/")
-                        ? type.substring(type.lastIndexOf('/') + 1, type.length())
+                        ? type.substring(type.lastIndexOf('/') + 1)
                         : type;
                 // for http downloads fileType may contain something like: text/html; charset=UTF-8
                 fileExt = fileExt.contains(";")
@@ -74,7 +74,7 @@ public class FilenameUnique {
             basename = filename;
             filename = basename + "." + fileExt;
         } else {
-            fileExt = filename.substring(filename.lastIndexOf('.') +1, filename.length());
+            fileExt = filename.substring(filename.lastIndexOf('.') +1);
             basename = filename.substring(0, filename.lastIndexOf('.'));
         }
 

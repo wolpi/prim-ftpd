@@ -18,7 +18,7 @@ public class RemoteIpChecker {
                 String ip = IpAddressProvider.extractIp(origIp);
                 boolean allowed = doCheck(ip, pattern);
                 logger.info("[checking whether remote ip is allowed] remote ip: '{}', pattern: '{}', allowed? '{}'",
-                        new Object[]{ip, pattern, allowed});
+                        ip, pattern, allowed);
                 if (!allowed) {
                     service.postClientAction(
                             ClientActionEvent.getStorage(service),

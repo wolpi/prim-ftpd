@@ -64,11 +64,10 @@ public class IpAddressProvider {
                     }
 
                     logger.debug("addr: '{}', iface name: '{}', disp name: '{}', loopback: '{}'",
-                            new Object[]{
-                                    inetAddr,
-                                    ifaceName,
-                                    ifaceDispName,
-                                    inetAddr.isLoopbackAddress()});
+                        inetAddr,
+                        ifaceName,
+                        ifaceDispName,
+                        inetAddr.isLoopbackAddress());
 
                     if (inetAddr.isLoopbackAddress()) {
                         continue;

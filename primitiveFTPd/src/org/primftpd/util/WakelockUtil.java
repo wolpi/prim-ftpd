@@ -18,7 +18,7 @@ public class WakelockUtil {
             logger.debug("acquiring wake lock");
             // note: PARTIAL_WAKE_LOCK is not enough
             wakeLock = powerMgr.newWakeLock(
-                    PowerManager.SCREEN_DIM_WAKE_LOCK,
+                    PowerManager.PARTIAL_WAKE_LOCK,
                     APP_NAME + ":wakelock");
             wakeLock.acquire(60*60*1000L /*60 minutes*/);
         } else {
