@@ -29,6 +29,8 @@ logbackAndroid = "3.0.0"
 slf4jApi = "2.0.17"
 zxing = "1.9.8"
 
+shizuku = "13.1.5"
+
 # Don't upgrade these any higher without migrating away from sshd-core 0.14
 ftpserver = "1.2.1"
 minaCore = "2.2.5"
@@ -58,6 +60,9 @@ logback-android = { group = "com.github.tony19", name = "logback-android", versi
 mina-core = { group = "org.apache.mina", name = "mina-core", version.ref = "minaCore" }
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4jApi" }
 zxing = { group = "me.dm7.barcodescanner", name = "zxing", version.ref = "zxing" }
+
+shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "shizuku" }
+shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", version.ref = "shizuku" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

@@ -73,6 +73,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import rikka.shizuku.Shizuku;
 
 public class PftpdFragment extends Fragment implements RecreateLogger, RadioGroup.OnCheckedChangeListener {
 
@@ -86,7 +87,10 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
         }
     };
 
+    private final ShizukuListener shizukuListener = new ShizukuListener();
+
     private static final int REQUEST_CODE_SAF_PERM = 1234;
+    private static final int REQUEST_CODE_SHIZUKU_PERM = 5678;
 
     public static final String DIALOG_TAG = "dialogs";
 
@@ -170,12 +174,22 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
         // create sample authorized_keys files
         new SampleAuthKeysFileCreator().createSampleAuthorizedKeysFiles(getContext());
 
+        // shizuku
+        Shizuku.addBinderReceivedListener(shizukuListener);
+        Shizuku.addBinderDeadListener(shizukuListener);
+        Shizuku.addRequestPermissionResultListener(shizukuListener);
+
         return view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        // shizuku
+        Shizuku.removeRequestPermissionResultListener(shizukuListener);
+        Shizuku.removeBinderDeadListener(shizukuListener);
+        Shizuku.removeBinderReceivedListener(shizukuListener);
 
         // server state change events
         EventBus.getDefault().unregister(this);
@@ -591,6 +605,7 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
         displayFullStorageAccess();
         displayMediaLocationAccess();
         displayNotificationPermission();
+        displayShizukuPermission();
     }
 
     private final ActivityResultLauncher<String[]> permissionRequestLauncher = registerForActivityResult(
@@ -706,6 +721,36 @@ public class PftpdFragment extends Fragment implements RecreateLogger, RadioGrou
             return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
+    }
+
+    private void displayShizukuPermission() {
+        View view = getView();
+        if (view == null) {
+            return;
+        }
+
+        // check shizuku perm
+        boolean hasPermission = false;
+        if (shizukuListener.isBinderReceived()) {
+            if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                hasPermission = true;
+            }
+        }
+
+        // display it
+        String hasPermissionStr = getString(R.string.hasShizukuPermission, hasPermission);
+        TextView textView = view.findViewById(R.id.shizukuPermissionTextView);
+        Context context = getContext();
+        buildPermissionRequestLink(
+                textView,
+                hasPermissionStr,
+                v -> {
+                    if (shizukuListener.isBinderReceived()) {
+                        Shizuku.requestPermission(REQUEST_CODE_SHIZUKU_PERM);
+                    } else {
+                        Toast.makeText(context, R.string.shizukuNotInited, Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     protected void showSafUrl(String url) {
