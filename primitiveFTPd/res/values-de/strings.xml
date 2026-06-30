@@ -76,7 +76,7 @@
     <string name="prefTitleIdleTimeout">Server Idle-Timeout</string>
     <string name="prefSummaryIdleTimeoutV2">Server wird ungenutzte Verbindungen nach dieser Zeit in Sekunden beenden. Auf 0 setzen um abzuschalten.</string>
     <string name="prefTitleLogging">Log</string>
-    <string name="prefSummaryLoggingV2">Log dient der Analyse von Fehlern. Falls die App auf ihrem Gerät nicht richtig funktioniert können sie ein Log an die Entwickler senden. Es kann nötig sein die App neu zu starten. Text Logs werden abgelegt in %s.</string>
+    <string name="prefSummaryLoggingV2">Log dient der Analyse von Fehlern. Falls die App auf Ihrem Gerät nicht richtig funktioniert, können Sie das Log an die Entwickler senden. Es kann nötig sein, die App neu zu starten. Text Logs werden abgelegt in %s.</string>
     <string name="prefAllowedIpsPattern">Erlaubte IPs Pattern</string>
     <string name="prefSummaryAllowedIpsPattern">Pattern der erlaubten IP Adressen. Nur eine Wildcard (*) kann genutzt werden, nur als letztes Zeichen.</string>
     <string name="prefTitleQuickSettingsRequiresUnlock">Quick Settings Tile erfordert entsperren des Geräts</string>
