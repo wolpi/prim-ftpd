@@ -134,7 +134,7 @@
     <string name="storageTypeVirtual">Foldery wirtualne (zapewniają wszystkie typy przechowywania)</string>
     <string name="hasAccessToMediaLocation">Ma dostęp do lokalizacji multimediów (dane geograficzne): %1$b</string>
     <string name="rootTmpFiles">Pliki tymczasowe dostępu do konta root:</string>
-    <string name="prefShowTabNames">Pokaż nazwy zakładek</string>
+    <string name="prefShowTabNames">Pokaż nazwy kart</string>
     <string name="prefSummaryShowTabNames">Pokaż nazwy na kartach głównego interfejsu użytkownika</string>
     <string name="prefTitleIdleTimeoutServerStop">Limit czasu bezczynności, aby zatrzymać serwer</string>
     <string name="hasFullAccessToStorage">Ma pełny dostęp do pamięci: %1$b</string>
@@ -158,4 +158,7 @@
     <string name="prefSummaryChooseBindIp">Wyświetla przyciski opcji w głównym interfejsie użytkownika, umożliwiające wybór adresu IP, z którym ma zostać powiązane połączenie przy uruchomieniu serwera. Ma wyższy priorytet niż powyższa preferencja powiązania adresu IP. Nie działa, jeśli serwer zostanie uruchomiony przez inny mechanizm.</string>
     <string name="usernameLabel">Użytkownik: %s</string>
     <string name="prefChooseBindIp">Wybierz adres IP,   którym chcesz się połączyć w głównym interfejsie użytkownika</string>
+    <string name="prefTitleEnableTasker">Włącz Taskera</string>
+    <string name="prefSummaryEnableTasker">Umożliwia zdalne sterowanie uruchamianiem/zatrzymywaniem serwerów przez Taskera.</string>
+    <string name="taskerDisabledInPreferences">Obsługa Taskera jest wyłączona w preferencjach. Musisz ją najpierw włączyć.</string>
 </resources>
