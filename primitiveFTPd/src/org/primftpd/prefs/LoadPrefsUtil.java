@@ -29,6 +29,7 @@ public class LoadPrefsUtil
 	public static final String PREF_KEY_WHICH_SERVER = "whichServerToStartPref";
 	public static final String PREF_KEY_SHOW_TAB_NAMES = "showTabNamesPref";
 	public static final String PREF_KEY_START_ON_BOOT = "startOnBootPref";
+	public static final String PREF_KEY_ENABLE_TASKER = "enableTaskerPref";
 	public static final String PREF_KEY_START_ON_OPEN = "startOnOpenPref";
 	public static final String PREF_KEY_SHOW_CONN_INFO = "showConnectionInfoInNotificationPref";
 	public static final String PREF_KEY_SHOW_IPV4 = "showIpv4InNotificationPref";
@@ -117,6 +118,12 @@ public class LoadPrefsUtil
 	public static Boolean startOnBoot(SharedPreferences prefs) {
 		return prefs.getBoolean(
 			LoadPrefsUtil.PREF_KEY_START_ON_BOOT,
+			Boolean.FALSE);
+	}
+
+	public static Boolean taskerEnabled(SharedPreferences prefs) {
+		return prefs.getBoolean(
+			LoadPrefsUtil.PREF_KEY_ENABLE_TASKER,
 			Boolean.FALSE);
 	}
 

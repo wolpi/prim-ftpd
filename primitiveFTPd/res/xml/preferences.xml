@@ -216,6 +216,14 @@
 			android:summary="@string/prefSummaryStartOnBoot"
 			app:iconSpaceReserved="false"
 			/>
+		<SwitchPreference
+			android:name="enableTasker"
+			android:key="enableTaskerPref"
+			android:defaultValue="false"
+			android:title="@string/prefTitleEnableTasker"
+			android:summary="@string/prefSummaryEnableTasker"
+			app:iconSpaceReserved="false"
+			/>
 		<MultiSelectListPreference
 			android:name="hostkeyAlgos"
 			android:key="hostkeyAlgosPref"

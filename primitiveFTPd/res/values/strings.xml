@@ -66,6 +66,8 @@
     <string name="prefSummaryWhichServerToStart">Choose whether to start FTP server only, SFTP server only or both.</string>
     <string name="prefTitleStartOnBoot">Start on boot</string>
     <string name="prefSummaryStartOnBoot">Start server on system boot.</string>
+    <string name="prefTitleEnableTasker">Enable Tasker</string>
+    <string name="prefSummaryEnableTasker">Enables remote controlling to start/stop servers by Tasker.</string>
     <string name="prefShowTabNames">Show tab names</string>
     <string name="prefSummaryShowTabNames">Show names on tabs in main UI</string>
     <string name="prefTitleStartOnOpen">Start on open</string>
@@ -158,6 +160,7 @@
     <string name="qrFallback">no network interfaces, no IP addresses, no QR code</string>
     <string name="fingerprintsCreationTimeLabel">Creation Time</string>
     <string name="unknown">unknown</string>
+    <string name="taskerDisabledInPreferences">Tasker support is disabled in preferences. You have to enable it first.</string>
     <string-array name="prefWhichServerToStartNames">
         <item>FTP and SFTP</item>
         <item>FTP only</item>
