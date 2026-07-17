@@ -66,7 +66,7 @@
         </receiver>
 
         <receiver android:name="org.primftpd.StartStopWidgetProvider"
-                android:exported="true">
+                android:exported="false">
             <intent-filter >
                 <action
                     android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -291,7 +291,7 @@
             android:name="org.primftpd.ui.StartServerAndExitActivity"
             android:label="@string/startService"
             android:theme="@android:style/Theme.NoDisplay"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <!-- be invokable by other apps (e.g. Automate) but not listed in main menu -->
                 <action android:name="android.intent.action.MAIN" />
@@ -302,7 +302,7 @@
             android:name="org.primftpd.ui.StopServerAndExitActivity"
             android:label="@string/stopService"
             android:theme="@android:style/Theme.NoDisplay"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <!-- be invokable by other apps (e.g. Automate) but not listed in main menu -->
                 <action android:name="android.intent.action.MAIN" />
