@@ -175,4 +175,7 @@
     <string name="prefSummaryChooseBindIp">Sunucu başlatıldığında bağlanılacak IP adresini seçmek için ana kullanıcı arayüzünde radyo düğmeleri gösterir. Yukarıdaki IP adresi tercihinden daha yüksek önceliğe sahiptir. Sunucu başka bir yöntemle başlatılırsa etkili olmaz.</string>
     <string name="fingerprintsCreationTimeLabel">Oluşturulma Zamanı</string>
     <string name="unknown">bilinmiyor</string>
+    <string name="prefTitleEnableTasker">Tasker\'ı etkinleştir</string>
+    <string name="prefSummaryEnableTasker">Tasker aracılığıyla sunucuları başlatma/durdurma işlemlerini uzaktan denetlemeyi etkinleştirir.</string>
+    <string name="taskerDisabledInPreferences">Tercihler bölümünde Tasker desteği devre dışı bırakıldı. Öncelikle bunu etkinleştirmeniz gerekiyor.</string>
 </resources>

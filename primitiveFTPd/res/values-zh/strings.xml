@@ -157,4 +157,7 @@
     <string name="usernameLabel">用户名：%s</string>
     <string name="prefChooseBindIp">在主用户界面选择要绑定的 IP</string>
     <string name="prefSummaryChooseBindIp">在主用户界面显示单选按钮选择在服务器启动时要绑定的 IP。优先级高于上面的绑定 IP。如果服务器由其他一些机制启动则不生效。</string>
+    <string name="prefTitleEnableTasker">启用 Tasker</string>
+    <string name="prefSummaryEnableTasker">启用远程控制通过 Tasker 启动/停止服务器。</string>
+    <string name="taskerDisabledInPreferences">设置中禁用了 Tasker 支持。必须先启用它。</string>
 </resources>
