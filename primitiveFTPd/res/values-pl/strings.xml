@@ -161,4 +161,5 @@
     <string name="prefTitleEnableTasker">Włącz Taskera</string>
     <string name="prefSummaryEnableTasker">Umożliwia zdalne sterowanie uruchamianiem/zatrzymywaniem serwerów przez Taskera.</string>
     <string name="taskerDisabledInPreferences">Obsługa Taskera jest wyłączona w preferencjach. Musisz ją najpierw włączyć.</string>
+    <string name="prefSummaryEnableTaskerV2">Umożliwia zdalne sterowanie uruchamianiem/zatrzymywaniem serwerów przez Taskera. Uwaga: może to stanowić zagrożenie bezpieczeństwa. Więcej informacji można znaleźć na stronie https://github.com/wolpi/prim-ftpd/security/advisories/GHSA-j72x-x52h-247j</string>
 </resources>
