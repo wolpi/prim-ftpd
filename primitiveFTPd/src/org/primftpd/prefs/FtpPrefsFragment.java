@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.widget.TextView;
 
 import org.primftpd.R;
 import org.primftpd.log.LogController;
@@ -15,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -28,43 +33,45 @@ public class FtpPrefsFragment extends PreferenceFragmentCompat
         addPreferencesFromResource(R.xml.preferences);
 
         final Context context = getContext();
-        if (context != null) {
-            // text parameter for pub key auth pref
-            Resources res = getResources();
-            String text = String.format(
-                    res.getString(R.string.prefSummaryPubKeyAuth_v2),
-                    Defaults.pubKeyAuthKeyPath(context));
-            Preference pubKeyAuthPref = findPreference(LoadPrefsUtil.PREF_KEY_PUB_KEY_AUTH);
-            if (pubKeyAuthPref != null) {
-                pubKeyAuthPref.setSummary(text);
-            }
+        if (context == null) {
+            return;
+        }
 
-            // text parameter for logging pref
-            String textLogsPath = Defaults.homeDirScoped(context).getAbsolutePath()
-                                  + '/' + LogController.LOGFILE_BASENAME + '*';
-            if (textLogsPath.contains("//")) {
-                textLogsPath = textLogsPath.replaceAll("//", "/");
-            }
-            String loggingText = String.format(
-                    res.getString(R.string.prefSummaryLoggingV2),
-                    textLogsPath);
-            Preference loggingPref = findPreference(LoadPrefsUtil.PREF_KEY_LOGGING);
-            if (loggingPref != null) {
-                loggingPref.setSummary(loggingText);
-            }
+        // text parameter for pub key auth pref
+        Resources res = getResources();
+        String text = String.format(
+                res.getString(R.string.prefSummaryPubKeyAuth_v2),
+                Defaults.pubKeyAuthKeyPath(context));
+        Preference pubKeyAuthPref = findPreference(LoadPrefsUtil.PREF_KEY_PUB_KEY_AUTH);
+        if (pubKeyAuthPref != null) {
+            pubKeyAuthPref.setSummary(text);
+        }
 
-            // create / remove notification when pref is toggled
-            Preference startStopNotificationPref = findPreference(LoadPrefsUtil.PREF_KEY_SHOW_START_STOP_NOTIFICATION);
-            if (startStopNotificationPref != null) {
-                startStopNotificationPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    if (Boolean.TRUE.equals(newValue)) {
-                        NotificationUtil.createStartStopNotification(context);
-                    } else {
-                        NotificationUtil.removeStartStopNotification(context);
-                    }
-                    return true;
-                });
-            }
+        // text parameter for logging pref
+        String textLogsPath = Defaults.homeDirScoped(context).getAbsolutePath()
+                + '/' + LogController.LOGFILE_BASENAME + '*';
+        if (textLogsPath.contains("//")) {
+            textLogsPath = textLogsPath.replaceAll("//", "/");
+        }
+        String loggingText = String.format(
+                res.getString(R.string.prefSummaryLoggingV2),
+                textLogsPath);
+        Preference loggingPref = findPreference(LoadPrefsUtil.PREF_KEY_LOGGING);
+        if (loggingPref != null) {
+            loggingPref.setSummary(loggingText);
+        }
+
+        // create / remove notification when pref is toggled
+        Preference startStopNotificationPref = findPreference(LoadPrefsUtil.PREF_KEY_SHOW_START_STOP_NOTIFICATION);
+        if (startStopNotificationPref != null) {
+            startStopNotificationPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (Boolean.TRUE.equals(newValue)) {
+                    NotificationUtil.createStartStopNotification(context);
+                } else {
+                    NotificationUtil.removeStartStopNotification(context);
+                }
+                return true;
+            });
         }
 
         // directory picker for choosing home dir
@@ -81,6 +88,29 @@ public class FtpPrefsFragment extends PreferenceFragmentCompat
                     startDirPref.setIntent(dirPickerIntent);
                 }
                 return false;
+            });
+        }
+
+        // dialog for tasker pref
+        Preference taskerPref = findPreference(LoadPrefsUtil.PREF_KEY_ENABLE_TASKER);
+        if (taskerPref != null) {
+            taskerPref.setOnPreferenceClickListener(preference -> {
+                SharedPreferences sharedPrefs = taskerPref.getSharedPreferences();
+                if (sharedPrefs != null && LoadPrefsUtil.taskerEnabled(sharedPrefs)) {
+                    final SpannableString msg = new SpannableString(getText(R.string.prefSummaryEnableTaskerV2));
+                    Linkify.addLinks(msg, Linkify.ALL);
+                    final AlertDialog diag = new AlertDialog.Builder(context)
+                            .setTitle("Tasker")
+                            .setMessage(msg)
+                            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {})
+                            .create();
+                    diag.show();
+                    TextView diagText = diag.findViewById(android.R.id.message);
+                    if (diagText != null) {
+                        diagText.setMovementMethod(LinkMovementMethod.getInstance());
+                    }
+                }
+                return true;
             });
         }
     }

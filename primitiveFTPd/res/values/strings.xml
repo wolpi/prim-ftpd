@@ -68,6 +68,7 @@
     <string name="prefSummaryStartOnBoot">Start server on system boot.</string>
     <string name="prefTitleEnableTasker">Enable Tasker</string>
     <string name="prefSummaryEnableTasker">Enables remote controlling to start/stop servers by Tasker.</string>
+    <string name="prefSummaryEnableTaskerV2">Enables remote controlling to start/stop servers by Tasker. Note this might be a security risk, see https://github.com/wolpi/prim-ftpd/security/advisories/GHSA-j72x-x52h-247j</string>
     <string name="prefShowTabNames">Show tab names</string>
     <string name="prefSummaryShowTabNames">Show names on tabs in main UI</string>
     <string name="prefTitleStartOnOpen">Start on open</string>

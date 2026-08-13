@@ -221,7 +221,7 @@
 			android:key="enableTaskerPref"
 			android:defaultValue="false"
 			android:title="@string/prefTitleEnableTasker"
-			android:summary="@string/prefSummaryEnableTasker"
+			android:summary="@string/prefSummaryEnableTaskerV2"
 			app:iconSpaceReserved="false"
 			/>
 		<MultiSelectListPreference
