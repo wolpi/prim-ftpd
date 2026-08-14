@@ -160,4 +160,5 @@
     <string name="prefTitleEnableTasker">启用 Tasker</string>
     <string name="prefSummaryEnableTasker">启用远程控制通过 Tasker 启动/停止服务器。</string>
     <string name="taskerDisabledInPreferences">设置中禁用了 Tasker 支持。必须先启用它。</string>
+    <string name="prefSummaryEnableTaskerV2">启用远程控制通过 Tasker 启动/停止服务器。注意这可能是安全风险，见 https://github.com/wolpi/prim-ftpd/security/advisories/GHSA-j72x-x52h-247j</string>
 </resources>
