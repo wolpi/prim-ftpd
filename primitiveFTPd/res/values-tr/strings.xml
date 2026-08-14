@@ -178,4 +178,5 @@
     <string name="prefTitleEnableTasker">Tasker\'ı etkinleştir</string>
     <string name="prefSummaryEnableTasker">Tasker aracılığıyla sunucuları başlatma/durdurma işlemlerini uzaktan denetlemeyi etkinleştirir.</string>
     <string name="taskerDisabledInPreferences">Tercihler bölümünde Tasker desteği devre dışı bırakıldı. Öncelikle bunu etkinleştirmeniz gerekiyor.</string>
+    <string name="prefSummaryEnableTaskerV2">Tasker aracılığıyla sunucuları uzaktan başlatma/durdurma işlevini etkinleştirir. Bunun bir güvenlik riski oluşturabileceğini unutmayın: https://github.com/wolpi/prim-ftpd/security/advisories/GHSA-j72x-x52h-247j</string>
 </resources>
