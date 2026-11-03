@@ -44,8 +44,6 @@ import org.apache.sshd.common.cipher.AES192CBC;
 import org.apache.sshd.common.cipher.AES192CTR;
 import org.apache.sshd.common.cipher.AES256CBC;
 import org.apache.sshd.common.cipher.AES256CTR;
-import org.apache.sshd.common.cipher.ARCFOUR128;
-import org.apache.sshd.common.cipher.ARCFOUR256;
 import org.apache.sshd.common.cipher.BlowfishCBC;
 import org.apache.sshd.common.cipher.TripleDESCBC;
 import org.apache.sshd.common.compression.CompressionNone;
@@ -254,8 +252,6 @@ public class SshBuilder {
             avail.add(new AES128CTR.Factory());
             avail.add(new AES192CTR.Factory());
             avail.add(new AES256CTR.Factory());
-            avail.add(new ARCFOUR128.Factory());
-            avail.add(new ARCFOUR256.Factory());
             avail.add(new AES128CBC.Factory());
             avail.add(new TripleDESCBC.Factory());
             avail.add(new BlowfishCBC.Factory());

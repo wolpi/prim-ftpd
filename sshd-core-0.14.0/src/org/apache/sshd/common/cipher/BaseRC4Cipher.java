@@ -18,10 +18,6 @@
  */
 package org.apache.sshd.common.cipher;
 
-import org.apache.sshd.common.util.SecurityUtils;
-
-import javax.crypto.spec.SecretKeySpec;
-
 /**
  * @author <a href="mailto:dev@mina.apache.org">Apache MINA SSHD Project</a>
  */
@@ -35,20 +31,8 @@ public class BaseRC4Cipher extends BaseCipher {
 
     @Override
     public void init(Mode mode, byte[] key, byte[] iv) throws Exception {
-        key = resize(key, bsize);
-        try {
-            cipher = SecurityUtils.getCipher(transformation);
-            cipher.init((mode == Mode.Encrypt ? javax.crypto.Cipher.ENCRYPT_MODE : javax.crypto.Cipher.DECRYPT_MODE),
-                    new SecretKeySpec(key, algorithm));
-
-            byte[] foo = new byte[1];
-            for (int i = 0; i < SKIP_SIZE; i++) {
-                cipher.update(foo, 0, 1, foo, 0);
-            }
-        } catch (Exception e) {
-            cipher = null;
-            throw e;
-        }
+        cipher = null;
+        throw new UnsupportedOperationException("RC4 is not supported");
     }
 
 }
