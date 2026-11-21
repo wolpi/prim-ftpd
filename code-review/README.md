@@ -1,16 +1,28 @@
-# Code review – 2026-11-21
+# Code review
 
-Review of the app code of primitive ftpd, covering correctness bugs, handling of
-large files / long running transfers and security risks. All fixes described
-here are on branch `fix/review-large-files-hardening`
-(commits `3554ec2` and `ec9f15d`, 48 files).
+Reviews of the app code of primitive ftpd on branch
+`fix/review-large-files-hardening`.
+
+| Review | Date | Result |
+|--------|------|--------|
+| First | 2026-11-21 | 22 problems with large files, 44 bugs, 9 security issues fixed. Commits `3554ec2`, `ec9f15d`. |
+| Second | 2026-11-21 | Re-check with real clients and 5 GiB files, use without root, Android 10+. 7 transfer problems, 11 bugs, 1 security issue fixed. |
 
 | File | Content |
 |------|---------|
-| [large-files.md](large-files.md) | Problems with large files and long running transfers |
-| [bugs.md](bugs.md) | Functional bugs, crashes, thread-safety, resource leaks |
-| [security.md](security.md) | Security risks, hardening, behaviour changes, open risks |
-| [verification.md](verification.md) | What has been verified and what has not |
+| [large-files.md](large-files.md) | First review: problems with large files and long running transfers |
+| [bugs.md](bugs.md) | First review: functional bugs, crashes, thread-safety, resource leaks |
+| [security.md](security.md) | First review: security risks, hardening, behaviour changes, open risks |
+| [round-2.md](round-2.md) | Second review: all findings, open points, coverage |
+| [non-root.md](non-root.md) | Does the app work without root? |
+| [android-versions.md](android-versions.md) | Does the app work on Android 10 and higher? |
+| [verification.md](verification.md) | What has been verified and what has not, for both reviews |
+| [improve/](improve/README.md) | What has been changed in the code, per review |
+
+The architecture of the project is described in
+[../architecture/](../architecture/README.md).
+
+The rest of this page describes the first review.
 
 ## Scope
 

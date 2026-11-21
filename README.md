@@ -38,6 +38,41 @@ You may download latest development snapshot from [GitHub packages](https://gith
 * Optional support for Android Storage Access Framework to be able to write external SD-cards
 * Can calculate hash for complete files on server side (sftp extended command)
 
+## Works without root
+
+Root is optional. The default storage type ("Plain old filesystem") and the storage types
+based on the Android Storage Access Framework need no root, a root shell is only opened for
+the storage types "Super user" and "Virtual Folders".
+
+On a device which is not rooted:
+* Grant 'all files access' (see below) or use SAF / QuickShare.
+* Allow notifications, so the server can be stopped from the statusbar.
+* Ports must be above 1024 (defaults: 12345 for ftp, 1234 for sftp).
+* Storage type "Super user" can not be used, the server tells you so when you try to start it.
+
+Details: [code-review/non-root.md](code-review/non-root.md),
+Android 10 and higher: [code-review/android-versions.md](code-review/android-versions.md).
+
+## Large files
+
+Files larger than 4 GB can be transferred by ftp, sftp and scp, interrupted transfers can be resumed
+(downloads with all storage types, uploads with plain storage and SAF).
+This has been tested with the server code running on a desktop JVM and plain storage, not yet on a device.
+Some hints for transfers which take long:
+* Keep the wakelock enabled, it is renewed while data is transferred.
+* The server is not stopped by the 'idle timeout to stop server' while data is transferred.
+* 'Idle timeout' of connections (default: none) does not interrupt running transfers.
+* With storage type "Super user" the option to copy files to a tmp dir needs twice the space, resuming uploads is not supported.
+
+Details: [code-review/large-files.md](code-review/large-files.md),
+tests with 5 GiB files: [code-review/verification.md](code-review/verification.md).
+
+## Documentation in this repository
+
+* [architecture/](architecture/README.md): how the app is built (components, runtime flows, storage types, Android integration)
+* [code-review/](code-review/README.md): findings of the code reviews, what has been verified
+* [code-review/improve/](code-review/improve/README.md): what has been improved
+
 ## Translation
 You may help translate this app in [hosted weblate](https://hosted.weblate.org/projects/pftpd/pftpd/).
 

@@ -42,14 +42,18 @@
 | L21 | Progress used `(int) size`, overflow above 2 GB. | `util/NotificationUtil` | Scaled to 0..1000, human readable sizes. |
 | L22 | HTTP error responses were saved as file. | `services/DownloadsService` | Status >= 400 is an error. |
 
-## Known limitations (not fixed)
+## Known limitations
 
-- Root storage ignores the offset of uploads (`dd` and copy mode), resumed
-  uploads start from the beginning.
+State after the second review ([round-2.md](round-2.md)):
+
+- Root storage can not continue uploads at an offset. Resumed uploads and
+  `APPE` are rejected with an error now (R2-L3), they destroyed the file
+  before.
 - Root storage with offset for downloads reads and discards data up to the
   offset as `dd` output is a pipe.
 - Root copy mode and quick share copy complete files, twice the space is
   needed temporarily.
-- sshd 0.14 truncates at the given offset when a stream is re-opened, writes
-  in random order are not supported for SAF.
-- Passive data connections are accepted without timeout.
+- SFTP writes in random order are only supported by plain storage. A write
+  at offset 0 truncates the file (R2-O3).
+- Passive data connections are awaited for the idle time, 2 minutes if none
+  is configured (R2-L7, was: without limit).
