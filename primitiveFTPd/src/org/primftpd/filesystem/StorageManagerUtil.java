@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 
 import androidx.annotation.Nullable;
@@ -70,7 +70,7 @@ public final class StorageManagerUtil {
         return getFilesystemTimeResolutionForVolumeId(volumeId);
     }
 
-    private final static Map<String, Integer> CACHED_FILESYSTEM_TIME_RESOLUTIONS = new HashMap<>();
+    private final static Map<String, Integer> CACHED_FILESYSTEM_TIME_RESOLUTIONS = new ConcurrentHashMap<>();
 
     /**
      * This function is to handle 2 Android bugs.
