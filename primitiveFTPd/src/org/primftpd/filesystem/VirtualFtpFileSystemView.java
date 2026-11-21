@@ -72,13 +72,20 @@ public class VirtualFtpFileSystemView extends VirtualFileSystemView<
         FtpFile newWorkingDir;
         boolean isAbsolute = dir != null && dir.startsWith("/");
         if (!isAbsolute) {
-            // curl ignores current WD and tries to switch to WD from root dir by dir
-            String topLevelPath = "/" + dir;
-            FtpFile topLevelDir = getFile(topLevelPath);
-            if (topLevelDir.doesExist()) {
-                newPath = topLevelDir.getAbsolutePath();
+            String relativePath = workingDir.getAbsolutePath() + File.separator + dir;
+            boolean startsWithDot = dir == null || dir.isEmpty() || dir.charAt(0) == '.';
+            if (startsWithDot) {
+                // '.', '..', '../foo': always relative to working dir
+                newPath = relativePath;
             } else {
-                newPath = workingDir.getAbsolutePath() + File.separator + dir;
+                // curl ignores current WD and tries to switch to WD from root dir by dir
+                String topLevelPath = "/" + dir;
+                FtpFile topLevelDir = getFile(topLevelPath);
+                if (topLevelDir.doesExist()) {
+                    newPath = topLevelDir.getAbsolutePath();
+                } else {
+                    newPath = relativePath;
+                }
             }
             logger.trace("  using path for cwd operation: {}", newPath);
         } else {

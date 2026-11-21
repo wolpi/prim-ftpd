@@ -32,6 +32,7 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
 
     private Process ddProcess;
     private File tmpDir;
+    private File tmpFile;
     private boolean moveFileOnClose;
 
     public RootFile(TFileSystemView fileSystemView, String absPath, LsOutputBean bean) {
@@ -199,6 +200,14 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
         postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
+        if (offset != 0) {
+            // Neither dd nor the copy via tmp dir can continue at an offset. Ignoring the offset silently
+            // replaced the file by the part which has been sent, i.e. a resumed upload destroyed the file.
+            throw new IOException(String.format(
+                    "Can not write file '%s' at offset %d, resuming uploads is not supported for root storage",
+                    absPath, offset));
+        }
+
         if (!bean.isExists()) {
             // TODO test if parent exists and run "mkdir -p" on parent if needed, see FS or SAF
             // if file does not exist, explicitly create it as root, see GH issue #117
@@ -303,7 +312,9 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
         if (name.contains("/")) {
             name = name.substring(name.lastIndexOf("/") + 1);
         }
-        File tmpFile = new File(tmpDir, name);
+        // remember it: name may be the complete path if file exists already,
+        // file would not be found again when it is moved to its target
+        tmpFile = new File(tmpDir, name);
         logger.trace("  using output stream tmp: {}", tmpFile.getAbsolutePath());
         return new FileOutputStream(tmpFile) {
             @Override
@@ -327,18 +338,20 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
         if (files == null || files.length == 0) {
             throw new IOException(String.format("Failed to copy file '%s' to tmp dir", absPath));
         }
-        File tmpFile = files[0];
-        FileInputStream fis = new FileInputStream(tmpFile);
+        File copiedFile = files[0];
+        FileInputStream fis = new FileInputStream(copiedFile);
         Utils.skipFully(fis, offset);
         return fis;
     }
 
     public void handleCloseCopy() {
         if (moveFileOnClose) {
+            File source = tmpFile != null ? tmpFile : new File(tmpDir, getName());
             runCommand("mv" + " " +
-                    escapePath(new File(tmpDir, getName()).getAbsolutePath()) + " " + escapePath(absPath));
+                    escapePath(source.getAbsolutePath()) + " " + escapePath(absPath));
             moveFileOnClose = false;
         }
+        tmpFile = null;
         if (tmpDir != null) {
             runCommand("rm -rf " + " " + escapePath(tmpDir.getAbsolutePath()));
             tmpDir = null;

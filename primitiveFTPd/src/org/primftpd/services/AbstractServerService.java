@@ -197,6 +197,10 @@ public abstract class AbstractServerService
 					LoadPrefsUtil.IDLE_TIMEOUT_SERVER_STOP_DEFAULT_VAL));
 			if (timeout > 0) {
 				this.timerTimeout = timeout * 60 * 1000;
+				if (this.timerHandler != null) {
+					// service may be started several times, there must be just one timer
+					stopTimer();
+				}
 				startTimer();
 			}
 		} catch (Exception e) {

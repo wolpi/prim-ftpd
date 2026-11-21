@@ -38,7 +38,9 @@ public abstract class VirtualFileSystemView<
     protected abstract String absolute(String file);
 
     public TMina getFile(String file) {
-        String absoluteVirtualPath = absolute(file);
+        // resolve '.' and '..': otherwise '/fs/..' stays inside of storage type 'fs' instead of
+        // leading to the list of storage types, clients could never go up again by CDUP
+        String absoluteVirtualPath = Utils.toPath(Utils.normalizePath(absolute(file)));
         logger.debug("getFile '{}', absolute: '{}'", file, absoluteVirtualPath);
         if ("/".equals(absoluteVirtualPath)) {
             return createFile(absoluteVirtualPath, true);

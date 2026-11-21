@@ -50,6 +50,10 @@ public class DownloadsService extends Service {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     protected static Handler serviceHandler;
+    private HandlerThread handlerThread;
+
+    // a server may answer with a 'Location' header again and again
+    private static final int MAX_REDIRECTS = 5;
 
     private String localPath = "";
     private String filename = "";
@@ -79,8 +83,13 @@ public class DownloadsService extends Service {
             }
 
             if (msg.what == MSG_START) {
-                String urlStr = msg.getData().getString(URL);
-                service.download(urlStr);
+                String urlStr = msg.getData() != null ? msg.getData().getString(URL) : null;
+                service.download(urlStr, 0);
+                if (!hasMessages(MSG_START)) {
+                    // nothing left to do: a started service which is never stopped
+                    // stays around (incl. its thread) until the system kills the process
+                    service.stopSelf();
+                }
 
             } else if (msg.what == MSG_STOP) {
                 // -> seems not to be delivered
@@ -102,6 +111,7 @@ public class DownloadsService extends Service {
                 "DownloadsService",
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
+        handlerThread = thread;
 
         Looper serviceLooper = thread.getLooper();
         serviceHandler = new DownloadsHandler(serviceLooper, this);
@@ -175,10 +185,14 @@ public class DownloadsService extends Service {
             // stop download
             stopped = true;
         }
-        stopSelf();
+        // let thread of this service end, download loop ends as it has been signaled above
+        if (handlerThread != null) {
+            handlerThread.quitSafely();
+            handlerThread = null;
+        }
     }
 
-    private void download(String urlStr) {
+    private void download(String urlStr, int redirectCount) {
         CloseableHttpClient httpclient = null;
         CloseableHttpResponse response = null;
         FileOutputStream fos = null;
@@ -233,9 +247,12 @@ public class DownloadsService extends Service {
 
             Header locationHeader = response.getHeader("Location");
             String location = locationHeader != null ? locationHeader.getValue() : null;
+            if (StringUtils.isNotEmpty(location) && redirectCount >= MAX_REDIRECTS) {
+                throw new IOException("too many redirects");
+            }
             if (StringUtils.isNotEmpty(location)) {
                 logger.debug("url {} redirected", location);
-                download(location);
+                download(location, redirectCount + 1);
             } else {
 
                 // build local path

@@ -11,6 +11,7 @@ import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import org.primftpd.services.AbstractServerService;
 import org.primftpd.util.FilenameUnique;
@@ -97,6 +98,8 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         private final List<Uri> uris;
         private final List<String> contents;
         private final String type;
+        private boolean wakeLockWasHeld = false;
+        private volatile int failedCopies = 0;
 
         CopyTask(AbstractReceiveShareActivity activity,
                  ProgressDialog progressDiag,
@@ -123,6 +126,8 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
             PowerManager powerMgr =
                     (PowerManager) activity.getSystemService(
                             AbstractServerService.POWER_SERVICE);
+            // wake lock is shared with running servers, it must only be released if it has been taken here
+            wakeLockWasHeld = WakelockUtil.isHeld();
             WakelockUtil.obtainWakeLock(powerMgr);
 
             for (int i = 0; i < uris.size(); i++) {
@@ -138,9 +143,12 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
                 // copy in this background thread, copying large files on main thread freezes the UI
                 // and makes android show 'app not responding'
                 try {
-                    activity.saveUri(targetDir, uri, content, type);
+                    if (!activity.saveUri(targetDir, uri, content, type)) {
+                        failedCopies++;
+                    }
                 } catch (Exception e) {
                     logger.warn("could not copy shared data", e);
+                    failedCopies++;
                 }
                 progressDiag.incrementProgressBy(1);
             }
@@ -153,11 +161,23 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
             progressDiag.dismiss();
 
             try {
-                if (!activity.keepWakelock()) {
+                if (!activity.keepWakelock() && !wakeLockWasHeld) {
                     WakelockUtil.releaseWakeLock();
                 }
             } catch (Exception e) {
                 logger.warn("error while releasing wake lock", e);
+            }
+
+            if (failedCopies > 0) {
+                // e.g. no space left for a large file, user must not think data has been saved
+                try {
+                    Toast.makeText(
+                            activity,
+                            "could not copy " + failedCopies + " of " + uris.size() + " file(s)",
+                            Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    logger.warn("could not show toast", e);
+                }
             }
 
             mainThreadHandler.post(() -> {
@@ -171,14 +191,18 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         this.finish();
     }
 
-    protected void saveUri(TargetDir targetDir, Uri uri, String content, String type) {
+    /**
+     * @return false if data could not be copied (completely)
+     */
+    protected boolean saveUri(TargetDir targetDir, Uri uri, String content, String type) {
         if (uri == null) {
-            return;
+            return true;
         }
         if (!isUriAllowed(uri)) {
             logger.warn("refusing to copy shared data, uri points to private data of this app: {}", uri);
-            return;
+            return false;
         }
+        boolean success = false;
         OutputStream os = null;
         InputStream is = null;
         try {
@@ -188,9 +212,10 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
             is = getContentResolver().openInputStream(uri);
             if (os == null || is == null) {
                 logger.warn("could not open streams to copy shared data, uri: {}", uri);
-                return;
+                return false;
             }
             copyStream(is, os);
+            success = true;
 
         } catch (Exception e) {
             logger.warn("could not copy shared data", e);
@@ -198,7 +223,9 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
             try {
                 if (os != null) os.close();
             } catch (IOException e) {
+                // data may be written when stream is closed
                 logger.warn("could not copy shared data", e);
+                success = false;
             }
             try {
                 if (is != null) is.close();
@@ -206,6 +233,7 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
                 logger.warn("could not copy shared data", e);
             }
         }
+        return success;
     }
 
     // small buffers slow down copying of large files
@@ -243,18 +271,15 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
 
     private static final int BUFFER_SIZE = 64 * 1024;
 
-    private void copyStream(InputStream is, OutputStream os) {
-        try {
-            byte[] bytes = new byte[BUFFER_SIZE];
-            for (;;) {
-                int count = is.read(bytes, 0, BUFFER_SIZE);
-                if (count == -1) {
-                    break;
-                }
-                os.write(bytes, 0, count);
+    private void copyStream(InputStream is, OutputStream os) throws IOException {
+        // errors must be reported to caller, otherwise a truncated file looks like a successful copy
+        byte[] bytes = new byte[BUFFER_SIZE];
+        for (;;) {
+            int count = is.read(bytes, 0, BUFFER_SIZE);
+            if (count == -1) {
+                break;
             }
-        } catch (Exception e) {
-            logger.warn("could not copy stream", e);
+            os.write(bytes, 0, count);
         }
     }
 }

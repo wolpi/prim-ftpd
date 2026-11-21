@@ -71,7 +71,7 @@ public class FtpServerService extends AbstractServerService
 			ftpServer.stop();
 			ftpServer = null;
 		} else {
-			logger.info("ssh server already null");
+			logger.info("ftp server already null");
 		}
 	}
 
@@ -176,8 +176,8 @@ public class FtpServerService extends AbstractServerService
 		serverFactory.setConnectionConfig(conCfg.createConnectionConfig());
 
 		// do start server
-		ftpServer = serverFactory.createServer();
 		try {
+			ftpServer = serverFactory.createServer();
 			ftpServer.start();
 			return true;
 		} catch (Throwable e) {

@@ -16,6 +16,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -43,6 +44,9 @@ public class AndroidIoDataConnectionFactory extends IODataConnectionFactory impl
     private InetAddress serverControlAddress;
 
     private FtpIoSession session;
+
+    // used if no idle time is configured
+    private static final long PASSIVE_ACCEPT_TIMEOUT_MILLIS = 2 * 60 * 1000L;
 
     private ServerSocketChannel serverSocketChannel;
     private SocketChannel dataSocketChannel;
@@ -222,23 +226,49 @@ public class AndroidIoDataConnectionFactory extends IODataConnectionFactory impl
 
                 LOG.debug("Opening passive data connection");
 
-                //dataSoc = servSoc.accept();
-                dataSocketChannel = serverSocketChannel.accept();
-                dataSoc = dataSocketChannel.socket();
-
-                if (dataConfig.isPassiveIpCheck()) {
-                    // Let's make sure we got the connection from the same
-                    // client that we are expecting
-                    InetAddress remoteAddress = ((InetSocketAddress) session.getRemoteAddress()).getAddress();
-                    InetAddress dataSocketAddress = dataSoc.getInetAddress();
-                    if (!dataSocketAddress.equals(remoteAddress)) {
-                        LOG.warn("Passive IP Check failed. Closing data connection from "
-                                + dataSocketAddress
-                                + " as it does not match the expected address "
-                                + remoteAddress);
-                        closeDataConnection();
-                        return null;
+                // Wait for the client, but not forever: accept() of the channel ignores the timeout
+                // of the socket, a client which never connects would block its session for good.
+                int idleMillis = dataConfig.getIdleTime() * 1000;
+                long timeoutMillis = idleMillis > 0 ? idleMillis : PASSIVE_ACCEPT_TIMEOUT_MILLIS;
+                long deadline = System.currentTimeMillis() + timeoutMillis;
+                ServerSocket acceptingSocket = serverSocket;
+                if (acceptingSocket == null) {
+                    throw new IOException("passive data connection has not been initiated");
+                }
+                while (true) {
+                    long remaining = deadline - System.currentTimeMillis();
+                    if (remaining <= 0) {
+                        throw new SocketTimeoutException("client did not open passive data connection in time");
                     }
+                    acceptingSocket.setSoTimeout((int) Math.min(remaining, Integer.MAX_VALUE));
+                    Socket accepted = acceptingSocket.accept();
+
+                    if (dataConfig.isPassiveIpCheck()) {
+                        // Let's make sure we got the connection from the same
+                        // client that we are expecting
+                        InetAddress remoteAddress = ((InetSocketAddress) session.getRemoteAddress()).getAddress();
+                        InetAddress dataSocketAddress = accepted.getInetAddress();
+                        if (dataSocketAddress == null || !dataSocketAddress.equals(remoteAddress)) {
+                            LOG.warn("Passive IP Check failed. Closing data connection from "
+                                    + dataSocketAddress
+                                    + " as it does not match the expected address "
+                                    + remoteAddress);
+                            // Just drop the foreign connection and keep waiting for the client. Giving up here
+                            // would allow any host to make transfers of others fail by connecting first.
+                            try {
+                                accepted.close();
+                            } catch (IOException e) {
+                                LOG.debug("could not close rejected data connection", e);
+                            }
+                            continue;
+                        }
+                    }
+                    dataSoc = accepted;
+                    dataSocketChannel = accepted.getChannel();
+                    if (dataSocketChannel == null) {
+                        throw new IOException("accepted data connection has no channel");
+                    }
+                    break;
                 }
 
                 DataConnectionConfiguration dataCfg = session.getListener()

@@ -4,16 +4,17 @@ import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.Signature;
 import org.apache.sshd.common.signature.AbstractSignature;
 import org.bouncycastle.crypto.Signer;
+import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
-import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
-import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
+import org.bouncycastle.crypto.util.PrivateKeyFactory;
+import org.bouncycastle.crypto.util.PublicKeyFactory;
 import org.primftpd.pojo.KeyParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
+import java.io.IOException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
@@ -39,28 +40,23 @@ public class SignatureEd25519 extends AbstractSignature {
 
     private Signer signer = new Ed25519Signer();
 
-    private Ed25519PublicKeyParameters extractPubKeyParas(PublicKey pubkey)
-            throws NoSuchFieldException, IllegalAccessException {
-        if (!(pubkey instanceof BCEdDSAPublicKey)) {
-            throw new RuntimeException("can not extract pub key paras from key of type: " + pubkey.getClass().getName());
+    // Parameters are derived from the standardized encoding of the keys (X.509 / PKCS#8).
+    // Reading private fields of the key classes of bouncy castle by reflection breaks as soon as
+    // bouncy castle hands out a subclass, which it does for newer java versions (BC15EdDSAPublicKey).
+    private Ed25519PublicKeyParameters extractPubKeyParas(PublicKey pubkey) throws IOException {
+        AsymmetricKeyParameter keyParameter = PublicKeyFactory.createKey(pubkey.getEncoded());
+        if (!(keyParameter instanceof Ed25519PublicKeyParameters)) {
+            throw new IOException("can not extract pub key paras from key of type: " + pubkey.getClass().getName());
         }
-        Class<? extends PublicKey> pubkeyClass = pubkey.getClass();
-        Field eddsaPublicKeyFiled = pubkeyClass.getDeclaredField("eddsaPublicKey");
-        eddsaPublicKeyFiled.setAccessible(true);
-        Object eddsaPublicKey = eddsaPublicKeyFiled.get(pubkey);
-        return (Ed25519PublicKeyParameters)eddsaPublicKey;
+        return (Ed25519PublicKeyParameters) keyParameter;
     }
 
-    private Ed25519PrivateKeyParameters extractPrvKeyParas(PrivateKey prvkey)
-            throws NoSuchFieldException, IllegalAccessException {
-        if (!(prvkey instanceof BCEdDSAPrivateKey)) {
-            throw new RuntimeException("can not extract prv key paras from key of type: " + prvkey.getClass().getName());
+    private Ed25519PrivateKeyParameters extractPrvKeyParas(PrivateKey prvkey) throws IOException {
+        AsymmetricKeyParameter keyParameter = PrivateKeyFactory.createKey(prvkey.getEncoded());
+        if (!(keyParameter instanceof Ed25519PrivateKeyParameters)) {
+            throw new IOException("can not extract prv key paras from key of type: " + prvkey.getClass().getName());
         }
-        Class<? extends PrivateKey> prvkeyClass = prvkey.getClass();
-        Field eddsaPrivateKeyFiled = prvkeyClass.getDeclaredField("eddsaPrivateKey");
-        eddsaPrivateKeyFiled.setAccessible(true);
-        Object eddsaPrivateKey = eddsaPrivateKeyFiled.get(prvkey);
-        return (Ed25519PrivateKeyParameters)eddsaPrivateKey;
+        return (Ed25519PrivateKeyParameters) keyParameter;
     }
 
     public void init(PublicKey pubkey, PrivateKey prvkey) {

@@ -45,6 +45,17 @@ public class WakelockUtil {
         }
     }
 
+    /**
+     * @return true if wake lock is held, e.g. by a running server.
+     */
+    public static synchronized boolean isHeld() {
+        try {
+            return wakeLock != null && wakeLock.isHeld();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static synchronized void releaseWakeLock() {
         if (wakeLock != null) {
             if (wakeLock.isHeld()) {

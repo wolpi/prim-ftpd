@@ -335,26 +335,22 @@ public class ScpHelper {
                     }
                 }
             } else {
-                String basedir = "";
-                int lastSep = pattern.lastIndexOf('/');
-                if (lastSep >= 0) {
-                    basedir = pattern.substring(0, lastSep);
-                    pattern = pattern.substring(lastSep + 1);
-                }
-                SshFile file = root.getFile(basedir + "/" + pattern);
+                // a path without separator is relative to home dir of the file system view,
+                // prepending a separator would make it relative to root of the file system
+                SshFile file = root.getFile(pattern);
                 if (!file.doesExist()) {
-                    throw new IOException(file + ": no such file or directory");
+                    throw new IOException(pattern + ": no such file or directory");
                 }
                 if (file.isFile()) {
                     sendFile(file, preserve, bufferSize);
                 } else if (file.isDirectory()) {
                     if (!recursive) {
-                        throw new IOException(file + " not a regular file");
+                        throw new IOException(pattern + " not a regular file");
                     } else {
                         sendDir(file, preserve, bufferSize);
                     }
                 } else {
-                    throw new IOException(file + ": unknown file type");
+                    throw new IOException(pattern + ": unknown file type");
                 }
             }
         }

@@ -289,10 +289,26 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
         InputStream input;
         long inputPos;
         long length;
+        // attributes set by SSH_FXP_FSETSTAT while file is written, see setAttributes()
+        Map<SshFile.Attribute, Object> attrsToApplyOnClose;
 
         public FileHandle(SshFile sshFile, int flags) {
             super(sshFile);
             this.flags = flags;
+        }
+
+        /**
+         * Clients like OpenSSH (put -p) send SSH_FXP_FSETSTAT before SSH_FXP_CLOSE.
+         * Data which is still buffered would be written after modification time has been set
+         * and overwrite it with current time. So buffered data is written first and
+         * attributes are applied once more when the file has been closed.
+         */
+        public void setAttributes(Map<SshFile.Attribute, Object> attrs) throws IOException {
+            if (output != null) {
+                output.flush();
+                attrsToApplyOnClose = attrs;
+            }
+            file.setAttributes(attrs);
         }
 
         public int read(byte[] data, long offset) throws IOException {
@@ -355,10 +371,38 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
 
         @Override
         public void close() throws IOException {
-            IoUtils.closeQuietly(output, input);
+            // errors of closing the output stream must not be swallowed: buffered data is written
+            // by close(), if that fails (e.g. no space left) client must not be told upload was fine
+            IOException error = null;
+            OutputStream out = output;
             output = null;
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    error = e;
+                }
+            }
+            IoUtils.closeQuietly(input);
             input = null;
-            super.close();
+            try {
+                super.close();
+            } catch (IOException e) {
+                if (error == null) {
+                    error = e;
+                }
+            }
+            if (error == null && attrsToApplyOnClose != null) {
+                try {
+                    file.setAttributes(attrsToApplyOnClose);
+                } catch (IOException | RuntimeException e) {
+                    // has been applied successfully before, never mind
+                }
+            }
+            attrsToApplyOnClose = null;
+            if (error != null) {
+                throw error;
+            }
         }
     }
 
@@ -584,7 +628,7 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                         sendStatus(id, SSH_FX_OK, "", "");
                     }
                 } catch (IOException e) {
-                    sendStatus(id, SSH_FX_FAILURE, e.getMessage());
+                    sendStatus(id, SSH_FX_FAILURE, e.getMessage() == null ? "" : e.getMessage());
                 }
                 break;
             }
@@ -691,7 +735,11 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                     if (p == null) {
                         sendStatus(id, SSH_FX_FAILURE, handle);
                     } else {
-                        p.getFile().setAttributes(attrs);
+                        if (p instanceof FileHandle) {
+                            ((FileHandle) p).setAttributes(attrs);
+                        } else {
+                            p.getFile().setAttributes(attrs);
+                        }
                         sendStatus(id, SSH_FX_OK, "");
                     }
                 } catch (FileNotFoundException e) {
@@ -956,6 +1004,8 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
                         } catch (IOException e) {
                             sendStatus(id, SSH_FX_FAILURE, e.getMessage());
                         }
+                        // without break a 2nd response (unsupported) was sent for the same request
+                        break;
                     }
                     default: {
                         log.info("Received unsupported SSH_FXP_EXTENDED({})", extension);
