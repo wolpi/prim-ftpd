@@ -14,8 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -66,17 +64,27 @@ public class CleanSpaceFragment extends Fragment implements RecreateLogger {
         int numberOfFiles = collectNumberOfFiles(dir, includeChildren);
         if (numberOfFiles > 0) {
             final AlertDialog progressDialog = createProgressDialog();
-            try (ExecutorService executorService = Executors.newSingleThreadExecutor()) {
-                executorService.execute(() -> {
-                    int counter = 0;
-                    delete(dir, includeChildren, counter);
-
-                    view.post(() -> {
+            progressDialog.show();
+            // note: ExecutorService must not be used with try-with-resources here:
+            // close() is not available on older android versions and it would block the main thread until deletion is done
+            Thread thread = new Thread(() -> {
+                try {
+                    delete(dir, includeChildren, 0);
+                } catch (Exception e) {
+                    logger.error("could not delete files", e);
+                }
+                view.post(() -> {
+                    try {
                         progressDialog.dismiss();
+                    } catch (Exception e) {
+                        logger.debug("could not dismiss dialog: {}", e.toString());
+                    }
+                    if (fragment.isAdded()) {
                         fragment.updateView();
-                    });
+                    }
                 });
-            }
+            }, "clean-space");
+            thread.start();
         }
     }
 

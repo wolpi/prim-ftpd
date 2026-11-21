@@ -69,10 +69,11 @@ public class KeyParser {
         List<PublicKey> keys = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         int lineCounter = 0;
-        while (reader.ready()) {
+        // note: ready() must not be used to detect end of stream, it just tells if reading would block
+        String keyLine;
+        while ((keyLine = reader.readLine()) != null) {
+            lineCounter++;
             try {
-                String keyLine = reader.readLine();
-                lineCounter++;
                 PublicKey key = parseKeyLine(keyLine);
                 if (key != null) {
                     keys.add(key);
@@ -81,13 +82,21 @@ public class KeyParser {
                 errors.add("could not read key at line " + lineCounter + ": " + e.getClass().getName() + ", " + e.getMessage());
             }
         }
-
         return keys;
     }
 
     public static PublicKey parseKeyLine(String keyLine) throws Exception {
         PublicKey key = null;
-        String[] parts = keyLine.split(" ");
+        if (keyLine == null) {
+            return null;
+        }
+        keyLine = keyLine.trim();
+        if (keyLine.isEmpty() || keyLine.charAt(0) == '#') {
+            // empty line or comment
+            return null;
+        }
+        // parts might be separated by several blanks or tabs
+        String[] parts = keyLine.split("\\s+");
 
         String name = null;
         String keyEncoded = null;

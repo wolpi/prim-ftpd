@@ -58,7 +58,12 @@ public class FsSshFile extends FsFile<SshFile, FsSshFileSystemView> implements S
 	@Override
 	public SshFile getParentFile() {
 		logger.trace("[{}] getParentFile()", name);
-		return new FsSshFile(getFileSystemView(), file.getParentFile(), session);
+		File parent = file.getParentFile();
+		if (parent == null) {
+			// root dir has no parent, stay at root
+			parent = file;
+		}
+		return new FsSshFile(getFileSystemView(), parent, session);
 	}
 
 	@Override

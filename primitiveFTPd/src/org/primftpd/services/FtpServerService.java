@@ -85,6 +85,11 @@ public class FtpServerService extends AbstractServerService
 		}
 
 		DataConnectionConfigurationFactory dataConConfigFactory = new DataConnectionConfigurationFactory();
+		// data connections must have the same remote address as the control connection:
+		// prevents other hosts from stealing data by connecting to passive port (there is just a single one by default)
+		// and prevents misuse of the server to connect to arbitrary hosts (ftp bounce attack)
+		dataConConfigFactory.setPassiveIpCheck(true);
+		dataConConfigFactory.setActiveIpCheck(true);
 		String passivePorts = prefsBean.getFtpPassivePorts();
 		if (StringUtils.isNotBlank(passivePorts)){
 			dataConConfigFactory.setPassivePorts(passivePorts);

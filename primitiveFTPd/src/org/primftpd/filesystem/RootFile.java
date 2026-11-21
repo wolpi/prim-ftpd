@@ -78,9 +78,16 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
     public long getLastModified() {
         logger.trace("[{}] RootFile getLastModified()", name);
         long result = bean.getTimestamp();
-        logger.trace("  returning date '{}', original ls-output line: {}",
-                DEBUG_DATE_FORMAT.format(result),
-                bean.getOriginalLine());
+        if (logger.isTraceEnabled()) {
+            String dateStr;
+            // SimpleDateFormat is not thread-safe
+            synchronized (DEBUG_DATE_FORMAT) {
+                dateStr = DEBUG_DATE_FORMAT.format(result);
+            }
+            logger.trace("  returning date '{}', original ls-output line: {}",
+                    dateStr,
+                    bean.getOriginalLine());
+        }
         logger.trace("[{}] getLastModified() -> {}", name, result);
         return result;
     }
@@ -175,7 +182,13 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
         getShell().waitForIdle();
 
         for (LsOutputBean bean : beans) {
-            String path = absPath + "/" + bean.getName();
+            // 'ls -a' prints entries for current and parent dir, they are not children
+            if (".".equals(bean.getName()) || "..".equals(bean.getName())) {
+                continue;
+            }
+            String path = absPath.endsWith("/")
+                    ? absPath + bean.getName()
+                    : absPath + "/" + bean.getName();
             result.add(createFile(path, bean));
         }
 
@@ -259,7 +272,7 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
         }
 
         BufferedInputStream bis = new BufferedInputStream(ddProcess.getInputStream());
-        bis.skip(offset);
+        Utils.skipFully(bis, offset);
         return bis;
     }
 
@@ -303,7 +316,7 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
     }
 
     public InputStream createInputStreamCopy(long offset) throws IOException {
-        if (offset == 0) {
+        if (offset == 0 || tmpDir == null) {
             tmpDir = Defaults.buildTmpDir(getPftpdService().getContext(), TmpDirType.ROOT_COPY);
             runCommand("cp" + " " + escapePath(absPath) + " " + escapePath(tmpDir.getAbsolutePath()));
         }
@@ -311,12 +324,12 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
             throw new IOException("cannot find parent dir");
         }
         File[] files = tmpDir.listFiles();
-        if (files == null) {
-            throw new IOException("cannot find parent dir");
+        if (files == null || files.length == 0) {
+            throw new IOException(String.format("Failed to copy file '%s' to tmp dir", absPath));
         }
         File tmpFile = files[0];
         FileInputStream fis = new FileInputStream(tmpFile);
-        fis.skip(offset);
+        Utils.skipFully(fis, offset);
         return fis;
     }
 
@@ -387,7 +400,8 @@ public abstract class RootFile<TMina, TFileSystemView extends RootFileSystemView
             }
         });
         getShell().waitForIdle();
-        return wrapper[0];
+        // result is null if shell did not run the command, e.g. because it died
+        return Boolean.TRUE.equals(wrapper[0]);
     }
 
     protected String readCommandOutput(String cmd) {

@@ -19,27 +19,36 @@ public class IpAddressProvider {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public static String extractIp(String remoteAddress) {
+        if (remoteAddress == null || remoteAddress.isEmpty()) {
+            return "";
+        }
         String ip = remoteAddress;
 
-        // in some cases we get ip-address with leading /, just cut it off
-        if (remoteAddress.charAt(0) == '/') {
-            ip = remoteAddress.substring(1);
+        // in some cases we get ip-address with leading / or even "hostname/ip", just cut it off
+        int indexOfSlash = ip.indexOf('/');
+        if (indexOfSlash >= 0) {
+            ip = ip.substring(indexOfSlash + 1);
+        }
+        if (ip.isEmpty()) {
+            return "";
         }
 
         // if square brackets are present we can reliably say it is IPv6
         if (ip.charAt(0) == '[') {
             int index = ip.indexOf(']');
-            ip = ip.substring(0, index + 1);
+            if (index > 0) {
+                ip = ip.substring(0, index + 1);
+            }
             return ip;
         }
 
-        // if length is more than IPv4 dotted quad notation, we guess it would be IPv6
-        if (ip.length() > (4*3+3)) {
+        // more than one colon can only be IPv6 (without brackets there is no port)
+        int indexOfColon = ip.indexOf(':');
+        if (indexOfColon != ip.lastIndexOf(':')) {
             return ip;
         }
 
         // remove port for IPv4
-        int indexOfColon = ip.indexOf(':');
         if (indexOfColon > 0) {
             ip = ip.substring(0, indexOfColon);
         }

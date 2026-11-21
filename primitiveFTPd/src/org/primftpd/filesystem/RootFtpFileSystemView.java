@@ -19,8 +19,9 @@ public class RootFtpFileSystemView extends RootFileSystemView<RootFtpFile, FtpFi
 
     public RootFtpFileSystemView(PftpdService pftpdService, Shell.Interactive shell, File homeDir, User user) {
         super(pftpdService, shell);
-        this.homeDir = getFile(homeDir.getAbsolutePath());
+        // user must be assigned before creating file objects
         this.user = user;
+        this.homeDir = getFile(homeDir.getAbsolutePath());
 
         workingDir = this.homeDir;
     }

@@ -273,6 +273,15 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
         }
     }
 
+    private static volatile long lastTransferTimestamp = 0;
+
+    /**
+     * @return Timestamp of last moment file data has been read or written by any client, 0 if there was no transfer yet.
+     */
+    public static long getLastTransferTimestamp() {
+        return lastTransferTimestamp;
+    }
+
     protected static class FileHandle extends Handle {
         int flags;
         OutputStream output;
@@ -305,7 +314,21 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
             if (offset >= length) {
                 return -1;
             }
-            int read = input.read(data);
+            // fill the buffer as far as possible, short reads confuse some clients
+            // and cause a lot of additional round trips for large files
+            int read = 0;
+            while (read < data.length) {
+                int n = input.read(data, read, data.length - read);
+                if (n < 0) {
+                    break;
+                }
+                read += n;
+            }
+            lastTransferTimestamp = System.currentTimeMillis();
+            if (read == 0 && data.length > 0) {
+                // end of stream, must not modify inputPos
+                return -1;
+            }
             inputPos += read;
             return read;
         }
@@ -327,6 +350,7 @@ public class SftpSubsystem implements Command, Runnable, SessionAware, FileSyste
             }
             output.write(data);
             outputPos += data.length;
+            lastTransferTimestamp = System.currentTimeMillis();
         }
 
         @Override

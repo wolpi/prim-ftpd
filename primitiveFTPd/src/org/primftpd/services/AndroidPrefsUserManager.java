@@ -21,7 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +35,7 @@ public class AndroidPrefsUserManager implements UserManager {
 
 	private final PrefsBean prefsBean;
 
-	private Map<String, User> nameToUser = new HashMap<>();
+	private Map<String, User> nameToUser = new ConcurrentHashMap<>();
 
 	public AndroidPrefsUserManager(PrefsBean prefsBean) {
 		this.prefsBean = prefsBean;
@@ -71,7 +73,10 @@ public class AndroidPrefsUserManager implements UserManager {
 		logger.debug("rootDir: {}", rootDir);
 		user.setHomeDirectory(rootDir);
 
-		user.setMaxIdleTime(60);
+		// idle timeout is configurable, 0 means no timeout
+		// a hard coded value would terminate control connection after long running transfers
+		Integer idleTimeout = prefsBean.getIdleTimeout();
+		user.setMaxIdleTime(idleTimeout != null && idleTimeout > 0 ? idleTimeout : 0);
 		user.setName(username);
 		if(password != null) {
 			user.setPassword(prefsBean.getPassword());
@@ -85,7 +90,7 @@ public class AndroidPrefsUserManager implements UserManager {
 
 	@Override
 	public User getUserByName(String username) throws FtpException {
-		return nameToUser.get(username);
+		return username != null ? nameToUser.get(username) : null;
 	}
 
 	@Override
@@ -103,7 +108,7 @@ public class AndroidPrefsUserManager implements UserManager {
 
 	@Override
 	public boolean doesExist(String username) {
-		return prefsBean.getUserName().equals(username) || ANONYMOUS_USER_NAME.equals(username);
+		return (username != null && username.equals(prefsBean.getUserName())) || ANONYMOUS_USER_NAME.equals(username);
 	}
 
 	@Override
@@ -118,7 +123,9 @@ public class AndroidPrefsUserManager implements UserManager {
 				if (!StringUtils.isBlank(pw)) {
 					String encryptedPW = EncryptionUtil.encrypt(pw);
 					String storedPW = prefsBean.getPassword();
-					if (storedPW.equals(encryptedPW)) {
+					if (storedPW != null && encryptedPW != null && MessageDigest.isEqual(
+							storedPW.getBytes(StandardCharsets.UTF_8),
+							encryptedPW.getBytes(StandardCharsets.UTF_8))) {
 						return buildUser(getRemoteIp(((UsernamePasswordAuthentication) authentication).getUserMetadata()));
 					}
 				}

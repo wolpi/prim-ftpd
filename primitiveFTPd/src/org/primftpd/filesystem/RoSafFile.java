@@ -6,7 +6,6 @@ import android.provider.DocumentsContract;
 
 import org.primftpd.events.ClientActionEvent;
 
-import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,6 +45,7 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
                 null);
         logger.trace("  c-tor 1");
 
+        boolean initialized = false;
         try {
             Cursor cursor = getPftpdService().getContext().getContentResolver().query(
                     getStartUrl(),
@@ -54,15 +54,19 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
                     null,
                     null);
             try {
-                initByCursor(cursor);
-            } catch (Exception e) {
-                logger.warn("  exception opening cursor", e);
+                if (cursor != null && cursor.moveToFirst()) {
+                    initByCursor(cursor);
+                    initialized = true;
+                }
             } finally {
                 closeQuietly(cursor);
             }
-        } catch (UnsupportedOperationException e) {
-            logger.warn("  UnsupportedOperationException opening cursor, creating fallback object", e);
+        } catch (Exception e) {
+            logger.warn("  exception opening cursor, creating fallback object", e);
+        }
+        if (!initialized) {
             // this is probably a directory
+            documentId = null;
             name = SafFileSystemView.ROOT_PATH;
             isDirectory = true;
             exists = true;
@@ -94,9 +98,14 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
                     null,
                     null,
                     null);
-            cursor.moveToNext();
             try {
-                initByCursor(cursor);
+                if (cursor != null && cursor.moveToFirst()) {
+                    initByCursor(cursor);
+                } else {
+                    // vanished in the meantime
+                    this.exists = false;
+                    name = absPath.substring(absPath.lastIndexOf('/') + 1);
+                }
             } finally {
                 closeQuietly(cursor);
             }
@@ -274,7 +283,7 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
                 null,
                 null);
         try {
-            while (childCursor.moveToNext()) {
+            while (childCursor != null && childCursor.moveToNext()) {
                 String absPath = this.absPath.endsWith("/")
                         ? this.absPath + childCursor.getString(CURSOR_INDEX_NAME)
                         : this.absPath + "/" + childCursor.getString(CURSOR_INDEX_NAME);
@@ -305,8 +314,11 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
         Uri uri = DocumentsContract.buildDocumentUriUsingTree(
                 getStartUrl(),
                 documentId);
-        return new TracingBufferedOutputStream(getPftpdService().getContext().getContentResolver().openOutputStream(uri), logger);
-        // TODO no null, throw IOException
+        OutputStream os = getPftpdService().getContext().getContentResolver().openOutputStream(uri);
+        if (os == null) {
+            throw new IOException(String.format("Failed to open file '%s' for writing", absPath));
+        }
+        return new TracingBufferedOutputStream(os, logger);
     }
 
     public InputStream createInputStream(long offset) throws IOException {
@@ -316,9 +328,11 @@ public abstract class RoSafFile<TMina, TFileSystemView extends RoSafFileSystemVi
         Uri uri = DocumentsContract.buildDocumentUriUsingTree(
                 getStartUrl(),
                 documentId);
-        BufferedInputStream bis = new BufferedInputStream(getPftpdService().getContext().getContentResolver().openInputStream(uri));
-        bis.skip(offset);
-        return bis;
+        InputStream is = getPftpdService().getContext().getContentResolver().openInputStream(uri);
+        if (is == null) {
+            throw new IOException(String.format("Failed to open file '%s' for reading", absPath));
+        }
+        return Utils.openAtOffset(is, offset);
         // TODO no null, throw IOException
     }
 

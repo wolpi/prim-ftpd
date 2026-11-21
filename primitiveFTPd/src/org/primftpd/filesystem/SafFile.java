@@ -1,6 +1,7 @@
 package org.primftpd.filesystem;
 
 import android.content.Context;
+import android.os.Handler;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.DocumentsContract;
@@ -8,7 +9,6 @@ import android.widget.Toast;
 
 import org.primftpd.events.ClientActionEvent;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -50,8 +50,11 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
                 fileSystemView,
                 absPath,
                 null);
-        String parentName = parentDocumentFile.getName();
-        logger.trace("new SafFile() with documentFile, parent '{}' and absPath '{}'", parentName, absPath);
+        if (logger.isTraceEnabled()) {
+            // getName() queries the content provider, avoid that if not tracing
+            String parentName = parentDocumentFile.getName();
+            logger.trace("new SafFile() with documentFile, parent '{}' and absPath '{}'", parentName, absPath);
+        }
 
         name = documentFile.getName();
         if (name == null && SafFileSystemView.ROOT_PATH.equals(absPath)) {
@@ -74,9 +77,12 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
                 fileSystemView,
                 absPath,
                 name);
-        String parentName = parentDocumentFile.getName();
-        logger.trace("new SafFile() with name '{}', parent '{}', dirs '{}' and absPath '{}'",
-                new Object[]{name, parentName, Utils.toPath(parentNonexistentDirs), absPath});
+        if (logger.isTraceEnabled()) {
+            // getName() queries the content provider, avoid that if not tracing
+            String parentName = parentDocumentFile.getName();
+            logger.trace("new SafFile() with name '{}', parent '{}', dirs '{}' and absPath '{}'",
+                    new Object[]{name, parentName, Utils.toPath(parentNonexistentDirs), absPath});
+        }
 
         this.parentDocumentFile = parentDocumentFile;
         this.parentNonexistentDirs = parentNonexistentDirs;
@@ -91,7 +97,7 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
             DocumentFile parentDoc = parentDocumentFile;
             for (int i=0; i<parentNonexistentDirs.size(); i++) {
                 String currentDir = parentNonexistentDirs.get(i);
-                logger.trace("[{}] creating parent folder, parent of parent: '{}', parent: '{}'", new Object[]{name, parentDoc.getName(), currentDir});
+                logger.trace("[{}] creating parent folder: '{}'", name, currentDir);
                 DocumentFile currentDoc = parentDoc.createDirectory(currentDir);
                 if (currentDoc == null) {
                     return false;
@@ -165,6 +171,9 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
     public boolean setLastModified(long time) {
         logger.trace("[{}] setLastModified({})", name, time);
 
+        if (documentFile == null) {
+            return false;
+        }
         try {
             Uri docUri = documentFile.getUri();
             Path filePath = Paths.get(StorageManagerUtil.getFullDocIdPathFromTreeUri(docUri,
@@ -179,11 +188,7 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
             String clientActionMsg = baseMsg + ", error: " + e.getClass().getName();
             postClientActionError(clientActionMsg);
             String toastMsg = baseMsg + ", file: " + name + ", error: " + e.getClass().getName();
-            try {
-                Toast.makeText(getPftpdService().getContext(), toastMsg, Toast.LENGTH_SHORT).show();
-            } catch (Exception e2) {
-                logger.error("cannot show toast: {}: {}", e2.getClass(), e2.getMessage());
-            }
+            showToast(toastMsg);
         }
         return false;
     }
@@ -236,6 +241,10 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
         Uri startUrl = getStartUrl();
         Context context = getPftpdService().getContext();
 
+        if (documentFile == null) {
+            return result;
+        }
+
         Cursor childCursor = null;
         try {
             String documentId = DocumentsContract.getDocumentId(documentFile.getUri());
@@ -248,7 +257,7 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
                     null,
                     null,
                     null);
-            while (childCursor.moveToNext()) {
+            while (childCursor != null && childCursor.moveToNext()) {
                 String absPath = this.absPath.endsWith("/")
                         ? this.absPath + childCursor.getString(RoSafFile.CURSOR_INDEX_NAME)
                         : this.absPath + "/" + childCursor.getString(RoSafFile.CURSOR_INDEX_NAME);
@@ -259,13 +268,32 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
             }
         } catch (Exception e) {
             logger.error("", e);
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+            showToast(e.getMessage());
         } finally {
             closeQuietly(childCursor);
         }
 
         logger.trace("  [{}] listFiles(): num children: {}", name, result.size());
         return result;
+    }
+
+    private void showToast(final String msg) {
+        // we are usually not on the main thread, toasts must be shown there
+        try {
+            final Context context = getPftpdService().getContext();
+            new Handler(context.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        logger.error("cannot show toast: {}: {}", e.getClass(), e.getMessage());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            logger.error("cannot show toast: {}: {}", e.getClass(), e.getMessage());
+        }
     }
 
     private void closeQuietly(Cursor cursor) {
@@ -278,8 +306,16 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
         logger.trace("[{}] createOutputStream(offset: {})", name, offset);
         postClientAction(ClientActionEvent.ClientAction.UPLOAD);
 
+        // SAF streams are not seekable: we can start from scratch or append at the end (e.g. resume of upload)
+        boolean append = false;
         if (offset != 0) {
-            throw new UnsupportedOperationException("Only offset=0 is supported");
+            long currentSize = documentFile != null ? documentFile.length() : 0;
+            if (offset != currentSize) {
+                throw new IOException(String.format(
+                        "Can not write file '%s' at offset %d, only 0 and end of file (%d) are supported",
+                        absPath, offset, currentSize));
+            }
+            append = true;
         }
 
         // validate file name for known bad characters
@@ -303,7 +339,12 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
         }
         Uri uri = documentFile.getUri();
         logger.trace("   createOutputStream() uri: {}", uri);
-        return new TracingBufferedOutputStream(getPftpdService().getContext().getContentResolver().openOutputStream(uri), logger);
+        // note: since android 10 mode "w" does not truncate existing files, old content would remain at end of file
+        OutputStream os = getPftpdService().getContext().getContentResolver().openOutputStream(uri, append ? "wa" : "wt");
+        if (os == null) {
+            throw new IOException(String.format("Failed to open file '%s' for writing", absPath));
+        }
+        return new TracingBufferedOutputStream(os, logger);
     }
 
     public InputStream createInputStream(long offset) throws IOException {
@@ -313,9 +354,11 @@ public abstract class SafFile<TMina, TFileSystemView extends SafFileSystemView> 
         if (documentFile == null) {
             throw new IOException(String.format("File '%s' doesn't exist", absPath));
         }
-        BufferedInputStream bis = new BufferedInputStream(getPftpdService().getContext().getContentResolver().openInputStream(documentFile.getUri()));
-        bis.skip(offset);
-        return bis;
+        InputStream is = getPftpdService().getContext().getContentResolver().openInputStream(documentFile.getUri());
+        if (is == null) {
+            throw new IOException(String.format("Failed to open file '%s' for reading", absPath));
+        }
+        return Utils.openAtOffset(is, offset);
     }
 
     // This method is the equivalent of java.io.File.createNewFile().

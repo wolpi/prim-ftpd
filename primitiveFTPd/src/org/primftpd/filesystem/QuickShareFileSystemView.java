@@ -37,7 +37,12 @@ public abstract class QuickShareFileSystemView<TFile extends QuickShareFile<TMin
             result = createFile();
         } else {
             String filename = file.substring(file.lastIndexOf('/')+1);
-            result = createFile(new File(tmpDir, filename));
+            if (filename.isEmpty() || CURRENT_PATH.equals(filename) || "..".equals(filename)) {
+                // never leave tmp dir
+                result = createFile();
+            } else {
+                result = createFile(new File(tmpDir, filename));
+            }
         }
 
         return result;

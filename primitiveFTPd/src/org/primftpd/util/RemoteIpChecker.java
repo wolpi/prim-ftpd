@@ -14,8 +14,13 @@ public class RemoteIpChecker {
         if (StringUtils.isNotBlank(pattern)) {
             if (remoteAddress instanceof InetSocketAddress) {
                 InetSocketAddress inetSock = (InetSocketAddress) remoteAddress;
+                if (inetSock.getAddress() == null) {
+                    logger.warn("cannot check remote IP, address is unresolved: {}", remoteAddress);
+                    return false;
+                }
                 String origIp = inetSock.getAddress().toString();
-                String ip = IpAddressProvider.extractIp(origIp);
+                // toString() might contain host name: "hostname/ip"
+                String ip = IpAddressProvider.extractIp(inetSock.getAddress().getHostAddress());
                 boolean allowed = doCheck(ip, pattern);
                 logger.info("[checking whether remote ip is allowed] remote ip: '{}', pattern: '{}', allowed? '{}'",
                         ip, pattern, allowed);
@@ -30,8 +35,10 @@ public class RemoteIpChecker {
                 return allowed;
             } else {
                 logger.warn("cannot check remote IP, bad class. remote addr: {}, class: {}",
-                        remoteAddress.toString(),
-                        remoteAddress.getClass().getSimpleName());
+                        remoteAddress,
+                        remoteAddress != null ? remoteAddress.getClass().getSimpleName() : null);
+                // a pattern is configured, but it cannot be checked -> must not allow access
+                return false;
             }
         } else {
             logger.debug("not checking ip pattern: '{}'", pattern);

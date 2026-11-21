@@ -102,6 +102,11 @@ class SshUtils {
     }
 
     static String getClientIp(Session session) {
-        return IpAddressProvider.extractIp(session.getIoSession().getRemoteAddress().toString());
+        try {
+            return IpAddressProvider.extractIp(String.valueOf(session.getIoSession().getRemoteAddress()));
+        } catch (Exception e) {
+            // e.g. session already closed
+            return "unknown ip";
+        }
     }
 }

@@ -6,8 +6,6 @@ import org.apache.ftpserver.ftplet.FtpSession;
 import org.apache.ftpserver.impl.DefaultFtpSession;
 import org.apache.ftpserver.impl.FtpIoSession;
 import org.apache.ftpserver.impl.ServerDataConnectionFactory;
-import org.greenrobot.eventbus.EventBus;
-import org.primftpd.events.DataTransferredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +24,18 @@ public class AndroidIoDataConnection implements DataConnection {
     private final FtpIoSession session;
     private final ServerDataConnectionFactory factory;
     private SocketChannel dataSocketChannel;
+
+    // small buffers slow down transfer of large files significantly
+    private static final int BUFFER_SIZE = 64 * 1024;
+
+    private static volatile long lastTransferTimestamp = 0;
+
+    /**
+     * @return Timestamp of last moment data has been transferred on any data connection, 0 if there was no transfer yet.
+     */
+    public static long getLastTransferTimestamp() {
+        return lastTransferTimestamp;
+    }
 
     public AndroidIoDataConnection(final SocketChannel dataSocketChannel, final FtpIoSession session,
                             final ServerDataConnectionFactory factory) {
@@ -49,14 +59,10 @@ public class AndroidIoDataConnection implements DataConnection {
         WritableByteChannel outStreamBacked = new WritableByteChannel() {
             @Override
             public int write(ByteBuffer src) throws IOException {
-                //LOG.trace("buffer stats, position: {}, limit: {}, capacity: {}, remaining: {}",
-                //        new Object[]{src.position(), src.limit(), src.capacity(), src.remaining()});
-                byte[] buf = src.array();
-                int length = src.position();
-                if (length < buf.length) {
-                    LOG.trace("writing less than buffer length, len: {}, diff: {}", length, (buf.length - length));
-                }
-                out.write(buf, 0, length);
+                // buffer has been flipped by caller, write everything between position and limit
+                int length = src.remaining();
+                out.write(src.array(), src.arrayOffset() + src.position(), length);
+                src.position(src.limit());
                 return length;
             }
 
@@ -72,7 +78,8 @@ public class AndroidIoDataConnection implements DataConnection {
         };
 
         try {
-            return transfer(session, true, dataSocketChannel, outStreamBacked);
+            // data is read from client
+            return transfer(session, false, dataSocketChannel, outStreamBacked);
         } finally {
             //IoUtils.close(out);
         }
@@ -90,27 +97,21 @@ public class AndroidIoDataConnection implements DataConnection {
         LOG.trace("transferToClient()");
 
         ReadableByteChannel inStreamBacked = new ReadableByteChannel() {
-
-            private int lastRead = 0;
-
+            private boolean eof = false;
             @Override
             public int read(ByteBuffer dst) throws IOException {
-                byte[] buf = dst.array();
-                lastRead = in.read(buf);
-                if (lastRead < 0) {
-                    dst.position(0);
-                    dst.limit(0);
-                } else if (lastRead < buf.length) {
-                    LOG.trace("setting buffer position: 0 & limit: {}", lastRead);
-                    dst.position(0);
-                    dst.limit(lastRead);
+                int read = in.read(dst.array(), dst.arrayOffset() + dst.position(), dst.remaining());
+                if (read < 0) {
+                    eof = true;
+                } else {
+                    dst.position(dst.position() + read);
                 }
-                return lastRead;
+                return read;
             }
 
             @Override
             public boolean isOpen() {
-                return lastRead >= 0;
+                return !eof;
             }
 
             @Override
@@ -142,12 +143,14 @@ public class AndroidIoDataConnection implements DataConnection {
             //writer.write(str);
             byte[] bytes = str.getBytes("UTF-8");
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
-            dataSocketChannel.write(buffer);
+            // a single call of write() is not guaranteed to write everything, e.g. listing of large dirs
+            while (buffer.hasRemaining()) {
+                dataSocketChannel.write(buffer);
+            }
 
             // update session
             if (session instanceof DefaultFtpSession) {
-                ((DefaultFtpSession) session).increaseWrittenDataBytes(str
-                        .getBytes("UTF-8").length);
+                ((DefaultFtpSession) session).increaseWrittenDataBytes(bytes.length);
             }
         } finally {
 //            if (writer != null) {
@@ -163,7 +166,7 @@ public class AndroidIoDataConnection implements DataConnection {
         long transferredSize = 0L;
 
         boolean isAscii = session.getDataType() == DataType.ASCII;
-        byte[] buff = new byte[4096];
+        byte[] buff = new byte[BUFFER_SIZE];
 
         LOG.trace("transfer(), ascii: {}", isAscii);
         if (isAscii) {
@@ -179,20 +182,17 @@ public class AndroidIoDataConnection implements DataConnection {
             CountingReadableByteChannel inCounting = new CountingReadableByteChannel(in);
             CountingWritableByteChannel outCounting = new CountingWritableByteChannel(out);
 
-            long loopcnt = 0;
             ByteBuffer buffer = ByteBuffer.wrap(buff);
             while (true) {
 
                 // read data
+                buffer.clear();
                 int count = inCounting.read(buffer);
                 if (count == -1) {
                     break;
                 }
-                if (count < buff.length) {
-                    LOG.trace("read less than buffer size in loop '{}', read: {}, diff: {}",
-                            new Object[]{loopcnt, count, (buff.length - count)});
-                    LOG.trace("    buffer stats, position: {}, limit: {}, capacity: {}, remaining: {}",
-                            new Object[]{buffer.position(), buffer.limit(), buffer.capacity(), buffer.remaining()});
+                if (count == 0) {
+                    continue;
                 }
 
                 // update MINA session
@@ -204,24 +204,15 @@ public class AndroidIoDataConnection implements DataConnection {
                     }
                 }
 
-                // write data
-                outCounting.write(buffer);
+                // write data, a single call of write() is not guaranteed to write everything
+                buffer.flip();
+                while (buffer.hasRemaining()) {
+                    outCounting.write(buffer);
+                }
 
                 transferredSize += count;
 
                 notifyObserver();
-
-                buffer.clear();
-
-                long read = inCounting.getCount();
-                long written = outCounting.getCount();
-                if (read != written) {
-                    LOG.trace("difference of read/written in loop '{}', bytes: {}", loopcnt, (written - read));
-                }
-                loopcnt++;
-
-                // post event
-                //EventBus.getDefault().post(new DataTransferredEvent(System.currentTimeMillis(), transferredSize, isWrite));
             }
 
             LOG.trace("bytes read: {}", inCounting.getCount());
@@ -250,6 +241,7 @@ public class AndroidIoDataConnection implements DataConnection {
     protected void notifyObserver() {
         //LOG.trace("notifyObserver()");
         session.updateLastAccessTime();
+        lastTransferTimestamp = System.currentTimeMillis();
 
         // TODO this has been moved from AbstractConnection, do we need to keep
         // it?

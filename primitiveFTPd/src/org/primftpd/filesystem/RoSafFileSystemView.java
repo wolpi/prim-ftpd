@@ -71,7 +71,7 @@ public abstract class RoSafFileSystemView<TFile extends RoSafFile<TMina, ? exten
                         null,
                         null);
                 try {
-                    while (childCursor.moveToNext()) {
+                    while (childCursor != null && childCursor.moveToNext()) {
                         String docId = childCursor.getString(0);
                         String docName = childCursor.getString(1);
                         if (currentPart.equals(docName)) {
@@ -84,7 +84,7 @@ public abstract class RoSafFileSystemView<TFile extends RoSafFile<TMina, ? exten
                             }
                         }
                     }
-                    if (childCursor.isAfterLast()) {
+                    if (childCursor == null || childCursor.isAfterLast()) {
                         // not found
                         if (i == parts.size() - 1) {
                             // TODO we are read only -> there is no upload anyway
@@ -95,9 +95,8 @@ public abstract class RoSafFileSystemView<TFile extends RoSafFile<TMina, ? exten
                             // invalid path
                             String absPath = Utils.toPath(parts.subList(0, i+1));
                             logger.error("path does not exist: {}", absPath);
-                            // fall through to returning the root document
-                            // TODO follow SAF implementation
-                            break;
+                            // must not fall through to returning the root document
+                            return createFile(Utils.toPath(parts), parts.get(parts.size() - 1), false);
                         }
                     }
                 } finally {

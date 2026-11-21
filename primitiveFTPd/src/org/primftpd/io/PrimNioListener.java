@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,29 @@ public class PrimNioListener extends AbstractListener {
 
     boolean suspended = false;
 
-    private FtpHandler handler = new DefaultFtpHandler();
+    private FtpHandler handler = new DefaultFtpHandler() {
+        @Override
+        public void sessionIdle(FtpIoSession session, IdleStatus status) throws Exception {
+            // Control connection is idle from MINA's point of view while a data transfer is running.
+            // Idle events are queued behind the running command and would close the session
+            // right after transfer of a large file has been finished.
+            // Last access time is updated continuously while data is transferred.
+            try {
+                Date lastAccess = session.getLastAccessTime();
+                long idleMillis = session.getConfig().getBothIdleTimeInMillis();
+                if (lastAccess != null && idleMillis > 0) {
+                    long sinceLastAccess = System.currentTimeMillis() - lastAccess.getTime();
+                    if (sinceLastAccess >= 0 && sinceLastAccess < idleMillis) {
+                        LOG.debug("ignoring idle event, last access was {} ms ago", sinceLastAccess);
+                        return;
+                    }
+                }
+            } catch (RuntimeException e) {
+                LOG.debug("could not check last access time", e);
+            }
+            super.sessionIdle(session, status);
+        }
+    };
 
     private FtpServerContext context;
 

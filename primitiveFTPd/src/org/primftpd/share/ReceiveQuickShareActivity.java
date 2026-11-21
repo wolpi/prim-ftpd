@@ -23,12 +23,15 @@ import org.primftpd.util.TmpDirType;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
 
     private TargetDir targetDir;
     private List<Uri> uris = null;
+    private List<String> contents = null;
+    private boolean copyStarted = false;
     private String type;
 
     @Override
@@ -81,19 +84,31 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
 
         if (Intent.ACTION_SEND_MULTIPLE.equals(action)) {
             ArrayList<Parcelable> parcelables = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-            this.uris = new ArrayList<>(parcelables.size());
-            for (Parcelable parcelable : parcelables) {
-                Uri uri = (Uri) parcelable;
-                logger.debug("got uri: '{}'", uri);
-                uris.add(uri);
+            if (parcelables != null) {
+                this.uris = new ArrayList<>(parcelables.size());
+                for (Parcelable parcelable : parcelables) {
+                    logger.debug("got uri: '{}'", parcelable);
+                    if (parcelable instanceof Uri) {
+                        uris.add((Uri) parcelable);
+                    }
+                }
+            } else {
+                finish();
             }
             // more in onResume()
         }
         if (Intent.ACTION_SEND.equals(action)) {
             Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             logger.debug("got uri: '{}'", uri);
-            saveUri(targetDir, uri, content, type);
-            onCopyFinished(targetDir);
+            if (uri != null) {
+                // copy in background (see onResume()), shared file might be large
+                this.uris = Collections.singletonList(uri);
+                if (content != null) {
+                    this.contents = Collections.singletonList(content);
+                }
+            } else {
+                onCopyFinished(targetDir);
+            }
         }
     }
 
@@ -118,7 +133,9 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
         super.onResume();
         logger.trace("onResume()");
 
-        if (this.uris != null) {
+        // onResume() may be called several times, copy must be started just once
+        if (this.uris != null && !this.copyStarted) {
+            this.copyStarted = true;
             final ProgressDialog progressDialog = createProgressDialog(uris.size());
 
             // delay start of copy process to give the system time to draw progress dialog
@@ -127,7 +144,7 @@ public class ReceiveQuickShareActivity extends AbstractReceiveShareActivity {
                 logger.trace("on delayed saveUris()");
 
                 // this will show a progress dialog
-                saveUris(progressDialog, targetDir, uris, null, type);
+                saveUris(progressDialog, targetDir, uris, contents, type);
             }, 500);
         }
     }

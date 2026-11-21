@@ -34,8 +34,8 @@ public class SampleAuthKeysFileCreator
 				}
 				if (dir.exists()) {
 					logger.debug("trying to create sample authorized keys file: {}", file.getAbsolutePath());
-					try {
-						PrintStream ps = new PrintStream(new FileOutputStream(file));
+					// stream must be closed, otherwise file handle leaks and content might not be written
+					try (PrintStream ps = new PrintStream(new FileOutputStream(file))) {
 						ps.println("# sample authorized keys file");
 						ps.println("# place your keys in this file");
 						ps.println("# one key per line");

@@ -65,6 +65,10 @@ public class QuickSettingsService extends TileService {
     protected void updateTile() {
         logger.debug("updateTile");
         Tile tile = this.getQsTile();
+        if (tile == null) {
+            // not listening
+            return;
+        }
         boolean isActive = isActive();
 
         String newLabel;
@@ -91,7 +95,9 @@ public class QuickSettingsService extends TileService {
         logger.debug("onStartListening");
         super.onStartListening();
         updateTile();
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     @Override

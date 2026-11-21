@@ -45,7 +45,7 @@ public abstract class RootFileSystemView<TFile extends RootFile<TMina, ? extends
         shell.addCommand(cmd, 0, new Shell.OnCommandResultListener() {
             @Override
             public void onCommandResult(int commandCode, int exitCode, @NonNull List<String> output) {
-                if (exitCode == 0) {
+                if (exitCode == 0 && !output.isEmpty()) {
                     wrapper[0] = parser.parseLine(output.get(0));
                 } else {
                     logger.error("could not run 'ls' command (exitCode: {})", exitCode);
@@ -83,7 +83,7 @@ public abstract class RootFileSystemView<TFile extends RootFile<TMina, ? extends
         final LsOutputBean[] wrapper = new LsOutputBean[1];
         int i=0;
         while (tmp.isLink()) {
-            shell.addCommand("ls -lad \"" + tmp.getLinkTarget() + "\"", 0, new Shell.OnCommandLineListener() {
+            shell.addCommand("ls -lad " + RootFile.escapePath(tmp.getLinkTarget()), 0, new Shell.OnCommandLineListener() {
                 @Override
                 public void onSTDOUT(@NonNull String s) {
                     wrapper[0] = parser.parseLine(s);
@@ -98,7 +98,12 @@ public abstract class RootFileSystemView<TFile extends RootFile<TMina, ? extends
             });
             shell.waitForIdle();
 
+            if (wrapper[0] == null) {
+                // could not resolve link target
+                break;
+            }
             tmp = wrapper[0];
+            wrapper[0] = null;
             i++;
             if (i > 20) {
                 break;

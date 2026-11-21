@@ -145,9 +145,12 @@ public class LsOutputParser {
             dateEndIndex = 6 + linkCountOffset;
         }
         try {
-            SimpleTimeZone timeZone = new SimpleTimeZone(0, "No-TZ");
-            dateFormat.setTimeZone(timeZone);
-            date = dateFormat.parse(dateStr);
+            // DateFormat is not thread-safe and parser is used by several client connections at the same time
+            synchronized (dateFormat) {
+                SimpleTimeZone timeZone = new SimpleTimeZone(0, "No-TZ");
+                dateFormat.setTimeZone(timeZone);
+                date = dateFormat.parse(dateStr);
+            }
             if (offset > 0) {
                 date = new Date(date.getTime() + offset);
             }

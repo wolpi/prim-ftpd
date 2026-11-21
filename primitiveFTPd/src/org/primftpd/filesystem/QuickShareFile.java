@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import org.primftpd.events.ClientActionEvent;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -138,8 +137,6 @@ public abstract class QuickShareFile<TMina, TFileSystemView extends QuickShareFi
         if (realFile == null) {
             throw new IOException(String.format("Can not read file '%s'", absPath));
         }
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(realFile));
-        bis.skip(offset);
-        return bis;
+        return Utils.openAtOffset(new FileInputStream(realFile), offset);
     }
 }

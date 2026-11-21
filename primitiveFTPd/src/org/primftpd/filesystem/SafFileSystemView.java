@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import org.primftpd.services.PftpdService;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -85,6 +86,9 @@ public abstract class SafFileSystemView<TFile extends SafFile<TMina, ? extends S
                             null,
                             null);
                     try {
+                        if (childCursor == null) {
+                            throw new IllegalStateException("content provider returned no cursor for " + childrenUri);
+                        }
                         while (childCursor.moveToNext()) {
                             String docId = childCursor.getString(0);
                             String docName = childCursor.getString(1);
@@ -115,7 +119,7 @@ public abstract class SafFileSystemView<TFile extends SafFile<TMina, ? extends S
                                 return createFile(absPath, parentDocFile, Collections.emptyList(), currentPart);
                             } else {
                                 // file upload or dir creation in an nonexistent dir, probably called without first calling mkdirs
-                                List<String> parentNonexistentDirs = parts.subList(i, parts.size() - 1);
+                                List<String> parentNonexistentDirs = new ArrayList<>(parts.subList(i, parts.size() - 1));
                                 String name = parts.get(parts.size() - 1);
                                 logger.trace("    calling createFile() for doc: {}, parentId: {}, parentUri: {}, parentNonexistentDirs: {}",
                                     new Object[]{name, parentId, parentUri, Utils.toPath(parentNonexistentDirs)});

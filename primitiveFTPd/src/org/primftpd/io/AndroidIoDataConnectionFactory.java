@@ -10,6 +10,7 @@ import org.apache.ftpserver.impl.ServerDataConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -178,7 +179,12 @@ public class AndroidIoDataConnectionFactory extends IODataConnectionFactory impl
 
     @Override
     public DataConnection openConnection() throws Exception {
-        return new AndroidIoDataConnection(createDataSocket(), session, this);
+        SocketChannel channel = createDataSocket();
+        if (channel == null) {
+            // e.g. ip check failed
+            throw new IOException("data connection could not be established or was not accepted");
+        }
+        return new AndroidIoDataConnection(channel, session, this);
     }
 
     private synchronized SocketChannel createDataSocket() throws Exception {

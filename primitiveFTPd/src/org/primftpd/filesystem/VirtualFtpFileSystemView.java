@@ -70,7 +70,7 @@ public class VirtualFtpFileSystemView extends VirtualFileSystemView<
         logger.trace("changeWorkingDirectory({})", dir);
         String newPath;
         FtpFile newWorkingDir;
-        boolean isAbsolute = dir != null && dir.charAt(0) == '/';
+        boolean isAbsolute = dir != null && dir.startsWith("/");
         if (!isAbsolute) {
             // curl ignores current WD and tries to switch to WD from root dir by dir
             String topLevelPath = "/" + dir;

@@ -3,6 +3,9 @@ package org.primftpd.filesystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,6 +17,9 @@ public class Utils {
     protected static Logger logger = LoggerFactory.getLogger(Utils.class);
 
     static String absolute(String rel, String workingDir) {
+        if (rel == null || rel.isEmpty()) {
+            return workingDir;
+        }
         if (rel.charAt(0) == '/') {
             return rel;
         }
@@ -24,7 +30,7 @@ public class Utils {
     }
 
     static String absoluteOrHome(String path, String homeDir) {
-        if (".".equals(path) || "/.".equals(path)) {
+        if (path == null || path.isEmpty() || ".".equals(path) || "/.".equals(path)) {
             return homeDir;
         }
         // if homeDir == / -> stay relative (needed for virtual folders)
@@ -68,7 +74,55 @@ public class Utils {
     }
 
     static String parent(String path) {
-        return path.substring(0, path.lastIndexOf('/'));
+        // strip trailing slashes, but keep root
+        int end = path.length();
+        while (end > 1 && path.charAt(end - 1) == '/') {
+            end--;
+        }
+        int idx = path.lastIndexOf('/', end - 1);
+        if (idx <= 0) {
+            // top level entry (or no slash at all) -> parent is root
+            return "/";
+        }
+        return path.substring(0, idx);
+    }
+
+    /**
+     * Skips exactly the given number of bytes or until end of stream is reached.
+     * InputStream.skip() is allowed to skip less bytes than requested.
+     * Closes the stream if skipping fails.
+     */
+    static void skipFully(InputStream is, long offset) throws IOException {
+        try {
+            long remaining = offset;
+            while (remaining > 0) {
+                long skipped = is.skip(remaining);
+                if (skipped <= 0) {
+                    // skip() may return 0 without being at end of stream
+                    if (is.read() < 0) {
+                        break;
+                    }
+                    skipped = 1;
+                }
+                remaining -= skipped;
+            }
+        } catch (IOException | RuntimeException e) {
+            try {
+                is.close();
+            } catch (IOException e2) {
+                // ignore
+            }
+            throw e;
+        }
+    }
+
+    /**
+     * Positions the stream at offset and wraps it into a buffered stream.
+     * Skipping is done on the raw stream as file based streams can seek instead of reading.
+     */
+    static InputStream openAtOffset(InputStream is, long offset) throws IOException {
+        skipFully(is, offset);
+        return new BufferedInputStream(is, TracingBufferedOutputStream.BUFFER_SIZE);
     }
 
     private static final DateFormat TOUCH_DATE_FORMAT = new SimpleDateFormat("yyMMddHHmm.ss");
@@ -76,7 +130,10 @@ public class Utils {
         TOUCH_DATE_FORMAT.setTimeZone(new SimpleTimeZone(0, "No-TZ"));
     }
     static String touchDate(long time) {
-        return TOUCH_DATE_FORMAT.format(time);
+        // SimpleDateFormat is not thread-safe
+        synchronized (TOUCH_DATE_FORMAT) {
+            return TOUCH_DATE_FORMAT.format(time);
+        }
     }
 
     public static final boolean RUN_TESTS = false;

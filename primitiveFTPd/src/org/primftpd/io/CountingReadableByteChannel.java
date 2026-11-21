@@ -7,7 +7,8 @@ import java.nio.channels.ReadableByteChannel;
 public class CountingReadableByteChannel implements ReadableByteChannel {
 
     private final ReadableByteChannel delegate;
-    private int count;
+    // long to support files larger than 2 GB
+    private long count;
 
     public CountingReadableByteChannel(ReadableByteChannel delegate) {
         this.delegate = delegate;
@@ -33,7 +34,7 @@ public class CountingReadableByteChannel implements ReadableByteChannel {
         delegate.close();
     }
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 }

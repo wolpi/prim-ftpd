@@ -32,6 +32,8 @@ public class ClientActionFragment extends Fragment {
 
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private static final int MAX_LOG_CHARS = 200_000;
+
     public static final int EVENT_UPDATE_STATS = 1;
     public static final int INTERVAL_UPDATE_STATS = 100;
     public static final int FACTOR_1S = 1000 / INTERVAL_UPDATE_STATS;
@@ -140,6 +142,13 @@ public class ClientActionFragment extends Fragment {
     public void onEvent(ClientActionEvent event) {
         String clientAction = format(event);
 
+        // server may run for a long time, text must not grow endlessly
+        CharSequence currentText = logContent.getText();
+        if (currentText != null && currentText.length() > MAX_LOG_CHARS) {
+            String text = currentText.toString();
+            int cutIndex = text.indexOf('\n', text.length() - MAX_LOG_CHARS / 2);
+            logContent.setText(cutIndex >= 0 ? text.substring(cutIndex + 1) : "");
+        }
         logContent.append(clientAction);
         logContent.append("\n");
         scrollView.fullScroll(View.FOCUS_DOWN);

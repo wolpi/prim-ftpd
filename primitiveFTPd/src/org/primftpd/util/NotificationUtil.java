@@ -289,6 +289,25 @@ public class NotificationUtil {
             boolean finished,
             long currentBytes,
             long size) {
+        Notification notification = buildDownloadNotification(ctxt, filename, canceled, finished, currentBytes, size);
+        NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
+                Context.NOTIFICATION_SERVICE);
+        notiMgr.notify(DOWNLOAD_ID, notification);
+    }
+
+    public static int getDownloadNotificationId() {
+        return DOWNLOAD_ID;
+    }
+
+    private static final int DOWNLOAD_PROGRESS_MAX = 1000;
+
+    public static Notification buildDownloadNotification(
+            Context ctxt,
+            String filename,
+            boolean canceled,
+            boolean finished,
+            long currentBytes,
+            long size) {
 
         // create channel
         createChannel(ctxt, DOWNLOAD_CHANNEL_ID);
@@ -302,9 +321,9 @@ public class NotificationUtil {
         } else if (finished) {
             tickerText = "finished";
         } else {
-            String sizeStr = size != 0 ? String.valueOf(size) : "unknown";
+            String sizeStr = size > 0 ? FileSizeUtils.humanReadableByteCountSI(size) : "unknown";
             tickerText = "downloading ... (" +
-                    currentBytes +
+                    FileSizeUtils.humanReadableByteCountSI(currentBytes) +
                     " / " +
                     sizeStr +
                     ")" +
@@ -327,7 +346,18 @@ public class NotificationUtil {
                 .setSmallIcon(iconId)
                 .setLargeIcon(largeIcon)
                 .setWhen(when)
-                .setProgress((int) size, (int) currentBytes, false);
+                .setOnlyAlertOnce(true);
+        if (!canceled && !finished) {
+            // sizes of large files do not fit into int, scale progress
+            if (size > 0) {
+                int progress = (int) Math.min(
+                        DOWNLOAD_PROGRESS_MAX,
+                        (currentBytes * (double) DOWNLOAD_PROGRESS_MAX) / size);
+                builder.setProgress(DOWNLOAD_PROGRESS_MAX, Math.max(0, progress), false);
+            } else {
+                builder.setProgress(0, 0, true);
+            }
+        }
         addChannel(builder, DOWNLOAD_CHANNEL_ID);
 
         // intent to open file
@@ -355,9 +385,6 @@ public class NotificationUtil {
             addAction(ctxt, builder, pendingStopIntent, R.string.cancel, stopIconId);
         }
 
-        Notification notification = builder.build();
-        NotificationManager notiMgr = (NotificationManager) ctxt.getSystemService(
-                Context.NOTIFICATION_SERVICE);
-        notiMgr.notify(DOWNLOAD_ID, notification);
+        return builder.build();
     }
 }

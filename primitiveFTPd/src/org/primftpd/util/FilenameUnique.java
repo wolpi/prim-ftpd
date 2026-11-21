@@ -19,6 +19,41 @@ public class FilenameUnique {
 
     protected static DateFormat FILENAME_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS");
 
+    private static final int MAX_FILENAME_LENGTH = 120;
+
+    static String sanitize(String filename) {
+        StringBuilder sb = new StringBuilder(filename.length());
+        for (int i = 0; i < filename.length() && sb.length() < MAX_FILENAME_LENGTH; i++) {
+            char c = filename.charAt(i);
+            if (c == '/' || c == '\\' || c == ':' || c < ' ') {
+                sb.append('_');
+            } else {
+                sb.append(c);
+            }
+        }
+        if (filename.length() > MAX_FILENAME_LENGTH) {
+            // keep file extension if name had to be shortened
+            int dotIndex = filename.lastIndexOf('.');
+            int extLength = filename.length() - dotIndex;
+            if (dotIndex > 0 && extLength > 1 && extLength <= 10) {
+                String ext = sanitizeExtension(filename.substring(dotIndex));
+                sb.setLength(MAX_FILENAME_LENGTH - ext.length());
+                sb.append(ext);
+            }
+        }
+        String result = sb.toString().trim();
+        if (result.isEmpty() || ".".equals(result) || "..".equals(result)) {
+            synchronized (FILENAME_DATEFORMAT) {
+                result = FILENAME_DATEFORMAT.format(new Date());
+            }
+        }
+        return result;
+    }
+
+    private static String sanitizeExtension(String ext) {
+        return ext.replace('/', '_').replace('\\', '_').replace(':', '_');
+    }
+
     public static String filename(Uri uri, String content, String type, TargetDir targetDir, Context context) {
         String filename = null;
         boolean addExtension = false;
@@ -48,9 +83,14 @@ public class FilenameUnique {
         if (filename == null || (content == null && addExtension)) {
             // if we still don't have a filename or last part of url does not contain a extension
             // use timestamp as filename
-            filename = FILENAME_DATEFORMAT.format(new Date());
+            // DateFormat is not thread-safe
+            synchronized (FILENAME_DATEFORMAT) {
+                filename = FILENAME_DATEFORMAT.format(new Date());
+            }
             addExtension = true;
         }
+        // name is provided by other apps, it must not be able to point to another directory
+        filename = sanitize(filename);
         String fileExt;
         String basename;
         if (addExtension) {

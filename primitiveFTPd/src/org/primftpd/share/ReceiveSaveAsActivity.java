@@ -153,7 +153,7 @@ public class ReceiveSaveAsActivity extends AbstractReceiveShareActivity {
 
         logger.debug("onActivityResult()");
 
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             TargetDir targetDir = null;
             if (requestCode == 0) {
                 Uri targetUri = data.getData();

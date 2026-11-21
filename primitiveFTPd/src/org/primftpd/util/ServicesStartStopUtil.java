@@ -2,6 +2,7 @@ package org.primftpd.util;
 
 import android.app.ActivityManager;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -303,6 +304,14 @@ public class ServicesStartStopUtil {
                     R.id.widgetText,
                     context.getText(R.string.widgetTextStart));
         }
+
+        // updateAppWidget() replaces the complete views, click handlers must be set again
+        // otherwise widget does not react anymore after first update
+        Intent intent = StartStopWidgetProvider.buildServerStartStopIntent(context);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        remoteViews.setOnClickPendingIntent(R.id.widgetIcon, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.widgetText, pendingIntent);
 
         ComponentName thisWidget = new ComponentName(context, StartStopWidgetProvider.class);
         AppWidgetManager manager = AppWidgetManager.getInstance(context);

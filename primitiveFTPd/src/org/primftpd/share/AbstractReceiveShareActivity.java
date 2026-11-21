@@ -1,6 +1,7 @@
 package org.primftpd.share;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,6 +18,7 @@ import org.primftpd.util.WakelockUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -133,25 +135,13 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
 
                 logger.trace("handling uri async: {}", uri);
 
-                boolean[] finished = new boolean[]{false};
-                final String finalContent = content;
-                mainThreadHandler.post(() -> {
-                    logger.trace("saving uri in main thread");
-                    activity.saveUri(targetDir, uri, finalContent, type);
-                    finished[0] = true;
-                });
-
-                while (!finished[0]) {
-                    try {
-                        // wait
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        logger.error("", e);
-                    }
+                // copy in this background thread, copying large files on main thread freezes the UI
+                // and makes android show 'app not responding'
+                try {
+                    activity.saveUri(targetDir, uri, content, type);
+                } catch (Exception e) {
+                    logger.warn("could not copy shared data", e);
                 }
-
-                // progress mus be updated in background task, not in main thread
-                logger.trace("incrementing progress in background task");
                 progressDiag.incrementProgressBy(1);
             }
 
@@ -185,6 +175,10 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         if (uri == null) {
             return;
         }
+        if (!isUriAllowed(uri)) {
+            logger.warn("refusing to copy shared data, uri points to private data of this app: {}", uri);
+            return;
+        }
         OutputStream os = null;
         InputStream is = null;
         try {
@@ -192,6 +186,10 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
             logger.debug("saving with filename: {}", filename);
             os = targetDir.createOutStream(filename);
             is = getContentResolver().openInputStream(uri);
+            if (os == null || is == null) {
+                logger.warn("could not open streams to copy shared data, uri: {}", uri);
+                return;
+            }
             copyStream(is, os);
 
         } catch (Exception e) {
@@ -199,6 +197,10 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         } finally {
             try {
                 if (os != null) os.close();
+            } catch (IOException e) {
+                logger.warn("could not copy shared data", e);
+            }
+            try {
                 if (is != null) is.close();
             } catch (IOException e) {
                 logger.warn("could not copy shared data", e);
@@ -206,7 +208,40 @@ public abstract class AbstractReceiveShareActivity extends FragmentActivity {
         }
     }
 
-    private static final int BUFFER_SIZE = 4096;
+    // small buffers slow down copying of large files
+    /**
+     * Share intents can be sent by any app. They must not be able to make this app copy its own private files
+     * (e.g. host keys or preferences) to a place where others can read them or where they are served to clients.
+     */
+    protected boolean isUriAllowed(Uri uri) {
+        try {
+            String scheme = uri.getScheme();
+            if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+                String authority = uri.getAuthority();
+                return authority == null || !authority.startsWith(getPackageName());
+            }
+            if (scheme == null || ContentResolver.SCHEME_FILE.equals(scheme)) {
+                String path = uri.getPath();
+                if (path == null) {
+                    return false;
+                }
+                String canonicalPath = new File(path).getCanonicalPath();
+                String dataDir = new File(getApplicationInfo().dataDir).getCanonicalPath();
+                if (canonicalPath.equals(dataDir) || canonicalPath.startsWith(dataDir + File.separator)) {
+                    return false;
+                }
+                // data dir might be reachable by different paths, e.g. /data/data and /data/user/0
+                return !canonicalPath.contains(File.separator + getPackageName() + File.separator)
+                        || !canonicalPath.startsWith("/data/");
+            }
+            return true;
+        } catch (Exception e) {
+            logger.warn("could not check uri", e);
+            return false;
+        }
+    }
+
+    private static final int BUFFER_SIZE = 64 * 1024;
 
     private void copyStream(InputStream is, OutputStream os) {
         try {

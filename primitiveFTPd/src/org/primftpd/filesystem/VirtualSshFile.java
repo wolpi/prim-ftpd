@@ -77,7 +77,8 @@ public class VirtualSshFile extends VirtualFile<SshFile, VirtualSshFileSystemVie
     @Override
     public SshFile getParentFile() {
         logger.trace("[{}] getParentFile()", name);
-        return delegate != null ? ((SshFile)delegate).getParentFile() : null;
+        // parent must be resolved in virtual namespace, otherwise prefix of storage type gets lost
+        return getFileSystemView().getFile(Utils.parent(absPath));
     }
 
     @Override

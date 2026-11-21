@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 public class MediaScannerClient implements MediaScannerConnectionClient {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    // each attempt waits up to 500ms
+    private static final int MAX_CONNECT_ATTEMPTS = 20;
+
     private final MediaScannerConnection connection;
 
     public MediaScannerClient(Context context) {
@@ -29,12 +32,19 @@ public class MediaScannerClient implements MediaScannerConnectionClient {
         synchronized (connection) {
             // Android 11 (API level 30) and higher: isConnected() is constant true (we called connect() in the ctor above)
             // Android 10 (API level 29) and lower: we have to wait onMediaScannerConnected() before calling scanFile()
+            int attempts = 0;
             while (!connection.isConnected()) {
+                if (attempts++ >= MAX_CONNECT_ATTEMPTS) {
+                    throw new IllegalStateException("could not connect to media scanner");
+                }
                 try {
                     // calling connect() multiple times, even on an already connected connection, doesn't cause any problem
                     connection.connect();
                     // if we somehow miss a notifyAll(), better to use a timeout and retry
                     connection.wait(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new IllegalStateException("interrupted while connecting to media scanner");
                 } catch (Exception e) {
                     logger.warn("  media scanner connection error (reconnecting) '{}'", e.toString());
                 }

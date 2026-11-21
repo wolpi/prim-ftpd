@@ -8,6 +8,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.Process;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import org.primftpd.util.Defaults;
 import org.primftpd.util.FilenameUnique;
 import org.primftpd.util.NotificationUtil;
 import org.primftpd.util.StringUtils;
+import org.primftpd.util.WakelockUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +42,10 @@ public class DownloadsService extends Service {
     protected static final int MSG_STOP = 2;
     public static final String URL = "url";
 
-    private static final int BUF_SIZE = 4096;
+    // small buffers slow down download of large files
+    private static final int BUF_SIZE = 64 * 1024;
+    private static final long NOTIFICATION_UPDATE_INTERVAL_MILLIS = 1000;
+    private static final long WAKELOCK_TIMEOUT_MILLIS = 10 * 60 * 1000L;
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -48,8 +53,9 @@ public class DownloadsService extends Service {
 
     private String localPath = "";
     private String filename = "";
-    private boolean stopped = false;
-    private boolean finished = false;
+    // accessed by main thread and download thread
+    private volatile boolean stopped = false;
+    private volatile boolean finished = false;
 
     static class DownloadsHandler extends Handler {
 
@@ -67,6 +73,10 @@ public class DownloadsService extends Service {
             logger.debug("handleMessage()");
 
             DownloadsService service = serviceRef.get();
+            if (service == null) {
+                logger.warn("service is gone, ignoring message");
+                return;
+            }
 
             if (msg.what == MSG_START) {
                 String urlStr = msg.getData().getString(URL);
@@ -172,10 +182,33 @@ public class DownloadsService extends Service {
         CloseableHttpClient httpclient = null;
         CloseableHttpResponse response = null;
         FileOutputStream fos = null;
+        PowerManager.WakeLock wakeLock = null;
+        finished = false;
         try {
+            // download must survive app going to background and device going to standby,
+            // esp. large files take a while
+            try {
+                startForeground(
+                        NotificationUtil.getDownloadNotificationId(),
+                        NotificationUtil.buildDownloadNotification(this, filename, false, false, 0, 0));
+            } catch (Exception e) {
+                logger.warn("could not start foreground: {}", e.toString());
+            }
+            try {
+                PowerManager powerMgr = (PowerManager) getSystemService(POWER_SERVICE);
+                wakeLock = powerMgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WakelockUtil.APP_NAME + ":download");
+                wakeLock.setReferenceCounted(false);
+                wakeLock.acquire(WAKELOCK_TIMEOUT_MILLIS);
+            } catch (Exception e) {
+                logger.warn("could not obtain wake lock: {}", e.toString());
+            }
+
             httpclient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(urlStr);
             response = httpclient.execute(httpGet);
+            if (response.getCode() >= 400) {
+                throw new IOException("server responded with status " + response.getCode());
+            }
 
             // log headers
             long filesize = 0;
@@ -220,27 +253,39 @@ public class DownloadsService extends Service {
                 // copy
                 byte[] buf = new byte[BUF_SIZE];
                 long bytes = 0;
+                long lastNotificationUpdate = 0;
                 while (!stopped) {
                     int r = inputStream.read(buf);
-                    bytes += r;
                     if (r == -1) {
                         logger.info("download finished");
+                        fos.flush();
                         finished = true;
                         break;
                     }
-                    //logger.trace("download: transferring num bytes: {}", r);
-                    NotificationUtil.createDownloadNotification(
-                            this,
-                            this.filename,
-                            false,
-                            false,
-                            bytes,
-                            filesize);
+                    bytes += r;
                     fos.write(buf, 0, r);
+
+                    // updating notification is expensive, must not be done for every chunk
+                    long now = System.currentTimeMillis();
+                    if (now - lastNotificationUpdate >= NOTIFICATION_UPDATE_INTERVAL_MILLIS) {
+                        lastNotificationUpdate = now;
+                        NotificationUtil.createDownloadNotification(
+                                this,
+                                this.filename,
+                                false,
+                                false,
+                                bytes,
+                                filesize);
+                        if (wakeLock != null) {
+                            // renew timeout
+                            wakeLock.acquire(WAKELOCK_TIMEOUT_MILLIS);
+                        }
+                    }
                 }
                 if (stopped && !finished) {
                     logger.info("download stopped");
                 } else if (finished) {
+                    stopForeground(STOP_FOREGROUND_REMOVE);
                     NotificationUtil.removeDownloadNotification(this);
                     NotificationUtil.createDownloadNotification(
                             this,
@@ -254,6 +299,7 @@ public class DownloadsService extends Service {
         } catch (final Exception e) {
             logger.error("could not download", e);
             Toast.makeText(this, "could not download: " + e.getMessage(),Toast.LENGTH_LONG).show();
+            stopForeground(STOP_FOREGROUND_REMOVE);
             NotificationUtil.removeDownloadNotification(this);
             NotificationUtil.createDownloadNotification(
                     this,
@@ -263,9 +309,18 @@ public class DownloadsService extends Service {
                     0,
                     0);
         } finally {
+            close(fos);
             close(response);
             close(httpclient);
-            close(fos);
+            if (wakeLock != null) {
+                try {
+                    if (wakeLock.isHeld()) {
+                        wakeLock.release();
+                    }
+                } catch (Exception e) {
+                    logger.warn("error while releasing wake lock", e);
+                }
+            }
         }
     }
 

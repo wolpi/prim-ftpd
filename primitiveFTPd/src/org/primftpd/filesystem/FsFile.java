@@ -2,7 +2,6 @@ package org.primftpd.filesystem;
 
 import org.primftpd.events.ClientActionEvent;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -238,7 +237,7 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView>
 		// see isWritable()
 		File parent = file.getParentFile();
 		if (parent == null || (!parent.exists() && !parent.mkdirs())) {
-			throw new IOException(String.format("Failed to create parent folder(s) '%s'", file.getAbsolutePath()));
+			throw new IOException(String.format("Failed to create parent folder(s) of '%s'", file.getAbsolutePath()));
 		}
 
 		// now create out stream
@@ -248,20 +247,30 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView>
 		} else if (offset == this.file.length()) {
 			os = new FileOutputStream(file, true);
 		} else {
-			try (final RandomAccessFile raf = new RandomAccessFile(this.file, "rw")) {
+			// must not be closed here, it is closed when the returned stream is closed
+			final RandomAccessFile raf = new RandomAccessFile(this.file, "rw");
+			try {
 				raf.seek(offset);
-				os = new OutputStream() {
-					@Override
-					public void write(int oneByte) throws IOException {
-						raf.write(oneByte);
-					}
-
-					@Override
-					public void close() throws IOException {
-						raf.close();
-					}
-				};
+			} catch (IOException | RuntimeException e) {
+				raf.close();
+				throw e;
 			}
+			os = new OutputStream() {
+				@Override
+				public void write(int oneByte) throws IOException {
+					raf.write(oneByte);
+				}
+
+				@Override
+				public void write(byte[] b, int off, int len) throws IOException {
+					raf.write(b, off, len);
+				}
+
+				@Override
+				public void close() throws IOException {
+					raf.close();
+				}
+			};
 		}
 
 		return new BufferedOutputStream(os) {
@@ -282,8 +291,6 @@ public abstract class FsFile<TMina, TFileSystemView extends FsFileSystemView>
 		});
 		postClientAction(ClientActionEvent.ClientAction.DOWNLOAD);
 
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file), TracingBufferedOutputStream.BUFFER_SIZE);
-		bis.skip(offset);
-		return bis;
+		return Utils.openAtOffset(new FileInputStream(file), offset);
 	}
 }

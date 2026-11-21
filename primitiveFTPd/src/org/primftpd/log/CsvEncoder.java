@@ -16,7 +16,7 @@ public class CsvEncoder
     private static final int MAX_MSG_LEN = 250;
 
     private static final DateTimeFormatter DATE_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss.S", Locale.GERMAN)
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS", Locale.GERMAN)
                              .withZone(ZoneId.systemDefault());
 
     @Override
@@ -36,10 +36,9 @@ public class CsvEncoder
         String msg = event.getFormattedMessage();
         sb.append("\"");
         if (msg != null && msg.length() > MAX_MSG_LEN) {
-            sb.append(msg, 0, MAX_MSG_LEN - 3).append("...");
-        } else {
-            sb.append(msg != null ? msg : "");
+            msg = msg.substring(0, MAX_MSG_LEN - 3) + "...";
         }
+        sb.append(escape(msg));
         sb.append("\";");
 
         sb.append("\"");
@@ -53,9 +52,19 @@ public class CsvEncoder
         return sb.toString().getBytes(StandardCharsets.UTF_8);
     }
 
+    /**
+     * Quotes inside of values must be doubled, otherwise they end the CSV column.
+     */
+    private static String escape(String val) {
+        if (val == null) {
+            return "";
+        }
+        return val.replace("\"", "\"\"");
+    }
+
     private void appendThrowable(StringBuilder sb,
                                  IThrowableProxy tp) {
-        sb.append(tp.getClassName()).append(": ").append(tp.getMessage());
+        sb.append(escape(tp.getClassName())).append(": ").append(escape(tp.getMessage()));
         StackTraceElementProxy[] stepArray = tp.getStackTraceElementProxyArray();
         if (stepArray != null) {
             for (StackTraceElementProxy step : stepArray) {

@@ -7,7 +7,8 @@ import java.nio.channels.WritableByteChannel;
 public class CountingWritableByteChannel implements WritableByteChannel {
 
     private final WritableByteChannel delegate;
-    private int count;
+    // long to support files larger than 2 GB
+    private long count;
 
     public CountingWritableByteChannel(WritableByteChannel delegate) {
         this.delegate = delegate;
@@ -31,7 +32,7 @@ public class CountingWritableByteChannel implements WritableByteChannel {
         delegate.close();
     }
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 }

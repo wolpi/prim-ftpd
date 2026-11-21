@@ -54,9 +54,12 @@ public class TargetDir {
 
     private boolean doesFilenameExistSaf(String filename) {
         DocumentFile documentFile = DocumentFile.fromTreeUri(context, targetSafUrl);
+        if (documentFile == null) {
+            return false;
+        }
         DocumentFile[] children = documentFile.listFiles();
         for (DocumentFile docFile : children) {
-            if (docFile.getName().equals(filename)) {
+            if (filename.equals(docFile.getName())) {
                 return true;
             }
         }
@@ -69,8 +72,15 @@ public class TargetDir {
 
     private OutputStream createOutStreamSaf(String filename) throws IOException {
         DocumentFile documentFile = DocumentFile.fromTreeUri(context, targetSafUrl);
-        DocumentFile file = documentFile.createFile(null, filename);
+        DocumentFile file = documentFile != null ? documentFile.createFile(null, filename) : null;
+        if (file == null) {
+            throw new IOException("could not create file: " + filename);
+        }
         ContentResolver contentResolver = context.getContentResolver();
-        return contentResolver.openOutputStream(file.getUri());
+        OutputStream os = contentResolver.openOutputStream(file.getUri());
+        if (os == null) {
+            throw new IOException("could not open file: " + filename);
+        }
+        return os;
     }
 }

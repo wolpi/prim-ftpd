@@ -43,6 +43,9 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -123,6 +126,11 @@ public class SshServerService extends AbstractServerService
 	protected boolean launchServer(final Shell.Interactive shell)
 	{
 		sshServer = SshServer.setUpDefaultServer();
+
+		// do not offer algorithms which are known to be broken
+		sshServer.setCipherFactories(withoutWeakAlgorithms(sshServer.getCipherFactories()));
+		sshServer.setMacFactories(withoutWeakAlgorithms(sshServer.getMacFactories()));
+		sshServer.setKeyExchangeFactories(withoutWeakAlgorithms(sshServer.getKeyExchangeFactories()));
 		sshServer.setPort(prefsBean.getSecurePort());
 		String bindIp = getBindIp();
 		if (bindIp != null) {
@@ -257,7 +265,7 @@ public class SshServerService extends AbstractServerService
 
 		// idle timeout
 		// sec -> ms
-		sshServer.getProperties().put(SshServer.IDLE_TIMEOUT, String.valueOf(prefsBean.getIdleTimeout() * 1000));
+		sshServer.getProperties().put(SshServer.IDLE_TIMEOUT, String.valueOf((prefsBean.getIdleTimeout() != null ? prefsBean.getIdleTimeout() : 0) * 1000L));
 
 		try {
 			// XXX preference to enable shell? seems to need root to access /dev/tty
@@ -285,6 +293,15 @@ public class SshServerService extends AbstractServerService
 					@Override
 					public KeyPair loadKey(String type) {
 						if ("ssh-ed25519".equals(type)) {
+							if (ed25519KeyPair == null) {
+								// do not rely on getKeyTypes() having been called before
+								for (KeyPair keyPair : keys) {
+									if ("Ed25519".equals(keyPair.getPrivate().getAlgorithm())) {
+										ed25519KeyPair = keyPair;
+										break;
+									}
+								}
+							}
 							return ed25519KeyPair;
 						}
 						return super.loadKey(type);
@@ -323,6 +340,29 @@ public class SshServerService extends AbstractServerService
 			handleServerStartError(e);
 		}
 		return false;
+	}
+
+	private static final Set<String> WEAK_ALGORITHMS = new HashSet<>(Arrays.asList(
+			"arcfour128",
+			"arcfour256",
+			"hmac-md5",
+			"hmac-md5-96",
+			"diffie-hellman-group1-sha1"));
+
+	private <T> List<NamedFactory<T>> withoutWeakAlgorithms(List<NamedFactory<T>> factories) {
+		if (factories == null) {
+			return null;
+		}
+		List<NamedFactory<T>> result = new ArrayList<>(factories.size());
+		for (NamedFactory<T> factory : factories) {
+			if (factory != null && WEAK_ALGORITHMS.contains(factory.getName())) {
+				logger.debug("not offering weak algorithm: {}", factory.getName());
+			} else {
+				result.add(factory);
+			}
+		}
+		// never end up without any algorithm
+		return result.isEmpty() ? factories : result;
 	}
 
 	protected List<KeyPair> loadKeys() {

@@ -42,22 +42,22 @@ public abstract class VirtualFileSystemView<
         logger.debug("getFile '{}', absolute: '{}'", file, absoluteVirtualPath);
         if ("/".equals(absoluteVirtualPath)) {
             return createFile(absoluteVirtualPath, true);
-        } else if (absoluteVirtualPath.startsWith("/" + PREFIX_FS)) {
+        } else if (hasPrefix(absoluteVirtualPath, "/" + PREFIX_FS)) {
             String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_FS);
             logger.debug("Using FS '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = fsFileSystemView.getFile(realPath);
             return createFile(absoluteVirtualPath, delegate);
-        } else if (absoluteVirtualPath.startsWith("/" + PREFIX_ROOT)) {
+        } else if (hasPrefix(absoluteVirtualPath, "/" + PREFIX_ROOT)) {
             String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_ROOT);
             logger.debug("Using ROOT '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = rootFileSystemView.getFile(realPath);
             return createFile(absoluteVirtualPath, delegate);
-        } else if (absoluteVirtualPath.startsWith("/" + PREFIX_SAF)) {
+        } else if (hasPrefix(absoluteVirtualPath, "/" + PREFIX_SAF)) {
             String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_SAF);
             logger.debug("Using SAF '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = safFileSystemView.getFile(realPath);
             return createFile(absoluteVirtualPath, delegate);
-        } else if (absoluteVirtualPath.startsWith("/" + PREFIX_ROSAF)) {
+        } else if (hasPrefix(absoluteVirtualPath, "/" + PREFIX_ROSAF)) {
             String realPath = toRealPath(absoluteVirtualPath, "/" + PREFIX_ROSAF);
             logger.debug("Using ROSAF '{}' for '{}'", realPath, absoluteVirtualPath);
             AbstractFile delegate = roSafFileSystemView.getFile(realPath);
@@ -66,6 +66,11 @@ public abstract class VirtualFileSystemView<
             logger.debug("Using VirtualFile for unknown path '{}'", absoluteVirtualPath);
             return createFile(absoluteVirtualPath, false);
         }
+    }
+
+    private boolean hasPrefix(String path, String prefix) {
+        // "/fs" and "/fs/foo" belong to prefix "/fs", but "/fsfoo" does not
+        return path.equals(prefix) || path.startsWith(prefix + "/");
     }
 
     private String toRealPath(String path, String prefix) {

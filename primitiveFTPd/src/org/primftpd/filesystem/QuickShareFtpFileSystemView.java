@@ -27,14 +27,14 @@ public class QuickShareFtpFileSystemView extends QuickShareFileSystemView<QuickS
         logger.trace("getHomeDirectory()");
 
         // just tell clients: we are on root
-        return createFile(new File("/"));
+        return createFile();
     }
 
     public QuickShareFtpFile getWorkingDirectory() {
         logger.trace("getWorkingDirectory()");
 
         // just tell clients: we are on root
-        return createFile(new File("/"));
+        return createFile();
     }
 
     public boolean changeWorkingDirectory(String dir) {

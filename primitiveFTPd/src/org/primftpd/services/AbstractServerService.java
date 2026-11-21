@@ -19,6 +19,8 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.apache.sshd.server.sftp.SftpSubsystem;
+import org.primftpd.io.AndroidIoDataConnection;
 import org.primftpd.events.ClientActionEvent;
 import org.primftpd.events.ServerInfoRequestEvent;
 import org.primftpd.events.ServerInfoResponseEvent;
@@ -29,6 +31,7 @@ import org.primftpd.R;
 import org.primftpd.share.QuickShareBean;
 import org.primftpd.util.KeyFingerprintProvider;
 import org.primftpd.util.ServicesStartStopUtil;
+import org.primftpd.util.WakelockUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,9 +70,39 @@ public abstract class AbstractServerService
 	private Handler timerHandler;
 	private long timerTimeout;
 	private final Runnable timerTask = () -> {
+		// transfer of a large file may take longer than timeout and does not cause client action events
+		long lastTransfer = lastTransferTimestamp();
+		long idleTime = System.currentTimeMillis() - lastTransfer;
+		if (lastTransfer > 0 && idleTime >= 0 && idleTime < this.timerTimeout) {
+			logger.debug("not stopping server, data has been transferred {} ms ago", idleTime);
+			rescheduleTimer(this.timerTimeout - idleTime);
+			return;
+		}
 		logger.info("stopping server due to idle timeout");
 		ServicesStartStopUtil.stopServers(AbstractServerService.this);
 	};
+
+	private static final long WAKELOCK_CHECK_INTERVAL_MILLIS = 5 * 60 * 1000L;
+	private Handler wakelockHandler;
+	private final Runnable wakelockTask = new Runnable() {
+		@Override
+		public void run() {
+			// wake lock has a timeout, transfer of large files may take longer
+			long idleTime = System.currentTimeMillis() - lastTransferTimestamp();
+			if (idleTime >= 0 && idleTime < 2 * WAKELOCK_CHECK_INTERVAL_MILLIS) {
+				WakelockUtil.renewWakeLock();
+			}
+			if (wakelockHandler != null) {
+				wakelockHandler.postDelayed(this, WAKELOCK_CHECK_INTERVAL_MILLIS);
+			}
+		}
+	};
+
+	private static long lastTransferTimestamp() {
+		return Math.max(
+				AndroidIoDataConnection.getLastTransferTimestamp(),
+				SftpSubsystem.getLastTransferTimestamp());
+	}
 
 	protected abstract ServerServiceHandler createServiceHandler(
 		Looper serviceLooper,
@@ -128,6 +161,15 @@ public abstract class AbstractServerService
 
 		// get parameters
 		Bundle extras = intent.getExtras();
+		if (extras == null || extras.get(ServicesStartStopUtil.EXTRA_PREFS_BEAN) == null) {
+			logger.warn("no prefs in intent in onStartCommand()");
+			if (prefsBean == null) {
+				// nothing we could run with
+				stopSelf();
+				return START_NOT_STICKY;
+			}
+			return START_STICKY;
+		}
 		prefsBean = (PrefsBean)extras.get(ServicesStartStopUtil.EXTRA_PREFS_BEAN);
 		keyFingerprintProvider = (KeyFingerprintProvider)extras.get(
 				ServicesStartStopUtil.EXTRA_FINGERPRINT_PROVIDER);
@@ -143,6 +185,11 @@ public abstract class AbstractServerService
 		EventBus.getDefault().post(new ServerStateChangedEvent());
 
 		// handle server stop on idle timeout
+		if (prefsBean.isWakelock() && this.wakelockHandler == null) {
+			this.wakelockHandler = new Handler(Looper.getMainLooper());
+			this.wakelockHandler.postDelayed(wakelockTask, WAKELOCK_CHECK_INTERVAL_MILLIS);
+		}
+
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 		try {
 			long timeout = Long.parseLong(sharedPreferences.getString(
@@ -174,6 +221,10 @@ public abstract class AbstractServerService
 		if (this.timerHandler != null) {
 			stopTimer();
 		}
+		if (this.wakelockHandler != null) {
+			this.wakelockHandler.removeCallbacks(wakelockTask);
+			this.wakelockHandler = null;
+		}
 
 		// post event
 		EventBus.getDefault().post(new ServerStateChangedEvent());
@@ -200,6 +251,13 @@ public abstract class AbstractServerService
 	private synchronized void stopTimer() {
 		this.timerHandler.removeCallbacks(timerTask);
 	}
+	private synchronized void rescheduleTimer(long delay) {
+		if (this.timerHandler != null) {
+			this.timerHandler.removeCallbacks(timerTask);
+			this.timerHandler.postDelayed(timerTask, delay);
+		}
+	}
+
 	private synchronized void startTimer() {
 		if (this.timerHandler == null) {
 			this.timerHandler = new Handler();
@@ -277,15 +335,29 @@ public abstract class AbstractServerService
 
         NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
 
-        nsdManager.registerService(
-                serviceInfo,
-                NsdManager.PROTOCOL_DNS_SD,
-                nsdRegistrationListener);
+        try {
+            nsdManager.registerService(
+                    serviceInfo,
+                    NsdManager.PROTOCOL_DNS_SD,
+                    nsdRegistrationListener);
+        } catch (Exception e) {
+            // must not prevent server from running
+            logger.error("could not announce service", e);
+            nsdRegistrationListener = null;
+        }
     }
 
 	protected void unannounceService () {
         NsdManager nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
-        nsdManager.unregisterService(nsdRegistrationListener);
+        if (nsdRegistrationListener == null) {
+            return;
+        }
+        try {
+            nsdManager.unregisterService(nsdRegistrationListener);
+        } catch (Exception e) {
+            logger.error("could not unannounce service", e);
+        }
+        nsdRegistrationListener = null;
     }
 
 	protected void cleanQuickShareTmpDir() {
